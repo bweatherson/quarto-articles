@@ -1,0 +1,471 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  oneside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \ifXeTeX
+    \usepackage{mathspec} % this also loads fontspec
+  \else
+    \usepackage{unicode-math} % this also loads fontspec
+  \fi
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[Scale = MatchLowercase]{Scala Pro}
+  \setsansfont[]{Scala Sans Pro}
+  \ifXeTeX
+    \setmathfont(Digits,Latin,Greek)[]{Scala Pro}
+  \else
+    \setmathfont[]{Scala Pro}
+  \fi
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[left=1in,marginparwidth=2.0666666666667in,textwidth=4.1333333333333in,marginparsep=0.3in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\makeatletter
+\def\@maketitle{%
+\newpage
+\null
+\vskip 2em%
+\begin{center}%
+\let \footnote \thanks
+  {\LARGE \@title \par}%
+  \vskip 1.5em%
+  {\large
+    \lineskip .5em%
+    \begin{tabular}[t]{c}%
+      \@author
+    \end{tabular}\par}%
+  %\vskip 1em%
+  %{\large \@date}%
+\end{center}%
+\par
+\vskip 1.5em}
+\makeatother 
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{sidenotes}{}{\usepackage{sidenotes}}
+\@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Review of ``Sameness and Substance Renewed''},
+  pdfauthor={Brian Weatherson},
+  colorlinks=true,
+  linkcolor={black},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Review of ``Sameness and Substance Renewed''}
+\author{Brian Weatherson}
+\date{2002-09-06}
+
+\begin{document}
+\maketitle
+\emph{Sameness and Substance Renewed} (hereafter, 2001) is, in effect, a
+second edition of Wiggins's 1980 book \emph{Sameness and Substance}
+(hereafter, 1980), which in turn expanded and corrected some ideas in
+his 1967 \emph{Identity and Spatio-Temporal Continuity} (hereafter,
+1967). All three books have similar aims. The first is to argue,
+primarily against Geach, that identity is absolute not relative. The
+second is to argue that, despite this, whenever an identity claim
+\emph{a}~=~\emph{b} is true, there is a sortal \emph{f} such that
+\emph{a} is the same \emph{f} as \emph{b}. The biggest difference
+between 1967 and the two later books is that the later books contain
+much more detail on what a sortal must be if this claim, called
+\textbf{D}, is to be both correct and philosophically interesting. The
+third aim is to apply the first two conclusions to the topic of personal
+identity.
+
+\marginnote{\begin{footnotesize}
+
+This review first published in
+\href{https://ndpr.nd.edu/news/sameness-and-substance-renewed/}{Notre
+Dame Philosophical Reviews}.
+
+\end{footnotesize}}
+
+For the bulk of 2001, most of the changes to 1980 are confined to
+footnotes, the bulk of these consisting of a citation of, and
+occasionally a brief comment upon, a post 1980 publication that bears on
+Wiggins's approach to the topic. This changes in the last two chapters.
+The penultimate chapter is a mostly new discussion of the determinacy of
+identity. In the final chapter, on personal identity, Wiggins retracts
+many of the claims made in the matching chapter of 1980, and raises some
+interesting objections to Parfit's account of personal identity. Apart
+from those, the major changes to 1980 are stylistic. No longer is the
+material considered more peripheral printed in smaller type, though to
+make up for this there are frequent exhortations to skip these sections.
+And the longer notes of the 1980 edition are now mostly incorporated
+into the text, several prefixed with advice that they not be read.
+
+In the preface Wiggins says that it is a matter of no concern whether
+1980 and 2001 are the same book. But it is of concern to me, twice over.
+First, it makes a large difference to what kind of review should be
+written whether this is an old book reissued or a new book. Secondly,
+the difficulty in answering this question draws out some problems
+Wiggins's theory faces when we try to apply it outside the realms of
+physics and biology. On the first problem, the reader who hopes here to
+find a comprehensive discussion of the literature on identity post-1980
+as it strikes David Wiggins will be disappointed. Three examples should
+help to illustrate this.
+
+In 1967 Wiggins held, quite sensibly, that a statue is not identical to
+the bronze that it is made of, but rather is \emph{constituted} by that
+bronze. This was an important move in his response to Geach. If identity
+is absolute, and the statue is identical with the bronze, then we can't
+say that when the statue is remoulded into a vase, we have the same lump
+of bronze but a different artwork. In 2001 he says much the same thing.
+This still seems like good common sense, but the problem is that in the
+intervening 34 years there has been a mass of work on constitution, most
+of it concluding that the constitution relation is much more problematic
+than we had originally thought. In a genuinely new work, or even perhaps
+in a revised old work, this material should have been addressed.
+
+In 1980 Wiggins makes it quite clear he dislikes perdurantist theories
+of persistence that hold that an object persists from
+\emph{t}­\textsubscript{1} to \emph{t}\textsubscript{2} by having
+instantaneous temporal parts at every time in
+{[}\emph{t}\textsubscript{1}, \emph{t}\textsubscript{2}{]}. Just why he
+dislikes perdurantism is unclear, since all his arguments are directed
+against the conjunction of this view with the striking, and not
+especially popular, view that our ordinary names refer to these
+instantaneous objects. In 2001 it is still clear he dislikes
+perdurantism. But we find little on the barrage of arguments
+perdurantists have offered in the last 21 years in support of their
+position. All we find is a footnote expressing agreement with Mark
+Johnston's response to Lewis's `problem of temporary intrinsics'
+argument, and a citation of a paper expanding upon said agreement. Given
+that this book largely reprints previously available material, including
+more detail here would not have been absurd, and saying something about
+other arguments quite appropriate.
+
+The third example is a little more serious. In the book's new chapter,
+he outlines approvingly Evans's proof that identity is always
+determinate identity, and cites (without outlining) a proof by
+Williamson that distinctness is always determinate. From these proofs he
+quite naturally concludes that the prospects for indeterminate
+identities are pretty grim. But he doesn't engage with those who
+maintain that, despite all this, there really are indeterminate
+identities. It would have been worthwhile, for instance, to see a more
+direct engagement between his views and those of, say, Terrence Parsons,
+who over the last 15 years has developed a rather detailed theory on
+which indeterminate identity is possible. It will probably turn out that
+Wiggins's position is entirely correct, and Parsons's position basically
+mistaken, but that's no reason to not take Parsons more seriously.
+
+Apart from this oversight, there is one rather odd feature in the
+discussion of determinacy. Wiggins says that ``it can be \emph{perfectly
+determinate} which mountain \emph{x} is without \emph{x}'s extent being
+determinate.'' (166) The idea is that it can be determinate that
+\emph{x} is, say, this mountain, while it is indeterminate whether, say,
+that foothill is part of \emph{x}. Such a position always feels strained
+to me, but it is certainly not unfamiliar. But it is very hard to see
+how it is meant to fit in with Wiggins's picture of the role of sortal
+concepts, such as \emph{mountain}. On page 70 he says a sortal concept
+is such that grasp of it determines ``what changes \emph{x} tolerates
+without there ceasing to exist such a thing as \emph{x}.'' (He actually
+says `substance-concept', not `sortal concept' there, but these phrases
+seem to be used synonymously.) The trouble should be apparent. For it to
+be determinate what \emph{x} is, presumably just is for it to be
+determinate that \emph{x} is this \emph{mountain}. That is, it is
+determinate that \emph{x} falls under the sortal \emph{mountain}, and
+that sortal must determine persistence conditions, else it fails to be a
+sortal. But that means \emph{x}'s persistence conditions are determined.
+So there is a determinate fact, perhaps unknown and perhaps even
+unknowable, about how far in the future one can go without leaving
+\emph{x} behind. (I assume here that if \emph{x}'s temporal extent is
+\emph{determined} by which sortal it falls under, then \emph{x}'s
+temporal extent is \emph{determinate}. I imagine some will deny this
+claim, but it looks like a platitude to me.) On the other hand, it seems
+that it can be determinate what \emph{x} is even though the conditions
+of \emph{x}'s spatial persistence, conditions that determine how far
+westward one can go without leaving \emph{x} behind, are not
+determinate. Just how this asymmetry is to be tolerated is not
+explained.
+
+Much of the interest in this edition will focus on the new material on
+personal identity, and I shall say more about this below. But it is
+worth going over the central claims of the earlier part of the book. The
+crucial principle is called \textbf{D}(ii). The derivation of it appeals
+crucially to \textbf{D}(i). (Both definitions, and the commentary, from
+page 64.)
+
+\textbf{D}(i) (\emph{x})(\emph{t}) {[}(\emph{x} exists at \emph{t})~→
+(∃\emph{g}) (\emph{g}(\emph{x})~at \emph{t}){]}.
+
+\textbf{D}(ii) (\emph{x})(∃\emph{g})(\emph{t}) {[}(\emph{x} exists at
+\emph{t})~→ (\emph{g}(\emph{x})~at \emph{t}){]}.
+
+`\emph{x}' ranges over three-dimensional continuants, `\emph{t}' over
+times and `\emph{g}' over sortals. The argument for \textbf{D}(i) is
+that for any object at any time there is an answer to the Aristotelian
+question \emph{What is it}? This answer is a sortal so, as just noted,
+it must determine principles of persistence. It must also determine ``a
+prnciple of \emph{activity}, a principle of \emph{functioning} or a
+principle of \emph{operation}''. (72) If the last claim looks
+disjunctive, that's because it is. Sortals for living objects determine
+principles of activity, sortals for artifacts determine principles of
+functioning. Just what philosophically interesting features these
+principles share is never satisfactorily explained. So there's a
+suspicion that there is no decent concept of \emph{sortal} that covers
+the kinds of things living creatures are and the kinds of things
+artifacts are. In slogan form \emph{sortal} isn't a sortal. Two other
+considerations reinforce that suspicion.
+
+First, there are objects that don't naturally fall under any known
+sortal. Just looking at the computer I'm now using, there is the latch
+that holds the lid down when it's closed, the button that opens the CD
+tray, the brightness control, and the stick that plays some (but not
+all) the functional roles of a mouse. It's far from obvious that any of
+these falls under a sortal, at least if a sortal must determine
+persistence conditions and a principle of functioning.
+
+Secondly, there's a tension between the kinds of sortals Wiggins thinks
+appropriate for artifacts and what he says about persistence. Artifact
+sortals are, he says, functional kinds. These sortals are meant to
+determine persistence conditions. Whether an object has persisted is not
+meant to depend on extrinsic, or external, factors. This is the upshot
+of his \emph{Only a and b} rule (96), which is important in ruling out
+`best deserver' theories of persistence. That rule says that we don't
+need to consider objects other than \emph{a} or \emph{b} to determine
+whether \emph{a} is \emph{b}. So whether \emph{a}, the boy genius is
+\emph{b}, the Nobel Prize winning author, cannot depend on the existence
+or otherwise of a person more closely continuous with \emph{a} than
+\emph{b} happens to be. Hence Nozick's theory of personal identity,
+which rejects this, cannot be true. But to determine whether \emph{a}´,
+the brightness control on my computer at \emph{t}\textsubscript{1} is
+\emph{b}´, the volume control on Jack's computer at
+\emph{t}\textsubscript{2}, we need to see which sortals \emph{a}´ and
+\emph{b}´ fall under, to see whether \emph{a}´ has persisted. That will
+depend, in part, on whether \emph{a}´ still falls under that sortal,
+whatever it is. Such a sortal will sort by functional role, and whether
+that functional role is fulfilled at all times between
+\emph{t}\textsubscript{1} and \emph{t}\textsubscript{2} will be
+determined by things other than \emph{a}´ and \emph{b}´. The point
+generalises: in most cases whether an object continues to fill a
+functional role often turns on the existence, and behaviour, of
+\emph{other} objects. The natural conclusion to be drawn here is that
+\textbf{D}(i) might be false for artifacts.
+
+Clearly \textbf{D}(i) doesn't entail \textbf{D}(ii). But, bracketing our
+concerns about its truth, it might still be usable in an abductive
+argument for \textbf{D}(ii). Wiggins does just this. The argument, and
+this is I think the \emph{only} argument for \textbf{D}(ii), is that it
+best explains our widespread agreement over whether an object has
+survived. Wiggins says that, ``Our capacity for massive agreement about
+this is much more remarkable than our occasional disagreement,'' (66)
+and given \textbf{D}(i), \textbf{D}(ii) is the best explanation of this.
+Two replies. First, the agreement is not all that widespread, even in
+actual cases. Think, for example, about the range of disagreement over
+whether a corpse is a thing that once lived, and hence the disagreement
+over whether Auntie is buried behind the back shed, or Auntie no longer
+exists. Secondly, there is a better explanation -- the perdurantist
+explanation given by Lewis. This not only explains why there is
+agreement just where there is agreement, but why there is disagreement
+where there is disagreement. The story is familiar. All sorts of
+continuants (fusions of temporal parts) exist, but we choose which ones
+to refer to and quantify over because of our particular interests, and
+those choices are codified in our linguistic practices. When dealing
+with historically familiar situations, membership of linguistic, and
+more broadly cultural, communities commits us to common answers. Since
+most situations are historically familiar, we have agreement in most
+cases. When we deal with new cases, either generated by new technology
+or new imaginativeness, and our interests do not pick out a clearly
+preferable continuant, we do not have agreement. If this is right, we
+will agree about the familiar and disagree about the unfamiliar.
+Happily, this is exactly what we find -- we all know what the
+persistence conditions for cows, pigs and chicken are, we do not know
+the persistence conditions for corporate entities or pieces of software
+or even relocated football teams in perfectly everyday cases.
+
+In 1980, the chapter on personal identity had two main aims. The first
+was to argue that Lockean considerations about continuity of memory
+could be used in an account of personal identity, even if they would
+have to be used as reference fixers rather than as constituents of a
+reductive analysis. The opponents here were those followers of Bishop
+Butler, most prominently Anthony Flew, who held that any such
+consideration would be hopelessly circular. The second aim was to argue
+that it is a conceptual truth that persons are animals. The targets here
+were (unnamed) philosophers who wanted to provide a complete functional
+analysis of a person. The objections were mainly political but since it
+is unclear whether the philosophy of personal identity should be part of
+metaphysics or ethics, that's perfectly acceptable.
+
+In 2001, the aims have changed. Wiggins retracts everything he said
+against Butler and Flew, and then spends most of the chapter in a
+lengthy discussion of Parfit's theory of personal identity. Butler's
+original complaint against Locke was that the concept of memory needs a
+pre-existing concept of personal identity to be applied so it cannot be
+used in a non-circular account of identity. In the bluntest version of
+this complaint, it is held that `A remembers X-ing' is properly
+represented as `A remembers A X-ing', which requires an identity between
+the referents of the two occurences of `A'. Wiggins's complaint, in
+1980, was that this position costs us some vital distinctions. We want
+to distinguish, for example, `A imagines being an elephant' from `A
+imagines A being an elephant'. In the first case only, A imagines
+something possible. And what holds for imagining, he thought, holds for
+remembering. Wiggins now rejects the last step here. Remembering, unlike
+imagining, has a tie to the truth. A can only remember X-ing if A in
+fact X-ed.~This last claim might not be part of the logical form of `A
+remembers X-ing', but there is a close relation between the two. Wiggins
+calls the relationship presupposition, but the name here doesn't matter
+much. So Butler, and Flew, were right -- appeals to memory in a theory
+of personal identity are hopelessly circular, because they presuppose
+that debates about identity through time are resolved.
+
+The rest of the chapter outlines concerns with Parfit's theory of
+personal identity, based on his concept of quasi-memory, and with the
+intuitions behind some cases that support Parfit's theory. Quasi-memory,
+unlike memory, need not be factive, but what is quasi-remembered must
+have happened somewhere, to someone. Wiggins launches a barrage of
+attacks on this idea, of which the following three seem most telling.
+First, quasi-memory could not be defined (and is not defined) as memory
+minus factiveness, because conceptual subtraction is undefined in the
+absence of conceptual analysis, and we don't have a conceptual analysis
+here. Secondly, the concept of quasi-memory may seem to make sense for
+quite general, \emph{de dicto} memories, but it runs into trouble with
+\emph{de re}, or even with more specific memories. If I am to
+quasi-remember climbing Big Ben on my sixteenth birthday, must someone
+have climbed Big Ben on my sixteenth birthday? Or perhaps on their
+sixteenth birthday? Thirdly, even if Parfit can define the concept of
+\emph{accurate quasi-memory}, that won't get us the general concept of
+quasi-memory, because again conceptual subtraction doesn't make sense.
+
+There are some good points here for followers of Parfit to consider.
+They are followed by some interesting considerations about why we might
+rethink our intuitions about personal identity in cases involving brain
+swaps. Those interested in personal identity debates, and particularly
+Wiggins's and Parfit's contributions, should pay close attention here.
+These will not be the only people to whom this new volume has interest.
+\emph{Sameness and Substance} was an important statement of a rather
+commonsensical solution to some of the hardest questions in metaphysics,
+a solution with which everyone working in the field should be well
+acquainted. And those who have not previously read it closely will find
+that the stylistic changes (having a uniform font size, incorporating
+the longer notes into the text) make the renewed version of
+\emph{Sameness and Substance} much more accessible than the original.
+
+
+
+\end{document}
