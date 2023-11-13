@@ -1,0 +1,469 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  oneside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \ifXeTeX
+    \usepackage{mathspec} % this also loads fontspec
+  \else
+    \usepackage{unicode-math} % this also loads fontspec
+  \fi
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[Scale = MatchLowercase]{Scala Pro}
+  \setsansfont[]{Scala Sans Pro}
+  \ifXeTeX
+    \setmathfont(Digits,Latin,Greek)[]{Scala Pro}
+  \else
+    \setmathfont[]{Scala Pro}
+  \fi
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[left=1in,marginparwidth=2.0666666666667in,textwidth=4.1333333333333in,marginparsep=0.3in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\makeatletter
+\def\@maketitle{%
+\newpage
+\null
+\vskip 2em%
+\begin{center}%
+\let \footnote \thanks
+  {\LARGE \@title \par}%
+  \vskip 1.5em%
+  {\large
+    \lineskip .5em%
+    \begin{tabular}[t]{c}%
+      \@author
+    \end{tabular}\par}%
+  %\vskip 1em%
+  %{\large \@date}%
+\end{center}%
+\par
+\vskip 1.5em}
+\makeatother
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{sidenotes}{}{\usepackage{sidenotes}}
+\@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Epistemicism, Parasites, and Vague Names},
+  pdfauthor={Brian Weatherson},
+  colorlinks=true,
+  linkcolor={black},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Epistemicism, Parasites, and Vague Names}
+\author{Brian Weatherson}
+\date{2003-04-01}
+
+\begin{document}
+\maketitle
+Why is it so implausible that there is a sharp boundary between the rich
+and the non-rich? Perhaps we find it implausible merely because we
+(implicitly) believe that if there were such a boundary we would be able
+to discover where it is. If this is so we should revise our judgements.
+As Timothy Williamson (\citeproc{ref-Williamson1994-WILV}{1994},
+\citeproc{ref-Williamson2000-WILKAI}{2000}) has shown, if there were
+such a boundary we would \emph{not} know where it is. Still, this is not
+the only reason for being sceptical about the existence of such a
+boundary. In ``Vagueness, Epistemicism and Response-Dependence'' John
+Burgess (\citeproc{ref-Burgess2001}{2001}) outlines an impressive
+objection to the existence of such boundaries, and in particular to
+epistemicist theories that posit their existence. Burgess's objection is
+based not on principles about the \emph{epistemology} of content, as the
+bad objection just stated is, but rather on principles about the
+\emph{metaphysics} of content.
+
+If a word \emph{t} has content \emph{c}, this must be the case in virtue
+of some more primitive fact obtaining. Facts about content, such as
+this, are not among the fundamental constituents of reality. Roughly,
+facts about linguistic content must obtain in virtue of facts about use.
+But there are simply not enough facts about use to determine a precise
+meaning for paradigmatically vague terms like `rich'. Any theory that
+holds that `rich' does have a precise meaning must meet this objection.
+As Burgess argues, Williamson's attempts to do this have not been
+entirely successful. Burgess argues, persuasively, that epistemicists
+owe us a theory of how terms like `rich' get to have the precise meaning
+they apparently have given that the facts about use do not seem to
+generate a precise meaning. He also argues, less persuasively, that
+Williamson's `parasitic' strategy for meeting this obligation is
+unsuccessful. Indeed, the argument here rests at one point on a premiss
+that is clearly false. I will suggest a way to patch the argument and
+reinstate the objection to epistemicism.
+
+The obligation to provide a theory that generates content in terms of
+use does not just fall on the epistemicists. We indeterminists about
+content must also discharge it. Assume that we have done so, and we have
+a theory of content that divides sentences into (at least) the true, the
+false and the indeterminate. Williamson
+(\citeproc{ref-Williamson1994-WILV}{1994, 207--8}) argues that the only
+reason we believe that any sentences fall into this third category is
+that we are respecting a mythical symmetry between truth and falsity. We
+are falling into the trap of thinking that if a sentence is not somehow
+made false, it is not false. The true story is that if an assertoric
+sentence has content, and it is not made true, it is\emph{false}. This
+provides the basis for Williamson's `parasitic' strategy: wait for the
+indeterminist to offer a theory of when sentences are true, accept that
+part of the indeterminist theory, and say all other sentences that
+express propositions are false. If the strategy works, then there is no
+way the indeterminist can meet the obligation to provide a theory of
+content without the epistemicist also being able to do so, so there is
+no argument for indeterminism here. (There are complications, to put it
+mildly, with this strategy when the indeterminist allows the border
+between the true and the indeterminate to be vague. Burgess lets these
+potential problems slide, and so shall I.)
+
+The strategy rests on the purported asymmetry between truth and falsity.
+Burgess claims that positing such an asymmetry makes epistemicism
+inconsistent. Consider a colour patch that is around the border between
+red and orange. Burgess claims, correctly, that an indeterminist theory
+of content may say that (1) and (2) are indeterminate, and hence
+Williamson might be committed to the position that (1) and (2) are
+false, and hence so is (3).
+
+\begin{description}
+\tightlist
+\item[(1)]
+That patch is red.
+\item[(2)]
+That patch is orange.
+\item[(3)]
+That patch is either red or orange.
+\end{description}
+
+But this is hopeless because ``on the epistemicist view, there is a
+sharp boundary in the series between red and orange; every patch is
+either one or the other.'' (\citeproc{ref-Burgess2001}{Burgess 2001,
+519}) This last claim is false. According to epistemicism, there is a
+sharp boundary between red and not red, so the patch is either red or
+not red. But the epistemicist need not hold that if the patch is not
+red, then it is orange. It is consistent with epistemicism that there
+are colours strictly between red and orange, just as it is consistent
+with epistemicism that there are colours strictly between red and
+yellow, and just as it is consistent with epistemicism that there are
+colours strictly between red and blue. Hence it is possible that the
+colour of this patch is strictly between red and orange, and thus is
+neither red nor orange. So this line of reasoning does not work. Perhaps
+the argument can be easily fixed. According to the indeterminist, both
+(1) and (4) are indeterminate. Hence according to Williamson's
+`parasitic' theory of content, both (1) and (4) are false, so (5) is
+false.
+
+\begin{description}
+\tightlist
+\item[(1)]
+That patch is red.
+\item[(4)]
+That patch is not red.
+\item[(5)]
+That patch is either red or not red.
+\end{description}
+
+This is more like a problem, because Williamson certainly is committed
+to the truth of (5). However, it is easy to see how Williamson should
+respond. The theory of content sketched above (or more precisely, the
+strategy for converting indeterminist theories to determinist ones) was
+only meant to apply to simple sentences. A \emph{simple} sentence is
+true iff the indeterminist says it is true. The truth value of
+\emph{compound} sentences, like (4) and (5), is given by a standard
+Davidsonian theory of truth. Hence (1) is false and (4) is true, as
+required.
+
+The best way to resurrect Burgess's argument is to shift our attention
+from vague predicates to vague names. Consider any mountain, say
+Kilimanjaro. It is vague just where the mountain starts, so it will be
+vague just which atoms constitute Kilimanjaro. Kilimanjaro is some
+fusion of atoms or other, but it is indeterminate just which one it is.
+Some of these fusions have different masses, and some have different
+shapes, so no sentence of the form of (6) or of (7) will be true
+according to the indeterminist.
+
+\begin{description}
+\tightlist
+\item[(6)]
+Kilimanjaro has shape \emph{s}.
+\item[(7)]
+Kilimanjaro has mass \emph{m}.
+\end{description}
+
+Hence according to the Williamson's asymmetric theory of truth, any
+sentence of either of these forms is false. Note that this holds even if
+we restrict the application of his theory to simple sentences. Now let
+\emph{K} be a set of fusions of atoms \{\emph{f}\textsubscript{1},
+\emph{f}\textsubscript{2}, \ldots, \emph{f\textsubscript{n}}\} such that
+it is determinate that Kilimanjaro is one of these fusions. (Because of
+higher-order vagueness it may be impossible to find such a set that does
+not contain any fusion that is determinately not Kilimanjaro. That will
+not matter; all that we require is that Kilimanjaro is one of these
+fusions.) Let \emph{s\textsubscript{i}} be the shape of
+\emph{f\textsubscript{i}} and \emph{m\textsubscript{i}} its mass. Then
+for all \emph{i}, (6.\emph{i}) and (7.\emph{i}) are false, as we just
+argued.
+
+\begin{description}
+\tightlist
+\item[(6.\emph{i})]
+Kilimanjaro has shape \emph{s\textsubscript{i}}.
+\item[(7.\emph{i})]
+Kilimanjaro has mass \emph{m\textsubscript{i}}.
+\end{description}
+
+Hence both (8) and (9) are false.
+
+\begin{description}
+\tightlist
+\item[(8)]
+Kilimanjaro has shape \emph{s}\textsubscript{1} or Kilimanjaro has shape
+\emph{s}\textsubscript{2} or \ldots{} or Kilimanjaro has shape
+\emph{s\textsubscript{n}}.
+\item[(9)]
+Kilimanjaro has mass \emph{m}\textsubscript{1} or Kilimanjaro has mass
+\emph{m}\textsubscript{2} or \ldots{} or Kilimanjaro has mass
+\emph{m\textsubscript{n}}.
+\end{description}
+
+And the epistemicist is committed to (8) and (9) being true. We may not
+be able to discover which disjunct is true, but that is no reason to
+think that the disjunction is not true. Burgess's argument was that if
+we adopt Williamson's advice for constructing a theory of content, we
+will misclassify sentences that express penumbral connections. He was
+basically right, but we need to use a different example to prove it.
+
+I assumed above that Kilimanjaro is a fusion of atoms. Some may object
+to this on the grounds that Kilimanjaro has different temporal and modal
+properties to any fusion of atoms. I doubt such objections ultimately
+work, but for present purposes the important thing to note is that the
+argument can go through without such an assumption. Even if Kilimanjaro
+is not identical to any fusion in \emph{K}, it is clear that Kilimanjaro
+(actually, now) exactly overlaps some member of \emph{K}. And since
+Kilimanjaro has the same (actual, present) shape and mass as any fusion
+of atoms it exactly overlaps, it still follows that (8) and (9) are
+true.
+
+If we do assume that Kilimanjaro is one of the fusions, then we can
+generate another case where Williamson's theory generates false
+predictions. Since at most one of the fusions is a mountain, it follows
+that (10.\emph{i}) is indeterminate for all \emph{i} on an indeterminist
+theory of content, and hence false according to Williamson.
+
+\begin{description}
+\tightlist
+\item[(10.\emph{i})]
+\emph{f\textsubscript{i}} is a mountain.
+\end{description}
+
+Hence his theory mistakenly predicts that (11) is false, when it is by
+hypothesis true.
+
+\begin{description}
+\tightlist
+\item[(11)]
+\emph{f}\textsubscript{1} is a mountain or \emph{f}\textsubscript{2} is
+a mountain or \ldots{} or \emph{f\textsubscript{n}} is a mountain.
+\end{description}
+
+This argument does rest on a contentious bit of metaphysics, but it
+still seems basically sound.
+
+I did not assume at any point that Kilimanjaro is a vague object. I did
+assume that `Kilimanjaro' is a vague name, but it is consistent with the
+argument I have presented that there are no vague objects, and the
+vagueness in `Kilimanjaro' consists in it being indeterminate which
+precise object it denotes.
+
+As Burgess demonstrates, it is fair to require that the epistemicist
+provide a theory of how terms get the precise content they do.
+Williamson attempted to show he was in just as good a position to
+discharge this obligation as the indeterminist by providing an algorithm
+for converting any indeterminist theory of content into one acceptable
+to the epistemicist. Burgess argued that the algorithm produced
+unacceptable results when we applied it to vague sentences such as (1)
+and (2). This particular argument is no good; the algorithm does not
+seem to produce implausible results in that case. We can make this form
+of argument work, however, especially if we focus on vague names.
+Applying the algorithm to any plausible indeterminist theory produces
+the result that every disjunct in (8) and (9) are false, and hence that
+these disjunctions are false. Since the epistemicist is (correctly)
+committed to these sentences being true, Burgess was correct to conclude
+that ``this particular attempt to implement the parasite strategy is
+doomed to failure.''
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Burgess2001}
+Burgess, John. 2001. {``Vagueness, Epistemicism and
+Response-Dependence.''} \emph{Australasian Journal of Philosophy} 79
+(4): 507--24. \url{https://doi.org/10.1080/713659306}.
+
+\bibitem[\citeproctext]{ref-Williamson1994-WILV}
+Williamson, Timothy. 1994. \emph{{Vagueness}}. Routledge.
+
+\bibitem[\citeproctext]{ref-Williamson2000-WILKAI}
+---------. 2000. \emph{{Knowledge and its Limits}}. Oxford University
+Press.
+
+\end{CSLReferences}
+
+
+
+\end{document}

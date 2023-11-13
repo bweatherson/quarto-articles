@@ -1,0 +1,392 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \ifXeTeX
+    \usepackage{mathspec} % this also loads fontspec
+  \else
+    \usepackage{unicode-math} % this also loads fontspec
+  \fi
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[Scale = MatchLowercase]{Scala Pro}
+  \setsansfont[]{Scala Sans Pro}
+  \ifXeTeX
+    \setmathfont(Digits,Latin,Greek)[]{Scala Pro}
+  \else
+    \setmathfont[]{Scala Pro}
+  \fi
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\makeatletter
+\def\@maketitle{%
+\newpage
+\null
+\vskip 2em%
+\begin{center}%
+\let \footnote \thanks
+  {\LARGE \@title \par}%
+  \vskip 1.5em%
+  {\large
+    \lineskip .5em%
+    \begin{tabular}[t]{c}%
+      \@author
+    \end{tabular}\par}%
+  %\vskip 1em%
+  %{\large \@date}%
+\end{center}%
+\par
+\vskip 1.5em}
+\makeatother
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Games and the Reason-Knowledge Principle},
+  pdfauthor={Brian Weatherson},
+  colorlinks=true,
+  linkcolor={black},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Games and the Reason-Knowledge Principle}
+\author{Brian Weatherson}
+\date{2012-01-01}
+
+\begin{document}
+\maketitle
+John Hawthorne and Jason Stanley
+(\citeproc{ref-Hawthorne2008-HAWKAA}{2008}), defend what they call the
+``Reason-Knowledge Principle''.
+
+\begin{quote}
+Where one's choice is \(p\)-dependent, it is appropriate to treat the
+proposition that \(p\) as a reason for acting iff you know that \(p\).
+(578)
+\end{quote}
+
+There have been many attempts in the literature to show that this leads
+to implausible \emph{actions}. As Jonathan Ichikawa
+(\citeproc{ref-Ichikawa2012}{2012}) shows, most of these attempts rest
+on further, and arguably false, assumptions about the connection between
+reasons and action. Relatedly, most of those responses concern the role
+of knowledge and reasons in decision-making. I'll argue that we can
+formulate a sharper problem for the principle if we focus on
+game-playing, and say exactly which extra assumptions we are making.
+
+The Reason-Knowledge Principle should have the following implications,
+at least for cases where \(S\)'s aim is to produce the best outcome.
+
+\begin{description}
+\tightlist
+\item[(1)]
+If \(S\) knows that \(\varphi\) and \(\psi\) will produce the same
+outcome, and \(S\) must choose \(\varphi\) or \(\psi\), then it is
+rationally permissible for \(S\) to choose \(\psi\).
+\item[(2)]
+If \(S\) knows that \(\varphi\) and \(\psi\) will produce the same
+outcome if \(p\), and \(\varphi\) will produce a better outcome if
+\(\neg p\), then it is rationally permissible for \(S\) to choose
+\(\psi\) iff she knows \(p\).
+\end{description}
+
+The point of (1) is that \(S\) can use her knowledge that \(\varphi\)
+and \(\psi\) will produce the same outcome to justify making an
+arbitrary choice between \(\varphi\) and \(\psi\). And the point of (2)
+is that the Reason-Knowledge Principle suggests only knowledge that
+\(p\) could justify ignoring the fact that \(\psi\) does worse than
+\(\varphi\) if \(\neg p\).
+
+Define a \textbf{symmetric} game as having these features:
+
+\begin{itemize}
+\tightlist
+\item
+  The game is purely co-operative; each player gets the same payoffs;
+\item
+  Each player knows nothing about the other save that it is common
+  knowledge the players are rational, and hence know what each other's
+  rational requirements are;
+\item
+  Each player has the same moves available; and,
+\item
+  The payoffs are a function of just which moves are made, not of who
+  makes them.
+\end{itemize}
+
+Assume \(A\) and \(B\) are playing a symmetric game, and it is common
+knowledge which symmetric game they are playing. Then the following
+premise seems hard to dispute:
+
+\begin{description}
+\tightlist
+\item[(3)]
+It is rationally required for \(A\) to play \(\varphi\) iff \(A\) knows
+\(B\) will play \(\varphi\).
+\end{description}
+
+What makes (3) so compelling is that we can derive it from (4), (5) and
+(6).
+
+\begin{description}
+\tightlist
+\item[(4)]
+\(A\) knows that \(B\) will play \(\varphi\) iff \(A\) knows that any
+rational player will play \(\varphi\).
+\item[(5)]
+If \(A\) knows any rational player will play \(\varphi\), then \(A\) is
+rationally required to play \(\varphi\).
+\item[(6)]
+If \(A\) is rationally required to play \(\varphi\), then \(A\) knows
+that any rational player will play \(\varphi\).
+\end{description}
+
+We get (4) from the fact that \(A\) knows nothing about \(B\) save that
+she is rational. We get (5) by the factivity of knowledge. And we get
+(6) by the requirement that the players are rational, and hence know
+what rationality requires of each player. And these three together
+entail (3). So (3) is true, and (1) and (2) are entailed by the
+Reason-Knowledge Principle. Unfortunately, (1), (2) and (3) are
+inconsistent, as we'll now show.
+
+Informally, in this game \(A\) and \(B\) must each play either a green
+or red card. I will capitalise \(A\)'s moves, i.e., \(A\) can play GREEN
+or RED, and italicise \(B\)'s moves, i.e., \(B\) can play \emph{green}
+or \emph{red}. If two green cards, or one green card and one red card
+are played, each player gets \$1. If two red cards are played, each gets
+nothing. Each cares just about their own wealth, so getting \$1 is worth
+1 util. All of this is common knowledge. More formally, here is the game
+table, with \(A\) on the row and \(B\) on the column.
+
+\begin{longtable}[]{@{}lcc@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+& \emph{green} & \emph{red} \\
+GREEN & 1, 1 & 1, 1 \\
+RED & 1, 1 & 0, 0 \\
+\end{longtable}
+
+Assume \(A\) knows \(B\) will play \emph{green}. By (3), it is
+rationally required that \(A\) plays GREEN. But \(A\) can use this
+knowledge of \(B\) to deduce that GREEN and RED have the same payoff. So
+by (1), it is rationally permissible to play RED. Contradiction.
+
+Now assume \(A\) does not know \(B\) will play \emph{green}. By (3), it
+is not a rational requirement that \(A\) plays GREEN. But \(A\) knows
+that GREEN does better than RED unless \(B\) plays \emph{green}. And
+since she doesn't know \(B\) plays \emph{green}, by (2), she's required
+to play GREEN. Contradiction.
+
+So either assuming that \(A\) does or does not know that it is
+rationally required for \(B\) to play \emph{green} leads to a
+contradiction given (1), (2) and (3). So these three premises are
+inconsistent. Since (3) is true, that means (1) or (2) is false. And
+since the Reason-Knowledge principle entails those two premises, one of
+which is false, the Reason-Knowledge Principle is false.
+
+I'm not entirely sure which of (1) and (2) is false; both of them do
+feel plausible. I suspect the problem is (1). Assume \(A\) deduces from
+premises she believes that rational players will play a green card.
+Perhaps she agrees with Robert Stalnaker
+(\citeproc{ref-Stalnaker1998}{1998}) that rationality requires avoiding
+weakly dominated options. Then she knows it doesn't matter to her
+outcome whether she plays GREEN or RED; she will get \$1 either way. But
+if she plays RED, she is incoherent; she is doing something she thinks
+no rational player does. And perhaps this incoherence is a bad thing in
+itself. Niko Kolodny (\citeproc{ref-Kolodny2005}{2005}) argues that
+incoherence is not bad in itself; Jacob Ross
+(\citeproc{ref-Ross2012}{2012}) argues that it is. The suggestion that
+(1) is the false premise favours Ross's view over Kolodny's. But this
+conclusion is very speculative; the main thing I wanted to note was the
+problem this game raises for the Reason-Knowledge Principle.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Hawthorne2008-HAWKAA}
+Hawthorne, John, and Jason Stanley. 2008. {``{Knowledge and Action}.''}
+\emph{Journal of Philosophy} 105 (10): 571--90.
+\url{https://doi.org/10.5840/jphil20081051022}.
+
+\bibitem[\citeproctext]{ref-Ichikawa2012}
+Ichikawa, Jonathan. 2012. {``Experimentalist Pressure Against
+Traditional Methodology.''} \emph{Philosophical Psychology} 25 (5):
+743--65. \url{https://doi.org/10.1080/09515089.2011.625118}.
+
+\bibitem[\citeproctext]{ref-Kolodny2005}
+Kolodny, Niko. 2005. {``Why Be Rational?''} \emph{Mind} 114 (455):
+509--63. \url{https://doi.org/10.1093/mind/fzi509}.
+
+\bibitem[\citeproctext]{ref-Ross2012}
+Ross, Jacob. 2012. {``All Roads Lead to Violations of Countable
+Additivity.''} \emph{Philosophical Studies} 161 (3): 381--90.
+\url{https://doi.org/10.1007/s11098-011-9744-z}.
+
+\bibitem[\citeproctext]{ref-Stalnaker1998}
+Stalnaker, Robert. 1998. {``Belief Revision in Games: Forward and
+Backward Induction.''} \emph{Mathematical Social Sciences} 36 (1):
+31--56. \url{https://doi.org/10.1016/S0165-4896(98)00007-9}.
+
+\end{CSLReferences}
+
+
+
+\end{document}
