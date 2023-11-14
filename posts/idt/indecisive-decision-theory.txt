@@ -16,71 +16,13 @@ citation: false
 categories:
   - games and decisions
   - unpublished
-output:
-  distill::distill_article:
-    toc: true
-    toc_depth: 4
-    number_sections: TRUE
-    keep_md: yes
-    md_extensions: +footnotes
+format:
+  html: default
+  pdf:
+    output-title: "Indecisive Decision Theory"
 ---
 
-
-```{r, include=FALSE}
-require(knitr)
-require(tidyverse)
-require(kableExtra)
-require(huxtable)
-
-knitr::opts_chunk$set(echo = FALSE, results = "asis")
-
-gameformat <- function(game){
-  gg <- as_hux(game) %>%
-    set_width(ncol(game)/10) %>%
-#    set_caption(caption) %>%
-    set_bold(1, everywhere) %>%
-    set_bold(everywhere, 1) %>%
-    set_right_border(everywhere, 1, 0.5) %>%
-    set_bottom_border(1, everywhere, 0.5) %>%
-    set_align(everywhere, everywhere, "center") %>%
-#    set_caption_pos("bottom") %>%
-    set_row_height(everywhere, 0.6)
-  right_border_color(gg) <- "grey80"
-  print_html(gg)
-  ### kbl(game, 
-  ###     booktabs = F, 
-  ###     escape = FALSE,
-  ###     align = paste0("r",strrep("c", ncol(game)-1)),
-  ###     # caption = caption,
-  ###     linesep = ""
-  ###     ) %>%
-  ###   column_spec(1, 
-  ###               border_right = T,
-  ###               bold = T) %>%
-  ###   row_spec(0, bold = T, extra_css = "border-bottom: solid 0.5px;") %>%
-  ###   cell_spec(df[1, 2], extra_css = "border_left = solid 0.5px;") %>%
-  ###   kable_styling(full_width = F)  
-}
-
-game_display_caption <- function(game, caption){
-  labelgame <- rbind(
-    c("", names(game)[2:length(names(game))]),
-    game
-  )
-  labelgame %>%
-    kbl(booktabs = T, 
-        col.names = NULL, 
-        escape = FALSE,
-        align = paste0("r",strrep("c", ncol(game)-1)),
-        linesep = "",
-        caption = caption) %>%
-    column_spec(1, border_right = T) %>%
-    row_spec(1, hline_after = TRUE) %>%
-    kable_styling(latex_options = "HOLD_position")
-}
-```
-
-### Decisiveness
+# Decisiveness
 
 Say a decision theory is **decisive** iff for any decision problem, it says either:
 
@@ -89,11 +31,7 @@ Say a decision theory is **decisive** iff for any decision problem, it says eith
 
 A decision theory is **decisive over binary choices** iff it satisfies this condition for all decision problems where there are just two choices. Most decision theories in the literature are decisive, and of those that are not, most of them are at least decisive over binary choices. I'm going to argue that the correct decision theory, whatever it is, is indecisive. It is not, I'll argue, even decisive over binary choices.
 
-<aside>
-Picture is "Study for 'The Bear Hunt' (for the Alcázar, Madrid)" by Peter Paul Rubens via [Cleveland Museum of Art](https://www.clevelandart.org/art/1983.69).
-</aside>
-
-The argument  turns on a pair of very similar decision problems. Each problem has the following structure. There is a human Player, and a predictor, who I'll call Doctor. Doctor is very good, as good as the demon in Newcomb's problem, at predicting Player's behavior. Doctor will make two decisions. First, they will opt-in (which I'll write as I for In), or opt-out (which I'll write as O for out). If they opt-out, Doctor gets $1, and Player gets $100. (Assume both Doctor and Player prefer more money to less, and indeed that over these small sums there is more or less no declining marginal utility of money.) If they opt-in, this will be publicly announced, an another game will be played. Each of Doctor and Player will (independently) pick a letter: A or B. Doctor will aim to predict Player's choice, and will be rewarded iff that prediction is correct. Here is the payout table for the possible outcomes of this game.
+The argument  turns on a pair of very similar decision problems. Each problem has the following structure. There is a human Player, and a predictor, who I'll call Doctor. Doctor is very good, as good as the demon in Newcomb's problem, at predicting Player's behavior. Doctor will make two decisions. First, they will opt-in (which I'll write as I for In), or opt-out (which I'll write as O for out). If they opt-out, Doctor gets $1, and Player gets $100. (Assume both Doctor and Player prefer more money to less, and indeed that over these small sums there is more or less no declining marginal utility of money.) If they opt-in, this will be publicly announced, an another game will be played. Each of Doctor and Player will (independently) pick a letter: A or B. Doctor will aim to predict Player's choice, and will be rewarded iff that prediction is correct. @tbl-main-game-state is the payout table for the possible outcomes of this game.
 
  Human Pick   Doctor Pick   Human Reward   Doctor Reward
 ------------ ------------- -------------- ---------------
@@ -102,21 +40,20 @@ The argument  turns on a pair of very similar decision problems. Each problem ha
      B           A              $3             $0
      B           B              $4             $1
      
+: Main game, in state description form {#tbl-main-game-state}
 
-If you prefer this in the way we standardly present games in normal form, it looks like this, with the human as Row, doctor as Column, and in each cell the human's payout is listed first. (All payouts are in dollars)
+If you prefer this in the way we standardly present games in normal form, it looks like @tbl-main-game-table, with the human as Row, doctor as Column, and in each cell the human's payout is listed first. (All payouts are in dollars)
 
-```{r}
-	main_game <- tribble(
-	   ~" ", ~A, ~B,
-	   "A", "6,4", "0,0",
-	   "B", "3,0", "4,1"
-	)
-gameformat(main_game)
-```
+                  A             B 
+------------ ------------- -------------- 
+  **A**          6, 4         0, 0
+  **B**          3, 0         4, 1
+     
+: Main game, in table description form {#tbl-main-game-table}
 
 Doctor is good at predictions, and prefers more money to less. So if Doctor predicts Player will choose A, they will opt-in, and also play A, getting $4. But what if they predict Player will choose B. They will get $1 either by opting-out, or by opting-in and choosing B. Since they are indifferent in this case, let's say they will flip a coin to decide which way to go. And Player knows that this is how Doctor will decide, should Doctor predict Player will choose B. Doctor will also flip a coin to decide what prediction to make if they think Player is completely indifferent between the choices, and Player also knows this.
 
-Now I said there were going to be two problems. Here's how they are created. two Players, Amsterdam and Brussels, will play the game. They have identical utility functions over money, and identical prior probability distributions about what Doctor will do conditional on each of their choices. That's to say, they both think the probability that Doctor will be wrong is vanishingly small. But Brussels is busy and has to run to the bank, so they have to write their decision in an envelope that will be revealed, after Doctor chooses A or B, iff Doctor opts-in in the game with Brussels. Amsterdam, on the other hand, gets to see Doctor's decision about whether to opt-in or opt-out, and then (if Doctor opts-in) has to write their decision in an envelope that will be revealed after Doctor chooses A or B. For ease of reference, call Brussels's decision the _early_ decision and Amsterdam's decision the _late_ decision.
+Now I said there were going to be two problems. Here's how they are created. Two Players, Amsterdam and Brussels, will play the game. They have identical utility functions over money, and identical prior probability distributions about what Doctor will do conditional on each of their choices. That's to say, they both think the probability that Doctor will be wrong is vanishingly small. But Brussels is busy and has to run to the bank, so they have to write their decision in an envelope that will be revealed, after Doctor chooses A or B, iff Doctor opts-in in the game with Brussels. Amsterdam, on the other hand, gets to see Doctor's decision about whether to opt-in or opt-out, and then (if Doctor opts-in) has to write their decision in an envelope that will be revealed after Doctor chooses A or B. For ease of reference, call Brussels's decision the _early_ decision and Amsterdam's decision the _late_ decision.
 
 Here is the core philosophical premise in the argument to follow.
 
@@ -146,9 +83,9 @@ Second, a theory could say that no matter how much one adds to the specification
 
 Third, I have set up this problem quite explicitly as a game, with another player - Doctor. I don't think this is particularly big deal, though I gather not everyone agrees. In this respect (among others) I'm following William @Harper1986, who recommended treating Newcomb's Problem as a game. It's not clear why it wouldn't be a game. The Newcomb demon makes a choice, and if you assume the demon gets utility 1 from correct predictions and utility 0 from incorrect predictions, they make the choice that maximises their return given their beliefs about what the other (human) player will do. So game theoretic techniques can and should apply. I think any problem with a predictive demon is best thought of as a game where the demonic player gets utility 1 or 0 depending on whether their prediction is right. Here the predictive player, Doctor, has a utility function with slightly more structure. But if we think decision theory should apply in cases where there is a predictor around, it should still apply when that predictor has preferences with slightly more structure.
 
-Fourth, this project was inspired by reading David Pearce's argument against 'Single Solution Concepts' [@Pearce1983]. My initial plan was to simply translate his argument into decision theoretic terms and use it as an argument for indecisiveness. I ended up with a somewhat different argument to his, one that draws heavily on Brian Skyrms's work on Stag Hunts [@Skyrms1990; @Skyrms2001; @Skyrms2004]. But the project started out from an idea of Pearce's. And as you'll see in the conclusion, it will end with a related idea of is.
+Fourth, this project was inspired by reading David Pearce's argument against 'Single Solution Concepts' [@Pearce1983]. My initial plan was to simply translate his argument into decision theoretic terms and use it as an argument for indecisiveness. I ended up with a somewhat different argument to his, one that draws heavily on Brian Skyrms's work on Stag Hunts [-@Skyrms1990; -@Skyrms2001; -@Skyrms2004]. But the project started out from an idea of Pearce's. And as you'll see in the conclusion, it will end with a related idea of is.
 
-### Defending The Core Premise
+# Defending The Core Premise
 
 In this section I'll offer three arguments in defence of **The Core Premise**. The first will be to argue that Amsterdam and Brussels have in a key sense the same choice, the second will argue that violations of **The Core Premise** will violate the Sure Thing Principle, and the third is that violations of **The Core Premise** lead to people being willing to pay to avoid information. The arguments will make frequent use of the following equivalence. A player must choose a letter iff the player prefers choosing that letter. So I'll move freely from saying that a theory says Amsterdam should choose X to saying Amsterdam should prefer X. I don't think this should be controversial, but it's worth noting. Onto the three arguments.
 
@@ -162,35 +99,33 @@ Now this last argument has one caveat. I didn't calculate how much Player should
 
 So that's the defence of **The Core Premise**. What I'll now show is that a wide range of decisive theories violate it, and so we can conclude they are false.
 
-### Early and Late Choices
+# Early and Late Choices
 
-To see why theories might violate **The Core Premise**, it's helpful to set out explicitly the choices that Amsterdam and Brussels face. And we'll treat Doctor largely as a non-player character, just as the demon is typically treated in Newcomb's problem. So from now on the columns will not be Doctor's choices, but what Doctor predicts the human player chooses. And we'll assume Doctor maximises their financial return given a correct prediction. It's easy to set out the choice Amsterdam faces; it's just the embedded game with some notational differences.
+To see why theories might violate **The Core Premise**, it's helpful to set out explicitly the choices that Amsterdam and Brussels face. And we'll treat Doctor largely as a non-player character, just as the demon is typically treated in Newcomb's problem. So from now on the columns will not be Doctor's choices, but what Doctor predicts the human player chooses. And we'll assume Doctor maximises their financial return given a correct prediction. It's easy to set out the choice Amsterdam faces; it's just the embedded game with some notational differences. I've presented it in @tbl-main-game-ams.
 
-```{r}
-	ams_game <- tribble(
-	   ~" ", ~PA, ~PB,
-	   "A", "6", "0",
-	   "B", "3", "4"
-	)
-gameformat(ams_game)
-```
+                  PA             PB 
+------------ ------------- -------------- 
+  **A**          6            0
+  **B**          3            4
+     
+: The decision problem Amsterdam faces {#tbl-main-game-ams}
 
-I've written **PA** and **PB** in the columns to indicated that A or B is Predicted. But in this game that makes little difference, since Doctor will do whatever they predict Amsterdam will do. Things are a little different for Brussels. If Doctor predicts that Brussels has written B, they will flip a coin to decide whether to opt-out, or opt-in.  So we can't write Brussels's return in actual dollars, since we don't know how the coin lands. But we can write the return in expected dollars, and we assume that Brussels is after all trying to maximise expected dollars. (We'll come back to this assumption in the next section.) So the table Brussels faces looks like this.
 
-```{r}
-	bru_game <- tribble(
-	   ~" ", ~PA, ~PB,
-	   "A", "6", "50",
-	   "B", "3", "52"
-	)
-gameformat(bru_game)
-```
+In @tbl-main-game-ams I've written **PA** and **PB** in the columns to indicated that A or B is Predicted. But in this game that makes little difference, since Doctor will do whatever they predict Amsterdam will do. Things are a little different for Brussels. If Doctor predicts that Brussels has written B, they will flip a coin to decide whether to opt-out, or opt-in.  So we can't write Brussels's return in actual dollars, since we don't know how the coin lands. But we can write the return in expected dollars, and we assume that Brussels is after all trying to maximise expected dollars. (We'll come back to this assumption in the next section.) So the table Brussels faces looks like this.
+
+                  PA             PB 
+------------ ------------- -------------- 
+  **A**          6            50
+  **B**          3            52
+     
+: The decision problem Brussels faces {#tbl-main-game-bru}
+
 
 If Doctor predicts B, then Player has a 1 in 2 chance of getting $100, and a 1 in 2 chance of getting the payout from the previous game. So their average payout is $50 if they play A, and $52 if they play B. Hence the values in  the right hand column here.
 
 So what **The Core Premise** says is that if each of these games has a uniquely rational choice, it must be the same choice. As we'll see, a lot of theories do not satisfy this constraint.
 
-### Evidential Decision Theory
+# Evidential Decision Theory
 
 Given a perfect predictor, Evidential Decision Theory says that the only payout values that matter are those in the main diagonal, running from northwest to southeast. So Amsterdam should choose A, since they'll expect to get $6 from A and $4 from B. But Brussels should choose B, since they'll expect to get $6 from A and $52 from B. So Evidential Decision Theory violates **The Core Premise**, and hence is mistaken.
 
@@ -202,7 +137,7 @@ As Edward @Elliot2019 notes, within contemporary decision theory there is little
 
 The Quiggin/Buchak view raises a dilemma for Evidential Decision Theory. If they reject the view and stick with orthodoxy, as most do, they should have an argument against the risk-weighted view. But the strongest such arguments turn on the fact that the risk-weighted view violates the Sure Thing Principle, and leads to people paying to avoid information. Evidential Decision Theorists can't complain about it on those grounds, since their theory does the same thing. Alternatively, they can modify their theory to incorporate the Quiggin/Buchak view. But then they wouldn't have a decisive decision theory, since on that view what to do in a decision problem depends on something not typically specified in the problem, namely the chooser's attitude towards risk. So even if the Evidential Decision Theorist rejects the arguments behind **The Core Premise**, as I suspect most will, they need to either find a new objection to risk-weighted theories of choice, or modify their theory in a way that abandons decisiveness. I think the arguments for **The Core Premise** are sound, but even if they aren't, it seems unlikely that there is a plausible _decisive_ theory that can be derived from Evidential Decision Theory.
 
-### Stag Hunt
+# Stag Hunt
 
 It's possible to transform any decision problem involving a predictor into a game. David @Lewis1979e already noted the relationship between Prisoners' Dilemma and Newcomb's Problem. And William @Harper1986 noted that you could turn any problem involving a predictor into a game by assuming the predictor wants to make correct predictions and acts in their own interest.
 
@@ -210,16 +145,14 @@ It's also frequently possible to do the reverse transformation, to turn a game i
 
 If you plug various famous games into the recipe from the previous paragraph, you get some familiar examples from modern decision theory. If you start with Prisoners' Dilemma and apply this recipe, you get Newcomb's Problem. If you start with Matching Pennies ^[You can see examples of all these games, and all the game theoretic machinery I use throughout this paper, in any standard game theory textbook. My favorite such textbook is @Bonanno2018, which has the two advantages of being philosophically sophisticated and open access. I'm not going to include citations for every bit of textbook game theory I use; that seems about as appropriate as citing an undergrad logic textbook every time I use logic. But if you want more details on anything unfamiliar in this paper, that's where to look.] , you get Death in Damascus [@GibbardHarper1978]. If you start with Battle of the Sexes, you get Asymmetric Death in Damascus [@Richter1984]. If you start with Chicken, you get the Psychopath Button [@Egan2007-EGASCT]. But there hasn't been quite as much attention paid to what happens if you start with Stag Hunt and run this recipe. The game you get turns out to be very useful for classifying decisive decision theories that choose two boxes in Newcomb's Problem.
 
-Here is an abstract form of a Stag Hunt game, where the options are G/g for Gather or H/h for Hunt. Actually, this is a table for a generic symmetric game; what makes it a Stag Hunt are the four constraints listed below.^[I've listed the constraints as strict inequalities, but that might be over the top. Sometimes you'll see one or other of these constraints weakened to an inclusive inequality. This difference won't matter for current purposes.]
+@tbl-generic is an abstract form of a Stag Hunt game, where the options are G/g for Gather or H/h for Hunt. Actually, it is a table for a generic symmetric game; what makes it a Stag Hunt are the four constraints listed below.^[I've listed the constraints as strict inequalities, but that might be over the top. Sometimes you'll see one or other of these constraints weakened to an inclusive inequality. This difference won't matter for current purposes.]
 
-```{r}
-stag_hunt_game <- tribble(
-  ~" ",       ~g, ~h,
-  "G",      "$x, x$", "$y, z$",
-  "H",    "$z, y$", "$w, w$"
-)
-gameformat(stag_hunt_game)
-```
+                  g             h 
+------------ ------------- -------------- 
+  **G**          $x, x$      $y, z$
+  **H**          $z, y$      $w, w$
+     
+: A generic symmetric game {#tbl-generic}
 
 - $x > z$
 - $w > y$
@@ -232,16 +165,14 @@ First, one might play $G$ because one wants to minimise regret. Each play is a g
 
 Second, one might want to maximise expected utility, given uncertainty about what the other player will do. Since one has no reason to think the other player will prefer $g$ to $h$ or vice versa - both are equilibria - maybe one should give each of them equal probability. And then it will turn out that $G$ is the option with highest expected utility. Intuitively, $H$ is a risky option and $G$ is a safe option, and when in doubt, perhaps one should go for the safe option.
 
-What I'll call a _Stag Decision_ is basically a Stag Hunt game where the other player is a predictor. So the decision looks like this, where the above four constraints on the values still hold, and **PX** means the predictor predicts **X** will be chosen.
+What I'll call a _Stag Decision_ is basically a Stag Hunt game where the other player is a predictor. So the decision looks like @tbl-stag-decision, where the above four constraints on the values still hold, and **PX** means the predictor predicts **X** will be chosen.
 
-```{r}
-stag_hunt_decision <- tribble(
-  ~" ",       ~PG, ~PH,
-  "G",      "$x$", "$y$",
-  "H",    "$z$", "$w$"
-)
-gameformat(stag_hunt_decision)
-```
+                  PG             PH 
+------------ ------------- -------------- 
+  **G**          $x$         $y$
+  **H**          $z$         $w$
+     
+: A Stag Problem (when the in text constraints are applied) {#tbl-stage-decision}
 
 These kinds of decisions are important in the history of game theory because they illustrate in the one game the two most prominent theories of equilibrium selection: risk dominance and payoff dominance [@HarsanyiSelten1988]. Risk dominance recommends gathering; payoff dominance recommends hunting. And most contemporary proponents of decisive decision theories in philosophy fall into one of these two camps.
 
@@ -253,16 +184,14 @@ Another family of approaches says to always Gather in Stag Decisions. For very d
 
 Both Amsterdam and Brussels are facing Stag Decisions. But for Amsterdam, choosing A is Hunting and choosing B is Gathering, while for Brussels, choosing A is Gathering and choosing B is Hunting. So any view which says to always Gather will say that Amsterdam should choose B, and Brussels should choose A. Again, this treats differently choices that are fundamentally the same, and violates Sure Thing. But does it mean Cardiff will pay to avoid information? Here things are a little trickier, because Cardiff has four possible choices: Receive information or pay to decline it, and then choose A or B. And the different approaches to Gathering say different things about how to make decisions in four-way choices. So let's set that argument for **The Core Premise** aside - the first two arguments for it still seem like decisive objections to any view that one should always Gather.
 
-What about views that deny that all Stag Decisions should be treated alike? As I've said, I don't think any such view is in the literature, but it's good to think about other views. Let's drop the assumption that we're even looking at a Stag Decision (though it will turn out that we are), and think about what to do in general in cases where there are two strict equilibria. That is, think about what our imaginary decisive decision theory will say about the following case, where we just have the constraints $x > z$ and $w > y$, and again $PX$ means the predictor predicts $X$.
+What about views that deny that all Stag Decisions should be treated alike? As I've said, I don't think any such view is in the literature, but it's good to think about other views. Let's drop the assumption that we're even looking at a Stag Decision (though it will turn out that we are), and think about what to do in general in cases where there are two strict equilibria. That is, think about what our imaginary decisive decision theory will say about @tbl-two-eqm, where we just have the constraints $x > z$ and $w > y$, and again $PX$ means the predictor predicts $X$.
 
-```{r}
-two_eqm_decision <- tribble(
-  ~" ",       ~PE, ~PF,
-  "E",      "$x$", "$y$",
-  "F",    "$z$", "$w$"
-)
-gameformat(two_eqm_decision)
-```
+                  PE             PF 
+------------ ------------- -------------- 
+  **E**          $x$         $y$
+  **F**          $z$         $w$
+
+: A decision problem with multiple equilibria
 
 Any coherent solution must be invariant under redescriptions of the problem. So if you take a real world example that fits this category, and relabel which option is E and which is F, the recommendation should flip. And if you rescale the utilities by multiplying by a positive constant or adding a constant, the verdict should be unchanged, since utilities are only defined up to positive affine transformation. The only theories that meet these constraints say that a choice has a 'score' $x + my$, where $x$ is the equilibrium payoff, and $y$ is the other possible payoff, and $m$ is a free variable the theory sets which reflects how much it cares about the value of the non-equilibrium payoff. The theory then says to pick the option with the higher score, or to be indifferent otherwise. So it  says to strictly prefer E to F iff $x + my > w + mz$ and to be indifferent between the choices if that's an equality not an inequality. Setting $m$ to 0 gives you the view that says one should always Hunt, since one should always pick the equilibrium with the highest equilibrium value. Setting $m$ to 1 gives you the view that you should always Gather, since you should maximise the sum (or, equivalently, the average) of the two payouts you might get with the choice. And both of these views violate **The Core Premise**. But what should we say about views that give $m$ other values?
 
@@ -270,7 +199,7 @@ The first thing to say is that it is very hard to see any good philosophical mot
 
 The second thing to say is that we have done more already than object just to the theories that set $m$ to 1 or 0. Any theory that has $m < \frac{2}{3}$ will say that Amsterdam should choose A and Brussels should choose B, violating **The Core Premise**. And any view that has $m > \frac{46}{47}$ will say that Amsterdam should choose B and Brussels should choose A, also violating **The Core Premise**. But we don't yet have an objection to theories on which $\frac{2}{3} \leq m \leq \frac{46}{47}$.
 
-To see what's wrong with those theories, keep the structure of the game the same, but change the rewards as follows (all rewards are in dollars).
+To see what's wrong with those theories, keep the structure of the game the same, but change the rewards as in @tbl-revised-game (all rewards are in dollars).
 
 Human Pick   Doctor Pick   Human Reward               Doctor Reward
 ------------ ------------- -------------------------- ---------------
@@ -280,35 +209,34 @@ Human Pick   Doctor Pick   Human Reward               Doctor Reward
      B           A              2+$\frac{1}{m}            0
      B           B              2                         1
 
-Then the 'late game' that Amsterdam faces will look like this:
+: State description of the game with an opt-out included {#tbl-revised-game}
 
-```{r}
-general_late_game <- tribble(
-  ~" ",       ~PA, ~PB,
-  "A",      "4", "0",
-  "B",    "2+$\frac{1}{m}$", "2"
-)
-gameformat(general_late_game)
-```
+Then the 'late game' that Amsterdam faces will look like @tbl-revised-late:
+
+                  PA                PB 
+------------ ------------------ -------------- 
+  **A**          4                  0
+  **B**       2+$\frac{1}{m}$       2
+
+: Table of the revised version of the late game {#tbl-revised-late}
+
 
 Since $2 + m(2+\frac{1}{m}) > 4 + 0m$ for any value of $m$ satisfying $\frac{2}{3} \leq m \leq \frac{46}{47}$, the theory will say Amsterdam should choose B.^[More slowly, we can use the formula to work out the score of each option. The score of A is the value in the top-left, 4, plus $m$ times the value in the top-right, 0. And that's 4, no matter the value of $m$. The score of B is the value in the bottom-left, 2, plus $m$ times the value in the bottom-left, $2 + \frac{1}{m}$. That is, the score is $2 + (1 + 2m) = 3 + 2m$. Since $m > \frac{1}{2}$, this value is greater than 4, which was the score of A.]
 
-The 'early game' that Brussels faces will look like this:
+The 'early game' that Brussels faces will look like @tbl-revised-early.
  
-```{r}
-general_early_game <- tribble(
-  ~" ",       ~PA, ~PB,
-  "A",      "4", "0",
-  "B",    "2+$\frac{1}{m}$", "1"
-)
-gameformat(general_early_game)
-```
+                  PA                PB 
+------------ ------------------ -------------- 
+  **A**          4                  0
+  **B**       2+$\frac{1}{m}$       1
+
+: Table of the revised version of the early game {#tbl-revised-early}
 
 Since in this game Player gets nothing if Doctor opts-out, and there is a 50/50 chance the Doctor will opt-out if they predict B, the returns in the right-hand column are half what they are in the late game. Since $4 + 0m > 1 + m(2+\frac{1}{m})$ for any value of $m$ satisfying $\frac{2}{3} \leq m \leq \frac{46}{47}$, the theory will say Brussels should choose A.^[More slowly, we can use the formula to work out the score of each option. The score of A is the value in the top-left, 4, plus $m$ times the value in the top-right, 0. And that's 4, no matter the value of $m$. The score of B is the value in the bottom-left, 1, plus $m$ times the value in the bottom-left, $2 + \frac{1}{m}$. That is, the score is $1 + (1 + 2m) = 2 + 2m$. Since $m < 1$, this value is less than 4, which was the score of A.]
 
 So any decisive theory will violate **The Core Premise** for some choice pair or other. Hence all decisive theories are mistaken.
 
-### Where To Next?
+# Where To Next?
 
 Decision theory cannot be everything that some of its proponents want it to be. It cannot be a guide that tells us what to do in every situation, even if we allow it to sometimes say that options are tied. So what can decision theory be? A natural answer is that it can tell us which options are rationally permissible, knowing that there will often be a plurality of options that are permissible. I think the way to finding a plausible indecisive theory goes via answering the following five questions.
 
@@ -341,3 +269,7 @@ The Canadian Presidency examples suggests that there are constraints on $Pr$ tha
 The long term goal of the project behind this paper is to argue that there are no such principles. The only constraints on rational decision are that one should maximise expected utility given some $Pr$, and this $Pr$ should satisfy independently motivated epistemic requirements. Now I haven't come close to arguing for that here, and it's a very strong claim. Given everything else I've said, it basically amounts to the claim that the theory of equilibrium selection has no role to play in normative decision theory. It may have a central role to play in descriptive decision theory, in explaining why people end up at a certain equilibrium. But it can't justify that equilibrium, since any equilibrium could be rationally justified.^[But note here that what I'm calling an equilibrium is just a coherent set of beliefs that is grounded in the evidence. It doesn't include the requirement, typical in game-theory, that the chooser has true beliefs about some aspect of the world around them.]
 
 But all of this is for future work. The aim of this paper has been to open up the possibility of an indecisive, i.e., permissive, decision theory. Decisive decision theories have to take a stand on Stag Decisions, and there is no coherent way for them to do that. So no decisive theory is correct, and the correct decision theory is indecisive.
+
+:::{.content-visible when-format="pdf"}
+## References {-}
+:::
