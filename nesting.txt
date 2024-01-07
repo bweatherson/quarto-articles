@@ -1,0 +1,101 @@
+Recently there has been some philosophical attention to a result John @Geanakoplos1989 proved about the value of information.^[See @Dorst2020 and @DorstEtAl2021 for uses of this result, and @Williamson20xx and @Das2023 for scepticism about its significance.] The point of this note is to show that a natural generalisation of Geanakoplos's result doesn't hold. I think this undermines some of the attempts to get philosophical mileage out of Geanakoplos's result, but I won't try to prove that here; the point is just to state, and refute, the generalisation.
+
+# Information, Partions, and Value
+
+It's a fairly old result that if information is partitional, then information is valuable to utility maximisers. David @Blackwell1951 proved two stronger results. First, he showed not just that information is valuable, but that more information is more valuable than less information. Second, he showed that in some good sense only information is guaranteed to be valuable. Set aside the second of these results, despite its mathematical importance. This paper focusses on a version of the first result.
+
+Assume that we start with a finite^[It makes the math much easier to start with finite sets, but it isn't clear what philosophical justification we can give for this. I'll come back to this point below.] set *W* of possibilities. These aren't worlds in the traditional sense; they don't include any information about what we do. But we assume that any choice we make will have different payouts in different *states*, and each member of *W* determines a state. The experimenter will then conduct an experiment. An experiment is a function from members of *W* to subsets of *W*.^[We're modelling deterministic experiments here; that is, given the state, there is a guaranteed result of the experiment. If the experiment is noisy, in the sense that the state of the world does not determine a result but merely a probability distribution over possible results, we need more complexity.] An experiment *E* is **partitional** if whenever *b* $\in$ *E*(*a*), then *E*(*a*) = *E*(*b*). Intuitively, if *b* is possible given the experimental result in world *a*, then exactly the same things are possible, post-experiment, in worlds *a* and *b*.
+
+An experiment *E*~1~ is more informative than an experiment *E*~2~ iff given the result of *E*~1~, we can work out the result of *E*~2~. To state that more precisely, it helps to use some extra terminology. This terminology will make things more familiar to people coming from modal logic.^[Unfortunately, this way of setting things out makes it harder to say what it means for one experiment to be more informative than another if we assume experiments can be noisy. In that setting it's better to use a different way of formalising the idea that one experiment tells us what the other experiment will say.] For *i* $\in$ \{1, 2\}, and *a*, *b* $\in$ *W*, say *aR~i~b* iff *b* $\in$ *E~i~*(a)*. Intuitively, *aR~i~b* means that *b* is possible after performing experiment *i* in world *a*. Then *E*~1~ is more informative than *E*~2~ iff for all *a*, *b* $\in$ *W*, if *aR*~1~*b*, then *aR*~2~*b*. That is, if experiment 1 doesn't rule out *b* in world *a*, neither does experiment 2.
+
+Note that while my terminology so far is standard, it's a bit misleading. Nothing I've said so far implies that experiment 1 is *strictly* more informative than experiment 2. Indeed, given these definitions, every experiment is more informative than itself. We could define what it is for one experiment to be strictly more informative than another, or call the notion we've defined being at least as informative as. But having noted this, I'll simply stick with standard terminology.
+
+An experiment is more valuable than another if it would not lead to worse results. More precisely, imagine we have a finite set *B* of bets. Each bet is a function from members of *W* to a real value. The experimenter starts with a credence function $\pi$ defined over *W*, and updates this by conditionalisation after learning *E*(*a*), where *E* is the experiment they run, and *a* is the actual state. They then choose the member of *B* with the highest expected value. It's possible that doing this will lead to choosing something with an actually low value. But what's not possible, if experiments are partitional, is that the experimenter can expect to be worse off by running the experiment.
+
+More precisely, Blackwell derives this result.^[It's not completely explicit in Blackwell, because he's more interested in the converse, but it's a trivial consequence of things he does say.] If *E*~1~ is more informative than *E*~2~, then the expected value of the strategy *Conduct E*~1~* then choose the member of B with highest expected value* has, antecedently, at least as high an expected value as the strategy *Conduct E*~2~* then choose the member of B with highest expected value*.
+
+Somewhat colloquially, more informative experiments are more valuable. At least, that's true if *W* is finite and experiments are partitional.
+
+# Nested Experiments
+
+John @Geanakoplos1989 proved a nice generalisation of this result. Say an experiment *E* is nested iff whenever *E*(*a*) and *E*(*b*) overlap, one of them is a subset of the other. In symbols, if *E*(*a*) $\cap$ *E*(*b*) $\neq \null$, then *E*(*a*) $\subset$ *E*(*b*), or *E*(*b*) $\subset$ *E*(*a*). The result we're interested in concerns reflexive, transitive, nested frames. Among reflexive and transitive frames, nestedness is equivalent to this condition on the generated *R*-relation:
+
+$$
+\forall a, b, c: (aRc \wedge bRc) \rightarrow (aRb \vee bRa)
+$$
+
+The result which has led to philosophical discussion is this. Let *E*~1~ be a nested experiment, and *E*~2~ a partitional experiment. Then if *E*~1~ is more informative than *E*~2~, in the sense from the previous section, *E*~1~ is more valuable than *E*~2~.
+
+One special case of this has been particularly discussed by philosophers. Let *E*~2~ be what we might call the null experiment. For any *a* $\in$ *W*, *E*~2~(*a*) = *W*. Since this is clearly partitional, and less informative than any experiment, it follows that if *E*~1~ is nested, then performing *E*~1~ is valuable. (At least, it does not have negative value.) So if we have good reason to believe that experiments are nested in this sense (and reflexive and transitive), and we are expected utility maximisers, we get the nice result that information is valuable.
+
+And perhaps we can argue for something stronger than this. Start with the premise that evidence is valuable. Geanakoplos also shows that this is only guaranteed to be true if experiments are reflexive, transitive, and nested. Since evidence is guaranteed to be valuable, we have an argument that experiments are reflexive, transitive, and nested. Now it would be good to back up this argument with independent reasons to think that experiments are nested.^[There is obviously a large philosophical literature already on whether they are reflexive and transitive. On the former, see @Comesana2023 for a dissent from the standard view that they are. The literature since @Williamson2000 on the latter is too large to survey.] Geanakoplos argues for nestedness from some considerations about memory.^[Though note that he thinks ideally experiments are partitional, and the fallback to reflexive, transitive, and nested is a kind of blameless error, not a form of being ideal. For reasons set out in Humberstone [-@Humberstone201x, Ch. xx], most philosophers will not go along with that.] @Dorst2020 argues for nesteness from considerations about the structure of reasons. I think the criticisms @Das2023 makes of both these arguments are fairly compelling, but I think the general point that experiments must be nested else evidence wouldn't always be valuable, and it is, is independently interesting.
+
+# Combinations of Experiments
+
+That said, there are reasons to be a little sceptical here. Start with the following relatively straightforward result.^[Check whether this is in Williamson; I think it might be.] Nestedness isn't closed under conjunction. For example, let *W* be \{1, 2, 3, 4\}, and *E*~1~ and *E*~2~ be given by @tbl-first-experiment.
+
+   *W*              *E*~1~           *E*~2~
+:-------: :--------------------: :------------------:
+   1          \{1, 2, 3, 4\}       \{1, 2, 3, 4\}
+   2          \{2, 4\}             \{1, 2, 3, 4\}
+   3          \{1, 2, 3, 4\}       \{3, 4}
+   4          \{2, 4}              \{3, 4}
+
+: Two nested experiments {#tbl-first-experiment}
+
+The intersection of these is not nested. Intuitively, if the experimenter conducts either experiment, the generated epistemic possibility relation satisfies nestedness, but if they conduct both, it does not. We can see this by just adding a column to @tbl-first-experiment, as in @tbl-second-experiment.
+
+   *W*              *E*~1~           *E*~2~             *E*~1~ $\cap$ *E*~2~
+:-------: :--------------------: :------------------: :----------------------:
+   1          \{1, 2, 3, 4\}       \{1, 2, 3, 4\}           \{1, 2, 3, 4\}
+   2          \{2, 4\}             \{1, 2, 3, 4\}           \{2, 4\}
+   3          \{1, 2, 3, 4\}       \{3, 4}                  \{3, 4\}
+   4          \{2, 4}              \{3, 4}                  \{4\}
+
+: Two nested experiments, with their conjunction {#tbl-first-experiment}
+
+If nesteness is a constraint on post-experiment information states, it's as if it is permitted by the rules for the experimenter to conduct either experiment, but not both. This is somewhat odd.
+
+But worse, I think, is that nestedness does not guarantee the most intuitive form of the view that evidence is valuable. It does not guarantee that more evidence is more valuable. Geanakoplos's result had an odd asymmetry in the constraints. *E*~1~, the more informative experiment, is required to be nested, but *E*~2~, the less informative one, is further required to be partitional. It might be hoped we could drop that constraint, but we cannot.
+
+# Pairs of Nested Experiments
+
+Again, let *W* be \{1, 2, 3, 4\}, and define *E*~1~ and *E*~2~ as in @tbl-main-example.
+
+   *W*              *E*~1~           *E*~2~
+:-------: :--------------------: :------------------:
+   1          \{1, 2, 3\}          \{1, 2, 3, 4\}
+   2          \{2, 3\}             \{2, 3, 4\}
+   3          \{2, 3\}             \{2, 3, 4\}
+   4          \{4\}                \{2, 3, 4\}
+
+: Experiments in main example {#tbl-main-example}
+
+Now let *B* consist of two bets, *B*~1~ and *B*~2~, defined as in @tbl-main-example-bets.
+
+   *W*              *B*~1~           *B*~2~
+:-------: :--------------------: :------------------:
+   1          -3                   0
+   2          2                    0
+   3          2                    0
+   4          -2                   0
+
+: Bets in main example {#tbl-main-example-bets}
+
+Finally, let $\pi$ be the flat distribution, so for each *a* $\in$ *W*, $\pi$(*a*) = 0.25. Prior to conducting an experiment, the expected value of *B*~1~ is -0.25, so the experimenter will prefer *B*~2~, and get a return of 0.
+
+After conducting *E*~1~, the experimenter will prefer *B*~2~ if they know they are in 4, because that has a sure loss of 2. But any other signal will lead them to choose *B*~1~, because it has an expected return of 2 after learning \{2, 3\}, and an expected return of 1/3 after learning \{1, 2, 3\}. So the experimenter will choose *B*~1~ in the first three scenarios, and *B*~2~ in the second, for an expected return of 0.25. That's more than 0; this is a case where conducting an experiment has value. But it's not the best we could do.
+
+After conducting *E*~2~, the experimenter will prefer *B*~2~ if they learn nothing, as they do in 1. But they will prefer *B*~1~ if they learn any of the others, because they will then think it has an expected return of 2/3. And choosing *B*~2~ in 1, and *B*~1~ in the other three worlds, has an expected return of 0.5. So they expect to do better by conducting *E*~2~ than conducting *E*~1~.
+
+This shows that Geanakoplos's result cannot be generalised in the way we'd hope. It does not hold in general when *E*~2~ is reflexive, transitive, and nested.
+
+It might be wondered whether we could rescue the result by increasing the other constraints on *E*, beyond being reflexive and transitive. Presumably there are some suggestions that would work, e.g., requiring that the cardinality of *W* be at most 3. But it's hard to find one that's particularly well motivated.
+
+Note that the frame consisting of *W* and *R*~1~ is a frame for S4.4, which Humberstone [-@Humberstone201x 390-xxx] argues is the strongest epistemic logic that is even somewhat plausible. The frame consisting of *W* and *R*~2~ is also a frame for S4.4. So any extra constraints on *E* to rule out this example would make the resulting logic stronger than S4.4. That makes it seem unlikely that there is a natural constraint, more plausible than a restriction on the cardinality of *W*, that will work.
+
+# Open Questions
+
+There is one other constraint in Geanakoplos's result, that *W* is finite. It would be a lot of work to eliminate this constraint. Once *W* might be infinite, we have to worry about unbounded utility functions, unmeasurable sets, and all the other complications that arise once we apply probability to infinite spaces. On the other hand, it feels like this work is worth doing. It seems perfectly normal for an inquiry to be into the value of some quantity that could (for all we know) take any value in some interval. It is very odd to exclude these inquiries from our models.
+
+And the constraint plays an important role. The original proof Geanakoplos gives is by induction on the size of *W*, so it only works when *W* is finite. If there isn't some natural extension of his result to infinite cases, then it is hard to see its philosophical significance. But that set of puzzles is for another paper.
