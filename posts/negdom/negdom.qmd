@@ -53,13 +53,53 @@ Getting the machinery on the table to show this will take some time, but it will
 
 ## Games as Decisions
 
-Lewis 1981
+It's a fairly old point by now that once we allow demons into decision theory, as we did when we started discussing Newcomb's Problem, some games look a lot like decision problems. As @Lewis1981a notes, a pair of (self-interested) twins playing Prisoners' Dilemma is facing something like a Newcomb Problem.
+
+It's easy to overstate the point Lewis is making here, and the title of his paper probably encourages this overstatement. But what's true is that each of the twins faces a problem where Evidential Decision Theory (EDT) recommends one course of action, and standard forms of Causal Decision Theory (CDT) recommend another. That's enough to suggest there is a connection between this debate within decision theory and some familiar problems in game theory.
 
 ## Decisions as Games
 
-Harper 1986
+A few years later, William @Harper1986 argued that we can turn many decision problems involving demons into games. At least in Newcomb's Problem, the demon is just like a game player with a simple reward function. They get a positive reward if they correctly predict what the human player takes, and no reward otherwise. That is, we can turn the decision problem in @tbl-newcomb-decision into the game in @tbl-newcomb-game.
+
+|          |  **P1**    | **P2** |
+|:--------:|:----------:|:------:|
+|  **1**   |   1000     |  0     |
+|  **2**   |   1001     |  1     |
+
+: Newcomb's Problem. {#tbl-newcomb-decision}
+
+|          |  **1**    | **2** |
+|:--------:|:----------:|:------:|
+|  **1**   |   1000, 1  |  0, 0     |
+|  **2**   |   1001, 0  |  1, 1     |
+
+: Newcomb's Problem as a game. {#tbl-newcomb-game}
+
+In @tbl-newcomb-decision, the rows are labelled 1 and 2 for human taking either 1 box or two. The columns have a 'P' in front of the options for the human because they are what the demon **predicts**. In the game version, i.e., @tbl-newcomb-game, I've just labeled them as 1 and 2 because the fact that they are predictions is now moved into the payoff structure.
+
+There is only one Nash equilibrium of @tbl-newcomb-game, and it's the result that dominance reasoning gets you to in @tbl-newcomb-decision. This is a paper in decision theory, and I'll mostly work with cases like @tbl-newcomb-decision. But a lot of what I say here is just taking fairly familiar points from game theory, and translating them back into decision-theoretic language. And that idea is something I'm taking directly from @Harper1986.
 
 ## Three Approaches to Probabilistic Dependence
+
+If we allow that states can be probabilistically dependent on actions, as the predictions of a demon can be probabilistically (though not causally) dependent on human's choice, this makes a difference to how we calculate expected utilities. Everyone agrees, for example, that just multiplying state probabilities by the utility of the state given some action, and summing the total, does not produce a useful guide to action if states are causally dependent on actions. And most everyone agrees that if states and actions are both causally and probabilistically independent (and all relevant values are numerical), then multiplying and summing like this is exactly what one should do to figure out the best action. But there are a number of theories that disagree with each other in general, but agree in these extreme cases. Philosophers have primarily focussed on two of these; I'll note a third that is just as plausible.
+
+One approach is that of Evidential Decision Theory. It says the problem with all that multiplying and summing is that it had the wrong input. We shouldn't start with the probability of a state. Rather, we should start with the probability of a state given an action. In symbols, where A ranges over the actions and S over the states, the value V of an action is given by
+
+$$
+V(A) = \sum \Pr(S | A) V(S \wedge A)
+$$
+
+The rational actor maximises this value. 
+
+A standard version of causal decision theory agrees with the general approach, but says the amendment was wrong. It says that the input should be the probability of some kind of counterfactual. In particular, it says the utility U of an action is given by
+
+$$
+U(A) = \sum \Pr(A \square \rightarrow S) V(S \wedge A)
+$$
+
+There are some bells and whistles needed if there are multiple states that might occur, but this is the basic idea. (Dmitri @Gallow2024 has a detailed argument that this really captures the essence of the classic versions of Causal Decision Theory.)
+
+It's an interesting fact that game theorists typically use neither of these options. Pick up a game theory text, and the standard definition of expected utility includes neither conditional probabilities, as in the definition of V, nor probabilities of counterfactuals, as in the definition of U. Indeed, it is common to not even see a symbol for counterfactuals in such a book, even though they are doing 
 
 EDT
 Counterfactuals - Quote Hedden and Gallow
