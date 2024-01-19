@@ -79,7 +79,7 @@ In @tbl-newcomb-decision, the rows are labelled 1 and 2 for human taking either 
 
 There is only one Nash equilibrium of @tbl-newcomb-game, and it's the result that dominance reasoning gets you to in @tbl-newcomb-decision. This is a paper in decision theory, and I'll mostly work with cases like @tbl-newcomb-decision. But a lot of what I say here is just taking fairly familiar points from game theory, and translating them back into decision-theoretic language. And that idea is something I'm taking directly from @Harper1986.
 
-## Three Approaches to Probabilistic Dependence
+## Three Approaches to Probabilistic Dependence {#three-approaches-dependence}
 
 If we allow that states can be probabilistically dependent on actions, as the predictions of a demon can be probabilistically (though not causally) dependent on human's choice, this makes a difference to how we calculate expected utilities. Everyone agrees, for example, that just multiplying state probabilities by the utility of the state given some action, and summing the total, does not produce a useful guide to action if states are causally dependent on actions. And most everyone agrees that if states and actions are both causally and probabilistically independent (and all relevant values are numerical), then multiplying and summing like this is exactly what one should do to figure out the best action. But there are a number of theories that disagree with each other in general, but agree in these extreme cases. Philosophers have primarily focussed on two of these; I'll note a third that is just as plausible.
 
@@ -99,13 +99,38 @@ $$
 
 There are some bells and whistles needed if there are multiple states that might occur, but this is the basic idea. (Dmitri @Gallow2024 has a detailed argument that this really captures the essence of the classic versions of Causal Decision Theory.)
 
-It's an interesting fact that game theorists typically use neither of these options. Pick up a game theory text, and the standard definition of expected utility includes neither conditional probabilities, as in the definition of V, nor probabilities of counterfactuals, as in the definition of U. Indeed, it is common to not even see a symbol for counterfactuals in such a book, even though they are doing 
+It's an interesting fact that game theorists typically use neither of these options. Pick up a game theory text, and the standard definition of expected utility includes neither conditional probabilities, as in the definition of V, nor probabilities of counterfactuals, as in the definition of U. Indeed, it is common to not even see a symbol for counterfactuals in such a book, even though they are doing something like causal decision theory.
 
-EDT
-Counterfactuals - Quote Hedden and Gallow
-Ex Post unconditional probabilities
+The alternative approach the game theorists use says that instead of using conditional probabilities, or probabilities of conditionals, we should use ex post probabilities. The utility of B, having chosen A, is given by this formula:
+
+$$
+U~A~(B) = \sum \Pr~A~(S) V(S \wedge B)
+$$
+
+Pr~A~(S) is the probability of S after updating on A. Except in edge cases, where Pr(A) is 0, it's just Pr(S|A). So in that respect it's like EDT; it could be rewritten using conditional probabilities. But it differs from EDT in several respects.
+
+First, the rule is not to maximise U~A~(A). Rather, it's to say that a necessary condition on A being choiceworthy is that for all available choices B, U~A~(A) $\geq$ U~A~(B). That is, A has to be ratifiable, as @Jeffrey1983 suggests.
+
+Second, there is a separate causal constraint. A partition of possibility space only counts as a division into states if each member of the partition is causally independent of the action chosen. The point of ratifiability is not to replace causal talk, as in Jeffrey, but to supplement it.
+
+Third, this is only a necessary condition for choiceworthiness, not a sufficient one. We'll add some other necessary conditions as we go along.
+
+For now, the big thing I want to stress is that this view is different to the two views that get most of the airtime in philosophy: EDT and CDT. The differences between the three views can be seen in @tbl-first-coordination.
+
+|          |  **PA**    | **PB** |
+|:--------:|:----------:|:------:|
+|  **A**   |   6        |  0     |
+|  **B**   |   0        |  4     |
+
+: A simple coordination decision. {#tbl-first-coordination}
+
+I'll call a coordination decision any problem like this where the chooser has two options, the demon tries to predict their choice, the human gets a positive reward if the demon predicts correctly, and a zero reward if the demon predicts incorrectly.
+
+EDT says that the human should choose the option with the higher payout, in this case A. CDT as stated doesn't give a verdict about what to do; it depends on the antecedent probabilities of counterfactuals connecting choices and predictions. The alternative I've attributed to game theorists says that as stated, both A and B are permissible. And while I'm going to add other constraints onto rational choice, that won't change; both options are permissible.
 
 ## Three Approaches to Dynamics
+
+The 
 
 Purely Strategic
 Purely Consequentialist
