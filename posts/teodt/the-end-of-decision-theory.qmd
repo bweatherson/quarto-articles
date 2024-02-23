@@ -1,5 +1,5 @@
 ---
-title: "Four Problems in Decision Theory"
+title: "The End of Decision Theory"
 description: |
   What question are decision theorists trying to answer, and why is it worth trying to answer it? A lot of philosophers talk as if the aim of decision theory is to describe how we should make decisions, and the reason to do this is to help us make better decisions. I disagree on both fronts. The aim of the decision theory is to describe how a certain kind of idealised decider does in fact decide. And the reason to do this is that this idealisation, like many other idealisations, helps generate explanations of real-world behaviour. We shouldn't do what these ideal deciders do, or try to be more like them, because a lot of what they do only makes sense because of the differences between us and them. Still, sometimes those differences are small enough that they can be ignored in explanations, and that's when decision theory is useful.
 bibliography: ../../brian-quarto.bib
@@ -18,7 +18,7 @@ categories:
 format:
   html: default
   pdf:
-    output-file: "Four Problems in Decision Theory"
+    output-file: "The End of Decision Theory"
     include-after-body: 
       text: |
          Unpublished. Posted online in 2024.
@@ -276,7 +276,7 @@ tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
   geom_path(data = paths %>% select(long, lat), aes(x = long, y = lat), inherit.aes = FALSE, colour = "grey30", alpha = 0.5 ) + 
   coord_quickmap() +
 #  labs(x = paste0("Tour length: ", tour_length(tour_line), " miles.")) +
-#  labs(x = "") +
+  labs(x = "") +
   theme(axis.title.x = element_text())
 tour_map
 prop_cap <= paste0("An optimisation of the previous map, with a length of ", tour_length(tour_line), " miles.")
@@ -322,7 +322,7 @@ tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
   geom_path(data = paths %>% select(long, lat), aes(x = long, y = lat), inherit.aes = FALSE, colour = "grey30", alpha = 0.5 ) + 
   coord_quickmap() +
 #  labs(x = paste0("Tour length: ", tour_length(tour_line), " miles.")) +
-#  labs(x = "") +
+  labs(x = "") +
   theme(axis.title.x = element_text())
 tour_map
 prop_cap <= paste0("The shortest path I could find, with a length of ", tour_length(tour_line), " miles.")
@@ -349,8 +349,17 @@ Imagine a version of Chooser with, as Rousseau might have put it, their knowledg
 
 Decision theories describe what that version of Chooser would do in the problem that Chooser is facing. In the betting case, adding unlimited computing power doesn't tell you who is going to win the game. So that version of Chooser will still avoid betting. But in the Salesman case, adding unlimited computing power is enough to solve the problem. They don't even have to use any fancy techniques. To find the shortest path, all it takes is finding the length of each path, and sorting the results. The first requires nothing more that addition; at least if, as was the case here, we provided the computer with the distances between any pairs of cities as input. The second just requires being able to do a bubble sort, which is technically extremely simple. To be sure, doing all these additions, then doing a bubble sort on the results, will take longer than most human lives on the kinds of computers most people have available to them. But a version of Chooser with unlimited, free, computational power will do these computations no problem at all.
 
-If we say that 
+If we say that Chooser should maximise expected utility, and we expect them to compute that, then we're asking Chooser to perform a task that is one step harder than calculating the shortest path in a Salesman problem. To calculate an expected utility, for each option one looks up a probability and a utility for each state^[Exactly which probability it is, or indeed whether it even strictly is a probability, varies by which theory one chooses. But the basic idea that Chooser multiples something probability like by a utility is common across theories], multiplies the two together, then adds the results to get a value for the option. One repeats that for each state, and finds an extreme value. Calculating the shortest path is exactly the same, except one only has to look up one number (a distance) rather than two (a probability and a utility), and there is no multiplication. Solving for the shortest path is strictly easier than finding the maximum expected utility. And yet finding the shortest path is practically impossible.
 
+This is one reason I focussed on Salesman problems rather than other mathematical claims that Chooser is, in the standard models, assumed to know. I didn't ask Chooser to bet on the Twin Primes conjecture. It's possible one could come up with a model where finding the maximum expected utility is typically possible but resolving the Twin Primes conjecture is not; it's really hard to see how an agent who could always calculate expected utilities couldn't solve a Salesman problem.
+
+There are two other things that are distinctively interesting about this problem which I'll simply note here, and defer longer discussion of them to another day. First, it is possible to give practical useful advice about how to solve Salesman problems. I've repeated some of the better advice I've heard in the previous section. Second, when someone follows this advice and does badly, as can happen with carefully designed maps, it seems they are unlucky in just the same way that someone who maximises expected utility but gets a low amount of actual utility is unlucky. This raises some interesting questions about the normative significance of expected utility maximisation that will be in the background of the rest of the discussion here; hopefully I'll return to them in later work.
+
+At this point you might complain that I've talked about decision theories asking Chooser to *calculate* expected utilities. They do no such thing. This is a point that Frank Knight made a century ago.
+
+> Let us take Marshall's example of a boy gathering and eating berries ... We can hardly suppose that the boy goes through such mental operations as drawing curves or making estimates of utility and disutility scales. [@Knight1921 66-7]
+
+And Knight does not say this is irrational. As long as the boy gets enough berries, he's doing fine. In more modern terminology, we might say that describing 
 
 ## Technical Detour
 
