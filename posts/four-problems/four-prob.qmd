@@ -34,7 +34,7 @@ Game theory textbooks tend to be several hundred pages, and identifying all the 
 
 When a student starts decision theory, they are introduced to a view that is simple, elegant, and wrong. The view says that a chooser, hereafter called Chooser, has a set of possible actions *A* available. We'll use *a* to represent an arbitrary member of that set. And there is a set of possible states *S*, with *s* being used to pick out an arbitrary member. It is assumed that a probability distribution Pr over *S* is given, and that each action-state pair has a numerical value. I'll write *V* for the value function, so *V*(*as*) is the value of performing act *a* in state *s*.
 
-The simple, elegant, and wrong theory is that Chooser should value each act *a* by its expected value, where this is $\sum_{s \in S} \Pr(s)V(as)$. And Chooser should then choose the act with the highest value.
+The simple, elegant, and wrong theory is that Chooser should value each act *a* by its expected value, where this is Σ~s ∈ S~Pr(*s*)*V*(*as*). And Chooser should then choose the act with the highest value.
 
 The problem with this view is that if Chooser has any influence over which state is actual, then this view will recommend obviously bad actions. Assume that the only possibly actions are *a* and *b*, the only two states are *s* and *t*, and while *a* will almost certainly cause *s* to be actual, *b* will almost certainly cause *b* to be actual. Now let the payoffs for all four action-state combinations be as in @tbl-joycewindow.
 
@@ -50,11 +50,11 @@ The problem is that in @tbl-joycewindow it obviously makes sense to do *b*, sinc
 Evidential decision theorists such as @Ahmed2014 say the problem is that there is an evidential connection between the acts and the states. They say that instead of the simple theory Chooser should value options using this formula.
 
 EDT
-:    $V(a) = \sum_{s \in S} \Pr(s|a)V(as)$
+:    *V*(*a*) = Σ~s ∈ S~Pr(*s* | *a*)*V*(*as*)
 
 As with the simple theory, the rule is just to maximise value. The difference is just that instead of the unconditional probability of a state, we use the conditional probability of a state given that the action is performed. This will get the right result in @tbl-joycewindow, but gives some strange results in other cases.
 
-Reinterpret @tbl-joycewindow so that the states are causally independent of the actions, but the actions are evidence for the state. To use the standard example, going back to @Nozick1969, imagine that a demon (hereafter called Demon) has predicted Chooser's choice. There is no backwards causation, so Chooser's choice is causally independent of Demon's prediction. But Chooser believes Demon is incredibly reliable, so $\Pr(s | a) \approx 1$, and $\Pr(t | b) \approx 1$. For ease of reference, I'll use the relabelled version in @tbl-newcomb for the problem when the actions are probabilistically, but not causally, connected to the states. In @tbl-newcomb, Chooser selects **U**p or **D**own, and Demon **P**redicts this choice. In general in what follows, if a state is labelled **PX**, it means that Demon has predicted that Chooser will select X. Using that notation @tbl-newcomb is just Newcomb's Problem.
+Reinterpret @tbl-joycewindow so that the states are causally independent of the actions, but the actions are evidence for the state. To use the standard example, going back to @Nozick1969, imagine that a demon (hereafter called Demon) has predicted Chooser's choice. There is no backwards causation, so Chooser's choice is causally independent of Demon's prediction. But Chooser believes Demon is incredibly reliable, so Pr(*s* | *a*) ≈ 1, and Pr(*t* | *b*) ≈ 1. For ease of reference, I'll use the relabelled version in @tbl-newcomb for the problem when the actions are probabilistically, but not causally, connected to the states. In @tbl-newcomb, Chooser selects **U**p or **D**own, and Demon **P**redicts this choice. In general in what follows, if a state is labelled **PX**, it means that Demon has predicted that Chooser will select X. Using that notation @tbl-newcomb is just Newcomb's Problem.
 
 |       | **PU** |  **PD**  |
 |:-----:|:------:|:--------:|
@@ -66,13 +66,48 @@ Reinterpret @tbl-joycewindow so that the states are causally independent of the 
 In @tbl-newcomb, EDT says that Chooser should do *a*. There is a simple argument that Chooser should do *b*: whatever the world is like, it will have a higher return. This argument convinced many people that we need a different theory, and over the 1970s and 1980s a lot of people settled on something like CfDT as the right alternative.
 
 CfDT
-:    $V(a) = \sum_{s \in S} \Pr(a \nobreakspace\Box\rightarrow s)V(as)$
+:    *V*(*a*) = Σ~s ∈ S~Pr(*a* □→ *V*(*as*))*V*(*as*)
 
 That's a way to value options; the theory is just that one should choose the option with maximal value. Recently Brian @Hedden2023 has argued that this theory is preferable to typical versions of Causal Decision Theory. I'm sympathetic to the reply offered by Dmitri @Gallowndppq that this just is what Causal Decision Theorists in the 1970s and 1980s were typically defending. But I also think, for reasons that will soon become clear, that some other theories which are quite different to this are also *causal* in the relevant sense. So from now on I'll use "Causal Decision Theory" to name a family of theories, and CfDT will be a distinctive member of that family.
 
 Another theory in that family says that the simple theory was essentially correct, it was just applied at the wrong time. This theory, which I'll call Gamified Decision Theory, or GDT, starts with the following two claims. First, the relevant state probabilities are those at the end of deliberation, once a choice has been made, not at the start of deliberation. Second, when we use those _ex post_ probabilities, the simple theory is fine. In symbols, the core formula that GDT uses is this.
 
 GDT
-:    $V(a) = \sum_{s \in S} \Pr^{\prime}(s)V(as)$
+:    V(a) = Σ~s ∈ S~Pr$\prime$(*s*)*V*(*as*)
 
-In this formula, Pr^$\prime$^ is the probability distribution over states after Chooser has made their decision. GDT says that only options that have maximal value using this formula are choice-worthy.^[My preferred version of GDT adds several more constraints to this - it has a separate constraint for ruling out weakly dominated options, and a constraint for solving beer-quiche games, and maybe a constraint for ruling out mixed strategies in coordination games. But this is a necessary condition for choice-worthiness.] This allows that different options, with different values, could be choice-worthy. All that matters is that given the probability distribution over states 
+In this formula, Pr$\prime$ is the probability distribution over states after Chooser has made their decision. GDT says that only options that have maximal value using this formula are choice-worthy.^[My preferred version of GDT adds several more constraints to this - it has a separate constraint for ruling out weakly dominated options, and a constraint for solving beer-quiche games, and maybe a constraint for ruling out mixed strategies in coordination games. But this is a necessary condition for choice-worthiness.] This allows that different options, with different values, could be choice-worthy. All that matters is that given the probability distribution over states that Chooser has when they have decided to perform an act, that act is utility maximising. In @tbl-first-coord, GDT says that both Up and Down are choice-worthy.
+
+|       | **PU** |  **PD**  |
+|:-----:|:------:|:--------:|
+| **U** |  3     |  0    |
+| **D** |  0     |  2    |
+
+: An asymmetric coordination problem {#tbl-first-coord}
+
+One of our four problems is to work out which of these theories is right. I'll be arguing for GDT.
+
+## Risk
+
+Think about what value of *x* would make Chooser indifferent between these two options.
+
+1. \$1,000,000
+2. A gamble that returns \$2,000,000 with probability *x*, and \$0 with probability 1-*x*.
+ 
+What factors are relevant to solving for *x*. One factor is the declining marginal utility of money. Money primarily has exchange value, and if Chooser won $2,000,000, the things Chooser would buy with the second million dollars are largely things they declined to buy with the first million. Hence the second million will be worth much less to them than the first, barring a pronounced taste for expensive goods that lack valuable parts. That's one factor that goes into solving for *x*, and every decision theorist agrees it is important, and that it is part of why whatever value *x* takes, it is surely well above ½.
+
+But is it the only factor? If Chooser is rational, is knowing the function from the money they have to the utility they get from money enough to solve for *x*? The orthodox answer is that it is. Lara @BuchakRisk has argued that it is not. We also need to know how much Chooser values, or more likely disvalues, risk. That is, we need to know how risk-seeking, or risk-averse, Chooser is.
+
+The orthodox view is that all we need to know are three numbers:
+
+- The value Chooser assigns to their current wealth, which we can set as 0 for ease of calculation.
+- The value Chooser assigns to having $1,000,000 more than their current wealth, which we can set as 1 again for ease of calculation.
+- The value Chooser assigns to having $2,000,000 more than their current wealth, which we will label *c*.
+
+Then on the standard view, the value of the gamble is *cx*, so the gamble is equal to the sure million iff *x* = 1/*c*. On Buchak's view, rational Chooser has a risk function *f*, that measures their sensitivity to risk. The function must be monotonic increasing, with *f*(0) = 0, and *f*(1) = 1. If Chooser is risk-averse, then typically *f*(*x*) < *x*.
+
+Buchak's view reduces to the orthodox view if *f*(*x*) = *x*. I'm going to argue that given one very natural constraint, we can show that *f*(*x*) must indeed equal *x*. I'm far from the first to make an argument on these lines; I think the arguments that @Briggs201x and @Thoma20xx make for the same conclusion are also successful. What's novel about what I'm going here is two-fold. First, the premise I'll use is, I think, weaker and more plausible than the premises used in other arguments. Second, and more importantly, I'll be using the same premise to resolve problems involving demons as to argue against Buchak's view. A big aim of this paper is to bring different parts of contemporary decision theory together. As a quick glance at the literature will tell you, there isn't much overlap between work on views like Buchak's and work on problems involving demons, though both of them are large literatures. This is a mistake, and one I'm hoping to help rectify here.
+
+## Non-Linearity
+
+
+
