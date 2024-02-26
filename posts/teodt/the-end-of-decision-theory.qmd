@@ -21,6 +21,9 @@ format:
     include-after-body: 
       text: |
          Unpublished. Posted online in 2024.
+    include-in-header: 
+      text: |
+          \usepackage[english]{babel}
 ---
 
 # What is Decision Theory a Theory Of?
@@ -65,11 +68,11 @@ So far this will probably strike you, dear reader, as obvious. But there's anoth
 
 We'll focus on a version of what Julia @Robinson1949 called the travelling salesman problem. Given some points on a map, find the shortest path through them. We'll focus on the 257 cities shown on the map in @fig-map.
 
-```{r first_map}
+```{r}
 #| echo: false
 #| warning: false
 #| message: false 
-#| cache: true
+#| cache: false
 #| label: fig-map
 #| fig-cap: "257 American cites; we'll try to find the shortest path through them."
 require(tidyverse)
@@ -194,17 +197,17 @@ tour_map
 
 The task is to find the shortest path through those 257 cities.^[Include citation as to where I got the map, and the packages used in this, and to where I learned some of this stuff about TS problems.]
 
-All nine of the decision theories I mentioned, and as far as I know every competitor to them in the philosophical literature, say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. And least, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandlekernEtAl2017].
+All nine of the decision theories I mentioned, and as far as I know every competitor to them in the philosophical literature, say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. And least, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandelkernEtAl2017].
 
 One of the striking things about this puzzle is that it turns out there are some helpful things that can be said. One helpful bit of advice to someone trying to solve a problem like this is to use a Farthest Insertion Algorithm. Insertion algorithms say to start with a random city, then add cities to the path one at a time, at each time finding the point to insert the city into the existing path that adds the least distance. The Farthest Insertion Algorithm says that the city added at each stage is the one farthest from the existing path. Insertion algorithms in general produce pretty good paths in a very short amount of time - at least on normal computers. And the Farthest Insertion Algorithm is, most of the time, the best Insertion Algorithm to use. @fig-farthest shows the result of one output of this algorithm.^[The algorithm is silent on which city you start with, and usually chooses this randomly.]
 
 ```{r}
 #| echo: false
-#| cache: true
+#| cache: false
 #| warning: false
 #| message: false 
 #| label: fig-farthest
-#| fig-cap: !expr prop_cap
+#| fig-cap: "An output of the Farthest Insertion Algorithm, with a length of 21075 miles"
 theme_set(theme_map())
 tour_line <- solve_TSP(as.TSP(city_matrix), method = "farthest_insertion", start = 1)
 
@@ -236,17 +239,17 @@ tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
   labs(x = "") +
   theme(axis.title.x = element_text())
 tour_map
-
-prop_cap <- paste0("An output of the Farthest Insertion Algorithm, with a length of ", tour_length(tour_line), " miles.")
 ```
 
-The path in @fig-farthest is not bad, but with only a bit of extra computational work, one can do better. A fairly simple optimisation algorithm takes a map as input, and then deletes pairs of edges at a time, and finds the shortest path of all possible paths with all but those two edges. The process continues until no improvements can be made by deleting two edges at a time, at which point you've found a somewhat resilient local minimum. @fig-two_opt is the output from applying this strategy to the path in @fig-farthest.
+The path in @fig-farthest is not bad, but with only a bit of extra computational work, one can do better. A fairly simple optimisation algorithm takes a map as input, and then deletes pairs of edges at a time, and finds the shortest path of all possible paths with all but those two edges. The process continues until no improvements can be made by deleting two edges at a time, at which point you've found a somewhat resilient local minimum. @fig-two-opt is the output from applying this strategy to the path in @fig-farthest.
 
 ```{r}
 #| echo: false
-#| cache: true
-#| label: fig-two_opt
-#| fig-cap: !expr prop_cap
+#| cache: false
+#| label: fig-two-opt
+#| fig-cap: "The output of an optimisation process, which reduced the path length to 20891 miles."
+#| warning: false
+#| message: false 
 theme_set(theme_map())
 tour_line <- solve_TSP(as.TSP(city_matrix), method = "farthest_insertion", start = 1)
 tour_line <- solve_TSP(as.TSP(city_matrix), method = "two_opt", tour = tour_line)
@@ -278,7 +281,6 @@ tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
   labs(x = "") +
   theme(axis.title.x = element_text())
 tour_map
-prop_cap <= paste0("An optimisation of the previous map, with a length of ", tour_length(tour_line), " miles.")
 ```
 
 This optimisation tends to produce paths that look a lot like the original, but are somewhat shorter. For most practical purposes, the best advice you could give someone faced with a problem like this is to use a Farthest Insertion Algorithm, then optimise it in this way. Or, if they have a bit more time, they could do this a dozen or so times, and see if different starting cities led to slightly shorter paths.
@@ -286,11 +288,13 @@ This optimisation tends to produce paths that look a lot like the original, but 
 While this is good advice, and indeed it's what most people should do, it's not typically what is optimal to do. For that reason, it's not what our nine decision theories would say to do. If one had unlimited and free computing power available, hacks like these would be pointless. One would simply look at all the possible paths, and see which was shortest. I do not have free, unlimited computing power, so I didn't do this. Using some black box algorithms I did not particularly understand, I was able to find a shorter path, however. It took some time, both of mine and my computer's, and for most purposes it would not have been worth the hassle of finding it. Still, just to show it exists, I've plotted it as @fig-best.
 
 
-```{r echo = FALSE, cache = TRUE}
+```{r}
 #| echo: false
-#| cache: true
+#| cache: false
 #| label: fig-best
-#| fig-cap: !expr prop_cap
+#| warning: false
+#| message: false
+#| fig-cap: "The shortest path I could find, with a distance of 20301 miles."
 my_list <- as.integer(unlist(strsplit("0,84,59,240,13,198,121,58,102,89,170,20,212,135,231,127,136,107,147,17,151,97,24,142,162,228,87,229,194,206,116,138,244,158,61,108,207,44,54,11,132,9,55,143,26,86,103,47,117,7,96,216,46,251,95,184,69,179,250,174,153,183,242,15,99,119,110,181,248,4,249,164,10,234,71,148,109,152,161,246,222,42,33,150,137,149,100,219,252,175,78,34,30,38,123,130,134,57,173,171,12,16,144,36,32,168,235,2,208,239,25,226,186,35,74,254,167,223,245,39,1,51,256,45,8,56,221,60,98,50,124,129,31,146,159,77,230,118,104,145,83,125,232,6,65,81,19,189,120,106,18,92,112,215,90,49,115,178,139,210,94,133,187,163,28,43,238,62,218,192,53,220,111,82,237,156,73,247,196,233,113,114,191,126,157,213,214,64,243,41,105,67,185,70,225,68,193,140,190,79,141,27,166,180,211,23,93,101,37,169,155,197,176,29,217,241,253,21,209,227,172,195,75,76,22,154,201,204,202,224,188,182,40,85,14,203,128,160,199,200,255,122,80,165,236,72,205,3,88,91,48,63,52,177,66,5,131",",")))
 my_list_adj <- my_list + 1
 tour_line <- TOUR(my_list_adj, tsp = as.TSP(city_matrix))
@@ -324,7 +328,6 @@ tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
   labs(x = "") +
   theme(axis.title.x = element_text())
 tour_map
-prop_cap <= paste0("The shortest path I could find, with a length of ", tour_length(tour_line), " miles.")
 
 ```
 
@@ -363,7 +366,7 @@ And Knight does not say this is irrational. As long as the boy gets enough berri
 ## Technical Detour
 
 Most philosophical decision theory concerns decisions under uncertainty, not decisions like Salesman that are made under certainty.
-
+<!--
 -   But the structure is still the same.
 
 ## Technical Detour
@@ -614,3 +617,4 @@ You might also wonder at this point whether there are other idealisations we cou
 
 - Decision theory provides idealisations.
 - These are not things we should aim for, but simplifications that play a role in explanations.
+-->

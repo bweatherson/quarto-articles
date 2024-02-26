@@ -86,7 +86,7 @@ $$
 \frac{\binom{w}{x} \binom{b}{t-x}}{\binom{w+b}{t}}
 $$
 
-More importantly, (@indform) looks just like a special case of the central formula (Upco) that @EaswaranEtAl2016 use. And that's not surprising, since this case uses the same conditional independence assumption that they make through much of their paper. To say that *A* and *B* are conditionally independent given *C* is just to say that Pr(*A* ∧ *B* | *C*) = \Pr(*A* | *C*)\Pr(*B* | *C*). In this case, any pair of claims about how many white balls are in the jars shown to Ivy and to Zack are conditionally independent, both conditional on *p* and on ¬*p*.
+More importantly, (@indform) looks just like a special case of the central formula (Upco) that @EaswaranEtAl2016 use. And that's not surprising, since this case uses the same conditional independence assumption that they make through much of their paper. To say that *A* and *B* are conditionally independent given *C* is just to say that Pr(*A* ∧ *B* | *C*) = Pr(*A* | *C*)Pr(*B* | *C*). In this case, any pair of claims about how many white balls are in the jars shown to Ivy and to Zack are conditionally independent, both conditional on *p* and on ¬*p*.
 
 The right hand side of (@indform) also looks a lot like the geometric means described above. The big difference is that the square root signs have disappeared. And that makes a difference, because it means the result violates what @BaccelliStewart2021 call Unanimity. This principle requires that *Cr~P~*(*p* | *Cr~I~*(*p*) = *y* ∧ *Cr~I~*(*p*) = *y*) = *y*. If (@indform) is true then Unanimity is violated in every case except where *y* equals 0, 0.5 or 1. But this is bad news for Unanimity, because the case for (@indform) in this case seems very strong. Player really knows how many white marbles were in each jar, and it's just a bit of algebra to get from there to (@indform) via conditionalisation. And it's very plausible that conditionalisation is the right way to update on evidence about how many marbles are in a jar. So any principle incompatible with (@indform) is false.
 
@@ -98,16 +98,14 @@ Again, this isn't a new result; @EaswaranEtAl2016 [27] derive an even more gener
 
 Let *I~x~* be the disjunction of all possible evidence propositions that would lead Ivy to have credence *x* in *p*. In this case *I~x~* is a simple proposition that there are 10*x* white marbles in the jar, but we don't need to assume that *I~x~* will be anything like that simple. Everything that follows about *I~x~* also holds for *Z~x~*, the disjunction of all possible evidence propositions that would lead Ivy to have credence *x* in *p*, but I won't repeat the derivations. Since Player defers to Ivy, i.e., (@expib) is true, we have the following proof. (All credences are Player's, so I'll drop the subscripts.) 
 
-$$
 \begin{align*}
-Cr(p | I_x) &= x &&\therefore \\
-Cr(p ∧ I_x) &= x \cdot Cr(I_x) \\
- &= x (Cr(p ∧ I_x) + Cr(\neg p ∧ I_x)) &&\therefore \\
-(1-x)Cr(p ∧ I_x) &= x \cdot Cr(\neg p ∧ I_x)) &&\therefore \\
-Cr(\neg p ∧ I_x)) &= \frac{1-x}{x} Cr(p ∧ I_x) &&\therefore \\
-Cr(I_x | \neg p) &= \frac{(1-x)Cr(*p*)}{x\cdot Cr(\neg p)}Cr(I_x | p)
+Cr(p | I_x) &= x &&\therefore \\
+Cr(p ∧ I_x) &= x \cdot Cr(I_x) \\
+ &= x (Cr(p ∧ I_x) + Cr(\neg p ∧ I_x)) &&\therefore \\
+(1-x)Cr(p ∧ I_x) &= x \cdot Cr(\neg p ∧ I_x) &&\therefore \\
+Cr(\neg p ∧ I_x) &= \frac{1-x}{x} Cr(p ∧ I_x) &&\therefore \\
+Cr(I_x | \neg p) &= \frac{(1-x)Cr(*p*)}{x\cdot Cr(\neg p)}Cr(I_x | p)
 \end{align*}
-$$
 
 So we know the ratio of *Cr*(*I~x~* | *p*) to *Cr*(*I~x~* | ¬*p*). That will become useful in what follows. Assuming evidentialism, what matters for (@exppb) is working out the value of *Cr*(*p* | *I~y~* ∧ *Z~z~*). But we now know enough to do that.
 
@@ -161,90 +159,99 @@ In our second case, Carmen once again has an urn with 50 marbles, 25 black and 2
 
 So far, it's just like the last case. But what happens next is (possibly) different. In this case, Carmen removes *m* unmarked marbles from the jar, puts them back in the urn, and draws a new set of *m* marbles to put in the jar. It's all random, so this could include some of the marbles she just removed. She shows the jar to Zack, he inspects it, and reports his credence in *p* to Player. And, crucially, player knows *m*, the number of marbles that are in common between the jars. So *m* is a measure of the independence of the experts' opinions.
 
-Once again, we can work out precisely what Player's credence should be given *m*, and the two credences. Unfortunately, it's just a long formula that doesn't seem to reduce nicely. But if you've got a machine that's good at calculating hypergeometric distributions, and you dear reader are probably reading this paper on a machine that's good at calculating hypergeometric distributions, it's not that hard to calculate the values by brute force. I won't list all the values, there are several hundred of them, but I'll present them graphically here. (Note I'll leave off the case where one or other expert announces a credence of 0 or 1; in that case Player knows whether *p* is true, so the question of how to merge the credences is easy.)
+Once again, we can work out precisely what Player's credence should be given *m*, and the two credences. Unfortunately, it's just a long formula that doesn't seem to reduce nicely. But if you've got a machine that's good at calculating hypergeometric distributions, and you dear reader are probably reading this paper on a machine that's good at calculating hypergeometric distributions, it's not that hard to calculate the values by brute force. I won't list all the values, there are several hundred of them, but I'll present them graphically in @fig-conexp. (Note I'll leave off the case where one or other expert announces a credence of 0 or 1; in that case Player knows whether *p* is true, so the question of how to merge the credences is easy.)
 
 ```{r, include=FALSE}
 require(knitr)
 require(tidyverse)
 require(kableExtra)
 
-knitr::opts_chunk$set(echo = FALSE, results = "asis")
+knitr::opts_chunk$set(echo = FALSE, results = "asis")
 ```
 
 ```{r}
+#| fig-cap: "The result of merging two somewhat connected opinions."
+#| label: fig-conexp
 r <- 0.5 # Proportion of balls that are white
 
-master <- expand_grid(marked_ball = 0:1, 
-                      ivy_white = 0:10, 
-                      to_remove = 1:9, 
-                      white_remove = 0:9, 
-                      white_add = 0:9) %>%
+master <- expand_grid(marked_ball = 0:1, 
+                      ivy_white = 0:10, 
+                      to_remove = 1:9, 
+                      white_remove = 0:9, 
+                      white_add = 0:9) %>%
   filter(white_remove <= ivy_white - marked_ball) %>%
   filter(white_remove <= to_remove) %>%
   filter(white_add <= to_remove) %>%
   filter(ivy_white >= marked_ball) %>%
   filter(ivy_white <= 9 + marked_ball) %>%
-  mutate(ivy_black = 10 - ivy_white,
-         black_remove = to_remove - white_remove,
-         black_add = to_remove - white_add) %>%
+  mutate(ivy_black = 10 - ivy_white,
+         black_remove = to_remove - white_remove,
+         black_add = to_remove - white_add) %>%
   filter(black_remove <= ivy_black - 1 + marked_ball) %>%
-  mutate(zack_white = ivy_white - white_remove + white_add,
-         zack_black = ivy_black - black_remove + black_add,
-         zack_total = zack_white + zack_black,
-         ivy_prob = dhyper(ivy_white - marked_ball, 50 * r - marked_ball, 50 * (1-r) - 1 + marked_ball, 9),
-         remove_prob = dhyper(white_remove, ivy_white - marked_ball, ivy_black - 1 + marked_ball, to_remove),
-         add_prob = dhyper(white_add, 50 * r - ivy_white + white_remove, 50 * (1-r) - ivy_black + black_remove, to_remove),
-         all_prob = (1-r + marked_ball * (2 * r - 1)) * ivy_prob * remove_prob * add_prob)
+  mutate(zack_white = ivy_white - white_remove + white_add,
+         zack_black = ivy_black - black_remove + black_add,
+         zack_total = zack_white + zack_black,
+         ivy_prob = dhyper(ivy_white - marked_ball, 50 * r - marked_ball, 50 * (1-r) - 1 + marked_ball, 9),
+         remove_prob = dhyper(white_remove, ivy_white - marked_ball, ivy_black - 1 + marked_ball, to_remove),
+         add_prob = dhyper(white_add, 50 * r - ivy_white + white_remove, 50 * (1-r) - ivy_black + black_remove, to_remove),
+         all_prob = (1-r + marked_ball * (2 * r - 1)) * ivy_prob * remove_prob * add_prob)
 
 player <- master %>%
   group_by(ivy_white, zack_white, to_remove) %>%
-  summarise(prob = weighted.mean(marked_ball, all_prob), .groups = 'drop') %>%
-  rename(Ivy = ivy_white, Zack = zack_white, Removed = to_remove, Probability = prob) %>%
-  mutate(Ivy = Ivy/10, Zack = Zack / 10)
+  summarise(prob = weighted.mean(marked_ball, all_prob), .groups = 'drop') %>%
+  rename(Ivy = ivy_white, Zack = zack_white, Removed = to_remove, Probability = prob) %>%
+  mutate(Ivy = Ivy/10, Zack = Zack / 10)
 
 player_plot <- ggplot(player %>%
                         filter(Ivy != round(Ivy, 0), Zack != round(Zack, 0)), 
                       aes(Removed, Probability)) +
-  geom_point(size = 0.2) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  geom_point(size = 0.2) +
+  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
   theme_light() +
-  scale_x_continuous(breaks = seq(2, 8, 3)) +
-  scale_y_continuous(breaks = seq(0.2, 0.8, 0.3)) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_x_continuous(breaks = seq(2, 8, 3)) +
+  scale_y_continuous(breaks = seq(0.2, 0.8, 0.3)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  labs(x="Number of marbles removed between the expert inspections", y = "Player's final credence in p")
 
 player_plot
 ```
 
-Here is how to read the graph. Each row corresponds to a particular credence announced by Ivy; the credence is shown on the right. Each column corresponds to a particular credence announced by Zack; that credence is shown on the top. The x-axis of the individual graphs shows the value for *m*, the number of marbles removed. And the y-axis shows Player's final credence in *p*. There are more dots on some graphs than others because some combinations of Ivy credence, Zack credence and *m* are impossible. The announced credences can't, by the rules of the game, differ by more than 0.1*m*.
+Here is how to read the graph in @fig-conexp. Each row corresponds to a particular credence announced by Ivy; the credence is shown on the right. Each column corresponds to a particular credence announced by Zack; that credence is shown on the top. The x-axis of the individual graphs shows the value for *m*, the number of marbles removed. And the y-axis shows Player's final credence in *p*. There are more dots on some graphs than others because some combinations of Ivy credence, Zack credence and *m* are impossible. The announced credences can't, by the rules of the game, differ by more than 0.1*m*.
 
 One notable feature of that graph is that as *m* gets larger, the final credence tends to move away from 0.5; it tends to get more opinionated. Another notable feature, though probably not one you can see in this resolution, is that this move towards greater opinionation happens in a surprisingly linear fashion. To a first approximation, Player's credence moves away from 0.5 roughly the same amount for each addition to *m*, at least holding *y* and *z* fixed.
 
-It's not perfectly linear, but it's much closer than I would have guessed looking at how really quite non-linear the inputs are. Let's zoom in on a part of the graph to see this more vividly.
+It's not perfectly linear, but it's much closer than I would have guessed looking at how really quite non-linear the inputs are. @fig-cap-top-right shows the result of zooming in on a part of the graph to see this more vividly.
 
 ```{r}
+#| fig-cap: "The bottom right corner of @fig-conexp"
+#| label: fig-cap-bottom-right
 ggplot(player %>%
             filter(Ivy != round(Ivy, 0), Zack != round(Zack, 0), Ivy > 0.6, Zack > 0.6),
             aes(Removed, Probability)) +
-  geom_point(size = 0.2) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  geom_point(size = 0.2) +
+  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
   theme_light() +
-  scale_x_continuous(breaks = seq(2, 8, 3)) +
-  scale_y_continuous(breaks = seq(0.75, 0.95, 0.1)) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_x_continuous(breaks = seq(2, 8, 3)) +
+  scale_y_continuous(breaks = seq(0.75, 0.95, 0.1)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(x="Number of marbles removed between the expert inspections", y = "Player's final credence in p")
 ```
 
-The curve in the bottom right panel is not really linear; it definitely curves downwards. But as you move your eye upwards and leftwards in the table, the curves look much much straighter. The panel where they both announce 0.7 is really remarkably straight. If we focus on the middle of the big graph, this is even more striking. (I've left off the cases where Zack announces a credence under 0.5 because those graphs are just mirror images of graphs already shown.)
+The curve in the bottom right panel of @fig-cap-bottom-right is not really linear; it definitely curves downwards. But as you move your eye upwards and leftwards in the table, the curves look much much straighter. The panel where they both announce 0.7 is really remarkably straight. If we focus on the middle of @fig-conexp, this is even more striking. (I've left off the cases where Zack announces a credence under 0.5 because those graphs are just mirror images of graphs already shown.)
 
 ```{r}
+#| fig-cap: "A detail of the middle of @fig-conexp"
+#| label: fig-cap-middle
 ggplot(player %>%
             filter(Ivy > 0.2, Zack > 0.4, Ivy < 0.8, Zack < 0.8),
             aes(Removed, Probability)) +
-  geom_point(size = 0.2) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  geom_point(size = 0.2) +
+  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
   theme_light() +
-  scale_x_continuous(breaks = seq(2, 8, 3)) +
-  scale_y_continuous(breaks = seq(0.3, 0.7, 0.2)) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_x_continuous(breaks = seq(2, 8, 3)) +
+  scale_y_continuous(breaks = seq(0.3, 0.7, 0.2)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  labs(x="Number of marbles removed between the expert inspections", y = "Player's final credence in p")
 ```
 
 Why does this matter? Because pooling functions are easy to use, and the supra-Bayesian needs something to match that ease of use. It's a cliche that for every problem there is a solution that is simple, intuitive, and wrong. And the version of the pooling approach that uses linear averages is very simple, very intuitive, and very wrong. The version that uses geometric averages strikes most people as less simple and intuitive (or maybe I'm just bad at explaining it), but it is less wrong. But still, sometimes simple, intuitive and wrong is exactly what you need! Computation is hard, life is short, precision is overrated. Why not just average if you are just looking to get something roughly right?
@@ -255,47 +262,51 @@ $$
 (1-k)\frac{\sqrt{yz}}{\sqrt{yz} + \sqrt{(1-y)(1-z)}} + k\frac{yz}{yz + (1-y)(1-z)}
 $$
 
-Let's check visually how this does against the exact calculations. In the graphs that follow, I'll use circles for the ideally calculated posterior credences, and triangles for the estimates made using this formula.
+Let's check visually how this does against the exact calculations. In the graphs that follow, starting with @fig-twoprob-bottom-right, I'll use circles for the ideally calculated posterior credences, and triangles for the estimates made using this formula.
 
 ```{r}
-player$type = "Calculated"
+#| label: fig-twoprob-bottom-right
+#| fig-cap: "A detail from @fig-conexp with estimated probabilities shown."
+player$type = "Calculated"
 
 player_model <- player %>%
-  mutate(Probability =  #(9 - Removed) / 9 * (Ivy + Zack) / 2 + 
+  mutate(Probability =  #(9 - Removed) / 9 * (Ivy + Zack) / 2 + 
                         (9 - Removed) / 9  * (Ivy * Zack)^0.5 / ((Ivy * Zack)^0.5 + ((1 - Ivy)* (1 - Zack))^0.5) +
                         Removed / 9 * (Ivy * Zack) / ((Ivy * Zack) + ((1 - Ivy)* (1 - Zack)))
   ) %>%
-   mutate(type = "Estimated")
+   mutate(type = "Estimated")
 
 all_player <- bind_rows(player, player_model) %>%
-  rename(`Credence Type` = type)
+  rename(`Credence Type` = type)
 
 ggplot(all_player %>%
          filter(Ivy >= 0.7, Ivy <= 0.9, Zack >= 0.7, Zack <= 0.9),
        aes(Removed, Probability)) +
-  geom_point(size = 1, aes(shape = `Credence Type`)) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  geom_point(size = 1, aes(shape = `Credence Type`)) +
+  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
   theme_light() +
-  scale_x_continuous(breaks = seq(2, 8, 3)) +
-  scale_y_continuous(breaks = seq(0.75, 0.95, 0.1)) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_x_continuous(breaks = seq(2, 8, 3)) +
+  scale_y_continuous(breaks = seq(0.75, 0.95, 0.1)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
 
-That looks pretty good. There is a tiny bit of separation in the bottom right panel, but otherwise the estimate tracks the calculated credences pretty closely. Let's look at the middle of the graph.
+That looks pretty good. There is a tiny bit of separation in the bottom right panel of @fig-twoprob-bottom-right, but otherwise the estimate tracks the calculated credences pretty closely. @fig-twoprob-middle shows the middle of the graph.
 
 ```{r}
+#| label: fig-twoprob-middle
+#| fig-cap: "The middle of @fig-conexp with estimated probabilities shown."
 ggplot(all_player %>%
          filter(Ivy >= 0.3, Ivy <= 0.7, Zack >= 0.5, Zack <= 0.7),
        aes(Removed, Probability)) +
-  geom_point(size = 1, aes(shape = `Credence Type`)) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  geom_point(size = 1, aes(shape = `Credence Type`)) +
+  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
   theme_light() +
-  scale_x_continuous(breaks = seq(2, 8, 3)) +
-  scale_y_continuous(breaks = seq(0.3, 0.7, 0.2)) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_x_continuous(breaks = seq(2, 8, 3)) +
+  scale_y_continuous(breaks = seq(0.3, 0.7, 0.2)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
 
-And all through here the dots are overlapping. That's close enough. So at least in this special case, the supra-Bayesian can produce an estimate that is very close to the ideally calculated credence. So we don't need to resort to pooling even as an approximation device.
+And all through @fig-twoprob-middle the dots are overlapping. That's close enough. So at least in this special case, the supra-Bayesian can produce an estimate that is very close to the ideally calculated credence. So we don't need to resort to pooling even as an approximation device.
 
 But the simplifications here are dire. Here are six ways we might want to generalise the model.
 
@@ -320,52 +331,54 @@ In our last case, one expert is better informed than the other. Carmen first fil
 
 There is a weird thing in this setup in that one of the experts reports something other than their precise credence. The reason I set up the example this way is to make it impossible for the recipient of the expert opinion to infer who saw the smaller jar. If they both reported their actual credence, it would be possible for the recipient to be told one of them has credence 0.75 in *p* and the other has credence 0.6. And then it would be obvious that the hearer should have credence 0.6 in *p*, since that's the credence of the more informed person. So I made the first person round to the nearest 0.1 to make it harder to make such inferences.
 
-Given all that setup we can work out what Player's credence in *p* should be given the two announcements. (I'm rounding to three decimal places to save space.I'm leaving off the cases where one or other party announces an extremal credence - the hearer agrees with those credences, at least to three decimal places. And the 'NA' values are where it is impossible given the setup for those to be the announced values.)
+Given all that setup we can work out what Player's credence in *p* should be given the two announcements, and I've shown the values in @tbl-diffk. (I'm rounding to three decimal places to save space.I'm leaving off the cases where one or other party announces an extremal credence - the hearer agrees with those credences, at least to three decimal places. And the 'NA' values are where it is impossible given the setup for those to be the announced values.)
 
 ```{r}
-master <- expand_grid(marked_ball = 0:1, 
-                      who_first = c("Ivy", "Zack"),
-                      how_round = 0:1,
-                      first_white = 0:20, 
-                      white_remove = 0:10) %>% 
+#| label: tbl-diffk
+#| caption: "The posterior probability after hearing two differentially informed experts."
+master <- expand_grid(marked_ball = 0:1, 
+                      who_first = c("Ivy", "Zack"),
+                      how_round = 0:1,
+                      first_white = 0:20, 
+                      white_remove = 0:10) %>% 
   filter(white_remove <= first_white - marked_ball) %>%
   filter(first_white >= marked_ball) %>%
   filter(first_white <= 19 + marked_ball) %>%
-  mutate(first_black = 20 - first_white,
-         black_remove = 10 - white_remove) %>%
+  mutate(first_black = 20 - first_white,
+         black_remove = 10 - white_remove) %>%
   filter(black_remove <= first_black - 1 + marked_ball) %>%
-  mutate(second_white = first_white - white_remove,
-         second_black = first_black - black_remove,
-         second_total = second_white + second_black,
-         first_white_display = case_when(first_white %% 2 == 0 ~ first_white / 2,
+  mutate(second_white = first_white - white_remove,
+         second_black = first_black - black_remove,
+         second_total = second_white + second_black,
+         first_white_display = case_when(first_white %% 2 == 0 ~ first_white / 2,
                                          TRUE ~ first_white/2 - 0.5 + how_round),
-         first_white_display = as.integer(first_white_display),
-         ivy_white = case_when(who_first == "Ivy" ~ first_white_display,
+         first_white_display = as.integer(first_white_display),
+         ivy_white = case_when(who_first == "Ivy" ~ first_white_display,
                                TRUE ~ second_white),
-         zack_white = case_when(who_first == "Zack" ~ first_white_display,
+         zack_white = case_when(who_first == "Zack" ~ first_white_display,
                                TRUE ~ second_white),
-         first_prob = dhyper(first_white - marked_ball, 25 - marked_ball, 24 + marked_ball, 19),
-         remove_prob = dhyper(white_remove, first_white - marked_ball, first_black - 1 + marked_ball, 10),
-         all_prob = 1/8 * first_prob * remove_prob)
+         first_prob = dhyper(first_white - marked_ball, 25 - marked_ball, 24 + marked_ball, 19),
+         remove_prob = dhyper(white_remove, first_white - marked_ball, first_black - 1 + marked_ball, 10),
+         all_prob = 1/8 * first_prob * remove_prob)
 
 player <- master %>%
   group_by(ivy_white, zack_white) %>%
-  summarise(prob = weighted.mean(marked_ball, all_prob), .groups = 'drop') %>%
-  rename(Ivy = ivy_white, Zack = zack_white, Probability = prob) %>%
-  mutate(Ivy = Ivy/10,
-         Zack = Zack / 10,
-         Probability = round(Probability, 3)) %>%
+  summarise(prob = weighted.mean(marked_ball, all_prob), .groups = 'drop') %>%
+  rename(Ivy = ivy_white, Zack = zack_white, Probability = prob) %>%
+  mutate(Ivy = Ivy/10,
+         Zack = Zack / 10,
+         Probability = round(Probability, 3)) %>%
   filter(Ivy != round(Ivy), Zack != round(Zack)) %>%
-  pivot_wider(values_from = Probability,
-              names_from = Zack) %>%
-  rename(`Ivy/Zack` = Ivy)
+  pivot_wider(values_from = Probability,
+              names_from = Zack) %>%
+  rename(`Ivy/Zack` = Ivy)
 
 kable(player, 
-      booktabs = TRUE,
-      linesep = "")
+      booktabs = TRUE,
+      linesep = "")
 ```
 
-And a striking thing about this table is how close it comes to verifying a strong form of what @Levinstein2015 calls Thrasymachus' Principle. The hearer defers to the expert with the strongest view, i.e., the view that's furthest from the prior. In contemporary terms, the hearer listens to the expert with the hottest take. It isn't an unvarnished form of that. When one says 0.5 and the other says 0.6 you end up with 0.561, not 0.6. But that's in large part because there's a good chance that the person who said 0.6 was merely rounding up as the result of a coin flip. In general, the rule in this case is find the expert credence that is furthest from the prior, and adopt it.
+And a striking thing about @tbl-diffk is how close it comes to verifying a strong form of what @Levinstein2015 calls Thrasymachus' Principle. The hearer defers to the expert with the strongest view, i.e., the view that's furthest from the prior. In contemporary terms, the hearer listens to the expert with the hottest take. It isn't an unvarnished form of that. When one says 0.5 and the other says 0.6 you end up with 0.561, not 0.6. But that's in large part because there's a good chance that the person who said 0.6 was merely rounding up as the result of a coin flip. In general, the rule in this case is find the expert credence that is furthest from the prior, and adopt it.
 
 There is a reason that a case like this should follow Thrasymachus' Principle. If the experts are rational, hotter takes should correspond to stronger evidence. And while it isn't impossible for the person with more evidence to have in a sense weaker evidence, the extra evidence may be full of defeaters for the first obtained evidence, it is pretty unlikely. In general, if someone is worthy of deference, and they have a strong view, they have strong evidence. If someone else has a weaker view, i.e., a view closer to the prior, the best explanation is that they simply don't have the evidence that the person with stronger view does.
 
