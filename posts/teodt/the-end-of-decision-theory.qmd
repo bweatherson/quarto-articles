@@ -3,7 +3,7 @@ title: "The End of Decision Theory"
 description: |
   What question are decision theorists trying to answer, and why is it worth trying to answer it? A lot of philosophers talk as if the aim of decision theory is to describe how we should make decisions, and the reason to do this is to help us make better decisions. I disagree on both fronts. The aim of the decision theory is to describe how a certain kind of idealised decider does in fact decide. And the reason to do this is that this idealisation, like many other idealisations, helps generate explanations of real-world behaviour. We shouldn't do what these ideal deciders do, or try to be more like them, because a lot of what they do only makes sense because of the differences between us and them. Still, sometimes those differences are small enough that they can be ignored in explanations, and that's when decision theory is useful.
 bibliography: ../../brian-quarto.bib
-date: February 22 2024
+date: February 27 2024
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -24,6 +24,8 @@ format:
     include-in-header: 
       text: |
           \usepackage[english]{babel}
+          \setlength\heavyrulewidth{0ex}
+          \setlength\lightrulewidth{0ex}
 ---
 
 # What is Decision Theory a Theory Of?
@@ -52,7 +54,7 @@ There is another pair of answers to this question which is interesting, but whic
 
 The nine theories I mentioned above disagree about a lot of things. In philosophy we typically spend our time looking at cases where theories agree. Not here! I will focus almost exclusively on two cases where those nine theories all say the same thing. I'll assume that whatever question they are asking, the correct answer to it in those two cases must agree with all nine theories. That will be enough to defend the view I want to defend, which is that a decision theory is correct iff is true in the right kind of idealisation.
 
-# Three Cases
+# Two Cases
 
 ## Betting
 
@@ -66,15 +68,16 @@ So far this will probably strike you, dear reader, as obvious. But there's anoth
 
 ## Salesman
 
-We'll focus on a version of what Julia @Robinson1949 called the travelling salesman problem. Given some points on a map, find the shortest path through them. We'll focus on the 257 cities shown on the map in @fig-map.
+We'll focus on a version of what Julia @Robinson1949 called the travelling salesman problem.^[For a thorough history of the problem, see @Schrijver2005. For an accessible history of the problem, which includes these references, see @wiki-salesman.] Given some points on a map, find the shortest path through them. We'll focus on the 257 cities shown on the map in @fig-map.
 
 ```{r}
 #| echo: false
 #| warning: false
 #| message: false 
-#| cache: false
+#| cache: true
+#| column: page
 #| label: fig-map
-#| fig-cap: "257 American cites; we'll try to find the shortest path through them."
+#| fig-cap: "257 American cites; our task is to find the shortest path that goes through all of them."
 require(tidyverse)
 require(TSP)
 require(maps)
@@ -195,19 +198,20 @@ tour_map
 #str_c(our_gps$name, sep = "; ", collapse = "; ")
 ```
 
-The task is to find the shortest path through those 257 cities.^[Include citation as to where I got the map, and the packages used in this, and to where I learned some of this stuff about TS problems.]
+The task is to find the shortest path through those 257 cities.^[The 257 cities are the cities in the lower 48 states from the 312 cities in North America that John @Burkhart2011 mapped in his dataset USCA312.]
 
 All nine of the decision theories I mentioned, and as far as I know every competitor to them in the philosophical literature, say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. And least, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandelkernEtAl2017].
 
-One of the striking things about this puzzle is that it turns out there are some helpful things that can be said. One helpful bit of advice to someone trying to solve a problem like this is to use a Farthest Insertion Algorithm. Insertion algorithms say to start with a random city, then add cities to the path one at a time, at each time finding the point to insert the city into the existing path that adds the least distance. The Farthest Insertion Algorithm says that the city added at each stage is the one farthest from the existing path. Insertion algorithms in general produce pretty good paths in a very short amount of time - at least on normal computers. And the Farthest Insertion Algorithm is, most of the time, the best Insertion Algorithm to use. @fig-farthest shows the result of one output of this algorithm.^[The algorithm is silent on which city you start with, and usually chooses this randomly.]
+One of the striking things about this puzzle is that it turns out there are some helpful things that can be said. One helpful bit of advice to someone trying to solve a problem like this is to use a Farthest Insertion Algorithm.^[To implement both this algorithm and the optimisation I'll mention below, I've used the TSP package by Michael Hashler and Kurt Hornik [-@HashlerHornik2007]. The description of the two steps owes a lot to their summaries in the package documentation.] Insertion algorithms say to start with a random city, then add cities to the path one at a time, at each time finding the point to insert the city into the existing path that adds the least distance. The Farthest Insertion Algorithm says that the city added at each stage is the one farthest from the existing path. Insertion algorithms in general produce pretty good paths in a very short amount of time - at least on normal computers. And the Farthest Insertion Algorithm is, most of the time, the best Insertion Algorithm to use. @fig-farthest shows the result of one output of this algorithm.^[The algorithm is silent on which city you start with, and usually chooses this randomly.]
 
 ```{r}
 #| echo: false
-#| cache: false
+#| cache: true
+#| column: page
 #| warning: false
 #| message: false 
 #| label: fig-farthest
-#| fig-cap: "An output of the Farthest Insertion Algorithm, with a length of 21075 miles"
+#| fig-cap: "An output of the Farthest Insertion Algorithm, with a length of 21075 miles."
 theme_set(theme_map())
 tour_line <- solve_TSP(as.TSP(city_matrix), method = "farthest_insertion", start = 1)
 
@@ -245,7 +249,8 @@ The path in @fig-farthest is not bad, but with only a bit of extra computational
 
 ```{r}
 #| echo: false
-#| cache: false
+#| cache: true
+#| column: page
 #| label: fig-two-opt
 #| fig-cap: "The output of an optimisation process, which reduced the path length to 20891 miles."
 #| warning: false
@@ -290,7 +295,8 @@ While this is good advice, and indeed it's what most people should do, it's not 
 
 ```{r}
 #| echo: false
-#| cache: false
+#| cache: true
+#| column: page
 #| label: fig-best
 #| warning: false
 #| message: false
@@ -335,13 +341,15 @@ I'm not sure if @fig-best is as short as possible, but I couldn't find a shorter
 
 ## The Two Cases
 
-Let's summarise these two cases in a table.
+@tbl-examples summarises the examples from the last two sections.
 
 |                 |    Betting    |     Salesman     |
 |-----------------|:-------------:|:----------------:|
 | Best outcome    | Bet on winner |  Shortest path   |
 | Decision theory |     Pass      |  Shortest path   |
 | Best advice     |     Pass      | Learn algorithms |
+
+: How three approaches to decision theory handle the two cases {#tbl-examples}
 
 The first row says which action would produce the best outcome in the two cases. The third row says what advice one ought give someone who had to choose in the two cases. And the middle row says what all the decision theories say about the two cases. Notably, it agrees with neither the first nor third row. Decision theory is neither in the business of saying what will produce the best result, nor with giving the most useful advice. So what is it doing?
 
@@ -361,11 +369,11 @@ At this point you might complain that I've talked about decision theories asking
 
 > Let us take Marshall's example of a boy gathering and eating berries ... We can hardly suppose that the boy goes through such mental operations as drawing curves or making estimates of utility and disutility scales. [@Knight1921 66-7]
 
-And Knight does not say this is irrational. As long as the boy gets enough berries, he's doing fine. In other terminology, we might say that decision theory provides a criteria of rightness, not a deliberation procedure. I'm taking this distinction from Peter @Railton1984. Alastair @Norcross1997 notes that the phrase "criterion of rightness" is used in the context of drawing this distinction by Sidgwick [-@Sidgwick1907 Book 4, Chapter 1, §1].] As long as one follows the rules of decision theory, even if one follows them largely instinctually like Marshall's boy, one is rational.
+And Knight does not say this is irrational. As long as the boy gets enough berries, he's doing fine. In other terminology, we might say that decision theory provides a criteria of rightness, not a deliberation procedure. I'm taking this distinction from Peter @Railton1984. Alastair @Norcross1997 notes that the phrase "criterion of rightness" is used in the context of drawing this distinction by Sidgwick [-@Sidgwick1907 Book 4, Chapter 1, §1]. As long as one follows the rules of decision theory, even if one follows them largely instinctually like Marshall's boy, one is rational.
 
 This move just brings us back to the original problem. It's easy to understand the distinction in Sidgwick. The criterion of rightness is that one actually produces the best outcome. Which decision procedure actually produces that outcome is hard to determine in advance, though there are good reasons for suspecting that aiming for the best outcome as such is not the optimal procedure. Why, however, should we think that maximising _expected_ utility is a criteria of rightness? What benefits does it have, over the standard of maximising actual utility, as such a criteria? It is a somewhat easier rule to use, which makes it a better deliberation procedure. Unfortunately, as the Salesman cases show, there are other procedures that are better again qua deliberation procedures too. So what benefit does it have?
 
-One possible answer to this challenge is that expected utility maximisation, or whatever one's favourite decision theory endorses, is a goal;; it is something we should try to achieve. On this picture, decision theory is relevant because it tells us what idealised people are like, and it recommends we try to be like them. In practice we can't always be like them, as in the Salesman problem, but we should try.
+One possible answer to this challenge is that expected utility maximisation, or whatever one's favourite decision theory endorses, is a goal; it is something we should try to achieve. On this picture, decision theory is relevant because it tells us what idealised people are like, and it recommends we try to be like them. In practice we can't always be like them, as in the Salesman problem, but we should try.
 
 The problem with this answer is that it is not, in general, good to try to be like the ideal. The key point goes back to Lipsey and Lancaster's _General Theory of the Second Best_ [@LipseyLancaster]. Often times, the right thing to do is something whose value consists in mitigating the costs of our other flaws. It's not true in general, indeed it's rather rare that it's true in practice, that approaches which differ from the ideal in one respect are better than all approaches which differ from the ideal in two respects. For example, us non-ideal agents should, especially in high stakes settings, stop and have a little think before acting. The ideal agent of decision theory never stops to have a think. After all, stopping is costly, and the ideal agent gets no gain from incurring that cost.
 
@@ -397,7 +405,7 @@ Until very recently, used cars sold at a huge discount to new cars, even when th
 
 Based on these five assumptions, Akerlof built a formal model of the market for recently used cars. In the model, the most common reason to sell a car one just bought is the discovery that it was a bad instance of that kind of car. Knowing this, buyers of used cars demanded a big discount in exchange for the possibility they were buying a dud. But as long as there are enough forced sellers of good recently purchased cars, who prefer whatever money they can get for their car to keeping the car, there can be an equilibrium where lightly used cars sell at a heavy discount to new cars, and it is rational for (some) owners to sell into this market, and for (some) buyers to buy in this market.
 
-If Akerlof was right, and I think he was largely correct, you'd expect the used car discount to fall if either of the following things happened. First, it would fall if production lines got more reliable, and cars off the same line were more similar to one another. And second, it would fall if buyers had access to better tools^[Better that is than a drive around the block test drive.] to judge the quality of used cars. By 2020 both of those things had happened, and the used car discount was almost zero. (Then during the pandemic very strange things happened in the used car market and the 'discount' arguably went negative. Whatever was happening there was not explained by the Akerlof model.)
+If Akerlof was right, and I think he was largely correct, you'd expect the used car discount to fall if either of the following things happened. First, it would fall if production lines got more reliable, and cars off the same line were more similar to one another. And second, it would fall if buyers had access to better tools^[Better that is than a drive around the block test drive.] to judge the quality of used cars. By 2020 both of those things had happened, and the used car discount was almost zero.^[Then during the pandemic very strange things happened in the used car market and the 'discount' arguably went negative. Whatever was happening there was not explained by the Akerlof model.]
 
 The philosophical significance of this is that one can't build models like Akerlof's without a theory of rational action under uncertainty. The big payoff of philosophical decision theory is that it's an essential input to useful models, like the Akerlof model. Since those models are useful, getting the inputs to them right is useful.
 
@@ -447,7 +455,7 @@ These models are relevant here for two reasons. One is that the main example I u
 
 This doesn't on its own show the Akerlof explanation is wrong. It might just show that explanation was incomplete. To complete the explanation we could simply add the premises that cars are expensive, and that people act more carefully when making expensive purchases. The first premise is clearly true, cars are indeed expensive, and there is some evidence for the second. Still, thinking about cursed equilibrium models, which are still incredibly idealised, helps both explain new phenomena, and appreciate more fully the explanations that rational choice models make.
 
-Cursed equilibrium models have not been developed nearly as fully as rational choice models; it's only very recently that fully dynamic versions of them have been put forward [@CohenLi2022, @FongLinPalfrey2023]. I certainly don't want to say this is the only way to modify the idealisations in standard decision theory, or even the best such way. What I do want to say is that thinking about decision theory as the project of building good simplified models suggests that the project of building multiple models of decision could have some value.
+Cursed equilibrium models have not been developed nearly as fully as rational choice models; it's only very recently that fully dynamic versions of them have been put forward [@CohenLi2023, @Fong2023]. I certainly don't want to say this is the only way to modify the idealisations in standard decision theory, or even the best such way. What I do want to say is that thinking about decision theory as the project of building good simplified models suggests that the project of building multiple models of decision could have some value.
 
 ::: {.content-visible unless-format="html"}
 ## References {-}
