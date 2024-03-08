@@ -50,7 +50,7 @@ The problem is that in @tbl-joycewindow it obviously makes sense to do *b*, sinc
 Evidential decision theorists such as Arif @Ahmed2014 say the problem is that there is an evidential connection between the acts and the states. They say that instead of the simple theory Chooser should value options using this formula.
 
 EDT
-:    *V*(*a*) = ΣΣ~*s* ∈ *S*~ (*s* | *a*)*V*(*as*)
+:    *V*(*a*) = Σ~*s* ∈ *S*~ Pr(*s* | *a*)*V*(*as*)
 
 As with the simple theory, the only rule is that Chooser should maximise value. The difference between EDT and the simple theory is that EDT replaces an unconditional probability with a conditional probability in the formula that gives the value of options. This will get the right result in @tbl-joycewindow, but gives some strange results in other cases.
 
@@ -66,14 +66,14 @@ Reinterpret @tbl-joycewindow so that the states are causally independent of the 
 In @tbl-newcomb, EDT says that Chooser should do *a*. There is a simple argument that Chooser should do *b*: whatever the world is like, it will have a higher return. This argument convinced many people that we need a different theory, and over the 1970s and 1980s a lot of people settled on something like CfDT as the right alternative.^[The canonical statement of this view is @GibbardHarper1978.]
 
 CfDT
-:    *V*(*a*) = ΣΣ~*s* ∈ *S*~ Pr(*a* □→ *s*)*V*(*as*)
+:    *V*(*a*) = Σ~*s* ∈ *S*~ Pr(*a* □→ *s*)*V*(*as*)
 
 That's a way to value options; the theory is just that one should choose the option with maximal value. Recently Brian @Hedden2023 has argued that this theory is preferable to *Causal* Decision Theory, properly so called. I'm sympathetic to the reply offered by Dmitri @Gallowndppq that CfDT just is what Causal Decision Theorists in the 1970s and 1980s were typically defending. But I also think, for reasons that will soon become clear, that some other theories which are quite different to this are also *causal* in the relevant sense. So from now on I'll use "Causal Decision Theory" to name a family of theories, and CfDT will be a distinctive member of that family.
 
 Another theory in that family says that the simple theory was essentially correct, it was just applied at the wrong time. This theory, which I'll call Gamified Decision Theory, or GDT, starts with the following two claims. First, the relevant state probabilities are those at the end of deliberation, once a choice has been made, not at the start of deliberation. Second, when we use those _ex post_ probabilities, the simple theory is fine. In symbols, the core formula that GDT uses is this.
 
 GDT
-:    V(a) = Σ~*s* ∈ *S*~ Pr′(*s*)*V*(*as*)
+:    V(a) = Σ~*s* ∈ *S*~ Pr′(*s*)*V*(*as*)
 
 In this formula, Pr′ is the probability distribution over states after Chooser has made their decision. GDT says that only options that have maximal value using this formula are choice-worthy.^[My preferred version of GDT adds several more constraints to this - it has a separate constraint for ruling out weakly dominated options, and a constraint for solving beer-quiche games, and maybe a constraint for ruling out mixed strategies in coordination games. But having maximal value ex post is a necessary condition for choice-worthiness.] This allows that different options, with different values, could be choice-worthy. All that matters is that given the probability distribution over states that Chooser has when they have decided to perform an act, that act is utility maximising. In @tbl-first-coord, GDT says that both Up and Down are choice-worthy.
 
@@ -363,20 +363,18 @@ The intuitive argument comes from thinking about how strange violations of the S
 
 :  The game table for @fig-four-three-closed {#tbl-four-three-closed}
 
-If Chooser has to act, they'll know they are in the part of the tree shown in @fig-four-three-closed-good, and are facing the table shown by @tbl-four-three-closed-good.
-
-[Include figure]
+There is one extra bit of notation in @fig-four-three-closed; the dashed lines around the two nodes where Chooser acts. These lines mean that when Chooser gets to one of those nodes, all the know is that they are somewhere in the set; they do not know which node they are at. If they do get there, they'll know that they are not at the left-most branch of the tree, so they are facing the table shown by @tbl-four-three-closed-good.
 
 |          | **Up-Tails** | **Down-Heads** | **Down-Tails** |
 |:--------:|:------------:|:--------------:|:--------------:|
 | **Up**   |      4       |       0        |       0        |
 | **Down** |      0       |       3        |       3        |
 
-: The game table for @fig-four-three-closed-good {#tbl-four-three-closed-good}
+: The strategy table for @fig-four-three-closed if Chooser knows they must choose. {#tbl-four-three-closed-good}
 
-Conditional on playing Up, they'll have got some weak evidence against Demon's reliability, but that won't make a major difference if they started out thinking that Demon was arbitrarily accurate. So whether Chooser reaches @tbl-four-three-closed-good as part of @fig-four-closed-closed, or it was the first interaction they have with Demon shouldn't make a difference to how they act.
+Conditional on playing Up, they'll have got some weak evidence against Demon's reliability, but that won't make a major difference if they started out thinking that Demon was arbitrarily accurate. So whether Chooser reaches @tbl-four-three-closed-good as part of @fig-four-three-closed, or it was the first interaction they have with Demon shouldn't make a difference to how they act.
 
-Despite that, imagine Chooser does violate SCP. In particular, imagine they are disposed to play Up in @fig-four-three-closed-good, and Down in @tbl-four-three-closed. To make vivid how odd this is, we'll also imagine that Chooser is talking to the Game-Master while they wait for Demon's prediction.
+Despite that, imagine Chooser does violate SCP. In particular, imagine they are disposed to play Up in @tbl-four-three-closed-good, and Down in @tbl-four-three-closed. To make vivid how odd this is, we'll also imagine that Chooser is talking to the Game-Master while they wait for Demon's prediction.
 
 > **Chooser**: Do they normally take this long?    
 > **Game-Master**: Sometimes. Predictions are hard.    
@@ -402,15 +400,17 @@ That's what goes on in this dialogue. Chooser is asked the same question, what w
 
 There are two other arguments for the SCP that I don't want to lean quite as heavily on.
 
-One is that the SCP is just an instance of the Sure-Thing Principle, and the Sure-Thing Principle is true. There are two problems with this argument. One is that I want to deploy the SCP against theories that go out of their way to reject Sure-Thing. If the only argument for the SCP was from Sure-Thing, these uses would be blatantly question-begging. The other is that it's not clear that my preferred theory, Gamified Decision Theory (GDT), actually endorses Sure-Thing in full generality. The arguments that Dmitri @Gallow202x gives for the inconsistency of Causal Decision Theory and Sure-Thing might generalise to GDT as well.
+One is that the SCP is just an instance of the Sure-Thing Principle, and the Sure-Thing Principle is true. There are two problems with this argument. One is that I want to deploy the SCP against theories that go out of their way to reject Sure-Thing. If the only argument for the SCP was from Sure-Thing, these uses would be blatantly question-begging. The other is that it's not clear that my preferred theory, Gamified Decision Theory (GDT), actually endorses Sure-Thing in full generality. The arguments that Dmitri @Gallownd gives for the inconsistency of Causal Decision Theory and Sure-Thing might generalise to GDT as well.
 
-Another argument is that SCP follows from the more general principle of dynamic-strategic equivalence. But arguing for the SCP this way would require arguing that only UpUp is rational in @tbl-lastsection. And while that might be right, I don't want to rest the whole paper on it.
+Another argument is that SCP follows from the more general principle of dynamic-strategic equivalence. But arguing for the SCP this way would require arguing that only UpUp is rational in @tbl-first-dynamic. And while that might be right, I don't want to rest the whole paper on it.
 
 It's better to argue from the Ramsey test, and from the intuition that Chooser is being incoherent in the above dialogue, and those are the two arguments I'll rely on in what follows.
 
-# The Single Choice Principle and Evidential Decision Theory
+# Applications
 
-Evidential Decision Theory (EDT) endorses all of the things Chooser says in the previous dialog. In @fig-four-three-closed, it says that Chooser should play Down. If the game gets to the point where Chooser must choose, i.e., in @fig-four-three-closed-good/@tbl-four-three-closed-good, EDT says that Chooser should play Up. That's incoherent, so EDT is mistaken.
+## Evidential Decision Theory
+
+Evidential Decision Theory (EDT) is inconsistent with the Single Choice Principle. @fig-four-three-closed can be used to show this, but it's a little clearer to work with a variant example. Change the case so that if Chooser has a choice, they get 4 if they choose Up, and 3 if they choose Down, whatever Demon predicted. So the game tree looks like 
 
 
 
