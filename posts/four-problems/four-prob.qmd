@@ -30,7 +30,7 @@ Game theory textbooks tend to be several hundred pages, and identifying all the 
 
 # Four Problems
 
-## Demons
+## Demons {#sec-demons}
 
 When a student starts decision theory, they are introduced to a view that is simple, elegant, and wrong. The view starts by assuming that a chooser, hereafter called Chooser, has a set of possible actions *A* available. We'll use *a* to represent an arbitrary member of that set. And there is a set of possible states *S*, with *s* being used to pick out an arbitrary member. It is assumed that a probability distribution Pr over *S* is given, and that each action-state pair has a numerical value. I'll write *V* for the value function, so *V*(*as*) is the value of performing act *a* in state *s*.
 
@@ -492,7 +492,7 @@ Before Chooser knows whether they must make a choice, the strategy table looks l
 
 : The strategy table at choice time. {#tbl-four-three-open-late}
 
-Two strategy tables for @fig-four-three-open
+Two strategy tables for @fig-four-three-open.
 :::
 
 EDT, like most other theories, says to choose Up in @tbl-four-three-open-late. But @tbl-four-three-open-early is a Newcomb problem, and EDT says to choose Down. That pair of views is, according to SCP, incoherent. EDT recommends rational Chooser give different answers to the following two questions.
@@ -510,3 +510,48 @@ Rather, the worry is that the particular information Chooser gets, namely that t
 
 ## Buchak on Risk
 
+Most decision theorists think treat the question of how to make decisions when probabilities and utilities are precise, states are known to be causally independent of actions, and there are no demons around, as a solved problem. In those cases the simple and elegant theory from @sec-demons is widely thought to be correct. One should simply maximise expected utility.
+
+The most important alternative to the standard view is the risk-sensitive view developed by Lara @BuchakRisk.^[Buchak's view builds on earlier work by John @Quiggin1981 which was designed to model how people actually make choices in some famous choice situations.] The core of Buchak's theory is a non-standard way of valuing a gamble. For simplicity, we'll focus on gambles with finitely many outcomes. Associate a gamble with a random variable *O*, which takes values *o*~1~, …, *o~n~*, where *o~j~* > *o~i~* iff *j* > *i*. Buchak says that the risk-weighted expected utility of *O* is given by this formula, where *r* is the agent's risk-weighting function.
+
+$$
+REU(O) = o_1 + \sum_{i = 2}^n r(\Pr(O \geq o_i))(o_i - o_{i-1})
+$$
+
+The decision rule then is simple: choose the gamble with the highest REU.
+
+The key notion here is the function *r*, which measures Chooser's attitudes to risk. If *r* is the identity function, then this definition becomes a slightly non-standard way of defining expected utility. Buchak allows it to be much more general. The key constraints are that $r$ is monotonically increasing, that *r*(0) = 0 and *r*(1) = 1. In general, if *r*(*x*) < *x*, Chooser is some intuitive sense more risk-averse than an expected utility maximiser, while if *r*(*x*) > *x*, Chooser is more risk-seeking. The former case is more relevant to everyday intuitions, and it's what I'll focus on. Indeed, I'll focus on the case where *r*(*x*) = *x*^2^, which is also a case Buchak uses a lot.
+
+There are a number of good reasons to like Buchak's theory. Standard expected utility theory explains risk-aversion in a surprisingly roundabout way. Risk-aversion simply falls out as a consequence of the fact that at almost all points, almost all goods have a declining marginal utiility. This is theoretically elegant - risk-aversion and relative satiation are explained in a single framework - but has a number of downsides. For one thing, it doesn't allow rational agents to have certain kinds of risk-aversion, such as the kind described by @Allais1953. For another, it doesn't seem like risk-aversion just is the same thing as the declining marginal utility of goods. Buchak's theory, by putting attitudes to risk into *r*, avoids both these problems.
+
+Unfortunately, Buchak's theory is inconsistent with the Single Choice Principle. I'll show this for the case *r*(*x*) = *x*^2^, but it's not much harder to produce similar examples for any value of *r* other than *r*(*x*) = *x*. In @fig-buchak at stage 1 a fair die will be rolled. If it lands 1 or 2, Nature moves Left; if it lands 3 or 4, Nature moves Middle; otherwise, Nature moves Right. If Nature moves Left, the game ends, and Chooser gets 1. Otherwise Chooser is told that Nature did not move Left, but not whether they moved Middle or Right. If Chooser selects Down, they get 1. If Chooser selects Up, they get 5 if Nature moved Middle, and 0 otherwise.
+
+[Include figure]
+
+@tbl-buchak-early shows the strategic table of @fig-buchak, and @tbl-buchak-late shows the decision table Chooser faces at the time they have to choose.
+
+::: {#tbl-panel layout-ncol=2}
+|          | **Left**     | **Middle**     |   **Right**  |
+|:--------:|:------------:|:--------------:|:------------:|
+| **Up**   |      1       |       5        |     0        |
+| **Down** |      1       |       1        |     1        |
+
+: The strategy table at game start. {#tbl-buchak-early}
+
+|          | **Middle**   | **Right**      |
+|:--------:|:------------:|:--------------:|
+| **Up**   |      5       |       0        |
+| **Down** |      1       |       1        |
+
+: The strategy table at choice time. {#tbl-buchak-late}
+
+Two strategy tables for @fig-buchak.
+:::
+
+In @tbl-buchak-early, the REU of Down is 1 (since that's the only possible outcome), and the REU of Up is 8/9. There is a 2/3 chance of getting at least 1, so that's worth 4/9, and there's a 1/3 chance of getting another 4, so that's also worth 4/9, and adding those gives 8/9. So the optimal strategy, according to REU theory, is Down. That is, REU says to prefer the strategy _Choose Down if you have to choose_ to the strategy _Choose Up if you have to choose_. 
+
+But if we get to the choice point, we're at @tbl-buchak-late. And in that table the REU of Up is 5 times 1/4, i.e., 5/4. So at that point, REU says to choose Up. What REU says to do if you have to choose is different to which strategy it chooses for the one and only point you have to choose at. This is incoherent, so the theory is false.
+
+The point is not that this is a completely novel argument; on it's own it's not that much more persuasive than earlier objections to Buchak's view. What I want to stress here is the connection to puzzles about demons. The same principle that provided an objection to EDT also provides an objection to Buchak's REU theory. This raises a particularly tricky problem for EDT. What could possibly motivate the combination of EDT with orthodox expected utility theory?
+
+If our aim as decision theorists is to maximise agreement between theory and intuitions about cases, we perhaps should endorse EDT over CDT, but we should also endorse Buchak's theory over orthodox expected utility theory. If our aim instead is to have a theory that is consistent with intuitions about decision theoretic principles, there are lots of reasons to reject Buchak's theory. It violates the Sure Thing Principle, and its weaker cousin, the Single Choice Principle. It violates the principle that one shouldn't pass up free information [@CampbellMooreSalow2019]. It violates various sensible principles of dynamic choice [@Briggs2015; @Thoma2019]. But EDT violates all these principles too. It's really hard to see the starting point, the initial set of premises, that leads to the conclusion that orthodox expected utility, plus EDT, is the right combination of views.
