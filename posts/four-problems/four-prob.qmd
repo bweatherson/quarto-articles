@@ -410,7 +410,103 @@ It's better to argue from the Ramsey test, and from the intuition that Chooser i
 
 ## Evidential Decision Theory
 
-Evidential Decision Theory (EDT) is inconsistent with the Single Choice Principle. @fig-four-three-closed can be used to show this, but it's a little clearer to work with a variant example. Change the case so that if Chooser has a choice, they get 4 if they choose Up, and 3 if they choose Down, whatever Demon predicted. So the game tree looks like 
+Evidential Decision Theory (EDT) is inconsistent with the Single Choice Principle. @fig-four-three-closed can be used to show this, but it's a little clearer to work with a variant example. Change the case so that if Chooser has a choice, they get 4 if they choose Up, and 3 if they choose Down, whatever Demon predicted. So the game tree looks like @fig-four-three-open.
 
+```{r engine='tikz'}
+#| label: fig-four-three-open
+#| fig.cap: "Tree Diagram of the Four-Three-Open game."
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 4
 
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.4,font=\footnotesize]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=13mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node [solid node,label=right:{Coin (N)}] {}
+          child { 
+            node [square node, label=below:{0}]{}
+            edge from parent
+              node[left] {H}
+              }
+          child { 
+            node (1)[solid node]{}
+              child{
+                node[square node, label=below:{4}]{}
+                edge from parent
+                  node[left]{U}
+              }
+              child{
+                node[square node, label=below:{3}]{}
+                edge from parent
+                  node[right]{D}
+              }
+            edge from parent
+              node[right] {T}}
+          edge from parent
+            node[left] {PU}}
+        child [level distance=25mm,sibling distance=25mm]{ node (2)[solid node] {}
+          child { 
+            node[square node, label=below:{4}]{}
+            edge from parent
+              node[left] {U}}
+          child { 
+            node[square node, label=below:{3}]{}
+            edge from parent
+              node[right] {D}}
+          edge from parent
+            node[right] {PD}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+Before Chooser knows whether they must make a choice, the strategy table looks like @tbl-four-three-open-early; at the time they have to choose it looks like @tbl-four-three-open-late. Note that the values in @tbl-four-three-open-early are expected values, since EDT says that once we conditionalise on what Demon does, all that matters is expected value.
+
+::: {#tbl-panel layout-ncol=2}
+|          | **PUp**      | **PDown**      |
+|:--------:|:------------:|:--------------:|
+| **Up**   |      2       |       4        |
+| **Down** |      1.5     |       3        |
+
+: The strategy table at game start. {#tbl-four-three-open-early}
+
+|          | **PUp**      | **PDown**      |
+|:--------:|:------------:|:--------------:|
+| **Up**   |      4       |       4        |
+| **Down** |      3       |       3        |
+
+: The strategy table at choice time. {#tbl-four-three-open-late}
+
+Two strategy tables for @fig-four-three-open
+:::
+
+EDT, like most other theories, says to choose Up in @tbl-four-three-open-late. But @tbl-four-three-open-early is a Newcomb problem, and EDT says to choose Down. That pair of views is, according to SCP, incoherent. EDT recommends rational Chooser give different answers to the following two questions.
+
+- Assuming you have to choose, what do you do?
+- What will you do if you have to choose?
+
+Whatever answer one gives to either question, rational Chooser gives to the other question as well.
+
+The point here is not that EDT recommends a dominated option in @tbl-four-three-open-early. This argument doesn't work against other views that recommend dominated options like Levinstein and Soares's Functional Decision Theory [@LevinsteinSoares2020]. After all, they answer these two questions the same way. And the objection is that EDT offers different answers to questions that should get the same answer.
+
+Nor is it just that EDT recommends paying to avoid information. At the start of the game, EDT thinks that Down is worth 1 more than Up, and they'll choose Up if they get the information that they must choose, and they will almost certainly choose. So given a choice between paying nearly 1 to choose now, and choosing after they learn what whether they have to choose, they will pay to avoid learning the information. That's a worry for EDT, but not a new worry, and @AhmedXXX20xx have a response to it.
+
+Rather, the worry is that the particular information Chooser gets, namely that they have to choose, should not make a difference to how they choose. When one is thinking of making a choice that will only be effective if *p*, one should assume *p*, and choose as if that assumption was in place. And that's exactly what EDT does not do in @fig-four-three-open.
+
+## Buchak on Risk
 
