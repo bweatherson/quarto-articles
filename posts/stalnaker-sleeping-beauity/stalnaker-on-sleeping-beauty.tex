@@ -1,0 +1,974 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Stalnaker on Sleeping Beauty
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Stalnaker on Sleeping Beauty},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Stalnaker on Sleeping Beauty}
+\author{Brian Weatherson}
+\date{2011}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+A contribution to a book symposium on Stalnaker's Our Knowledge of the
+Internal World, focussing on the way his framework helps cast new light
+on the Sleeping Beauty problem.
+\end{abstract}
+
+\setstretch{1.1}
+The Sleeping Beauty puzzle provides a nice illustration of the approach
+to self-locating belief defended by Robert Stalnaker in \emph{Our
+Knowledge of the Internal World} (\citeproc{ref-Stalnaker2008}{Stalnaker
+2008}), as well as a test of the utility of that method. The setup of
+the Sleeping Beauty puzzle is by now fairly familiar. On Sunday Sleeping
+Beauty is told the rules of the game, and a (known to be) fair coin is
+flipped. On Monday, Sleeping Beauty is woken, and then put back to
+sleep. If, and only if, the coin landed tails, she is woken again on
+Tuesday after having her memory of the Monday awakening
+erased.\footnote{Note that I'm not assuming that Beauty's memories are
+  erased in other cases. This makes the particular version of the case
+  I'm discussing a little different to the version popularised in Elga
+  (\citeproc{ref-Elga2000}{2000}). This shouldn't make any difference to
+  most analyses of the puzzle, but it helps to clarify some issues.} On
+Wednesday she is woken again and the game ends. There are a few
+questions we can ask about Beauty's attitudes as the game progresses.
+We'd like to know what her credence that the coin landed heads should be
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Before she goes to sleep Sunday;
+\item
+  When she wakes on Monday;
+\item
+  When she wakes on Tuesday; and
+\item
+  When she wakes on Wednesday?
+\end{enumerate}
+
+Standard treatments of the Sleeping Beauty puzzle ignore (d), run
+together (b) and (c) into one (somewhat ill-formed) question, and then
+divide theorists into `halfers' or `thirders' depending on how they
+answer it. Following Stalnaker, I'm going to focus on (b) here, though
+I'll have a little to say about (c) and (d) as well. I'll be following
+orthodoxy in taking ½ to be the clear answer to (a), and in taking the
+correct answers to (b) and (c) to be independent of how the coin lands,
+though I'll briefly question that assumption at the end.
+
+An answer to these four questions should respect two different kinds of
+constraints. The answer for day \emph{n} should make sense `statically'.
+It should be a sensible answer to the question of what Beauty should do
+given what information she then has. And the answer should make sense
+`dynamically'. It should be a sensible answer to the question of how
+Beauty should have updated her credences from some earlier day, given
+rational credences on the earlier day.
+
+As has been fairly clear since the discussion of the problem in Elga
+(\citeproc{ref-Elga2000}{2000}), Sleeping Beauty is puzzling because
+static and dynamic considerations appear to push in different
+directions. The static considerations apparently favour a ⅓ answer to
+(b). When Beauty wakes, there are three options available to her: It is
+Monday and the coin landed heads; It is Monday and the coin landed
+tails; It is Tuesday and the coin landed tails. If we can argue that
+each of those are equally probable given her evidence, we get the answer
+⅓. The dynamic considerations apparently favour a ½ answer to (b). The
+right answer to (a) is ½. Nothing happens on Monday or Tuesday that
+surprises Beauty. And credences should only change if we are surprised.
+So the right answer to (b) is ½.
+
+Since we must have harmony between dynamic and static considerations,
+one of these arguments must be misguided. (In fact, I think both are, to
+some degree.) These days there is a cottage industry of `thirders'
+developing accounts of credal dynamics that accord with the ⅓ answer to
+(b).\footnote{See, for instance, Titlebaum
+  (\citeproc{ref-Titlebaum2008}{2008}) and the references therein.} But
+all of these accounts are considerably more complex than the
+traditional, conditionalisation-based, dynamic theory that we all grew
+up with.
+
+Three of the many attractions of Robert Stalnaker's new account of
+self-locating knowledge are (i) that it offers a way to answer all four
+of our questions about Sleeping Beauty, (ii) that it does so while
+remaining both statically and dynamically plausible, and (iii) that the
+dynamic theory involved is, in large part, traditional
+conditionalisation. I spend most of this note setting out Stalnaker's
+account, and setting out his derivation of a ⅓ answer to (b). I conclude
+with some reasons for preferring a slightly different solution of the
+Sleeping Beauty puzzle within the broad framework Stalnaker suggests.
+
+\section{Stalnaker on Self-Location}\label{stalnaker-on-self-location}
+
+The picture of self-locating belief that we get from Lewis's ``Attitudes
+\emph{De Dicto} and \emph{De Se}'' (\citeproc{ref-Lewis1979b}{Lewis
+1979}) has been widely adopted in recent years.\footnote{Including by
+  me. See Egan, Hawthorne, and Weatherson
+  (\citeproc{ref-Egan2005-EGAEMI}{2005}).} On Lewis's picture, the
+content of an attitude is a set of centered worlds. For current purposes
+we'll take to centered worlds to be ⟨\{world, agent, time\}⟩ triples. To
+believe that \emph{S}, where \emph{S} is a set of centered worlds, is to
+believe that the triple ⟨\{your world, you, now\}⟩ ∈ \emph{S}.
+
+The motivation for this picture comes from reflection on how to
+represent locational uncertainty. If you're sure where in New York City
+you are, you can pick out a point on a map and say ``I'm there''. If
+you're not sure exactly where you are, but you have some information,
+you can pick out a region on the map and say ``I'm somewhere in that
+region''. If you're not sure who you are, but you know where everyone
+is, you can do the same kind of thing. And it's plausible that this is a
+(somewhat) realistic situation. As one modern-day Lewisian, Andy Egan,
+puts it `I can believe that my pants are on fire without believing that
+Egan's pants are on fire, and I can hope that someone turns a fire
+extinguisher on me right now without hoping that someone turns a fire
+extinguisher on Egan at 5:41pm.'' (\citeproc{ref-Egan2004-JACSPA-2}{Egan
+2004, 64}) There is an important puzzle here that needs to be addressed,
+and can't obviously be addressed in the framework Lewis accepted before
+1979, where the content of a propositional attitude is a set of Lewisian
+concreta. If possible worlds are Lewisian concreta, then Lewisians like
+Egan are correct to respond to puzzles about location by saying,
+``sometimes (as when we want to know who or where we are) \textbf{the
+world is not enough}''. (\citeproc{ref-Egan2004-JACSPA-2}{Egan 2004,
+64})
+
+But this response is too self-centered. Not all locational thoughts are
+self-locational thoughts. I can be just as uncertain about where
+\emph{that} is as about where \emph{this} is, or as uncertain about who
+\emph{you} are as about who \emph{I} am. Imagine I'm watching Egan's
+unfortunate adventures with his infernal trousers on a delayed video
+tape. I can believe \emph{his} pants are on fire without believing
+Egan's pants are on fire, and hope that someone turns a fire
+extinguisher on him \emph{then} without hoping some turns a fire
+extinguisher on Egan at 5:41pm. Or, at least, that way of putting things
+sounds just as good as Egan's original description of the case.
+
+For a different example, imagine I wake at night and come to believe it
+is midnight. As Lewis would represent it, I believe
+⟨\emph{w},~me,~now⟩~∈~\{⟨\emph{w},~\emph{s},~\emph{t}⟩: \emph{t} =
+midnight\}. When I wake, I think back to that belief, and judge that I
+may have been mistaken. How should we represent this? Not that I now
+believe ⟨\emph{w}, me, now⟩ ∉ \{⟨\emph{w}, \emph{s}, \emph{t}⟩: \emph{t}
+= midnight\}. That's obviously true - I know the sun is up. We want to
+represent something more contentious.
+
+The best, I think, the Lewisian can do is to pick out some description
+\emph{D} of my earlier belief and say what I believe is
+⟨\emph{w},~me,~now⟩~∉~\{⟨\emph{w},~\emph{s},~\emph{t}⟩ : (ɩ\emph{x}:
+\emph{Dx})\emph{x} happens at midnight\}. That is, I believe the belief
+that satisfies \emph{D} doesn't happen at midnight. Is that good enough?
+Well, we might imagine the debate continuing with the anti-Lewisian
+proposing cases where \emph{D} will not be unique (because of forgotten
+similar beliefs) or will not be satisfied (because of a misrecollection
+of the circumstances of the belief), and so this approach will fail. And
+we might imagine the Lewisian responding by complicating \emph{D}, or by
+denying that in these cases we really do have beliefs about our earlier
+beliefs. In other words, we can imagine the familiar debates about
+descriptivism about names being replayed as debates about descriptivism
+about prior beliefs. As enjoyable as that may be, it's interesting to
+consider a different approach.
+
+There's a more philosophical reason to worry about Lewis's model. If we
+model uncertainty as a class of relationships to possible worlds, it
+looks like there's a lot of actual uncertainty we won't be able to
+model. Indeed, there are three kinds of uncertainty that we can't model
+in this framework. First, we can't model uncertainty about logic and
+mathematics. Second, if we accept the necessity of identity, we can't
+model uncertainty about identity claims. Whatever it is to be uncertain
+about whether \emph{a} is \emph{b}, it won't be a distinctive relation
+to the set of worlds in which \emph{a} is \emph{b}, since that's all the
+worlds. Third, we can't model uncertainty about claims about
+self-identity, like \emph{I'm that guy}. Lewis's framework is an
+improvement on the sets of possible worlds approach because it helps
+with this third class of cases. But it doesn't help with the first or,
+more importantly, with the second. We might think that a solution to
+puzzles about self-identity should generalise to solve puzzles about
+identity more broadly. Lewis's model doesn't. One of Stalnaker's key
+insights is that we should, and can, have a model that addresses both
+kinds of puzzles about identity.
+
+On Stalnaker's model, a belief is just a distinction between worlds. The
+content of a belief is a set of worlds, not a set of centered worlds.
+But worlds have more structure than we thought they had. The formal
+model is a bit more subtle than what I'll sketch here, but I think I'll
+include enough detail to cover the Sleeping Beauty case. In each world,
+each center, in Lewis's sense, has a haecceity. A world is the Cartesian
+product of a Lewisian world, i.e.~a world without haecceities, and a
+function from each contextually salient haecceity to a location. If we
+see a kiss, and wonder who \emph{she} is, who \emph{he} is, and
+\emph{when} they are kissing, then we can think of the worlds as
+quadruples consisting of a haecceity-free world (perhaps a Lewisian
+concreta), a woman, a man and a time. So we can represent three kinds of
+locational doubts, not just self-locational doubt.\footnote{Stalnaker
+  thinks we have independent reason to treat these structured entities
+  as simply worlds. The main point of the last few sentences was that we
+  can adopt Stalnaker's model while staying neutral on this metaphysical
+  question.}
+
+When an agent at center \emph{c} believes something self-locating,
+e.g.~that it is Monday, the content of their belief is that \emph{c}'s
+haecceity is on a Monday. If they don't know what day it is, there's a
+sense in which they don't know what they believe, since they don't know
+whether what they are believing is that \emph{c}'s center is on Monday,
+or that some other center's haecceity is on Monday.\footnote{Perhaps it
+  would be better to say that individuals and times have haecceities,
+  rather than saying centers do. I have little idea what could tell
+  between these options, or even if there is a substantive issue here.}
+But their belief, the belief they would express on Monday by saying ``It
+is Monday'', has two nice features. First, it is neither trivial, like
+the belief that \emph{Monday is Monday}, nor changing in value over
+time, since \emph{c}'s center is always on Monday. Second, it is the
+kind of belief that people on days other than Monday can share, or
+dispute. And this belief can be shared by others who have the capacity
+to think \emph{de re} about \emph{c}, even if they can't uniquely
+describe it. It's this last fact that lets Stalnaker handle the cases
+that proved problematic for Lewis and the neo-Lewisians. For instance,
+it lets Stalnaker model shared uncertainty about identity claims.
+
+With all that in place, it's time to return to Sleeping Beauty. Let's
+consider two propositions. The first, \emph{H}, is that the coin landed
+heads. The second, \emph{M}, is what Beauty can express when she wakes
+on Monday by saying ``It is Monday''. That is, it is a singular
+proposition about a wakening experience that Beauty can now have
+singular thoughts about (since she is now undergoing it), but which she
+didn't previously have the capacity to determinately pick out. We'll
+call this wakening \emph{a}. (Beauty might undergo multiple wakenings,
+but we're going to focus on one for now, and call it \emph{a}.) Given
+these three propositions, we can describe four possibilities. Or, as
+we'll somewhat inaccurately describe them, four worlds.\footnote{Of
+  course worlds are considerably more detailed than this, but the extra
+  detail is an unnecessary confusion for the current storyline.}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  H ∧ \emph{M}
+\item
+  \emph{H} ∧ ¬\emph{M}
+\item
+  ¬\emph{H} ∧ \emph{M}
+\item
+  ¬\emph{H} ∧ ¬\emph{M}
+\end{enumerate}
+
+On Sunday, Beauty's credences are distributed over the algebra generated
+by the partition \{\emph{H}, ¬\emph{H}\}, i.e.,
+\{\{\emph{w}\textsubscript{1}, \emph{w}\textsubscript{2}\},
+\{\emph{w}\textsubscript{3}, \emph{w}\textsubscript{4}\}\}. The algebra
+is that course-grained because she doesn't have the capacity to think
+\emph{M} thoughts. And that's because she's not acquainted with the
+relevant haecceities. So she can't distinguish between worlds that
+differ only on whether \emph{M} is true. On Sunday then, Beauty's
+credences are given by Pr(\emph{H}) = Pr(¬H) = ½.
+
+When she wakes on Monday, two things happen. First, she becomes
+acquainted with \emph{a}. So she can now think about whether \emph{a} is
+on Monday. That is, she can now think about whether \emph{M} is true. So
+she can now carve the possibility space more finely. Indeed, now her
+credences can be distributed over all propositions built out of the four
+possibilities noted above. The second thing that happens is that Beauty
+rules out one of these possibilities. In particular, she now knows that
+\emph{H} ∧ ¬\emph{M}, a proposition she couldn't so much as think
+before, is actually false. That's because if the coin landed heads, this
+very wakening could not have taken place on Tuesday.
+
+Stalnaker's position on Beauty's credences uses these two facts. First
+Beauty `recalibrates' her credences to the new algebra, then she updates
+by conditionalising on ¬\emph{H} ∨ \emph{M}. If after recalibration, her
+credences are equally distributed over the four cells of the partition,
+the conditionalising on ¬\emph{H} ∨ \emph{M} will move Pr(\emph{H}) to
+⅓. That is, the thirders win!
+
+But we might wonder why we use just this calibration, the one where all
+four cells get equal credence. We're going to come back to this question
+below. But first, I want to use Stalnaker's framework to respond to an
+interesting objection to the thirder position.
+
+\section{Monty Hall}\label{monty-hall}
+
+Both C. S. Jenkins (\citeproc{ref-Jenkins2005}{2005}) and Joseph Halpern
+(\citeproc{ref-Halpern2004}{2004}) have argued that the `thirder'
+solution is undermined by its similarity to fallacious reasoning in the
+Monty Hall case. The idea is easy enough to understand if we simply
+recall the Monty Hall problem. The agent is in one of three states
+\emph{s}\textsubscript{1}, \emph{s}\textsubscript{2} or
+\emph{s}\textsubscript{3}, and has reason to believe each is equally
+likely. She guesses which one she is in. An experimenter then selects a
+state that is neither the state she is in, nor the state she guessed,
+and tells her that she is not in that state. If she simply
+conditionalises on the content of the experimenter's report, then her
+credence that she guessed correctly will go from ⅓ to ½. This is a
+bizarre failure of Reflection, so something must have gone
+wrong.\footnote{The standard response is to say that the agent shouldn't
+  just conditionalise on the content of the experimenter's utterance,
+  but on the fact that the experimenter is making just that utterance.
+  We'll return to this idea below.} Both Jenkins and Halpern suggest
+that the violation of Reflection that `thirders' endorse in Sleeping
+Beauty is just as bizarre.
+
+But the Sleeping Beauty puzzle is not analogous to the Monty Hall
+problem. That's because in Sleeping Beauty we seem forced to have a
+violation of Reflection somewhere. Let's think a bit again about
+Beauty's credences on Wednesday, and let's assume that we're trying to
+avoid Reflection violations. Then on Monday (and Tuesday) her credence
+in \emph{H} is ½. Now when Beauty awakes on those days, there are three
+possibilities open to her. (Hopefully it won't lead to ambiguity if I
+re-use the name \emph{a} for the awakening Beauty is undergoing when
+thinking about \emph{H}.)
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{a} is Monday and \emph{H}
+\item
+  \emph{a} is Monday and ¬\emph{H}
+\item
+  \emph{a} is Tuesday and ¬\emph{H}
+\end{itemize}
+
+When she wakes on Wednesday, she's in a position to reflect on these
+possibilities. And she can rule out the second of them. That's what she
+learns when she wakes and learns it is Wednesday; that if ¬\emph{H},
+then that last awakening was on Tuesday. Now since that last awakening,
+nothing odd has happened to Beauty. She hasn't had her memories erased.
+She might have had her memories erased between Monday and Tuesday, but
+that's not relevant to the time period she's considering. Moreover, she
+knows that she hasn't had her memories erased. So I think she's in a
+position to simply conditionalise on her new evidence. And that new
+evidence is simply that whatever else was going on when she was thinking
+about those three possibilities, she wasn't in the second possibility.
+
+But now we face a challenge. Beauty knows that Wednesday will come. So
+if her credence in \emph{H} on Wednesday isn't ½, then we'll have a
+violation of Reflection. The violation is that on Sunday her credence in
+\emph{H} is ½, but she knows it will go up on Wednesday. And that
+violation is just as bad as the violation of Reflection that `thirders'
+endorse. But if she conditionalises when she wakes up on Wednesday, then
+the only way her updated credence in \emph{H} can be ½ is if her prior
+credence in the first and third options above were equal. And the only
+way that can happen is for her credence, when \emph{a} is happening, in
+the proposition that \emph{a} is Monday and ¬\emph{H} is 0. But that's
+bizarre. Whether or not the thirders are right to think that she should
+give equal credence to that possibility as to the two others, she can't
+give it credence 0. So Reflection will fail somewhere.
+
+To see why Reflection is failing in these cases, it helps to look back
+at the requirements we need in order to get from conditionalisation to
+Reflection. In Rachael Briggs's careful analysis of when Reflection
+holds, in Briggs (\citeproc{ref-Briggs2009}{2009}), Reflection is only
+guaranteed to hold when agents know what their evidence is. In other
+cases, even perfect conditionalisers may violate Reflection.
+
+This assumption, namely that agents know what their evidence is, is a
+kind of luminosity assumption. And not surprisingly, it has been
+challenged by Timothy Williamson
+(\citeproc{ref-Williamson2000-WILKAI}{Williamson 2000, 230--33}). What
+is a little more surprising is that we only need a relatively weak
+failure of luminosity in order to get problems for reflection. The
+assumption that agents know what their evidence is can be broken into
+two parts.
+
+\begin{itemize}
+\tightlist
+\item
+  If \emph{p} is part of \emph{S}'s evidence, then \emph{S} knows that
+  \emph{p} is part of her evidence.
+\item
+  If \emph{p} is not part of \emph{S}'s evidence, then \emph{S} knows
+  that \emph{p} is not part of her evidence.
+\end{itemize}
+
+The first part is, I think, implausible for reasons familiar from
+Williamson's work. But the second is implausible even if one doesn't
+like Williamson's style of reasoning. If we think \emph{p} must be true
+to be part of \emph{S}'s evidence (as I think we should), and we think
+that rational agent's can have false beliefs about anything, as also
+seems plausible by simple observation of how easy it is to be misled,
+then even a rational agent can fail to realise that \emph{p} is not part
+of her evidence. The easiest way that can happen is if she falsely, but
+reasonably, believes \emph{p}, and hence does not realise that due to
+its falsity, it is not part of her evidence.
+
+Williamson provides an interesting model, based on a discussion in Shin
+(\citeproc{ref-Shin1989}{1989}), of a case where an agent does not know
+that something is not part of her evidence. There are currently three
+possible states the agent could be in: \emph{s}\textsubscript{1},
+\emph{s}\textsubscript{2} or \emph{s}\textsubscript{3}. An experiment
+will be run, and after the experiment the agent will get some evidence
+depending on which state she's in.
+
+\begin{itemize}
+\tightlist
+\item
+  If she's in \emph{s}\textsubscript{1}, her evidence will rule out
+  \emph{s}\textsubscript{3}.
+\item
+  If she's in \emph{s}\textsubscript{2}, her evidence will rule out
+  \emph{s}\textsubscript{1} and \emph{s}\textsubscript{3}.
+\item
+  If she's in \emph{s}\textsubscript{3}, her evidence will rule out
+  \emph{s}\textsubscript{1}.
+\end{itemize}
+
+Assume the agent knows these conditionals before the experiment is run,
+and now let's assume the experiment has been run. Let \emph{xRy} mean
+that \emph{y} is possible given the evidence \emph{S} gets in \emph{x}.
+Then we can see that \emph{R} is transitive. That means that if \emph{p}
+is part of \emph{S}'s evidence, then her evidence settles that \emph{p}
+is part of her evidence. But \emph{R} is not Euclidean. So it is
+possible that \emph{p} is not part of her evidence, even though her
+evidence does not settle that \emph{p} is not part of her evidence. In
+particular, if she is in \emph{s}\textsubscript{1}, that she isn't in
+\emph{s}\textsubscript{1} is not part of her evidence. But for all she
+can tell, she's in \emph{s}\textsubscript{2}. And if she's in
+\emph{s}\textsubscript{2}, her evidence does rule out her being in
+\emph{s}\textsubscript{1}. So her evidence doesn't settle that this is
+not part of her evidence.
+
+The model is obviously an abstraction from any kind of real-world case.
+But as we argued above, it is plausible that there are cases where an
+agent doesn't know what evidence she \emph{lacks}. And this kind of case
+makes for Reflection failure. Assume that the agent's prior credences
+are (and should be) that each state is equally likely. And assume the
+agent conditionalises on the evidence she gets. Then her credence that
+she's in \emph{s}\textsubscript{2} will go up no matter what state she's
+in. And she knows in advance this will happen. But there's no obvious
+irrationality here; it's not at all clear what kind of
+reflection-friendly credal dynamics would be preferably to updating by
+conditionalisation.\footnote{The idea that we should update by
+  conditionalisation on our evidence, even when we don't know what the
+  evidence is, has an amusing consequence in the Monty Hall problem. The
+  agent guesses that she's in \emph{s\textsubscript{i}}, and comes to
+  know she's not in \emph{s\textsubscript{j}}, where \emph{i} ≠
+  \emph{j}. If she only comes to know that she's not in
+  \emph{s\textsubscript{j}}, and not something stronger, such as knowing
+  that she knows she's not in \emph{s\textsubscript{j}}, then she really
+  should conditionalise on this, and her credence that her guess was
+  correct will go up. This is the `mistaken' response to the puzzle that
+  is frequently deprecated in the literature. But since the orthodox
+  solutions to the puzzle rely on the agent reflecting on how she came
+  to know ¬\emph{s\textsubscript{j}}, it seems that it is the right
+  solution if she doesn't know that she knows
+  ¬\emph{s\textsubscript{j}}.}
+
+So when an agent doesn't know what evidence she lacks, Reflection can
+fail. One way to think about the Sleeping Beauty case is that something
+like this is going on, although it isn't quite analogous to the
+Shin-Williamson example discussed above. In that example, the agent
+doesn't know what evidence she lacks at the \emph{later} time. In the
+Sleeping Beauty case, we can reasonably model Beauty as knowing exactly
+what her evidence is when she wakes up. Her evidence does nothing more
+or less than rule out \emph{w}\textsubscript{2}. That's something she
+didn't know before waking up. But in a good sense she didn't know that
+she didn't know that. That's because she was not in a position to even
+think about \emph{w}\textsubscript{2} as such. Since she wasn't in a
+position to think about \emph{a}, couldn't distinguish, even in thought,
+between \emph{w}\textsubscript{1} and \emph{w}\textsubscript{2}. So any
+proposition she could think about, and investigate whether she knew or
+not, had to include either both \emph{w}\textsubscript{1} and
+\emph{w}\textsubscript{2}, or include neither of them. So the only way
+she could know that she didn't know \{\emph{w}\textsubscript{1},
+\emph{w}\textsubscript{3}, \emph{w}\textsubscript{4}\} is if she tacitly
+knew she didn't know that in virtue of knowing that she didn't know
+\{\emph{w}\textsubscript{1}, \emph{w}\textsubscript{2},
+\emph{w}\textsubscript{3}, \emph{w}\textsubscript{4}\}. But she didn't
+know that she didn't know that for the simple reason that she did know
+that \{\emph{w}\textsubscript{1}, \emph{w}\textsubscript{2},
+\emph{w}\textsubscript{3}, \emph{w}\textsubscript{4}\}, i.e.~the
+universal proposition, is true. So we have a case where Beauty doesn't
+know what it is she doesn't know at the earlier time. And like cases
+where the agent doesn't know what she doesn't know at the later time,
+this is a case where reflection fails.
+
+So there are two reasons to be sceptical of reflection-based arguments
+against the `thirder' solution to the Sleeping Beauty puzzle.
+
+\begin{itemize}
+\tightlist
+\item
+  There is no plausible way for Beauty's credence in \emph{H} to be ½ on
+  both Monday and Wednesday, but reflection requires this.
+\item
+  Reflection is only plausible when agents know both what evidence they
+  have, and what evidence they lack, throughout the story. And it is
+  implausible that Beauty satisfies this constraint, since she gains
+  conceptual capacities during the story.
+\end{itemize}
+
+But this isn't a positive argument for the ⅓ solution. I'll conclude
+with a discussion of two arguments for the ⅓ solution. Both arguments
+are suggested by Stalnaker's framework, but only one of them is
+ultimately defensible.
+
+\section{Stalnaker on Sleeping Ugly}\label{stalnaker-on-sleeping-ugly}
+
+When we left Stalnaker's discussion of the Sleeping Beauty case, we had
+just noticed that there was a question about why Beauty should respond
+to being able to more finely discriminate between states by
+`recalibrating' to a credal state where each of
+\emph{w}\textsubscript{1} through \emph{w}\textsubscript{4} receive
+equal credence. This question about calibration is crucial to the
+Sleeping Beauty puzzle because there are other post-calibration
+distributions of credence are are \emph{prima facie} viable. Perhaps,
+given what Beauty knows about the setup, she should never have assigned
+any credence to \emph{H} ∧ ¬\emph{M}. Rather, she should have made it so
+Pr(¬\emph{H} ∧ \emph{M}) = Pr(¬\emph{H} ∧ ¬\emph{M}) = ¼, and
+Pr(\emph{H} ∧ \emph{M}) = ½. If she does that, the conditionalising on
+¬(\emph{H} ∧ ¬\emph{M}) won't change a thing, and Pr(\emph{H}) will
+still be ½. That is, the halfers win!
+
+One argument against this, and in favour of the equally weighted
+calibration, is suggested by Stalnaker's `Sleeping Ugly' example.
+Sleeping Ugly is woken up on Monday and again (with erased memories) on
+Tuesday however the coin lands. So when Ugly awakes, he has the capacity
+to think new singular thoughts, but he doesn't get much evidence about
+them. In particular, he can't share the knowledge Beauty would express
+by saying, ``If the coin landed Heads, this is Monday.''\footnote{Stalnaker
+  notes that this is a reason for thinking Beauty does learn something
+  when she wakes up, and so there's a reason her credence in \emph{H}
+  changes.} Now we might think it is intuitive that Ugly's credences
+when he wakes up and reflects on his situation should be equal over the
+four possibilities. Moreover, \emph{all} Ugly does is recalibrate; since
+he doesn't learn anything about which day it is, his post-awakening
+credence just is his recalibration. If all this is correct, and if
+Beauty should recalibrate in the same way as Ugly, then Beauty should
+recalibrate to the `equally weighted calibration'. And now we're back to
+victory for the thirders!
+
+But there's little reason to believe the crucial premise about how Ugly
+should recalibrate his credences. What we know is that Ugly doesn't have
+any reason to give any more credence to any one of the four
+possibilities than to the others. It doesn't at all follow that he has
+reason to give equal credence to each, any more than in general an
+absence of reasons to treat one of the \emph{x}s differently to the
+others is a reason to treat them all the same.\footnote{Compare this
+  argument for giving nothing to charity. There are thousands of
+  worthwhile charities, and I have no reason to give more to one than
+  any of the others. But I can't afford to give large equal amounts to
+  each, and if I gave small equal amounts to each, the administrative
+  costs would mean my donation has no effect. So I should treat each
+  equally, and the only sensible practical way to do this is to give
+  none to each. Note that you really don't have to think one charity is
+  more worthy than the others to think this is a bad argument; sometimes
+  we just have to make arbitrary choices.}
+
+The argument I'm considering here is similar to reasoning Adam Elga has
+employed Elga (\citeproc{ref-Elga2004}{2004}), and which I have
+criticised Weatherson (\citeproc{ref-Weatherson2005-WEACWD}{2005}). A
+central focus of my criticism was that this kind of reasoning has a
+tendency to lead to countable additivity violations. In an important
+recent paper, Jacob Ross (\citeproc{ref-Ross2010}{2010}) has shown that
+many thirder arguments similarly lead to countable additivity
+violations. He shows this by deriving what he calls the `Generalised
+Thirder Principle' (hereafter, GTP) from the premises of these
+arguments. The GTP is a principle concerning a generalised version of
+the Sleeping Beauty problem. Here is Ross's description of this class of
+problems.
+
+\begin{quote}
+Let us define a \emph{Sleeping Beauty problem} as a problem in which a
+fully rational agent, Beauty, will undergo one or more mutually
+indistinguishable awakenings, and in which the number of awakenings she
+will undergo is determined by the outcome of a random process. Let
+\emph{S} be a partition of alternative hypotheses concerning the outcome
+of this random process. Beauty knows the objective chances of each
+hypothesis in \emph{S}, and she also knows how many time she will awaken
+conditional on each of these hypotheses, but she has no other relevant
+information. The problem is to determine how her credence should be
+divided among the hypotheses in \emph{S} when she first awakens. (Ross
+ms, 2-3)
+\end{quote}
+
+The GTP is a principle about this general class of problem. Here's how
+Ross states it.
+
+\begin{description}
+\tightlist
+\item[Generalized Thirder Principle]
+In any standard Sleeping Beauty problem, upon first awakening, Beauty's
+credence in any given hypothesis in \emph{S} must be proportional to the
+product of the hypothesis' objective chance and the number of times
+Beauty will awaken conditional on this hypothesis. \ldots{} {[}We can{]}
+express this principle formally. For any hypothesis \emph{i} ∈ \emph{S},
+let \emph{Ch}(\emph{i}) be the objective chance that hypothesis \emph{i}
+is true, and let \emph{N}(\emph{i}) be the number of times Beauty
+awakens if \emph{i} is true. Let \emph{p} be the Beauty's credence
+function upon first awakening. The GTP states \ldots{}
+\end{description}
+
+\[
+\text{For all }i, j ∈ S, \frac{P(i)}{P(j)} = \frac{N(i)Ch(i)}{N(j)Ch(j)} \text{ whenever }Ch(j) >  0. \text{ (Ross ms, 6-7)}
+\]
+
+The argument I'm considering seems to be committed to the GTP. In a
+generalised Sleeping Beauty problem, we can imagine a version of
+Sleeping Ugly who will awake every day that Beauty might awake. The
+reasoning that leads one to think that Ugly should give equal credence
+to each of the two days in the original Sleeping Beauty case seems to
+generalise to imply that Ugly should give equal credence to each day in
+this more general case. But if in the general example Beauty calibrates
+to match these credences of Ugly, then conditionalises on the
+information she receives, then she'll end up endorsing the GTP. That's
+an unhappy outcome. It would be better to have an argument for the ⅓
+solution that doesn't imply the GTP.
+
+I'm going to argue that when Beauty wakes up her credences should
+satisfy the following two premises. (As always, I use \emph{a} to name
+the awakening that Beauty is now undergoing, and I'm using \emph{Cr} for
+her credence function on waking.)
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{Cr}(\emph{a} is Monday and \emph{H}) = \emph{Cr}(\emph{a} is
+  Tuesday and ¬\emph{H})
+\item
+  \emph{Cr}(\emph{a} is Monday and \emph{H}) = \emph{Cr}(\emph{a} is
+  Monday and ¬\emph{H})
+\end{enumerate}
+
+These constraints imply, given what Beauty knows about the setup, that
+\emph{Cr}(\emph{H}) = ⅓. The arguments for each premise are quite
+different.
+
+The argument for P1 is one I mentioned above, so I'll just sketch it
+quickly here. On Wednesday, Beauty's credence in \emph{H} should be back
+to ½. But what she learns on Wednesday is ¬(\emph{a} is on Monday and
+¬\emph{H}). So on Monday, her credence in \emph{H} conditional on
+¬(\emph{a} is on Monday and ¬\emph{H}) should be ½. But given what
+Beauty knows about the setup of the problem, this immediately implies
+P1.
+
+The argument for P2 requires a slightly more fanciful version of the
+example. Imagine that on Sunday night, Beauty is visited by a time
+traveller from Monday who comes back with a videotape of her waking on
+Monday, and tells her that it was taken on Monday. So Beauty now has the
+capacity to think about this very awakening, i.e., \emph{a}. This
+doesn't seem to affect her credences in \emph{H}, it should still be ½.
+Now imagine that her memory of this visit is erased overnight, so when
+she wakes up on Monday her situation is just like in the original
+Sleeping Beauty problem.
+
+Call \emph{Cr}\_1 her credence function on Sunday after meeting the time
+traveller. And call Cr\textsubscript{2} her credence function on Monday
+after she wakes up and reflects on her situation. It seems the only
+relevant difference between the situation on Sunday and the situation on
+Monday is that Beauty has \emph{lost} the information that \emph{a} is
+on Monday. The following principle about situations where an agent loses
+information seems plausible. If \emph{Cr}\textsubscript{old} is the
+pre-loss credence function, and \emph{Cr}\textsubscript{new} is the
+post-loss credence function, and \emph{E} is the information lost, then
+
+\begin{quote}
+\emph{Cr}\textsubscript{old}(\emph{p}) =
+\emph{Cr}\textsubscript{new}(\emph{p}~\textbar~\emph{E})
+\end{quote}
+
+The idea here is that information loss is a sort of reverse
+conditionalisation. Applying this, we get that
+\emph{Cr}\textsubscript{1}(\emph{H}) =
+\emph{Cr}\textsubscript{2}(\emph{H}~\textbar~\emph{a} is Monday), so
+\emph{Cr}\textsubscript{2}((\emph{H}~\textbar~\emph{a} is Monday\}) = ½,
+so \emph{Cr}\textsubscript{2}(\emph{a} is Monday and \emph{H}) =
+\emph{Cr}\textsubscript{2}(\emph{a} is Monday and ¬\emph{H}). And since
+the situation on Monday in the revised problem, i.e., the situation when
+Beauty's credence function is \emph{Cr}\textsubscript{2} is just like
+the situation in the original Sleeping Beauty problem on Monday, it
+follows that P1 is true in the original problem. And from P1 and P2, it
+follows that the thirder solution is right.
+
+But note a limitation of this solution. When Beauty wakes on
+\emph{Tuesday} her credence function is defined over a different algebra
+of propositions to what it was defined over after meeting the time
+traveller. So there's no time travel based argument that her credences
+on Tuesday should satisfy P2, or indeed that on Tuesday her credence in
+\emph{H} should be ⅓. (For similar reasons, this kind of reason does not
+support the GTP.)
+
+One might try and argue that Beauty's situation on Tuesday is
+indistinguishable from her situation on Monday, and so she should have
+the same credences on Tuesday. Both the premise and the inference here
+seem dubious. On Tuesday, Beauty knows different singular propositions,
+so the situation isn't clearly indistinguishable. But more importantly,
+it is implausible that indistinguishability implies same credences. The
+relation \emph{should have the same credences in} is a transitive and
+symmetric relation between states. The relation \emph{is
+indistinguishable from} is neither transitive nor symmetric. So I
+suspect that the kind of arguments developed here leave it an open
+question what Beauty's credences should be on Tuesday, and indeed
+whether there is a unique value for what her credences then should be.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Briggs2009}
+Briggs, Ray. 2009. {``Distorted Reflection.''} \emph{Philosophical
+Review} 118 (1): 59--85. doi:
+\href{https://doi.org/10.1215/00318108-2008-029}{10.1215/00318108-2008-029}.
+
+\bibitem[\citeproctext]{ref-Egan2004-JACSPA-2}
+Egan, Andy. 2004. {``Second-Order Predication and the Metaphysics of
+Properties.''} \emph{Australasian Journal of Philosophy} 82 (1): 48--66.
+doi: \href{https://doi.org/10.1080/713659803}{10.1080/713659803}.
+
+\bibitem[\citeproctext]{ref-Egan2005-EGAEMI}
+Egan, Andy, John Hawthorne, and Brian Weatherson. 2005. {``{Epistemic
+Modals in Context}.''} In \emph{Contextualism in Philosophy: Knowledge,
+Meaning, and Truth}, edited by Gerhard Preyer and Georg Peter, 131--70.
+Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Elga2000}
+Elga, Adam. 2000. {``Self-Locating Belief and the Sleeping Beauty
+Problem.''} \emph{Analysis} 60 (4): 143--47. doi:
+\href{https://doi.org/10.1093/analys/60.2.143}{10.1093/analys/60.2.143}.
+
+\bibitem[\citeproctext]{ref-Elga2004}
+---------. 2004. {``Defeating Dr. Evil with Self-Locating Belief.''}
+\emph{Philosophy and Phenomenological Research} 69 (2): 383--96. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2004.tb00400.x}{10.1111/j.1933-1592.2004.tb00400.x}.
+
+\bibitem[\citeproctext]{ref-Halpern2004}
+Halpern, Joseph. 2004. {``Sleeping Beauty Reconsidered: Conditioning and
+Reflection in Asynchronous Systems.''} In \emph{Oxford Studies in
+Epistemology}, 1:111--42. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Jenkins2005}
+Jenkins, C. S. 2005. {``Sleeping Beauty: A Wake-up Call.''}
+\emph{Philosophica Mathematica} 13 (2): 194--201. doi:
+\href{https://doi.org/10.1093/philmat/nki015}{10.1093/philmat/nki015}.
+
+\bibitem[\citeproctext]{ref-Lewis1979b}
+Lewis, David. 1979. {``Attitudes \emph{de Dicto} and \emph{de Se}.''}
+\emph{Philosophical Review} 88 (4): 513--43. doi:
+\href{https://doi.org/10.2307/2184646}{10.2307/2184646}. Reprinted in
+his \emph{Philosophical Papers}, Volume 1, Oxford: Oxford University
+Press, 1983, 133-156. References to reprint.
+
+\bibitem[\citeproctext]{ref-Ross2010}
+Ross, Jacob. 2010. {``Sleeping Beauty, Countable Additivity, and
+Rational Dilemmas.''} \emph{Philosophical Review} 119 (4): 411--47. doi:
+\href{https://doi.org/10.1215/00318108-2010-010}{10.1215/00318108-2010-010}.
+
+\bibitem[\citeproctext]{ref-Shin1989}
+Shin, Hyun Song. 1989. {``Non-Partitional Information on Dynamic State
+Spaces and the Possibility of Speculation.''} Working Paper 90-11.
+Univesity of Michigan: Center for Research on Economic; Social Theory.
+
+\bibitem[\citeproctext]{ref-Stalnaker2008}
+Stalnaker, Robert. 2008. \emph{Our Knowledge of the Internal World}.
+Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Titlebaum2008}
+Titlebaum, Michael. 2008. {``The Relevance of Self-Locating Beliefs.''}
+\emph{Philosophical Review} 117 (4): 555--605. doi:
+\href{https://doi.org/10.1215/00318108-2008-016}{10.1215/00318108-2008-016}.
+
+\bibitem[\citeproctext]{ref-Weatherson2005-WEACWD}
+Weatherson, Brian. 2005. {``{Can We Do Without Pragmatic
+Encroachment?}''} \emph{Philosophical Perspectives} 19 (1): 417--43.
+doi:
+\href{https://doi.org/10.1111/j.1520-8583.2005.00068.x}{10.1111/j.1520-8583.2005.00068.x}.
+
+\bibitem[\citeproctext]{ref-Williamson2000-WILKAI}
+Williamson, Timothy. 2000. \emph{{Knowledge and its Limits}}. Oxford
+University Press.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Philosophical Studies}, 2011, pp. 445–456.
+
+\end{document}

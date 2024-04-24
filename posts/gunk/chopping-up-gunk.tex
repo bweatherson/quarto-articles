@@ -1,0 +1,739 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  ?invalid meta type:author
+  }
+\cohead{
+  Chopping up Gunk
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Chopping up Gunk},
+  pdfauthor={John Hawthorne; Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Chopping up Gunk}
+\author{John Hawthorne \and Brian Weatherson}
+\date{2004}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+We raise an objection to the idea that the world is gunky. Certain
+plausible sounding supertasks have implausible consequences if the world
+is made of gunk.
+\end{abstract}
+
+\setstretch{1.1}
+Atomism, the view that indivisible atoms are the basic building blocks
+of physical reality, has a distinguished history. But it might not be
+true. The history of physical science certainly gives many of us pause.
+Every time some class of objects appeared to be the entities that Newton
+had described as ``solid, massy, hard, impenetrable, movable Particles''
+out of which ``God in the Beginning formed Matter''
+(\citeproc{ref-Newton1952}{Newton 1952, 400}), further research revealed
+that these objects were divisible after all. One might be tempted to see
+that history as confirming Leibniz' dismissal of atomism as a ``youthful
+prejudice'' .\footnote{See `Nature Itself' in
+  (\citeproc{ref-Leibniz1998}{Leibniz 1998, 220}).} Perhaps material
+objects and their parts are always divisible. There are no extended
+atoms; nor are there point particles which compose material
+beings.\footnote{Cf Leibniz: `I hold that \emph{matter} is essentially
+  an \emph{aggregate}, and consequently that it always has actual
+  parts,' in `Third Explanation of The New System,'
+  (\citeproc{ref-Leibniz1998}{Leibniz 1998, 193}).}
+
+When first presented with this hypothesis, our imaginations are quickly
+drawn to picturing the process whereby a quantity of such matter -- call
+it gunk -- is chopped up into smaller and smaller pieces. Prima facie,
+there is nothing problematic here: insofar as such a process continues
+without end, the initial quantity gets resolves into smaller and smaller
+chunks with no limit to the diminution. But suppose this process is
+packed into an hour, as imagined by Jose Bernadete
+(\citeproc{ref-Bernadete1964}{1964}) in his 1964 monograph Infinity:
+
+\begin{quote}
+Take a stick of wood. In 1/2 minute we are to divide the stick into two
+equal parts. In the next 1/4 minute we are to divide each of the two
+pieces again into two equal parts. In the next 1/8 minute we are to
+divide each of the four pieces (for there are now four equal pieces)
+again into two equal parts, \&c.~\emph{ad infinitum}
+(\citeproc{ref-Bernadete1964}{Bernadete 1964, 184}).
+\end{quote}
+
+If matter is divisible without end there seems to be no conceptual
+obstacle to each of the divisions. Yet how are we to imagine the
+situation at the end of the hour, when the super-task (call it
+`super-cutting') has been performed on a quantity of gunk?\footnote{What
+  is important, of course, is that the sequence of separations occur: it
+  does not matter whether some kind of super-sharp knife is responsible
+  for them. In what follows, descriptions of cutting sequences can be
+  replaced without loss of content by descriptions of separation
+  sequences, leaving it open whether repulsive forces or chance events
+  or knives or \ldots{} are responsible for the separation sequence.}
+
+If there were extended atoms that were never annihilated, it is clear
+enough what would happen if some super-being undertook to perform
+super-cutting: the process would grind to a halt when insurmountably
+hard particles resisted the chopper.
+
+If, meanwhile, there were point-sized particles that composed planes
+that were as thin as a line, it would be natural to picture the limit of
+the process as a sea of separated slivers, each devoid of finite extent
+along one dimension. As Benardete, notes, one might then redo
+super-cutting in order to finally resolve the original stick into a sea
+of ``metaphysical motes'' devoid of finite extent in any direction:
+
+\begin{quote}
+At the end of the minute how many pieces of wood will we have laid out
+before us? Clearly an infinite number. If the original stick was twenty
+inches in length, one inch in width, and one inch in depth, what are the
+dimensions of the metaphysical chips into which the stick has been
+decomposed? Each chip will be one inch by one inch by one inch by --
+what? So prodigiously thin must each chip be that its value is
+certifiably less then any rational (or irrational) quantity. Let us now
+take up one of the metaphysical chips and decompose it further into an
+infinite number of metaphysical splinters. In 1/2 minute we shall divide
+the chip into two equal parts. Each pieces will be one inch by 1/2 inch.
+In the next 1/4 minute we shall divide each of the two pieces again into
+two equal parts, yielding four pieces each being one inch by 1/4 inch.
+In the next 1/8 minute we shall divide each of the four pieces again
+into two equal parts, \&c ad infinitum. At the end of the mute we shall
+have composed the metaphysical chip into metaphysical splinters. Each
+splinter will be one inch in length. Let us now take up one of the
+metaphysical splinters and break it down into an infinite number of
+metaphysical motes (\citeproc{ref-Bernadete1964}{Bernadete 1964,
+184--85})
+\end{quote}
+
+The number of cuts made on the stick, the chip and the splinter
+respectively is aleph zero. The number of chips, splinters and motes
+left at the end of each cutting process, meanwhile, is aleph one. (Think
+of numbering each piece in a super-cutting process by an infinite
+expansion of one's and zero's as follows: if it lay on the left of the
+first cut, the first numeral is a zero, if to the right, the first
+numeral is a one; it if lay on the left of one of the pieces that was
+divided at the second round of cutting its second numeral is a zero, if
+to the right a one; and so on. For each decimal expansion of one's and
+zero's there is a bit and the end with that expansion.). This result is
+surprising to some, but poses no deep conceptual confusion. With an
+ontology of chips, splinters and motes available to us, there is a
+natural description available to us of the limit to the super-cutting
+processes described.
+
+But what to say when gunk is subjected to super-cutting? If each
+quantity of matter has proper parts, then a sea of metaphysical motes is
+not, it would seem, an available outcome. In what follows, we unpack
+this puzzle, providing along the way some a priori physics for
+gunk-lovers. The problem is only well formed when we make explicit some
+of the assumptions that drive it. We do so below:
+
+\begin{quote}
+\begin{description}
+\tightlist
+\item[(1)]
+Gunk
+\end{description}
+
+Every quantity of matter has proper parts.
+
+\begin{description}
+\tightlist
+\item[(2)]
+Conservation of Matter:
+\end{description}
+
+No mereological sum of quantities of matter can be destroyed by any
+sequence of cuts (though it may be scattered)\footnote{The `can' here is
+  one of nomological possibility.}.
+
+\begin{description}
+\tightlist
+\item[(3)]
+Occupation
+\end{description}
+
+If a quantity of matter occupies a point of space, then there is some
+volume, extended in all dimensions, to which that point belongs which
+that quantity of matter occupies.
+
+\begin{description}
+\tightlist
+\item[(4)]
+Super-cutting
+\end{description}
+
+The laws of the world permit super-cutting.
+\end{quote}
+
+Note that (1), the thesis that every quantity of matter has parts does
+not, by itself, entail any of the other theses. One might also think
+that matter sometimes vanishes as a result of some sequence of cuts,
+denying (2). One might hold that there are metaphysical splinters (and
+perhaps even chips), denying (3). One might hold that any given quantity
+of matter does have point sized pieces but that those pieces themselves
+have parts (the parts being of the same size as the whole in this case),
+denying (3). One might hold that some pieces of gunk can occupy, say, a
+spherical region and also a single isolated point at some considerable
+distance from the spherical region (while maintaining that no part of it
+merely occupies the point), also denying (3). One might imagine that
+while always having parts, the parts below a certain thickness are
+inseparable, denying (4). One might think there is a minimum amount of
+time that any event of separation takes, also denying (4) and so on.
+
+If the gunk hypothesis is maintained, but one or more of (2) to (4) is
+jettisoned, there is no problem left to solve. For example: If we are
+allowed to suppose that gunk may vanish, then it will be perfectly
+consistent to say that nothing is left at the limit of super-cutting. If
+we are allowed parts that lack finite extent, then it will be consistent
+to adopt Benardete's picture of the outcome. And so on. Our puzzle,
+properly formulated is: What would happen if super-cutting occurred in a
+world where (1) to (4) are true?
+
+In order to answer that question, we need to supplement Bernadete's
+brief discussion of the super-cutting process. It is not immediately
+clear from what he says that super-cutting a piece of wood will turn an
+object into chips, even assuming the wood to be composed of point
+particles. That is a natural description of the limit of the process,
+but it is hardly one that is forced upon us by the barebones description
+of the process that Benardete provides. When we divide the stick into
+two pieces, and then into four pieces, where are we to put these pieces?
+Presumably we must ensure that they are separated. If not, it will not
+be clear that we really have splinters left at the end. If the stick is
+cut into four, but the four pieces are then stored so closely together
+that they are not scattered any more, then we will not have four
+scattered objects after two rounds of cutting. By extension, unless we
+separate the pieces sufficiently after each round (or at least after
+sufficiently many of them) then even in a world where matter is composed
+of point particles, it is not clear that there will be infinitely many
+chips left at the end. Note in this connection that there are limits as
+to how far we can separate the objects. In a world where super-cutting
+produces chips, we could not, from left to right, put a one inch gap
+between each chip and any other, since there are aleph one chips and not
+aleph one inches of space along any vector. Nor is it even clear what
+kind of spacing will do the trick: how we are to keep aleph one chips
+separated from each other? What we need is a formal model showing how
+super-cutting is to be performed. Only then can we answer with any
+precision what would happen were super-cutting to be performed on gunk.
+
+Assume, for simplicity, that we have a stick that is exactly one inch
+long. At the first stage, cut the stick into two 1/2 inch long pieces,
+move the left-hand one 1/4 inch leftwards and the right hand one 1/4
+inch rightwards. This can be accomplished in 1/2 second without moving
+the objects at a speed of faster than 1 inch per second, or accelerating
+or decelerating the objects at a rate higher than 4 inches per second
+per second.\footnote{The idea is that in the first quarter second we
+  accelerate the object at 4 inches per second per second. This will
+  raise its velocity to 1 inch per second, and move the object 1/8 of an
+  inch. In the second quarter second we decelerate it at 4 inches per
+  second per second, so its velocity ends up at zero, and it ends up
+  having moved 1/4 of an inch.} At the second stage, cut each piece into
+two, and move each of the left-hand pieces 1/16 of an inch leftwards,
+and each of the right-hand pieces 1/16 of an inch rightwards. So if the
+original piece occupied the interval {[}0,~1) on a particular axis, the
+four pieces will now occupy the intervals: {[}-5/16, -1/16), {[}1/16,
+5/16), {[}11/16, 15/16), {[}17/16, 21/16). (The reason we are using
+these half-open intervals is to avoid questions about whether the
+objects that are separated by the cut used to overlap.) This cutting and
+moving can be accomplished in 1/4 of a second, without any piece
+attaining a velocity higher than 1/2 inch per second, or an acceleration
+higher than 4 inches per second per second.
+
+The third stage of the cutting is to take each of these four pieces, cut
+them in two, move the left-hand part of each of the four 1/64 of an inch
+to the left, and the right-hand part 1/64 of an inch to the right. So
+the eight pieces now occupy the intervals: {[}-21/64, -13/64),
+{[}-11/64, -3/64), {[}3/64, 11/64), {[}13/64,~21/64), {[}43/64,~51/64),
+{[}53/64,~61/64), {[}67/64,~75/64), {[}77/64,~85/64). Again, this
+cutting and moving can be accomplished within 1/8 of a second, without
+any piece attaining a velocity higher than 1/4 inch per second, or an
+acceleration higher than 4 inches per second per second.\footnote{Note
+  that, interestingly, if we moved the pieces 1/2 inch after the first
+  round, 1/4 inch after the second round, 1/8 inch after the third round
+  and so on then at the limit, each left and right edge that was once
+  attached will have moved back together again. The process we have
+  chosen preserves separation in a way that the aforementioned process
+  does not.}
+
+In general, at stage \emph{n}, we take the 2\textsuperscript{\emph{n}}
+pieces, divide each of them in two, move the left-hand piece
+1/2\textsuperscript{2\emph{n}} inches leftward, and the right-hand piece
+1/2\textsuperscript{2\emph{n}} inches rightward. This can all be done in
+1/2\textsuperscript{\emph{n}} seconds without any piece attaining a
+velocity higher than 1/2\textsuperscript{\emph{n}-1} inches per second,
+or an acceleration higher than 4 inches per second per second. So the
+whole super-cut can be performed in 1 second: the first stage in 1/2
+second, the second stage in 1/4 second, the third stage in 1/8 second,
+and so on. Note, moreover, that the whole super-cut can be performed in
+a second without the pieces ever moving at any huge velocity. If readers
+doubted the possibility of super-cutting because they believed it to be
+a necessary truth that no matters travels at or beyond the speed of
+light, their doubts were misplaced: no piece of matter in the
+super-cutting process approaches a superluminous velocity.
+
+Further, in this kind of procedure, a quantity of matter that is
+scattered during the super-cutting process remains scattered during the
+process. To see this, first consider a particular example. We noted
+above that at the second stage there were pieces occupying the intervals
+{[}-5/16, -1/16) and {[}1/16, 5/16). Before this, the point 0 had been
+occupied; at this stage a gap of 1/8 inch around 0 had been opened. This
+gap keeps being closed at each stage. After the third stage there were
+pieces occupying the intervals {[}/64, -3/64), {[}3/64, 11/64), so the
+gap is now only 3/32 inch. After the fourth stage, there will be pieces
+at {[}-27/256, -11/256), {[}11/256, 27/256), so the gap is now only
+11/128 inch. This process will make the gap ever smaller, but will not
+lead to its closure. As the process continues, the size of the gap will
+approach 1/12 of an inch, but never cross that boundary. To see this,
+note that the size of the gap in inches after stage \emph{n}
+(\emph{n}~\({\geq}\) 3) is
+1/8~-~1/2\textsuperscript{5}~-~1/2\textsuperscript{7}~-~\ldots~-~1/2\textsuperscript{2\emph{n}}.
+The sum of the series
+1/2\textsuperscript{5}~+~1/2\textsuperscript{7}~+~\ldots~is 1/24. Hence
+the gap at stage \emph{n} is greater than 1/8~-~1/24~=~1/12. So once the
+pieces around 0 have been separated, they will never be rejoined.
+
+This result applies generally to all of the separated pieces in the
+super-cut. Once a gap is created, parts of pieces from either side of
+the gap are moved ever closer to the centre of the gap at every
+subsequent stage of the super-cut. But since we decrease the distance
+moved by each piece at each stage of the cut, and in particular decrease
+it by a factor greater than 2, the pieces, once disjointed, will never
+be united.
+
+How is the matter arranged at the end of the super-cut? To answer this
+question we need to assume that motion is continuous. For each part of
+the object we can calculate its position function, the function from the
+length of time the super-cut has been in progress to the position of the
+part. At least, we can calculate this for all times until the end of the
+super-cut. With the continuity assumption in place we can infer that its
+position at the end of the cut is the limiting value of its position
+function. So we make this assumption.
+
+We assumed above that there is a Cartesian axis running along the
+object; say that a part \emph{a} covers a point \emph{x} just in case
+\emph{a} occupies some region {[}\emph{y}, \emph{z}), and
+\emph{y}~\({\leq}\)~\emph{x} and \emph{z}~\textgreater~\emph{x}. When we
+say \emph{a} occupies {[}\emph{y}, \emph{z}), we do not mean to imply it
+occupies only that region, just that it occupies at least that region.
+Assume then that a part \emph{a} occupies a point \emph{x}
+(0~\({\leq}\)~\emph{x}~\textless~1), and that the binary representation
+of \emph{x} is
+0.\emph{x}\textsubscript{1}\emph{x}\textsubscript{2}\ldots{}\emph{x\textsubscript{n}}\ldots,
+where for each \emph{x\textsubscript{i}}, \emph{x\textsubscript{i}}
+equals 0 or 1, and for all \emph{i}, there exists a \emph{j}
+\textgreater{} \emph{i} such that \emph{x\textsubscript{j}}~equals
+zero.\footnote{The final condition is important to rule out numbers
+  having two possible representations. For example, we have to choose
+  whether the representation of 1/2 should be 0.1000\ldots{} or
+  0.0111\ldots, and we somewhat arbitrarily, choose the former.} If
+\emph{x}\textsubscript{1}~=~1, then \emph{x}~\({\geq}\)~1/2, so the some
+part of \emph{a}, a small part that originally covered \emph{x}, will be
+moved rightward at the first stage. It is possible that \emph{a} itself
+may be split by the cut, but there will be a small part around \emph{x}
+that is not split, and it will move rightward. If
+\emph{x}\textsubscript{1}~=~0, then \emph{x}~\textless~1/2, so some part
+of \emph{a}, a small part that originally covered \emph{x}, will be
+moved leftward at the first stage. Indeed, in general some part of
+\emph{a}, a small part that originally covered \emph{x}, will be moved
+rightward at the \emph{n}'th stage if \emph{x\textsubscript{n}}~=~1, and
+some part of \emph{a}, a small part that originally covered \emph{x},
+will be moved leftward at the \emph{n}'th stage if
+\emph{x\textsubscript{n}}~=~0.
+
+Using the fact that a part gets moved 2\textsuperscript{-2\emph{n}}
+inches at stage \emph{n}, we can infer that after \emph{n} stages, a
+small part that originally covered \emph{x} and has not been split by
+the cuts will cover the following point after \emph{n} cuts.
+\[x + \frac{(-1)^{x_1 + 1}}{4} + \frac{(-1)^{x_2 + 1}}{16} + \dots + \frac{(-1)^{x_n + 1}}{2^{2n}}\]
+
+Assuming continuity of motion, we can assume that \emph{a} will end up
+with a part that eventually covers the following point, which we will
+call \emph{f}(\emph{x}).
+\[f(x) = x + \sum_{i=1}^{\infty}\frac{(-1)^{x_i + 1}}{2^{2i}}\]
+
+From this, it follows immediately that for all \emph{x} in {[}0, 1),
+\emph{f}(\emph{x}) will end up being occupied. It turns out that these
+are the \emph{only} points that are occupied at the end of the
+super-cut.
+
+Assume that a point \emph{y} is occupied at the end of the super-cut. We
+will construct a number \emph{c} such that
+\emph{y}~=~\emph{f}(\emph{c}). Recall that we noted above that whenever
+two pieces were separated, a gap was created between them that would
+never be completely filled. While parts of the stick would move closer
+and closer to the centre of that gap during the super-cut, the middle
+two-thirds of the gap would never be reoccupied. That interval, that
+would never be reoccupied, would be \emph{liberated}. The interval
+{[}1/3, 2/3) is liberated at the first stage, the intervals {[}-1/24,
+1/24) and {[}23/24, 25/24) are liberated at the second stage, the
+intervals {[}-37/192, -35/192), {[}35/192, 37/192), {[}155/192, 157/192)
+and {[}227/192, 229/192) are liberated at the third stage, and so on. If
+\emph{y} is occupied, then \emph{y} must not be in any liberated
+interval. Therefore it must be either to the left or to the right of any
+interval that is liberated.
+
+Let \emph{c}\textsubscript{1}~equal~0 if \emph{y} is to the left of the
+first liberated interval, {[}1/3, 2/3), and 1 otherwise. Given the value
+of \emph{c}\textsubscript{1}, it is already determined which side
+\emph{y} is of one of the intervals liberated at the second stage. If
+\emph{y} is to the left of {[}1/3, 2/3), for example, then it is to the
+left of {[}23/24, 25/24). But the value of \emph{c}\textsubscript{1}
+does not determine which side \emph{y} is of the other interval. Let
+\emph{c}\textsubscript{2} equal 0 if \emph{y} is to the left of that
+interval, and 1 otherwise. The values of \emph{c}\textsubscript{1} and
+\emph{c}\textsubscript{2} determine which side \emph{y} is of three of
+the four intervals liberated at the fourth stage, but leave open which
+side it is of one of these four. Let \emph{c}\textsubscript{3} equal 0
+if \emph{y} is to the left of that interval, 1 otherwise. If we repeat
+this procedure for all stages, we will get values of
+\emph{c\textsubscript{i}} for all \emph{i}. Let \emph{c} be the number
+whose binary expansion is
+0.\emph{c}\textsubscript{1}\emph{c}\textsubscript{2}\ldots{}\emph{c\textsubscript{n}}\ldots.
+It follows that \emph{y}~=~\emph{f}(\emph{c}). The reason once it is
+determined which side \emph{y} is of each of the liberated intervals,
+\emph{y} has been determined to fall in an interval that is exactly one
+point wide, and \emph{f}(\emph{c}) is in that interval, so
+\emph{f}(\emph{c}) must equal \emph{y}. So \emph{y} is occupied iff for
+some \emph{x}, \emph{y}~=~\emph{f}(\emph{x}). Say
+\emph{S}~=~\{\emph{y}:~\({\exists}\)\emph{x}~(\emph{y}~=~\emph{f}(\emph{x}))\};
+the conclusion is that all and only the points in \emph{S} are occupied.
+
+Could a piece of gunk occupy the points in \emph{S}? Not given the
+assumptions we have made so far. \emph{S} has two properties that might
+not seem consistent at first glance. It is \emph{dense} in the sense
+that for any point \emph{y} in \emph{S}, and any distance \({\delta}\),
+there is another point \emph{z} in \emph{S} such that
+\emph{y}~-~\emph{z}~\textless~\({\delta}\). But it is
+\emph{disconnected} in the sense that for any two points \emph{y} and
+\emph{z} in \emph{S}, there is an extended region \emph{r} between
+\emph{y} and \emph{z} that is wholly unoccupied. The proofs of density
+and disconnectedness are given in the appendix.
+
+Given (3), disconnectedness is inconsistent with gunk occupying
+\emph{S}. If a material object occupies \emph{S}, it must occupy the
+points in \emph{S}. Let \emph{y} be any one of these points. By (3),
+\emph{S} must occupy some extended region containing \emph{y}, say,
+{[}\emph{y}\textsubscript{1}, \emph{y}\textsubscript{2}). Two cases to
+consider. First case: \emph{y}\textsubscript{1}~\textless~\emph{y}. If
+{[}\emph{y}\textsubscript{1},~\emph{y}\textsubscript{2})~\({\subset}\)
+\emph{S}, then \emph{y}\textsubscript{1} and \emph{y} are in \emph{S},
+and so are all the points in between them. Since the object occupies
+\emph{S}, it follows that these points are occupied. Hence there is no
+extended region between \emph{y}\textsubscript{1} and \emph{y} that is
+wholly unoccupied, which is inconsistent with disconnectedness. Second
+case: \emph{y}\textsubscript{1}~=~\emph{y}. Again,
+{[}\emph{y}\textsubscript{1}, \emph{y}\textsubscript{2})
+\({\subset}\)~\emph{S}, and since this interval is non-empty,
+\emph{y}\textsubscript{2}~\textgreater~\emph{y}\textsubscript{1}. Hence
+(\emph{y}\textsubscript{1} +~\emph{y}\textsubscript{2})~/~2 is greater
+than \emph{y}\textsubscript{1}, and all the points between it and
+\emph{y}\textsubscript{1} are occupied. This is also inconsistent with
+disconnectedness. So given (3), no material object could occupy
+\emph{S}.
+
+In summary, (1) through (4) plus continuity of motion cannot be true
+together. From (1), (2), and (4), we inferred that our super-cutting
+process was possible, and that it would not destroy any quantity of
+matter (though of course it would scatter it). Assuming continuity of
+motion, we calculated which points would be occupied after the
+super-cut. By (3) we concluded that no piece of gunk could occupy those
+points, or indeed any subset of them, yielding an inconsistent result.
+Suppose that the continuity of motion thesis is dropped. We can then
+maintain (1) to (4) with consistency. One should note, however, that a
+world where (1) to (4) holds would be a strange world indeed: if
+super-cutting is performed, the pieces of gunk would have to jump
+location at the limit. The gunk cannot occupy S: but in order to occupy
+a different set of points, various quantities of matter would have to
+jump position at the limit.
+
+If one believes in gunk one has a choice: Abandon one or more of (2) to
+(4) or else deny that it is nomologically necessary that motion be
+continuous. Which assumption should be dropped? We leave it to the gunk
+lover to select the most tolerable package. The choice for the gunk
+lover is a little unenviable. Those who are attracted to the view that
+the actual world is gunky are very much wedded to (1) and (3). When
+philosophers take seriously the idea that that matter has parts all the
+way down\footnote{See, for example,
+  (\citeproc{ref-Zimmerman1996}{Zimmerman 1996}).}, they do not imagine
+conjoining that thesis with point sized parts, or else immaterial
+parts\footnote{Leibniz, with his monads, is an exception of course. No
+  contemporary gunk lover wants a monadology, however.}, or else
+quantities of matter that are as thin as a plane, and so on. With a
+commitment to (1) and (3) in place, super-cutting will be loaded with
+physical significance. Accept that the laws of nature permits
+super-cutting and one will be committed to either denying the
+conservation of matter or the continuity of motion.
+
+\section*{Appendix}\label{appendix}
+\addcontentsline{toc}{section}{Appendix}
+
+To prove density, note that if \emph{y} is occupied, there is a point
+\emph{x} with binary representation
+0.\emph{x}\textsubscript{1}\emph{x}\textsubscript{2}\ldots{} such that
+\emph{y}~=~\emph{f}(\emph{x}). For any positive \({\delta}\), there is
+an integer \emph{n} such that
+\({\delta}\)~\textgreater~2\textsuperscript{-2\emph{n}}. Let \emph{v} be
+the number represented by
+0.\emph{x}\textsubscript{1}\emph{x}\textsubscript{2}\ldots{}\emph{x\textsubscript{n}x\textsubscript{n}}\textsubscript{+1}′\emph{x\textsubscript{n}}\textsubscript{+2}\emph{x\textsubscript{n}}\textsubscript{+3}\ldots,
+where \emph{x\textsubscript{n}}\textsubscript{+1}′~=~1 iff
+\emph{x\textsubscript{n}}\textsubscript{+1}~= 0, and
+\emph{x\textsubscript{n}}\textsubscript{+1}′~=~0 otherwise. The
+difference between \emph{f}(\emph{x}) and \emph{f}(\emph{v}) will be
+exactly 2\textsuperscript{-2\emph{n}-1}. Since \emph{f}(\emph{v}) is
+occupied, and \emph{y}~=~\emph{f}(\emph{x}), there is an occupied point
+exactly 2\textsuperscript{-2\emph{n}-1} inches from \emph{y}, so there
+is a point less than \({\delta}\) inches from \emph{y}, as required.
+
+To prove disconnectedness, let \emph{y} and \emph{z} be any two distinct
+occupied points. So for some distinct \emph{v},~\emph{x},
+\emph{y}~=~\emph{f}(\emph{x}) and \emph{z}~=~\emph{f}(\emph{v}). Say
+that the binary representation of \emph{x} is
+0.\emph{x}\textsubscript{1}\emph{x}\textsubscript{2}\ldots, and the
+binary representation of \emph{v} is
+0.\emph{v}\textsubscript{1}\emph{v}\textsubscript{2}\ldots{} Let
+\emph{j} be the lowest number such that
+\emph{x\textsubscript{j}}~\({\neq}\)~\emph{v\textsubscript{j}}. (Since
+\emph{x} and \emph{v} are distinct, there must be at least one value
+\emph{j}.) Without loss of generality, assume that
+\emph{x\textsubscript{j}}~=~0~and \emph{v\textsubscript{j}}~=~1. (There
+is no loss of generality because we are just trying to show that between
+any two occupied points there is a gap, so it does not matter which of
+the two points is the rightward one.) Let \emph{k} be the number with
+binary representation
+0.\emph{x}\textsubscript{1}\emph{x}\textsubscript{2}\ldots{}\emph{x\textsubscript{j}}1,
+and let \emph{l}\textsubscript{2} be \emph{f}(\emph{k}). Finally, define
+\emph{l}\textsubscript{1} by the following equation:
+\[l_i = \sum_{i=1}^j \frac{(-1)^{x_i+1}}{2^{2i}} + \sum_{i = j+1}^\infty \frac{1}{2^{2i}}\]
+
+It is easy enough to see that \emph{f}(\emph{x}), that is \emph{y}, must
+be less that \emph{l}\textsubscript{1}. For \emph{l}\textsubscript{1} is
+the value that \emph{f}(\emph{x}) would take were every digit in the
+binary expansion of \emph{x} after \emph{j} be 1. But by definition
+there must be some value \emph{j}′~\textgreater~\emph{j} such that
+\emph{x\textsubscript{j}}′~=~0. From this it follows that:
+\[\sum_{i = j+1}^\infty \frac{1}{2^{2i}} > \sum_{i = j+1}^\infty \frac{(-1)^{x_i+1}}{2^{2i}}\]
+
+And from that it follows that
+\emph{l}\textsubscript{1}~\textgreater~\emph{f}(\emph{x}). Indeed, by
+similar reasoning, it follows that for all \emph{u}~\textless~\emph{k},
+\emph{f}(\emph{u}) \textless~\emph{l}\textsubscript{1}. Since \emph{f}
+is monotone increasing, it also follows that for all
+\emph{u}~\({\geq}\)~\emph{k},
+\emph{f}(\emph{u})~\({\geq}\)~\emph{l}\textsubscript{2}. And from those
+facts, it follows that there does not exist a \emph{u} such that
+\emph{f}(\emph{u})~\({\in}\)~{[}\emph{l}\textsubscript{1},~\emph{l}\textsubscript{2}).
+And since
+\emph{y}~\textless~\emph{l}\textsubscript{1}~\textless~\emph{l}\textsubscript{2}~\({\leq}\)~\emph{z},
+this implies that there is an extended unoccupied region between
+\emph{y} and \emph{z}, as required.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Bernadete1964}
+Bernadete, Jose. 1964. \emph{Infinity: An Essay in Metaphysics}. Oxford:
+Clarendon Press.
+
+\bibitem[\citeproctext]{ref-Leibniz1998}
+Leibniz, Gottfried Wilhelm. 1998. \emph{Philosophical Texts}. Translated
+by R. S. Woolhouse and Richard Francks. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Newton1952}
+Newton, Isaac. 1952. \emph{Opticks}. New York: Dover Press.
+
+\bibitem[\citeproctext]{ref-Zimmerman1996}
+Zimmerman, Dean. 1996. {``Could Extended Objects Be Made Out of Simple
+Parts: An Argument for Atomless Gunk.''} \emph{Philosophy and
+Phenomenological Research} 56 (1): 1--29. doi:
+\href{https://doi.org/10.2307/2108463}{10.2307/2108463}.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+The Monist}, 2004, pp. 339-350.
+
+\end{document}

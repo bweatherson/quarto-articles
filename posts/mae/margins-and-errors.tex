@@ -1,0 +1,1025 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Margins and Errors
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Margins and Errors},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Margins and Errors}
+\author{Brian Weatherson}
+\date{2013}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Timothy Williamson has argued that cases involving fallible measurement
+show that knowledge comes apart from justified true belief in ways quite
+distinct from the familiar `double luck' cases. I start by describing
+some assumptions that are necessary to generate Williamson's conclusion,
+and arguing that these assumptions are well justified. I then argue that
+the existence of these cases poses problems for theorists who suppose
+that knowledge comes apart from justified true belief only in a well
+defined class of cases. I end with some general discussion of what we
+can know on the basis of imperfect measuring devices.
+\end{abstract}
+
+\setstretch{1.1}
+Recently, Timothy Williamson (\citeproc{ref-WilliamsonLofoten}{2013})
+has argued that considerations about margins of errors can generate a
+new class of cases where agents have justified true beliefs without
+knowledge. I think this is a great argument, and it has a number of
+interesting philosophical conclusions. In this note I'm going to go over
+the assumptions of Williamson's argument. I'm going to argue that the
+assumptions which generate the justification without knowledge are true.
+I'm then going to go over some of the recent arguments in epistemology
+that are refuted by Williamson's work. And I'm going to end with an
+admittedly inconclusive discussion of what we can know when using an
+imperfect measuring device.
+
+\section{Measurement, Justification and
+Knowledge}\label{measurement-justification-and-knowledge}
+
+Williamson's core example involves detecting the angle of a pointer on a
+wheel by eyesight. For various reasons, I find it easier to think about
+a slightly different example: measuring a quantity using a digital
+measurement device. This change has some costs relative to Williamson's
+version -- for one thing, if we are measuring a quantity it might seem
+that the margin of error is related to the quantity measured. If I
+eyeball how many stories tall a building is, my margin of error is 0 if
+the building is 1-2 stories tall, and over 10 if the building is as tall
+as the World Trade Center. But this problem is not as pressing for
+digital devices, which are often very \emph{unreliable} for small
+quantities. And, at least relative to my preferences, the familiarity of
+quantities makes up for the loss of symmetry properties involved in
+angular measurement.
+
+To make things explicit, I'll imagine the agent \emph{S} is using a
+digital scale. The scale has a \textbf{margin of error} \emph{m}. That
+means that if the reading, i.e., the \textbf{apparent mass} is \emph{a},
+then the agent is justified in believing that the mass is in
+{[}\emph{a}-\emph{m}, \emph{a}+\emph{m}{]}. We will assume that \emph{a}
+and \emph{m} are luminous; i.e., the agent knows their values, and knows
+she knows them, and so on. This is a relatively harmless idealisation
+for \emph{a}; it is pretty clear what a digital scale reads.\footnote{This
+  isn't always true. If a scale flickers between reading 832g and 833g,
+  it takes a bit of skill to determine what \emph{the reading} is. But
+  we'll assume it is clear in this case. On an analogue scale, the
+  luminosity assumption is rather implausible, since it is possible to
+  eyeball with less than perfect accuracy how far between one marker and
+  the next the pointer is.} It is a somewhat less plausible assumption
+for \emph{m}. But we'll assume that \emph{S} has been very diligent
+about calibrating her scale, and that the calibration has been recently
+and skilfully carried out, so in practice \emph{m} can be assessed very
+accurately.
+
+We'll make three further assumptions about \emph{m} that strike me as
+plausible, but which may I guess be challenged. I need to be a bit
+careful with terminology to set out the first one. I'll use \emph{V} and
+\emph{v} as variables that both pick out the \textbf{true value} of the
+mass. The difference is that \emph{v} picks it out rigidly, while
+\emph{V} picks out the value of the mass in any world under
+consideration. Think of \emph{V} as shorthand for \emph{the mass of the
+object} and \emph{v} as shorthand for \emph{the actual mass of the
+object}. (More carefully, \emph{V} is a \emph{random} variable, while
+\emph{v} is a standard, rigid, variable.) Our first assumption then is
+that \emph{m} is also related to what the agent can know. In particular,
+we'll assume that if the reading \emph{a} equals \emph{v}, then the
+agent can know that \emph{V} ∈ {[}\emph{a}-\emph{m},
+\emph{a}+\emph{m}{]}, and can't know anything stronger than that. That
+is, the margin of error for justification equals, in the best case, the
+margin of error for knowledge. The second is that the scale has a
+readout that is finer than \emph{m}. This is usually the case; the last
+digit on a digital scale is often not significant. The final assumption
+is that it is metaphysically possible that the scale has an error on an
+occasion that is greater than \emph{m}. This is a kind of fallibilism
+assumption -- saying that the margin of error is \emph{m} does not mean
+there is anything incoherent about talking about cases where the error
+on an occasion is greater than \emph{m}.
+
+This error term will do a lot of work in what follows, so I'll use
+\emph{e} to be the \textbf{error} of the measurement, i.e.,
+\textbar{}\emph{a}-\emph{v}\textbar. For ease of exposition, I'll assume
+that \emph{a}~⩾~\emph{v}, i.e., that any error is on the high side. But
+this is entirely dispensible, and just lets me drop some disjunctions
+later on.
+
+Now we are in a position to state Williamson's argument. Assume that on
+a particular occasion, 0~\textless~\emph{e}~\textless~\emph{m}. Perhaps
+\emph{v}~=~830, m~=~10 and \emph{a}~=~832, so \emph{e}~=~2. Williamson
+appears to make the following two assumptions.\footnote{I'm not actually
+  sure whether Williamson \emph{makes} the first, or thinks it is the
+  kind of thing anyone who thinks justification is prior to knowledge
+  should make.}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The agent is justified in believing what they would know if
+  appearances matched reality, i.e., if \emph{V} equalled \emph{a}.
+\item
+  The agent cannot come to know something about \emph{V} on the basis of
+  a suboptimal measurement that they could not also know on the basis of
+  an optimal measurement.
+\end{enumerate}
+
+I'm assuming here that the optimal measurement displays the correct
+mass. I don't assume the actual measurement is \emph{wrong}. That would
+require saying something implausible about the semantic content of the
+display. It's not obvious that the display has a content that could be
+true or false, and if it does have such a content it might be true. (For
+instance, the content might be that the object on the scale has a mass
+near to \emph{a}, or that with a high probability it has a mass near to
+\emph{a}, and both of those things are true.) But the optimal
+measurement would be to have \emph{a}~=~\emph{v}, and in this sense the
+measurement is suboptimal.
+
+The argument then is pretty quick. From the first assumption, we get
+that the agent is justified in believing that
+\emph{V}~∈~{[}\emph{a}-\emph{m}, \emph{a}+\emph{m}{]}. Assume then that
+the agent forms this justified belief. This belief is incompatible with
+\emph{V}~∈~{[}\emph{v}-\emph{m}, \emph{a}-\emph{m}). But if \emph{a}
+equalled \emph{v}, then the agent wouldn't be in a position to rule out
+that \emph{V}~∈~{[}\emph{v}-\emph{m}, \emph{a}-\emph{m}). So by premise
+2 she can't knowledgeably rule it out on the basis of a mismeasurement.
+So her belief that \emph{V}~⩾~\emph{a}-\emph{m} cannot be knowledge. So
+this justified true belief is not knowledge.
+
+If you prefer doing this with numbers, here's the way the example works
+using the numbers above. The mass of the object is 830. So if the
+reading was correct, the agent would know just that the mass is between
+820 and 840. The reading is 832. So she's justified in believing, and
+we'll assume she does believe, that the mass is between 822 and 842.
+That belief is incompatible with the mass being 821. But by premise 2
+she can't know the mass is greater than 821. So the belief doesn't
+amount to knowledge, despite being justified and, crucially, true. After
+all, 830 is between 822 and 842, so her belief that the mass is in this
+range is true. So simple reflections on the workings on measuring
+devices let us generate cases of justified true beliefs that are not
+knowledge.
+
+I'll end this section with a couple of objections and replies.
+
+\emph{Objection}: The argument that the agent can't know that
+\emph{V}~∈~{[}\emph{a}-\emph{m}, \emph{a}+\emph{m}{]} is also an
+argument that the argument can't justifiably believe that
+\emph{V}~∈~{[}\emph{a}-\emph{m}, \emph{a}+\emph{m}{]}. After all, why
+should it be possible to get justification from a suboptimal measurement
+when it isn't possible to get the same justification from an optimal
+measurement?
+
+\emph{Reply}: It is possible to have justification to believe an
+outright falsehood. It is widely believed that you can have
+justification even when none of your evidential sources are even
+approximately accurate (\citeproc{ref-Cohen1984}{Cohen 1984}). And even
+most reliabilists will say that you can have false justified beliefs if
+you use a belief forming method that is normally reliable, but which
+badly misfires on this occasion. In such cases we clearly get
+justification to believe something from a mismeasurement that we
+wouldn't get from a correct measurement. So the objection is based on a
+mistaken view of justification.
+
+\emph{Objection}: Premise 2 fails in cases using random sampling. Here's
+an illustration. An experimenter wants to know what percentage of
+\emph{F}s are \emph{G}. She designs a survey to ask people whether they
+are \emph{G}. The survey is well designed; everyone gives the correct
+answer about themselves. And she designs a process for randomly sampling
+the \emph{F}s to get a good random selection of 500. It's an excellent
+process; every \emph{F} had an equal chance of being selected, and the
+sample fairly represents the different demographically significant
+subgroups of the \emph{F}s. But by the normal processes of random
+variation, her group contains slightly more \emph{G}s than the average.
+In her survey, 28\% of people said (truly!) that they were \emph{G},
+while only 26\% of \emph{F}s are \emph{G}s. Assuming a margin of error
+in such a study of 4\%, it seems plausible to say she knows that between
+25 and 32\% of \emph{F}s are \emph{G}s. But that's not something she
+could have known the survey had come back correctly reporting that 26\%
+of \emph{F}s are \emph{G}s.
+
+\emph{Reply}: I think the core problem with this argument comes in the
+last sentence. A random survey isn't, in the first instance, a
+measurement of a population. It's a measurement of those surveyed, from
+which we draw extrapolations about the population. In that sense, the
+only \emph{measurement} in the imagined example was as good as it could
+be; 28\% of surveyed people are in fact \emph{G}. So the survey was
+correct, and it is fine to conclude that we can in fact know that
+between 24 and 32 percent of \emph{F}s are \emph{G}s.
+
+There are independent reasons for thinking this is the right way to talk
+about the case. If a genuine measuring device, like a scale, is off by a
+small amount, we regard that as a reason for tinkering with the device,
+and trying to make it more accurate. That's one respect in which the
+measurement is suboptimal, even if it is correct within the margin of
+error. This reason to tinker with the scale is a reason that often will
+be outweighed. Perhaps it is technologically infeasible to make the
+machine more accurate. More commonly, the only way to guarantee greater
+accuracy would be more cost and hassle than it is worth. But it remains
+a reason. The fact that this experiment came out with a deviation
+between the sample and the population is \emph{not} a reason to think
+that it could have been run in a better way, or that there is some
+reason to improve the survey. That's just how random sampling goes. If
+it were a genuine measurement of the population, the deviation between
+the `measurement' and what is being measured would be a reason to do
+things differently. There isn't any such reason, so the sample is not
+truly a measurement.
+
+So I don't think this objection works, and I think the general principle
+that you can't get extra knowledge from a suboptimal measurement is
+right. But note also that we don't need this general principle to
+suggest that there will be cases of justified true belief without
+knowledge in the cases of measurement. Consider a special case where
+\emph{e} is just less than \emph{m}. For concreteness, say
+\emph{a}~=~\emph{v}+0.95\emph{m}, so \emph{e}~=~0.95\emph{m}. Now assume
+that whatever is justifiedly truly believed in this case is known, so
+\emph{S} knows that \emph{V}~∈~{[}\emph{a}-\emph{m},
+\emph{a}+\emph{m}{]}. That is, \emph{S} knows that
+\emph{V}~∈~{[}v-0.05\emph{m}, \emph{a}+\emph{m}{]}.
+
+We don't need any principles about measurement to show this is false;
+safety considerations will suffice. Williamson
+(\citeproc{ref-Williamson2000-WILKAI}{2000}) says that a belief that
+\emph{p} is safe only if \emph{p} is true in all nearby worlds. But
+given how close \emph{v} is to the edge of the range
+{[}\emph{v}-0.05\emph{m},~\emph{a}+\emph{m}{]}. Rival conceptions of
+safety don't help much more than this. The most prominent of these,
+suggested by Sainsbury (\citeproc{ref-Sainsbury1996}{1995}), says that a
+belief is safe only if the method that produced it doesn't produce a
+false belief in any nearby world. But if the scale was off by
+0.95\emph{m}, it could have been off by 1.05\emph{m}, so that condition
+fails too.
+
+I don't want the last two paragraphs to leave too concessive an
+impression. I think the objection fails because it relies on a
+misconception of the notion of measurement. But I think that even if the
+objection works, we can get a safety based argument that some
+measurement cases will produce justified true beliefs without knowledge.
+And that will matter for the argument of the next two sections.
+
+\section{The Class of Gettier Cases is
+Disjunctive}\label{the-class-of-gettier-cases-is-disjunctive}
+
+There's an unfortunate terminological confusion surrounding gaps between
+knowledge and justification. Some philosophers use the phrase `Gettier
+case' to describe any case of a justified true belief that isn't
+knowledge. Others use it to describe just cases that look like the cases
+in Gettier (\citeproc{ref-Gettier1963}{1963}), i.e., cases of true
+belief derived from justified false belief. I don't particularly have
+strong views on whether either of these uses is \emph{better}, but I do
+think it is important to keep them apart.
+
+I'll illustrate the importance of this by discussing a recent argument
+due to Jeremy Fantl and Matthew McGrath
+(\citeproc{ref-FantlMcGrath2009}{Fantl and McGrath 2009} Ch. 4). I've
+previously discussed this argument
+(\citeproc{ref-Weatherson2011-WEAKBI}{Weatherson 2011}), but I don't
+think I quite got to the heart of why I don't like the kind of reasoning
+they are using.
+
+The argument concerns an agent, call her \emph{T}, who has the following
+unfortunate combination of features. She is very confident that
+\emph{p}. And with good reason; her evidence strongly supports \emph{p}.
+For normal reasoning, she takes \emph{p} for granted. That is, she
+doesn't distinguish between ϕ is best given \emph{p}, and that ϕ is
+simply best. And that's right too, given the strong evidence that
+\emph{p}. But she's not crazy. Were she to think that she was facing a
+bet on extreme odds concerning \emph{p}, she would cease taking \emph{p}
+for granted, and revert to trying to maximise expected value given the
+high probability that \emph{p}. But she doesn't think any such bet is
+salient, so her disposition to retreat from \emph{p} to \emph{Probably
+p} has not been triggered. So far, all is going well. I'm inclined to
+say that this is enough to say that \emph{T} justifiedly believes that
+\emph{p}. She believes that \emph{p} in virtue of the fact that she
+takes \emph{p} for granted in actual reasoning.\footnote{There are some
+  circumlocutions here because I'm being careful to be sensitive to the
+  points raised in Ross and Schroeder
+  (\citeproc{ref-SchroederRoss2012}{2014}) about the relationship
+  between belief and reasoning. I think there's less distance between
+  the view they put forward and the view I defended in Weatherson
+  (\citeproc{ref-Weatherson2005-WEACWD}{2005}) than they do, but this is
+  a subtle matter, and for this paper's purposes I want to go along with
+  Ross and Schroeder's picture of belief.} She's disposed to stop doing
+so in some circumstances, but until that disposition is triggered, she
+has the belief. And this is the right way to act given her evidence, so
+her belief is justified. So far, so good.
+
+Unfortunately, \emph{T} really does face a bet on long odds about
+\emph{p}. She knows she has to choose between ϕ and ψ. And she knows
+that ϕ will produce the better outcome iff \emph{p}. But she thinks the
+amount she'll gain by choosing ψ if ¬\emph{p} is roughly the same as the
+amount she'll gain by choosing ϕ if \emph{p}. That's wrong, and her
+evidence clearly shows it is wrong. If \emph{p} is false, then ϕ will be
+\emph{much} worse than ψ. In fact, the potential loss here is so great
+that ψ has the greater expected value given the correct evidential
+probability of \emph{p}. I think that means she doesn't know that
+\emph{p}. Someone who knows that \emph{p} can ignore ¬\emph{p}
+possibilities in practical reasoning. And someone who could ignore
+¬\emph{p} possibilities in practical reasoning would choose ϕ over ψ,
+since it is better if \emph{p}. But \emph{T} isn't in a position to make
+that choice, so she doesn't know that \emph{p}.
+
+(I've said here that \emph{T} is wrong about the costs of choosing ϕ if
+\emph{p}, and her evidence shows she is wrong. In fact I think she
+doesn't know \emph{p} if either of those conditions obtain. But here I
+only want to use the weaker claim that she doesn't know \emph{p} if both
+conditions obtain.)
+
+Fantl and McGrath agree about the knowledge claim, but disagree about
+the justified belief claim. They argue as follows (this is my version of
+the `Subtraction Argument' from page 97 of their book).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{T} is justfied in choosing ϕ iff she knows that \emph{p}.
+\item
+  Whether \emph{T}'s belief that \emph{p} is true is irrelevant to
+  whether she is justified in choosing ϕ.
+\item
+  Whether \emph{T}'s belief that \emph{p} is `Gettiered' is irrelevant
+  to whether she is justified in choosing ϕ.
+\item
+  Knowledge is true, justified, UnGettiered belief.
+\item
+  So \emph{T} is justfied in choosing ϕ iff she is justified in
+  believing that \emph{p}.
+\item
+  \emph{T} is not justified in choosing ϕ.
+\item
+  So \emph{T} is not justified in believing that \emph{p}.
+\end{enumerate}
+
+I think this argument is only plausible if we equivocate on what it is
+for a belief to be `Gettiered'.
+
+Assume first that `Gettiered' means `derived from a false intermediate
+step'. Then premise 4 is false, as Williamson's example shows. \emph{S}
+has a justified true belief that is neither knowledge nor derived from a
+false premise.
+
+Assume then that `Gettiered' simply means that the true belief is
+justified without being known. In that case we have no reason to accept
+premise 3. After all, the class of true justified beliefs that are not
+knowledge is pretty open ended. Before reading Williamson, we may not
+have thought that this class included the beliefs of agents using
+measuring devices that were functioning properly but imperfectly. But it
+does. Prior to the end of epistemology, we simply don't know what other
+kind of beliefs might be in this class. There's no way to survey all the
+ways for justification to be insufficient for knowledge, and see if all
+of them are irrelevant to the justification for action. I think one way
+a justified belief can fall short of knowledge is if it is tied up with
+false beliefs about the stakes of bets. It's hard to say that that is
+irrelevant to the justification of action.
+
+It is by now reasonably well known that logical subtraction is a very
+messy and complicated business. See, for instance, Humberstone
+(\citeproc{ref-Humberstone2000}{2000}) for a clear discussion of the
+complications. In general, unless it is analytic that \emph{F}s are
+\emph{G}s and \emph{H}s, for some antecedently understood \emph{G} and
+\emph{H}, there's nothing interesting to say about the class of things
+that are \emph{G} but not \emph{F}. It will just be a disjunctive
+shambles. The same is true for knowledge and justification. The class of
+true beliefs that are justified but not known is messy and disjunctive.
+We shouldn't expect to have any neat way of overviewing it. That in part
+means we can't say much interesting about it as a class, contra premise
+3 in the above argument. It also means the prospects for `solving the
+Gettier problem' are weak. We'll turn to that issue next.
+
+\section{There is No Solution to the Gettier
+Problem}\label{there-is-no-solution-to-the-gettier-problem}
+
+The kind of example that Edmund Gettier
+(\citeproc{ref-Gettier1963}{1963}) gives to refute the justified true
+belief theory of knowledge has what Linda Zagzebski
+(\citeproc{ref-Zagzebski2009}{2009, 117}) aptly calls a ``double luck''
+structure. In Gettier's original cases, there's some bad luck that leads
+to a justified belief being false. But then there's some good luck that
+leads to an inference from that being true. As was quickly realised in
+the literature, the good and bad luck doesn't need to apply to separate
+inferential steps. It might be that the one belief that would have been
+false due to bad luck also ends up being true due to good luck.
+
+This has led to a little industry, especially in the virtue epistemology
+section of the market, of attempts to ``solve the Gettier problem'' by
+adding an anti-luck condition to justification, truth and belief and
+hoping that the result is something like an analysis of knowledge. As
+Zagzebski (\citeproc{ref-Zagzebski1994}{1994}) showed, this can't be an
+\emph{independent} condition on knowledge. If it doesn't entail truth,
+then we will be able to recreate the Gettier cases. But maybe a `fourth'
+condition that entails truth (and perhaps belief) will suffice. Let's
+quickly review some of these proposals.
+
+So Zagzebski (\citeproc{ref-Zagzebski1996}{1996}) suggested that the
+condition is that the belief be true \emph{because} justified. John
+Greco (\citeproc{ref-Greco2010}{2010}) says that the extra condition is
+that the beliefs be ``intellectually creditable''. That is, the primary
+that the subject ended up with a true belief is that it was the result
+of her reliable cognitive faculties. Ernest Sosa
+(\citeproc{ref-Sosa2007}{2007}) said that knowledge is belief that is
+true because it manifests intellectual competence. John Turri
+(\citeproc{ref-Turri2011}{2011}) says that knowledge is belief the truth
+of which is a manifestation of the agent's intellectual competence.
+
+It should be pretty clear that no such proposal can work if what I've
+said in earlier sections is remotely right. Assume again that
+\emph{v}~~=~830, a~=~832 and \emph{m}~=~10. The agent believes that
+\emph{V}~∈~{[}822, 842{]}. This belief is, we've said, justified and
+true. Does it satisfy these extra conditions?
+
+My short answer is that it does. My longer answer is that it does if any
+belief derived from the use of a measuring device does, and since some
+beliefs derived from the use of measuring devices amount to knowledge,
+the epistemologists are committed to the belief satisfying the extra
+condition. Let's go through those arguments in turn.
+
+In our story, \emph{S} demonstrates a range of intellectual
+competencies. She uses a well-functioning measuring device. It is the
+right kind of device for the purpose she is using. By hypothesis, she
+has had the machine carefully checked, and knows exactly the accuracy of
+the machine. She doesn't form any belief that is too precise to be
+justified by the machine. And she ends up with a true belief precisely
+because she has so many competencies.
+
+Note that if we change the story so \emph{a} is closer to
+\emph{v}+\emph{m}, the case that the belief is true in virtue of
+\emph{S} being so competent becomes even stronger. Change the case so
+that \emph{a}~=~839, and she forms the true belief that
+\emph{V}~∈~{[}829, 849{]}. Now if \emph{S} had not been so competent,
+she may have formed a belief with a tighter range, since she could
+easily have guessed that the margin of error of the machine is smaller.
+So in this case the truth of the belief is very clearly due to her
+competence. But as we noted at the end of section 1, in the cases where
+\emph{a} is near \emph{v}+\emph{m}, the argument that we have justified
+true belief without knowledge is particularly strong. Just when the gap
+between justification and knowledge gets most pronounced, the competence
+based approach to knowledge starts to issue the strongest verdicts
+\emph{in favour} of knowledge.
+
+But maybe this is all a mistake. After all, the object doesn't have the
+mass it has because of \emph{S}'s intellectual competence. The truth of
+any claim about its mass is not because of \emph{S}'s competence, or a
+manifestation of that competence. So maybe these epistemologists get the
+correct verdict that \emph{S} does not know that
+\emph{V}~∈~{[}\emph{a}-\emph{m}, \emph{a}+\emph{m}{]}?
+
+Not so quick. Even had \emph{a} equalled \emph{v}, all these claims
+would have been true. And in that case, \emph{S} would have known that
+\emph{V} was within \emph{m} of the measurement. What is needed for
+these epistemological theories to be right is that there can be a sense
+that a belief that \emph{p} can be true in virtue of some cause \emph{C}
+without \emph{C} being a cause of \emph{p}. I'm inclined to agree with
+the virtue epistemologists that such a sense can be given. (I think it
+helps to give up on content essentialism for this project, as suggested
+by David (\citeproc{ref-David2002}{2002}) and endorsed in Weatherson
+(\citeproc{ref-Weatherson2004-WEALMT}{2004}).) But I don't think it will
+help. There's no real way in which a belief is true because of
+competencies, or in which the truth of a belief manifests competence, in
+the good case where \emph{a}~=~\emph{v}, but not in the bad cases, where
+\emph{a} is in (0,~\emph{m}). These proposals might help with `double
+luck' cases, but there is more to the space between justification and
+knowledge than those cases. Of course, I think the space in question
+includes some cases involving false beliefs about the practical
+significance of \emph{p}, but I don't expect everyone to agree with
+that. Happily, the Williamsonian cases should be less controversial.
+
+\section{What Can We Learn from Fallible
+Machines?}\label{what-can-we-learn-from-fallible-machines}
+
+My presentation of Williamson's argument in section 1 abstracted away
+from several features of his presentation. In particular, I didn't make
+any positive assumption about what the agent can know when they find out
+that the machine reads \emph{a}. Williamson makes a suggestion, though
+he offers it more as the most internalist friendly suggestion than the
+most likely correct hypothesis.
+
+The suggestion, which I'll call the \textbf{Circular Reading Centred}
+hypothesis, is that the most the agent can know is that
+\emph{V}~∈~{[}a-(\emph{e}+\emph{m}), a+(\emph{e}+\emph{m}){]}. That is,
+the agent can know that \emph{V} is in a region centred on \emph{a}, the
+`radius' of which is the margin of error \emph{m}, plus the error on
+this occasion \emph{e}. This is actually a quite attractive suggestion,
+though not the only suggestion we could make. Let's look through some
+other options and see how well they work.
+
+We said above that the agent can't know more from a mismeasurement than
+they can know from an accurate measurement. And we said that given an
+accurate measurement, the most they can know is that
+\emph{V}~∈~{[}\emph{v}-\emph{m}, \emph{v}+\emph{m}{]}. So here's one
+very restrictive suggestion: if \emph{a}~∈~{[}\emph{v}-\emph{m},
+\emph{v}+\emph{m}{]}, then the agent can know that
+\emph{V}~∈~{[}\emph{v}-\emph{m},~\emph{v}+\emph{m}{]}. But we can easily
+rule that out on the basis of considerations about justification. The
+strongest proposition the agent is justified in believing is that
+\emph{V}~∈~{[}\emph{a}-\emph{m}, \emph{a}+\emph{m}{]}. If the agent
+could know that \emph{V}~∈~{[}\emph{v}-\emph{m}, \emph{v}+\emph{m}{]},
+then she could know that \emph{V}~∉ (\emph{v}+\emph{m},
+\emph{a}+\emph{m}{]}, even though she isn't justified in believing this.
+This is absurd, so that proposal is wrong.
+
+We now have two principles on the table: \emph{S} can't know anything by
+a mismeasurement that she knows on the basis of a correct measurement,
+and that she can only know things she's justified in believing. The
+first principle implies that for all \emph{x}~∈~{[}\emph{v}-\emph{m},
+\emph{v}+\emph{m}{]}, that \emph{V}~~=~\emph{x} is epistemically
+possible. The second implies that for all
+\emph{x}~∈~{[}\emph{a}-\emph{m}, \emph{a}+\emph{m}{]}, that
+\emph{V}~~=~\emph{x} is epistemically possible. Our next proposal is
+that the epistemic possibilities, given a reading of \emph{a}, are just
+that \emph{V}~∈~{[}\emph{v}-\emph{m}, \emph{v}+\emph{m}{]} ∪
+{[}\emph{a}-\emph{m}, \emph{a}+\emph{m}{]}.
+
+But this is fairly clearly absurd too. Assume that
+\emph{a}~\textgreater~\emph{v}+2\emph{m}. This is unlikely, but as we
+said above not impossible. Now consider the hypothesis that
+\emph{V}~∈~(\emph{v}+\emph{m}, \emph{a}-\emph{m}). On the current
+hypothesis, this would be ruled out. That is, she would know it doesn't
+obtain. But this seems bizarre. There are epistemic possibilities all
+around it, but somehow she's ruled out this little gap, and done so on
+the basis of a horrifically bad measurement.
+
+This suggests two other approaches that are consistent with the two
+principles, and which do not have such an odd result. I'll list them
+alongside the proposal we mentioned earlier.
+
+\begin{description}
+\tightlist
+\item[Circular Appearance Centred]
+The strongest proposition the agent can know is that
+\emph{V}~∈~{[}a-(\emph{e}+\emph{m}), a+(\emph{e}+\emph{m}){]}.
+\item[Circular Reality Centred]
+The strongest proposition the agent can know is that
+\emph{V}~∈~{[}\emph{v}-(\emph{e}+\emph{m}), v+(\emph{e}+\emph{m}){]}.
+\item[Elliptical]
+The strongest proposition the agent can know is that
+\emph{V}~∈~{[}\emph{v}-\emph{m}, \emph{a}+\emph{m}{]}.
+\end{description}
+
+The last proposal is called \textbf{Elliptical} because it in effect
+says that there are two foci for the range of epistemic possibilities.
+The agent can't rule out anything within \emph{m} of the true value, or
+anything within \emph{m} of the apparent value, or anything between
+those.
+
+Actually we can motivate the name even more by considering a slight
+generalisation of the puzzle that we started with. Assume that \emph{R}
+is trying to determine the location of an object in a two-dimensional
+array. As before, she has a digital measuring device, perhaps a GPS
+locator trained on the object in question. And she knows that margin of
+error of the device is \emph{m}. The object is actually located at
+⟨\emph{x\textsubscript{v}}, \emph{y\textsubscript{v}}⟩, and the device
+says it is at ⟨\emph{x\textsubscript{a}}, \emph{y\textsubscript{a}}⟩. So
+the epistemic possibilities, by the reasoning given above, should
+include the circles with radius \emph{m} centred on
+⟨\emph{x\textsubscript{v}}, \emph{y\textsubscript{v}}⟩ and
+⟨\emph{x\textsubscript{a}}, \emph{y\textsubscript{a}}⟩. Call these
+circles \emph{C\textsubscript{v}} and \emph{C\textsubscript{a}}. Unless
+⟨\emph{x\textsubscript{v}}, \emph{y\textsubscript{v}}⟩ =
+⟨\emph{x\textsubscript{a}}, \emph{y\textsubscript{a}}⟩, the union of
+these circles will not be convex. If the distance between
+⟨\emph{x\textsubscript{v}}, \emph{y\textsubscript{v}}⟩ and
+⟨\emph{x\textsubscript{a}}, \emph{y\textsubscript{a}}⟩ is greater than
+2\emph{m}, the union won't even be connected. So just as we `filled in'
+the gap in the one-dimensional case, the natural thing to say is that
+any point in the convex hull of \emph{C\textsubscript{v}} and
+\emph{C\textsubscript{a}} is an epistemic possibility.
+
+But now see what happens if we say those are all of the epistemic
+possibilities, i.e., that the agent knows that the true value lies in
+the convex hull of the two circles. Here's what it might look like.
+
+Now consider the line from ⟨\emph{x\textsubscript{v}},
+\emph{y\textsubscript{v}}⟩ to ⟨\emph{x\textsubscript{a}},
+\emph{y\textsubscript{a}}⟩. No matter how bad the measurement is, the
+convex hull of the two circles \emph{C\textsubscript{v}} and
+\emph{C\textsubscript{a}} will include no points more than distance
+\emph{m} from the line between ⟨\emph{x\textsubscript{v}},
+\emph{y\textsubscript{v}}⟩ to ⟨\emph{x\textsubscript{a}},
+\emph{y\textsubscript{a}}⟩. That is, the agent can know something
+surprisingly precise about how close \emph{V} is to a particular line,
+even on the basis of a catastrophically bad measurement.
+
+There are some circumstances where this wouldn't be counterintuitive.
+Assume that \emph{x\textsubscript{v}}~=~\emph{x\textsubscript{a}}, while
+\emph{y\textsubscript{v}} and \emph{y\textsubscript{a}} are very very
+different. And assume further that ⟨\emph{x\textsubscript{a}},
+\emph{y\textsubscript{a}}⟩ is calculated by using two very different
+procedures for the \emph{x} and \emph{y} coordinates. (Much as sailors
+used to use very different procedures to calculate longitude and
+latitude.) Then the fact that one process failed badly doesn't, I think,
+show that we can't get fairly precise knowledge from the other process.
+
+But that's not the general case. If the machine determines
+⟨\emph{x\textsubscript{a}}, \emph{y\textsubscript{a}}⟩ by a more
+holistic process, then a failure on one dimension should imply that we
+get less knowledge on other dimensions, since it makes it considerably
+flukier that we got even one dimension right. So I think the space of
+epistemic possibilities, in a case involving this kind of errant
+measurement, must be greater than the convex hull of
+\emph{C\textsubscript{v}} and \emph{C\textsubscript{a}}.
+
+Fortunately, there are a couple of natural generalisations of the
+elliptical proposal that avoid this complication. One of them says that
+the space of epistemic possibilities forms an ellipse. In particular, it
+is the set of all points such that the sum of the distance from that
+point to ⟨\emph{x\textsubscript{v}}, \emph{y\textsubscript{v}}⟩ and the
+distance from that point to ⟨\emph{x\textsubscript{a}},
+\emph{y\textsubscript{a}}⟩ is less than or equal to 2\emph{m}+\emph{e},
+where \emph{e} again is the distance between the measured and actual
+value. As you can quickly verify, that includes all points on the line
+from ⟨\emph{x\textsubscript{v}}, \emph{y\textsubscript{v}}⟩ to
+⟨\emph{x\textsubscript{a}}, \emph{y\textsubscript{a}}⟩, plus an
+extension of length \emph{m} beyond in each direction. But it doesn't
+just contain the straight path between \emph{C\textsubscript{v}} and
+\emph{C\textsubscript{a}}; it `bulges' in the middle. And the
+considerations above suggest that is what should happen.
+
+The other alternative is to drop the idea that the space of
+possibilities should be elliptical, and have another circular proposal.
+In particular, we say that the space of possibilities is the circle
+whose centre is halfway between ⟨\emph{x\textsubscript{v}},
+\emph{y\textsubscript{v}}⟩ and ⟨\emph{x\textsubscript{a}},
+\emph{y\textsubscript{a}}⟩, and whose radius is \emph{m}+\emph{e}/2.
+Again, that will include all points on the line from
+⟨\emph{x\textsubscript{v}}, \emph{y\textsubscript{v}}⟩ to
+⟨\emph{x\textsubscript{a}}, \emph{y\textsubscript{a}}⟩, plus an
+extension of length \emph{m} beyond in each direction. But it will
+include a much larger space in the middle.
+
+I think both of these are somewhat plausible proposals, though the
+second suffers from a slightly weaker version of the objection I'm about
+to mount to the Circular Reality Centred proposal. But they do share one
+weakness that I think counts somewhat against them. It's easy enough to
+see what the weakness is in the one-dimensional case, so let's return to
+it for the time being, and remember we're assuming that
+\emph{a}~\textgreater~\emph{v}.
+
+Consider a case where \emph{e} is rather large, much larger than
+\emph{m}. This affects how far below \emph{v} we have to go in order to
+reach possibilities that are ruled out by the measurement. But it
+doesn't affect how far above \emph{v} we have to go in order to reach
+such possibilities. Indeed, no matter how bad \emph{e} is, we can be
+absolutely certain that we know \emph{V}~\textless~\emph{a}+2\emph{m},
+or that we know that \emph{V}~\textgreater~\emph{a}-2\emph{m}. That
+seems a little odd; if the measurement is so badly mistaken, it seems
+wrong that it can give us such a fine verdict, at least in one
+direction.
+
+I don't think that's a conclusive objection. Well, I don't think many of
+the considerations I've listed here are \emph{conclusive}, but this
+seems even weaker. But it is a reason to look away from the elliptical
+proposal and back towards the circular proposals that we started with.
+
+If we just look at first order knowledge claims, it is hard to feel much
+of an intuitive pull towards one or other of the alternatives. Perhaps
+safety based considerations favour the Reality Centred over the
+Appearance Centred version, but I don't think the salient safety
+consideration is that strong.
+
+If we look at iterated knowledge claims, however, there is a big problem
+with the Reality Centred approach. The intuition here is clearer if we
+use numerical examples, so I'll work through a case with numbers first,
+then do the general version next.
+
+Assume, as above, that \emph{v}~~=~830, \emph{a}~=~834 and
+\emph{m}~=~10. So we have a pretty decent measurement here. On the
+Reality Centred proposal, the strongest thing that \emph{S} can know is
+that \emph{V}~∈~{[}816, 844{]}. So it is an epistemic possibility that
+\emph{V}~~=~816. Assume that that's the actual possibility. Then the
+measurement is rather bad; the new value for \emph{e} is 18. Were
+\emph{V} to equal 816, while \emph{a} equalled 834, then on the Reality
+Centred approach, the epistemic possibilities would be a circle of
+radius \emph{e}+\emph{m}, i.e., 28, around the actual value, i.e., 816.
+So the strongest thing the agent could know is that \emph{V}~∈~{[}788,
+844{]}. On the other hand, if \emph{V} were 844, the strongest thing the
+agent could know is that \emph{V}~∈~{[}824, 864{]}. Putting those
+together, the strongest thing the agent can know that she knows is that
+\emph{V}~∈~{[}788, 864{]}. That's a very large range already. Similar
+calculations show that the strongest thing the agent can know that she
+knows that she knows is that \emph{V}~∈~{[}732, 904{]}.
+
+Now I'll grant that intuitions about second and third order knowledge
+are not always maximally sharp. But I think it is very implausible that
+a relatively accurate measurement like this could lead to such radical
+ignorance in the second and third orders of knowledge. So I think the
+Reality Centred approach can't be right.
+
+The general form the case is as follows. The strongest thing the agent
+can know is that \emph{V}~∈~{[}\emph{v}-(\emph{e}+\emph{m}),
+\emph{a}+\emph{m}{]}. The strongest thing she can know that she knows is
+that \emph{V}~∈~{[}\emph{v}-3(\emph{e}+\emph{m}), a+3m{]}. And the
+strongest thing she can know that she knows that she knows is that
+\emph{V}~∈~{[}\emph{v}-7(\emph{e}+\emph{m}), \emph{a}+7\emph{m}{]}. In
+general, we have \emph{exponential} growth of the possibilities as we
+add one extra order of knowledge. That seems absurd to me, so the
+Reality Centred approach is wrong.
+
+Note that this isn't a problem with the Appearance Centred approach. The
+first-order epistemic possibilities are that
+\emph{V}~∈~{[}a-(\emph{e}+\emph{m}), a+\emph{e}+\emph{m}{]}. If \emph{V}
+is at the extremes of this range, then \emph{e} will be rather large.
+For example, if \emph{V} were equal to \emph{a}+\emph{e}+\emph{m}, then
+the new error would be \emph{e}+\emph{m}, since the measured value is
+still \emph{a}. So the range of possibilities would be that
+\emph{V}~∈~{[}a-((\emph{e}+\emph{m})+m), a+((\emph{e}+\emph{m})+m){]}.
+Somewhat surprisingly, those would also be the possibilities if \emph{V}
+were equal to \emph{a}-(\emph{e}+\emph{m}), since the only feature of
+\emph{V} that affects the epistemic possibilities for \emph{V} is its
+distance from \emph{a}. So for all \emph{S} knows that she knows,
+\emph{V} could be anything in {[}a-(e+2m), a+(e+2m){]}. Similar
+reasoning shows that for all \emph{V} knows that she knows that she
+knows, \emph{V} could be anything in {[}a-(e+3m), a+(e+3m){]}. In
+general, \emph{V} has \emph{n}'th order knowledge that \emph{V} is in
+{[}\emph{a}-(\emph{e}+\emph{nm}), \emph{a}+(\emph{e}+\emph{nm}){]}. This
+linear growth in the size of the range of epistemic possibilities is
+more plausible than the exponential growth on the Reality Centred
+approach.
+
+So all things considered, I think the Circular Appearance Centred
+approach is the right one, as Williamson suggests. Any simple
+alternative seems to have rather counterintuitive consequences.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Cohen1984}
+Cohen, Stewart. 1984. {``Justification and Truth.''} \emph{Philosophical
+Studies} 46 (3): 279--95. doi:
+\href{https://doi.org/10.1007/bf00372907}{10.1007/bf00372907}.
+
+\bibitem[\citeproctext]{ref-David2002}
+David, Marian. 2002. {``Content Essentialism.''} \emph{Acta Analytica}
+17: 103--14. doi:
+\href{https://doi.org/10.1007/bf03177510}{10.1007/bf03177510}.
+
+\bibitem[\citeproctext]{ref-FantlMcGrath2009}
+Fantl, Jeremy, and Matthew McGrath. 2009. \emph{Knowledge in an
+Uncertain World}. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Gettier1963}
+Gettier, Edmund L. 1963. {``Is Justified True Belief Knowledge?''}
+\emph{Analysis} 23 (6): 121--23. doi:
+\href{https://doi.org/10.2307/3326922}{10.2307/3326922}.
+
+\bibitem[\citeproctext]{ref-Greco2010}
+Greco, John. 2010. \emph{Achieving Knowledge}. Cambridge: Cambridge
+University Press.
+
+\bibitem[\citeproctext]{ref-Humberstone2000}
+Humberstone, Lloyd. 2000. {``Parts and Partitions.''} \emph{Theoria} 66
+(1): 41--82. doi:
+\href{https://doi.org/10.1111/j.1755-2567.2000.tb01144.x}{10.1111/j.1755-2567.2000.tb01144.x}.
+
+\bibitem[\citeproctext]{ref-SchroederRoss2012}
+Ross, Jacob, and Mark Schroeder. 2014. {``Belief, Credence, and
+Pragmatic Encroachment.''} \emph{Philosophy and Phenomenological
+Research} 88 (2): 259--88. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2011.00552.x}{10.1111/j.1933-1592.2011.00552.x}.
+
+\bibitem[\citeproctext]{ref-Sainsbury1996}
+Sainsbury, Mark. 1995. {``Vagueness, Ignorance and Margin for Error.''}
+\emph{British Journal for the Philosophy of Science} 46: 589--601. doi:
+\href{https://doi.org/10.1093/bjps/46.4.589}{10.1093/bjps/46.4.589}.
+
+\bibitem[\citeproctext]{ref-Sosa2007}
+Sosa, Ernest. 2007. \emph{A Virtue Epistemology: Apt Belief and
+Reflective Knowledge}. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Turri2011}
+Turri, John. 2011. {``Manifest Failure: The Gettier Problem Solved.''}
+\emph{Philosophers' Imprint} 11 (8): 1--11.
+\url{http://hdl.handle.net/2027/spo.3521354.0011.008}.
+
+\bibitem[\citeproctext]{ref-Weatherson2004-WEALMT}
+Weatherson, Brian. 2004. {``Luminous Margins.''} \emph{Australasian
+Journal of Philosophy} 82 (3): 373--83. doi:
+\href{https://doi.org/10.1080/713659874}{10.1080/713659874}.
+
+\bibitem[\citeproctext]{ref-Weatherson2005-WEACWD}
+---------. 2005. {``{Can We Do Without Pragmatic Encroachment?}''}
+\emph{Philosophical Perspectives} 19 (1): 417--43. doi:
+\href{https://doi.org/10.1111/j.1520-8583.2005.00068.x}{10.1111/j.1520-8583.2005.00068.x}.
+
+\bibitem[\citeproctext]{ref-Weatherson2011-WEAKBI}
+---------. 2011. {``Knowledge, Bets and Interests.''} In
+\emph{Forthcoming Volume on Knowledge Ascriptions}, edited by Jessica
+Brown and Mikkel Gerken, 75--103. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Williamson2000-WILKAI}
+Williamson, Timothy. 2000. \emph{{Knowledge and its Limits}}. Oxford
+University Press.
+
+\bibitem[\citeproctext]{ref-WilliamsonLofoten}
+---------. 2013. {``Gettier Cases in Epistemic Logic.''} \emph{Inquiry}
+56 (1): 1--14. doi:
+\href{https://doi.org/10.1080/0020174X.2013.775010}{10.1080/0020174X.2013.775010}.
+
+\bibitem[\citeproctext]{ref-Zagzebski1994}
+Zagzebski, Linda. 1994. {``The Inescapability of Gettier Problems.''}
+\emph{The Philosophical Quarterly} 44 (174): 65--73. doi:
+\href{https://doi.org/10.2307/2220147}{10.2307/2220147}.
+
+\bibitem[\citeproctext]{ref-Zagzebski1996}
+---------. 1996. \emph{Virtues of the Mind: An Inquiry into the Nature
+of Virtue and the Ethical Foundations of Knowledge}. Cambridge:
+Cambridge University Press.
+
+\bibitem[\citeproctext]{ref-Zagzebski2009}
+---------. 2009. \emph{On Epistemology}. Belmont, CA.: Wadsworth.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Inquiry}, 2013, pp. 63-76.
+
+\end{document}

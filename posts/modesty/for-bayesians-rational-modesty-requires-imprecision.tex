@@ -1,0 +1,1365 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  For Bayesians, Rational Modesty Requires Imprecision
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={For Bayesians, Rational Modesty Requires Imprecision},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{For Bayesians, Rational Modesty Requires Imprecision}
+\author{Brian Weatherson}
+\date{2016}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Gordon Belot has recently developed a novel argument against
+Bayesianism. He shows that there is an interesting class of problems
+that, intuitively, no rational belief forming method is likely to get
+right. But a Bayesian agent's credence, before the problem starts, that
+she will get the problem right has to be 1. This is an implausible kind
+of immodesty on the part of Bayesians. My aim is to show that while this
+is a good argument against traditional, precise Bayesians, the argument
+doesn't neatly extend to imprecise Bayesians. As such, Belot's argument
+is a reason to prefer imprecise Bayesianism to precise Bayesianism.
+\end{abstract}
+
+\setstretch{1.1}
+Gordon Belot (\citeproc{ref-Belot2013}{2013}) has recently developed a
+novel argument against Bayesianism. He shows that there is an
+interesting class of problems that, intuitively, no rational belief
+forming method is likely to get right. But a Bayesian agent's credence,
+before the problem starts, that she will get the problem right has to be
+1. This is an implausible kind of \emph{immodesty} on the part of
+Bayesians.\footnote{There is another sense of immodesty that is often
+  discussed in the literature, going back to Lewis
+  (\citeproc{ref-Lewis1971d}{1971}). This is the idea that some agents
+  think their attitudes are optimal by some standards; these are the
+  immodest ones. And often, it is held that not being self-endorsing in
+  this way is a coherence failure Elga
+  (\citeproc{ref-Elga2010-ELGHTD}{2010}). I don't think this kind of
+  immodesty is rationally required, for reasons set out by Miriam
+  Schoenfield (\citeproc{ref-Schoenfield2014}{2015}) and Maria
+  Lasonen-Aarnio (\citeproc{ref-Lasonen-Aarnio2015}{2015}), but in any
+  case that's not the kind of modesty that's at issue in Belot's
+  argument.} My aim is to show that while this is a good argument
+against traditional, precise Bayesians, the argument doesn't neatly
+extend to imprecise Bayesians. As such, Belot's argument is a reason to
+prefer imprecise Bayesianism to precise Bayesianism.
+
+For present purposes, the precise Bayesian agent has just two defining
+characteristics. First, their credences in all propositions are given by
+a particular countably additive probability function. Second, those
+credences are updated by conditionalisation as new information comes in.
+These commitments are quite strong in some respects. They say that there
+is a single probability function that supplies the agent's credences no
+matter which question is being investigated, and no matter how little
+evidence the agent has before the investigation is started. The everyday
+statistician, even one who is sympathetic to Bayesian approaches, may
+feel no need to sign up for anything this strong. But many philosophers
+seem to be interested in varieties of Bayesianism that are just this
+strong. For instance, there has been extensive discussion in recent
+epistemology of whether various epistemological approaches, such as
+dogmatism, can be modeled within the Bayesian framework, with the
+background assumption being that it counts against those approaches if
+they cannot.\footnote{For dogmatism, see Pryor
+  (\citeproc{ref-Pryor2000}{2000}). The canonical argument that it is
+  inconsistent with Bayesianism is White
+  (\citeproc{ref-White2006}{2006}).} In these debates, the issue is not
+whether the Bayesian approach works in the context of a well-defined
+question and a substantial evidential background, but whether it does so
+for all questions in all contexts. Indeed, the assumption is that it
+does, and epistemological theories inconsistent with it are false. So
+the precise Bayesian is a figure of some interest, at least in
+epistemology.
+
+The imprecise Bayesian doesn't have a single probability function for
+their credences. Rather, they have a representor consisting of a set of
+probability functions. The agent is more confident in \emph{p} than
+\emph{q} just in case Pr(\emph{p})~\textgreater~Pr(\emph{q}) for every
+Pr in this representor.\footnote{Note that this formulation leaves it
+  open which side of the biconditional is explanatorily prior. I'm going
+  to defend a view on which the left hand side, i.e., the comparative
+  confidences, are more explanatorily basic than the facts about what is
+  in the agent's representor. I say a little more about why I take this
+  stand in footnote 7. For much more detail on varieties of imprecise
+  Bayesianism, see Walley (\citeproc{ref-Walley1991}{1991}), from whom I
+  take the view that the representor and its members are much less
+  explanatorily important than the comparative judgments the agent
+  makes.} Just like the precise Bayesian, the imprecise Bayesian updates
+by conditionalisation; their new representor after an update is the
+result of conditionalising every member of the old representor with the
+new information. The added flexibility in imprecise Bayesianism will
+allow us to develop a suitably modest response to Belot's puzzle.
+
+\section{The Puzzle}\label{the-puzzle}
+
+The set up Belot uses is this. An agent, \emph{A}, will receive a data
+stream of 0s and 1s. The data stream will go on indefinitely. I will use
+\textbf{x} for the (infinite) sequence of data she would (eventually)
+get, x\textsubscript{k} for the \emph{k}th element of this sequence, and
+\textbf{x}\textsubscript{\emph{k}} for the sequence consisting of the
+first \emph{k} elements of the stream. These variables are, as usual,
+rigid designators. I'll also use the capitalised \textbf{X} and
+\textbf{X}\textsubscript{\emph{k}} as random variables for the sequence
+itself, and for the first \emph{k} elements of the sequence,
+respectively. So \textbf{X}= \textbf{x} is the substantive and true
+claim that the sequence that will be received is actually \textbf{x}.
+And \textbf{X}\textsubscript{\emph{k}} =
+\textbf{x}\textsubscript{\emph{k}} is the substantive and true claim
+that the first \emph{k} elements of that sequence are
+\textbf{x}\textsubscript{\emph{k}}. Propositions of this form will play
+a major role below, since they summarise the evidence the agent has
+after \emph{k} elements have been revealed. I'll use \(+\) as a sequence
+concatenation operator, so \textbf{y}~+~\textbf{z} is the sequence
+consisting of all of \textbf{y}, followed by all of \textbf{z}.
+
+Belot is interested in a quite general puzzle, but I'll focus for most
+of the paper on a very specific instance of the puzzle. (We'll return to
+the more general puzzle in the last section.) We're going to look at the
+agent's evolving credence that \textbf{X} is \emph{periodic}. Let
+\emph{p} be the proposition that \textbf{X} is periodic, since we'll be
+returning to that proposition a lot. And let's start by assuming the
+agent is a precise Bayesian, to see the challenge Belot develops.
+
+Say that the agent \textbf{succeeds} just in case her credence in
+\emph{p} eventually gets on the correct side of ½, and stays there. (The
+correct side is obviously the high side if \emph{p} is true, and the low
+side otherwise.) That is, if \emph{v} is the truth value function, it
+succeeds just in case this is true.\footnote{Belot lets an agent succeed
+  if \textbf{X} is periodic, and the credence in \emph{p} never drops
+  below ½, but I think it's neater to say that the agent is undecided in
+  this case.}
+
+\begin{quote}
+∃\emph{n} ∀\emph{m}⩾\emph{n}: \textbar{}\emph{v}(\emph{p}) -
+\emph{Cr}(\emph{p} \textbar{} \textbf{X}\textsubscript{\emph{m}} =
+\textbf{x}\textsubscript{\emph{m}})\textbar{} \textless{} ½
+\end{quote}
+
+The agent \textbf{fails} otherwise. Given the assumption that the agent
+is a classical Bayesian, we can step back from evaluating the agent and
+evaluate her prior probability function directly. So a prior Pr succeeds
+relative to \textbf{x} just in case this is true.
+
+\begin{quote}
+∃\emph{n} ∀\emph{m}⩾\emph{n}: \textbar{}\emph{v}(\emph{p}) - Pr(\emph{p}
+\textbar{} \textbf{X}\textsubscript{\emph{m}} =
+\textbf{x}\textsubscript{\emph{m}})\textbar{} \textless{} ½
+\end{quote}
+
+This is reasonably intuitive; the agent is going to get a lot of data
+about \textbf{X}, and it is interesting to ask whether that data
+eventually lets her credence in \emph{p} get to the right side of ½.
+
+Given these notions of success and failure, we can naturally define the
+success set of a prior (or agent) as the set of sequences it succeeds
+on, and the failure set as the set of sequences it fails on.
+
+Abusing notation a little, say that \textbf{x}\textsubscript{\emph{i}}
+⊃~\textbf{x}\textsubscript{\emph{k}} iff
+\textbf{x}\textsubscript{\emph{i}} is a sequence that has
+\textbf{x}\textsubscript{\emph{k}} as its first \emph{k} entries. Then
+we can state the first of Belot's conditions on a good Bayesian
+agent/prior. A prior is \textbf{open-minded} just in case this condition
+holds:
+
+\begin{quote}
+∀\textbf{x}\textsubscript{\emph{k}} ∃\textbf{x}\textsubscript{\emph{i}}
+⊃ \textbf{x}\textsubscript{\emph{k}}, \textbf{x}\textsubscript{\emph{j}}
+⊃ \textbf{x}\textsubscript{\emph{k}}: Pr(\emph{p} \textbar{}
+\textbf{X}\textsubscript{\emph{i}} = \textbf{x}\textsubscript{\emph{i}})
+\textless{} ½ ∧ Pr(\emph{p}~\textbar{}
+\textbf{X}\textsubscript{\emph{j}} = \textbf{x}\textsubscript{\emph{j}})
+\textgreater{} ½
+\end{quote}
+
+That is, no matter what happens, it is possible that the probability of
+\emph{p} will fall below , and possible it will rise above . To motivate
+the first, consider any situation where the sequence to date has looked
+periodic. (If it had not looked periodic to date, presumably the
+probability of \emph{p} should already be low.) Now extend that sequence
+with a large of random noise. At the end of this, it should no longer be
+probable that the sequence is periodic. On the other hand, assume the
+sequence has not looked periodic to date. Extend it by repeating
+\textbf{x}\textsubscript{\emph{k}} more than \emph{k} times. At the end
+of this, it should look probable that the sequence is periodic (at least
+for large enough \emph{k}). So open-mindedness looks like a good
+condition to impose.
+
+The second condition we might impose, though not one Belot names, is
+\emph{modesty}. Any function might fail. One natural way it might fail
+is that it might get, to use a term Belot does use, \emph{flummoxed}. It
+could change its mind infinitely often about whether the sequence is
+periodic. By definition, open-mindedness entails the possibility of
+being flummoxed. Given the definitions of success and failure, Pr will
+fail relative to any \textbf{x} that flummoxes it. So success is not a
+priori guaranteed. Now for any function we can work out the set of
+sequences relative to which it fails. It turns out this will be a rather
+large set. Indeed, the set of sequences on which any open-minded
+function succeeds is meagre.\footnote{A meagre subset of a space is any
+  set built up as a countable union of nowhere dense sets.} Say a
+function is \textbf{modest} if the initial probability it gives to
+\textbf{X} being in its success set is less than 1. Given how large the
+failure set is, modesty also seems like a good requirement.\footnote{Belot
+  goes into much more detail about why modesty is a good requirement to
+  put on a rational prior, but I'm omitting those details since I have
+  very little to add to what Belot says.}
+
+The argument for modesty is not that it is an immediate consequence of
+regularity. It does follow from regularity, but in the case we're
+considering, regularity is quite implausible. Some sets, even some quite
+large sets in some sense, will have to be given probability 0. The
+surprising thing is that a residual set (i.e., the complement of a
+meagre set) gets probability 0.
+
+It might be thought that modesty here is problematic for the same reason
+that epistemic modesty is often problematic: it validates
+Moore-paradoxical thoughts. It's bad to say \emph{p, but there is a
+probability that not p}. It's even bad, though as Briggs
+(\citeproc{ref-Briggs2009}{2009}) points out, not quite bad for the same
+reasons, to say \emph{Whether I believe p is true or false tomorrow,
+there will be a probability I'm false}. Perhaps modesty is a requirement
+that someone say something like that, and hence is an improper
+requirement.
+
+But in fact the requirement of modesty is disanalogous to the
+`requirement', suggested in the previous paragraph, that agents endorse
+Moore-paradoxical principles. There isn't anything wrong with saying
+\emph{Whichever side of one half my credence in p is tomorrow, there is
+a probability that the truth will be the other side of one half}. That's
+not Moore-paradoxical. Indeed, unless one is sure that one's credence in
+\emph{p} tomorrow will be 0 or 1, it is something one should endorse.
+
+Or consider a different example. There will be a sequence of 0s and 1s,
+but this time there will only be three elements, and the agent will only
+be shown the first of them tomorrow. Let \emph{q} be the proposition
+that there are more 1s than 0s in the three-element sequence. Say the
+agent \textbf{succeeds} iff tomorrow, after seeing just one element, her
+credence in \emph{q} is the same side of one-half as the truth. And say
+the agent is \textbf{modest} iff, right now, her credence that she
+succeeds tomorrow is less than one. There is nothing incoherent about
+being modest. If her credal distribution today is completely flat,
+giving 1/8 credence to each of the eight possible sequences, she will be
+modest, for example.
+
+Now this case is somewhat different to the one Belot started with in a
+couple of respects. On the one hand, we're asking about modesty at a
+particular point, i.e., tomorrow, rather than over a long sequence. On
+the other hand, we're asking about whether the agent's credences will be
+on the right side of one-half after having seen one-third of the data,
+rather than, as in the original case, after seeing measure zero of the
+sequence. The first difference makes it easier to be modest, the second
+difference makes it harder. So the cases are not perfect analogies, but
+they are similar enough in respect of modesty to make it plausible that
+if modesty is coherent in this case, as we've shown it is, then it
+should be coherent in Belot's case as well.
+
+So that's the argument that open-mindedness and modesty are good
+conditions for priors to satisfy. Here's the worrying result that Belot
+proves. There are no open-minded modest priors. If \emph{A} is a
+classical Bayesian, she will either have to be closed minded or
+immodest. Neither seems rational, so it seems that being a classical
+Bayesian is incompatible with being rational. That is, we can't be
+precise Bayesians if we accept the following two constraints.
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{Open-Mindedness}: For any initial sequence, there is a
+  continuation after which it seems probable that \textbf{X} is
+  periodic, and a continuation after which it seems probable that
+  \textbf{X} is not periodic.
+\item
+  \emph{Modesty}: The initial probability that the agent will succeed,
+  i.e., that their credence in \emph{p} will eventually get to the right
+  side of ½ and stay there, is less than 1.
+\end{itemize}
+
+Since both open-mindedness and modesty are very plausible constraints,
+it follows that there is no good way to be a precise Bayesian in the
+face of this puzzle.
+
+\section{Making the Puzzle Less
+Precise}\label{making-the-puzzle-less-precise}
+
+What happens, though, if the agent is an imprecise Bayesian? Is there a
+parallel version of Belot's argument that shows this kind of imprecise
+Bayesian is necessarily irrational? I'm going to argue that the answer
+is no.
+
+The first thing we have to do is work out how to redefine the key terms
+in Belot's argument once we drop the assumption that the agent is a
+classical Bayesian. There are several ways of formulating our
+definitions which are equivalent given that assumption, but not
+equivalent given that the agent is an imprecise Bayesian. There are
+three major choice points here.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What is success?
+\item
+  What is open-mindedness?
+\item
+  What is modesty?
+\end{enumerate}
+
+Assume our agent's credal state is represented by set \emph{S} of
+probability functions. Then there are two natural ways to think about
+success.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  ∀Pr ∈ S: ∃\emph{n} ∀\emph{m} ⩾ \emph{n}: \textbar{}\emph{v}(\emph{p})
+  - Pr(\emph{p}~\textbar{} \textbf{X}\textsubscript{\emph{m}}=
+  \textbf{x}\textsubscript{\emph{m}})\textbar{} \textless{} ½
+\item
+  ∃\emph{n} ∀Pr ∈ S: ∀\emph{m} ⩾~\emph{n}: \textbar{}\emph{v}(\emph{p})
+  - Pr(\emph{p}~\textbar{} \textbf{X}\textsubscript{\emph{m}}=
+  \textbf{x}\textsubscript{\emph{m}})\textbar{} \textless{} ½
+\end{enumerate}
+
+The second is obviously stronger than the first, since it involves
+moving an existential quantifier out in front of a universal quantifier.
+And there are some natural cases where an agent could succeed on the
+first definition, and fail on the second. Here's one such case.
+
+Let Pr\textsubscript{0} be the \emph{fair-coin measure}. Acccording to
+the fair coin measure, if \textbf{y} is any \emph{k} length sequence of
+0s and 1s we have Pr\textsubscript{0}(\textbf{x}\textsubscript{\emph{k}}
+= \textbf{y}) = 2\^{}-\emph{k}\textasciitilde. Intuitively, it thinks
+the 0s and 1s are generated by flips of a fair coin, and it won't change
+its mind about that no matter what happens.
+
+Say a probability function Pr is \textbf{regular periodic} iff it
+satisfies these two conditions.
+
+\begin{itemize}
+\tightlist
+\item
+  Pr(\emph{p}) = 1.
+\item
+  For any periodic sequence \textbf{y}, Pr(\textbf{X} = \textbf{y})
+  \textgreater{} 0.
+\end{itemize}
+
+Intuitively, these functions are certain that \emph{X} is periodic, and
+assign positive probability to each possible periodic sequence. Now
+consider the family of functions we get by taking equal weighted
+mixtures of Pr\textsubscript{0} with each regular periodic function. Let
+that family represent the agent's credence. And assume for now that
+\textbf{X} is the sequence ⟨0, 0, 0, \dots⟩. Does the agent succeed?
+
+Well, each Pr in her representor succeeds. To prove this, it will be
+helpful to prove a lemma that we'll again have use for below. For this
+lemma, let Pr\textsubscript{0} be the fair-coin measure (as already
+noted), Pr\textsubscript{1} be any measure such that
+Pr\textsubscript{1}(\emph{p}) = 1, and Pr\textsubscript{2} be the equal
+mixture of Pr\textsubscript{0} and Pr\textsubscript{1}.
+
+\textbf{Lemma 1}: Pr\textsubscript{2}(\emph{p}~\textbar{}
+\textbf{X}\textsubscript{\emph{k}} = \textbf{y}\textsubscript{k})
+\textgreater{} ½ iff
+Pr\textsubscript{1}(\textbf{X}\textsubscript{\emph{k}} =
+\textbf{y}\textsubscript{k}) \textgreater{}
+Pr\textsubscript{0}(\textbf{X}\textsubscript{\emph{k}} =
+\textbf{y}\textsubscript{k}).
+
+\begin{quote}
+\emph{Proof.} Let
+Pr\textsubscript{\emph{i}}(\textbf{X}\textsubscript{\emph{k}} =
+\textbf{y}\textsubscript{k}) = \emph{a}\textsubscript{\emph{i}} for
+\emph{i} ∈ \{0, 1\}. Recall that Pr\textsubscript{0}(\emph{p}) = 0 and
+Pr\textsubscript{1}(\emph{p}) = 1. Then we can quickly get that
+Pr\textsubscript{2}(\emph{p}~\textbar{}
+\textbf{X}\textsubscript{\emph{k}} = \textbf{y}\textsubscript{k}) =
+\emph{a}\textsubscript{1}/(\emph{a}\textsubscript{0}~+~\emph{a}\textsubscript{1}),
+from which the lemma immediately follows.~◻
+\end{quote}
+
+For any Pr in the agent's representor, there is some \emph{k} such that
+Pr(\textbf{X}= ⟨0, 0, 0, \dots⟩) \textgreater{}
+2\textsuperscript{-\emph{k}}\}. So after at most \emph{k} 0s have
+appeared, Pr(\emph{p}) will be above ½, and it isn't coming back. That
+means it succeeds. And since Pr was arbitrary, it follows that all Pr
+succeed.
+
+But the agent in a good sense doesn't succeed. No matter how much data
+she gets, there will be Pr in her representor according to which
+Pr(\emph{p}) \textless{} ½. After all, for any \emph{k}, there are
+regular periodic Pr such that the probability of
+\textbf{x}\textsubscript{\emph{k}} being \emph{k} 0s is below
+2\textsuperscript{-\emph{k}}. So if we mix that function with
+Pr\textsubscript{0}, we get a function where the most probable
+continuations of this initial sequence are the random sequences provided
+by the fair coin measure.
+
+In terms of our definitions of success above, the agent satisfies the
+first, but not the second. Every function in her representor eventually
+has the probability of \emph{p} go above ½. But at any time, there are
+functions in her representor according to which the probability of
+\emph{p} is arbitrarily low.
+
+Here I think we have to make a distinction between different ways of
+understanding the formalism of imprecise probabilities. (What follows is
+indebted to Bradley (\citeproc{ref-Bradley2014}{2014}), especially his
+section 3.1, but I'm disagreeing somewhat with his conclusions, and
+following more closely the conclusions of Joyce
+(\citeproc{ref-Joyce2010}{2010}) and Schoenfield
+(\citeproc{ref-Schoenfield2012}{2012}).)
+
+One way of thinking about imprecise credences is that each probability
+function in the representor is something like an advisor, and the agent
+who is imprecise simply hasn't settled on which advisor to trust. Call
+this the \textbf{pluralist} interpretation of the formalism. On this
+interpretation, it is natural to think that what is true of every
+function is true of the agent.
+
+Another way is to think of the agent's mind as constituted by, but
+distinct from, the representors. An analogy to keep in mind here is the
+way that a parliament is constituted by, but distinct from, its members.
+Keeping with this analogy, call this the \textbf{corporate}
+interpretation of the formalism. Note that corporate bodies will
+typically have their own rules for how the views of the members will be
+translated into being views of the whole. Even if every member of the
+parliament believes that the national cricket team will win its upcoming
+game, it doesn't follow that the parliament believes that; the
+parliament only believes what it resolves it has believed.
+
+Now I only want to defend the imprecise Bayesian model on the corporate
+interpretation.\footnote{I have an independent metaphysical reason for
+  preferring the corporate interpretation. I think that comparative
+  confidences, things like being at least as confident in \emph{p} as in
+  \emph{q}, are metaphysically prior to numerical credences, or even
+  sets of numerical credences. On such a metaphysics, what it is for Pr
+  to be in the representor just is for every \emph{p}, \emph{q},
+  \emph{r}, \emph{s}, if the agent is at least as confident in \emph{p}
+  given \emph{q} as in \emph{r} given \emph{s}, then
+  Pr(\emph{p}~\textbar~\emph{q})~⩾~Pr(\emph{r}~\textbar~\emph{s}). And
+  it seems, though I won't defend this claim here, that the corporate
+  interpetation fits more naturally with the idea that comparative
+  confidences are primitive.} The pluralist interpretation, it seems to
+me, faces grave difficulties. For one thing, it has a hard time
+explaining what's wrong with the existential claim ``There is a precise
+number \emph{x} such that \emph{x} is the probability of \emph{p}''.
+Every advisor believes that, so on the pluralist model the agent does
+too. (Compare the criticisms of ``fanatical supervaluationism'' in Lewis
+(\citeproc{ref-Lewis1993c}{1993}).) More relevant to the discussion
+here, I am following Belot in thinking we have an argument that each
+precise Bayesian is unreasonably proud. On the pluralist interpretation,
+the agent is undecided which of these unreasonable advisors she will
+follow. But such a state is itself unreasonable; she should have decided
+not to follow any of them, since they are all provably unreasonable!
+
+A surprising fact about corporate bodies is that they can be immune to
+problems that beset each of their members. It would be illegitimate for
+any one parliamentarian to have law-making power; it is (or at least can
+be) legitimate for them all to have such power. Indeed, it would be
+unreasonable for any of them to think that they individually should have
+law-making powers; that would be unreasonably proud. But it is not
+unreasonable for them to collectively think that they should
+collectively have law-making powers. If they are a well-constituted
+parliament, this is a perfectly reasonable thought. Similarly here, the
+agent, the corporate body, could avoid being unreasonably proud even
+though each of the representors is over-confident in its own powers.
+
+Now going back to success and modesty, it seems to me that the first
+definition of success is appropriate on the pluralist interpretation of
+the imprecise framework, and the second is appropriate on the corporate
+interpretation. The first interpretation says that the agent succeeds
+iff every member succeeds. And the second says that the agent succeeds
+iff the body of functions, collectively, succeed. Since I'm defending
+the use of the imprecise framework on the corporate interpretation, it
+is the second definition of success that is appropriate, and that's what
+I will use here.
+
+This understanding isn't without costs. Bradley
+(\citeproc{ref-Bradley2014}{2014}) argues, in effect, that the best
+responses to dilation-based arguments against imprecise probabilities
+(as in White (\citeproc{ref-White2010}{2010})), are only available on
+the pluralist interpretation. I'm not going to try to solve those
+problems here, but I will note that the interpretative choice I'm making
+generates some extra philosophical work elsewhere. Against that, the
+corporate interpretation has some benefits. It lets us agree with Peter
+Walley (\citeproc{ref-Walley1991}{1991}) that there are rational agents
+who are represented by sets of merely finitely additive probability
+functions, though no merely finitely additive probability function on
+its own could represent a rational agent. So the issues between the two
+interpretations are extensive. For now, I'll simply note that I'm
+interested in defending the imprecise Bayesian from Belot's argument on
+the corporate interpretation. And with that I'll return to translating
+Belot's puzzle into the imprecise framework, with the second,
+corporate-friendly, interpretation of success on board.
+
+There are also two natural ways to generalise Belot's notion of
+open-mindedness to the imprecise case. We could require that the agent
+satisfies either the first or second of these conditions.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  ∀\textbf{x}\textsubscript{\emph{k}}
+  ∃\textbf{x}\textsubscript{\emph{i}} ⊃
+  \textbf{x}\textsubscript{\emph{k}}, \textbf{x}\textsubscript{\emph{j}}
+  ⊃\textbf{x}\textsubscript{\emph{k}}: ¬(Pr(\emph{p}~\textbar{}
+  \textbf{X}\textsubscript{\emph{i}} =
+  \textbf{x}\textsubscript{\emph{i}}) ⩾½) ∧ ¬(Pr(\emph{p}~\textbar{}
+  \textbf{X}\textsubscript{\emph{j}} =
+  \textbf{x}\textsubscript{\emph{j}}) \textless{} ½)
+\item
+  ∀\textbf{x}\textsubscript{\emph{k}}
+  ∃\textbf{x}\textsubscript{\emph{i}}
+  ⊃\textbf{x}\textsubscript{\emph{k}},
+  \textbf{x}\textsubscript{\emph{j}}
+  ⊃\textbf{x}\textsubscript{\emph{k}}: Pr(\emph{p}~\textbar{}
+  \textbf{X}\textsubscript{\emph{i}} =
+  \textbf{x}\textsubscript{\emph{i}}) \textless{} ½ ∧
+  Pr(\emph{p}~\textbar{} \textbf{X}\textsubscript{\emph{j}} =
+  \textbf{x}\textsubscript{\emph{j}}) ⩾ ½
+\end{enumerate}
+
+The second is just the same symbols as in Belot's, and it is what I'll
+end up arguing is the right constraint to put on the imprecise Bayesian
+agent. And it is a considerably more demanding constraint than the
+first. But the first is perhaps the more natural understanding of
+\emph{open-mindedness}. It says that no matter what the initial evidence
+is, the agent is not guaranteed to settle her credence in \emph{p} on
+one side of ½. That's a way of being open-minded.
+
+But if the agent satisfies that constraint, she may be open-minded, but
+she won't necessarily be responsive to the evidence. Here's how I'm
+using the terms `open-minded' and `evidence-responsive'. In both
+clauses, the quantification is intended to be over a salient class of
+propositions. (The relevant class in the application we're most
+interested in is just \{\emph{X is periodic}, *X is not periodic\}.) And
+I'll say an agent is `confident' in a proposition iff her credence in it
+is above ½.
+
+\begin{description}
+\tightlist
+\item[Open-Minded]
+Any time an agent is confidence in a proposition, there is some evidence
+she could get that would make her lose confidence in it.
+\item[Evidence-Responsive]
+For any proposition, there is some evidence the agent could get that
+would make her confident in it.
+\end{description}
+
+Once we allow imprecise credences, these two notions can come apart.
+Consider the agent we described above, whose representor consists of
+equal mixtures of the fair-coin measure and regular periodic functions.
+They are open-minded; they can always lose confidence that \emph{X} is
+periodic or not. But they aren't evidence-responsive; no matter what the
+evidence, their credence that \emph{X} is periodic will never rise above
+½. In fact, their credence that \emph{X} is periodic will never rise
+above any positive number.
+
+That suggests open-mindedness is too weak a constraint. If the evidence
+the agent gets is a string of several hundred 0s, she shouldn't just
+lose any initial confidence in ¬\emph{p}, she should become confident in
+\emph{p}. And arguably (though I could imagine a dissent here), if the
+initial sequence is a seemingly random sequence, the credence in
+\emph{p} should drop well below ½. (The imagined dissent here is from
+someone who thinks that the noisier the data, the more imprecise
+credences should get. That's an interesting view, but perhaps orthogonal
+to the issues we're debating here.)
+
+And when we look back at Belot's motivations for open-mindedness, we see
+that they are really motivations for being evidence-responsive. One of
+the distinctive (and I would say problematic) features of precise
+Bayesianism is that it doesn't really have a good way of representing a
+state of indecisiveness or open-mindedness. In the terms we've been
+using here, there's no difference for the precise Bayesian between being
+evidence responsive and open minded. The imprecise Bayesian can
+distinguish these. And in Belot's puzzle, we should require that the
+imprecise Bayesian agent is evidence responsive. So we should impose the
+second, stronger, condition.
+
+The final condition to discuss is modesty. There are three natural
+candidates here. We could merely require that the agent's prior
+probability that \textbf{x} is in her success set is not equal to 1. Or
+we could require that it be less than 1. Or, even more strongly, we
+could require that it be less than some number that is less than 1. If
+her credence that \textbf{x} is in her success set is imprecise over
+some interval {[}\emph{k}, 1{]}, she satisfies the first condition, but
+not the second or third. If it is imprecise over some interval
+(\emph{k}, 1), or {[}\emph{k}, 1), she satisfies the first and second
+conditions, but not the third. In the interests of setting the imprecise
+Bayesian the hardest possible challenge, though, let's say that modesty
+requires the third criteria. Her ex ante credence in success should not
+just be less than 1, it should be less than some number less than 1.
+
+The aim of the next section is to describe a representor that satisfies
+open-mindedness and modesty with respect to the question of whether the
+sequence is periodic. The representor will not represent a state that it
+is rational for a person to be in; we'll come back in the last section
+to the significance of this. My aim is just to show that for the
+imprecise Bayesian, unlike the precise Bayesian, open-mindedness and
+modesty are compatible. And the proof of this will be constructive; I'll
+build a representor that is, while flawed in some other ways,
+open-minded and modest.
+
+\section{Meeting the Challenge,
+Imprecisely}\label{meeting-the-challenge-imprecisely}
+
+Recall that Pr\textsubscript{0} is the \emph{fair-coin measure},
+according to which, if \textbf{y} is any \emph{k} length sequence of 0s
+and 1s we have Pr\textsubscript{0}(\textbf{X}\textsubscript{\emph{k}} =
+\textbf{y}) = 2\textsuperscript{-\emph{k}}.
+
+Say a finite sequence \textbf{y}\textsubscript{k} of length \emph{k} is
+\textbf{repeating} iff for some \emph{n} \textgreater{} 1,
+\textbf{y}\textsubscript{k} consists of \emph{n} repetitions of a
+sequence of length \emph{k}/\emph{n}. For any non-repeating sequence
+\textbf{y}\textsubscript{k} (of length \emph{k}) let
+\(\boldsymbol{s}_{\boldsymbol{y}_k}\) be the sequence consisting of
+\textbf{y}\textsubscript{k} repeated infinitely often. Let
+Pr\textsubscript{1} be the function such that,
+
+\[\Pr{}_1(\boldsymbol{X}= \boldsymbol{s}_{\boldsymbol{y}_k}) = \frac{1}{2^{2k}-1}
+\]
+
+Intuitively, we can think of Pr\textsubscript{1} as follows. Consider a
+measure over representations of periodic sequences. Any periodic
+sequence can be represented just as a finite sequence, plus the
+instruction \emph{repeat infinitely often}, so this is really just a
+measure over finite sequences. One natural such measure assigns measure
+2\textsuperscript{-2\emph{k}} to each sequence of length \emph{k}. Of
+course, several of these representations will be representations of the
+same sequence. For instance, ⟨0, 1⟩, ⟨0, 1, 0, 1⟩ and ⟨0, 1, 0, 1, 0, 1⟩
+repeated infinitely produce the same sequence. Now the probability of a
+sequence, according to Pr\textsubscript{1} is just the measure, so
+defined, of the class of representations of that measure. (It's a little
+easier to confirm that the measures sum to 1 than that the probabilities
+do, which is why I've included this little explanation.)
+
+Now define Pr\textsubscript{2} as the equal weight mixture of
+Pr\textsubscript{0} and Pr\textsubscript{1}, i.e.,
+Pr\textsubscript{2}(\emph{q}) = (Pr\textsubscript{0}(\emph{q}) +
+Pr\textsubscript{1}(\emph{q}))/2. Since Pr\textsubscript{0}(\emph{p}) =
+0, and Pr\textsubscript{1}(\emph{p}) = 1\$,
+Pr\textsubscript{2}(\emph{p}) = ½. There will be several facts about
+Pr\textsubscript{2} that are useful to have in place for future
+reference. (Recall I'm using \textbf{X} as a random variable for the
+sequence the agent will see, \textbf{x} as a rigid designator of that
+sequence, \textbf{y} and \textbf{z} are variables for arbitrary
+sequences, and the \emph{k} subscript to restrict sequences to length
+\emph{k}.) The first of these was proven as Lemma~1.
+
+\begin{description}
+\tightlist
+\item[Lemma~1.]
+Pr\textsubscript{2}(\emph{p}~\textbar{}
+\textbf{X}\textsubscript{\emph{k}} = \textbf{y}\textsubscript{k})
+\textgreater{} ½ iff
+Pr\textsubscript{1}(\textbf{X}\textsubscript{\emph{k}} =
+\textbf{y}\textsubscript{k}) \textgreater{}
+Pr\textsubscript{0}(\textbf{X}\textsubscript{\emph{k}} =
+\textbf{y}\textsubscript{k}).\$
+\end{description}
+
+Define a new predicate \emph{n} of finite sequences
+\textbf{y}\textsubscript{k}, to hold just in case
+\textbf{y}\textsubscript{k} could be the initial segment of an infinite
+sequence of period at most \emph{k}/2. So \textbf{y}\textsubscript{k}
+must consist of some sequence repeated twice, and anything else in
+\textbf{y}\textsubscript{k} must be consistent with that sequence
+repeating again (and if necessary again, and again, \ldots). Then we
+get,
+
+\begin{description}
+\tightlist
+\item[Lemma 2.]
+For \emph{k} ⩾ 2, Pr\textsubscript{2}(\emph{p}~\textbar{}
+\textbf{X}\textsubscript{2\emph{k}} =
+\textbf{y}\textsubscript{2\emph{k}}) \textgreater{} ½ iff
+\emph{N}\textbf{y}\textsubscript{2\emph{k}}.
+\end{description}
+
+\begin{quote}
+\emph{Proof.} By Lemma~1, this reduces to the question of the
+relationship Pr\textsubscript{1}(\textbf{X}\textsubscript{2\emph{k}} =
+\textbf{y}\textsubscript{2\emph{k}}) \textgreater{}
+Pr\textsubscript{0}(\textbf{X}\textsubscript{2\emph{k}} =
+\textbf{y}\textsubscript{2\emph{k}}). Moreover, we know that
+Pr\textsubscript{0}(\textbf{X}\textsubscript{2\emph{k}} =
+\textbf{y}\textsubscript{2\emph{k}}) = 2\textsuperscript{-2\emph{k}}. So
+the question is whether
+Pr\textsubscript{1}(\textbf{X}\textsubscript{2\emph{k}} =
+\textbf{y}\textsubscript{2\emph{k}}) \textgreater{}
+2\textsuperscript{-2\emph{k}}.
+
+If \emph{N}\textbf{y}\textsubscript{2\emph{k}}, then it is consistent
+with \textbf{X}\textsubscript{2\emph{k}} =
+\textbf{y}\textsubscript{2\emph{k}} that \textbf{x} is a particular
+periodic sequence with period at most \emph{k}. Since the probability,
+according to Pr\textsubscript{1} of any such sequence is greater than
+2\textsuperscript{-2\emph{k}}, the right-to-left direction follows.
+
+If ¬\emph{N}\textbf{y}\textsubscript{2\emph{k}}, then the possibilities
+that get positive probability according to Pr\textsubscript{1} are at
+most among the following: \textbf{X} consists of the first \emph{k}~+~1
+digits of \textbf{y}\textsubscript{2\emph{k}} repeated endlessly;
+\textbf{X} consists of the first \emph{k}~+~2 digits of
+\textbf{y}\textsubscript{2\emph{k}} repeated endlessly; \ldots;
+\textbf{x} consists of the first 2\emph{k} digits of
+\textbf{y}\textsubscript{2\emph{k}} repeated endlessly; \textbf{X} is
+one of the two sequences of period 2\emph{k}~+ 1 starting with
+\textbf{y}\textsubscript{2\emph{k}}, or one of the four sequences of
+period 2\emph{k}~+~2 starting with \textbf{y}\textsubscript{2\emph{k}}
+or \ldots. So we get the following, starting with the probabilities of
+each of the possibilities listed in the previous sentence,
+
+\[
+\begin{aligned}
+Pr{}_1(\boldsymbol{X}~2k~ = \boldsymbol{y}~2k~) 
+&\leq \frac{1}{2^{2k+2}-1} 
+&+&\frac{1}{2^{2k+4}-1} 
+&+\dots 
+&+&\frac{1}{2^{4k}-1} 
+&+&\frac{2}{2^{4k+2}-1} 
+&+\dots \\
+%
+&< \frac{1}{2^{2k+1}} 
+&+ &\frac{1}{2^{2k+3}} 
+&+ \dots
+&+ &\frac{1}{2^{4k-1}}
+&+ &\frac{1}{2^{4k}}
+&+ \dots \\
+%
+&< \frac{1}{2^{2k}}
+\end{aligned}
+\]
+
+And from that the left-to-right direction follows.~◻
+\end{quote}
+
+\begin{description}
+\tightlist
+\item[Lemma 3]
+Pr\textsubscript{2} is open-minded.
+\end{description}
+
+\begin{quote}
+\emph{Proof.} Since any initial sequence \textbf{y}\textsubscript{k}
+that is not \emph{N} can be easily extended into one that is \emph{N}
+(by, e.g., repeating \textbf{y}\textsubscript{k}), and one is that is
+\emph{N} can be extended into one that is not (by, e.g., having the
+repeating sequence stop at the very next step), this follows immediately
+from Lemma~2.~◻
+\end{quote}
+
+Define \emph{f} to be a function from sequences of length \emph{k}~⩾~2
+to sequences of length \emph{k}~+~1 such that
+
+\[
+f(\boldsymbol{y}_k) = \boldsymbol{y}_k + 
+    \begin{cases} 
+        \langle 0 \rangle &\text{if } N\boldsymbol{y}_k \leftrightarrow Pr{}_1(x_{k+1} = 0 | \boldsymbol{X}_k = \boldsymbol{y}_k) \leq ½ \\
+        \langle 1 \rangle &\text{otherwise}
+    \end{cases}
+\]
+
+In the normal way, define
+\emph{f~\textsuperscript{n}}(\textbf{y}\textsubscript{k}) to be the
+result of applying \emph{f} \emph{n} times to
+\textbf{y}\textsubscript{k}. And define
+\emph{f}\textsuperscript{∞}(\textbf{y}\textsubscript{k}) to be the
+infinite sequence we get by doing this infintely often.
+
+Intuitively, the way \emph{f} works is that if
+\textbf{y}\textsubscript{k} is already somewhat sequential, then we
+include the less likely digit, and if it isn't, then we include the more
+likely digit. (With ties resolved in favour of including 0 rather than
+1.) If we define \emph{p}(\textbf{y}\textsubscript{k}) to be the
+smallest \emph{n} such that \textbf{y}\textsubscript{k} could be the
+initial segment of a periodic sequence of length \emph{n}, then we'll
+get that
+\emph{p}(\emph{f}(\textbf{y}\textsubscript{k}))~\textgreater~\emph{p}(\textbf{y}\textsubscript{k})
+↔ \emph{N}\textbf{y}\textsubscript{k} in all cases, except for the case
+where Pr\textsubscript{1}(\textbf{x}\textsubscript{\emph{k}} =
+0~\textbar~\textbf{X}\textsubscript{\emph{k}}~=~\textbf{y}\textsubscript{k})
+= ½. That is, if \emph{N}\textbf{y}\textsubscript{k}, then extending
+\textbf{y}\textsubscript{k} in this way will wipe out the possibility of
+that smallest sequence being extended indefinitely, while if
+¬\emph{N}\textbf{y}\textsubscript{k}, then that possibility will still
+be on the table.
+
+From this, it follows that
+\emph{f}\textsuperscript{∞}(\textbf{y}\textsubscript{k}) will flummox
+Pr\textsubscript{2}, no matter which \textbf{y}\textsubscript{k} we
+start with.
+
+We need one last classification of finite sequences, and then we are
+done. Say that \emph{O}\textbf{y}\textsubscript{k} just in case some
+initial segment of \textbf{y}\textsubscript{k} of length \emph{r} could
+be the initial segment of an infinite period sequence of period less
+than \emph{r}/2. This contrasts with \emph{N} in two ways. First, it
+requires a sequence that repeats twice, and then starts a third
+repetition. Second, it does not require that the sequence be `live';
+there might be subsequent parts of \textbf{y}\textsubscript{k} that are
+not compatible with the sequence repeating. So the sequence ⟨0, 0, 1, 0,
+0, 1⟩ satisfies \emph{N} but not \emph{O}, while the sequence ⟨0, 1, 0,
+1, 0, 0⟩ satisfies \emph{O} but not \emph{N}.
+
+There are a countable infinity of finite sequences
+\textbf{y}\textsubscript{k} such that
+¬\emph{O}\textbf{y}\textsubscript{k}. Produce some ordering of them,
+then define Pr\textsubscript{\emph{i}}, for \emph{i}~⩾~3, to be the
+probability function such that
+Pr\textsubscript{\emph{i}}(\textbf{X}~=~\emph{f}\textsuperscript{∞}(\textbf{y}\textsubscript{k}))
+= 1, where \textbf{y}\textsubscript{k} is the \emph{i}-2'th sequence in
+this order.
+
+Now, consider the set \emph{R} of all probability functions of the form:
+
+\[
+Pr = \sum_{i = 2}^\infty a_i \Pr{}_i
+\]
+
+where each of the Pr\textsubscript{\emph{i}} are defined as above, each
+\emph{a\textsubscript{i}} is non-negative, \emph{a}\textsubscript{2} is
+½, and the sum of the \emph{a\textsubscript{i}} from 3 to ∞ is also ½.
+Intuitively, each function starts by halving the probability
+Pr\textsubscript{2} gives to each initial (or completed) sequence, and
+distributing the remaining probability over the countable infinity of
+flummoxing sequences of the form
+\emph{f}\textsuperscript{∞}(\textbf{y}\textsubscript{k}), where
+¬\emph{O}\textbf{y}\textsubscript{k}.
+
+I'll now prove that \emph{R} is open minded.
+
+\begin{description}
+\tightlist
+\item[Lemma 4]
+If ¬\emph{O}\textbf{y}\textsubscript{k}, then ¬\emph{O}
+f(\textbf{y}\textsubscript{k}).
+\end{description}
+
+\begin{quote}
+\emph{Proof.} Since ¬\emph{O}\textbf{y}\textsubscript{k}, the only way
+that \emph{O} \emph{f}(\textbf{y}\textsubscript{k}) could be true is if
+\emph{k} = 2\emph{r} +1, and \emph{f}(\textbf{y}\textsubscript{k})
+consists of some sequence of length \emph{r} repeated twice, plus the
+first digit repeated a third time. But that means that
+\emph{N}\textbf{y}\textsubscript{k}. And if that's the case, then the
+extra digit that is added by \emph{f}(\textbf{y}\textsubscript{k}) will
+not be the necessary digit to repeat this sequence. So it is impossible
+that \emph{O} \emph{f}(\textbf{y}\textsubscript{k}).~◻
+\end{quote}
+
+\begin{description}
+\tightlist
+\item[Lemma 5]
+If ¬\emph{O} \textbf{y}\textsubscript{k}, then ¬\emph{O}
+\emph{f}\textsuperscript{∞}(\textbf{y}\textsubscript{k}).
+\end{description}
+
+\begin{quote}
+\emph{Proof.} This follows trivially from Lemma~4.~◻
+\end{quote}
+
+\begin{description}
+\tightlist
+\item[Theorem 6]
+\emph{R} is open-minded.
+\end{description}
+
+\begin{quote}
+\emph{Proof.} Any initial sequence can be extended to a sequence
+satisfying \emph{O}. For example, the initial sequence can be repeated
+in full twice. An immediate consequence of Lemma~5 is that for all
+\emph{i}~⩾~3, \emph{O}\textbf{y}\textsubscript{k} →
+Pr\textsubscript{\emph{i}}(\textbf{X}\textsubscript{\emph{k}} =
+\textbf{y}\textsubscript{k}) = 0. That means that if
+\emph{O}\textbf{y}\textsubscript{k}, then for any Pr ∈ \emph{R},
+Pr(\emph{p}~\textbar{} \textbf{X}\textsubscript{\emph{k}} =
+\textbf{y}\textsubscript{k}) = Pr\textsubscript{2}(\emph{p}~\textbar{}
+\textbf{X}\textsubscript{\emph{k}} = \textbf{y}\textsubscript{k}). And
+now the theorem is an immediate consequence of Lemma~3.~◻
+\end{quote}
+
+Let \emph{F} be the set of all sequences
+f\textsuperscript{∞}(\textbf{y}\textsubscript{k})\$, where ¬\emph{O}
+\textbf{y}\textsubscript{k}.
+
+\begin{description}
+\tightlist
+\item[Lemma 7]
+If \textbf{x}~∈~\emph{F}, then \emph{R} fails.
+\end{description}
+
+\begin{quote}
+\emph{Proof.} Assume \textbf{x}~∈~\emph{F}, so \textbf{x} is not
+periodic. Then proving the lemma requires showing that for any \emph{i},
+there is a \emph{j}~⩾~\emph{i} such that, according to \emph{R}, the
+probability of \emph{p} given \textbf{X}\textsubscript{\emph{j}}
+=\textbf{x}\textsubscript{\emph{j}} is not less than ½. And that
+requires showing that there is a Pr~∈~\emph{R} such that
+Pr(\emph{p}~\textbar~\textbf{X}\textsubscript{\emph{j}}~=~\textbf{x}\textsubscript{\emph{j}})~⩾~½.
+This is easy to do. Consider any sequence
+\textbf{y}\textsubscript{\emph{i}} of length \emph{i} not identical to
+\textbf{x}\textsubscript{\emph{i}} such that ¬\emph{O}
+\textbf{y}\textsubscript{\emph{i}}. Consider the probability function
+Pr\textsubscript{k}~∈~\emph{R} such that
+Pr\textsubscript{k}(\textbf{X}~=~\emph{f}\textsuperscript{∞}(\textbf{y}\textsubscript{\emph{i}}))
+= ½. Once we conditionalise on \textbf{X}\textsubscript{\emph{i}} =
+\textbf{x}\textsubscript{\emph{i}}, that function will behave just like
+Pr\textsubscript{2}. And since \textbf{X} flummoxes Pr\textsubscript{2},
+that means there is a \textbf{x}\textsubscript{\emph{j}} such that
+Pr(\emph{p}~\textbar{} \textbf{X}\textsubscript{\emph{j}} =
+\textbf{x}\textsubscript{\emph{j}}) \textgreater{} ½, and hence
+Pr(\emph{p}~\textbar{} \textbf{X}\textsubscript{\emph{j}} =
+\textbf{x}\textsubscript{\emph{j}}) ⩾½.~◻
+\end{quote}
+
+\begin{description}
+\tightlist
+\item[Lemma 8]
+For each Pr ∈ \emph{R}, Pr(\textbf{x}~∈ \emph{F}) = ½.
+\end{description}
+
+\begin{quote}
+\emph{Proof.} It helps to think of each of the Pr ∈ \emph{R} as mixtures
+of Pr\textsubscript{0} and Pr\textsubscript{1}, plus a mixture of the
+Pr\textsubscript{\emph{i}} for \emph{i}~⩾~3. Now
+Pr\textsubscript{0}(\textbf{x}~∈~\emph{F}) = 0, since for any countable
+set, Pr\textsubscript{0} says the probability that \textbf{x} is in that
+set is 0. And Pr\textsubscript{1}(\textbf{x}~∈~\emph{F}) = 0, since
+Pr\textsubscript{1} says that the probability of \textbf{x} being
+periodic is 1, and none of the members of \emph{F} are periodic. But for
+each Pr\textsubscript{\emph{i}} for \(i ⩾3\),
+Pr\textsubscript{\emph{i}}(\textbf{x}~∈~\emph{F}) = 1\$. Indeed, for
+each such function, there is a particular sequence in \emph{F} such that
+the probability that \textbf{x} is that sequence is 1. So for each Pr ∈
+R, Pr(\textbf{x}~∈~\emph{F}) = ¼ × 0 + ¼ × 0 + ½ × 1 = ½.~◻
+\end{quote}
+
+\begin{description}
+\tightlist
+\item[Theorem 9]
+According to \emph{R}, the probability of an agent whose representor is
+\emph{R} failing is at least ½.
+\end{description}
+
+\begin{quote}
+\emph{Proof.} Immediate from Lemma~7 and Lemma 8.~◻
+\end{quote}
+
+So if an agent's credences are represented by a non-singleton set of
+probability functions, not a single probability function, it is possible
+for them to be open-minded and modest. On the other hand, if an agent is
+represented by a single probability function, as the precise Bayesian
+desires, then it is impossible to be open-minded and modest. Since being
+open-minded and modest is desirable, this is a reason to prefer the
+imprecise Bayesian picture.
+
+\section{Objections and Replies}\label{objections-and-replies}
+
+I'm going to reply to three objections, but since my replies overlap,
+I'll group the objections together.
+
+\begin{description}
+\item[Objection 1]
+The model here only gives you conditional modesty. Once the initial
+sequence is \emph{O}, the representor becomes the singleton of an
+open-minded probability function, and Belot showed that to be immodest.
+Ideally, the agent would have a prior that is in some way resiliently
+modest, whereas this prior is fragilely modest.
+\item[Objection 2]
+This representor is open-minded and modest towards one particular
+problem, namely whether \textbf{X} is periodic. But Belot was interested
+in a wider range of problems, indeed in all problems of the form: does
+\textbf{x} fall into some set that is measurable, dense, and has a dense
+complement. Ideally, we'd have a prior which is widely open-minded and
+modest, in the sense that it had an open-minded and modest attitude
+towards many problems. But this prior is narrowly modest, in the sense
+that it is open-minded and modest about only one problem.
+\item[Objection 3]
+The representor described here is clearly not a representation of a
+credal state of anyone rational. Look what it does if the data is a 1
+followed by thousands of 0s, or is the first few thousand digits of the
+binary expansion of π, or has a frequency of 0s of 0.2 over all large
+sub-intervals. No one could adopt this prior, so it doesn't show
+anything about the advantages of imprecise Bayesianism.
+\end{description}
+
+\emph{Reply.} My responses are going to be (1) that we should want more
+resilient modesty, and though this is a hard technical challenge, it's
+possible to see a way forward on it, (2) that we should want somewhat
+wider open-minded modesty, though how much wider is a hard question, and
+(3) that the third objection should simply be rejected. Let's go through
+those in reverse order, since it's the response to the third that
+explains part of what I'm doing in response to the other two.
+
+What we have in section three is a consistency proof. For the imprecise
+Bayesian, unlike the precise Bayesian, being open-minded is consistent
+with being modest. That's good, since it shows that we can't rule out a
+rational response to problems like Belot's. It's obviously true that the
+prior in question isn't rational, but that's not needed for a
+consistency proof.
+
+Moreover, we don't just have a consistency proof, we have a constructive
+consistency proof - the prior is described in detail. It's just not
+going to be possible to do a constructive proof that open-mindedness,
+modesty and full rationality are consistent. And that's because to do
+that would essentially be to solve all of the problems of epistemology
+ever. Demonstrating a fully rational prior, even for the range of
+questions Belot considers, is too much to ask.
+
+If there's a reasonable looking argument that imprecise Bayesians are
+unlikely to be able to satisfy some set of plausible constraints, then
+the defender of imprecise Bayesianism is, I think, obliged to show how
+those constraints can be satisfied. But to ask for a demonstration of
+how all reasonable constraints can be satisfied at once, in the absence
+of a decent argument that they cannot be, would clearly be asking too
+much.
+
+So I don't care that the prior I described is irrational; it serves its
+purpose in proving consistency. Now what would be nice is to show that
+some slightly stronger constraints can be simultaneously satisfied. But
+we have to be sure that those constraints are in fact reasonable
+constraints. Here's one constraint that I think isn't reasonable: be
+open-minded towards any proposition of the form
+\{\textbf{X}~∈~\emph{S}\}, where \emph{S} is a dense set of sequences.
+Let \emph{S}, for example, be the set consisting of all sequences of the
+form \textbf{y}\textsubscript{k} + \textbf{z}, where
+\textbf{y}\textsubscript{k} ranges over all finite sequeneces, and
+\textbf{z} is a particular arbitrary sequence that lacks finite
+definition in our current language. That set is dense, and indeed
+measurable. But there's no evidence that could make it reasonable to
+take \textbf{X}~∈~\emph{S} to be probable. So a prior that wasn't
+open-minded towards \textbf{X}~∈~\emph{S} could still be perfectly
+reasonable.
+
+That said, the prior I demonstrated is closed-minded towards several
+propositions that should be taken seriously. It will never have positive
+credence that \textbf{X} is eventually periodic without being periodic,
+or that \textbf{X} is generated by a chance process that gives each data
+point chance \emph{c}~≠~½ of being 0. It would be good to have a prior
+whose open-minded modesty was wider. But before we do that technical
+work, I think there's a need to figure out which propositions we should
+be open-minded about.
+
+I am more worried by the fragility of the modesty of this prior. There's
+a reasonable sense in which the prior is open-minded only in virtue of
+the fact that it has parts which are immodest. At any point where the
+agent has credence above ½ that \emph{p}, she has credence 1 that she
+will succeed.
+
+We could try to complicate the prior a bit more to avoid that. Here's a
+sketch of how it could go, with application to one particular initial
+sequence of data. Consider what happens to \emph{R} if the initial input
+is ⟨0, 1, 0, 0, 1, 0, 0, 1⟩, hereafter \textbf{y}. According to
+Pr\textsubscript{0}, that initial sequence has probability 1/256.
+According to Pr\textsubscript{1}, it has probability 1/63 + 1/4095 +
+1/65535 ≈ 1/62. So given that initial sequence, Pr\textsubscript{2} says
+the probability of \emph{p} is about 0.8. And since the sequence is
+\emph{O}, it could be the start of the the sequence ⟨0, 1, 0⟩ repeated
+indefinitely, its probability according to Pr\textsubscript{\emph{i}} is
+0, for \emph{i}~⩾~3. Now consider the set of all probability functions
+of the form
+\emph{a}Pr\textsubscript{\emph{R}}~+~\emph{b}Pr\textsubscript{\emph{New}},
+where \emph{a} + \emph{b} = 1, \emph{b} ∈ (0, 1/256),
+Pr\textsubscript{\emph{R}}~∈~\emph{R} and Pr\textsubscript{\emph{New}}
+is the function which gives probability 1 to \textbf{X} being
+\emph{O}(\textbf{y}). That prior is open-minded, and even after
+conditionalising on \textbf{y} satisfies the intermediate of the three
+modesty conditions described on page - the probability of failure is
+less than one, though it isn't less than some number less than one. And
+this trick could be generalised to satisfy more modesty conditions, and
+even (though it would take some time to prove this) be unconditionally
+modest.
+
+But I'm not going to go through those steps here. That's mostly because
+I think we already have shown enough to show that imprecise Bayesianism
+has an advantage over precise Bayesianism. The imprecise Bayesian can,
+and the precise Bayesian can't, have an open-minded modest attitude. It
+would be good to press home that advantage and show that there are other
+things the imprecise Bayesian can do that the precise Bayesian can't do,
+such as having a widely open-minded and resiliently modest prior. But
+even before such a demonstration takes place, the advantage has been
+established.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Belot2013}
+Belot, Gordon. 2013. {``Bayesian Orgulity.''} \emph{Philosophy of
+Science} 80 (4): 483--503. doi:
+\href{https://doi.org/10.1086/673249}{10.1086/673249}.
+
+\bibitem[\citeproctext]{ref-Bradley2014}
+Bradley, Seamus. 2014. {``Imprecise Probabilities.''} In \emph{The
+Stanford Encyclopedia of Philosophy}, edited by Edward N. Zalta, Winter
+2014.
+\url{http://plato.stanford.edu/archives/win2014/entries/imprecise-probabilities/};
+Metaphysics Research Lab, Stanford University.
+
+\bibitem[\citeproctext]{ref-Briggs2009}
+Briggs, Ray. 2009. {``Distorted Reflection.''} \emph{Philosophical
+Review} 118 (1): 59--85. doi:
+\href{https://doi.org/10.1215/00318108-2008-029}{10.1215/00318108-2008-029}.
+
+\bibitem[\citeproctext]{ref-Elga2010-ELGHTD}
+Elga, Adam. 2010. {``How to Disagree about How to Disagree.''} In
+\emph{Disagreement}, edited by Ted Warfield and Richard Feldman,
+175--87. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Joyce2010}
+Joyce, James M. 2010. {``A Defence of Imprecise Credences in Inference
+and Decision Making.''} \emph{Philosophical Perspectives} 24 (1):
+281--323. doi:
+\href{https://doi.org/10.1111/j.1520-8583.2010.00194.x}{10.1111/j.1520-8583.2010.00194.x}.
+
+\bibitem[\citeproctext]{ref-Lasonen-Aarnio2015}
+Lasonen-Aarnio, Maria. 2015. {``New Rational Reflection and Internalism
+about Rationality.''} \emph{Oxford Studies in Epistemology} 5: 145--71.
+doi:
+\href{https://doi.org/10.1093/acprof:oso/9780198722762.003.0005}{10.1093/acprof:oso/9780198722762.003.0005}.
+
+\bibitem[\citeproctext]{ref-Lewis1971d}
+Lewis, David. 1971. {``Immodest Inductive Methods.''} \emph{Philosophy
+of Science} 38 (1): 54--63. doi:
+\href{https://doi.org/10.1086/288339}{10.1086/288339}.
+
+\bibitem[\citeproctext]{ref-Lewis1993c}
+---------. 1993. {``Many, but Almost One.''} In \emph{Ontology,
+Causality, and Mind: Essays on the Philosophy of {D. M. Armstrong}},
+edited by Keith Campbell, John Bacon, and Lloyd Reinhardt, 23--38.
+Cambridge: Cambridge University Press. doi:
+\href{https://doi.org/10.1017/CBO9780511625343.010}{10.1017/CBO9780511625343.010}.
+Reprinted in his \emph{Papers in Metaphysics and Epistemology},
+Cambridge: Cambridge University Press, 1999, 164-182. References to
+reprint.
+
+\bibitem[\citeproctext]{ref-Pryor2000}
+Pryor, James. 2000. {``The Sceptic and the Dogmatist.''} \emph{No{û}s}
+34 (4): 517--49. doi:
+\href{https://doi.org/10.1111/0029-4624.00277}{10.1111/0029-4624.00277}.
+
+\bibitem[\citeproctext]{ref-Schoenfield2012}
+Schoenfield, Miriam. 2012. {``Chilling Out on Epistemic Rationality: A
+Defense of Imprecise Credences (and Other Imprecise Doxastic
+Attitudes).''} \emph{Philosophical Studies} 158 (2): 197--219. doi:
+\href{https://doi.org/10.1007/s11098-012-9886-7}{10.1007/s11098-012-9886-7}.
+
+\bibitem[\citeproctext]{ref-Schoenfield2014}
+---------. 2015. {``A Dilemma for Calibrationism.''} \emph{Philosophy
+and Phenomenological Research} 91 (2): 425--55. doi:
+\href{https://doi.org/10.1111/phpr.12125}{10.1111/phpr.12125}.
+
+\bibitem[\citeproctext]{ref-Walley1991}
+Walley, Peter. 1991. \emph{Statisical Reasoning with Imprecise
+Probabilities}. London: Chapman \& Hall.
+
+\bibitem[\citeproctext]{ref-White2006}
+White, Roger. 2006. {``Problems for Dogmatism.''} \emph{Philosophical
+Studies} 131 (3): 525--57. doi:
+\href{https://doi.org/10.1007/s11098-004-7487-9}{10.1007/s11098-004-7487-9}.
+
+\bibitem[\citeproctext]{ref-White2010}
+---------. 2010. {``Evidential Symmetry and Mushy Credence.''}
+\emph{Oxford Studies in Epistemology} 3: 161--89.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Ergo}, 2016, pp. 529-545.
+
+\end{document}

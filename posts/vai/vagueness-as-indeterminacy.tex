@@ -1,0 +1,1137 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Vagueness as Indeterminacy
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Vagueness as Indeterminacy},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Vagueness as Indeterminacy}
+\author{Brian Weatherson}
+\date{2018}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Traditionally, we thought vague predicates were predicates with
+borderline cases. In recent years traditional wisdom has come under
+attack from several leading theorists. They are motivated by a common
+idea, that terms with borderline cases, but sharp boundaries around the
+borderline cases, are not vague. I argue for a return to tradition. Part
+of the argument is that the alternatives that have been proposed are
+themselves subject to intuitive counterexample. And part of the argument
+is that we need a theory of what vagueness is that applies to
+non-predicates. The traditional picture can be smoothly generalised to
+non-predicates if we identify vagueness generally with indeterminacy.
+Modern rivals to tradition do not admit of such smooth generalisation.
+\end{abstract}
+
+\setstretch{1.1}
+Recently there has been a flurry of proposals on how to `define'
+vagueness. These proposals are not meant to amount to \emph{theories} of
+vagueness as, for instance, epistemic or supervaluational theories of
+vagueness are. That is, they are not meant to provide solutions to the
+raft of puzzles and paradoxes traditionally associated with vagueness.
+Rather, they are meant to give us a sense of which terms in the language
+are vague, and to use Matti Eklund's phrase, in what their vagueness
+consists. Doing this \emph{might} be a prelude to a successful theory of
+vagueness, or it might just be an interesting classificatory question in
+its own right.
+
+When this activity started, most notably with Patrick Greenough's ``A
+Minimal Theory of Vagueness'', I suspected that it would be a hopeless
+project. Imagine, I thought, trying to give a definition of what
+causation is that didn't amount to a theory of causation. That project
+seems hopeless, and I didn't think the prospects for a definition of
+vagueness were much better. I now think I was wrong, and we can learn a
+lot from thinking about which terms are vague, independent of our theory
+of vagueness. (As we'll get to below, Greenough's theory isn't marketed
+as a definition of vagueness, but rather a `minimal theory' to which all
+parties can agree. But it has been taken, e.g.~by Eklund and Nicholas
+Smith, to be providing a rival to genuine definitions of vagueness, and
+I'll follow Eklund and Smith in this respect.)
+
+The point of this exercise is not to give an analysis of how the man on
+the Clapham omnibus uses `vague' and its cognates. As is widely
+recognised, `vague' is often used in ordinary language as a predicate
+that applies to claims like \emph{The Grand Canyon is between 2 and 2
+trillion years old}, i.e.~claims that are consistent with a wide range
+of possible worlds. That's not the sense of `vague' which philosophers
+use, nor the sense we are trying to define. But nor should we think we
+are just trying to analyse philosophical use of `vague'. The
+philosophers' usage may be our starting point, but if we find
+philosophers have traditionally being ignoring theoretically important
+commonalities, or blurring theoretically important distinction, our best
+definition may well amount to a revision of philosophical usage.
+
+The game, I think, is one of setting goals for what a theory of
+vagueness should do. It is a legitimate objection to a theory of
+vagueness that it isn't comprehensive, that it doesn't cover the field.
+If supervaluationism was only a theory of how vague words that started
+with consonants behaved, for example, that would be a problem for
+supervaluationism. But to press objections of this form we must have an
+antecedent answer to the question of which words are in the field, and
+hence should be covered. That's the good question which these
+definitions of vagueness address. Because I take this to be the
+important issue, I'm going to start this paper with a bunch of examples
+of apparently vague, and apparently non-vague, terms. We'll then look at
+which theories do the best job at systematising intuitions about these
+cases. I'll then argue that the best way to systematise our intuitions
+about these cases while respecting theoretically important commonalities
+and distinctions is to take vagueness to be indeterminacy, while staying
+silent for now on whether the indeterminacy is semantic or epistemic. In
+doing so I'm returning to a traditional view of vagueness, one that is
+discussed in such classic works as Kit Fine's statement of
+supervaluationism (\citeproc{ref-Fine1975a}{Fine 1975}). So I make no
+claim to originality in my conclusions here, though I hope at least
+\emph{some} of the arguments are original.
+
+\section{Examples}\label{examples}
+
+I'm going to introduce five classes of examples, which will serve as our
+data in what follows. I'll give a fairly tendentious description of each
+class to orient us before starting. Our five classes are (a) words that
+are indeterminate but not vague, (b) vague words that are not
+predicates, especially predicate modifiers, (c) vague predicates whose
+conditions of application are contentious, (d) vague predicates whose
+application depends on discrete states of the world, and (e) vague
+predicates that do not determine boundaries.
+
+\subsection{Indeterminacy without
+Vagueness}\label{indeterminacy-without-vagueness}
+
+Many philosophers, if asked, would say that vague words are those that
+have borderline cases. As noted above, Fine
+(\citeproc{ref-Fine1975a}{1975}) takes exactly this view. My preferred
+view, that vagueness is indeterminacy, is a simple generalisation of
+this view to non-predicates. But it is a commonplace of the literature
+on definitions of vagueness that this won't do because of examples of
+indeterminacy without vagueness. Two examples are commonly used. One of
+these is Sainsbury's example \emph{child}
+(\citeproc{ref-Sainsbury1991}{Sainsbury 1991}). By definition, the
+extension of \emph{child} is the set of persons under sixteen years old,
+and its anti-extension is the set of persons eighteen years old or
+older. Sixteen and seventeen year olds are borderline cases. The
+intuition is that even though \emph{child} has borderline cases it is
+not vague, because there are sharp boundaries to its borderline.
+
+A similar case arrives with \emph{mass} as it is used by a Newtonian
+physicist. (I'm grateful to Delia Graff Fara for pointing out the
+connection here.) As Field (\citeproc{ref-Field1973}{1973}) showed,
+\emph{mass} is indeterminate between two meanings, rest mass and proper
+mass. But it is intuitively \emph{not} vague, because it is determinate
+that it means either rest mass or proper mass. These cases are well
+discussed in the existing literature, and I won't say much more about
+them here, save to note that one of the examples that is usually taken
+to be very problematic for the vagueness as indeterminacy view,
+\emph{child}, is not synonymous with any term in any natural language.
+This is not a reason that it could not serve as a counterexample,
+because a definition should cover all terms actual and possible.
+
+\subsection{Non-Predicate Vagueness}\label{non-predicate-vagueness}
+
+Not only predicates are vague. There is an extensive literature on vague
+singular terms. Arguably many determiners are vague. And, as I'll stress
+here, many predicate modifiers are vague.
+
+We can make an intuitive distinction between vague and precise predicate
+modifiers. Compare the following two (obviously artificial) predicate
+modifiers. (I owe these examples to David Chalmers.) Where \emph{F} is a
+predicate such that \emph{Fa} is true iff for some variable \emph{v},
+\emph{v}(\emph{a})~\textgreater~\emph{x} and \emph{v} has a natural zero
+value (e.g.~like height and unlike utility) then we can define
+\emph{doubly F} and \emph{bigly F}. It is true that \emph{a} is doubly
+\emph{F} iff \emph{v}(\emph{a})~\textgreater~2\emph{x} and \emph{a} is
+bigly \emph{F} iff \emph{v}(\emph{a})/\emph{x} is big. Now there's a
+good sense in which \emph{doubly} is a precise modifier, for the
+modification it makes to its attached predicate can be precisely
+defined, while \emph{bigly} is a vague modifier. That's the sense in
+which I mean some modifiers are vague and others are precise. Note that
+even though \emph{doubly} is precise it can be a constituent of a vague
+predicate, such as \emph{doubly tall}. That makes sense; just as a vague
+sentence need only contain one vague word, so need a vague complex
+predicate need only contain one vague word.
+
+Now we might well ask whether natural language modifiers like
+\emph{very} are vague or precise. I'm sad to say that I really don't
+have an answer to that question, but I think it's an excellent question.
+To get a sense of how hard it is, note one awkward feature of
+\emph{very} -- it is most comfortable attaching to words that are
+themselves vague. For instance (1a) is a sentence of English while (1b)
+is not.
+
+\begin{description}
+\item[(1)]
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item[]
+\item
+  Jack is very old.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Jack is very forty-seven years old.
+\end{enumerate}
+\end{description}
+
+I don't know whether this is a universal feature of \emph{very}. My best
+guess is that it is though in conversation some people have proposed
+interesting putative counterexamples. (I'm grateful here to Daniel
+Nolan.) But to avoid that complication, I'll introduce a new word
+\emph{very}. This modifier is defined such that if \emph{F} is vague
+then \emph{very}* \emph{F} means the same thing as \emph{very F}, and if
+\emph{F} is not vague then \emph{very* F} is meaningless, like
+\emph{very forty-seven years old}. It's an excellent question whether
+\emph{very} is vague, and I think it's a requirement on a definition of
+vagueness that it allow this question to be asked. As we'll see, this is
+sadly not true of most proposed definitions of vagueness on the market.
+
+\subsection{Philosophically Interesting Vague
+Terms}\label{philosophically-interesting-vague-terms}
+
+It's morally obligatory that someone with my standard of living donate
+1\% of their income to charity. It's not morally obligatory that someone
+with my standard of living donate 100\% of their income to charity. What
+is the largest \emph{x} such that it's morally obligatory that someone
+with my standard of living donate \emph{x}\% of their income to charity?
+(As a moralistic cheapskate I'd rather like to know.) Arguably this is
+vague. But perhaps only arguably. On some divine command theories it is
+precise, because there's a fact about what God wants me to do, however
+hard this is to figure out. (It's even a knowable fact, since God knows
+it.) But on more standard secular moral theories this may indeed be
+vague.
+
+There are two lessons to draw from this case. First, if two philosophers
+can debate what the correct theory of morality is while one thinks it is
+vague and the other thinks is precise, as I think could happen in a
+dispute between a divine command theorist and a virtue ethicist, then
+knowing that a vague term is vague is not required for understanding the
+term. (I assume here the divine command theorist is not so confused that
+she's not really talking about \emph{goodness}.)
+
+Second, it is important to remember that for some vague terms competent
+users of the term need not know in virtue of what they apply. Much of
+the literature on vagueness focuses on words like \emph{tall},
+\emph{thin} and \emph{bald} where all competent users know which kinds
+of underlying facts are relevant to their application. But not all vague
+terms are like that, as \emph{good} illustrates. And this phenomena
+extends beyond the normative, at least narrowly conceived. If you
+believe Tom Wolfe (\citeproc{ref-Wolfe2000}{2000}) then among the youth
+of America \emph{going out with} is vague and many do not know exactly
+in virtue of what it applies. It's a familiar point in philosophy of
+mind that competent users can disagree about what kinds of features a
+thing must have to satisfy \emph{is thinking}. And we can multiply
+instances of this by considering any area of philosophy we like.
+
+\subsection{Discrete Vague Terms}\label{discrete-vague-terms}
+
+An academic with one child has few children for an academic. An academic
+with five children does not have few children for an academic. (I'll
+omit the comparison class `for an academic' from now on.) Where is the
+borderline between those with few children and those not with few
+children? (I don't ask out of personal interest this time.) This
+question, like the question of how much giving is morally obligatory,
+feels vague. But note that we cannot generate a compelling Sorites
+paradox using \emph{has few children}. Let's see how badly this Sorites
+argument fails.
+
+\begin{description}
+\item[(2)]
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item[]
+\item
+  An academic with one child has few children.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  If an academic with one child has few children, then an academic with
+  two children has few children.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  If an academic with two children has few children, then an academic
+  with three children has few children.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  If an academic with three children has few children, then an academic
+  with four children has few children.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  If an academic with four children has few children, then an academic
+  with five children has few children.
+\end{enumerate}
+\end{description}
+
+Arguably premise (2e) is plausible because as a material conditional it
+can be seen to be true via the falsity of the antecedent. And at a pinch
+I can see (2d) as compellingly true for the same reason. But neither
+(2b) nor (2c) strike me as at all compelling. If someone presents this
+argument as a Sorites paradox, I simply deny that the paradox-mongerer
+can know these premises to be true, or that I have a reason to believe
+they are true. To be sure, I don't know which premise is false. (If you
+think you know b to be false replace academics in the example with a
+more fertile professional group.) But just because I don't know where
+the argument fails doesn't mean it presents any kind of paradox. When I
+have no reason to accept two, maybe three, of the premises, the argument
+falls well short of being paradoxical.
+
+A small note on terminology. Contemporary scientific theories imply that
+many familiar vague predicates apply in virtue of facts about the world
+that are, at some level, discrete. What I'm interested in under this
+heading are predicates where the differences between salient adjacent
+cases are easily observable, such as the difference between having two
+and three children.
+
+\subsection{Vagueness without
+Boundaries}\label{vagueness-without-boundaries}
+
+The letter of Patrick Greenough's proposal (to be discussed in
+Section~\ref{sec-greenough} below) suggests that every vague term has
+only vague boundaries. This is not true. The predicate \emph{in one's
+early thirties} has a sharp boundary at the lower end and a precise
+boundary at the upper end. But it isn't too hard to amend his theory to
+allow for such cases, by saying (in effect) that a vague term is a term
+with at least one vague boundary. Nicholas Smith makes basically that
+move in his paper. But such a move won't work, because some vague
+predicates don't have boundaries. Indeed, some predicates can be vague
+even though they are satisfied by every object in the domain. The
+examples here are a little more complicated than in the rest of the
+paper, but I think they are important enough to warrant the complexity.
+
+For the next several paragraphs the domain will be adult Australian
+women, and when I use \emph{tall} I'll mean tall for an adult Australian
+woman. I don't know enough facts to know where the boundaries are for
+\emph{tall} in this context, but I'll stipulate that a woman shorter
+than 170cm is determinately not tall, and a woman taller than 180cm is
+determinately tall. I claim here neither that I know where these
+boundaries are nor that I could know where they are. But I assume there
+are boundaries. I'm making these stipulations because it is easier to
+follow the examples if I use 170 and 180 rather than variables like
+\emph{y} and \emph{z}. It will become obvious that the particular
+numbers won't matter, as long as there's separation between them. It
+also doesn't matter whether we use a semantic or epistemic account of
+determinacy here. It will matter that we use classical logic at various
+points (e.g.~in assuming there are boundaries), but I think that's
+perfectly reasonable in this context. (Here I follow the arguments in
+section 2 of Greenough's paper.)
+
+Consider the class of predicates defined by the following schema.
+
+\begin{quote}
+\emph{tall\textsubscript{x}} =\textsubscript{df} tall or shorter than
+\emph{x} cm
+\end{quote}
+
+For \emph{x} \textless{} 170, \emph{tall\textsubscript{x}} has all the
+same borderline cases as \emph{tall}, and is presumably vague in
+anyone's book. For \emph{x}~\textgreater~180,
+\emph{tall\textsubscript{x}} determinately applies to everyone in the
+domain, and for now we'll say that makes it not vague. (Though note it
+need not determinately determinately apply to everyone in the domain,
+and we'll see below that might be a reason to group it with the vague
+predicates.)
+
+When \emph{x} is between 170 and 180, \emph{tall\textsubscript{x}} has
+some very odd properties. The borderline cases are those women whose
+height is between \emph{x} and 180cm. When \emph{x} is close to 180,
+this might be a very small border. While we're assuming classical logic,
+we can assume that there is a value \emph{y} such that women taller than
+\emph{y} cm are tall and those shorter than \emph{y} cm are not tall. We
+need not here assume the value of \emph{y} is either epistemically
+\emph{or semantically} determinate. Consider a value of \emph{x}, say
+179, such that \emph{x}~\textgreater~\emph{y}. (Again it's not a
+necessary assumption that 179~\textgreater~\emph{y}, but it makes the
+example easier to understand if I use a particular number.) Now
+\emph{tall}\textsubscript{179} has some interesting properties. It has
+borderline cases, those women between 179 and 180cm tall. But it is
+satisfied by every woman, since every woman is either tall or shorter
+than 179cm. I think the existence of the borderline cases is sufficient
+to make \emph{tall}\textsubscript{179} vague. Note that these cases are
+quite different to \emph{child}, because at the upper boundary there is
+no sharp jump from borderline cases to clear cases -- the two blur
+together in just the way borderline cases and clear cases of \emph{tall}
+blur together, so whatever reasons we had to worry about \emph{child}
+being vague are not applicable here. Still the `borderline cases' are
+mislabelled here for there is no border they fall on. Every woman
+satisfies the predicate. So no definition of vagueness in terms of
+having a vague boundary, indeed of having a boundary at all, can work.
+
+One might object here that a definition of vagueness is only meant to
+apply to words not phrases. But just as we can worry about a possible
+word \emph{child}, we can worry about a possible atomic word \emph{gish}
+that means the same thing as \emph{tall}\textsubscript{179}, so that
+move won't help here.
+
+We now have enough data on the table. In the next section I argue that
+treating vagueness as being indeterminacy provides a \emph{satisfactory}
+treatment of the data. In the third section I argue that none of the
+live alternatives is so satisfactory. So I conclude, somewhat
+tentatively, that we should define vagueness as indeterminacy.
+
+\section{Vagueness as Indeterminacy}\label{vagueness-as-indeterminacy}
+
+Back when I was a supervaluationist, I thought that what it was for a
+term to be vague was for it to refer to different things on different
+precisifications. That won't do as a theory-neutral definition, for it
+presupposes supervaluationism, which is not only a theory but a false
+theory. But we can capture the essential idea in slightly less loaded
+language.
+
+I will have to make three possibly controversial assumptions. First, I
+assume a broadly Montagovian perspective, on which we can talk about the
+referent of an arbitrary term. (See
+(\citeproc{ref-Montague1970}{Montague 1970},
+\citeproc{ref-Montague1973}{1973}) for more details.) That referent
+might be an object, or a truth value, or a function from objects to
+truth values, or a more complicated function built out of these. Second,
+I assume we can sensibly use an expanded Lagadonian language where
+objects can be names for themselves, truth-values can be names for
+themselves, functions from objects to truth-values can be names for
+themselves, and so on. (See Lewis 1986 for more on Lagadonian
+languages.) Third, I assume there is no metaphysical vagueness, so each
+of these Lagadonian names is not vague.
+
+Those assumptions let us make a first pass at a definition of vagueness,
+as follows. A term \emph{t} is vague iff there is some object,
+truth-value or function \emph{l} which can serve as its own name such
+that the following sentence is neither determinately true nor
+determinately false.
+
+That delivers the intuitively correct account in four of the five cases
+we discuss above, all except the cases like \emph{child}*. I'll say much
+more about that case below. But it is in one respect slightly too
+liberal, and we need to make a small adjustment or two to fix this.
+Consider a predicate \emph{F} that is defined over a vague domain, but
+which is determinately satisfied by every object in the domain.
+Intuitively it is a partial function, which maps every member of its
+domain to \emph{true}. And assume for sake of argument that it is
+determinate that it maps every member the domain to \emph{true}. (Say,
+for example, it means \emph{is self-identical} when applied to a member
+of the domain.) Such a predicate is not, I think, vague. But since it is
+indeterminate which partial function it denotes, the above theory
+suggests it is vague. We need to make a small adjustment. To state the
+corrected theory, we will stipulate that \emph{every} term denotes a
+function. What were previously thought of as terms denoting constants
+will be treated as terms denoting constant functions. So instead of a
+name like \emph{Scott Soames} denoting Scott Soames, we'll take it to
+denote the function that takes anything whatsoever as input, and
+returning Scott Soames as output. Given that, our second take at a
+definition of vagueness is as follows.
+
+\begin{quote}
+\emph{t} is vague iff ∃\emph{x}, \emph{y}\textsubscript{1},
+\emph{y}\textsubscript{2} such that
+\emph{y}\textsubscript{1}~≠~\emph{y}\textsubscript{2} and it is
+indeterminate whether ∃\emph{l} such that \emph{t} denotes \emph{l} and
+\emph{l}(\emph{x})~=~\emph{y}\textsubscript{1}, and it is indeterminate
+whether ∃\emph{l} such that \emph{t} denotes \emph{l} and
+\emph{l}(\emph{x})~=~\emph{y}\textsubscript{2}.
+\end{quote}
+
+To get a sense of the definition, it helps to translate it back into
+supervaluational talk, and look at the special case where \emph{t} is a
+predicate. Then the definition comes to the claim that there is some
+object that is in the extension of \emph{t} on one precisification, and
+in the anti-extension of \emph{t} on another, which seems like what was
+intended.
+
+Arguably even that is not enough of a correction. (I'm indebted in the
+following three paragraphs to Mark Johnston.) Frequently there are
+debates in semantics over the appropriate \emph{type} of various
+terms.\footnote{In what follows I'll refer to functions of type ⟨X,~Y⟩.
+  These are functions from things of type X to things of type Y, where
+  the basic types are entities, represented by e, and truth values,
+  represented by t. So a function of type ⟨e,t⟩ is a function from
+  objects to truth values, or, equivalently, the characteristic function
+  of a set. A function of type ⟨⟨e, t⟩, ⟨e,t⟩⟩ is a function from
+  characteristic functions of sets to characteristic functions of sets.
+  This is plausibly the semantic value of a predicate modifier like
+  \emph{very}.} For instance, a straightforward account would say that
+in \emph{She ran yesterday}, \emph{yesterday} modifies the intransitive
+verb \emph{run}, so it denotes a function of type ⟨⟨e,t⟩,~⟨e,t⟩⟩. But on
+a Davidsonian semantics, \emph{yesterday} denotes a property of the
+running event being discussed, so its type is simply ⟨e,t⟩. Now it is at
+least a philosophical possibility that there should be no fact of the
+matter which of these theories is correct.
+
+There are two things we might say about such a possibility. On the one
+hand, it doesn't at all seem right that a word should count as vague
+because it is indeterminate what its type should be. That suggests the
+above definition needs modification. On the other hand, the above
+definition doesn't imply \emph{t} is vague whenever there are two
+distinct functions that could be the denotation of \emph{t}; it must
+also be the case that these functions have overlapping domains. The most
+natural cases of syntactic indeterminacy are cases where the two
+possible denotations are functions of quite different types. That
+suggests the above definition needs no modification.
+
+I think the case for modification is a little stronger. That's partially
+because the possibility of type-shifting suggests there's a possibility,
+perhaps a distant one but a possibility, that the second suggestion
+could fail. And partially because even if there are no uncontroversial
+cases of syntactic indeterminacy that will mistakenly be treated as
+cases of vagueness by this theory, the mere possibility of classifying a
+case of syntactic indeterminacy as a case of vagueness should be enough
+to warrant concern. And there is a way to modify the definition that
+does not look like it will lead to mistakenly ruling out any cases of
+vagueness that should be ruled in, as follows.
+
+\begin{quote}
+\emph{t} is vague iff ∃\emph{x}, \emph{y}\textsubscript{1},
+\emph{y}\textsubscript{2} such that
+\emph{y}\textsubscript{1}~≠~\emph{y}\textsubscript{2} and
+\emph{y}\textsubscript{1} is of the same type as
+\emph{y}\textsubscript{2}, and it is indeterminate whether ∃\emph{l}
+such that \emph{t} denotes \emph{l} and
+\emph{l}(\emph{x})~=~\emph{y}\textsubscript{1}, and it is indeterminate
+whether ∃\emph{l} such that \emph{t} denotes \emph{l} and
+\emph{l}(\emph{x})~=~\emph{y}\textsubscript{2}.
+\end{quote}
+
+That implies that if \emph{yesterday} is indeterminate merely because it
+is indeterminate what type of function it denotes, it won't count as
+vague, and that's all to the good. So this is our final definition of
+vagueness.
+
+Still there's a problem with \emph{child}. Many people have thought that
+it should not be considered vague for one reason or another. Sometimes
+this is just asserted as a raw intuition, as in Smith and Eklund.
+There's no arguing with an intuition, so I won't try arguing with it.
+Rather I'll just repeat a point I made at the start. We aren't here in
+the business simply of summarising ordinary or philosophical intuitions.
+Rather we are looking for a definition that captures all the cases that
+fall into the most theoretically important categories. And intuitions
+about theoretical importance are less impressive than demonstrations of
+theoretical importance.
+
+Patrick Greenough (\citeproc{ref-Greenough2003}{2003}) suggests that the
+problem with terms like \emph{child} is that they aren't vague, but
+rather that they are simply undefined for the alleged borderline cases.
+If that's true, and perhaps for some of the examples people had in mind
+in this area it is, then our definition agrees that they are not vague.
+For a term that carves a precise division out of part of the domain, and
+then stays silent, is precise not vague on my account.
+
+Greenough also suggests that the problem with \emph{child} is that it is
+not higher-order vague.\footnote{When I say a term is higher-order
+  vague, I mean that it is subject to higher-order vagueness, not that
+  it is vague whether the term is vague.} But as he says this can hardly
+be the entirety of the problem. For it does not seem to be
+\emph{definitional} that the vague terms are also higher-order vague.
+True, there is a theoretically important category of terms that are
+vague and higher-order vague. But it is not a category that we cannot
+represent. A term \emph{t} is in this category just in case \emph{t} is
+vague, and \emph{definitely t} is vague, and \emph{definitely definitely
+t} is vague, and so on. So we can capture that category, even if we
+don't call only members of that category the vague terms. And this
+doesn't seem to diminish the theoretical importance of the category of
+terms I called vague.
+
+It might be thought that what is wrong with \emph{child} is that it
+cannot be used to generate a Sorites argument. If you think that's what
+is centrally important to vague terms, then there's a theoretical reason
+to separate \emph{child} from the genuinely vague. But we should have
+seen enough by now to show that that can't be right. It's hard to know
+what it is for a predicate modifier to be Sorites-susceptible, and our
+last two example predicates, \emph{has few children} and
+\emph{tall}\textsubscript{179} cannot be used to set up Sorites
+arguments. So that \emph{child} does not generate a Sorites paradox is
+no reason to classify it outside the vague.
+
+So I take it there is no compelling reason to classify \emph{child} and
+similar terms as precise rather than vague. Admittedly there is an
+intuition that they are not vague, and perhaps that should be respected.
+But if the cost of respecting that intuition is that we misclassify
+several other terms, we should reject the intuition. That's what I'll
+argue in the next section.
+
+\section{Rival Definitions}\label{sec-greenough}
+
+I just mentioned the idea that a vague predicate could be defined as one
+that is susceptible to a Sorites argument. This account is sometimes
+attributed to Delia Graff Fara (\citeproc{ref-Fara2000}{2000}), but it
+seems quite a widespread view. For instance, Terence Horgan
+(\citeproc{ref-Horgan1995}{1995}) says that it is distinctive of vague
+predicates that they can be used to generate \emph{inconsistency}
+because the Sorites premises attaching to them are \emph{true}. As I
+mentioned, such views are vulnerable to a wide variety of
+counterexamples. Many of these counterexamples also apply to rival
+definitions of vagueness.
+
+Matti Eklund (\citeproc{ref-Eklund2005}{2005}) develops a similar kind
+of definition. He starts with Crispin Wright's
+(\citeproc{ref-Wright1975}{1975}) famous definition of what it is for a
+predicate \emph{F} to be \emph{tolerant}.
+
+\begin{quote}
+Whereas large enough differences in \emph{F}'s parameter of application
+sometimes matter to the justice with which it is applied, some small
+enough difference never thus matters.
+\end{quote}
+
+Eklund's position then is that \emph{F} is vague iff it is part of
+semantic competence with respect to \emph{F} to be disposed to accept
+that \emph{F} is tolerant. Eklund agrees that it is inconsistent to
+assert that \emph{F} is indeed tolerant. But as he has argued
+extensively elsewhere, the falsity of the tolerance principle is
+compatible with it being part of competence that one is disposed to
+accept it. (A view in the same family is put forward in Sorensen
+(\citeproc{ref-Sorensen2001}{2001}).) I have no wish to dispute this
+part of Eklund's theory. Indeed that meaning principles can be false,
+even inconsistent, it seems to have been a fairly fruitful idea in a
+variety of areas of Eklund's philosophy. But I don't think it helps with
+vague terms.
+
+Three of the problems with this have already been given. It is not clear
+what a parameter of application for a non-predicate like \emph{very}
+even is, so it isn't clear what it means to say that \emph{very} is
+tolerant. It surely is not required of competent users of \emph{few
+children} that they are disposed to accept the premises in our earlier
+Sorites argument. And for some vague predicates, like
+\emph{tall}\textsubscript{179}, the tolerance principle is not plausible
+to a competent speaker because it is not plausible that a ``large
+enough'' difference in the parameter of application (presumably height)
+matters. These problems all seem to carry over from the problems
+associated with Sorites based definitions.
+
+I suspect, though I'm less certain here, that the philosophically
+interesting cases also pose a problem for Eklund's view. When we look at
+philosophically interesting cases, like \emph{being good}, there are two
+distinct ways to read Eklund's claim that competent speakers are
+disposed to accept the tolerance principle. These are the wide scope and
+the narrow scope reading. To see the ambiguity, let's write out Eklund's
+principle in full.
+
+\begin{quote}
+Competent speakers are disposed to accept that whereas large enough
+differences in \emph{F}'s parameter of application sometimes matter to
+the justice with which it is applied, some small enough difference never
+thus matters.
+\end{quote}
+
+Here's the wide scope reading of this.
+
+\begin{quote}
+\emph{F}'s parameter of application is such that whereas competent
+speakers are disposed to accept that large enough differences in it
+sometimes matter to the justice with which \emph{F} is applied, some
+small enough difference never thus matters.
+\end{quote}
+
+And here is the narrow scope reading, with a phrase added for emphasis.
+
+\begin{quote}
+Competent speakers are disposed to accept that whereas large enough
+differences in \emph{F}'s parameter of application, \emph{whatever it
+is}, sometimes matter to the justice with which it is applied, some
+small enough difference never thus matters.
+\end{quote}
+
+To see the difference between the two cases, assume for the sake of
+argument that a competent speaker thinks that to be good is to do
+actions whose consequences have a high enough utility, whereas in
+reality to be good is to obey enough of God's commands. In each case
+\emph{being good} is vague, because we are using satisficing versions of
+consequentialism and divine command theory. So the parameter of
+application for \emph{being good} is the number of God's commands you
+obey. The competent speaker will not accept the wide scope version of
+tolerance with respect to \emph{being good}, because they don't think
+that large differences with respect to how many of God's commands you
+obey matter to the justice with which \emph{being good} is applied. Such
+cases can be multiplied endlessly to show that the wide scope version of
+Eklund's principle cannot generally be true, because it makes it the
+case that competent speakers have correct views on contentious
+philosophical matters the resolution of which goes beyond semantic
+competence. For these reasons Eklund has said (personal communication)
+that he intends the narrow scope version.
+
+But the narrow scope version also faces some difficulties. The most
+direct problem is that one can be a competent user of a term like
+\emph{food} or \emph{dangerous} or \emph{beautiful} without having any
+thoughts about parameters of application. I suspect I was a competent
+user of these terms before I even had the concept of a parameter of
+application. Even bracketing this concern, there is a worry that
+competence requires knowing of a term whether it is vague or not. But
+this seems to be a mistake. It is not a requirement of competence with
+moral terms like \emph{good} that one know whether they are maximising
+or satisficing terms. Tom Wolfe and the students he observed while
+writing \emph{I Am Charlotte Simmons} seemed to disagree about whether
+\emph{going out with} is vague, but they were both competent users, they
+simply disagreed on something like a normative question. (See Wolfe
+(\citeproc{ref-Wolfe2000}{2000}) for more on his take on matters.) And
+it seems that two users of language could disagree over whether \emph{is
+thinking} is vague without disagreeing over whether either is a
+competent semanticist. They may well disagree over whether either is a
+competent philosopher of mind, but such disagreements are neither here
+nor there with respect to our present purposes. So I don't think that
+either disambiguation of Eklund's principle can properly account for
+vagueness in philosophically interesting terms.
+
+Nicholas Smith argues for a definition of vagueness that uses some
+heavier duty assumptions about the foundations of semantics. In
+particular, he sets out the following definition,
+
+\begin{quote}
+\textbf{Closeness}\\
+If \emph{a} and \emph{b} are very similar in \emph{F}-relevant respects,
+then \emph{Fa} and \emph{Fb} are very similar in respect of truth.
+\end{quote}
+
+and goes on to say that vague predicates are those that satisfy
+non-vacuously satisfy Closeness over some part of their domain. For this
+to work there must be, as Smith acknowledges, both degrees of truth and
+something like a distance metric defined on them. (These are separate
+assumptions; in the theory of Weatherson 2005 the first is true but not
+the second.) I won't question those assumptions, but rather focus on the
+problems the definition has even granting the assumptions.
+
+As with the two definitions considered so far, it is hard to see how
+this could possibly be generalised to cover vagueness in non-predicates.
+It's true (given our assumptions) that if \emph{a} and \emph{b} are
+similar in \emph{very tall}-relevant respects, then `\emph{a} is very
+tall' and `\emph{b} is very tall' will be similar in respect of truth.
+But that doesn't show \emph{very} is vague, for the same condition is
+satisfied when we replace \emph{very} with the precise modifier
+\emph{doubly}. This isn't an argument that Smith's definition
+\emph{couldn't} be extended to cover modifiers, but a claim that it is
+hard to see how this will work.
+
+The definition also has trouble with \emph{tall}\textsubscript{179} for
+this satisfies Closeness vacuously. Though to be fair given the logical
+assumptions Smith makes, it is possible that no predicate with the
+properties I've associated with \emph{tall}\textsubscript{179} can be
+defined.
+
+More seriously, there is a problem with predicates like \emph{has few
+children}. It just isn't true that ``An academic with two children has
+few children'' is close in truth value to ``An academic with one child
+has few children''. In general Smith's theory has trouble with,
+i.e.~rules out by definition, vague terms where the underlying `relevant
+respects' are highly discrete. Note that the problem here extends to
+some predicates where the underlying facts are continuous. Consider the
+predicate \emph{is very late for the meeting}. At least where I come
+from, a person who is roughly ten minutes late is a borderline case of
+this predicate. But which side of ten minutes late they are matters. (In
+what follows I make some wild guesses about how numerical degrees of
+truth, which aren't part of my preferred theory, should operate. But I
+think the guesses are defensible given the empirical data.) If Alice is
+nine and three-quarters minutes late, and Bob is ten and a quarter
+minutes late, then the degree of truth of ``Alice is very late'' will be
+much smaller than the degree of truth of ``Bob is very late''. The later
+you are the truer ``you are very late'' gets, but crossing
+conventionally salient barriers like the ten minutes barrier matter much
+more to the degree of truth than crossing other barriers like the nine
+minutes thirty-three seconds barrier. Smith (in conversation) has
+suggested that he's prepared to accept that \emph{is very late for the
+meeting} is only partially vague if the truth-values `jump' at the ten
+minute mark as I'm suggesting. But this seems improper, for this is as
+clear a case of a vague predicate as we have. Still, it's worth
+remembering as always that every definition has its costs, and this may
+be a cost one chooses to live with. Personally I think it is excessive.
+
+Patrick Greenough did not put forward his theory as a \emph{definition}
+of vagueness, but rather as a \emph{minimal theory} to which all
+partisans could agree. Like Eklund, Greenough plays off Crispin Wright's
+idea of tolerance. Roughly, a vague predicate is one that is
+epistemically tolerant -- it's one where you can't know that a small
+difference makes a difference. Here's a less rough statement of it,
+though note this is heavily paraphrased.
+
+Let τ be a variable that ranges over truth states (e.g.~true,
+determinately true, not determinately determinately not determinately
+true, etc.) \emph{v} a function from objects to real numbers such that
+whether \emph{x} is \emph{F} depends only on the value of
+\emph{v}(\emph{x}) (i.e.~\emph{v} is \emph{F}'s parameter of
+application) and \emph{c} a suitably small number. Then \emph{F} is
+vague iff the following claim non-vacuously holds.
+
+\begin{quote}
+∀τ∀⍺∀β∀\emph{a}∀\emph{b}, if \emph{v}(α) -
+\emph{v}(β)~\textless~\emph{c} and \emph{a} names α and \emph{b} names β
+and it is knowable that \emph{Fa} is τ then it is not knowable that
+\emph{Fb} is not τ.
+\end{quote}
+
+Less formally, we can't know where any boundary at any order of
+definiteness for \emph{F} lies. (It isn't clear in Greenough's
+presentation exactly what the non-vacuous condition comes to. He only
+explicitly says that for the special case where τ is \emph{is true}
+there must be an \emph{a} and a \emph{b} such it is knowable that
+\emph{Fa} is τ and \emph{Fb} is not τ, but maybe that should be extended
+to all τ.) Because of cases like \emph{in one's early thirties} this
+cannot do as a general definition, but it is easy enough to repair it by
+restricting the quantifier attaching to \emph{a} and \emph{b} to a range
+over which \emph{F} has only vague boundaries. Doing this amounts to
+weakening Greenough's claim from the view that vague terms have only
+vague boundaries to the view that they have some vague boundaries, which
+seems plausible. But still there are problems.
+
+Most obviously, \emph{tall}\textsubscript{179} does not non-vacuously
+satisfy the tolerance requirement. And like all the tolerance-based
+theories it is far from clear how it should be extended to vagueness in
+non-predicates. On the other hand, Greenough's theory might well handle
+the discrete cases like \emph{has few children}. I say \emph{might}
+rather than \emph{does} because it is rather hard to work out how the
+higher-orders of vagueness work for such terms. I'll simply note that
+there are some plausible enough epistemic models on which \emph{has few
+children} satisfies his requirement.
+
+There is a problem which is distinctive to Greenough's view of his
+theory as a minimal theory. As Smith notes, Greenough makes it a
+requirement that vague boundaries are unknown. But this is controverted
+in some mainstream theories, for example the version of
+supervaluationism in Dorr (\citeproc{ref-Dorr2003}{2003}). Since Dorr's
+theory should not be ruled out by a minimal theory or a definition, this
+is a weakness in Greenough's theory.
+
+The more philosophically interesting problems concern, appropriately
+enough, the philosophically interesting terms. Greenough has a proof
+that his definition is equivalent to a definition in terms of borderline
+cases. The proof has several assumptions, one of which being that we
+know what the parameter of application of a vague term is. More
+precisely, he assumes that we know everyone older than an old person is
+old, which is unproblematic, but he also assumes that the proof
+generalises to all vague cases, and this amounts to the assumption that
+we know parameters of application. As we've seen, this isn't true of
+philosophically interesting vague terms. This leaves open the
+possibility that Greenough's theory, unlike Smith's and Eklund's
+theories, overgenerates. The following is probably not a live
+possibility in any interesting sense, but it isn't I think the kind of
+thing a definition (or minimal theory) should rule out by definition.
+
+It is possible that a kind of mysterianism about ethics is true, and we
+cannot know whether \emph{good} is vague or precise. For a concrete
+example, let's assume it is knowable that some kind of divine command
+theory is true, but it is unknowable whether to be good one must obey
+all of God's commands or merely enough of them, where it is vague what
+counts as enough of them. In fact morality requires obeying all God's
+commands, but this is not knowable -- for all we know the satisficing
+version is the true moral theory. If this is the case then \emph{good}
+will be epistemically tolerant, for we cannot know that a small
+difference in how many of God's commands you obey makes a difference to
+whether you are good, or determinately good etc. But in fact \emph{good}
+is precise, for it precisely means obeying all of God's commands.
+Earlier I objected to Eklund's theory because semantic competence does
+not require knowing parameters of application, especially as such. This
+is the converse objection -- I claim that a term's being precise does
+not imply that we know, or even \emph{could know}, that it applies in
+virtue of a precise condition. All that matters is that it \emph{does}
+apply in virtue of a precise condition.
+
+It's a constant danger in philosophy that one infer from the falsity of
+all extant rivals that one's preferred theory is correct. I certainly
+don't want to argue that because Eklund's, Smith's and Greenough's
+definitions are incorrect that the traditionalist definition I have
+offered must be right. But we can make that conclusion more plausible by
+noting how widely the arguments levelled here generalise. The
+philosophically interesting cases seem to tell against \emph{any}
+definition of vagueness in terms of semantic competence, for they show
+that competent users can have exactly the same attitude towards vague
+terms as they have towards precise terms. And our moral example suggests
+that any definition in terms of epistemic properties will be in trouble
+for it might not be knowable whether a particular term is vague or
+precise. Finally, the cases of vague predicate modifiers raise
+difficulties for any attempt to define the vagueness of a term in terms
+of properties of sentences in which it is used rather than mentioned.
+For it seems that as long as \emph{very} attaches only to vague
+predicates, then whether \emph{very}* is vague or precise will make no
+salient differences to the sentences in which it appears. So we have to
+look at sentences in which the allegedly vague term is mentioned. And
+while I don't have a definitive argument here, I think looking at the
+range of cases we want to cover, and in particular at the range of cases
+where tolerance-type principles fail to be non-vacuously satisfied, our
+best option for completing these sentences is to look whether the term
+has a determinate or indeterminate denotation. We can then pass the
+questions of what determinacy consists in, and in particular the
+question of whether it is an epistemic or semantic feature, to the
+theorist of vagueness.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Dorr2003}
+Dorr, Cian. 2003. {``Vagueness Without Ignorance.''} \emph{Philosophical
+Perspectives} 17: 83--113. doi:
+\href{https://doi.org/10.1111/j.1520-8583.2003.00004.x}{10.1111/j.1520-8583.2003.00004.x}.
+
+\bibitem[\citeproctext]{ref-Eklund2005}
+Eklund, Matti. 2005. {``What Vagueness Consists In.''}
+\emph{Philosophical Studies} 125 (1): 27--60. doi:
+\href{https://doi.org/10.1007/s11098-005-7773-1}{10.1007/s11098-005-7773-1}.
+
+\bibitem[\citeproctext]{ref-Fara2000}
+Fara, Delia Graff. 2000. {``Shifting Sands: An Interest-Relative Theory
+of Vagueness.''} \emph{Philosophical Topics} 28 (1): 45--81. doi:
+\href{https://doi.org/10.5840/philtopics20002816}{10.5840/philtopics20002816}.
+This paper was published under the name {``Delia Graff.''}
+
+\bibitem[\citeproctext]{ref-Field1973}
+Field, Hartry. 1973. {``Theory Change and the Indeterminacy of
+Reference.''} \emph{Journal of Philosophy} 70 (14): 462--81. doi:
+\href{https://doi.org/10.2307/2025110}{10.2307/2025110}.
+
+\bibitem[\citeproctext]{ref-Fine1975a}
+Fine, Kit. 1975. {``Vagueness, Truth and Logic.''} \emph{Synthese} 30
+(3-4): 265--300. doi:
+\href{https://doi.org/10.1007/bf00485047}{10.1007/bf00485047}.
+
+\bibitem[\citeproctext]{ref-Greenough2003}
+Greenough, Patrick. 2003. {``Vagueness: A Minimal Theory.''} \emph{Mind}
+112 (446): 235--81. doi:
+\href{https://doi.org/10.1093/mind/112.446.235}{10.1093/mind/112.446.235}.
+
+\bibitem[\citeproctext]{ref-Horgan1995}
+Horgan, Terrence. 1995. {``Transvaluationism: A Dionysian Approach to
+Vagueness.''} \emph{Southern Journal of Philosophy} 33: Spindel
+Conference Supplement: 97--125. doi:
+\href{https://doi.org/10.1111/j.2041-6962.1995.tb00765.x}{10.1111/j.2041-6962.1995.tb00765.x}.
+
+\bibitem[\citeproctext]{ref-Montague1970}
+Montague, Richard. 1970. {``Universal Grammar.''} \emph{Theoria} 36 (3):
+373--98. doi:
+\href{https://doi.org/10.1111/j.1755-2567.1970.tb00434.x}{10.1111/j.1755-2567.1970.tb00434.x}.
+
+\bibitem[\citeproctext]{ref-Montague1973}
+---------. 1973. {``The Proper Treatment of Quantification in Ordinary
+English.''} In \emph{Approaches to Ordinary Language}, edited by K. J.
+J. Hintikka, J. M. E. Moravcsik, and P. Suppes, 221--42. Dordrecht:
+Reidel.
+
+\bibitem[\citeproctext]{ref-Sainsbury1991}
+Sainsbury, Mark. 1991. {``Is There Higher-Order Vagueness?''} \emph{The
+Philosophical Quarterly} 41 (163): 167--82. doi:
+\href{https://doi.org/10.2307/2219591}{10.2307/2219591}.
+
+\bibitem[\citeproctext]{ref-Sorensen2001}
+Sorensen, Roy. 2001. \emph{Vagueness and Contradiction}. Oxford: Oxford
+University Press.
+
+\bibitem[\citeproctext]{ref-Wolfe2000}
+Wolfe, Tom. 2000. \emph{Hooking up}. Farrar, Strauss; Giroux: New York.
+
+\bibitem[\citeproctext]{ref-Wright1975}
+Wright, Crispin. 1975. {``On the Coherence of Vague Predicates.''}
+\emph{Synthese} 30 (3-4): 325--65. doi:
+\href{https://doi.org/10.1007/bf00485049}{10.1007/bf00485049}.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Cuts and Clouds: Vagueness, its Nature, and its Logic}, 2018, pp. 77-90.
+
+\end{document}

@@ -1,0 +1,1282 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Probability and Scepticism
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Probability and Scepticism},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Probability and Scepticism}
+\author{Brian Weatherson}
+\date{2014}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+One way to motivate scepticism is by looking at the ways we might
+possibly know we aren't brains in vats. Could we know we aren't brains
+in vats a priori? Many will say no, since it is possible to be a brain
+in a vat. Could we know it on the basis of evidence? The chapter argues
+that given some commonly held assumptions, the answer is no. In
+particular, there is a kind of sceptical hypothesis whose probability is
+decreased by conditionalising on the evidence we have. Using this fact,
+I argue that if we want to say our knowledge that we aren't brains in
+vats is a posteriori, we have to give up the view that all updating on
+evidence is by conditionalisation.
+\end{abstract}
+
+\setstretch{1.1}
+\section{The Humean Sceptical
+Argument}\label{the-humean-sceptical-argument}
+
+The following, broadly Humean, sceptical argument is fascinating for
+many reasons.\footnote{On how closely this argument resembles Hume's
+  argument for inductive scepticism, see Okasha
+  (\citeproc{ref-Okasha2001}{2001}, \citeproc{ref-Okasha2005}{2005}).
+  I've previously discussed the argument in Weatherson
+  (\citeproc{ref-WeathersonSRE}{2005b}) and Weatherson
+  (\citeproc{ref-Weatherson2007}{2007}).} In the argument \emph{E} is
+the agent's evidence, \emph{H} is some hypothesis derived by ampliative
+reasoning from her evidence, and ⊃ is the (classical) material
+conditional, i.e., ¬\emph{E}~∨~\emph{H}.\footnote{I'm going to assume
+  throughout that we aren't dealing with the special case where the
+  prior credence of \emph{E} is 0, or of \emph{H} is 1. That will do
+  some work in section 2.}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  It is not possible for the agent to know \emph{E}~⊃~\emph{H}~\emph{a
+  priori}.
+\item
+  It is not possible for the agent to know \emph{E}~⊃~\emph{H}~\emph{a
+  posteriori}.
+\item
+  So, it is not possible for the agent to know \emph{E}~⊃~\emph{H}.
+\end{enumerate}
+
+If we add as an extra premise that if the agent does know \emph{H}, then
+it is possible for her to know \emph{E}~⊃~\emph{H}~by using
+∨-introduction, we get the conclusion that the agent does not really
+know \emph{H}. But even without that closure premise, or something like
+it, the conclusion seems quite dramatic.
+
+One possible response to the argument, floated by both Descartes and
+Hume, is to accept the conclusion and embrace scepticism. We cannot know
+anything that goes beyond our evidence, so we do not know very much at
+all. This is a remarkably sceptical conclusion, so we should resist it
+if at all possible.
+
+A more modern response, associated perhaps most strongly with Timothy
+Williamson's view that our evidence just is as our knowledge, is to
+accept the conclusion but deny it is as sceptical as it first appears
+(\citeproc{ref-Williamson1998-WILCOK}{Williamson 1998},
+\citeproc{ref-Williamson2000-WILSAE-2}{2000}). The Humean argument, even
+if it works, only shows that our evidence and our knowledge are more
+closely linked than we might have thought. Perhaps that's true because
+we have a lot of evidence, not because we have very little knowledge.
+
+There's something right about this response I think. We have more
+evidence than Descartes or even Hume thought we had. But I think we
+still need the idea of ampliative knowledge. It stretches the concept of
+evidence to breaking point to suggest that all of our knowledge,
+including knowledge about the future, is part of our evidence. So the
+conclusion really is unacceptable. Or, at least, I think we should try
+to see what an epistemology that rejects the conclusion looks like.
+
+I'm going to argue here that such an epistemology has to deviate in one
+way or another from orthodox views. In particular, I'll argue that it
+has to accept deeply contingent \emph{a priori}~knowledge, or reject the
+idea that probabilistic updating should always go by conditionalisation.
+
+\section{\texorpdfstring{A Probabilistic Argument for the \emph{a
+posteriori}~Premise}{A Probabilistic Argument for the a posteriori~Premise}}\label{a-probabilistic-argument-for-the-a-posteriori-premise}
+
+Rejecting the conclusion would be easy if it was easy to reject the
+premises. But in fact there are quite strong defences of each of the
+premises. Let's look at some of them.
+
+The simplest argument in favour of premise 1 uses a little bit of
+empiricism. It could turn out to be true that \emph{E}~⊃~\emph{H}. What
+could turn out to be false can only be known \emph{a
+posteriori}.\footnote{I'm using `could turn out to be false' in the
+  sense described in Yablo (\citeproc{ref-Yablo2002}{2002}).} So we
+can't know \emph{a priori}~that \emph{E}~⊃~\emph{H}. The crucial premise
+there, about the limits of the \emph{a priori}, is the distinctively
+empiricist assumption, but it is shared by a lot of contemporary
+philosophers.\footnote{When I say it is an `empiricist' assumption, I
+  mean that the two ways of rejecting it correspond to two things
+  classical empiricists rejected. One is that we can reason our way,
+  perhaps abductively, to substantive knowledge about the external
+  world, a la Vogel (\citeproc{ref-Vogel1990}{1990}) or BonJour
+  (\citeproc{ref-BonJour1997}{1997}) . The other is that we have
+  substantial innate knowledge about the external world, and this is not
+  justified by empirical evidence, but perhaps by its reliability. It's
+  interesting that these two forms of rejection are associated with very
+  different views in contemporary philosophy, but they seem both
+  anti-empiricist to me.}
+
+The simplest argument in favour of premise 2 uses a little bit of
+rationalism, though I think it takes a little more to see that it is a
+rationalist assumption. Here's the argument in premise-conclusion form;
+we'll go through each of the premises at some length below. So as to
+avoid confusion with the Humean argument, I've named the premises rather
+than numbered them.
+
+\begin{description}
+\item[Credences are Classical Probabilities (CCP)]
+\emph{Cr} is a classical probability function.
+\item[Updating Theorem (UT)]
+Let \emph{E} = \emph{E}\textsubscript{1}\(\wedge \dots \wedge\)
+\emph{E\textsubscript{n}}, Pr(\emph{E}) \textgreater{} 0, Pr(\emph{H})
+\textless{} 1, Pr(E ⊃ H) \textless{} 1 and for each \emph{i},
+Pr(\emph{E\textsubscript{i}}) \textless{} 1. And assume Pr is a
+classical probability function. Then
+Pr(\emph{E}~⊃~\emph{H}~\textbar~\emph{E\textsubscript{i}}) \textless{}
+Pr(\emph{E}~⊃~\emph{H}).
+\item[Updating is Conditionalisation (UIC)]
+If we use \emph{Cr} to measure our rational agent's credences, and
+\emph{Cr\textsubscript{Y}} to be her credences after updating with
+evidence \emph{Y}, then \emph{Cr\textsubscript{Y}}(\emph{X}) =
+\emph{Cr}(\emph{X}~\textbar~\emph{Y}) for all \(X, Y\).
+\item[Learning Doesn't Lower Credence (LDLC)]
+It is impossible for a rational agent to learn \emph{X} on the basis of
+evidence \emph{Y} if \emph{Cr\textsubscript{Y}}(\emph{X}) \textless{}
+\emph{Cr}(\emph{X}).
+\item[Knowledge Requires Learning (KRL)]
+If the agent knows \emph{E}~⊃~\emph{H}~\emph{a posteriori}, i.e., on the
+basis of her empirical evidence, then there is some part of her evidence
+\emph{E\textsubscript{i}} on the basis of which she learned
+\emph{E}~⊃~\emph{H}, and before she learned it, her credence in
+\emph{E\textsubscript{i}} is less than 1.\footnote{When I say `part'
+  here, I just mean that \emph{E\textsubscript{i}} is one of the
+  conjuncts of \emph{E}. This may require relabelling, if for instance
+  the basis for \emph{E}~⊃~\emph{H}~consists of many conjuncts of
+  \emph{E} under some representation; just collect all those into a
+  single conjunct.}
+\item[Humean Conclusion (HC)]
+So, it is impossible to know \emph{E}~⊃~\emph{H}~\emph{a
+posteriori}.\footnote{\emph{Proof}: Assume for \emph{reductio} that we
+  can know \emph{E}~⊃~\emph{H}~\emph{a posteriori}. So by (KRL) there is
+  some \emph{E\textsubscript{i}} that is the basis of this knowledge,
+  such that before she learned it, her credence in it was less than 1.
+  When she does learn \emph{E\textsubscript{i}}, she conditionalises her
+  credences, as required by (UIC). So updating (i.e., conditionalising)
+  on \emph{E\textsubscript{i}} raised its credence to 1, but by (LDLC)
+  did not lower the agent's credence in \emph{E}~⊃~\emph{H}. As we noted
+  in footnote 2, we're assuming \emph{Cr}(\emph{E}) \textgreater{}
+  0\(, and by (CCP) we're assuming (Cr) is a classical probability function, so *Cr*(*E~i~*) > 0\).
+  We also assumed \emph{Cr}(\emph{H}) \textless{} 1. So the conditions
+  for applying (UIT) are all satisfied, and hence her credence in
+  \emph{E}~⊃~\emph{H}~goes down when she updates in
+  \emph{E\textsubscript{i}}. That contradicts our earlier conclusion
+  that it does not go down, completing the \emph{reductio}.}
+\end{description}
+
+Now if someone wants to reject the Humean argument at premise 2, they
+better reject one of these five principles. But the principles are each
+reasonably strong.
+
+\subsection{Classical and Non-Classical
+Credences}\label{classical-and-non-classical-credences}
+
+There is a huge literature on whether credence functions should be
+probability functions. For a good recent overview, see Hájek
+(\citeproc{ref-Hajek2008}{2008}). Most of that literature has assumed
+that the underlying logic we use in reasoning under uncertainty should
+be classical. But this assumption can be questioned too, as I did in
+Weatherson (\citeproc{ref-Weatherson2004}{2003}). It turns out this
+matters for the argument here. Without some extensive use of classical
+assumptions, it doesn't always hold that
+Pr(\emph{E}~⊃~\emph{H}\textbar{}\emph{E}) \textless{}
+Pr(\emph{E}~⊃~\emph{H}). (For more on this, see Jehle and Weatherson
+(\citeproc{ref-JehleWeatherson}{2012}).) In principle, that's one
+possible way out of the argument. But I imagine it will be too costly a
+way out for most philosophers.
+
+\subsection{The Updating Theorem}\label{the-updating-theorem}
+
+This is a theorem, so it is harder to reject! It's not a new theorem by
+any stretch; in fact it is a fairly simple result. Here's a proof of it.
+The proof uses the following very familiar result from the classical
+probability calculus.
+
+\[
+\Pr(X) = \Pr(X | Y)\Pr(Y) + \Pr(X | \neg Y)\Pr(\neg Y)
+\]
+
+We'll substitute \emph{E}~⊃~\emph{H}~for \emph{X} and
+\emph{E\textsubscript{i}} for \emph{Y}, to get.
+
+\[
+\Pr(E \supset H) = \Pr(*E* ⊃ *H*| *E~i~*)\Pr(*E~i~*) + \Pr(*E* ⊃ *H*| \neg *E~i~*)\Pr(\neg *E~i~*)
+\]
+
+Since ¬\emph{E\textsubscript{i}} entails \emph{E}~⊃~\emph{H}~it follows
+that Pr(\emph{E}~⊃~\emph{H}\textbar{} ¬\emph{E\textsubscript{i}}) = 1.
+And since Pr(\emph{E}~⊃~\emph{H}\textbar{}\emph{E\textsubscript{i}})
+\(\leq\) 1, it follows that
+\(\Pr(*E* ⊃ *H*| *E~i~*) \leq \Pr(*E* ⊃ *H*| \neg *E~i~*)\). So
+substituting \(\Pr(*E* ⊃ *H*| *E~i~*)\) for
+\(\Pr(*E* ⊃ *H*| \neg *E~i~*)\) on the right-hand side of that equation,
+and noting that we can't make the right-hand side larger by that
+substitution, we get,
+
+\[\Pr(E \supset H) \geq \Pr(*E* ⊃ *H*| *E~i~*)\Pr(*E~i~*) + \Pr(*E* ⊃ *H*| *E~i~*)\Pr(\neg *E~i~*)\]
+
+with equality only if
+\(\Pr(*E* ⊃ *H*| *E~i~*) = \Pr(*E* ⊃ *H*| \neg *E~i~*) = 1\) or
+\(\Pr(\neg *E~i~*) = 0\). But we assumed that \(\Pr(*E~i~*) < 1\), so
+\(\Pr(\neg *E~i~*) \neq 0\). We'll come back to the argument that
+\(\Pr(*E* ⊃ *H*| *E~i~*) < 1\). Note for now that we can rewrite that
+inequality by factoring out \(\Pr(*E* ⊃ *H*| *E~i~*)\), to get
+
+\[\Pr(E \supset H) \geq \Pr(*E* ⊃ *H*| *E~i~*)(\Pr(*E~i~*) + \Pr(\neg *E~i~*))\]
+
+But \(\Pr(*E~i~*) + \Pr(\neg *E~i~*) = 1\), is a trivial theorem of the
+classical probability calculus, so this just reduces to:
+
+\[\Pr(E \supset H) \geq \Pr(*E* ⊃ *H*| *E~i~*)\]
+
+Since \(\Pr(E \supset H) \geq \Pr(*E* ⊃ *H*| *E~i~*)\), and we assumed
+\(\Pr(E \supset H) < 1\), it follows that
+\(\Pr(*E* ⊃ *H*| *E~i~*) < 1\). But that means neither condition for the
+inequality introduced above to not be strict is satisfied. So in fact we
+can conclude:
+
+\[\Pr(E \supset H) > \Pr(*E* ⊃ *H*| *E~i~*)\]
+
+as required.
+
+\subsection{Updating and
+Conditionalising}\label{updating-and-conditionalising}
+
+In Weatherson (\citeproc{ref-Weatherson2007}{2007}), I argue that
+philosophers who are sympathetic to empiricism (broadly construed)
+should reject (UIC). That's because (UIC) embodies a very implausible
+picture of the relationship between evidence and hypotheses. We can see
+this more clearly if we think about the non-probabilistic case first.
+Consider the following hypothesis.
+
+\begin{itemize}
+\tightlist
+\item
+  After learning \emph{E}, an agent should believe \emph{H} iff they
+  believed \emph{E}~⊃~\emph{H}~before learning \emph{E}.
+\end{itemize}
+
+This picture suggests that all a rational agent has to do is line up all
+their thoughts at the beginning of time, or I guess of inquiry, and then
+go around collecting evidence and applying modus ponens. Indeed, it says
+there is nothing else that would be rational to do. This strikes me as
+implausible in the extreme. There are many more rules we can use to get
+from evidence to conclusion than modus ponens applied to pre-known
+conditionals. Sometimes, it is only by getting some evidence that we are
+in a position to see what that evidence supports.\footnote{In
+  (\citeproc{ref-Weatherson2007}{Weatherson 2007}) I argue for this by
+  considering agents with radically different kinds of evidence to ours,
+  and noting how much we could know about what kinds of conclusions
+  their evidence supports, and what they could know about what kinds of
+  conclusions our evidence supports.}
+
+Now the rule that we should always update by conditionalisation is like
+the rule that we should always update by modus ponens in the way just
+suggested. Instead of saying that learning \emph{E} doesn't change which
+conditionals with antecedent \emph{E} we can know to be true, it says
+that learning \emph{E} doesn't change the conditional probability of
+anything given \emph{E}. And it seems equally implausible for just the
+same reason.
+
+So I don't think (UIC) is right, and I suspect at the end of the day
+rejecting it is the best way to avoid the Humean sceptical argument. But
+I do think that there are many people who are not so sceptical (as a
+casual perusal of the literature on conditionalisation will show). And
+there may be several others who are implicitly committed to (UIC),
+whether or not they explicitly acknowledge that fact. So I think it is
+interesting to see how (UIC) can promote a certain kind of
+scepticism.\footnote{Of course, I'm hardly the only person to promote
+  doubts about (UIC). See Arntzenius
+  (\citeproc{ref-Arntzenius2003-ARNSPF}{2003}) for some very different
+  kind of criticisms.}
+
+\subsection{Learning and Credence}\label{learning-and-credence}
+
+We will look at a lot of cases that seem to raise problems for (LDLC)
+below. But first I just wanted to note that the restriction to rational
+agents avoids one quick problem for the principle. An irrational agent
+might simply ignore very good evidence for \emph{p}, and then come to
+believe \emph{p} on the basis of evidence that undermines that initial
+evidence for \emph{p}, but provides an independent (but weaker) basis
+for believing \emph{p}. She really could learn \emph{p} on the second
+basis, even though its probability was lowered.
+
+The restriction to rational agents is intended to rule out such a case.
+We assume that the agent has antecedently taken correct account of the
+available evidence. If that isn't the case, then something which lowers
+the probability of \emph{p} can ground knowledge that \emph{p}, perhaps
+because it reinforces evidence that \emph{S} had, but was not properly
+using. What's interesting is whether we can have violations of (LDLC)
+without irrationality.
+
+\subsection{Learning and Knowing}\label{learning-and-knowing}
+
+You might think that the last premise, (KRL), would be the easiest one
+to defend. Arguably something even stronger is an analytic truth, namely
+that \emph{S} learns \emph{p} at \emph{t} iff \emph{S} knows \emph{p} at
+\emph{t} but not before \emph{p}. Indeed, I used to think this. But it
+isn't actually true. What is plausibly true, as we'll see by some
+reflections on learning, is that knowing requires either innate
+knowledge or learning. But the relationship between the learning and the
+knowing may be very complicated indeed. Let's turn to that relationship
+now.
+
+\section{Learning and Defeaters}\label{learning-and-defeaters}
+
+In an earlier version of this paper, I worked with a much simpler
+premise, namely that coming to know required probability non-decrease.
+But that isn't right.\footnote{The essential reason it isn't right was
+  pointed out by Martin Smith in comments on this paper at the 2009
+  Arché scepticism conference. This section is basically a response to
+  the good objections he raised to the earlier version of the paper.}
+The problem is that the view in question doesn't account for defeaters.
+
+Here's a schematic version of the kind of case that causes problems.
+Assume \emph{S} has a justified true belief that \emph{p}. Assume also
+that there is some defeater \emph{D} that blocks \emph{S}'s belief from
+being knowledge. Now imagine an event happens that (a) slightly lowers
+the evidential probability of \emph{p} for \emph{S}, and (b) defeats the
+defeater \emph{D}. Then after the event, it may be that \emph{S} knows
+that \emph{p}, although she does so in part in virtue of an event that
+lowered the probability of \emph{p}.
+
+The schematic version of this argument is much more plausible than any
+particular case, since defeaters are often very hard to get clear
+judgments about. But here are three cases that may illustrate the kind
+of thing I have in mind.
+
+\begin{quote}
+\textbf{Dead Dictator}
+
+Carol is trapped in Gilbert Harman's dead dictator story
+(\citeproc{ref-Harman1973}{Harman 1973, 75}). At
+\emph{t}\textsubscript{1} she reads the one newspaper that correctly
+(and sensitively) reported that the dictator has died. She hasn't seen
+the copious other reports that the dictator is alive, but the existence
+of those reports defeats her putative knowledge that the dictator is
+alive. At \emph{t}\textsubscript{2}, all the other news sources change
+their tune, and acknowledge the dictator has died. Carol doesn't see any
+of those newspapers; she's too busy playing Farmville. But Carol's
+memory very slowly degrades over time (as most memories do), so at
+\emph{t}\textsubscript{2} her evidence that the dictator died is
+slightly weaker than at \emph{t}\textsubscript{1}. Still, over the time
+between \emph{t}\textsubscript{1} and \emph{t}\textsubscript{2} while
+she played Farmville, she came to know the dictator had died, even while
+the (evidential) probability of that decreased.
+\end{quote}
+
+\begin{quote}
+\textbf{Fake Barns}
+
+Bob starts our story in Fake Barn Country
+(\citeproc{ref-Goldman1976}{Goldman 1976}). At
+\emph{t}\textsubscript{1}, he starts looking straight at a genuine barn
+on a distant hill, and forms the belief that there is a barn on that
+hill. Since he's in fake barn country, he doesn't know there is a barn
+on the hill. At \emph{t}\textsubscript{2}, while Bob is still looking at
+the one genuine barn, all the fake barns are instantly destroyed by a
+visiting spaceship, from a race which doesn't put up with nonsense like
+fake barns. The mist from the vaporised barns slightly clouds Bob's
+vision, so he doesn't have quite as clear a view of the barn on the
+hill. But he still has an excellent view, so after the barns are
+destroyed, Bob's belief that there is a barn on that hill is knowledge.
+So at \emph{t}\textsubscript{2} he comes to know, for the first time,
+that there is a barn on that hill. But the vaporisation of the fake
+barns, which is what lets him come to know that there is a barn on that
+hill, doesn't raise the (evidential) probability that there is a barn
+there.\footnote{It does raise the probability that a randomly selected
+  barn-like structure in Bob's vicinity is a barn, but that's not the
+  evidential probability for Bob of there being a barn in that hill.}
+Indeed, by making Bob's vision a little cloudier, it lowers that
+probability.
+\end{quote}
+
+\begin{quote}
+\textbf{Gettier Cases}
+
+Ted starts our story believing (truly, at least in the world of the
+story) that Bertrand Russell was the last analytic philosopher to win
+the Nobel Prize in literature. The next day, the 2011 Nobel Prize in
+literature is announced. At \emph{t}\textsubscript{1}, a trustworthy and
+very reliable friend of Ted's tells him that Fred has won the Nobel
+Prize in literature. Ted believes this, and since Fred is an analytic
+philosopher, Ted reasonably infers that, as of 2011 at least, Bertrand
+Russell was not the last analytic philosopher to win the Nobel Prize in
+literature. This conclusion is true, but not because Fred won. In fact,
+Ed, who is also an analytic philosopher, won the 2011 Nobel Prize in
+literature. At \emph{t}\textsubscript{2}, Ted is told by a friend who is
+just slightly less reliable than the first friend that it is Ed, not
+Fred, who won the prize.\footnote{Presumably for
+  (\citeproc{ref-Gettier1963}{Gettier 1963}).} Since Ted knows that Ed
+is also an analytic philosopher, this doesn't change his belief that
+Bertrand Russell was not the last analytic philosopher to win the Nobel
+Prize in literature. But it does change that belief from a mere
+justified true belief into knowledge.
+
+At \emph{t}\textsubscript{1}, Ted didn't know that Bertrand Russell was
+not the last analytic philosopher to win the Nobel Prize in literature,
+since his true belief was based on a falsehood.\footnote{I'm not
+  presupposing here that we can never get knowledge from false beliefs,
+  just that the falsity of Ted's initial belief explains why his
+  subsequent belief is not knowledge. For more on this point, see
+  Warfield (\citeproc{ref-Warfield2005}{2005}).} At
+\emph{t}\textsubscript{2}, he did know this, on the basis of the second
+friend's testimony. But since the second friend was less reliable, and
+since the second piece of testimony raised doubts about the first in
+ways that render each of them suspect, the probability of Ted's
+conclusion was lower at \emph{t}\textsubscript{2} than
+\emph{t}\textsubscript{1}. So the second piece of testimony both lowered
+the probability of Ted's conclusion, and turned it into knowledge.
+\end{quote}
+
+In every one of those cases, something happens that ever so slightly
+lowers the probability of \emph{p}, and also defeats a defeater of the
+agent's knowledge that \emph{p}. So the agent gets knowledge that
+\emph{p} in virtue of an event that lowers the probability of \emph{p}.
+
+But there is, in general, something odd about events that bring about a
+conclusion by double prevention. There's a big difference between being
+responsible for a pot of soup in virtue of preparing and cooking it, and
+being responsible for it in virtue of removing the banana peel that the
+chef would have slipped on when bringing the pot to the table. The same
+goes for knowledge; things that remove defeaters of knowledge are
+importantly different in kind to the underlying bases for knowledge.
+
+The difference in question is one that we mark in language. We say that
+the chef cooked, or prepared, the soup. We don't say that the banana
+peel remover did either of those things, although she may have caused
+the soup to be ready to eat. In the three cases described above, I think
+it's odd to say that the agent \emph{learns} that \emph{p} in virtue of
+the defeater being defeated.\footnote{A quick sample of informants
+  suggests that this is much less odd in the Gettier case than in the
+  other two cases. We'll come back to this point below.}
+
+Carol can't learn that the dictator has died while she is busy playing
+Farmville, and not being in any contact (of the right kind) with the
+outside world. So the passage of time from \emph{t}\textsubscript{1} to
+\emph{t}\textsubscript{2} doesn't cause her to \emph{learn} the dictator
+has died. If she ever learned this, she learned it at
+\emph{t}\textsubscript{1}. And surely she did learn it. It wasn't innate
+knowledge, and it wasn't knowledge that was somehow implanted in her, in
+the way characters in the movie \emph{The Matrix} can have knowledge
+implanted directly into their brain.\footnote{It's a delicate question
+  whether this kind of procedure is properly called learning. I'm
+  inclined to say that it is, but I suspect a lot of people aren't, so
+  didn't want to presuppose my own idiosyncratic usage here. Thanks here
+  to Jonathan Livengood and Daniele Sgaravatti.} So she learned the
+dictator died, and the only learning she did took place at
+\emph{t}\textsubscript{1}, so she learned that the dictator died at
+\emph{t}\textsubscript{1}.
+
+I think the same thing is true in the other cases. Bob learns that there
+is a barn on that hill at \emph{t}\textsubscript{1}, but doesn't know
+this until \emph{t}\textsubscript{2}. And Ted learns that Russell is not
+the last analytic philosopher to win at \emph{t}\textsubscript{1}, but
+doesn't know this until \emph{t}\textsubscript{2}. So actually cases
+where defeaters are defeated by probability lowerers are not
+counterexamples to (LDLC).
+
+Officially, that completes my defence of (LDLC) from this kind of
+objection. But I know that not everyone agrees with my judgments about
+these three cases, especially the last. So I wanted to say a bit about
+why the overall argument is not overly affected even if I'm wrong about
+(LDLC).
+
+Note that in all three of the cases, there are two distinctive things
+that happen at \emph{t}\textsubscript{1}. The agent gets a lot of
+evidence in favour of \emph{p}. And the agent gets some kind of defeater
+that prevents beliefs based on that evidence turning into knowledge. Now
+let's say that the probabilistic argument that \emph{E}~⊃~\emph{H}~can't
+be known \emph{a posteriori}~fails because of an analogy with these
+cases. That is, let's suppose that \emph{E}~⊃~\emph{H}~can be known
+\emph{a posteriori}~even though all the empirical evidence \emph{lowers}
+its probability, and the explanation for how this is possible is by
+analogy with cases like \textbf{Dead Dictator}. Then we should be able
+to find analogies for these two properties: something sometime raises
+the probability of \emph{p}, and there is a defeater that prevents
+\emph{p} being known despite having a high probability.
+
+The first putative point of analogy obviously fails. After all,
+\emph{E}~⊃~\emph{H}~was designed so that the agent \emph{never} gets
+evidence that raises its probability. So we should already be suspicious
+of such an analogy going through. But the second putative point of
+analogy is actually pretty interesting. Could there be a defeater that
+prevents someone \emph{knowing a priori} that \emph{E}~⊃~\emph{H}~even
+though the \emph{a priori}~probability of \emph{E}~⊃~\emph{H}~is very
+high?\footnote{Why are we interested in whether we can prevent \emph{a
+  priori}~knowledge of \emph{E}~⊃~\emph{H}? Because we're interested in
+  ways in which \emph{E}~⊃~\emph{H}~can be known \emph{a posteriori},
+  and by definition that means that it isn't known \emph{a priori}. The
+  idea I'm floating here, which I don't think will work, is that the
+  first \emph{knowledge} of \emph{E}~⊃~\emph{H}~is after the agent gets
+  some evidence, and because she gets that evidence, although
+  \emph{E}~⊃~\emph{H}~has maximal probability \emph{a priori}, i.e.,
+  before she gets any evidence.}
+
+I don't have a conclusive argument that there is no such defeater, but
+it's worth noting that most of the usual suspects don't seem to work.
+
+\begin{description}
+\item[Sensitivity]
+It's true that the \emph{a priori}~belief that \emph{E}~⊃~\emph{H}~is
+insensitive. That is, even if it were false, it would still be held. But
+the \emph{a posteriori}~belief that \emph{E}~⊃~\emph{H}~is also
+insensitive. So if insensitivity is a barrier to knowledge, this is a
+quick argument for the conclusion of the Humean sceptical argument, not
+a way to block a premise in an argument for premise 2.\footnote{Vogel
+  (\citeproc{ref-Vogel1987}{1987}) makes a similar point that
+  sensitivity and induction don't mix.}
+\item[Safety]
+The belief that \emph{E}~⊃~\emph{H}~is true seems to be safe. After all,
+any world in which it is false must be rather distant. If not, then we
+don't know very much about the external world, which means we have a
+direct argument for the conclusion of the Humean sceptical conclusion,
+not a way to block a premise in an argument for premise 2.
+\item[Reliability]
+There are a few reliable ways in which \emph{E}~⊃~\emph{H}~could be
+believed. One is the rule, in any circumstance, believe
+\emph{E}~⊃~\emph{H}. More practically, the rule that says whenever
+\emph{X} is good evidence for \emph{Y}, good enough to ground knowledge
+that \emph{Y}, and one doesn't have any evidence for
+\(X \wedge \neg Y\), then believe \(X \supset Y\) seems fairly reliable
+too. So there isn't an obvious reliability argument that
+\emph{E}~⊃~\emph{H}~is not knowable \emph{a priori}.
+\item[False Belief]
+It's possible to infer \emph{E}~⊃~\emph{H}~\emph{a priori}~from a false
+premise. But it isn't necessary. The inference from the premise that
+\emph{E} is good evidence for \emph{H} to the conclusion
+\emph{E}~⊃~\emph{H}~seems reasonable, and based on true (indeed
+knowable) premises.
+\end{description}
+
+In short, the following position looks untenable to me: It's possible to
+have \emph{a priori}~a justified true belief in \emph{E}~⊃~\emph{H}, but
+defeaters always conspire to ensure that this cannot rise to the level
+of knowledge. There just aren't the defeaters around to ensure this
+works.
+
+A corollary to this is that it is impossible to learn
+\emph{E}~⊃~\emph{H}~on the basis of a probability lowerer that
+simultaneously defeats an \emph{a priori}~defeater to
+\emph{E}~⊃~\emph{H}. There just aren't enough defeaters around for that
+strategy to work.
+
+\section{Learning, Probability and
+Interests}\label{learning-probability-and-interests}
+
+A slightly different kind of objection to (LDLC) comes from
+considerations about lottery cases. My reply, in short, is going to be
+that standard treatments of lottery cases are not very promising, that
+we should adopt a kind of interest-relative approach to lottery cases
+instead, and when we do that the problem goes away. But first I'll set
+out the problem.\footnote{I'm grateful to David Chalmers, Crispin Wright
+  and Elia Zardini for pressing me on the need to address these cases.
+  The cases are discussed in more detail in Smith
+  (\citeproc{ref-MartinSmith2010}{2010}) and Zardini
+  (\citeproc{ref-Zardini2012}{2012}).}
+
+\subsection{Lotteries and Learning}\label{lotteries-and-learning}
+
+The case we will focus on concerns testimony from a source not certain
+to be reliable or knowledgeable, and we need a way to model that. I'll
+assume that if \(Ra\) is the proposition that \(R\) is a knowledgeable
+testifier, and \(Sap\) the proposition that \(a\) said that \emph{p},
+then our agent's credences satisfy the following constraints for any
+testifier \(a\).
+
+\begin{itemize}
+\item
+  \emph{Cr}\((p | Ra \wedge Sap) = 1\)
+\item
+  \emph{Cr}\((p | \neg Ra \wedge Sap) = \textit{Cr}(p | \neg Sap)\)
+\end{itemize}
+
+That is, testimony from a knowledgeable source is maximally valuable
+testimony, while testimony from other sources has no evidential value.
+The second assumption is a little extreme\footnote{I'm interpreting
+  \(R\) in such a way that \(Ra\) entails what \(a\) says is true, so
+  \(Ra \wedge Sap\) entails \emph{p}, so the first assumption is
+  natural. Making the second assumption more realistic would just
+  increase the complexity of the model without revealing anything
+  insightful. Since this model is meant to raise problems for my view, I
+  think it is fine to use an extreme case, and not complain about its
+  extremity.}, but more moderate models will also generate the kind of
+example we're interested in here.\footnote{I think this kind of model is
+  more realistic than a model that is based around
+  Jeffrey-conditionalising, where we have to specify in advance what the
+  posterior probability of some salient proposition is. That's not
+  required here; the posterior probability of \emph{p} is an output of
+  the prior probabilities of \emph{p} and \(Ra\), not an input to a
+  Jeffrey-conditionalising formula.}
+
+The case concerns a lottery that is based around a series of coin flips.
+Each lottery ticket consists of a 20-character string of H's and T's. A
+fair coin is flipped 20 times in a row. The agent wins iff the sequence
+of H's and T's on one's ticket matches the sequence of Heads and Tails
+that come up as the coin is flipped. The rational agent has one ticket
+in this lottery, so their initial credence that they will lose the
+lottery is \(1 - 2^{-20}\). Let \emph{X} be the proposition that they
+will lose the lottery.
+
+The agent will get some testimony from two sources, first \(b\), then
+\(c\). The agent's prior credence in \(Rb\) is 1. That is, she is
+certain that what \(b\) says is true. And her credence in \(Rc\) is
+0.99, which is reasonably high. (But we'll come back to the question of
+just how high it is by everyday standards.) Still, she does allow there
+is a non-zero probability that \(c\)'s vision was inaccurate, or that
+their memory was inaccurate, or that they are being deliberately
+misleading, or that any one of the myriad ways in which individual
+testifiers fail to be accurate infected \(c\)'s testimony. The agent
+then gets the following two pieces of evidence.
+
+\begin{itemize}
+\item
+  The agent is told by \(b\) that the first 19 characters on their
+  ticket match the first 19 flips of the coin.
+\item
+  The agent is told by \(c\) that the last character on their ticket
+  does not match the last flip of the coin.
+\end{itemize}
+
+In both cases we'll assume that the testifiers know the truth of their
+assertions, though we won't make any assumptions yet about whether the
+agent shares in this knowledge. After she gets the first piece of
+evidence, her credence in \emph{X} drops to 0.5. After she gets the
+second piece of evidence, her credence in \emph{X} rises back up to
+0.995. That's high, but notably it is less than her prior credence in
+\emph{X}.
+
+Still, we might think that the agent is now in a position to know
+\emph{X}, and she wasn't before getting this evidence. She has learned
+that her ticket lost from a knowledgeable source. (Strictly, she has
+learned something that entailed this, but this doesn't affect the
+overall argument.) To be sure, she has some minor reservations about the
+reliability of this source, but those reservations are no greater than
+most of us have about the testimony we get from friends and
+acquaintances everyday. And we typically take that testimony to produce
+knowledge. So it looks like, if \emph{Y} is the combination of these two
+pieces of testimony, then \emph{Y} lowers her credence in \emph{X}, as
+we'll put it, it makes \emph{X} less credible, but it also grounds
+knowledge of \emph{X}. That's a counterexample to (LDLC), or so it
+looks.
+
+Someone might object here that for many everyday pieces of knowledge,
+the prior credibility of our testifier is greater than 0.99. That
+doesn't mean the testifier is right 99\% of the time, just that on this
+occasion the credibility of their knowledgeability is greater than 0.99.
+I'm sympathetic to this line of criticism---I think we often
+overestimate the likelihood of error in everyday settings. But I don't
+think it matters much here. For one thing, we often learn things by
+testimony when our credence in the reliability of the testifier is much
+lower than 0.99. For another, we could make the prior credence in
+\(c\)'s knowledgeability as high as \(1 - 2^{-19}\) without affecting
+the argument. (And by increasing the number of coin flips, we can make
+the credence even higher; arbitrarily close to 1 if need be.) And that's
+a very high degree of credibility indeed. It seems to me that \(c\) is a
+lot like an ordinary testifier, and rejecting \(c\)'s testimony as a
+grounds for knowledge puts one at grave risk of embracing an overarching
+scepticism about testimonial knowledge. That is a sufficient reason to
+stay away from this kind of objection.
+
+The first thing to note about this example is that what we have here is
+a case where there is no single piece of evidence that both lowers the
+credibility of \emph{X} and grounds knowledge of \emph{X}. True, if we
+take \emph{Y} to be the combination of the two pieces of evidence the
+agent gets, then \emph{Y} both lowers the credibility of \emph{X} and
+grounds knowledge of \emph{X}. But that's because \emph{Y} has two
+parts, and one part lowers the credibility of \emph{X} while not
+grounding knowledge of it, and the other raises the credibility of
+\emph{X} and grounds knowledge of it. If we restrict our attention to
+single pieces of evidence, says the objector, then (LDLC) is clearly
+true, and is untouched by this objection.
+
+It isn't at all clear that anything similar is happening in the case of
+\emph{E} grounding knowledge of \emph{E}~⊃~\emph{H}. After all, the
+point of the theorem we earlier proved was that \emph{every single part}
+of \emph{E} lowers the probability of \emph{E}~⊃~\emph{H}. Now I don't
+want to rest too much on a theory of how evidence divides into parts,
+and maybe there won't be any way to make sense of the notion of parts of
+evidence in a way that is needed for the point I'm making here to work.
+If we are to have a theory of parts of evidence, I like a causal theory
+of evidence that naturally lends itself to individuating parts as being
+evidence that arrives via different causal chains. But I don't think we
+know nearly enough about the ontology of evidence to make this kind of
+response compelling.
+
+So if we are to defend (LDLC), and hence defend the Humean argument from
+attack at this point, we need to say what goes wrong with the example. I
+will offer a somewhat disjunctive response, with both disjuncts turning
+on the interest-relative account of justified belief that I defend in
+Weatherson (\citeproc{ref-Weatherson2005-WEACWD}{2005a}) and Weatherson
+(\citeproc{ref-Weatherson2011-WEAKBI}{2011}). I'll argue on the one hand
+that philosophers have been too quick to accept that we do not know
+we'll lose lotteries. As David Lewis (\citeproc{ref-Lewis1996b}{1996})
+pointed out, in many contexts it seems perfectly reasonable to say that
+people do have such knowledge. I'll argue that it often sounds right to
+say that because it's often true. On the other hand, I'll argue that in
+those settings where we do not know that the ticket will lose, \(c\)'s
+testimony does not help us gain knowledge.
+
+\subsection{Interest-Relativity, Knowledge and
+Justification}\label{interest-relativity-knowledge-and-justification}
+
+In Weatherson (\citeproc{ref-Weatherson2005-WEACWD}{2005a}) I defended
+an interest-relative theory of belief. This implied an interest-relative
+theory of justified belief, even though the theory of justification was
+not, fundamentally, interest-relative. Rather, that theory held that
+what it was to justifiably believe that \emph{p} was to have a high
+enough credence to believe \emph{p}, and for that credence to be
+justified. What is `high enough'? That, I claimed, was
+interest-relative. The agent's credence in \emph{p} is high enough for
+her to believe \emph{p} if her attitudes conditional on \emph{p} matched
+her unconditional attitudes on every issue that was relevant to her. In
+particular, I said that for her to believe \emph{p}, then for any \(A\)
+and \(B\) where the choice between doing \(A\) and \(B\) is a
+\emph{live} question (in a sense I describe in much more detail in the
+earlier paper), and \(U\) is her utility function, then
+\([U(A) > U(B)] \leftrightarrow [U(A | p) > U(B | p)]\).
+
+In that paper I also noted that sometimes the theoretical interests of
+the agent could be relevant to what she knows, but I don't think I went
+far enough down that road. Here's what I should have said.\footnote{I go
+  into much more detail on this in Weatherson
+  (\citeproc{ref-Weatherson2011-WEAKBI}{2011}).} The idea behind my
+theory was that if you believe \emph{p}, taking \emph{p} as given in any
+inquiry doesn't change the results of that inquiry. If you believe
+\emph{p}, you've already factored it in. Now one of the things that we
+can inquire into is the evidential probability of certain propositions.
+If we already believe \emph{p}, the results of those inquiries shouldn't
+change when we conditionalise on \emph{p}. In particular, we should have
+the following two constraints on belief that \emph{p}.
+
+\begin{itemize}
+\item
+  If whether \(q\) is more probable than \emph{X} is a live question,
+  then \emph{Cr}\((q) > x \leftrightarrow \textit{Cr}(q | p) > x\).
+\item
+  If the comparative probability of \(r\) and \emph{s} is a live
+  question, then
+  \emph{Cr}\((r) > \textit{Cr}(s) \leftrightarrow \textit{Cr}(r | p) > \textit{Cr}(s | p)\).
+\end{itemize}
+
+The restriction to live questions here is important. If our credence in
+\emph{p} is less than 1, even marginally less than 1, then there will be
+some inquiries whose results are altered by conditionalising on
+\emph{p}. For instance, the question of whether \emph{p}'s probability
+is or isn't exactly 1 will be affected by whether we conditionalise on
+\emph{p}. But that doesn't mean that belief requires probability 1. It
+means that not all inquiries are relevant to all agents, and in
+particular, the question of whether \emph{p}'s credence is exactly 1
+isn't always relevant.
+
+But consider one special case. Assume the agent \emph{is} interested in
+exactly what the probability of \emph{p} is. That is, for all \emph{X},
+the question of whether \(\Pr(p) > x\) is live for her. And assume that
+she judges that probability, on her evidence, to be less than 1. Assume
+also that she's rational enough to know that \(\Pr(p | p) = 1\). Then
+she can't believe that \emph{p}, because there will be some \emph{X}
+such that \(\Pr(p) < x\), but \(\Pr(p | p) > x\), and whether
+\(\Pr(p) > x\) is live.
+
+I think that's a quite nice result. When we're trying to say what the
+relation is between credence and outright belief, it is tempting for
+many reasons to say that belief requires credence 1. One reason for that
+is that if we know the objective chance of \emph{p}, and it's less than
+1, it can feel very odd to say, without qualification, that we believe
+that \emph{p}. It's much better to say that we believe \emph{p} is
+probable. But it's very implausible to say that in general belief
+requires credence 1, because that would mean we believe very little.
+
+The interest-relative view makes sense of this conundrum. On the one
+hand, belief does not in general require credence 1. On the other hand,
+when the agent is themselves focussed on the probability of \emph{p},
+they must judge that probability to be 1 to outright believe that
+\emph{p}. I think that's a nice way to steer between the conflicting
+intuitions here.
+
+Given all this, it's probably easy to imagine what I'll say about the
+challenge to (LDLC). The idea behind the challenge was two-fold. First,
+purely probabilistic evidence is not enough for knowledge. Second, other
+sources of evidence, such as testimony, can be the basis for knowledge
+even if we would, if pressed, say that they do not provide more support
+than purely probabilistic evidence. I'm going to accept the second claim
+(with some qualifications) but reject the first.
+
+I think there are circumstances where we can, with Lewis, say the
+following.
+
+\begin{quote}
+Pity poor Bill! He squanders all his spare cash on the pokies, the
+races, and the lottery. He will be a wage slave all his days. We know he
+will never be rich. (Lewis 1996: 443)
+\end{quote}
+
+How, you might ask, can we know Bill will never be rich? The answer is
+that we know the odds are massively against him winning the lottery.
+That justifies a very high credence in his losing. For anything we care
+about, the odds are close enough to 1 that the difference doesn't
+matter. So our high credence is belief, and since it is justified, true,
+and undefeated, it is knowledge.\footnote{So I'm disagreeing with those
+  such as Nelkin (\citeproc{ref-Nelkin2000}{2000}) who think high
+  probability can't suffice for knowledge. But I think the comments
+  below help explain away the motivations for such views.}
+
+But wait, you say, isn't there some chance of Bill winning the lottery,
+and hence being rich? Why yes, there is. And doesn't that mean that we
+don't know he'll never be rich? Indeed it does. And doesn't that mean
+the previous paragraph is all mistaken? No, it doesn't. It means that
+asking all these questions changes the subject. In particular, it raises
+the question of whether the chance of Bill winning is equal to zero or
+greater than zero to salience. And once that question is salient, our
+degree of belief that Bill will lose is not close enough to 1 that the
+difference doesn't matter. The difference matters a lot, to the question
+you just raised. So I insist that given what I cared about a paragraph
+ago, I was speaking truly.\footnote{Two technical points about how what
+  I said relates to the broader debates about interest-relativity.
+
+  I think that what's going on in cases like these involves the
+  interest-relativity of belief, not in the first-instance the
+  interest-relativity of knowledge. Does that mean that if an agent held
+  on to their beliefs across changes of interest, then their knowledge
+  would not be affected by changes of interest? No; because the only way
+  to hold on to beliefs when interests change may involve raising one's
+  credence so high that it would be irrational, and when credences are
+  irrational the resulting beliefs are irrational, and irrational
+  beliefs can't constitute knowledge.
+
+  My positive view is a form a interest-relative \emph{invariantism};
+  that is, I don't think contextualism is true about `knows'. But I
+  haven't relied on that here, just on the interest-relativity. If one
+  wanted to hold a form of interest-relative \emph{contextualism}, a la
+  Fantl and McGrath (\citeproc{ref-FantlMcGrath2009}{2009}), this
+  explanation would still go through. There are puzzles that might push
+  one towards interest-relative \emph{contextualism}, but I think there
+  are larger puzzles that should push one back towards invariantism
+  (\citeproc{ref-Weatherson2006-WEAQC}{Weatherson 2006}).}
+
+This explains why we think we can't get knowledge on probabilistic
+grounds. Here's what we can't do. We can't simultaneously try to figure
+out what the probability of \emph{p} is, conclude it is less than 1, and
+believe \emph{p}. But that's simply because once the question of
+\emph{p}'s probability is live, we lose the belief that \emph{p}. We
+can, I think, investigate whether the probability of \emph{p} is, say,
+over 0.9, conclude that it is, and conclude on that basis that \emph{p}.
+As long as there are no further questions whose answer turns on whether
+\emph{p}'s probability is 1 or a little less, that could be enough for
+knowledge.
+
+The converse is true about testimony. It's true that we can gain
+knowledge from testimony. And it's true that, if pressed, we may admit
+that that testimony is less than perfectly reliable. But what I deny we
+can do is admit the unreliability, work on figuring out just how
+unreliable it is, and hold onto the knowledge gained from testimony. But
+it's fairly intuitive that this would be impossible. Simultaneously
+thinking that my only reason for believing \emph{p} is that \emph{S}
+told me that \emph{p}, and holding that \emph{S} is somewhat unreliable,
+and may have been mistaken on this occasion, but nevertheless simply
+believing \emph{p}, is an unstable state.
+
+The difference between probabilistic grounds for belief, as when we
+believe we'll lose the lottery, and testimonial grounds then is not that
+one of them requires higher standards. It is rather that when we use
+explicitly probabilistic grounds, we tend to make probabilistic
+questions salient, and hence live.\footnote{Salient to the person doing
+  the reasoning that is. As an invariantist, I think that matters. But a
+  contextualist who thought what's relevant to subjects is thereby
+  relevant could say the same thing.} And the salience of those
+questions destroys belief, and hence destroys knowledge. If we make the
+same questions salient in both the probabilistic and testimonial cases,
+we get the same criteria for knowledge. Hence the kind of case we've
+been considering is not a threat to (LDLC). Indeed, it is hard to see
+what could be a threat to (LDLC), without changing the salience of
+probabilistic questions. So I think (LDLC) survives, and anyone who
+wants to resist the Humean conclusion will have to look elsewhere to
+find the weak link in the argument.
+
+Here's a crude summary of these reflections. If questions about the
+precise probability of \emph{H} or \emph{E}~⊃~\emph{H}~are salient, then
+\emph{E}~⊃~\emph{H}~can't be known before or after learning \emph{E}. If
+they aren't, \emph{E}~⊃~\emph{H}~can be known both \emph{a priori}~and
+\emph{a posteriori}. The only way we get that \emph{E}~⊃~\emph{H}~is
+only knowable after learning \emph{E} is if we equivocate between the
+two positions on what is salient.
+
+\section{Conclusions}\label{conclusions}
+
+So I think (LDLC) is invulnerable to these kinds of objections. Since it
+is intuitively a very plausible principle, and these attempts to
+counterexample it have failed, I think we should adopt as a working
+hypothesis that it is true. That means, I think, that we really have two
+options for responding to the Humean argument.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Accept that \emph{E}~⊃~\emph{H}~is \emph{a priori}~knowable.
+\item
+  Reject (UIC), and say some updating is not by conditionalisation.
+\end{enumerate}
+
+I don't think either of these are bad options. You can read Weatherson
+(\citeproc{ref-WeathersonSRE}{2005b}) as an attempt to defend the first,
+and Weatherson (\citeproc{ref-Weatherson2007}{2007}) as an attempt to
+defend the second. But I do think these options aren't available to
+everyone.
+
+If \emph{E}~⊃~\emph{H}~is \emph{a priori}~knowable, then any kind of
+`modal' account of the \emph{a priori}~has to fail. That is, we can't
+understand \emph{a priority} as any kind of metaphysical necessity,
+since \(E \wedge \neg H\) is clearly possible.\footnote{I mean both that
+  it's true in some possible worlds, and in some worlds considered as
+  actual, so a `two-dimensional' equation of a priority with a kind of
+  metaphysical possible is ruled out.} It's just that we have
+defeasible, fallible \emph{a priori}~knowledge that it isn't true. And I
+noted above that (UIC) will follow from some other independently
+attractive views about what we can known \emph{a priori}~about
+epistemology, and when it is that conditionalising seems wrong. Many
+years ago, I held both (UIC) and that deeply contingent truths like
+\emph{E}~⊃~\emph{H}~could not be known \emph{a priori}. I now think
+that's an unstable combination of views; it leaves you without resources
+to turn back the Humean argument.
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Arntzenius2003-ARNSPF}
+Arntzenius, Frank. 2003. {``Some Problems for Conditionalization and
+Reflection.''} \emph{Journal of Philosophy} 100 (7): 356--70. doi:
+\href{https://doi.org/10.5840/jphil2003100729}{10.5840/jphil2003100729}.
+
+\bibitem[\citeproctext]{ref-BonJour1997}
+BonJour, Laurence. 1997. \emph{In Defense of Pure Reason}. Cambridge:
+Cambridge University Press.
+
+\bibitem[\citeproctext]{ref-FantlMcGrath2009}
+Fantl, Jeremy, and Matthew McGrath. 2009. \emph{Knowledge in an
+Uncertain World}. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Gettier1963}
+Gettier, Edmund L. 1963. {``Is Justified True Belief Knowledge?''}
+\emph{Analysis} 23 (6): 121--23. doi:
+\href{https://doi.org/10.2307/3326922}{10.2307/3326922}.
+
+\bibitem[\citeproctext]{ref-Goldman1976}
+Goldman, Alvin I. 1976. {``Discrimination and Perceptual Knowledge.''}
+\emph{The Journal of Philosophy} 73 (20): 771--91. doi:
+\href{https://doi.org/10.2307/2025679}{10.2307/2025679}.
+
+\bibitem[\citeproctext]{ref-Hajek2008}
+Hájek, Alan. 2008. {``Arguments for-or Against-Probabilism?''}
+\emph{British Journal for the Philosophy of Science} 59 (4): 793--819.
+doi: \href{https://doi.org/10.1093/bjps/axn045}{10.1093/bjps/axn045}.
+
+\bibitem[\citeproctext]{ref-Harman1973}
+Harman, Gilbert. 1973. \emph{Thought}. Princeton: Princeton University
+Press.
+
+\bibitem[\citeproctext]{ref-JehleWeatherson}
+Jehle, David, and Brian Weatherson. 2012. {``Dogmatism, Probability and
+Logical Uncertainty.''} In \emph{New Waves in Philosophical Logic},
+edited by Greg Restall and Gillian Russell, 95--111. Bassingstoke:
+Palgrave Macmillan.
+
+\bibitem[\citeproctext]{ref-Lewis1996b}
+Lewis, David. 1996. {``Elusive Knowledge.''} \emph{Australasian Journal
+of Philosophy} 74 (4): 549--67. doi:
+\href{https://doi.org/10.1080/00048409612347521}{10.1080/00048409612347521}.
+Reprinted in his \emph{Papers in Metaphysics and Epistemology},
+Cambridge: Cambridge University Press, 1999, 418-446. References to
+reprint.
+
+\bibitem[\citeproctext]{ref-Nelkin2000}
+Nelkin, Dana. 2000. {``The Lottery Paradox, Knowledge, and
+Rationality.''} \emph{Philosophical Review} 109 (3): 373--409. doi:
+\href{https://doi.org/10.2307/2693695}{10.2307/2693695}.
+
+\bibitem[\citeproctext]{ref-Okasha2001}
+Okasha, Samir. 2001. {``What Did Hume Really Show about Induction?''}
+\emph{The Philosophical Quarterly} 51 (204): 307--27. doi:
+\href{https://doi.org/10.1111/1467-9213.00231}{10.1111/1467-9213.00231}.
+
+\bibitem[\citeproctext]{ref-Okasha2005}
+---------. 2005. {``Does Hume's Argument Against Induction Rest on a
+Quantifier-Shift Fallacy?''} \emph{Proceedings of the Aristotelian
+Society} 105 (1): 237--55. doi:
+\href{https://doi.org/10.1111/j.0066-7373.2004.00113.x}{10.1111/j.0066-7373.2004.00113.x}.
+
+\bibitem[\citeproctext]{ref-MartinSmith2010}
+Smith, Martin. 2010. {``What Else Justification Could Be.''}
+\emph{No{û}s} 44 (1): 10--31. doi:
+\href{https://doi.org/10.1111/j.1468-0068.2009.00729.x}{10.1111/j.1468-0068.2009.00729.x}.
+
+\bibitem[\citeproctext]{ref-Vogel1987}
+Vogel, Jonathan. 1987. {``Tracking, Closure and Inductive Knowledge.''}
+In \emph{The Possibility of Knowledge: Nozick and His Critics}, edited
+by Stephen Luper-Foy, 197--215. Totowa, NJ: Rowman \& Littlefield.
+
+\bibitem[\citeproctext]{ref-Vogel1990}
+---------. 1990. {``Cartesian Skepticism and Inference to the Best
+Explanatio.''} \emph{Journal of Philosophy} 87 (11): 658--66. doi:
+\href{https://doi.org/10.5840/jphil1990871123}{10.5840/jphil1990871123}.
+
+\bibitem[\citeproctext]{ref-Warfield2005}
+Warfield, Ted A. 2005. {``Knowledge from Falsehood.''}
+\emph{Philosophical Perspectives} 19: 405--16. doi:
+\href{https://doi.org/10.1111/j.1520-8583.2005.00067.x}{10.1111/j.1520-8583.2005.00067.x}.
+
+\bibitem[\citeproctext]{ref-Weatherson2004}
+Weatherson, Brian. 2003. {``From Classical to Intuitionistic
+Probability.''} \emph{Notre Dame Journal of Formal Logic} 44 (2):
+111--23. doi:
+\href{https://doi.org/10.1305/ndjfl/1082637807}{10.1305/ndjfl/1082637807}.
+
+\bibitem[\citeproctext]{ref-Weatherson2005-WEACWD}
+---------. 2005a. {``{Can We Do Without Pragmatic Encroachment?}''}
+\emph{Philosophical Perspectives} 19 (1): 417--43. doi:
+\href{https://doi.org/10.1111/j.1520-8583.2005.00068.x}{10.1111/j.1520-8583.2005.00068.x}.
+
+\bibitem[\citeproctext]{ref-WeathersonSRE}
+---------. 2005b. {``Scepticism, Rationalism and Externalism.''}
+\emph{Oxford Studies in Epistemology} 1: 311--31.
+
+\bibitem[\citeproctext]{ref-Weatherson2006-WEAQC}
+---------. 2006. {``Questioning Contextualism.''} In \emph{Epistemology
+Futures}, edited by Stephen Cade Hetherington, 133--47. Oxford: Oxford
+University Press.
+
+\bibitem[\citeproctext]{ref-Weatherson2007}
+---------. 2007. {``The Bayesian and the Dogmatist.''} \emph{Proceedings
+of the Aristotelian Society} 107: 169--85. doi:
+\href{https://doi.org/10.1111/j.1467-9264.2007.00217.x}{10.1111/j.1467-9264.2007.00217.x}.
+
+\bibitem[\citeproctext]{ref-Weatherson2011-WEAKBI}
+---------. 2011. {``Knowledge, Bets and Interests.''} In
+\emph{Forthcoming Volume on Knowledge Ascriptions}, edited by Jessica
+Brown and Mikkel Gerken, 75--103. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Williamson1998-WILCOK}
+Williamson, Timothy. 1998. {``{Conditionalizing on Knowledge}.''}
+\emph{British Journal for the Philosophy of Science} 49 (1): 89--121.
+doi: \href{https://doi.org/10.1093/bjps/49.1.89}{10.1093/bjps/49.1.89}.
+
+\bibitem[\citeproctext]{ref-Williamson2000-WILSAE-2}
+---------. 2000. {``{Scepticism and Evidence}.''} \emph{Philosophy and
+Phenomenological Research} 60 (3): 613--28. doi:
+\href{https://doi.org/10.2307/2653819}{10.2307/2653819}.
+
+\bibitem[\citeproctext]{ref-Yablo2002}
+Yablo, Stephen. 2002. {``Coulda, Woulda, Shoulda.''} In
+\emph{Conceivability and Possibility}, edited by Tamar Szabó Gendler and
+John Hawthorne, 441--92. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Zardini2012}
+Zardini, Elia. 2012. {``Confirming the Less Likely, Discovering the
+Unknown Dogmatisms: Surd and Doubly Surd, Natural, Flat and Doubly
+Flat.''} In \emph{Scepticism and Perceptual Justification}, edited by
+Dylan Dodd and Elia Zardini, 33--70. Oxford: Oxford University Press.
+doi:
+\href{https://doi.org/10.1093/acprof:oso/9780199658343.001.0001}{10.1093/acprof:oso/9780199658343.001.0001}.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Scepticism and Perceptual Justification}, 2014, pp. 71-86.
+
+\end{document}

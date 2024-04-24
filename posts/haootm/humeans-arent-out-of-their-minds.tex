@@ -1,0 +1,630 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Humeans Aren’t Out of Their Minds
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Humeans Aren't Out of Their Minds},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Humeans Aren't Out of Their Minds}
+\author{Brian Weatherson}
+\date{2006}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Humeans about causation say that in some situations, whether C causes E
+depends on events far away from C and E. John Hawthorne has objected to
+this feature of the view. Whether one has a mind depends on what causal
+relations obtain between the parts of one's brain. But whether one has a
+mind does not depend on what happens far far away. I reply on behalf of
+the Humean. In the cases Hawthorne is worried about, the Humean can and
+should deny the problematic long-range dependence. One advantage of
+Humeanism is that it lets us make sense of the idea that the laws could
+be different in different parts of the universe. In the cases Hawthorne
+is worried about, that's exactly what is happening - the laws are
+different here to how they are over there. And what causal relations
+obtain here is only dependent on what happens in places the laws are the
+same.
+\end{abstract}
+
+\setstretch{1.1}
+Humeanism is ``the thesis that the whole truth about a world like ours
+supervenes on the spatiotemporal distribution of local qualities.''
+(\citeproc{ref-Lewis1994a}{Lewis 1994, 473}) Since the whole truth about
+our world contains truths about causation, causation must be located in
+the mosaic of local qualities that the Humean says constitute the whole
+truth about the world. The most natural ways to do this involve
+causation being in some sense extrinsic. To take the simplest possible
+Humean analysis, we might say that \emph{c} causes \emph{e} iff
+throughout the mosaic events of the same type as \emph{c} are usually
+followed by events of type \emph{e}. For short, the causal relation is
+the constant conjunction relation. Whether this obtains is determined by
+the mosaic, so this is a Humean theory, but it isn't determined just by
+\emph{c} and \emph{e} themselves, so whether \emph{c} causes \emph{e} is
+extrinsic to the pair. Now this is obviously a bad theory of causation,
+but the fact that causation is extrinsic is retained even by good Humean
+theories of causation. John Hawthorne
+(\citeproc{ref-Hawthorne2004-Humeans}{2004}) objects to this feature of
+Humeanism. I'm going to argue that his arguments don't work, but first
+we need to clear up three preliminaries about causation and
+intrinsicness.
+
+First, my wording so far has been cagey because I haven't wanted to say
+that Humeans typically take causation to be an extrinsic
+\emph{relation}. That's because the greatest Humean of them all, David
+Lewis, denies that causation is a relation at all, and hence that it is
+an extrinsic relation (\citeproc{ref-Lewis2004d}{Lewis 2004b}). We can
+go some way to avoiding this complication by talking, as Hawthorne does,
+about properties of regions, and asking the property of containing a
+duplicate of \emph{c} that causes a duplicate of \emph{e} is intrinsic
+or extrinsic.\footnote{This move requires the not wholly uncontroversial
+  assumption that regions are the kinds of things that can have
+  properties. But I'll happily make that assumption here. Note that the
+  formulation here allows that the property denoted might be intrinsic
+  for some \emph{c} and \emph{e} and extrinsic for others. I'll say
+  causation is extrinsic if the property denoted is extrinsic for some
+  choice of \emph{c} and \emph{e}, even if it is intrinsic for others,
+  as it might be if, for example, no region could possess the property
+  because \emph{c} is a part of \emph{e}.} Humeans typically take
+causation to be extrinsic in this sense.
+
+Second, nothing in Humeanism \emph{requires} that causation is extrinsic
+in that sense. If one analysed causation as \emph{that intrinsic
+relation that actually most tightly correlates with the constant
+conjunction relation}, then one would have guaranteed that causation was
+an intrinsic relation. Moreover, one would have a perfectly Humean
+theory of causation. (A perfectly awful theory, to be sure, but still a
+Humean one.) Peter Menzies (\citeproc{ref-Menzies1996}{1996},
+\citeproc{ref-Menzies1999}{1999}) develops a more sophisticated version
+of such a theory, and though Menzies describes his view as anti-Humean,
+one can locate the relation we've defined here in the Humean mosaic, so
+such an approach might be consistent with Humeanism in the intended
+sense.
+
+Third, there is good reason, independent of Humeanism, to accept that
+causation is extrinsic. As Ned Hall (\citeproc{ref-Hall2004}{2004})
+argues, it is very hard to square the intrinsicness of causation with
+the possibility of causation by omission. Given the choice between these
+two, I'm going to accept causation by omission without much hesitation.
+There is one powerful objection to the possibility of causation by
+omission, namely that if there is any causation by omission then there
+is a lot more than is intuitively plausible. But since Sarah McGrath
+(\citeproc{ref-McGrath2005}{2005}) has a good response to that
+objection, I feel happy accepting there is causation by omission. So I
+accept that causation is extrinsic, for reasons totally independent of
+Humeanism. Since Hawthorne appeals to no feature of Humeanism beyond the
+Humean's acceptance of the extrinsicness of causation, we can take his
+argument to be an argument against the causal extrinsicalist, i.e.~the
+theorist who accepts causation is extrinsic in the above sense. To see
+that the argument doesn't go through, we need to consider what exactly
+the causal extrinsicalist is committed to. I'll explore this by looking
+at some other examples of properties of regions.
+
+Some regions contain uncles and some do not. This seems to be an
+extrinsic property of regions. My house does not contain any uncles
+right now, but there are duplicates of it, in worlds where my brothers
+have children, where it does contain an uncle, namely my counterpart.
+Consider the smallest region containing the earth from the stratosphere
+in from the earth's formation to its destruction. Call this region
+\emph{e}. Any duplicate of \emph{e} also contains uncles, including
+several uncles of mine. You can't duplicate the earth without producing
+a duplicate of me who is, in the duplicate world, the nephew of the
+duplicates of my uncles. So it is intrinsic to \emph{e} that it contain
+an uncle, even though this is an extrinsic property of regions. (There
+is much more discussion of extrinsic properties that are possessed
+intrinsically in Humberstone (\citeproc{ref-Humberstone1996}{1996}).)
+
+This possibility, that a region might intrinsically possess an extrinsic
+property, poses a problem for Hawthorne's argument. Here is his
+presentation of it.
+
+\begin{quote}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  An intrinsic duplicate of any region wholly containing me will contain
+  a being with my conscious life.
+\item
+  There are causal requirements on my conscious life.
+\end{enumerate}
+
+Therefore, Humeanism is false.
+(\citeproc{ref-Hawthorne2004-Humeans}{Hawthorne 2004, 351--52})
+\end{quote}
+
+The problem is that this argument isn't valid. What follows from (1) and
+(2) is that any region containing Hawthorne must possess some causal
+properties intrinsically. (As Hawthorne argues on page 356.) And what
+Humeanism entails is that causal properties are extrinsic properties of
+regions. But there is no incompatibility here, for it is possible that
+extrinsic properties are possessed intrinsically, as we saw in the
+discussion of uncles.
+
+Hawthorne's argument would go through if Humeans, and causal
+extrinsicalists more generally, were committed to the stronger claim
+that regions never possess causal properties intrinsically. But it
+doesn't seem that Humeans \emph{should} be committed to this claim.
+Consider again \emph{e} and all its duplicates. Any such duplicate will
+contain a duplication of the event of Booth's shooting Lincoln, and
+Lincoln dying.\footnote{There is a potential complication here in that
+  arguably in some such worlds, e.g.~worlds where there is another
+  planet on the opposite side of the sun to duplicate-earth where people
+  are immediately `resurrected' when the `die' on duplicate-earth. In
+  such a world you might say that duplicate-Lincoln doesn't really die
+  on duplicate-Earth, but merely has the duplicate-earth part of his
+  life ended. We'll understand `dying' in such a way that this counts as
+  dying.} Will it also be the case that duplicate-Booth's shooting in
+this world \emph{causes} duplicate-Lincoln's dying? If so, and this
+seems true, then it is intrinsic to \emph{e} that it contains an event
+of a shooting causing a dying, even though the property of containing a
+shooting causing a dying is extrinsic.
+
+It would be a bad mistake to offer the following epistemological
+argument that in all duplicates of \emph{e}, duplicate-Booth's shooting
+causes duplicate-Lincoln's dying.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  If there was a duplicate of \emph{e} where duplicate-Booth's shooting
+  does not cause duplicate-Lincoln's dying, then we would not know
+  whether Booth's shooting causes Lincoln's dying without investigating
+  what happens outside \emph{e}.
+\item
+  We can know that Booth's shooting caused Lincoln's dying without
+  investigating outside \emph{e}.
+\item
+  So, there is no duplicate of \emph{e} where duplicate-Booth's shooting
+  does not cause duplicate-Lincoln's dying.
+\end{enumerate}
+
+The problem with this argument is that even there are worlds containing
+such duplicates, we might know a priori that we do not live in such a
+world, just as we know a priori that we do not live in a world where
+certain kinds of sceptical scenarios unfold
+(\citeproc{ref-Hawthorne2002}{Hawthorne 2002};
+\citeproc{ref-WeathersonSRE}{Weatherson 2005}).
+
+A better argument against the existence of such a world is that if it is
+possible, it should be conceivable. But it is basically impossible to
+conceive such a world. Even if throughout the universe shootings like
+Booth's are usually followed by something other than dying, say that
+shooting in most parts of the universe causes diseases to be cured, the
+large-scale regularity within \emph{e} (or its duplicate) of shootings
+being followed by dying suffices to ground the claim that shootings
+cause dyings in a good Humean theory. The crucial assumption here is
+that \emph{local} regularities count for more than \emph{global}
+regularities. If the local regularities deviate too far from the global
+regularities, then Humeans can and should say that different nomic
+claims (and hence causal claims) are true in this part of the world to
+the rest of the universe. If they say this, they can say that regions
+can have causal features (such as containing a shooting causing a dying)
+intrinsically even though causal features are extrinsic properties.
+
+To illustrate the kind of Humean theory that would have such a
+consequence, consider the following variant on the constant conjunction
+theory of causation. The theory I'm imagining says that \emph{c} causes
+\emph{e} iff whenever an event of the same type as \emph{c} occurs
+within a 50 mile radius of where \emph{c} occurred, it was followed by
+an event of type \emph{e}. Call this the 50 mile constant conjunction
+theory of causation.\footnote{I assume here that events can be properly
+  said to have locations. Spelling out this assumption in detail will
+  require some serious metaphysics, particularly when it comes to
+  omissions. Where exactly does my omission to stop the Iraq War take
+  place? Here at my kitchen table where I am? In Iraq, where the war is?
+  In Washington, if that's where I'd be were I doing something to stop
+  the war? These questions are hard, though not so hard that we should
+  give up on the very natural idea that events have locations.} On the
+50 mile constant conjunction theory of causation, it won't be intrinsic
+to Ford's Theatre that it contained a causal event involving Booth
+shooting Lincoln, but it will be intrinsic to any sphere of radius 50
+miles or more centred on the theatre that it contains such a causal
+event. So on this theory causal properties can be intrinsic to a region,
+though they are still extrinsic properties of such a region.
+
+That's a very implausible Humean theory, but when we look at the details
+of David Lewis's Humean picture, we can see the outlines of a more
+plausible theory with the same consequences. Lewis of course doesn't
+offer a simple regularity theory of causation. Rather, he first argues
+that laws are the extremely simple, extremely informative true
+propositions (\citeproc{ref-Lewis1973a}{Lewis 1973, 73}). That is, he
+offers a sophisticated regularity theory of laws. Then he analyses
+counterfactual dependence in terms of lawhood
+(\citeproc{ref-Lewis1973a}{Lewis 1973},
+\citeproc{ref-Lewis1979c}{1979}). Finally he analyses causation in terms
+of counterfactual dependence (\citeproc{ref-Lewis2004a}{Lewis 2004a}).
+The philosophical theory meets the Humean mosaic most closely on the
+issue of what a law is. If we can offer a theory of laws that allows
+extra sensitivity to local facts, while remaining Humean, we can plug
+this back into Lewis's theories concerning counterfactual dependence and
+hence causation without upsetting its Humean credentials.
+
+Now there is a good reason to think that a Humean theory of laws should
+be locally sensitive. (I'm indebted here to long ago conversations with
+James Chase.) Humeans typically believe in fairly unrestricted
+principles of recombination. And they believe that laws are not
+necessarily true. So there could be worlds with very different laws. So
+there is a world which `patches' together part of the world with laws
+\emph{L}\textsubscript{1} with a world with laws
+\emph{L}\textsubscript{2}. If the parts are large and isolated enough,
+it would be foolish to say that within those parts nothing is
+law-governed, or that within those regions there is no counterfactual
+dependence, or no causation. Much better to say that regularities
+obtaining within such a region are sufficiently simple and informative
+to count as laws. In our patchwork world, the laws might simply say
+\emph{In r}\textsubscript{1}, \emph{L}\textsubscript{1} \emph{and in
+r}\textsubscript{2}, \emph{L}\textsubscript{2}. Provided the terms
+denoting the regions are not too gruesome, these will plausibly be
+Humean, even Lewisian, laws.
+
+Let's bring all this back to Hawthorne's example. Hawthorne argues that
+certain causal facts are intrinsic to the region containing his body.
+The challenge for the Humean is to say how this could be so when
+Hawthorne could be embedded in a world where very different regularities
+obtain. The simple answer is to say that in such worlds, laws like
+\emph{In r, L}, where \emph{r} picks out the region Hawthorne's body
+occupies, and \emph{L} picks out a real-world law, will be true, simple
+and informative. It is informative because any duplicate of Hawthorne's
+body is a very complicated entity, containing billions of billions of
+particles interacting in systematic ways, ways that are nicely
+summarised by real-world laws. Simplicity is a little harder to make
+out, but note that there is a reasonably sharp boundary between
+Hawthorne's body and the rest of the world
+(\citeproc{ref-Lewis1993c}{Lewis 1993}), so there should be a natural
+enough way to pick it out. In other words, even if we embed a Hawthorne
+duplicate in a world with very different regularities, Humeans will
+still have good reason to say that the laws, and hence the facts about
+counterfactual dependence and causation, inside that duplicate are not
+changed. So not only is it logically possible that Hawthorne's premises
+are true and his conclusion false, we can motivate a Humean position
+that endorses the truth of Hawthorne's premises and the falsity of the
+conclusion.
+
+Since Hawthorne's argument is invalid then, we can accept the premises
+without giving up Humeanism. But I think it is worthwhile to note that
+his (1) also can be questioned. Hawthorne notes that it is rejected by
+those such as Dretske and Lewis who say that phenomenal character is
+determined in part by kind membership. (See Lycan
+(\citeproc{ref-Lycan2001}{2001}) for a longer defence of this kind of
+rejection of (1).) Hawthorne thinks that the intuitive plausibility of
+(1) constitutes a serious objection to those views. But by reflecting a
+little on the phenomenology of what I'll call \emph{totality qualia}, we
+can undermine the intuitive case for (1).
+
+Tweedledee is facing a perfectly symmetrical scene. His visual field is
+symmetric, with two gentle mountains rising to his left and his right
+and a symmetric plain in between them. All he can hear are two birds
+singing in perfect harmony, one behind his left ear and one behind his
+right ear. The smells of the field seem to envelope him rather than
+coming from any particular direction. There is a cool breeze blowing
+directly on his face. It's a rather pleasant scene, and the overwhelming
+feeling is one of \emph{symmetry}.
+
+Tweedledum is very much like Tweedledee. Indeed, Tweedledum contains a
+duplicate of Tweedledee as a proper part. But Tweedledum also has some
+sensors in his skin, and brain cells in what corresponds to a
+suspiciously empty part of Tweedledee's brain, that allow him to detect,
+and \emph{feel}, where the magnetic fields are in the vicinity. And
+sadly, though Tweedledum is facing a duplicate of the scene facing
+Tweedledee, there is a major disturbance in the magnetic field just to
+Tweedledum's left. This produces a jarring sensation in Tweedledum's
+left side. As a consequence, Tweedledum does not share Tweedledee's
+feeling of symmetry.
+
+Whether a picture is symmetric is a property of its internal features,
+but it is also a feature that can be destroyed without changing the
+internal features by just adding more material to one side. It is a
+\emph{totality} property of pictures, a property the picture has because
+it stops just where it does.\footnote{Ted Sider
+  (\citeproc{ref-Sider2001}{2001}, \citeproc{ref-Sider2003}{2003})
+  stresses the importance to a theory of intrinsicness of properties
+  that are instantiated in virtue of the object \emph{not} bearing
+  relations to other objects. My example here is closely modeled on
+  examples from his papers.} Similarly, totality qualia are qualia that
+we have in part because we don't have any more feelings than we actually
+do. Feelings of symmetry are totality qualia in this sense, as are many
+of the feelings of calm and peacefulness associated with Tweedledee's
+state. It is \emph{not} intuitive that totality qualia should be
+intrinsic to a region. Indeed, it seems intuitive that a duplicate of me
+that was extended to produce \emph{more} sensory features would lack
+these feelings. Hence a duplicate of me would not share my conscious
+life in \emph{all} respects, so Hawthorne's premise (1) is also false.
+To be sure, these totality qualia are a somewhat speculative suggestion,
+but the Humean does not \emph{need} them since Hawthorne's anti-Humean
+argument is invalid.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Hall2004}
+Hall, Ned. 2004. {``Causation and the Price of Transitivity.''} In
+\emph{Causation and Counterfactuals}, edited by John Collins, Ned Hall,
+and L. A. Paul, 181--203. Cambridge: MIT Press.
+
+\bibitem[\citeproctext]{ref-Hawthorne2002}
+Hawthorne, John. 2002. {``Deeply Contingent a Priori Knowledge.''}
+\emph{Philosophy and Phenomenological Research} 65 (2): 247--69. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2002.tb00201.x}{10.1111/j.1933-1592.2002.tb00201.x}.
+
+\bibitem[\citeproctext]{ref-Hawthorne2004-Humeans}
+---------. 2004. {``Humeans Are Out of Their Minds.''} \emph{No{û}s} 38
+(2): 351--58. doi:
+\href{https://doi.org/10.1111/j.1468-0068.2004.00473.x}{10.1111/j.1468-0068.2004.00473.x}.
+
+\bibitem[\citeproctext]{ref-Humberstone1996}
+Humberstone, I. L. 1996. {``Intrinsic/Extrinsic.''} \emph{Synthese} 108
+(2): 205--67. doi:
+\href{https://doi.org/10.1007/bf00413498}{10.1007/bf00413498}.
+
+\bibitem[\citeproctext]{ref-Lewis1973a}
+Lewis, David. 1973. \emph{Counterfactuals}. Oxford: Blackwell
+Publishers.
+
+\bibitem[\citeproctext]{ref-Lewis1979c}
+---------. 1979. {``Counterfactual Dependence and Time's Arrow.''}
+\emph{No{û}s} 13 (4): 455--76. doi:
+\href{https://doi.org/10.2307/2215339}{10.2307/2215339}. Reprinted in
+his \emph{Philosophical Papers}, Volume 2, Oxford: Oxford University
+Press, 1986, 32-52. References to reprint.
+
+\bibitem[\citeproctext]{ref-Lewis1993c}
+---------. 1993. {``Many, but Almost One.''} In \emph{Ontology,
+Causality, and Mind: Essays on the Philosophy of {D. M. Armstrong}},
+edited by Keith Campbell, John Bacon, and Lloyd Reinhardt, 23--38.
+Cambridge: Cambridge University Press. doi:
+\href{https://doi.org/10.1017/CBO9780511625343.010}{10.1017/CBO9780511625343.010}.
+Reprinted in his \emph{Papers in Metaphysics and Epistemology},
+Cambridge: Cambridge University Press, 1999, 164-182. References to
+reprint.
+
+\bibitem[\citeproctext]{ref-Lewis1994a}
+---------. 1994. {``Humean Supervenience Debugged.''} \emph{Mind} 103
+(412): 473--90. doi:
+\href{https://doi.org/10.1093/mind/103.412.473}{10.1093/mind/103.412.473}.
+Reprinted in his \emph{Papers in Metaphysics and Epistemology},
+Cambridge: Cambridge University Press, 1999, 224-247. References to
+reprint.
+
+\bibitem[\citeproctext]{ref-Lewis2004a}
+---------. 2004a. {``Causation as Influence.''} In \emph{Causation and
+Counterfactuals}, edited by John Collins, Ned Hall, and L. A. Paul,
+75--106. Cambridge: {MIT} Press.
+
+\bibitem[\citeproctext]{ref-Lewis2004d}
+---------. 2004b. {``Void and Object.''} In \emph{Causation and
+Counterfactuals}, edited by John Collins, Ned Hall, and L. A. Paul,
+277--90. Cambridge: {MIT} Press.
+
+\bibitem[\citeproctext]{ref-Lycan2001}
+Lycan, William. 2001. {``The Case for Phenomenal Externalism.''}
+\emph{Philosophical Perspectives} 15: 17--35. doi:
+\href{https://doi.org/10.1111/0029-4624.35.s15.2}{10.1111/0029-4624.35.s15.2}.
+
+\bibitem[\citeproctext]{ref-McGrath2005}
+McGrath, Sarah. 2005. {``Causation by Omission: A Dilemma.''}
+\emph{Philosophical Studies} 123 (1-2): 125--48. doi:
+\href{https://doi.org/10.1007/s11098-004-5216-z}{10.1007/s11098-004-5216-z}.
+
+\bibitem[\citeproctext]{ref-Menzies1996}
+Menzies, Peter. 1996. {``Probabilistic Causation and the Pre-Emption
+Problem.''} \emph{Mind} 105 (417): 85--117. doi:
+\href{https://doi.org/10.1093/mind/105.417.85}{10.1093/mind/105.417.85}.
+
+\bibitem[\citeproctext]{ref-Menzies1999}
+---------. 1999. {``Intrinsic Versus Extrinsic Conceptions of
+Causation.''} In \emph{Causation and Laws of Nature}, edited by Howard
+Sankey, 313--29. Dordrecht: Kluwer.
+
+\bibitem[\citeproctext]{ref-Sider2001}
+Sider, Theodore. 2001. {``Maximality and Intrinsic Properties.''}
+\emph{Philosophy and Phenomenological Research} 63 (2): 357--64. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2001.tb00109.x}{10.1111/j.1933-1592.2001.tb00109.x}.
+
+\bibitem[\citeproctext]{ref-Sider2003}
+---------. 2003. {``Maximality and Microphysical Supervenience.''}
+\emph{Philosophy and Phenomenological Research} 66 (1): 139--49. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2003.tb00247.x}{10.1111/j.1933-1592.2003.tb00247.x}.
+
+\bibitem[\citeproctext]{ref-WeathersonSRE}
+Weatherson, Brian. 2005. {``Scepticism, Rationalism and Externalism.''}
+\emph{Oxford Studies in Epistemology} 1: 311--31.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Noûs}, 2006, pp. 529-535.
+
+\end{document}

@@ -1,0 +1,781 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Luminous Margins
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Luminous Margins},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Luminous Margins\thanks{Thanks to Tamar Szabó Gendler, John
+Hawthorne, Chris Hill, Ernest Sosa and the \emph{AJP}'s referees.}}
+\author{Brian Weatherson}
+\date{2004}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Timothy Williamson has recently argued that few mental states are
+luminous, meaning that to be in that state is to be in a position to
+know that you are in the state. His argument rests on the plausible
+principle that beliefs only count as knowledge if they are safely true.
+That is, any belief that could easily have been false is not a piece of
+knowledge. I argue that the form of the safety rule Williamson uses is
+inappropriate, and the correct safety rule might not conflict with
+luminosity.
+\end{abstract}
+
+\setstretch{1.1}
+\section{Luminosity}\label{luminosity}
+
+In \emph{Knowledge and Its Limits} Timothy Williamson argues that few
+conditions are \emph{luminous}. \footnote{Williamson
+  (\citeproc{ref-Williamson2000-WILKAI}{2000}) Ch. 4; all references to
+  this book unless otherwise specified.} A condition is luminous iff we
+know we are in it whenever we are. Slightly more formally, Williamson
+defines
+
+\begin{quote}
+A condition C is defined to be \emph{luminous} if and only if (L) holds:
+
+\begin{description}
+\tightlist
+\item[(L)]
+For every case α, if in α C obtains, then in α one is in a position to
+know that C obtains (95).
+\end{description}
+\end{quote}
+
+Intuitively, the argument against this is as follows. The following
+three conditions are incompatible.
+
+\begin{description}
+\tightlist
+\item[Gradual Change]
+There is a series of cases, each very similar to adjacent cases, that
+starts with a case where C clearly obtains, and ends with a case where C
+clearly doesn't obtain.
+\item[Luminosity]
+Whenever C obtains you can know it does.
+\item[Safety]
+Only safe beliefs count as knowledge, so whenever you can know that C
+obtains, C obtains in all very similar cases.
+\end{description}
+
+Luminosity and Safety entail
+
+\begin{description}
+\tightlist
+\item[Tolerance]
+Whenever C obtains, it obtains in all very similar cases.
+\end{description}
+
+But Tolerance is incompatible with Gradual Change, since Tolerance
+entails that if the first member of the series is a case where C
+obtains, then every successive member is also a case where C obtains.
+Williamson argues that for any interesting epistemic condition, Gradual
+Change is a clear possibility. And he argues that Safety is a general
+principle about knowledge. So Luminosity must be scrapped. The
+counterexamples to Luminosity we get from following this proof through
+are always borderline cases of C obtaining. In these cases Luminosity
+fails because any belief that C did obtain would be unsafe, and hence
+not knowledge.
+
+I will argue, following Sainsbury (\citeproc{ref-Sainsbury1996}{1995}),
+that Williamson has misinterpreted the requirement that knowledge be
+safe. The most plausible safety condition might be compatible with
+Gradual Change and Luminosity, if we make certain plausible assumptions
+about the structure of phenomenal beliefs.
+
+One consequence of the failure of Luminosity is that a certain
+historically important kind foundationalist analysis of knowledge fails.
+This kind of foundationalist takes the foundations to be luminous.
+Although I think Williamson's argument against Luminosity does not work,
+my objections are no help to the foundationalist. As I said, my
+objection to Williamson rests on certain assumptions about the structure
+of phenomenal beliefs. It is a wide open empirical and philosophical
+question whether these assumptions are true. If this kind of
+foundationalism provided a plausible \emph{analysis} of knowledge, then
+it would be a wide open question whether our purported knowledge rested
+on any foundations, and hence a wide open question whether we really had
+any knowledge. But this is a closed question. It is a Moorean fact that
+we know many things. So while I object to Williamson's claim that we
+have no luminous mental states, I do not object to the weaker claim that
+we \emph{might} not have any luminous mental states, and this claim is
+enough to do much of the philosophical work to which Williamson puts
+Luminosity.
+
+\section{Williamson's Example}\label{williamsons-example}
+
+Williamson suggests that (L), the formal rendition of Luminosity, fails
+for all interesting conditions even if we restrict the quantifier to
+those that are `physically and psychologically feasible' (94), and I
+will assume that is what we are quantifying over. To argue that (L)
+fails for any interesting C, Williamson first argues that it fails in a
+special case, when C is the condition \emph{feeling cold}, and then
+argues that the conditions that lead to failure here are met for any
+other interesting C. So I will also focus on the special case.
+
+Mr Davis's apartment faces southwest, so while it is often cold in the
+mornings it always warms up as the midday and afternoon sun streams in.
+This morning Mr Davis felt cold when he awoke, but now at noon he is
+quite warm, almost hot. But the change from wake-up time to the present
+is rather gradual. Mr Davis does not take a hot bath that morning, nor
+cook a hot breakfast, but sits reading by the window until the sun does
+its daily magic. Assume, for the sake of the argument, that
+\emph{feeling cold} is luminous, so whenever Mr Davis feels cold, he
+knows he feels cold. Williamson argues this leads to a contradiction as
+follows. (I've changed names and pronouns to conform with my example.)
+
+\begin{quote}
+Let \emph{t}\textsubscript{0}, \emph{t}\textsubscript{1}, \ldots,
+\emph{t\textsubscript{n}} be a series of times at one millisecond
+intervals from dawn to noon. Let α\textsubscript{\emph{i}} be the case
+at \emph{t\textsubscript{i}} (0 ⩽~\emph{i}~⩽~\emph{n}). Consider a time
+\emph{t\textsubscript{i}} between \emph{t}\textsubscript{0} and
+\emph{t\textsubscript{n}}, and suppose that at \emph{t\textsubscript{n}}
+Mr Davis knows that he feels cold. \ldots{} Now at
+\emph{t\textsubscript{i}}\textsubscript{+1} he is almost equally
+confident that he feels cold, by the description of the case. So if he
+does not feel cold at \emph{t\textsubscript{i}}\textsubscript{+1}, then
+his confidence at \emph{t\textsubscript{i}} that he feels cold is not
+reliably based, for his almost equal confidence on a similar basis one
+millisecond earlier that he felt cold was misplaced \ldots{} His
+confidence at \emph{t\textsubscript{i}} was reliably based in the way
+required for knowledge only if he feels cold at
+\emph{t\textsubscript{i}}\textsubscript{+1}. In the terminology of
+cases\ldots:
+
+(\textsc{i}\textsubscript{\emph{i}}) If in α\textsubscript{\emph{i}} he
+knows that he feels cold, then in α\textsubscript{\emph{i}+1} he feels
+cold. (97)
+\end{quote}
+
+Given (L), all instances of (\textsc{i}\textsubscript{\emph{i}}), and
+the fact that Mr Davis feels cold when he awakes, we get the false
+conclusion that he now feels cold. So if we accept all instances of
+(\textsc{i}\textsubscript{\emph{i}}), we must conclude that (L) is false
+when C is \emph{feeling cold} and `one' denotes Mr Davis. Why, then,
+accept (\textsc{i}\textsubscript{\emph{i}})? One move Williamson makes
+here is purely defensive. He notes that
+(\textsc{i}\textsubscript{\emph{i}}) is different from the conditionals
+that lead to paradox in the Sorites argument. The antecedent of
+(\textsc{i}\textsubscript{\emph{i}}) contains the modal operator
+\emph{knows that} absent from its consequent, so we cannot chain
+together instances of (\textsc{i}\textsubscript{\emph{i}}) to produce an
+implausible conditional claim. If that operator were absent then from
+all the instances of (\textsc{i}\textsubscript{\emph{i}}) it would
+follow that if Mr Davis feels cold at dawn he feels cold at noon, which
+is false. But by strengthening the antecedent, Williamson weakens
+(\textsc{i}\textsubscript{\emph{i}}) to avoid that conclusion. But the
+fact that (\textsc{i}\textsubscript{\emph{i}}) is not paradoxical is not
+sufficient reason to accept it.
+
+\section{Reliability}\label{reliability}
+
+It is useful to separate out two distinct strands in Williamson's
+argument for (\textsc{i}\textsubscript{\emph{i}}). One strand sees
+Williamson arguing for (\textsc{i}\textsubscript{\emph{i}}) by resting
+on the principle that beliefs constitute knowledge only if they are
+reliably based. The idea is that if Mr Davis's belief that he feels cold
+is a bit of knowledge, it is reliable, and if it is reliable it is true
+in all similar situations, and hence it is true in
+α\textsubscript{\emph{i}+1}. The other strand sees him appealing to a
+vague but undoubtedly real requirement that beliefs must be
+\emph{safely} true in order to be knowledge. Neither argument is
+successful, though the second kind of argument is better than the first.
+
+Williamson acknowledges Conee and Feldman's arguments that no
+reliabilist epistemologist has yet solved the generality problem (100).
+But he takes this to be reason to abandon not the concept of
+reliability, but the hope of providing a reductive analysis of it.
+Williamson thinks we can get a long way by just resting on the intuitive
+concept of reliability. This seems to be a mistake. There are two
+ordinary ways of using `reliable' in the context of discussing beliefs,
+and neither provides support for (\textsc{i}\textsubscript{\emph{i}}).
+
+First, and this is clearly not what is needed, sometimes `reliable' just
+means true. This is the sense of the word in which we can consistently
+say, ``It turned out the information that old Ronnie provided us about
+where the gov'nor was eating tonight was reliable, which was plenty
+surprising since Ronnie hadn't been right about anything since the Nixon
+administration.'' This is the sense in which reliable means just what
+the etymology suggests it means, something that can be relied upon. And
+that means, in practice, \emph{true}. But that won't help at all, for if
+`reliable' just means true, then nothing follows from the fact that
+knowledge is reliable that does not follow from the fact that it is
+factive.
+
+Second, there is a distinctively philosophical sense in which reliable
+means something more like true in a wide range of circumstances. This is
+the sense in which a stopped clock is not even reliable twice a day. At
+first, this might look to help Williamson a little more. But if
+philosophical usage is to be key, the second look is more discouraging.
+For in its philosophical usage, reliability does not even entail truth.
+And if reliability does not entail truth in the actual situation, it
+surely does not entail truth in nearby situations. But Williamson's
+argument for (\textsc{i}\textsubscript{\emph{i}}) requires that
+reliability in α\textsubscript{\emph{i}} entails truth in
+α\textsubscript{\emph{i}+1}. So on neither of its natural readings does
+the concept of reliability seal the argument here, and since we have no
+unnatural reading to fall back upon, the argument from reliability for
+(\textsc{i}\textsubscript{\emph{i}}) fails. To be fair, by chapter 5 of
+Williamson's book the concept of reliability that seems to be employed
+is little distinguishable from the concept of safety. So let us turn to
+those arguments.
+
+\section{Safety}\label{safety}
+
+Williamson at times suggests that the core argument for
+(\textsc{i}\textsubscript{\emph{i}}) is a straight appeal to intuition.
+``{[}E{]}ven when we can appeal to rigorous rules, they only postpone
+the moment at which we must apply concepts in particular cases on the
+basis of good judgement. \ldots{} The argument for
+(\textsc{i}\textsubscript{\emph{i}}) appeals to such judgement.'' (101)
+The appeal to intuition is the royal road to scepticism, so we would be
+justified in being a little wary of it. Weinberg, Stich, and Nichols
+(\citeproc{ref-Weinberg2001}{2001}) discovered that undergraduates from
+the same social class as Williamson, Mr Davis and I would frequently
+judge that a subject could not know that mule was a mule unless he could
+tell it apart from a cleverly painted zebra. The judgements of that
+class are not obviously the basis for a sane epistemology.
+
+Williamson undersells his argument by making it an appeal to judgement.
+For there is a principle here, if not a rigorous rule, that grounds the
+judgement. The principle is something like Ernest Sosa's safety
+principle. The idea is that a belief does not constitute knowledge if it
+is false in similar situations. ``{[}N{]}ot easily would S believe that
+\emph{p} without it being the case that \emph{p}.''
+(\citeproc{ref-Sosa1999}{Sosa 1999, 142}) There is much to be said here
+about what is a \emph{similar} situation. (David Lewis
+(\citeproc{ref-Lewis1996b}{1996}) discusses a concept of similarity in
+the context of saying that worlds can be \emph{salient}, in his sense,
+in virtue of being similar to salient worlds.) It might turn out that
+there is no account of similarity that makes it plausible that this is a
+constraint on knowledge. But for present purposes I am prepared to grant
+(a) that only safe beliefs count as knowledge, and (b) that
+α\textsubscript{\emph{i}+1} is a similar situation to
+α\textsubscript{\emph{i}}.
+
+This might seem like too much of a concession to Williamson, for it
+already conflicts with some platitudes about knowledge. Consider a case
+that satisfies the following three conditions. Some light reflects off a
+leopard some distance away and strikes our eyes. The impact of that
+light causes, by the normal processes, a belief that a leopard is nearby
+to appear in our belief box. Beliefs, including leopard-related beliefs,
+that we form by this kind of process are on the whole very reliable. You
+might think these conditions are sufficient for our belief to count as
+\emph{knowledge} that a tiger is present. The proponent of Safety denies
+this. She says that if, for example, there are several cheetahs with a
+particularly rare mutation that make the look much like leopards around,
+and if we saw them at similar distance we would have mistaken them for
+leopards. Since we could easily have had the belief that a leopard is
+nearby while there were no leopards, only cheetahs, nearby, the belief
+is not safe and so does not count as knowledge.
+
+There are two reasons to think that safety is too strong here, neither
+of which strike me as completely compelling. (I'm still conceding things
+to Williamson here. If there's a general objection to Safety then his
+argument against Luminosity does not get off the ground. That's not my
+position. As I'll soon argue, I think Williamson has misinterpreted
+Safety.) The first reason is a worry that if we deny knowledge in a case
+of reliable veridical perception, we are conceding too much to the
+sceptic. But the proponent of Safety has a very good reason to
+distinguish this case from my current veridical perception of a table -
+my perception is safe and the perception of a leopard is not. So there
+is no slippery slope to scepticism here. The second is that the
+allegedly similar case is not really that similar, because in that case
+the belief is caused by a \emph{cheetah}, not a \emph{leopard}. But to
+regard cases where the evidence is different in this way as being
+dissimilar is to make the safety condition impotent, and Sosa has shown
+that we need \emph{some} version of Safety to account for our intuitions
+about different cases.\footnote{I assume here a relatively conservative
+  epistemological methodology, one that says we should place a high
+  priority on having our theories agree with our intuitive judgments.
+  I'm in favour of a more radical methodology that makes theoretical
+  virtues as important as agreement with particular intuitions
+  Weatherson (\citeproc{ref-Weatherson2003-WEAWGA}{2003}). On the
+  radical view Safety might well be abandoned. But on that view
+  knowledge might be merely true belief, or merely justified true
+  belief, so the argument for Luminosity will be a non-starter. But the
+  argument of this paper does not rest on these radical methodological
+  principles. The position I'm defending is that, supposing a standard
+  methodological approach, we should accept a Safety principle. But as
+  I'll argue, the version of Safety Williamson adopts is not
+  appropriate, and the appropriate version does not necessarily support
+  the argument against Luminosity.}
+
+So I think some version of Safety should be adopted. I don't think this
+gives us (\textsc{i}\textsubscript{\emph{i}}), for reasons related to
+some concerns first raised by Mark Sainsbury
+(\citeproc{ref-Sainsbury1996}{1995}). The role for Safety condition in a
+theory of knowledge is to rule out knowledge by lucky guesses. This
+includes lucky guesses in mathematics. If Mr Davis guesses that 193 plus
+245 is 438, he does not thereby know what 193 plus 245 is. Can Safety
+show why this is so? Yes, but only if we phrase it in a certain way.
+Assume that we have a certain belief \emph{B} with content \emph{p}. (As
+it might be, Mr Davis's belief with content 193 + 245 = 438.) Then the
+following two conditions both have claims to being the correct analysis
+of `safe' as it appears in Safety.
+
+\begin{description}
+\tightlist
+\item[Content-safety]
+\emph{B} is safe iff \emph{p} is true in all similar worlds.
+\item[Belief-safety]
+\emph{B} is safe iff \emph{B} is true in all similar worlds.
+\end{description}
+
+If we rest with content-safety, then we cannot explain why Mr Davis's
+lucky guess does not count as knowledge. For in all nearby worlds, the
+content of the belief he actually has is true. If we use belief-safety
+as our condition though, I think we can show why Mr Davis has not just
+got some mathematical knowledge. The story requires following Marian
+David's good advice for token physicalists and rejecting content
+essentialism about belief (David (\citeproc{ref-David2002}{2002}); see
+also Gibbons (\citeproc{ref-Gibbons1993}{1993})). The part of Mr Davis's
+brain that currently instantiates a belief that 193 plus 245 is 438
+could easily have instantiated a belief that 193 plus 245 is 338, for Mr
+Davis is not very good at carrying hundreds while guessing. If, as good
+physicalists, we identify his belief with the part of the brain that
+instantiates it, we get the conclusion that this very belief could have
+had the \emph{false} content that 193 plus 245 is 338. So the belief is
+not safe, and hence it is not knowledge.
+
+This lends some credence to the idea that it's belief-safety, not
+content-safety, that's the important safety criteria. When talking about
+Mr Davis's mathematical hunches, belief-safety is a stronger condition
+than content-safety. But when talking about his feelings, things may be
+reversed.
+
+Let me tell you a little story about how Mr Davis's mind is
+instantiated. Mr Davis's phenomenal beliefs do not arise from one part
+of his brain, his belief box or mind's eye, tracking another part, the
+part whose states constitute his feeling cold. Rather, when he is in
+some phenomenal state, the very same brain states constitute both the
+phenomena and a belief about the phenomena. Mr Davis's brain is so wired
+that he could not have any sensation of radiant heat (or lack thereof)
+without his \emph{thereby} believing that he is having just that
+sensation, because he could not have felt cold without that feeling
+itself being a belief that he felt cold. In that case, belief-safety
+will not entail (\textsc{i}\textsubscript{\emph{i}}). Imagine that at
+α\textsubscript{\emph{i}} Mr Davis feels cold, but at
+α\textsubscript{\emph{i}+1} he does not. (I assume here, with
+Williamson, that there is such an \emph{i}.) At
+α\textsubscript{\emph{i}} he thereby believes that he feels cold. The
+content of that belief is a \emph{de se} proposition that is false at
+α\textsubscript{\emph{i}+1}, so it violates content-safety. But in
+α\textsubscript{\emph{t}+1} that part of his brain does not constitute
+his feeling cold (for he does not feel cold), and thereby does not
+constitute his believing that he feels cold. By hypothesis, by that time
+no part of his brain constitutes feeling cold. So the belief in
+α\textsubscript{\emph{i}} that he feels cold is not false in
+α\textsubscript{\emph{i}+1}; it either no longer exists, or now has the
+true content that Mr Davis does not feel cold. So belief-safety does not
+prevent this belief of Mr Davis's from being knowledge. And indeed, it
+seems rather plausible that it \emph{is} knowledge, for he could not
+have had just \emph{this} belief without it being true. This belief
+violates content-safety but not belief-safety, and since we have no
+reason to think that content-safety rather than belief-safety is the
+right form of the safety constraint, we have no reason to reject the
+intuition that this belief, this more or less infallible belief, counts
+as a bit of knowledge.
+
+This story about Mr Davis's psychology might seem unbelievable, so let
+me clear up some details. Mr Davis has both phenomenal and judgemental
+beliefs about his phenomenal states. The phenomenal beliefs are present
+when and only when the phenomenal states are present. The judgemental
+beliefs are much more flexible, they are nomically independent of the
+phenomena they describe. The judgemental beliefs are grounded in `inner
+perceptions' of his phenomenal states. The phenomenal beliefs are not,
+they just are the phenomenal states. The judgemental beliefs can be
+complex, as in a belief that \emph{I feel cold iff it is Monday}, while
+the phenomenal beliefs are always simple. It is logically possible that
+Mr Davis be wired so that he feel cold without believing he feels cold,
+but it is not an accident that \emph{he} is so wired. Most of his
+conspecifics are similarly set up. It is possible that at a particular
+time Mr Davis has \emph{both} a phenomenal belief and a judgemental
+belief that he feels cold, with the beliefs being instantiated in
+different parts of his brain. If he has both of these beliefs in
+α\textsubscript{\emph{i}}, then Williamson's argument may well show that
+the judgemental belief does not count as knowledge, for it could be
+false in α\textsubscript{\emph{i}+1}. If he has the judgemental belief
+that he is not cold in α\textsubscript{\emph{i}}, then the phenomenal
+belief that he is cold may not be knowledge, for it is plausible that
+the existence of a contrary belief defeats a particular belief's claim
+to knowledge. But that does not mean that he is not \emph{in a position
+to know} that he is cold in α\textsubscript{\emph{i}}.
+
+Some may object that it is conceptually impossible that a brain state
+that instantiates a phenomenal feel should also instantiate a belief.
+And it is true that Mr Davis's phenomenal states do not have some of the
+features that we typically associate with beliefs. These states are
+relatively unstructured, for example. Anyone who thinks that it is a
+conceptual truth that mental representations are structured like
+linguistic representations will think that Mr Davis could not have the
+phenomenal beliefs I have ascribed to him. But it is very implausible
+that this is a \emph{conceptual} truth. The best arguments for the
+language of thought hypothesis rest on empirical facts about believers,
+especially the facts that mental representation is typically productive
+and systematic. If there are limits to how productive and systematic Mr
+Davis's phenomenal representations are, then it is possible that his
+phenomenal states are beliefs. Certainly those states are correlated
+with inputs (external states of affairs) and outputs (bodily movements,
+if not actions) to count as beliefs on some functionalist conceptions of
+belief.
+
+A referee noted that we don't \emph{need} the strong assumption that
+phenomenal states can be beliefs to make the argument here, though it
+probably is the most illumination example. Either of the following
+stories about Mr Davis's mind could have done. First, Mr Davis's
+phenomenal belief may be of the form ``I feel ϕ'', where ``I'' and
+``feel'' are words in Mr Davis's language of thought, and ϕ is the
+phenomenal state, functioning as a name for itself. As long as the
+belief arises whenever Mr Davis is ϕ, and it has the phenomenal state as
+a constituent, it can satisfy belief-safety even when content-safety
+fails. The second option involves some more contentious assumptions. The
+phenomenal belief may be of the form ``I feel thus'', where the
+demonstrative picks out the phenomenal state. As long as it is essential
+to the belief that it includes a demonstrative reference to that
+phenomenal state, it will satisfy belief-safety. This is more
+contentious because it might seem plausible that a particular
+demonstrative belief could have picked out a different state. What won't
+work, of course, is if the phenomenal belief is ``I feel \emph{F}'',
+where \emph{F} is an attempted description of the phenomenal state. That
+certainly violates every kind of safety requirement. I think it is
+plausible that phenomenal states could be belief states, but if you do
+not believe that it is worth noting the argument could possibly go
+through without it, as illustrated in this paragraph.
+
+Mr Davis is an interesting case because he shows just how strong a
+safety assumption we need to ground
+(\textsc{i}\textsubscript{\emph{i}}). For Mr Davis is a counterexample
+to (\textsc{i}\textsubscript{\emph{i}}), but his coldness beliefs
+satisfy many plausible safety-like constraints. For example, his beliefs
+about whether he feels cold are sensitive to whether he feels cold.
+Williamson (Ch. 7) shows fairly conclusively that knowledge does not
+entail sensitivity, so one might have thought that in interesting cases
+sensitivity would be too strong for what is needed, not too weak as it
+is here. From this it follows that any safety condition that is strictly
+weaker than sensitivity, such as the condition that the subject could
+not easily believe \emph{p} and be wrong, is not sufficient to support
+(\textsc{i}\textsubscript{\emph{i}}). Williamson slides over this point
+by assuming that the subject will be almost as confident that he feels
+cold at α\textsubscript{\emph{i}+1} as he is at
+α\textsubscript{\emph{i}}. This is no part of the description of the
+case, as Mr Davis shows.
+
+My argument above rests on the denial of content essentialism, which
+might look like a relatively unsafe premise. So to conclude this
+section, let's see how far the argument can go without that assumption.
+Sainsbury responds to his example, the lucky arithmetic guess, by
+proposing a different version of safety: mechanism-safety.
+
+\begin{description}
+\tightlist
+\item[Mechanism-safety]
+\emph{B} is safe iff the mechanism that produced \emph{B} produces true
+beliefs in all similar worlds.
+\end{description}
+
+I didn't want to rest on this too much because I think it's rather hard
+to say exactly what the mechanism is that produces Mr Davis's belief
+that he feels cold. But if it's just his sensory system, then I think it
+is clear that even at α\textsubscript{\emph{i}}, Mr Davis's belief that
+he feels cold satisfies mechanism-safety. The bigger point here is that
+content-safety is a very distinctive kind of safety claim, but it's the
+only kind that justifies (\textsc{i}\textsubscript{\emph{i}}).
+
+\section{Retractions}\label{retractions}
+
+To close, let me stress how limited my criticisms of Williamson here
+are. Very briefly, the argument is that there can be some
+self-presenting mental states, states that are either token identical
+with the belief that they exist or are constituents of (the contents of)
+beliefs that they exist, and these beliefs will satisfy all the safety
+requirements we should want, even in borderline cases. If some
+conditions are invariably instantiated by self-presenting states, then
+those conditions will be luminous. And I think it is a live possibility,
+relative at least to the assumptions Williamson makes, that there are
+such self-presenting states. But there aren't very many of them. There
+is a reason I picked \emph{feels cold} as my illustration. It's not
+laughable that it is self-presenting.
+
+On the other hand, it is quite implausible that, say, \emph{knowing
+where to buy the best Guinness} is self-presenting. And for states that
+are not self-presenting, I think Williamson's anti-luminosity argument
+works. That's because it is very plausible (a) that for a belief to be
+knowledge it must satisfy either belief-safety or mechanism-safety, (b)
+a non-self-presenting state satisfies belief-safety or mechanism-safety
+only if it satisfies content-safety, and (c) as Williamson showed, if
+beliefs about a state must satisfy content-safety to count as knowledge,
+then that state is not luminous. So epistemic states, like the state of
+knowing where to buy the best Guinness, are not luminous. That is to
+say, one can know where to buy the best Guinness without knowing that
+one knows this. And saying that (for these reasons) is to just endorse
+Williamson's arguments against the KK principle. Those arguments are an
+important special case of the argument against luminosity, and I don't
+see how any of my criticisms of the general argument touch the special
+case.
+
+Williamson describes his attacks on luminosity as an argument for
+cognitive homelessness. If a state was luminous, that state would be a
+cognitive home. Williamson thinks we are homeless. I think we \emph{may}
+have a small home in our phenomenal states. This home is not a mansion,
+perhaps just a small apartment with some afternoon sun, but it may be a
+home.
+
+Don't be fooled into thinking this supports any kind of foundationalism
+about knowledge, however. It is true that \emph{if} we have the kind of
+self-presenting states that Mr Davis has (under one of the three
+descriptions I've offered), then we have the self-justifying beliefs
+that foundationalism needs to get started. But it is at best a wide-open
+philosophical and scientific question whether we have any such states,
+while it is not a wide-open question whether we have any knowledge, or
+any justified beliefs. If these states are the only things that could
+serve as foundations, it would be at least conceptually possible that we
+could have knowledge without self-justifying foundations. So the kind of
+possibility exemplified by Mr Davis cannot, on its own, prop up
+foundationalism.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-David2002}
+David, Marian. 2002. {``Content Essentialism.''} \emph{Acta Analytica}
+17: 103--14. doi:
+\href{https://doi.org/10.1007/bf03177510}{10.1007/bf03177510}.
+
+\bibitem[\citeproctext]{ref-Gibbons1993}
+Gibbons, John. 1993. {``Identity Without Supervenience.''}
+\emph{Philosophical Studies} 70 (1): 59--79. doi:
+\href{https://doi.org/10.1007/bf00989662}{10.1007/bf00989662}.
+
+\bibitem[\citeproctext]{ref-Lewis1996b}
+Lewis, David. 1996. {``Elusive Knowledge.''} \emph{Australasian Journal
+of Philosophy} 74 (4): 549--67. doi:
+\href{https://doi.org/10.1080/00048409612347521}{10.1080/00048409612347521}.
+Reprinted in his \emph{Papers in Metaphysics and Epistemology},
+Cambridge: Cambridge University Press, 1999, 418-446. References to
+reprint.
+
+\bibitem[\citeproctext]{ref-Sainsbury1996}
+Sainsbury, Mark. 1995. {``Vagueness, Ignorance and Margin for Error.''}
+\emph{British Journal for the Philosophy of Science} 46: 589--601. doi:
+\href{https://doi.org/10.1093/bjps/46.4.589}{10.1093/bjps/46.4.589}.
+
+\bibitem[\citeproctext]{ref-Sosa1999}
+Sosa, Ernest. 1999. {``How to Defeat Opposition to Moore.''}
+\emph{Philosophical Perspectives} 13: 141--53. doi:
+\href{https://doi.org/10.1111/0029-4624.33.s13.7}{10.1111/0029-4624.33.s13.7}.
+
+\bibitem[\citeproctext]{ref-Weatherson2003-WEAWGA}
+Weatherson, Brian. 2003. {``{What Good Are Counterexamples?}''}
+\emph{Philosophical Studies} 115 (1): 1--31. doi:
+\href{https://doi.org/10.1023/A:1024961917413}{10.1023/A:1024961917413}.
+
+\bibitem[\citeproctext]{ref-Weinberg2001}
+Weinberg, Jonathan, Stephen Stich, and Shaun Nichols. 2001.
+{``Normativity and Epistemic Intuitions.''} \emph{Philosophical Topics}
+29 (1): 429--60. doi:
+\href{https://doi.org/10.5840/philtopics2001291/217}{10.5840/philtopics2001291/217}.
+
+\bibitem[\citeproctext]{ref-Williamson2000-WILKAI}
+Williamson, Timothy. 2000. \emph{{Knowledge and its Limits}}. Oxford
+University Press.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Australasian Journal of Philosophy}, 2004, pp. 373-383.
+
+\end{document}

@@ -1,0 +1,851 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\usepackage{nicefrac}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Ross on Sleeping Beauty},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Ross on Sleeping Beauty}
+\author{Brian Weatherson}
+\date{2013}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+In two excellent recent papers, Jacob Ross has argued that the standard
+arguments for the `thirder' answer to the Sleeping Beauty puzzle lead to
+violations of countable additivity. The problem is that most arguments
+for that answer generalise in awkward ways when he looks at the whole
+class of what he calls Sleeping Beauty problems. In this note I develop
+a new argument for the thirder answer that doesn't generalise in this
+way.
+\end{abstract}
+
+\setstretch{1.1}
+In two excellent recent papers, Jacob Ross
+(\citeproc{ref-Ross2010}{2010}, \citeproc{ref-Ross2012}{2012}) has
+argued that the standard arguments for the ⅓~answer to the Sleeping
+Beauty puzzle lead to violations of countable additivity. The problem is
+that most arguments for the ⅓~answer generalise in awkward ways when he
+look at the whole class of what he calls \emph{Sleeping Beauty
+problems}.
+
+\begin{quote}
+Let us define a \emph{Sleeping Beauty problem} as any problem in which a
+fully rational agent, Beauty, will undergo one or more mutually
+indistinguishable awakenings and in which the number of awakenings she
+will undergo is determined by the outcome of a random process. Let
+\emph{S} be a partition of alternative hypotheses concerning the outcome
+of this process. Beauty knows the objective chance of each hypothesis in
+\emph{S}, and she also knows how many times she will awaken conditional
+on each of these hypotheses, but she has no other relevant information.
+The problem is to determine how her credence should be divided among the
+hypotheses in \emph{S} when she first awakens. The original Sleeping
+Beauty problem is the instance of this class of problems in which the
+random process that determines how many times Beauty awakens is a fair
+coin toss and in which Beauty awakens once given Heads and twice given
+Tails. (\citeproc{ref-Ross2010}{Ross 2010, 413--14})
+\end{quote}
+
+The `Generalised Thirder Principle' says
+
+\begin{quote}
+In any Sleeping Beauty problem, defined by a partition \emph{S}, upon
+first awakening, Beauty's credence in any given hypothesis in \emph{S}
+should be proportional to the product of its objective chance and the
+number of times Beauty awakens if this hypothesis is true.
+(\citeproc{ref-Ross2010}{Ross 2010, 414})
+\end{quote}
+
+Ross shows that this Principle leads to violations of countable
+additivity, and argues (convincingly to my mind) that this is a serious
+problem for the Principle. In Ross (\citeproc{ref-Ross2010}{2010}) he
+argues that many arguments for the ⅓~answer imply the Generalised
+Thirder Principle, and in Ross (\citeproc{ref-Ross2012}{2012}) he argues
+that the same is true of the argument for the ⅓~answer in Weatherson
+(\citeproc{ref-Weatherson-SoSB}{2011}). He suggests that we have some
+inductive reason to think that \emph{all} arguments for the ⅓~answer
+will imply the Generalised Thirder Principle. In reply I want to make
+three points.
+
+First, Ross offers a much more careful presentation and analysis of the
+argument for the ⅓~answer than appears in Weatherson
+(\citeproc{ref-Weatherson-SoSB}{2011}), and that analysis does really
+suggest that the argument overgenerates. But second, the careful setting
+out suggests that the argument fails by its own standards; it commits a
+fallacy of equivocation. So I don't think it's as much inductive
+evidence for Ross's general conclusion about all arguments for the
+⅓~answer as he suggests. And third, the inductive conclusion Ross draws
+is not true. There are arguments for the ⅓~answer that don't imply the
+Generalised Thirder principle. Below I outline two ways to fix the
+argument in Weatherson (\citeproc{ref-Weatherson-SoSB}{2011}) so that it
+becomes such an argument.
+
+It will be worthwhile having a minimal example of where the Generalised
+Thirder principle goes beyond the arguments for the ⅓~answer, so
+consider the following minimal version.
+
+\begin{quote}
+\textbf{Three-Day Sleeping Beauty}
+
+A coin will be flipped. If it comes up Heads, Beauty will wake up
+Monday, and go back to sleep until Thursday. If it comes up Tails,
+Beauty will wake Monday, then have her memories of that waking erased,
+then wake again Tuesday, and have her memories of that waking erased,
+then wake up Wednesday, and go back to sleep until Thursday. The
+different possible wakings will be indistinguishable.\footnote{I have
+  some concerns about what `indistinguishable' means in this context.
+  We'll come back to that issue a lot in what follows.} When she wakes
+on Monday, what should her credence be that the coin landed Heads?
+\end{quote}
+
+The Generalised Thirder says that it should be ¼. One of our aims here
+will be to come up with an argument for the ⅓~answer in the original
+puzzle that doesn't imply the answer to the Three-Day Sleeping Beauty
+puzzle is ¼.
+
+Returning to the original puzzle, Let \emph{Cr}\textsubscript{1} be
+Beauty's credence function when she wakes on Monday. Let \emph{M} be the
+proposition Beauty would express on waking with ``Today is Monday''. And
+let \emph{H} be the proposition that the coin landed heads. The ⅓~answer
+entails that the following claims are all true.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{Cr}\textsubscript{1}(\emph{M}~∧~\emph{H})~=~\emph{Cr}\textsubscript{1}(\emph{M}~∧~¬\emph{H})
+\item
+  \emph{Cr}\textsubscript{1}(¬\emph{M}~∧~¬\emph{H})~=~\emph{Cr}\textsubscript{1}(¬\emph{M}~∧~¬\emph{H})
+\item
+  \emph{Cr}\textsubscript{1}(\emph{M}~∧~¬\emph{H})~=~\emph{Cr}\textsubscript{1}(¬\emph{M}~∧~¬\emph{H})
+\end{enumerate}
+
+The usual argument for the ⅓~answer argues for (1) and (2), and then
+derives (3). And the arguments for (2) typically generalise into
+arguments for the Generalised Thirder Principle, and hence to violations
+of countable additivity.
+
+To get a bit better feel for what's going on with these principles,
+consider one interesting sub-class of Ross's large category of Sleeping
+Beauty problems. These are problems where there are \emph{n} chance
+hypotheses, and for any \emph{i} such that 1 ⩽ \emph{i} ⩽ \emph{n},
+Beauty is woken \emph{i} times if chance hypothesis
+\emph{h\textsubscript{i}} is true. When she wakes up, we can let the
+proposition \emph{p\textsubscript{ji}}, where 1 ⩽ \emph{j} ⩽ \emph{i} ⩽
+\emph{n}, be the proposition that this is the \emph{i}'th day, and
+chance hypothesis \emph{h\textsubscript{j}} is true. The following
+table, where the chance hypotheses are on the rows, and days are on the
+columns, represents the possibilities as they strike Beauty.
+
+\begin{longtable}[]{@{}lcccc@{}}
+\toprule\noalign{}
+~ & ~ Day 1 ~ & ~ Day 2 ~ & ~\ldots~ & ~Day \emph{n} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\emph{h}\textsubscript{1}~ & ~\emph{p}\textsubscript{11} ~ & ~ ~ & ~ ~ &
+~ \\
+\emph{h}\textsubscript{2}~ & ~\emph{p}\textsubscript{12} ~ &
+~\emph{p}\textsubscript{22} ~ & ~ ~ & ~ \\
+\ldots{} ~ & ~ ~ & ~ ~ & ~ ~ & ~ \\
+\emph{h\textsubscript{n}}~ & ~\emph{p}\textsubscript{1\emph{n}}~ &
+~\emph{p}\textsubscript{2\emph{n}}~ & ~\ldots~ &
+~\emph{p\textsubscript{nn}} \\
+\end{longtable}
+
+The usual argument for the ⅓~answer to Sleeping Beauty includes a
+`vertical' argument and a `horizontal' argument. The `vertical' argument
+attempts to show that
+\emph{Cr}\textsubscript{1}(\emph{p}\textsubscript{1\emph{i}}~\textbar~\emph{p}\textsubscript{11}~∨~\ldots~∨~\emph{p}\textasciitilde1\emph{n})~=~Ch(\emph{h\textsubscript{i}}).
+The `horizontal' argument attempts to show that
+\emph{Cr}\textsubscript{1}(\emph{p\textsubscript{ji}}~\textbar~\emph{p}\textsubscript{11}~∨~\ldots~∨~\emph{p}\textasciitilde1\emph{i})~=~1/\emph{i}.
+Or, at least, it attempts to show that those claims are true for the
+special case where \emph{n}~=~2. but as Ross shows, the arguments
+offered seem to work in the \emph{n}~=~2 case iff they work in the
+general case. And these vertical and horizontal arguments together do
+imply the Generalised Thirder Principle.
+
+The argument in Weatherson (\citeproc{ref-Weatherson-SoSB}{2011}) took a
+different tack. It argued for (1) and (3), and derived (2) Cr. In terms
+of the table above, the idea was to replace the `horizontal' argument,
+and indeed to reject its conclusion in the general case, with a
+`diagonal' argument, which showed that
+\emph{Cr}\textsubscript{1}(\emph{p\textsubscript{ii}}~\textbar~\emph{p}\textsubscript{11}~∨~\ldots~∨~\emph{p\textsubscript{nn}})~=~Ch(\emph{h\textsubscript{i}}).
+If the vertical and diagonal arguments worked, and didn't
+overgeneralise, then they wouldn't entail a solution for cases like
+Three-Day Sleeping Beauty, or about any case from the above class where
+\emph{n} \textgreater{} 2.
+
+If we drop the restriction to Sleeping Beauty problems where Beauty is
+woken \emph{i} times if chance hypothesis \emph{h\textasciitilde i} is
+true, and return to Ross's more general class, the arguments in
+Weatherson (\citeproc{ref-Weatherson-SoSB}{2011}) were meant to prove
+the following two claims, and not a lot more.
+
+\begin{description}
+\tightlist
+\item[First Day]
+In any Sleeping Beauty problem where Beauty wakes at least one time in
+every chance hypothesis, and exactly one time in at least one of them,
+when she wakes the first time, her conditional credences in each
+hypothesis in \emph{S}, conditional on this actually being the first
+waking, equals the objective chance of each such hypothesis.
+\item[Last Day]
+In any Sleeping Beauty problem where Beauty wakes at least one time in
+every chance hypothesis,, when she wakes the first time, her conditional
+credences in each hypothesis in \emph{S}, conditional on this actually
+being the last waking, equals the objective chance of each such
+hypothesis.
+\end{description}
+
+Since \textbf{First Day} entails (1) , and \textbf{Last Day} entails
+(3), these principles entail the ⅓~answer. But they don't settle what to
+say about the Three-Day Sleeping Beauty example. If
+\emph{Cr}\textsubscript{3} is Beauty's credences when she wakes for the
+first time in that example, these principles are consistent with Beauty
+having the following credal distribution.
+
+~~~\emph{Cr}\textsubscript{3}(Today is Monday and Heads) =
+\(\nicefrac{1}{5}\)~\\
+\strut ~~~\emph{Cr}\textsubscript{3}(Today is Monday and Tails) =
+\(\nicefrac{1}{5}\)~\\
+\strut ~~~\emph{Cr}\textsubscript{3}(Today is Tuesday and Tails) =
+\(\nicefrac{2}{5}\)~\\
+\strut ~~~\emph{Cr}\textsubscript{3}(Today is Wednesday and Tails) =
+\(\nicefrac{1}{5}\)~
+
+But those credences are incompatible with the Generalised Thirder
+Principle, so \textbf{First Day} and \textbf{Last Day} do not entail
+that principle.
+
+Ross (\citeproc{ref-Ross2012}{2012}) argues that this isn't right, and
+that the motivation for \textbf{First Day} offered in Weatherson
+(\citeproc{ref-Weatherson-SoSB}{2011}) in fact does lead to the
+Generalised Thirder Principle on its own. I think that's true in a
+sense; the argument provides just as much support for the Generalised
+Thirder Principle as it does for \textbf{First Day}. But that's because
+it is a bad argument, and doesn't support \textbf{First Day}. We'll see
+why that's true shortly. But since it is true, a new argument is needed
+for (1) , one that supports \textbf{First Day}, but not the Generalised
+Thirder principle.
+
+Most discussions of Sleeping Beauty assume that the contents of
+propositional attitudes are sets of centered worlds. Following Stalnaker
+(\citeproc{ref-Stalnaker2008}{2008}), the argument in Weatherson
+(\citeproc{ref-Weatherson-SoSB}{2011}) tried to get by with propositions
+simply being sets of worlds. The key idea was that the worlds themselves
+would be fine-grained enough that thoughts like \emph{Hesperus is
+Phosophorus}, or \emph{Today is Monday} would be contingently true if
+true at all. Very roughly, we associate singular terms with something
+like Fregean senses.\footnote{In Weatherson
+  (\citeproc{ref-Weatherson-SoSB}{2011}) these are described as
+  haeceitties, but this is misleading at best. It is crucial that
+  `Hesperus' and `Phosphorus' have different associations, but
+  intuitively they have the same haecceity. Thinking of the associations
+  as being with something like senses is better.} When Beauty wonders
+whether today is Monday, she isn't wondering about whether an instance
+of the law of identity is true. She has no more interest in that law
+than does the first gentleman of Europe. She is wondering, in effect,
+whether two senses, TODAY and MONDAY, have the same referent.
+
+This way of looking at things implies that credal dynamics need to be
+complicated. Sometimes our credences change because we acquire more
+information, and we react accordingly. But sometimes our credences
+change because we acquire new senses, and we can think new thoughts.
+That will become crucial in what follows.
+
+There is a quick argument for \textbf{Last Day}. Consider what happens
+after Beauty wakes up at the end of the puzzle, and is told that the
+game is over. (That is, on Wednesday in the original puzzle, or on
+Thursday in the three-day variant.) Plausibly, her credence in \emph{H}
+should be back to ½, or at least it is hard to see a good argument why
+it should be anything else.\footnote{One might be tempted by a seemingly
+  stronger argument. For instance, one could argue that on Wednesday,
+  Beauty knows that the chance of \emph{H} was ½, and she has no
+  inadmissible evidence, so by the Principal Principle her credence in
+  \emph{H} should be ½. But it isn't clear that she has no inadmissible
+  evidence; perhaps the evidence she would express by thinking back to
+  her last waking and saying \emph{That waking happened} is
+  inadmissible. Or one might be tempted by a Reflection Principle based
+  argument against any alternative credence. But such arguments seem to
+  lead to odd results in general around Sleeping Beauty. It's best, I
+  think, to stick with the clear intuition that on Wednesday her
+  credence in \emph{H} should be ½.} She can also think back to her last
+waking, and think to herself \emph{If H, that was on Monday, and if}
+\(¬\)H, that was on Tuesday. (She'll replace \emph{Tuesday} with
+\emph{Wednesday} in the three-day variant.) Call this conditional
+\emph{C}. Now think back to that last waking. At that time she is
+wondering various thoughts about the waking she is currently undergoing,
+a waking she will describe as ``this waking''. When she wakes on
+Wednesday, and thinks about ``that waking'', it is plausible she is
+thinking the very same kind of Fregean thought. She is thinking about
+the same thing, and thinking about it in the same kind of way. If that's
+right, then the big difference between her credences after the puzzle
+ends and her credences on the last waking are just that she comes to
+learn \emph{C}. So on the last waking, her credence in \emph{H}
+conditional on \emph{C} should be ½, since when she learns \emph{C} and
+nothing else, her credence in \emph{H} becomes ½. And that entails (3),
+and similar reasoning generalises to all Sleeping Beauty problems to
+entail \textbf{Last Day}.\footnote{Strictly speaking, all we've really
+  shown is that Beauty's credences on the last day she wakes should
+  satisfy \textbf{Last Day}. So if the focus of the puzzle is on her
+  credences on the first day, all we've strictly speaking shown is that
+  if \emph{H}, then \textbf{Last Day} is true. I think it is plausible
+  that \textbf{Last Day} should be independent of how the coin lands,
+  but I admit that I don't have an argument against someone who wants to
+  dispute this.}
+
+The argument in Weatherson (\citeproc{ref-Weatherson-SoSB}{2011}) for
+(1) , and for \textbf{First Day}, involved a rather baroque variant of
+the example involving time travelers. And, as we've noted already, it
+also involves some fallacious equivocation. Before we get to that, it is
+worth noting two other arguments for the same conclusion, neither of
+which generalise to the Generalised Thirder Principle. Both arguments
+have contentious premises, but they are somewhat independent, so I hope
+that presenting both arguments will increase the number of people who
+agree with \textbf{FirstDay}.
+
+The first argument is an argument from the Principal Principle. Consider
+the version of the Sleeping Beauty puzzle where the coin is tossed after
+Beauty goes back to sleep on Monday. (We didn't say so far when the coin
+is tossed, and it was consistent with everything we said that it is
+Monday night.) And assume that Beauty knows that the coin is tossed
+Monday. So when she wakes on Monday, she knows that the chance of
+\emph{H} is ½~if it is Monday. That is,
+\emph{Cr}\textsubscript{1}(\emph{Ch}(\emph{H})~=~½~\textbar~\emph{M})~=~1.
+The Principal Principle says that unless Beauty has inadmissible
+evidence,
+\emph{Cr}\textsubscript{1}(\emph{H}~\textbar~\emph{Cr}(\emph{H})~=~½)~=~½.
+And plausibly she doesn't have any inadmissible evidence conditional on
+it being Monday. Putting these two together, we get
+\emph{Cr}\textsubscript{1}(\emph{H}~\textbar~\emph{M})~=~½. And that
+kind of reasoning generalises to support \textbf{First Day}.
+
+The argument here is similar to the original argument given for (1) in
+Elga (\citeproc{ref-Elga2000}{2000}). Elga imagines a variant of the
+example where Beauty is told, sometime after she wakes up, that it is
+Monday, and argues that after that she should have credence ½~in
+\emph{H}, and derives (1) from that. Halpern
+(\citeproc{ref-Halpern2004}{2004}) objects to this argument on the
+grounds that the possibility of Beauty being told what day it is
+undermines the indistinguishability of the wakings, and this undermines
+Elga's own argument for (2). I'm not sure Halpern is right, but in any
+case, this argument doesn't rely on any possibility of Beauty being told
+what day it is. I imagine that some people will object to the claim that
+Beauty has no inadmissible evidence. But it is hard to see what she
+knows which is inadmissible, at least conditional on it being Monday.
+She \emph{knows} that if it is Monday, the truth of \emph{H} rests on a
+chance event that is yet to take place, and from which she is causally
+isolated. That looks to me like knowledge that she has no inadmissible
+evidence.
+
+The second argument is a version of the the Technicolor Beauty argument
+in Titlebaum (\citeproc{ref-Titlebaum2008}{2008}). It relies on a
+variant of the example that drops the idea that the wakings are
+indistinguishable in a strong sense. I'll set up first what the idea
+behind the argument is, and then set out how it works. Assume that
+Beauty can think about \emph{M} on Sunday. Follow Ross in using
+\emph{Cr}\textsubscript{0} for Beauty's credences on Sunday. The same
+Principal Principle style argument we used above suggests that
+\emph{Cr}\textsubscript{0}(\emph{H}~\textbar~\emph{M})~=~½. Indeed in
+this case the argument is even stronger, since everyone agrees that on
+Sunday, Beauty has no inadmissible evidence. But nothing happens to
+surprise Beauty between Sunday and Monday, so
+\emph{Cr}\textsubscript{1}(\emph{H}~\textbar~\emph{M})~=~½ should be
+½~as well, and we derive (1) from there.
+
+There are a few problems with this argument. For one thing, the `no
+surprise' premise goes by very quickly. More importantly, Beauty can't
+actually have \emph{M} thoughts on Sunday. She can think to herself that
+Monday is Monday, or at least she could if she cared to think about the
+law of identity. But that's not the same thought as \emph{M}. Remember,
+the guiding idea here is that contents are Fregean; it isn't easy to
+have the same thought as someone who thinks \emph{This is Monday}.
+Something dramatic needs to happen to let Beauty have such a thought on
+Sunday, when she isn't in a position to make the same kind of
+demonstration as she is on Monday.
+
+Here's one way the dramatic thing might happen. Change the example so
+that the wakings Beauty undergoes are not \emph{phenomenally}
+indistinguishable. In fact, Beauty is told on Sunday that each waking
+will be in a brightly coloured room, and the colours will be different
+each day. As it happens, the room that will be used for Monday is red,
+though Beauty doesn't know that. Let \emph{RE} be the proposition that
+one of Beauty's wakings will be in a red room, and \emph{RM} be the
+proposition that she wakes Monday in a red room. Now clearly \emph{RE},
+on its own, is inadmissible evidence in the sense that
+\emph{Cr}\textsubscript{0}(\emph{H}~\textbar~\emph{RE}) need not be ½.
+After all, \emph{RE} is probabilistic evidence that Beauty has more than
+one waking, since the more wakings she has, the more chance there is
+that one of them will be in a red room. On the other hand, \emph{RM}
+does not look like inadmissible evidence. She has to wake up in some
+colour room or other on Monday; learning it is red doesn't change
+anything. So \emph{Cr}\textsubscript{0}(\emph{H}~\textbar~\emph{RM})
+should be ½. And that's true even though \emph{RM} obviously entails
+\emph{RE}.
+
+Now she wakes on Monday, and the room is red. What follows? Well, she
+now knows \emph{RE}. And she can identify her current waking with the
+red waking she imagined (or at least could have imagined) on Sunday. So
+it is at least arguable that when on Monday she considers the thought
+\emph{This waking is on Monday}, that's the very same thought she
+considers on Sunday by saying to herself \emph{The waking in a red room
+is on Monday}. Making that last claim more plausible would require
+offering a more detailed theory of mental content than I have the space
+(or ability) to do here. For now I'm just going to take as a premise
+that there's a workable theory of mental content that types contents
+more finely than does a purely referential theory, but on which it is
+nevertheless the case that Beauty's demonstrative thought on Monday has
+the same content as her descriptive thought (about the waking in the red
+room) does on Sunday.
+
+Here is one way of thinking about that claim about content that may make
+it more plausible. (This idea is derived from the arguments in Jeshion
+(\citeproc{ref-Jeshion2002}{2002}).) Imagine that on Sunday Beauty names
+the waking in a red room. She calls it `Bluey'. She knows that `Bluey'
+might not refer. That is, she knows that Bluey, like Vulcan and Sherlock
+Holmes, might not exist. But she nevertheless entertains detailed
+thoughts about Bluey. She wonders if Bluey will be on Monday, whether
+she'll be happy when Bluey happens, and so on. Now she wakes up on
+Monday, and sees the red walls. She says to herself, ``This is Bluey''.
+From that point on, it seems that she'd express the same thought with
+\emph{This waking is} φ and \emph{Bluey is} φ, and it seems she's
+express the same thought with \emph{Bluey is} φ and \emph{The waking in
+a red room is} φ. By appeal to transitivity of identity, and
+substituting a particular value for φ, we get that she expresses the
+same thought by saying \emph{This waking is on Monday} as by saying
+\emph{The waking in a red room is on Monday}.
+
+If that claim about content is right, then \emph{all} that happens on
+Monday is that Beauty learns that \emph{RE} is true. She doesn't acquire
+the ability to think new thoughts, or to make fresh divisions in
+possibility space, the way that she does in the standard version of the
+puzzle. In the standard version of the puzzle, the demonstrative thought
+she considers on Monday, the one she would express by saying \emph{This
+is Monday}, is not equivalent to anything she can think on Sunday. So
+when she wakes, she not only acquires some evidence, she acquires a new
+cognitive capacity. That doesn't happen here, which makes the
+calculations easier.
+
+In particular, it lets us appeal to the following key fact. If
+\emph{E}\textsubscript{2} entails \emph{E}\textsubscript{1}, and a
+particular update only involves conditionalising one's prior credences,
+then learning \emph{E}\textsubscript{1} doesn't change the conditional
+credence of anything given \emph{E}\textsubscript{2}. That's a
+consequence of the following theorem. Let Pr be any probability
+function, and let Pr\textsuperscript{+} be the result of
+conditionalising that function on \emph{E}\textsubscript{1}. Then
+Pr(\emph{H}~\textbar~\emph{E}\textsubscript{2})~=~Pr\textsuperscript{+}(\emph{H}~\textbar~\emph{E}\textsubscript{2}).
+So if Beauty only learns \emph{RE}, that doesn't change the conditional
+credence of anything given \emph{RM}. In particular, it doesn't change
+the conditional credence of \emph{H} given \emph{RM}. So
+\emph{Cr}\textsubscript{1}(\emph{H}~\textbar~\emph{RM})~=~½. And since
+\emph{M} and \emph{RM} are trivially equivalent, since Beauty can see
+the room is red, it follows that
+\emph{Cr}\textsubscript{1}(\emph{H}~\textbar~\emph{M})~=~½, as required.
+
+I suspect the main objection to this argument will be that adding the
+room colours makes a substantial change to the problem. The fact that
+⅓~is the correct answer in this technicolour version of Sleeping Beauty,
+says the objector, is no reason to think that it is also the correct
+answer in the version where the wakings are phenomenally
+indistinguishable. But I think the objector will have a hard time making
+the case that phenomenal indistinguishability is epistemically
+significant unless they want to defend what Williamson
+(\citeproc{ref-Williamson2007-WILTPO-17}{2007}) calls the `phenomenal
+conception of evidence'. As has been pointed out in prior work on
+Sleeping Beauty, the different wakings are not evidentially equivalent;
+when she wakes up and sees that \emph{this} waking is happening, that's
+a piece of evidence she gets in some but not all wakings. (This point is
+made in Weintraub (\citeproc{ref-Weintraub2004}{2004}) and Stalnaker
+(\citeproc{ref-Stalnaker2008}{2008}).) It might well be argued that this
+demonstrative evidence is in a sense symmetric; although she gets
+evidence that is different in some sense on the different wakings, the
+force of that evidence is the same. But that's still true in the
+technicolour version of the problem as well. So I think, contra the
+objector, that this is a good argument for (1) .
+
+But neither of those were the argument offered in Weatherson
+(\citeproc{ref-Weatherson-SoSB}{2011}). That argument involved a rather
+baroque modification to the puzzle. A time traveller films Beauty waking
+on Monday and travels back to Sunday to show Beauty the film. After she
+sees the film, and can think about the waking it depicts, the traveller
+tells her that he took it on Monday. He then wipes Beauty's memories of
+this telling, but not of the showing of the film. The argument then
+proceeds as follows.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  On Sunday, she can think about her Monday waking in the same way as
+  she thinks about it on Monday when she wakes, thanks to the time
+  traveller's film.
+\item
+  On Sunday, the rational credence in \emph{H} is ½.
+\item
+  If premise 1 is true, then on Monday, after she wakes, the only
+  difference between her epistemic state then and her epistemic state
+  after being told that the film was of Monday is that she no longer
+  knows \emph{M}.
+\item
+  If the only difference between two epistemic states is that in the
+  first, an agent knows \emph{M} and in the second she does not, then
+  the rational credence of \emph{H} given \emph{M} in the second state
+  equals the rational credence of \emph{H} in the first state.
+\end{enumerate}
+
+And from that
+\emph{Cr}\textsubscript{1}(\emph{H}~\textbar~\emph{M})~=~½~was claimed
+to follow. Now there wasn't much of an argument for the first premise
+offered, and it might well be thought objectionable. It certainly relies
+on a liberal conception of sameness of `ways of thinking'. But let's set
+that aside, because there is a much bigger problem with the argument. It
+hopelessly equivocates on the phrase `On Sunday'. Let's distinguish the
+following four times that are all on Sunday.
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{t}\textsubscript{1} is before the time traveller turns up.
+\item
+  \emph{t}\textsubscript{2} is immediately after the time traveller
+  shows Beauty the film.
+\item
+  \emph{t}\textsubscript{3} is immediately after the time traveller
+  tells Beauty that the film is of Monday.
+\item
+  \emph{t}\textsubscript{4} is after the time traveller wipes Beauty's
+  memories of that telling, but not of the showing of the film.
+\end{itemize}
+
+Now let's consider the first two premises in Weatherson's argument. The
+first premise is clearly false if `On Sunday' refers to
+\emph{t}\textsubscript{1}, but arguably true if it refers to
+\emph{t}\textsubscript{2}, \emph{t}\textsubscript{3} or
+\emph{t}\textsubscript{4}. The second premise is clearly true if `On
+Sunday' refers to \emph{t}\textsubscript{1}, but much less plausible if
+it refers to any later time. If it refers to \emph{t}\textsubscript{2}
+or \emph{t}\textsubscript{4}, it is arguably equivalent to the ½~answer
+to the original Sleeping Beauty problem, which makes it pretty useless
+in an argument for the ⅓~answer! If it refers to
+\emph{t}\textsubscript{3}, it is much too close to what we're trying to
+prove in arguing for \textbf{FirstDay}, so it is still argumentatively
+useless.
+
+Ross argues that the style of argument we've been considering would, if
+it showed that (1) , and indeed more generally supported \textbf{First
+Day}, would show much more. In fact, it would show that for any two
+chance hypotheses \emph{h\textsubscript{i}} and
+\emph{h\textsubscript{j}}, and any \emph{k} such that
+\emph{h\textsubscript{j}} is consistent with at least \emph{k} wakings,
+that the following is true. (I'll again use \emph{p\textsubscript{kj}}
+to mean that this is the \emph{k}'th waking and
+\emph{h\textsubscript{j}} is true.)
+
+\begin{quote}
+\emph{Cr}\textsubscript{1}(\emph{p}\textsubscript{1\emph{i}}~\textbar~\emph{p}\textsubscript{1\emph{i}}~∨~\emph{p\textsubscript{kj}})
+=
+\emph{Ch}(\emph{h\textsubscript{i}})/(\emph{Ch}(\emph{h\textsubscript{i}})
++ \emph{Ch}(\emph{h\textsubscript{j}}))
+\end{quote}
+
+And from that we can derive the Generalised Thirder Principle, and hence
+countable additivity violations. That wasn't what was intended; the
+argument was only designed to work for the special case where
+\emph{k}~=~1, i.e., \textbf{First Day}. Now I think Ross is right in the
+following sense; there's just as good an argument in Weatherson
+(\citeproc{ref-Weatherson-SoSB}{2011}) for the above equation as there
+is for \textbf{First Day}. But that argument is no good for the reasons
+described above. Let's see where the same equivocation comes into Ross's
+telling of the story. I've changed Ross's notation a fair bit into
+notation I find easier to work with. Hopefully I haven't lost anything
+in the process. I'm also going to focus on the special case of Three-Day
+Sleeping Beauty, where \emph{h}\textsubscript{1} is the coin lands heads
+and \emph{h}\textsubscript{2\$}is the coin lands tails, and on the case
+where \emph{k}~=~2. So what we're really going to look at is whether
+there's an argument in Three-Day Sleeping Beauty for this equation.
+
+\begin{quote}
+\emph{Cr}\textsubscript{3}(\emph{p}\textsubscript{11}~\textbar~\emph{p}\textsubscript{11}~∨~\emph{p}\textsubscript{22}
+) =
+\emph{Ch}(\emph{h}\textsubscript{1})/(\emph{Ch}(\emph{h}\textsubscript{1})
++ \emph{Ch}(\emph{h}\textsubscript{2}))~=~½
+\end{quote}
+
+Now as noted above, I think that this equation need not hold in
+Three-Day Sleeping Beauty; in the model I gave for it earlier,
+\emph{Cr}\textsubscript{3}(p\textsubscript{11})~=~\(\nicefrac{1}{5}\)~,
+and
+\emph{Cr}\textsubscript{3}(p\textsubscript{22})~=~\(\nicefrac{2}{5}\)~,
+so
+\emph{Cr}\textsubscript{3}(\emph{p}\textsubscript{11}~\textbar~\emph{p}\textsubscript{11}~∨~\emph{p}\textsubscript{22})~=~⅓.
+But let's see how Ross derives the ½~answer.
+
+Again there is a time-traveller who shows Beauty a film. But this isn't
+necessarily a film of the first waking; the time traveller films the
+first waking if \emph{h}\textsubscript{1}, and the second waking if
+\emph{h}\textsubscript{2}. After seeing the film, Beauty is told this.
+So on Sunday, says Ross, Beauty's credences should satisfy these
+constraints. (I'm following Ross in using \emph{Cr}\textsubscript{0} for
+the Sunday credences.)
+
+~~~\emph{Cr}\textsubscript{0}(\emph{h}\textsubscript{1}) =
+\emph{Cr}\textsubscript{0}(\emph{h}\textsubscript{1} ∧
+\emph{p}\textsubscript{11})\\
+\strut ~~~\emph{Cr}\textsubscript{0}(\emph{h}\textsubscript{1}) =
+\emph{Ch}(\emph{h}\textsubscript{1})
+
+There are other premises used, but these will be the crucial ones.
+They're crucial because there's no good reason to think that there's
+\emph{any} time Sunday when Beauty's credences should satisfy both these
+equations. Before she sees the film, she can't even think about
+propositions like \emph{p}\textsubscript{11}, since she can't have
+singular thoughts about the waking it depicts. After she sees the film,
+there is no reason to think that her credences should align with
+chances. Causal contact with a time traveller who brings information
+that may well be about a time after the chance event, evidence whose
+existence may depend on the outcome of the chance event, is pretty much
+paradigmatically inadmissible evidence for the purposes of the Principal
+Principle. So after the film, there is no reason to think
+\emph{Cr}\textsubscript{0}(\emph{h}\textsubscript{1})~=~\emph{Ch}(\emph{h}\textsubscript{1}).
+
+I should stress that Ross doesn't \emph{endorse} the equivocating
+premises here; he merely attributes them to Weatherson
+(\citeproc{ref-Weatherson-SoSB}{2011}), and fairly so. But I think once
+we see the equivocation we can see there is no fear the kind of argument
+used in Weatherson (\citeproc{ref-Weatherson-SoSB}{2011}) will lead to
+the Generalised Thirder Principle. That argument is too flawed to lead
+to anything. But there are plenty of other arguments for \textbf{First
+Day}, such as the two arguments offered here. And both of those
+arguments rely on distinctive features of the first day. Most notably,
+they rely on the fact that for all we say in the setup of the problem,
+the first waking is before the chance event. So there's no reason to
+think they will have the problematic consequences that Ross finds in the
+argument for \textbf{First Day} in Weatherson
+(\citeproc{ref-Weatherson-SoSB}{2011}).
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Elga2000}
+Elga, Adam. 2000. {``Self-Locating Belief and the Sleeping Beauty
+Problem.''} \emph{Analysis} 60 (4): 143--47. doi:
+\href{https://doi.org/10.1093/analys/60.2.143}{10.1093/analys/60.2.143}.
+
+\bibitem[\citeproctext]{ref-Halpern2004}
+Halpern, Joseph. 2004. {``Sleeping Beauty Reconsidered: Conditioning and
+Reflection in Asynchronous Systems.''} In \emph{Oxford Studies in
+Epistemology}, 1:111--42. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Jeshion2002}
+Jeshion, Robin. 2002. {``Acquiantanceless \emph{de Re} Belief'.''} In
+\emph{Meaning and Truth: Investigations in Philosophical Semantics},
+edited by Joseph Keim Campbell, Michael O'Rourke, and David Shier,
+53--74. New York: Seven Bridges Press.
+
+\bibitem[\citeproctext]{ref-Ross2010}
+Ross, Jacob. 2010. {``Sleeping Beauty, Countable Additivity, and
+Rational Dilemmas.''} \emph{Philosophical Review} 119 (4): 411--47. doi:
+\href{https://doi.org/10.1215/00318108-2010-010}{10.1215/00318108-2010-010}.
+
+\bibitem[\citeproctext]{ref-Ross2012}
+---------. 2012. {``All Roads Lead to Violations of Countable
+Additivity.''} \emph{Philosophical Studies} 161 (3): 381--90. doi:
+\href{https://doi.org/10.1007/s11098-011-9744-z}{10.1007/s11098-011-9744-z}.
+
+\bibitem[\citeproctext]{ref-Stalnaker2008}
+Stalnaker, Robert. 2008. \emph{Our Knowledge of the Internal World}.
+Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Titlebaum2008}
+Titlebaum, Michael. 2008. {``The Relevance of Self-Locating Beliefs.''}
+\emph{Philosophical Review} 117 (4): 555--605. doi:
+\href{https://doi.org/10.1215/00318108-2008-016}{10.1215/00318108-2008-016}.
+
+\bibitem[\citeproctext]{ref-Weatherson-SoSB}
+Weatherson, Brian. 2011. {``Stalnaker on Sleeping Beauty.''}
+\emph{Philosophical Studies} 155 (3): 445--56. doi:
+\href{https://doi.org/10.1007/s11098-010-9613-1}{10.1007/s11098-010-9613-1}.
+
+\bibitem[\citeproctext]{ref-Weintraub2004}
+Weintraub, Ruth. 2004. {``Sleeping Beauty: A Simple Solution.''}
+\emph{Analysis} 64 (1): 8--10. doi:
+\href{https://doi.org/10.1093/analys/64.1.8}{10.1093/analys/64.1.8}.
+
+\bibitem[\citeproctext]{ref-Williamson2007-WILTPO-17}
+Williamson, Timothy. 2007. \emph{{The Philosophy of Philosophy}}.
+Blackwell.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Philosophical Studies}, 2013, pp. 503-512.
+
+\end{document}
