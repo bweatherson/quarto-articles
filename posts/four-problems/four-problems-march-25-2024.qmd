@@ -284,11 +284,102 @@ One more example and we're basically done. In the game I'll call Demon-Then-Coin
 
 If Chooser was planning on picking 1 box, they have a little evidence against the accuracy of Demon's predictions. If in the other games they thought the probability that Demon mispredicted was *e*, in this case they should (if they plan to choose 1 box) have a probability of error of roughly 2*e*. But if *e* was small enough to start with, and I'll assume throughout that Demon's error likelihood is arbitrarily small, this shouldn't make a difference.
 
-Again, I'm going to argue that the dynamic game, @fig-demon-then-coin, and the strategic game, @tbl-demon-then-coin, should get the same solutions. Indeed, they should get the same solutions for the same reason the previous two pairs of 
+Again, I'm going to argue that the dynamic game, @fig-demon-then-coin, and the strategic game, @tbl-demon-then-coin, should get the same solutions. Indeed, they should get the same solutions for the same reason the previous two pairs of decisions should get the same solutions. That reason, I'll argue, is the Single Choice Principle. 
 
-## Single Choice Principle
+## Single Choice Principle {#sec-scp-definition}
 
-Quote the definition
+Here is what the Single Choice Principle (hereafter, SCP) says:
+
+> **Single Choice Principle (SCP)**    
+> In any decision tree in which all the nodes where Chooser acts are in a single information set, an option is choice-worthy in the dynamic form of the game iff it is choice-worthy in the strategic form of the game.
+
+The SCP is a highly restricted version of a claim that dynamic and static games are in some sense equivalent. The strong version of the view says that there is some mapping from the set of rational choices in a tree to the set of possible choices in the strategic version of that tree. Exactly how that mapping should be understood is tricky in the general case, but since (a) the general principle is extremely controversial, and (b) I'm not endorsing the general principle, I won't fuss over the details. What I will fuss over is getting clearer about what the SCP does and doesn't say. 
+
+The SCP doesn't just say that on any run through the game, Chooser only makes one choice. Rather, it says that Chooser only has one possible choice to make in the game. This point might be clearer with an example. Imagine Chooser and Demon are playing a simple kind of ultimatum game. Demon has to propose a split of a \$3 pot; they can either propose \$2 for Demon and \$1 for Chooser, or vice versa. Chooser then has a take it or leave it choice. If they take, each party gets the money Demon proposes; if they leave, each party gets \$0. Assume Demon is arbitrarily good at predicting Chooser's strategy, and that Demon prefers more money to less^[Also assume Demon will flip a coin if they expect each option to have equal return]. The game tree is in @fig-ultimatum, and the strategy table is in @tbl-ultimatum.
+
+::: {.panel-tabset}
+
+## Tree
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-ultimatum
+#| fig.cap: "Ultimatum Game"
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 4
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node (1)[solid node] {}
+          child { 
+            node {2}
+            edge from parent
+              node[left] {Take}}
+          child { 
+            node {0}
+            edge from parent
+              node[right] {Leave}}
+          edge from parent
+            node[left] {D2C1}}
+        child { node (2)[solid node] {}
+          child { 
+            node {1}
+            edge from parent
+              node[left] {Take}}
+          child { 
+            node {0}
+            edge from parent
+              node[right] {Leave}}
+          edge from parent
+            node[right] {D1C2}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-1,0.2)$)rectangle($(1) +(.2,-.2)$);
+\node at ($(1) + (-0.5,0)$) {Chooser};
+\draw[dashed,rounded corners=10]($(2) + (1,-0.2)$)rectangle($(2) +(-.2,.2)$);
+\node at ($(2) + (0.5,0)$) {Chooser};
+
+\end{tikzpicture}
+
+```
+## Table
+
+:::: {#tbl-ultimatum layout-ncol=2}
+|        | D2C1 | D1C2 |
+|:------:|:----:|:----:|
+| **TT** | 1    | 2    |
+| **TL** | 1    | 0    |
+| **LT** | 0    | 2    |
+| **LL** | 0    | 0    |
+
+: Demon's Decisions {#tbl-ultimatum-game}
+
+|        | PTT  | PTL  | PLT  | PLL  |
+|:------:|:----:|:----:|:----:|:----:|
+| **TT** | 1    | 1    | 2    | 1.5  |
+| **TL** | 1    | 1    | 0    | 0.5  |
+| **LT** | 0    | 0    | 2    | 1    |
+| **LL** | 0    | 0    | 0    | 0    |
+
+: Demon's Predictions {#tbl-ultimatum-demon}
+
+Two representations of the strategic form of ultimatum game
+::::
+
+:::
 
 # Defending the SCP {#sec-scp-defence}
 
