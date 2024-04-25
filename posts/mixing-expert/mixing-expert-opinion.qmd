@@ -166,7 +166,8 @@ require(knitr)
 require(tidyverse)
 require(kableExtra)
 
-knitr::opts_chunk$set(echo = FALSE, results = "asis")
+# knitr::opts_chunk$set(echo = FALSE, results = "asis")
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r}
@@ -220,7 +221,7 @@ Here is how to read the graph in @fig-conexp. Each row corresponds to a particul
 
 One notable feature of that graph is that as *m* gets larger, the final credence tends to move away from 0.5; it tends to get more opinionated. Another notable feature, though probably not one you can see in this resolution, is that this move towards greater opinionation happens in a surprisingly linear fashion. To a first approximation, Player's credence moves away from 0.5 roughly the same amount for each addition to *m*, at least holding *y* and *z* fixed.
 
-It's not perfectly linear, but it's much closer than I would have guessed looking at how really quite non-linear the inputs are. @fig-cap-top-right shows the result of zooming in on a part of the graph to see this more vividly.
+It's not perfectly linear, but it's much closer than I would have guessed looking at how really quite non-linear the inputs are. @fig-cap-bottom-right shows the result of zooming in on a part of the graph to see this more vividly.
 
 ```{r}
 #| fig-cap: "The bottom right corner of @fig-conexp"
@@ -333,9 +334,11 @@ There is a weird thing in this setup in that one of the experts reports somethin
 
 Given all that setup we can work out what Player's credence in *p* should be given the two announcements, and I've shown the values in @tbl-diffk. (I'm rounding to three decimal places to save space.I'm leaving off the cases where one or other party announces an extremal credence - the hearer agrees with those credences, at least to three decimal places. And the 'NA' values are where it is impossible given the setup for those to be the announced values.)
 
+
+
 ```{r}
 #| label: tbl-diffk
-#| caption: "The posterior probability after hearing two differentially informed experts."
+#| tbl-cap: "The posterior probability after hearing two differentially informed experts."
 master <- expand_grid(marked_ball = 0:1, 
                       who_first = c("Ivy", "Zack"),
                       how_round = 0:1,
@@ -373,9 +376,7 @@ player <- master %>%
               names_from = Zack) %>%
   rename(`Ivy/Zack` = Ivy)
 
-kable(player, 
-      booktabs = TRUE,
-      linesep = "")
+kable(player)
 ```
 
 And a striking thing about @tbl-diffk is how close it comes to verifying a strong form of what @Levinstein2015 calls Thrasymachus' Principle. The hearer defers to the expert with the strongest view, i.e., the view that's furthest from the prior. In contemporary terms, the hearer listens to the expert with the hottest take. It isn't an unvarnished form of that. When one says 0.5 and the other says 0.6 you end up with 0.561, not 0.6. But that's in large part because there's a good chance that the person who said 0.6 was merely rounding up as the result of a coin flip. In general, the rule in this case is find the expert credence that is furthest from the prior, and adopt it.
