@@ -110,30 +110,38 @@ marginparsep=0in]{geometry}
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
-\usepackage{enumitem}
-\setlist[enumerate]{font=\bfseries, labelindent=0pt}
 \setlength\heavyrulewidth{0ex}
 \setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Epistemic Modals in Context
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
 \makeatletter
-\def\@maketitle{%
-\newpage
-\null
-\vskip 2em%
-\begin{center}%
-\let \footnote \thanks
-  {\LARGE \@title \par}%
-  \vskip 1.5em%
-  {\large
-    \lineskip .5em%
-    \begin{tabular}[t]{c}%
-      \@author
-    \end{tabular}\par}%
-  %\vskip 1em%
-  %{\large \@date}%
-\end{center}%
-\par
-\vskip 1.5em}
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
 \makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\cehead{
+  Egan, Hawthorne, and Weatherson
+   }
+ \usepackage{enumitem}
 \KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -368,6 +376,7 @@ That speaker says that it might be that \emph{p}.
 Further, (9) plus
 
 \begin{description}
+\tightlist
 \item[(10)]
 That speaker speaks truly; entail
 \item[(11)]
@@ -743,19 +752,20 @@ similarly have to reject:
 
 \begin{description}
 \tightlist
-\item[(4′)]
+\item[(4\textsuperscript{'})]
 If Myles has a true belief that I might be in Prague, then I might be in
 Prague.
 \end{description}
 
 But there are reasons to be worried about this version of contextualism,
 beyond the uneasiness that attaches to denying (4), and, worse still,
-(4′). For one, this particular version of the speaker-inclusion
-constraint seems a bit \emph{ad hoc}: why should there be just
-\emph{these} restrictions on the relevant community? More importantly,
-the theory indicts certain inferential patterns that are intuitively
-valid. Suppose a bystander in our original example reasoned\footnote{What
-  follows is a belief theoretic version of Charles' reasoning.}:
+(4\textsuperscript{'}). For one, this particular version of the
+speaker-inclusion constraint seems a bit \emph{ad hoc}: why should there
+be just \emph{these} restrictions on the relevant community? More
+importantly, the theory indicts certain inferential patterns that are
+intuitively valid. Suppose a bystander in our original example
+reasoned\footnote{What follows is a belief theoretic version of Charles'
+  reasoning.}:
 
 \begin{description}
 \tightlist
@@ -897,6 +907,7 @@ equivocation.\footnote{The same kind of equivocation can be seen in
 
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
+  \tightlist
   \item
     In saying ``I live nearby'' Nomar says that he lives nearby.
     (Plausible disquotational premise about `nearby')
@@ -911,7 +922,7 @@ equivocation.\footnote{The same kind of equivocation can be seen in
     If Nomar lives nearby, then he lives in New York (Since everywhere
     that's nearby to Derek's home is in New York.); therefore
   \item
-    Nomar lives in New York
+    Nomar lives in New York.
   \end{enumerate}
 
   The right thing to say about this argument is that it equivocates.
@@ -995,7 +1006,9 @@ proposed for various philosophically interesting terms. Jason Stanley
 two constraints should put limits on when we posit contextualist
 semantic theories.
 
-\textbf{Variable}\\
+\begin{description}
+\tightlist
+\item[Variable]
 Any contextual effect on truth-conditions that is not traceable to an
 indexical, pronoun, or demonstrative in the narrow sense must be
 traceable to a structural position occupied by a variable.
@@ -1010,13 +1023,17 @@ traceable to a structural position occupied by a variable.
   the existence of variables so we do not beg any questions against
   them, but see Pagin (\citeproc{ref-Pagin2005}{2005}) for an important
   exception.}
+\end{description}
 
-\textbf{Syntactic Evidence}\\
+\begin{description}
+\tightlist
+\item[Syntactic Evidence]
 The only good evidence for the existence of a variable in the semantic
 structure corresponding to a linguistic string is that the string, or
 another that we have reason to believe is syntactically like it, has
 interpretations that could only be accounted for by the presence of such
 a variable.
+\end{description}
 
 If any contextualist theory of epistemic modals is to be justifiably
 believed, then \textbf{Variable} and \textbf{Syntactic Evidence}
@@ -1551,7 +1568,9 @@ here.
 The following \emph{very} plausible principle looks like it is being
 violated.
 
-\textbf{Truth in Reporting}\\
+\begin{description}
+\tightlist
+\item[Truth in Reporting]
 If \emph{X} has a true belief, then \emph{Y}'s report \emph{X believes
 that S} accurately reports that belief only if in the context \emph{Y}
 is in, \emph{S} expresses a true proposition.\footnote{One might also
@@ -1562,6 +1581,7 @@ is in, \emph{S} expresses a true proposition.\footnote{One might also
   whether `says that' constructions must report what is semantically
   expressed by a speech, as opposed to what is merely communicated. See
   again the papers mentioned in footnote 25.}
+\end{description}
 
 Not only do our three reports here seem to constitute counterexamples to
 \textbf{Truth in Reporting}, Watson's report in (30) is also such a
@@ -1732,6 +1752,7 @@ such as this one.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
+\tightlist
 \item
   \textbf{Absoluteness of Propositional Content}: If an utterance
   expresses the proposition \emph{p} relative to some context of
@@ -2084,7 +2105,7 @@ same holds for reports of uses of \emph{huge}, \emph{color} or
 \emph{tastes}. Even if Vinny (truly) believes that rotting flesh tastes
 great, and the words ``Rotting flesh tastes great'' in John's mouth
 express a false proposition, John's report, ``Vinny believes that
-rotting flesh tastes great'' would only violate T\textbf{ruth in
+rotting flesh tastes great'' would only violate \textbf{Truth in
 Reporting} if Vinny's belief is still true in \emph{John's} context. And
 it is not.
 
