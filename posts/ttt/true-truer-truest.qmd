@@ -26,6 +26,10 @@ format:
   html: default
   pdf:
     output-title: "True, Truer, Truest"
+    include-in-header: 
+      - file: ../quarto2024.tex
+      - text: |
+            \addtokomafont{descriptionlabel}{\normalfont\bfseries}
     thanks: "Thanks to Juan Comesaña, John Hawthorne, Allan Hazlett, Alyssa Ney, and audiences at the 2002 APA Central, the University of Edinburgh and especially the 2003 BSPC for helpful comments. From the latter I’m especially grateful to Jonathan Bennett, Alex Byrne, Cian Dorr, Andy Egan, Elizabeth Harman, Robin Jeshion, Mike Nelson, Jonathan Schaffer, Ted Sider and Gabriel Uzquiano. I’m also grateful to two very helpful referee reports and to @Restall2000, without which I would never have known enough about lattices to write this paper."
   docx:
     output-title: "True, Truer, Truest"
@@ -41,13 +45,14 @@ The core of my theory is that some sentences involving vague terms are truer tha
 
 The most familiar many-valued theory, call it *M*, says there are continuum many truth values, and they can be felicitously represented by the interval \[0, 1\]. The four main logical connectives: *and*, *or*, *if* and *not* are truth-functional. The functions are:
 
-|      *V*(*A* ∧ *B*) = min(*V*(*A*), *V*(*B*))
-|      *V*(*A* ∨ *B*) = max(*V*(*A*), *V*(*B*))
+|    
+|     \noindent *V*(*A* ∧ *B*) = min(*V*(*A*), *V*(*B*))
+|     *V*(*A* ∨ *B*) = max(*V*(*A*), *V*(*B*))
 |     *V*(*A* → *B*) = max(1, 1 - *V*(*A*) + *V*(*B*))
 |           *V*(¬*A*) = 1 - V(*A*)
 |    
 
-where *V* is the valuation function on sentences, min(*x*, *y*) is the smaller of *y* and *y* and max(*x*, *y*) is the larger of *y* and *y*.
+\noindent where *V* is the valuation function on sentences, min(*x*, *y*) is the smaller of *y* and *y* and max(*x*, *y*) is the larger of *y* and *y*.
 
 Adopting these rules for the connectives commits us to adopting the logic Ł~C~. *M* is the theory that this semantic model, under its most natural interpretation, is appropriate for vague natural languages. (We'll discuss less natural interpretations presently.)
 
@@ -90,11 +95,9 @@ Finally, if understanding the inferential role of a logical operator helps know 
 I claim that the concept *truer*, and the associated concept *as true as*, are the only theoretical tools we need to provide a complete theory of vagueness. It is simplest to state the important features of my theory by contrasting it with *M*. I keep the following good features of *M*.
 
 G1
-
 :   There are *intermediate* sentences, i.e. sentences that are truer than some sentences and less true than others. For definiteness, I will say *S* is intermediate iff *S* is truer than 0=1 and less true than 0=0.
 
 G2
-
 :   *a* is a borderline *F* iff *a is F* is intermediate, and *a* is determinately *F* iff *a* is *F* and *a* is not a borderline *F*.
 
 I won't repeat the arguments here, but I take G1 to be a large advantage of theories like *M* over epistemicist theories. (See @Burgess2001, @Sider2001 and @Weatherson2003-WEAEPA for more detailed arguments to this effect.) And as noted G2 is a much simpler analysis of determinacy and borderline than supervaluationists have been able to offer.
@@ -102,27 +105,22 @@ I won't repeat the arguments here, but I take G1 to be a large advantage of theo
 I drop the following bad features of *M*.
 
 B1 
-
 :   *Some contradictions are intermediate sentences*.\
     On my theory all contradictions are determinately false, and determinately determinately false, and so on. The argument for this has been given above.
 
 B2 
-
 :   *Some classical tautologies are intermediate sentences*.\
     On my theory all classical tautologies are determinately true, and determinately determinately true, and so on. We will note three arguments for this being an improvement in the next section.
 
 B3 
-
 :   *Some classical inference rules are inadmissible*.\
     On my theory all classical inference rules are admissible. As @Williamson1994-WILV showed, the most prominent version of supervaluationism is like *M* in ruling some classical rules to be inadmissible, and this is clearly a cost of those theories.
 
 B4 
-
 :   *Sentences of the form* S is intermediate *are never intermediate*\
     I will argue below this is a consequence of *M*, and it means it is impossible to provide a plausible theory of higher-order vagueness within *M*. In my theory we can say that there is higher-order vagueness by treating *truer* as an iterable operator, so we can say that *S is intermediate* is intermediate. If *S* is *a is F*, that's equivalent to saying that *a* is a borderline case of a borderline case of an *F*. Essentially we get out theory of higher-order vagueness by simply iterating our theory of first-order vagueness, which is what Williamson does in his justly celebrated treatment of higher-order vagueness. Note it's not just *M* that has troubles with higher-order vagueness. See @Williamson1994-WILV and @Weatherson2003-Keefe for the difficulties supervaluationists have with higher-order vagueness. The treatment of higher-order vagueness here is a substantial advantage of my theory over supervaluationism.
 
 B5 
-
 :   *Truer is a linear relation*.\
     On my theory it need not be the case that *S*~1~is truer than *S*~2~, or *S*~2~ is truer than *S*~1~, or they are as true as each other. In the last section I will argue that this is a substantial advantage of my theory. I claim that *truer* generates a Boolean lattice on possible sentences of the language. (For a familiar example of a Boolean lattice, think of the subsets of $\mathbb{R}$ ordered by the subset relation.)
 
@@ -133,57 +131,47 @@ I also provide a very different, and much more general, treatment of the Sorites
 The following ten constraints on *truer* seem intuitively compelling. I've listed here both the philosophically important informal claim, and the formal interpretation of that claim. (I use *A* ⩾~T~ *B* as shorthand for *A* *is at least as* *true as B*. Note all the quantifiers over sentences here are *possibilist* quantifiers, we quantify over all possible sentences in the language.)
 
 (A1)
-
 :   ⩾~T~ is a weak ordering (i.e. reflexive and transitive)\
     If *A* ⩾~T~ *B* and *B* ⩾~T~ *C* then *A* ⩾~T~ *C*\
     *A* ⩾~T~ *A*
 
 (A2)
-
 :  ∧ is a greatest lower bound with respect to ⩾~T~\
     *A* ∧ *B* ⩾~T~ *C* iff *A* ⩾~T~ *C* and *B* ⩾~T~ *C*\
     *C* ⩾~T~ *A* ∧ *B* iff for all *S* such that *A* ⩾~T~ *S* and *B* ⩾~T~ *S* it is also the case that *C* ⩾~T~ *S*
 
 (A3)
-
 :   ∨ is a least upper bound with respect to ⩾~T~\
     *A* ∨ *B* ⩾~T~ *C* iff for all *S* such that *S* ⩾~T~ *A* and *S* ⩾~T~ *B*, it is also the case that *S* ⩾~T~ *C*\
     *C* ⩾~T~ *A* ∨ *B* iff *C* ⩾~T~ *A* and *B* ⩾~T~ *C*
 
 (A4)
-
 :   ¬ is ordering inverting with respect to ⩾~T~\
     *A* ⩾~T~ *B* iff ¬*B* ⩾~T~ ¬*A*
 
 (A5)
-
 :   Double negation is redundant\
     ¬¬*A* =~T~ *A*
 
 (A6)
-
 :   There is an absolutely false sentence *S~F~* and an absolutely true sentence *S~T~*\
     There are sentences *S~F~* and *S~T~* such that *S~F~* =~T~ ¬*S~T~* and ¬*S~F~* =~T~ *S~T~* and for all *S*: *S~T~* ⩾~T~ S ⩾~T~ *S~F~*
 
 (A7)
-
 :   Contradictions are absolutely false\
     A ∧ ¬A =~T~ *S~F~*
 
 (A8)
-
 :   ∀ is a greatest lower bound with respect Φ to ⩾~T~\
     *A* ⩾~T~ ∀*x*(Φ*x*) iff for all *S* such that for all *o*, if *n* is a name of *o* then Φ*n* ⩾~T~ *S*, it is the case that *A* ⩾~T~ *S*\
     ∀*x*(Φ*x*) ⩾~T~ *A* iff for all *o*, if *n* is a name of *o* then Φ*n* ⩾~T~ *A*
 
 (A9)
-
 :   ∃ is a least upper bound with respect to ⩾~T~\
     *A* ⩾~T~ ∃*x*(Φ*x*) iff for all *o*, if *n* is a name of *o* then *A* ⩾~T~ Φ*n*\
     ∃*x*(Φ*x*) ⩾~T~ *A* iff for all *S* such that for all *o*, if *n* is a name of *o* then *S* ⩾~T~ Φ*n*, *S* ⩾~T~ *A*
 
 (A10)
-
 :   A material implication with respect to ⩾~T~ can be defined.\
     There is an operator → such that
 
@@ -350,7 +338,7 @@ Still, it is very easy to believe in linearity. Even for comparatives that are c
 
 Here's an odd consequence of my theory plus the plausible assumption that *If S then S is true* is axiomatic. We can't infer from *A* is true and *B* is false that *A* is truer than *B*. But this looks like a reasonably plausible inference.
 
-If we added this as inference rule, we would rule out all intermediate sentences. To prove this assume, for *reductio*, that *A* is intermediate. Since we keep classical logic, we know *A* ∨ ¬*A* is true. If *A*, then *A* is true, and hence ¬*A* is false. Then the new this inference rule implies *A* ⩾~T~ ¬*A*, hence *A*$∧¬*A* ⩾~T~ ¬*A*, since ¬*A* ⩾~T~ ¬*A*, and hence 0=1 ⩾~T~ ¬*A*, since 0=1 ⩾~T~ *A* ∧ ¬*A*, and ⩾~T~ is transitive. So *A* is determinately true, not intermediate. A converse proof shows that if ¬*A*, then *A* is determinately false, not intermediate. So by (∨-Out) it follows that *A* is not intermediate, but since *A* was arbitrary, there are no intermediate truths. So this rule is unacceptable, despite its plausibility.
+If we added this as inference rule, we would rule out all intermediate sentences. To prove this assume, for *reductio*, that *A* is intermediate. Since we keep classical logic, we know *A* ∨ ¬*A* is true. If *A*, then *A* is true, and hence ¬*A* is false. Then the new this inference rule implies *A* ⩾~T~ ¬*A*, hence *A* ∧ ¬*A* ⩾~T~ ¬*A*, since ¬*A* ⩾~T~ ¬*A*, and hence 0=1 ⩾~T~ ¬*A*, since 0=1 ⩾~T~ *A* ∧ ¬*A*, and ⩾~T~ is transitive. So *A* is determinately true, not intermediate. A converse proof shows that if ¬*A*, then *A* is determinately false, not intermediate. So by (∨-Out) it follows that *A* is not intermediate, but since *A* was arbitrary, there are no intermediate truths. So this rule is unacceptable, despite its plausibility.
 
 ## Comparing Negative and Positive (due to Jonathan Schaffer) {#comparing-negative-and-positive-due-to-jonathan-schaffer .unnumbered}
 
