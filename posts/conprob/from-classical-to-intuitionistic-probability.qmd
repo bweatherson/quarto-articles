@@ -19,6 +19,7 @@ citation:
   issue: 2
   page: "111-123"
 image: "heyting.jpg"
+pdf-engine: xelatex
 format:
   html: default
   pdf:
@@ -61,8 +62,8 @@ There are four main reasons for grounding preferring intuitionistic over classic
 
 **2.1** A standard objection to classical Bayesianism is that it has no way of representing complete uncertainty. Because of the failures of Laplace's principle of indifference, it can't be said that uncertainty about *p* is best represented by assigning credence 1/2 to *p*. Heterodox approaches usually allow the assignment of credence 0 to both *p* and  ¬*p* when an agent has no evidence at all as to whether or not *p* is true. Because these approaches generally require an agent to assign credence 1 to classical tautologies, including *p* ∨ ¬*p*, these theories must give up the following principle of **Addition**.
 
-Addition
-:    For incompatible *A*, *B*: *Bel*(*A* ∨ *B*) = *Bel*(*A*) + *Bel*(*B*).
+> **Addition**    
+> For incompatible *A*, *B*: *Bel*(*A* ∨ *B*) = *Bel*(*A*) + *Bel*(*B*).
 
 "*Bel*(*A*)" is here used to mean the degree of belief the agent has in *A*, and "incompatible" to apply to *A* and *B* in which for some favoured consequence relation $\vdash$, the conjunction of *A* with *B* is a $\vdash$-antithesis. Such conditions as Addition are of course taken not as descriptive theories about all agents, since irrational agents would serve as counterexamples. Rather, they are proposed coherence constraints on all rational agents.
 
@@ -120,7 +121,69 @@ $$
 
 (Here *p* and *q* are a pair of atomic sentences.) To see that (P3′) is satisfied, assume *P*(*A* ∨ *B*) = 1 and $\vdash_{IL}$  ¬(*A*  ∧ *B*). Then *p* ∨ *q* $\vdash_{IL}$ *A* ∨ *B*, and *B* $\vdash_{IL}$  ¬*A*. Hence *p* ∨ *q* $\vdash_{IL}$ *A* ∨ ¬*A*, but this only holds if either (1) *p* ∨ *q* $\vdash_{IL}$ *A* or (2) *p* ∨ *q* $\vdash_{IL}$  ¬*A*. (For if *p* ∨ *q* $\vdash_{IL}$ *A* ∨ ¬*A*, then *p* $\vdash_{IL}$ *A* ∨ ¬*A* and *q* $\vdash_{IL}$ *A* ∨ ¬*A*, whence by a generalization, due to Harrop, of the Disjunction Property for intuitionistic logic, either *p* $\vdash_{IL}$ *A* or *p* $\vdash_{IL}$  ¬*A* and similarly either *q* $\vdash_{IL}$ *A* or *q* $\vdash_{IL}$  ¬*A*. Thus one of the following four combinations obtains: (a) *p* $\vdash_{IL}$ *A* and *q* $\vdash_{IL}$ *A*, (b) *p* $\vdash_{IL}$ *A* and *q* $\vdash_{IL}$  ¬*A*, (c) *p* $\vdash_{IL}$  ¬*A* and *q* $\vdash_{IL}$ *A*, (d) *p* $\vdash_{IL}$  ¬*A* and *q* $\vdash_{IL}$  ¬*A*. But cases (b) and (c) can be ruled out since they would make *p* and *q* $\vdash_{IL}$-incompatible, contradicting their status as atomic sentences, and from (a) and (d), (1) and (2) follow respectively.) If (1) first holds then *P*(*A*) = 1, as required. If (2) holds then *p* ∨ *q* $\vdash_{IL}$ (*A* ∨ *B*)  ∧ ¬*A* and (*A* ∨ *B*)  ∧ ¬*A* $\vdash_{IL}$ *B*, so *P*(*B*) = 1. The other cases are trivial to verify and are left to the reader.
 
-To see (P2) is needed (for the current choice of $\vdash$), as opposed to just (P2′), consider the following Kripke tree.
+To see (P2) is needed (for the current choice of $\vdash$), as opposed to just (P2′), consider the Kripke tree in @fig-kripke.
+
+```{r}
+#| echo: FALSE
+#| output: FALSE
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'tikz')
+}
+options(tinytex.engine = "xelatex")
+require(Rcpp)
+require(tidyverse)
+font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{Scala Sans Pro}"))
+```
+
+::: {.content-visible unless-format="pdf"}
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-kripke
+#| fig.cap: "A Kripke Tree to illustrate (P2)"
+#| fig.ext: 'jpg'
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.4]
+\tikzset{
+% Two node styles for game trees: solid and hollow
+solid node/.style={circle,draw,inner sep=1.5,fill=black},
+hollow node/.style={circle,draw,inner sep=1.5},
+square node/.style={rectangle,draw, inner sep = 1, fill = black}
+}
+
+% Specify spacing for each level of the tree
+\tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+\tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+\tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+
+% The Tree
+\node(0)[solid node,label=above:{1}]{}
+child{node[solid node,
+		 label=left:{2},
+		 label=below:{¬$p$}
+		] {}
+}
+child{node[solid node,
+		 label=right:{3}
+		] {}
+	child{node[solid node,
+		 label=right:{4},
+		 label=below:{$p$}
+		] {}
+}
+};
+
+\end{tikzpicture}
+```
+:::
+
+::: {.content-visible when-format="pdf"}
+![A Kripke Tree to illustrate (P2)](diagram.pdf){#fig-kripke width="80%"}
+:::
 
 We introduce a "weighting" function *w* by setting *w*(1) = 0.2, *w*(2) = 0.3, *w*(3) = -0.1 and *w*(4) = 0.6. For any *A*, let *P*(*A*) = ${\Sigma}$*w*(*i*), where the summation is across all points *i* that force *A*. So *P*(*p*) = 0.6 and *P*(${\lnot}{\lnot}$*p*) = 0.5, contradicting (P2). But (P0), (P1), (P2′) and (P3) are all satisfied, showing that (P2) is in the general case not derivable from these three conditions.
 
