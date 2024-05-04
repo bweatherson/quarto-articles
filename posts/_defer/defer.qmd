@@ -1,0 +1,56 @@
+---
+title: "Deference and Infinite Frames"
+subtitle: "Three Worked Examples"
+abstract: |
+  Dmitri Gallow showed that it is impossible to defer to two experts, and plan to linearly mix their views if they disagree. Snow Zhang showed that if there are only finitely many possibilities for the experts' credences, it is impossible to defer to both and plan to have any strict mixture of the two views if they disagree. This note shows that if we drop the assumption that only finitely many values are possible for the expert credences, this kind of mixing is possible.
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+date: 05-04-2024
+citation: false
+categories:
+  - epistemology
+  - unpublished
+format:
+  html: default
+  pdf:
+    output-file: "Deference and Infinite Frames"
+    include-in-header: 
+      - file: ../quarto2024.tex
+      - text: |
+         \usepackage{mathcal}
+    include-after-body: 
+      text: |
+         \noindent &nbsp;
+---
+
+Dmitri Gallow (2018) proved that there is no triple of probability functions C, A, B satisfying the following constraints.
+
+1. ∀*x*: C(p | A(p) = *x*) = *x*;
+2. ∀*x*: C(p | B(p) = *x*) = *x*;
+3. C(A = B) < 1;
+4. For some λ ∈ (0,1), ∀*x*,*y*: C(p | A(p) = *x* ∧ B(p) = *y*) = λ*x* + (1-λ)*y*.
+
+That is, C can't defer to both A and B individually (with respect to p's probability), think that A and B might disagree, and in the event they do disagree, plan to take a fixed linear mixture of A's probability and B's probability.
+
+Snow Zhang recently proved a result that mostly generalises Gallow's result, though it does weaken it in one crucial respect. (I'm describing here a simplification of Zhang's result, which also generalises the number of possible experts.) She shows that it is impossible for A, B and C to satisfy the following five constraints.
+
+1. ∀*x*: C(p | A(p) = *x*) = *x*;
+2. ∀*x*: C(p | B(p) = *x*) = *x*;
+3. C(A = B) < 1;
+4. For any *x*,*y*: C(p | A(p) = *x* ∧ B(p) = *y*) is strictly between *x* and *y*.
+5. For some finite set of values S, C(A(p) ∈ S ∧ B(p) ∈ S) = 1.
+
+This note shows that the last constraint is essential; it is possible to satisfy the first four constraints without it. I'll show this by constructing a model where the first four constraints are satisfied. In this model there will uncountably many values that A(p) and B(p) could take. It's an open question whether Zhang's result holds if we weaken 5 to say that S is countable.
+
+I'll describe the model in words first, then describe it algebraically. Let X, Y and Z be normal distributions with mean 0 and variance 1. In symbols, each of them is $\mathcal{N}$(0,1). So the sum of any two of them has distribution $\mathcal{N}$(0,2), and the sum of all three has distribution $\mathcal{N}$(0,3). Let p be the proposition that this sum, X + Y + Z, is positive. Let C be a credence function that knows^[I'm speaking metaphorically here; really the person whose credence function is C knows these things. But the point of this setup is to picture where the model below is coming from, so this way of speaking is harmless enough.] nothing about X, Y, Z except what's stated in this paragraph, so C(p) = ½.
+
+C knows some things about A and B. Both of them know everything C knows about X, Y, Z, and each are logically and mathematically omniscience. One of them knows the value of X, and one of them knows the value of X + Y. C doesn't know which is which; their prior that it is A who knows X + Y is ½. Since both know everything C knows plus something more, C should defer to them. If C knew which knew X + Y and which only knew X, they would defer to the one who knew X + Y. They don't know this, but conditional on A(p) and B(p), they can go close to figuring it out.
+
+Assume, purely as a hypothesis, that A knows X but not X + Y, and that A(p) = *a*. From those two assumptions, we can work out the value of X, as follows. (In what follows, φ(*x*) is the cumulative distribution for the standard normal distribution, i.e., for $\mathcal{N}$(0,1)). If X = *x*, then A(p) is the probability that Y + Z > -*x*. Since Y + Z is a normal distribution with mean 0 and variance 2, it follows that this is 1 minus the probability that such a distribution is less than -*x*. In other words,
+
+> A(p) = 1 - φ($\frac{-x}{\sqrt{2}}$) = φ($\frac{x}{\sqrt{2}}$)
+
