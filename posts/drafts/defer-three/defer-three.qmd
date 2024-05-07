@@ -1,0 +1,246 @@
+---
+title: "Deference and Infinite Frames"
+abstract: |
+  This paper concerns three recent results concerning probabilistic deference. The results show interesting things about how various kinds of deference work on finite frames, but in each case the results do not naturally generalise to infinite frames. The non-generalisation raises interesting philosophical questions about the epistemological significance of the results, but those questions are set aside here. The priority in this paper is simply showing that the results fail when we allow frames to be infinite.
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+date: today
+draft: true
+citation: false
+categories:
+  - epistemology
+  - logic
+  - unpublished
+bibliography: ../../../brian-quarto.bib
+csl: ../../../chicago-with-note.csl
+format:
+  html: default
+  docx:
+      reference-doc: ../../../quarto-articles-template.docx
+  pdf:
+    output-file: "Deference and Infinite Frames"
+    include-in-header: 
+      - file: ../../quarto2024.tex
+      - text: |
+         \usepackage{amsfonts}
+    include-after-body: 
+      text: |
+         \noindent \vspace{1in} In progress
+---
+
+This paper concerns three recent results concerning probabilistic deference. The results show interesting things about how various kinds of deference work on finite frames, but in each case the results do not naturally generalise to infinite frames. The non-generalisation raises interesting philosophical questions about the epistemological significance of the results, but those questions are set aside here. The priority in this paper is simply showing that the results fail when we allow frames to be infinite.
+
+# Dual Deference
+
+If A and C are probability functions, the strongest kind of deference (with respect to some proposition *p*) is when C takes A's probability in *p* to settle what the correct probability is. More formally, it is that ∀*a*: C(*p* | A(*p*) = *a*) = *a*. Our first question is when C can defer in this strong sense to two different functions A and B.
+
+There are two cases when this can happen quite easily. The first is when C is certain that A and B will agree, i.e., C(A = B) = 1. The second is when C takes one or other of the functions to be superior, i.e., when they disagree to always go with what one particular function says. So if C takes A to be superior, then ∀*a*, *b*: C(*p* | A(*p*) = *a* ∧ B(*p*) = *b*) = *a*. But is there a third option? Can C think that A and B are both worthy of total deference, that they might disagree, and when they do the right thing to do is to land somewhere between their two credences?
+
+Dmitri @Gallow2018 proved one important negative result here. He showed that there is no triple of probability functions C, A, B satisfying the following constraints.
+
+1. ∀*a*: C(*p* | A(*p*) = *a*) = *a*;
+2. ∀*b*: C(*p* | B(*p*) = *b*) = *b*;
+3. C(A = B) < 1;
+4. For some λ ∈ (0,1), ∀*a*,*b*: C(*p* | A(*p*) = *a* ∧ B(*p*) = *b*) = λ*a* + (1-λ)*b*.
+
+That is, C can't defer to both A and B individually, think that A and B might disagree, and in the event they do disagree, plan to take a fixed linear mixture of A's probability and B's probability as the probability of *p*. This result, unlike most we'll discuss in this paper, does not make any finiteness assumptions, but it does make this strong assumption in point 4 about how C will mix A and B's probabilities.
+
+Snow Zhang recently proved a result that mostly generalises Gallow's result, though it does weaken it in one crucial respect. (We're describing here a simplification of Zhang's result, which also generalises the number of possible experts.) She shows that it is impossible for A, B and C to satisfy the following five constraints.
+
+1. ∀*a*: C(*p* | A(*p*) = *a*) = *a*;
+2. ∀*b*: C(*p* | B(*p*) = *b*) = *b*;
+3. C(A = B) < 1;
+4. For any *a*,*b*: C(*p* | A(*p*) = *a* ∧ B(*p*) = *b*) is strictly between *a* and *b*.
+5. For some finite set of values S, C(A(*p*) ∈ S ∧ B(*p*) ∈ S) = 1.
+
+This section shows that the last constraint is essential; it is possible to satisfy the first four constraints without it. We'll show this by constructing a model where the first four constraints are satisfied. In this model there will uncountably many values that A(*p*) and B(*p*) could take. It's an open question whether Zhang's result holds if we weaken 5 to say that S is countable.
+
+Let X, Y and Z be normal distributions with mean 0 and variance 1. In symbols, each of them is $\mathcal{N}$(0,1). So the sum of any two of them has distribution $\mathcal{N}$(0,2), and the sum of all three has distribution $\mathcal{N}$(0,3). Let *p* be the proposition that this sum, X + Y + Z, is positive. Let C be a probability function that incorporates all these facts, but has no other direct information about X, Y, and Z. So C(*p*) = ½, since in all respects C's opinions are symmetric around 0.
+
+C knows some things about A and B. Both of them know everything C knows about X, Y, Z, and each are logically and mathematically omniscient, and know precisely what evidence they have.^[That is, each of them satisfy positive and negative introspection for evidence. The next two sections will drop the assumption that more informed functions satisfy negative introspection.] One of them knows the value of X, and one of them knows the value of X + Y. A fair coin was flipped. If it landed heads, then A knows X and B knows X + Y; if it landed tails, it was the other way around. C knows about this arrangement, but doesn't know how the coin landed. Let H be the proposition that it landed heads. 
+
+Since both A and B know everything C knows plus something more, and satisfy positive and negative introspection, C should defer to them. If C knew which knew X + Y and which only knew X, they would defer to the one who knew X + Y. They don't know this, but conditional on knowing the values of A(*p*) and B(*p*), they can go close to figuring it out.
+
+Assume for now that the coin landed heads, so H is true. We'll work out the joint density function for A and B. Then we can work out the same density function conditional on ¬H, and from those two facts work out the posterior probability of H. Call this value *h*. Conditional on A(*p*) = *a*, and B(*p*) = *b*, C's probability for p should be (1-*h*)*a* + *hb*. That's because conditional on A(*p*) = *a*, B(*p*) = *b* and H, C's probability for *p* should be *b*, while conditional on A(*p*) = *a*, B(*p*) = *b* and ¬H, C's probability for *p* should be *a*. The short version of what follows is that since *h* is a function of *a* and *b* and is always in (0,1), it follows that C obeys constraint 4.
+
+Given H, we can work out the value of X from A(*p*) = *a*. In what follows, $\Phi$(*x*) is the cumulative distribution for the standard normal distribution, i.e., for $\mathcal{N}$(0,1), and $\Phi$^-1^ is its inverse. If X = *x*, then *p* is true iff Y + Z > -*x*. Since Y + Z is a normal distribution with mean 0 and variance 2, i.e., standard deviation $\sqrt{2}$, the probability of this is $\Phi$($\frac{x}{\sqrt{2}}$). So *x* = $\sqrt{2}\Phi$^-1^(*a*).
+
+Given H, that X = $\sqrt{2}\Phi$^-1^(*a*), and B(*p*), we can work out what Y must be as well. If B(*p*) = *b*, that means that the probability that Z > -(X + Y) is *b*. Since Z just is a standard normal distribution, that means that X + Y is $\Phi$^-1^(*b*), and hence Y is $\Phi$^-1^(*b*) - $\sqrt{2}\Phi$^-1^(*a*).
+
+Now we can work out the joint density function for *a* and *b* conditional on H. Given H, A(*p*) = *a* and B(*p*) = *b* just when X = $\sqrt{2}\Phi$^-1^(*a*) and Y = $\Phi$^-1^(*b*) - $\sqrt{2}\Phi$^-1^(*a*). And if we write $\phi$(*x*) for the density function for the standard normal distribution^[i.e., $\phi(x) = \frac{e^{-\frac{x^2}{2}}}{\sqrt{2\pi}}$.], the joint distribution for A(*p*) = *a* ∧ B(*p*) = *b* given H has density
+
+$$
+\phi(\sqrt{2}\Phi^{-1}(a)) \phi(\Phi^{-1}(b) - \sqrt{2}\Phi^{-1}(a))
+$$
+
+By a parallel calculation, the joint density function for for A(*p*) = *a* ∧ B(*p*) = *b* given ¬H has density
+
+$$
+\phi(\sqrt{2}\Phi^{-1}(b)) \phi(\Phi^{-1}(a) - \sqrt{2}\Phi^{-1}(b))
+$$
+
+So given that A(*p*) = *a* ∧ B(*p*) = *b*, the probability of H is
+
+$$
+\frac{
+\phi(\sqrt{2}\Phi^{-1}(a)) \phi(\Phi^{-1}(b) - \sqrt{2}\Phi^{-1}(a))
+}{
+\phi(\sqrt{2}\Phi^{-1}(a)) \phi(\Phi^{-1}(b) - \sqrt{2}\Phi^{-1}(a)) + \phi(\sqrt{2}\Phi^{-1}(b)) \phi(\Phi^{-1}(a) - \sqrt{2}\Phi^{-1}(b))
+}
+$$
+
+If we call that value λ, it follows that C(*p* | A(*p*) = *a* ∧ B(*p*) = *b*) = λ*b* + (1-λ*a*), and since λ ∈ (0,1), this means that C satisfies constraint 4. This is consistent with Gallow's result because λ is not a constant, it is a function of *a* and *b*. And it is consistent with Zhang's result because each of A(*p*) and B(*p*) can take infinitely many, in fact uncountably many, values. If one tries to make a similar construction to this one with only finitely many possible values for the probabilities, there will be some value which only the more informed probability can take, and in that case C's posterior probability will be equal to the probability of the more informed expert.
+
+To understand the relationship between *a*, *b*, and C's posterior probability, it helps to visualise one part of it. @fig-two-experts shows what value this posterior takes for different values of *b* holding fixed *a* = 0.75.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false 
+#| cache: true
+#| label: fig-two-experts
+#| fig-cap: "The posterior probability of C(*p*) given A(*p*) = 0.75."
+require(tidyverse)
+
+defertwo <- function(a, b){
+  h = (dnorm(
+    2^0.5 * qnorm(a)
+    ) * 
+   dnorm(
+    qnorm(b) -
+    2^0.5 * qnorm(a)
+    )
+  ) /
+    (
+      (dnorm(
+        2^0.5 * qnorm(a)
+      ) * 
+        dnorm(
+          qnorm(b) -
+            2^0.5 * qnorm(a)
+        )
+      ) +
+        (dnorm(
+          2^0.5 * qnorm(b)
+        ) * 
+          dnorm(
+            qnorm(a) -
+              2^0.5 * qnorm(b)
+          )
+        )    
+    )
+  (1-h) * a + h * b
+}
+
+deferplot <- function(x){defertwo(0.75,x)}
+
+# a <- 0.07
+# b <- 0.75
+# 
+# # Assume H
+# xh <- 2^0.5 * qnorm(a)
+# yh <- qnorm(b) - 2^0.5 * qnorm(a)
+# hp <- dnorm(xh) * dnorm(yh)
+# 
+# # Assume not H
+# xnh <- 2^0.5 * qnorm(b)
+# ynh <- qnorm(a) - 2^0.5 * qnorm(b)
+# nhp <- dnorm(xnh) * dnorm(ynh)
+# 
+# h <- hp / (hp + nhp)
+# p <- (1-h)*a + h*b
+
+ggplot() +
+  theme_minimal() +
+  xlim(0.001,0.999) +
+  geom_function(fun = deferplot) +
+  geom_function(fun = identity, color = "grey80") +
+  labs(
+    x = "B(*p*)",
+    y = "Posterior value of C(*p*)"
+  ) +
+  theme(axis.title.y = ggtext::element_markdown(),
+        axis.title.x = ggtext::element_markdown())
+```
+
+The distribution loosely follows what @Levinstein2015 calls 
+Thrasymachus's Principle. The more opinionated of the two experts gets much stronger weight. You can see this in part by seeing how close the above graph gets to *x* = *y* at either extreme. But it's perhaps more vivid if we plot the posterior probability that the coin landed Tails against the different values of B(*p*), as in @fig-two-experts-heads.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false 
+#| cache: true
+#| label: fig-two-experts-heads
+#| fig-cap: "The posterior probability of the coin landing Tails given A(*p*) = 0.75."
+require(tidyverse)
+
+tails <- function(a, b){
+  h = (dnorm(
+    2^0.5 * qnorm(a)
+    ) * 
+   dnorm(
+    qnorm(b) -
+    2^0.5 * qnorm(a)
+    )
+  ) /
+    (
+      (dnorm(
+        2^0.5 * qnorm(a)
+      ) * 
+        dnorm(
+          qnorm(b) -
+            2^0.5 * qnorm(a)
+        )
+      ) +
+        (dnorm(
+          2^0.5 * qnorm(b)
+        ) * 
+          dnorm(
+            qnorm(a) -
+              2^0.5 * qnorm(b)
+          )
+        )    
+    )
+  1-h
+}
+
+tailsplot <- function(x){tails(0.75,x)}
+
+# a <- 0.07
+# b <- 0.75
+# 
+# # Assume H
+# xh <- 2^0.5 * qnorm(a)
+# yh <- qnorm(b) - 2^0.5 * qnorm(a)
+# hp <- dnorm(xh) * dnorm(yh)
+# 
+# # Assume not H
+# xnh <- 2^0.5 * qnorm(b)
+# ynh <- qnorm(a) - 2^0.5 * qnorm(b)
+# nhp <- dnorm(xnh) * dnorm(ynh)
+# 
+# h <- hp / (hp + nhp)
+# p <- (1-h)*a + h*b
+
+ggplot() +
+  theme_minimal() +
+  xlim(0.001,0.999) +
+  geom_function(fun = tailsplot) +
+#  geom_function(fun = identity, color = "grey80") +
+  labs(
+    x = "B(*p*)",
+    y = "Posterior probability of Tails"
+  ) +
+  theme(axis.title.y = ggtext::element_markdown(),
+        axis.title.x = ggtext::element_markdown())
+```
+
+When B(*p*) is between 0.25 and 0.75, i.e., when it is closer to 0.5 than A(*p*) is, C is confident that the coin landed Tails, and that A is more informed and hence more worthy of deference. When B(*p*) takes a more extreme value, then C is confident that the coin landed Heads, and hence that B is more worthy of deference. In general, this model backs up Levinstein's intuition that more opinionated sources are probably better informed, and hence more worthy of deference.
+
+# Evidence and Nesting
+
