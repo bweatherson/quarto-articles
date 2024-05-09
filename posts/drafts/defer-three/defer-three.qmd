@@ -260,4 +260,104 @@ First, for any O, W and Pr, if E~1~ is a refinement of E~2~, S~1~ is recommended
 
 Second, for any W, if E~1~ is not a refinement of E~2~, then for some O and Pr, there exists an S~1~ is recommended by E~1~ and S~2~ is recommended by E~2~ such that Exp(S~1~, Pr) < Exp(S~2~, Pr). That is, if E~1~ is not more informative than E~2~, then for some practical problem, it is better in expectation to perform E~2~ and carry out some strategy recommended by it.
 
-Blackwell isn't the first to connect the value of experiments to the relative value of strategies and options in this way; for some history of this idea see @Das2023 and @LeCam1996. But he works out the consequences of it in much more detail than anyone had before him. 
+Blackwell isn't the first to connect the value of experiments to the relative value of strategies and options in this way; for some history of this idea see @Das2023 and @LeCam1996. But he works out the consequences of it in much more detail than anyone had before him. (The two results I've listed here don't go close to exhausting what he proved, but they are enough for our purposes.) Philosophers have primarily focussed on the first of these two results. And they have focussed largely on the special case when E~2~(*w*) = W; i.e., when 'performing' experiment E~2~ means getting no information at all.^[Further, they haven't always credited Blackwell (or the earlier results from Peirce and Ramsey that Das discusses) when they do discuss the results. We're grateful to John Quiggin for pointing out to us the importance of Blackwell's results in this context.] In this section we'll also ignore the second result, but we will pay attention to the case where E~2~ isn't universal.
+
+John @Geanokopoulos1989 proved an interesting generalisation of this first result. As noted earlier, Blackwell's theorems presuppose that each experiment is partitional. Formally, E is partitional iff for all *w*, *w* \in E(*w*), and for all *w*, *v*, if *v* \in E(*w*), then E(*w*) = E(*v*). Geanokopoulos shows something interesting about experiments that are reflexive, transitive, and nested. These are defined as follow (with leading quantifiers over worlds left implicit)
+
+Reflexive
+:    *w* \in E(*w*).
+
+Transitive
+:    If *v* \in E(*w*), then E(*w*) \subseteq E(*v*).
+
+Nested
+:    Either E(*w*) \cup E(*v*) = \null, or E(*w*) \subseteq E(*v*), or E(*v*) \subseteq E(*w*).
+
+He shows that both the results of Blackwell's described above continue to hold when E~1~ is reflexive, transitive, and nested, as long as E~2~ is partitional.
+
+This result has had some influence on recent philosophical work. It suggests the following kind of argument.
+
+1. Performing experiments is valuable.
+2. Performing experiments is valuable iff experiments are nested.
+3. Therefore, experiments are nested.
+
+That's fairly crude as stated, but it's possible to develop it into a more sophisticated argument that has implications for what the correct epistemic logic should be. You can (more sophisticated) versions of this argument in @Spencer2018 and @Dorst2020, and criticisms of these arguments in @Williamson2019 and @Das2023.
+
+The aim of this section is to show that two of the assumptions that Geanokopoulos uses in proving these results are essential. First, E~2~ has to be partitional; it is not sufficient that it is reflexive, transitive, and nested. Second, it cannot be that both W and O are infinite. Both results arguably help the Williamson-Das side of the debate mentioned in the previous paragraph, but we won't go into that in more detail here. The aim is just to show the formal limits of Geanokopoulos's result.
+
+Here is the model that shows that more refined experiments do not necessarily have higher expected value if both experiments are reflexive, transitive, and nested.
+
+- W = \{w~1~, w~2~, w~3~\}
+- Pr(w~1~) = Pr(w~2~) = Pr(w~3~) =\third
+- O = \{O~1~, O~2~\}
+- O~1~(w~1~) = O~1~(w~2~) = O~1~(w~3~) = 0
+- O~2~(w~1~) = 3
+- O~2~(w~2~) = 9
+- O~2~(w~3~) = -6
+- E~1~(w~1~) = \{w~1~, w~3~\}
+- E~1~(w~2~) = \{w~2~\}
+- E~1~(w~3~) = \{w~3~\}
+- E~2~(w~1~) = \{w~1~, w~2~, w~3~\}
+- E~2~(w~2~) = \{w~2~, w~3~\}
+- E~2~(w~3~) = \{w~3~\}
+
+Given no information, the optimal strategy is to always take the bet, i.e., choose O~2~ over the fixed return of 0 that is O~1~. This has an expected return of 2. Given E~1~, the only recommended strategy is to choose O~1~ at w~1~ and w~3~, and O~2~ at w~2~, for an expected return of 2. But given the less informative E~2~, the recommended strategy is to choose O~2~ at w~1~ and w~2~, and O~1~ at w~3~, for an expected return of 4. In this case, performing the less informative experiment has higher expected returns. (Though to be clear, both experiments have positive expected returns, relative to not doing anything.)
+
+Next we'll show the result does not hold when W and O are infinite. We have to be careful here because it's easy to have a case where S~1~ and S~2~ are undefined. And it's not interesting that Exp(S~1~, Pr) ⩾ Exp(S~2~, Pr) might sometimes fail to be true simply because one or other term in it isn't defined. So we'll restrict attention to cases where utilities are bounded, for any E and any *w* there is an optimal strategy given E(*w*), and the expectation of any recommended strategy is defined.
+
+Let W be the reals in (0,1). E~1~(*x*) = [*x*,1), and E~2~(*x*) = (0,1). For any *x* in [0,1], let O~*x*~(*y*) be -1 if *x* \geq *y*, and *x* if *x* > *y*, and O be the set of all these O~*x*~. And Pr is the flat distribution over (0,1); the only fact we'll need is that whenever 0 < *x* < *y* < 1, the probability that the actual world is in (*x*, *y*) is *y* - *x*.
+
+The only strategy recommended by E~2~ is to always choose O~0~, which has a guaranteed return of 0. The strategy recommended by E~1~ is to choose O~*x*~ upon learning that the true value is in (*x*, 1). That has an expected return of *x*, which is higher than all the alternatives. But following that strategy all the time has a guaranteed return of -1, which is worse than the strategy recommended by E~2~. And that's true even though E~2~ is partitional, and E~1~ is reflexive, transitive, and nested.
+
+Now there is something odd about this example - each of the O~*x*~ is discontinuous. In each case, the payouts jump from -1 to *x* at a particular point. This suggests a question to which we don't know the answer: If every member of O is continuous, are more refined experiments valuable in expectation? It is also unknown whether Geanokpoulos's results hold in countable frames. But what this model shows is that if we allow discontinuous payouts, and uncountable frames, the result does not hold.
+
+# Trust and Value {#sec-dorst}
+
+The role of experiments in the frames discussed in @sec-nesting is somewhat curious. They are in one respect central, the theorems are all restricted to whether frames are partitional, nested, etc, but they are in another respect ephemeral. Ultimately what matters is not the experiment, but the probability that The Experimenter has after performing an experiment. This latter way of thinking is a helpful way to understand a striking recent result by @DorstEtAl2021.
+
+Say a probability frame is an ordered pair ⟨W, P⟩ such that W is a set (intuitively, of worlds), and P is a function from W to probability functions defined on w. One way to generate such a pair is to have some experiment E and prior probability Pr, each defined on W, and have P(*w*) be Pr(• | E(*w*)). But you can just cut out the E and Pr, and focus simply on W and P. As @DorstEtAl2021 show, this turns out to be mathematically a very helpful move. It lets you see a lot more interesting features of these frames.^[At least in the case where W is finite; we'll be getting to the issues when it is not.] They call frames where P is generated from E and Pr in this way *prior frames*, and those will be the focus of discussion here, but it is interesting to see them as a special case of a more general class.
+
+One thing they prove by looking at the more general class is that when W is finite, the following two claims are equivalent. (I'll state the claims formally, then explain my notation.)
+
+Total Trust
+:    E(X | {*w*: Exp(X, P(*w*)) ⩾ *t*}, π) ⩾ *t*
+
+Value
+:    If O is a set of options, *s* is a recommended strategy for O, and *o* is a member of O, then Exp(*s*, π) ⩾ E(*o*, π).
+
+There is a bit there to unpack. We'll follow them in using π for a probability function that is outside the frame. We'll sometimes call it Novice's probability function, as opposed to P(*w*) which is The Experimenter's probability function at *w*.^[When the frame is a prior frame, it is natural to focus on the case where π = Pr, but again we're not just looking at prior frames.] We're generalising the notion of expectation a bit to allow for conditional expectations; Exp(X | p, Pr) is the expectation of X according to Pr(• | p). So here's what Total Trust says. Take any random variable X. Update π on the proposition that consists of all and only worlds where The Experimenter at that world has an expected value for X at least equal to *t*. After that update, Novice also expects X's value to be at least *t*.
+
+We discussed recommended strategies in @sec-nested, so there is less to say about Value. What it says is that Novice does not expect member of O to do better than any recommended strategy.
+
+<!--A decision problem is just a set of random variables. Intuitively, the problem is that Novice has to choose which bet to take from the set O, with the return being the value of the chosen bet at the actual world. A strategy for Novice is to defer the decision to The Expert. Formally, a strategy *s* is a function from W to O; it picks a random variable, i.e., a bet, at each world. For a strategy to be *recommended*, it has to satisfy two constraints. First, if P(*i*) = P(*j*), then *s*(*i*) = *s*(*j*). A strategy can't be more discriminating than The Expert's credences. For the second constraint, associate each strategy *s* with a random variable S such that S(*w*) = *s*(*w*)(*w*). That is, the value of S at *w* is the return at *w* of the member of O that *s* selects at *w*. The constraint then says that for any *O*~1~ ∈ O, E(*s*(*w*), P(*w*)) ⩾ E(O~1~, P(*w*)). That is, at *w*, The Expert does not think there is a member of O that in expectation does better than *s*(*w*). Given all that, Value says that The Novice does not expect any member of O to do better than any recommended strategy.-->
+
+One way Dorst et al put the equivalence between Total Trust and Value (on finite frames) is that π Totally Trusts a frame ⟨W, P⟩ iff it Values that frame. What I'll show is that this equivalence breaks down when we drop the finiteness assumptions. Indeed, it breaks down even when W is countably infinite.
+
+Start with a frame I'll call **Coin**. A fair coin will be flipped repeatedly until it lands Tails. Let F be a random variable such that F = *x* iff the coin is flipped *x* times. (If the coin never lands Tails, we'll stipulate that F = 1. Since this has probability 0, it doesn't make a difference to what follows, but this case will matter below.) Novice knows these facts about F, so π(F = *x*) = 2^-*x*^. If F = *x*, then The Experimenter knows F ⩾ *x*, and updates on that. That is, P(F = *x*) = π(•|F ⩾ x). For any positive integer *i*, let O~i~ be the random variable that takes value 0 at F = *j* when *j* ⩽ *i*, and value 2^*i*^ at F = *j* when *j* > *i*. Let O be the set of each O~*i*~. The strategy *s* such that *s*(F = *i*) = O~*i*~ is recommended, as can be easily checked. But E(*s*) = 0, while for any *o* ∈ O, E(*o*, π) = ½. So Value fails on **Coin**.
+
+On the other hand, π does Totally Trust **Coin**. [Note to self, I need a proof here.]
+
+<!--Old proof that isn't quite working: To see this, let X be a random variable, and let *t* be any value. Let {*i*, …, *j*-1} be a set satisfying the following constraints. First, either *i* = 1 or E(X | F ⩾ *i*-1, π) ⩾ *t*. Second, for any *n* in that set, E(X | F ⩾ *n*, π) < *t*. Third, E(X | F ⩾ *j*, π) ⩾ *t*. Since E(X | F ⩾ *i*, π) = π(F < j | F ⩾ i)E(X | *i* ⩽ F < j) + π(F ⩾ j | F ⩾ i)E(X | F ⩾ j), it follows that E(X | *i* ⩽ F < j) < *t*. The set of all values *x* such that E(X | F ⩾ *x*, π) < *t* consists of at most countably many such sets, plus possibly an open set {*i*, *i*+1, …} such that whenever *x* ⩾ *i*, E(X | F ⩾ *x*, π) < *t*. So E(X | {*x*: E(X, P(F = *x*)) < *t*}, π) is the weighted average of countably many values each of which is less than *t*, so it is less than *t*.-->
+
+So π Totally Trusts **Coin**, but doesn't Value it. So the equivalence between Total Trust and Value fails here. But you might very reasonably object on two scores. First, the value function used to generate the counterexample was unbounded, and we know that unbounded value functions lead to all sorts of paradoxes. Second, I didn't just make W infinite, I made O infinite as well, so this isn't a minimal generalisation of the original claim. It turns out that if we put both these constraints on, then the equivalence fails in the other direction: It is possible to get a frame that π Values, but does not Totally Trust.
+
+Call the following frame **Bentham**. Again, a coin will be flipped until it lands Tails. If it ever lands Tails, F is the number of flips. If it never lands Tails, which has probability 0, then F = \infty. Again, Novice knows these facts, and so far the case is just like **Coin**. But in this case, if F = *x*, The Experimenter knows that F \leq *x*, and The Experimenter updates on that. So if F = \infty, The Experimenter learns nothing, but otherwise they can rule out all but finitely many possibilities. More precisely, P(F = *x*) = π(•|F \leq x).
+
+The Novice probability does not Value this frame. Let Y be a random variable such that Y(F = \infty) = 0, and for all finite *n*, Y(F = *n*) = 1 - 2^-*n*^. E(Y | {*w*: Exp(Y, P(*w*)) ⩾ \twothirds}, π) = 0 < \twothirds. The only world *w* where Exp(Y, P(*w*)) ⩾ \twothirds is F = \infty, and at F = \infty, Y = 0.
+
+On the other hand, π does Totally Trust this frame. [Note to self, I also kind of need a proof here.]
+
+# Conclusion
+
+- Some stuff about why infinite frames matter.
+- It's true that humans are finite, and so any infinite frame will be at best a model of a real human.
+- But any probabilistic model is really a model, since real humans also can't do the computations needed to be perfectly computationally coherent.
+- And in some cases infinite models are simpler, and in important senses closer to reality.
+- It's more natural to use the model in @sec-gallow than to use some discrete approximation to it, to model a scientist thinking about quantities that are roughly normally distributed.
+- We shouldn't think that because circles are infinitely curved it's more natural to model someone thinking about a chiliagon than to model them thinking about a circle.
+- There is something odd about the use of discontinuous models, as in @sec-nesting, and there are real puzzles about unbounded utility.
+- But any mathematical result that is meant to have epistemological significance should apply to at least some infinite cases.
+
+
+
+
