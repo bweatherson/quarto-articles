@@ -405,11 +405,138 @@ In dynamic problems where the SCP applies, neither of these reasons can apply. T
 
 # The Four Problems
 
+When a student starts decision theory, they are introduced to a view that is simple, elegant, and wrong. The view starts by assuming that Chooser, has some actions *A* available, with *a* an arbitrary action from *A*. There are some possible states *S*, with *s* an arbitrary such state. Two numerical functions are given: a probability function Pr over states, and a value function *V* over pairs of actions and states.
+
+The simple, elegant, and wrong theory is that Chooser should value each act *a* by its expected value, and choose the one with the highest value. That is, Chooser should select *a* to maximise Σ~*s* ∈ *S*~ Pr(*s*)*V*(*as*).
+
+If Chooser has any causal influence over the states, this theory gives bad advice. Assume *A* is {*a*, *b*}, *S* is {*s*, *t*}, and *a* will cause *s* to be actual, while *b* will cause *t*. And assume *V* is described in @tbl-joycewindow.
+
+|     | *s* |  *t*  |
+|:---:|:---:|:-----:|
+| *a* |  1  | 1001  |
+| *b* |  0  | 1000  |
+
+: A counterexample to the simple theory. {#tbl-joycewindow}
+
+In @tbl-joycewindow Chooser should do *b* and bring about the best state, but whatever Pr says, the simple theory says to do *a*. So far every decision theorist would agree. But here agreement ends. There is no agreement on either why the simple theory fails in this case, or what should go in its place.
+
+Evidential decision theorists such as Arif @Ahmed2014 say Chooser should value options using this formula.
+
+EDT
+:    *V*(*a*) = Σ~*s* ∈ *S*~ Pr(*s* | *a*)*V*(*as*)
+
+EDT modifies the simple theory by replacing an unconditional probability with a conditional probability. This leads to striking results in a version of @tbl-joycewindow where the states are causally independent of the actions, but evidentially connected. Following @Nozick1969, imagine that Demon has predicted Chooser's choice. There is no backwards causation, so Chooser's choice is causally independent of Demon's prediction. But Chooser believes Demon is incredibly reliable, so Pr(*s* | *a*) ≈ 1, and Pr(*t* | *b*) ≈ 1. We'll represent this setup in @tbl-newcomb. In general, when the states are predictions of Demon, I'll label it as **PX**, meaning X is Predicted.
+
+|       | **PU** |  **PD**  |
+|:-----:|:------:|:--------:|
+| **U** |  1     |  1001    |
+| **D** |  0     |  1000    |
+
+: Newcomb's Problem {#tbl-newcomb}
+
+In @tbl-newcomb, EDT says that Chooser should do *a*. Many philosophers rejected this because Chooser is better off whatever Demon has done. One theory that captures that intuition uses CfDT as the formula for valuing actions.^[The canonical statement of this view is @GibbardHarper1978. Recently Brian @Hedden2023 has argued that this theory is preferable to *Causal* Decision Theory, properly so called. I'm sympathetic to the reply offered by Dmitri @Gallowndppq that CfDT just is what Causal Decision Theorists in the 1970s and 1980s were typically defending.]
+
+CfDT
+:    *V*(*a*) = Σ~*s* ∈ *S*~ Pr(*a* □→ *s*)*V*(*as*)
+
+Sometimes this is called **Causal** Decision Theory, but I won't use that name; some causal theories use very different value functions. I'll use "Causal Decision Theory" to name a family of theories, and CfDT will be a distinctive member of that family.
+
+Another theory in that family says that the simple theory was essentially correct, it was just applied at the wrong time. This theory, hereafter Gamified Decision Theory (GDT), is based on two claims. First, the relevant probabilities over states are those Chooser has at the end of deliberation, not the start. Second, when using those _ex post_ probabilities, the simple theory is fine. In symbols, the core formula that GDT uses is this, where Pr′ is the probability over states at the end of deliberation.
+
+GDT
+:    V(a) = Σ~*s* ∈ *S*~ Pr′(*s*)*V*(*as*)
+
+GDT says that only options that have maximal value using this formula are choice-worthy.^[My preferred version of GDT adds several more constraints to this, e.g., to rule out weakly dominated options and to get the right verdict in the beer-quiche game (@ChoKreps1987), but this paper will focus on cases where maximising this formula is necessary and sufficient for choice-worthiness.] This allows that different options, with different values, could be choice-worthy. All that matters is that given the probability distribution over states that Chooser has when they have decided to perform an act, that act is utility maximising. In @tbl-first-coord, GDT says that both Up and Down are choice-worthy.
+
+|       | **PU** |  **PD**  |
+|:-----:|:------:|:--------:|
+| **U** |  3     |     0    |
+| **D** |  0     |     2    |
+
+: An asymmetric coordination problem {#tbl-first-coord}
+
+One of our four problems is to work out which of these theories is right. I'll be arguing for GDT.
+
+## Risk
+
+Think about what value of *x* would make Chooser indifferent between these two options, and why that would be the right value:
+
+1. \$1,000,000
+2. A gamble that returns \$2,000,000 with probability *x*, and \$0 with probability 1-*x*.
+ 
+What factors are relevant to solving for *x*? One factor is the declining marginal utility of money. Money primarily has exchange value, and if Chooser won $2,000,000, the things Chooser would buy with the second million dollars are largely things they declined to buy with the first million. Hence the second million will be worth much less to them than the first, barring a pronounced taste for expensive goods that lack valuable parts. That's one factor that goes into solving for *x*. Every decision theorist agrees it is important, and that it is part of why whatever value *x* takes, it is surely well above ½.
+
+But is it the only factor? If Chooser is rational, is knowing the function from the money they have to the utility they get from money enough to solve for *x*? The orthodox answer is that it is. Lara @BuchakRisk has argued that it is not. We also need to know how much Chooser values, or more likely disvalues, risk. That is, we need to know how risk-seeking, or risk-averse, Chooser is.
+
+The orthodox view is that all we need to know are three numbers:
+
+- The value Chooser assigns to their current wealth, which we can set as 0 for ease of calculation.
+- The value Chooser assigns to having $1,000,000 more than their current wealth, which we can set as 1 again for ease of calculation.
+- The value Chooser assigns to having $2,000,000 more than their current wealth, which we will label *c*.
+
+Then on the standard view, the value of the gamble is *cx*, so the gamble is equal to the sure million iff *x* = 1/*c*. On Buchak's view, rational Chooser has a risk function *f*, that measures their sensitivity to risk. The function must be monotonic increasing, with *f*(0) = 0, and *f*(1) = 1. If Chooser is risk-averse, then typically *f*(*x*) < *x*.
+
+Buchak's view reduces to the orthodox view if *f*(*x*) = *x*. I'm going to argue that given one very natural constraint, we can show that *f*(*x*) must indeed equal *x*. I'm far from the first to make an argument on these lines; I think the arguments that @Briggs2015 and @Thoma2019 make for the same conclusion are also successful. What's novel about what I'm going here is two-fold. First, the premise I'll use is, I think, weaker and more plausible than the premises used in other arguments. Second, and more importantly, I'll be using the same premise to resolve problems involving demons as to argue against Buchak's view. A big aim of this paper is to bring different parts of contemporary decision theory together. As a quick glance at the literature will tell you, there isn't much overlap between work on views like Buchak's and work on problems involving demons, though both of them are large literatures. This is a mistake, and one I'm hoping to help rectify here.
+
+## Non-Linearity {#sec-intro-ordering}
+
+Standard approaches to decision theory assign to Chooser a probability function and a utility function, both defined over (some) propositions. The domain of each function is some subset of the reals; the interval \[0,1\] for the probability, and some bounded interval for the utilities. The real numbers have a distinctive topology. Among other things, they are totally ordered: for any two numbers, either one is greater, or they are equal. So assuming that probabilities and utilities are numerical involves assuming, among other things, that they are also totally ordered. That is, for any two propositions, the probability(/utility) of the first is either greater than, less than, or equal to, that of the other. Call this assumption Ordering.
+
+Ordering is controversial, both for probabilities and utilities. For probabilities, it has been criticised since Keynes's _Treatise on Probability_ [-@Keynes1921], and in recent times has been criticised by, among others, Peter @Walley1991 and James @Joyce2010. For utilities, the most prominent critic has been Ruth Chang [-@Chang2002; -@Chang2015].
+
+It takes a little work to create a counterexample to Ordering. It's no good to just put forward two things and say it isn't clear which is larger. For one thing, it might simply be unknown which is larger. For another, they might be equal. We'll come back to the first concern in a bit. Ruth @Chang2002 points out a natural way to avoid the second complaint. Consider three options *A*, *B*, and *A*+, with the following features.
+
+- *A* and *B* concern different subject matters.
+- It is unclear whether the value of *A* or of *B* is larger. (The 'value' here could be either probability or utility.)
+- *A*+ is by design fractionally larger than *A*. If the value is utility, *A*+ could be *A* plus a cookie. If it is probability, *A*+ could be the disjunction *A or this lottery ticket wins*.
+- If *A* and *B* were equal in value, then since *A*+ is greater than *A*, *A*+ would be greater than *B*.
+- But it is also unclear whether *A*+ is greater than *B*.
+
+Call this the sweetening argument, since *A*+ is generated from *A* by making it a bit better, sweetening it.
+
+Just like there are many critics of Ordering, there are many defenders. @DorrEtAl2023 defend it on semantic grounds. Adam @Elga2010 argues that violations of Ordering for probabilities leads to susceptibility to a money pump. Johan @Gustafsson2022 makes a similar in favour of Ordering for utilities.
+
+Even critics of Ordering have noted its unintuitive characteristics. @BradleySteele2016 argue that violations of Ordering for probabilities leads to thinking it is acceptable to pay to avoid information.^[It's uncontroversial that in some cases we pay to avoid information, e.g., we take efforts to avoid spoilers for movies. Even if the information doesn't change the value of the final product, we might pay to avoid it if the information is not partitional [@Das2023], or we don't know we'll conditionalise [@Nethnd]. But if none of these three conditions are met, and probabilities and utilities satisfy Ordering, we should never pay to avoid information [@Blackwell1951].] Harvey @Ledermannd argues that violations of Ordering for utilities leads to violations of a principle he calls Negative Dominance, which I'll discuss more in @sec-ordering.
+
+Both Bradley and Steele, and Lederman, think that ultimately Ordering should be rejected, and we should live with these unintuitive results. They are both pointing out troubling features of their own view. (Something philosophers should do more often.)
+
+In each case it isn't hard to convert the argument they give to a problem for the other kind of Ordering violation. If Ordering fails for utilities, a Bradley and Steele-style argument shows that it is worth paying to avoid information, and if it fails for probabilities, a Lederman style argument shows that Negative Dominance fails.
+
+I'm going to offer a new defence of Ordering violations. The defence has two parts. First, I'll argue that even if Ordering holds for probabilities and for values of states, it does not hold for values of actions. A bit loosely, even if Ordering is true for preferences over ends, it isn't true for preferences over means. This shows we have independent reason to reject any principle that entails Ordering is true in general. That includes Negative Dominance^[Negative Dominance doesn't on its own entail Ordering, but it does in conjunction with some other principles that I accept, and indeed will be indirectly defending in this paper.], and the semantic principles Dorr et al endorse. Second, I'm going to argue that many of the criticisms of views that permit Ordering violations presuppose a false view about how rational dynamic choice works. This is how I'll respond to Elga, Gustafsson, and Bradley and Steele.
+
+## Dynamic Choice {#sec-dynamic-choice}
+
+On that note, it's time to introduce the last of our four problems - what the general theory of rational dynamic choice should look like. First, I'll set up how I'm conceiving of dynamic choice situations.
+
+For the purposes of this paper, a **decision tree** is a sextuple ⟨*W*, *R*, *V*, *a*, *I*, Pr⟩ such that:
+
+- *W* is a finite set of nodes. One of these nodes, call it *o* for origin, is designated as the initial node.
+- *R* is a relation on *W* such that for any *x* ∈ *W*, ¬*xRo*, and if *y* ≠ *o*, there is a unique *x* such that *xRy*. Intuitively, the decision problem starts at *o*, and continues by moving from a node *x* to another node *y* such that *xRy* until there is nowhere further to go. Say that *x* is a predecessor of *y* if *xR+y*, where *R+* is the ancestral of *R*.
+- *V* is a value function. It maps each terminal node of *W* to a real number. A node *x* is a terminal node iff there is no *y* such that *xRy*.
+- *a* is a function from non-terminal nodes in *W* to the set \{C, D, N\} that says who the agent is for each node. Intuitively, C is for Chooser, D is for Demon, and N is for Nature. That agent 'chooses' where the game goes next.
+- *I* is a partition of the nodes the non-terminal nodes *x: a(x) =*C. The elements of this partition are called information sets. Intuitively, when Chooser reaches a node where they must choose, they know that they are in one member of this partition, i.e., one information set, and nothing more. Any two nodes in the same information set have the same number of outbound links.
+- Pr is a conditional probability function. It says that given a _strategy_ for Chooser, and that a particular non-terminal node *x* which is assigned to Demon or Nature has reached, what the probability is that we'll move to some further node *y* such that *xRy*. If *x* is assigned to Nature, this probability is independent of Chooser's strategy.
+
+A **strategy** for one of the three players, Demon, Chooser or Nature, is a function from all the nodes in the tree which are assigned to them, to the move they will make if that node is reached.^[It doesn't matter much for our purposes, but note that in general a strategy includes what to do if one reaches a node that is ruled out by one's own prior choices.] Given any decision tree, one can generate a **strategic decision problem** where the possible actions are strategies for Chooser, and the states are pairs of strategies for Demon and strategies for Nature. One question that will be central 
+
+There are two standard positions in philosophy for how to navigate decision trees. The **resolute** view says that Chooser should use the correct static theory of choice to pick a strategy at the start, and then resolutely stick with it. The **sophisticated** theory says that Chooser should take each node as a new choice, treat their past choices as fixed, and treat their future choices as another more-or-less knowable part of the world, and do whatever is best given those constraints. My view is that both of these are wrong.
+
+The **dual mandate** approach, which I favour, says that Chooser should adopt a strategy that makes sense and stick to it, just like the resolute theory says, *and* Chooser should make choices that make sense at each point, just like the sophisticated theory says. It disagrees with the two existing theories on two counts. First, it denies that either provides a sufficient theory for a sequence of choices being rational. Second, it says that if Chooser adopts a plan that makes sense now, and will continue to make sense at each node conditional on reaching that node, Chooser does not have to regard the future as unknowable. Rather, Chooser can know that they will keep following the sensible plan they have adopted. The point is not just that Chooser knows they will continue to be rational. If Chooser has many rational choices, once they adopt one, Chooser can know they'll stick to it.
+
+This leads to the first reason for adopting the Dual Mandate view: it respects the distinctive relationship that holds between time-slices of the same person. On the resolute view, later stages of Chooser regard earlier stages as their Lord and Master, dictating what to do even if it no longer makes sense. On the sophisticated view, later stages of Chooser regard earlier stages as just someone that they used to know. As @Stalnaker1999 points out, neither of these feels right; we want something between those two pictures. Now this doesn't entail that the Dual Mandate view is right, since there are a lot of theories that are intuitively between the two pictures. But it should suggest that we look for something like the Dual Mandate view.
+
+The second argument for it is that widely adopted in other disciplines. In most textbook presentations of game theory, the first solution concept for dynamic games that gets introduced is subgame perfect equilibrium. This idea traces back to @Selten1975. It says that in an equilibrium, all players will adopt strategies that are in equilibrium over the whole game, and which are in equilibrium when restricted to 'subgames'.^[A subgame of the original game is the set of all nodes reachable from a particular node that is in a single information set, with all the other properties and relations of those nodes held fixed. Selten quickly shows that this is too weak a constraint to capture all intuitions about rational play in dynamic games, but all I'm using here is the idea that it is a necessary condition on rationality.] The Dual Mandate View is my attempt to translate this idea into decision theoretic language. But what I want to stress here is that the idea that choices should be rational both at a time, and over time, is completely uncontroversial in game theory; it's just presented in the textbooks as the way to solve dynamic games.
+
+The third argument is that decision theorists appeal to something like the Dual Mandate View already. Jack @Spencer2023 argues that (some versions of) Causal Decision Theory are "dynamically inconsistent". By that he means that there are some decision trees where the target version of CDT, plus the sophisticated approach to rational choice, ends up selecting a choice that is strictly worse than an available choice. Spencer's example relies on the unavailability of mixed strategies, and I don't think his targets should accept that assumption. So I don't think his overall argument works. But I do think the reasoning he uses is correct. If a sequence of choices leaves one necessarily worse off than some other available sequence of choices, that shows the first sequence was bad. But why does this show the first sequence is bad, rather than just, say, unlucky? The Dual Mandate View has an answer to this question; sequences of choices must be part of rationally playable strategies, and dominated strategies are not rationally playable.
+
+
 ## Demonic Problems
 
 Stress the Stag Hunt and coordination games
 
 ## Buchak {#sec-buchak}
+
+
 
 ## Incomplete Preferences
 
