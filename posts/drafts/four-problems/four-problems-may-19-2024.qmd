@@ -117,13 +117,13 @@ options(tinytex.engine = "xelatex")
 : Newcomb's Problem {#tbl-standard-newcomb}
 :::
 
-I'll go over the details of how to read diagrams like @fig-standard-newcomb in [insert cross-ref here!]. All you need to know for now is that the game starts at the open node, here at the top, and it moves along by the agent (Demon or Chooser) making choices. The dotted lines around the two nodes where Chooser acts mean that those two nodes are in the same **information set**. That is, when Chooser is at either one of those nodes, the strongest thing Chooser knows is that they are somewhere or other in the set.^[This formalism only really makes sense if we presuppose the right epistemic logic is S5, and there are good reasons to not make that assumption in general [@Humberstone2016 380-402]. For this paper we'll treat it as a simplifying assumption that really should be relaxed in subsequent work.] So this tree represents the standard vignette for Newcomb's Problem. Demon makes a prediction - I'm in general using PX for Demon predicting X - and Chooser knows that the prediction has been made, and that either P1 or P2 happened, but chooses without knowing which it is. Then the game is resolved.
+I'll go over the details of how to read diagrams like @fig-standard-newcomb in @sec-dualmandate. All you need to know for now is that the game starts at the open node, here at the top, and it moves along by the agent (Demon or Chooser) making choices. The dotted lines around the two nodes where Chooser acts mean that those two nodes are in the same **information set**. That is, when Chooser is at either one of those nodes, the strongest thing Chooser knows is that they are somewhere or other in the set.^[This formalism only really makes sense if we presuppose the right epistemic logic is S5, and there are good reasons to not make that assumption in general [@Humberstone2016 380-402]. For this paper we'll treat it as a simplifying assumption that really should be relaxed in subsequent work.] So this tree represents the standard vignette for Newcomb's Problem. Demon makes a prediction - I'm in general using PX for Demon predicting X - and Chooser knows that the prediction has been made, and that either P1 or P2 happened, but chooses without knowing which it is. Then the game is resolved.
 
 What @tbl-standard-newcomb shows is a subtly different story. In @tbl-standard-newcomb, each player chooses a *strategy*. A strategy for a player in a tree like @fig-standard-newcomb is a decision about what to do at each node in the tree where that player has to move.^[In game theory, it is usually specified that strategies include decisions about what to do at nodes that are ruled out by earlier moves in that very strategy. In theory I'm assuming this whenever I talk about strategies; in practice it doesn't matter for any application in this paper.] So what @tbl-standard-newcomb represents is a situation where each player chooses a strategy simultaneously, and that determines a result for the game. It differs from @fig-standard-newcomb in part in that it's symmetric; there is no hint that Demon moves first.
 
 There is a lot of disagreement about Newcomb's Problem, but here is one point of universal agreement: @fig-standard-newcomb and @tbl-standard-newcomb have the same solutions. It would be incoherent to prefer taking 1 box in one of these puzzles and 2 boxes in the other, or to say that both options were choice-worthy in one puzzle but not the other. They may not represent exactly the same problem, they don't pose exactly the same question to Chooser, but they should get the same answer (or answers).
 
-I'm going to agree with the unanimous verdict on this point, but I'll start dissenting very soon. And one way into my dissent is to ask, why should @fig-standard-newcomb and @tbl-standard-newcomb get the same answer? What principle is someone who gives different answers to the two questions violating? I have a suggestion for what principle that might be, the SCP, but to make that suggestion plausible we need a couple more examples.
+I'm going to agree with the unanimous verdict on this point, but I'll start dissenting from orthodox opinion very soon. And one way into my dissent is to ask, why should @fig-standard-newcomb and @tbl-standard-newcomb get the same answer? What principle is someone who gives different answers to the two questions violating? I have a suggestion for what principle that might be, the SCP, but to make that suggestion plausible we need a couple more examples.
 
 ## Variant 1: Coin-then-Demon
 
@@ -402,6 +402,44 @@ One reason that I introduced @fig-ultimatum/@tbl-ultimatum earlier is that it's 
 In dynamic problems where the SCP applies, neither of these reasons can apply. There is no possible strategic advantage to playing the dynamically irrational strategy. There is no parallel to saying, "I'm playing LT because, even though leaving money would be irrational, I almost certainly won't have to carry that part of the strategy out, and in exchange for this tiny risk, I'm getting rewarded." Doing something dynamically irrational at the only point one can possibly move can't have advantages elsewhere; you're going to get the same payout elsewhere no matter what. So whatever reason one could have in other cases for treating dynamic and strategic problems separately can't apply here; there isn't enough of an 'elsewhere' for one's bad decision at the one and only place one moves to be compensated.
 
 ## Sure Thing
+
+
+# Flagging Assumptions
+
+I'm going to make three assumptions in what follows, and it helps to have them on the table.
+
+One is that we can sensibly talk about demons who are arbitrarily accurate at predicting Chooser's strategy. One reason for making this assumption is that all the problems we discuss could be rephrased if we just assumed Demon was at least epsilon better than chance at predicting Chooser's strategy, and this is a realistic assumption. It would complicate the algebra considerably in what follows to do this, without making the examples clearer. A second reason for making the assumption is that standard approaches to game theory assume each player is a demon who can predict the other players' strategies with arbitrary precision, so we're just deferring to orthodox opinion in a notable research topic by making this assumption.
+
+A second is that decision problems are fully specified by setting out the states (assumed to be causally independent of actions), the available actions, the payoffs for each state-action pair, and the conditional probability of each state given each action. Here I'm following @Gallow202x, whose formalism for decision problems only includes places for these variables. This is a more substantive assumption. Some decision theorists think we need to include other factors, such as Chooser's prior unconditional probabilities for various states, or Chooser's attitude to risk. I'll note below where this assumption matters, but in general I'll be following Gallow in making this assumption.
+
+And a third is that in any dynamic choice, a choice at a point is permissible only if it would be permissible were that starting point of a decision problem. This rules out so-called _sophisticated_ approaches to dynamic choice. And I'll come back in @sec-dual-mandate to what happens if this assumption is relaxed.
+
+# Problem 1: Demons and Multiple Equilibria {#sec-multiple}
+
+@tbl-demon-generic is a completely generic form of a 2*2 decision problem involving demons. Without loss of generality, I'll assume all payouts are positive. I'll also assume all payouts are distinct; dropping this requires fussing about edge cases that are not relevant here.^[These edge cases are important for thinking about the significance of weak dominance, but that's not relevant to this paper.]
+
+|           |       PU     |     PD       |
+|:---------:|:------------:|:------------:|
+|  **Up**   |     *a*      |     *b*      |
+|  **Down** |     *c*      |     *d*      |
+
+: A generic demon problem {#tbl-generic-demon}
+
+Say that an option is a (strict) equilibrium if, assuming Demon predicts correctly, Chooser's payout for choosing it is (strictly) greater than their payout for choosing any other option. The focus of this section is only problems where both Up and Down are strict equilibria. In particular, focus on problems that satisfy these three constraints.
+
+1. *a* > *c*, and *d* > *b*.
+2. *a* > *d*.
+3. *b* > *c*.
+
+The first says that Up and Down are both strict equilibria. The second says that Up has the highest payout among the equilibria. The third says that Up has a higher off-equilibrium payout than Down does. Many theorists who disagree about other questions in decision theory say that these three facts suffice to make Up uniquely choice-worthy.
+
+Evidential Decision Theorists say that 2 alone suffices for choosing Up over Down.
+
+Consider next the theory that says only equilibria are choice-worthy, and among equilibria, one should choose the equilibrium with the highest expected payout. Versions of this theory are endorsed by @Jeffrey1983, @Arntzenius2008, and @Gustaffson2011. Given 1 and 2, this theory says to choose up.
+
+Finally, consider the theory that says one should (in two options games) minimise possible regret. That is, one should choose Up if the possible Regret from choosing Up, *d* - *b*, is less than the possible regret from choosing Down, *a* - *c*. @Wedgwood201x, @Gallow2020, @Podgorski2022, and @Barnett202x endorse this claim, though they go on to say very different things about cases with three or more options. Given constraints 2 and 3, these theories also say to choose Up.
+
+I'll argue that even given these three constraints, both Up and Down are choice-worthy. Since it's hard to see any reason to 
 
 # The Four Problems
 
