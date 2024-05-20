@@ -1,0 +1,629 @@
+---
+title: "Four Problems in Decision Theory"
+abstract: |
+  In recent years the literature on decision theory has become disjointed. There isn't as much discussion as there should be on how different problems impact one another. This paper aims to bring together work on problems involving demons, problems about attitudes to risk, problems about incomplete preferences, and problems about dynamic choice. In the first three of these cases, I end up defending a pre-existing view. I defend a ratificationist approach to problems with demons, the orthodox expected utility approach to risk, and the permissibility of incomplete preferences. These views are familiar, but seeing how they are related to a common strengthens the case for each of them. The most novel part of the view is the theory of dynamic choice that I offer: a sequence of choices is rational only if both the so-called 'resolute' and 'sophisticated' theories of dynamic choice would permit it. This theory would be implausible if paired with many rival solutions to the first three problems, but fits nicely with the view I'll develop through the paper.
+date: May 19 2024
+draft: true
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+citation: false
+categories:
+  - games and decisions
+  - unpublished
+bibliography: ../../../brian-quarto.bib
+csl: ../../../chicago-with-note.csl
+format:
+  html: default
+  docx:
+    reference-doc: ../../../quarto-articles-template.docx
+  pdf:
+    output-file: "Four Problems in Decision Theory"
+    include-after-body: 
+      text: |
+         \noindent Unpublished. Posted online in 2024.
+---
+
+Contemporary decision theory has become disjointed. There is less overlap than there should be in work on adjacent problems. This paper aims to undo some of that, by showing that four problems that have largely been worked on in isolation cast useful light on each other. In particular, I'll argue that we can go a long way towards solving all four problems by working through the consequences of a plausible principle that I'll call the Single Choice Principle.
+
+The Single Choice Principle (hereafter, SCP) relates theories of static choice and dynamic choice. In particular, it says that for a narrow class of games, it doesn't matter whether you think of the game as involving a static, strategic choice, or a dynamic choice that is made during a game. One way into the principle is to think about an oddity in the way Newcomb's Problem is normally introduced.
+
+# Newcomb's Problem
+
+## Standard Version
+
+In the standard vignette that goes with Newcomb's Problem, it is a dynamic game. The demon makes a *prediction*, and then the human (hereafter, Chooser) makes a choice. Chooser doesn't know what Demon did, but they do know that Demon has acted. So the natural presentation of Newcomb's Problem is in a tree like @fig-standard-newcomb.^[I'll assume $1,000 is worth 1 util. I think this assumption of constant marginal utility is close to incoherent, and it will get relaxed later, but it's harmless for now.]
+
+```{r tikz-fonts}
+#| echo: FALSE
+#| output: FALSE
+if(knitr::is_latex_output()) {
+font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{EB Garamond}"))
+} else {
+  font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{Scala Sans Pro}"))
+}
+options(tinytex.engine = "xelatex")
+```
+
+::: {.panel-tabset}
+
+## Tree
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-standard-newcomb
+#| fig.cap: "Newcomb's Problem."
+#| fig.ext: 'png'
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node (1)[solid node] {}
+          child { 
+            node {1000}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {1001}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[left] {P1}}
+        child { node (2)[solid node] {}
+          child { 
+            node {0}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {1}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[right] {P2}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+
+\end{tikzpicture}
+```
+
+## Table
+
+|       |       P1      |     P2     |
+|:-----:|:-------------:|:----------:|
+|  1    |     1000      |     0      |
+|  2    |     1001      |     1      |
+
+: Newcomb's Problem {#tbl-standard-newcomb}
+:::
+
+I'll go over the details of how to read diagrams like @fig-standard-newcomb in [insert cross-ref here!]. All you need to know for now is that the game starts at the open node, here at the top, and it moves along by the agent (Demon or Chooser) making choices. The dotted lines around the two nodes where Chooser acts mean that those two nodes are in the same **information set**. That is, when Chooser is at either one of those nodes, the strongest thing Chooser knows is that they are somewhere or other in the set.^[This formalism only really makes sense if we presuppose the right epistemic logic is S5, and there are good reasons to not make that assumption in general [@Humberstone2016 380-402]. For this paper we'll treat it as a simplifying assumption that really should be relaxed in subsequent work.] So this tree represents the standard vignette for Newcomb's Problem. Demon makes a prediction - I'm in general using PX for Demon predicting X - and Chooser knows that the prediction has been made, and that either P1 or P2 happened, but chooses without knowing which it is. Then the game is resolved.
+
+What @tbl-standard-newcomb shows is a subtly different story. In @tbl-standard-newcomb, each player chooses a *strategy*. A strategy for a player in a tree like @fig-standard-newcomb is a decision about what to do at each node in the tree where that player has to move.^[In game theory, it is usually specified that strategies include decisions about what to do at nodes that are ruled out by earlier moves in that very strategy. In theory I'm assuming this whenever I talk about strategies; in practice it doesn't matter for any application in this paper.] So what @tbl-standard-newcomb represents is a situation where each player chooses a strategy simultaneously, and that determines a result for the game. It differs from @fig-standard-newcomb in part in that it's symmetric; there is no hint that Demon moves first.
+
+There is a lot of disagreement about Newcomb's Problem, but here is one point of universal agreement: @fig-standard-newcomb and @tbl-standard-newcomb have the same solutions. It would be incoherent to prefer taking 1 box in one of these puzzles and 2 boxes in the other, or to say that both options were choice-worthy in one puzzle but not the other. They may not represent exactly the same problem, they don't pose exactly the same question to Chooser, but they should get the same answer (or answers).
+
+I'm going to agree with the unanimous verdict on this point, but I'll start dissenting very soon. And one way into my dissent is to ask, why should @fig-standard-newcomb and @tbl-standard-newcomb get the same answer? What principle is someone who gives different answers to the two questions violating? I have a suggestion for what principle that might be, the SCP, but to make that suggestion plausible we need a couple more examples.
+
+## Variant 1: Coin-then-Demon
+
+Consider a variant on Newcomb's Problem I'll call Coin-Then-Demon. In this game a fair coin will be flipped and shown to Demon and Chooser. If it lands Heads, Chooser will get $5,000 and the game ends. Otherwise, they play standard Newcomb Problem. @fig-coin-then-demon shows the game tree for this game, with Nature moving first, and the probabilities of Nature's moves shown. And @tbl-coin-then-demon shows the strategy table for it, with the payouts shown in expected value.^[I will drop the assumption that Chooser maximises expected value in @sec-buchak, but it's a harmless assumption for now.]
+
+::: {.panel-tabset}
+
+## Tree
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-coin-then-demon
+#| fig.cap: "Coin-then-Demon"
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+      \node[hollow node,label=above:{Nature}]{}
+      child{
+          node{5}
+          edge from parent
+            node[left] {H (0.5)}
+      }
+      child {node[hollow node,label=right:{Demon}]{}
+        child { node (1)[solid node] {}
+          child { 
+            node {1000}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {1001}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[left] {P1}}
+        child { node (2)[solid node] {}
+          child { 
+            node {0}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {1}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[right] {P2}}
+        edge from parent
+            node[right] {T (0.5)}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+
+\end{tikzpicture}
+```
+
+## Table
+
+|       |       P1      |     P2     |
+|:-----:|:-------------:|:----------:|
+|  1    |     502.5      |     2.5      |
+|  2    |     503      |     3      |
+
+: Coin-then-Demon {#tbl-coin-then-demon}
+:::
+
+I have two hypotheses about @fig-coin-then-demon/@tbl-coin-then-demon; one of which I think everyone will agree with, and one that might be more controversial. The less controversial hypothesis is that in this game, as in standard Newcomb's Problem, it doesn't matter whether Chooser is playing the dynamic game (i.e., @fig-coin-then-demon) or the strategic game (i.e., @tbl-coin-then-demon). Whichever options are choice-worthy in one are choice-worthy in the other. The more controversial hypothesis is that the reason these two games are rationally equivalent is exactly the same as the reason that the two forms of Newcomb Problem I presented should get the same answer.
+
+## Variant 2: Demon-then-Coin
+
+One more example and we're basically done. In the game I'll call Demon-Then-Coin, the coin is only flipped if Demon predicts Chooser takes one box. If the coin lands heads, Chooser gets $5,000, and the game ends. If either Demon predicts 2 boxes, or the coin lands tails, Chooser makes a selection, knowing that one or other of these disjuncts obtained. Then the game ends. The tree for this game is @fig-demon-then-coin, and the strategy table is @tbl-demon-then-coin.
+
+::: {.panel-tabset}
+
+## Tree
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-demon-then-coin
+#| fig.cap: "Demon-then-Coin"
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=13mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node [solid node,label=right:{Nature}] {}
+          child { 
+            node {5}
+            edge from parent
+              node[left] {H (0.5)}
+              }
+          child { 
+            node (1)[solid node]{}
+              child{
+                node{1000}
+                edge from parent
+                  node[left]{1}
+              }
+              child{
+                node{1001}
+                edge from parent
+                  node[right]{2}
+              }
+            edge from parent
+              node[right] {T (0.5)}}
+          edge from parent
+            node[left] {P1}}
+        child [level distance=25mm,sibling distance=25mm]{ node (2)[solid node] {}
+          child { 
+            node{0}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node{1}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[right] {P2}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+## Table
+
+|       |       P1      |     P2     |
+|:-----:|:-------------:|:----------:|
+|  1    |     502.5      |     0      |
+|  2    |     503      |     1      |
+
+: Demon-then-Coin {#tbl-demon-then-coin}
+:::
+
+If Chooser was planning on picking 1 box, they have a little evidence against the accuracy of Demon's predictions. If in the other games they thought the probability that Demon mispredicted was *e*, in this case they should (if they plan to choose 1 box) have a probability of error of roughly 2*e*. But if *e* was small enough to start with, and I'll assume throughout that Demon's error likelihood is arbitrarily small, this shouldn't make a difference.
+
+Again, I'm going to argue that the dynamic game, @fig-demon-then-coin, and the strategic game, @tbl-demon-then-coin, should get the same solutions. Indeed, they should get the same solutions for the same reason the previous two pairs of decisions should get the same solutions. That reason, I'll argue, is the Single Choice Principle. 
+
+## Single Choice Principle {#sec-scp-definition}
+
+Here is what the Single Choice Principle (hereafter, SCP) says:
+
+> **Single Choice Principle (SCP)**    
+> In any decision tree in which all the nodes where Chooser acts are in a single information set, an option is choice-worthy in the dynamic form of the game iff it is choice-worthy in the strategic form of the game.
+
+The SCP is a highly restricted version of a claim that dynamic and static games are in some sense equivalent. The strong version of the view says that there is some mapping from the set of rational choices in a tree to the set of possible choices in the strategic version of that tree. Exactly how that mapping should be understood is tricky in the general case, but since (a) the general principle is extremely controversial, and (b) I'm not endorsing the general principle, I won't fuss over the details. What I will fuss over is getting clearer about what the SCP does and doesn't say. 
+
+The SCP doesn't just say that on any run through the game, Chooser only makes one choice. Rather, it says that Chooser only has one possible choice to make in the game. This point might be clearer with an example. Imagine Chooser and Demon are playing a simple kind of ultimatum game. Demon has to propose a split of a \$3 pot; they can either propose \$2 for Demon and \$1 for Chooser, or vice versa. Chooser then has a take it or leave it choice. If they take, each party gets the money Demon proposes; if they leave, each party gets \$0. Assume Demon is arbitrarily good at predicting Chooser's strategy, and that Demon prefers more money to less^[Also assume Demon will flip a coin if they expect each option to have equal return]. The game tree is in @fig-ultimatum, and the strategy table is in @tbl-ultimatum.
+
+::: {.panel-tabset}
+
+## Tree
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-ultimatum
+#| fig.cap: "Ultimatum Game"
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 4
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node (1)[solid node] {}
+          child { 
+            node {2}
+            edge from parent
+              node[left] {Take}}
+          child { 
+            node {0}
+            edge from parent
+              node[right] {Leave}}
+          edge from parent
+            node[left] {D2C1}}
+        child { node (2)[solid node] {}
+          child { 
+            node {1}
+            edge from parent
+              node[left] {Take}}
+          child { 
+            node {0}
+            edge from parent
+              node[right] {Leave}}
+          edge from parent
+            node[right] {D1C2}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-1,0.2)$)rectangle($(1) +(.2,-.2)$);
+\node at ($(1) + (-0.5,0)$) {Chooser};
+\draw[dashed,rounded corners=10]($(2) + (1,-0.2)$)rectangle($(2) +(-.2,.2)$);
+\node at ($(2) + (0.5,0)$) {Chooser};
+
+\end{tikzpicture}
+
+```
+## Table
+
+:::: {#tbl-ultimatum layout-ncol=2}
+|        | D2C1 | D1C2 |
+|:------:|:----:|:----:|
+| **TT** | 1    | 2    |
+| **TL** | 1    | 0    |
+| **LT** | 0    | 2    |
+| **LL** | 0    | 0    |
+
+: Demon's Decisions {#tbl-ultimatum-game}
+
+|        | PTT  | PTL  | PLT  | PLL  |
+|:------:|:----:|:----:|:----:|:----:|
+| **TT** | 1    | 1    | 2    | 1.5  |
+| **TL** | 1    | 1    | 0    | 0.5  |
+| **LT** | 0    | 0    | 2    | 1    |
+| **LL** | 0    | 0    | 0    | 0    |
+
+: Demon's Predictions {#tbl-ultimatum-demon}
+
+Two representations of the strategic form of ultimatum game
+::::
+
+:::
+
+Most philosophers would say that in the dynamic form of the game, @fig-ultimatum, the only sensible thing to do is TT; whatever the demon does, it's better to take more money than less. But many would also say that in the strategic form, @tbl-ultimatum, some other strategy might be appropriate. For instance, Evidential Decision Theory says that in @tbl-ultimatum, the right strategy is LT.^[This is easier to see in @tbl-ultimatum-demon; EDT says to just look at the numbers in the main diagonal and choose the strategy with the highest one.] The SCP does not rule out this combination. It will ultimately have something to say about EDT, but it doesn't object to this pair of views. That's because in @fig-ultimatum there are two possible choices for Chooser to make, even if they will ultimately only make one of them, and the SCP only applies to games with just one possible choice. That makes it a more plausible principle, but surprisingly does little to reduce its philosophical significance.
+
+# Defending the SCP {#sec-scp-defence}
+
+## Ramsey Test
+
+## Unifying the Examples
+
+## Intuitions about Change
+
+## No Reward
+
+One reason that I introduced @fig-ultimatum/@tbl-ultimatum earlier is that it's the kind of case where it's most plausible that the strategic and dynamic choices might be distinct. Think about the pair of choices that EDT recommends: in the dynamic game, play TT; in the strategic game, play LT. While I ultimately disagree with this, I do think this is a plausible thing for EDT to say. The strategy LT has two big advantages that some will think make up for the fact that it is not what one would do dynamically. First, it differs from the dynamically rational play only in a situation which is, conditional on being played, highly unlikely to come about. Second, there is a reward, at least in expectation, for playing this dynamically irrational strategy; the strategy has a payout of 2 while the dynamically rational strategy only has a payout of 1. Either one of these facts will, at least to some people, make it rational to treat dynamic and strategic games differently; what's distinctive about @fig-ultimatum/@tbl-ultimatum is that both reasons are there.
+
+In dynamic problems where the SCP applies, neither of these reasons can apply. There is no possible strategic advantage to playing the dynamically irrational strategy. There is no parallel to saying, "I'm playing LT because, even though leaving money would be irrational, I almost certainly won't have to carry that part of the strategy out, and in exchange for this tiny risk, I'm getting rewarded." Doing something dynamically irrational at the only point one can possibly move can't have advantages elsewhere; you're going to get the same payout elsewhere no matter what. So whatever reason one could have in other cases for treating dynamic and strategic problems separately can't apply here; there isn't enough of an 'elsewhere' for one's bad decision at the one and only place one moves to be compensated.
+
+## Sure Thing
+
+# The Four Problems
+
+When a student starts decision theory, they are introduced to a view that is simple, elegant, and wrong. The view starts by assuming that Chooser, has some actions *A* available, with *a* an arbitrary action from *A*. There are some possible states *S*, with *s* an arbitrary such state. Two numerical functions are given: a probability function Pr over states, and a value function *V* over pairs of actions and states.
+
+The simple, elegant, and wrong theory is that Chooser should value each act *a* by its expected value, and choose the one with the highest value. That is, Chooser should select *a* to maximise Σ~*s* ∈ *S*~ Pr(*s*)*V*(*as*).
+
+If Chooser has any causal influence over the states, this theory gives bad advice. Assume *A* is {*a*, *b*}, *S* is {*s*, *t*}, and *a* will cause *s* to be actual, while *b* will cause *t*. And assume *V* is described in @tbl-joycewindow.
+
+|     | *s* |  *t*  |
+|:---:|:---:|:-----:|
+| *a* |  1  | 1001  |
+| *b* |  0  | 1000  |
+
+: A counterexample to the simple theory. {#tbl-joycewindow}
+
+In @tbl-joycewindow Chooser should do *b* and bring about the best state, but whatever Pr says, the simple theory says to do *a*. So far every decision theorist would agree. But here agreement ends. There is no agreement on either why the simple theory fails in this case, or what should go in its place.
+
+Evidential decision theorists such as Arif @Ahmed2014 say Chooser should value options using this formula.
+
+EDT
+:    *V*(*a*) = Σ~*s* ∈ *S*~ Pr(*s* | *a*)*V*(*as*)
+
+EDT modifies the simple theory by replacing an unconditional probability with a conditional probability. This leads to striking results in a version of @tbl-joycewindow where the states are causally independent of the actions, but evidentially connected. Following @Nozick1969, imagine that Demon has predicted Chooser's choice. There is no backwards causation, so Chooser's choice is causally independent of Demon's prediction. But Chooser believes Demon is incredibly reliable, so Pr(*s* | *a*) ≈ 1, and Pr(*t* | *b*) ≈ 1. We'll represent this setup in @tbl-newcomb. In general, when the states are predictions of Demon, I'll label it as **PX**, meaning X is Predicted.
+
+|       | **PU** |  **PD**  |
+|:-----:|:------:|:--------:|
+| **U** |  1     |  1001    |
+| **D** |  0     |  1000    |
+
+: Newcomb's Problem {#tbl-newcomb}
+
+In @tbl-newcomb, EDT says that Chooser should do *a*. Many philosophers rejected this because Chooser is better off whatever Demon has done. One theory that captures that intuition uses CfDT as the formula for valuing actions.^[The canonical statement of this view is @GibbardHarper1978. Recently Brian @Hedden2023 has argued that this theory is preferable to *Causal* Decision Theory, properly so called. I'm sympathetic to the reply offered by Dmitri @Gallowndppq that CfDT just is what Causal Decision Theorists in the 1970s and 1980s were typically defending.]
+
+CfDT
+:    *V*(*a*) = Σ~*s* ∈ *S*~ Pr(*a* □→ *s*)*V*(*as*)
+
+Sometimes this is called **Causal** Decision Theory, but I won't use that name; some causal theories use very different value functions. I'll use "Causal Decision Theory" to name a family of theories, and CfDT will be a distinctive member of that family.
+
+Another theory in that family says that the simple theory was essentially correct, it was just applied at the wrong time. This theory, hereafter Gamified Decision Theory (GDT), is based on two claims. First, the relevant probabilities over states are those Chooser has at the end of deliberation, not the start. Second, when using those _ex post_ probabilities, the simple theory is fine. In symbols, the core formula that GDT uses is this, where Pr′ is the probability over states at the end of deliberation.
+
+GDT
+:    V(a) = Σ~*s* ∈ *S*~ Pr′(*s*)*V*(*as*)
+
+GDT says that only options that have maximal value using this formula are choice-worthy.^[My preferred version of GDT adds several more constraints to this, e.g., to rule out weakly dominated options and to get the right verdict in the beer-quiche game (@ChoKreps1987), but this paper will focus on cases where maximising this formula is necessary and sufficient for choice-worthiness.] This allows that different options, with different values, could be choice-worthy. All that matters is that given the probability distribution over states that Chooser has when they have decided to perform an act, that act is utility maximising. In @tbl-first-coord, GDT says that both Up and Down are choice-worthy.
+
+|       | **PU** |  **PD**  |
+|:-----:|:------:|:--------:|
+| **U** |  3     |     0    |
+| **D** |  0     |     2    |
+
+: An asymmetric coordination problem {#tbl-first-coord}
+
+One of our four problems is to work out which of these theories is right. I'll be arguing for GDT.
+
+
+
+## Non-Linearity {#sec-intro-ordering}
+
+Standard approaches to decision theory assign to Chooser a probability function and a utility function, both defined over (some) propositions. The domain of each function is some subset of the reals; the interval \[0,1\] for the probability, and some bounded interval for the utilities. The real numbers have a distinctive topology. Among other things, they are totally ordered: for any two numbers, either one is greater, or they are equal. So assuming that probabilities and utilities are numerical involves assuming, among other things, that they are also totally ordered. That is, for any two propositions, the probability(/utility) of the first is either greater than, less than, or equal to, that of the other. Call this assumption Ordering.
+
+Ordering is controversial, both for probabilities and utilities. For probabilities, it has been criticised since Keynes's _Treatise on Probability_ [-@Keynes1921], and in recent times has been criticised by, among others, Peter @Walley1991 and James @Joyce2010. For utilities, the most prominent contemporary critic is Ruth Chang [-@Chang2002; -@Chang2015].
+
+Just like there are many critics of Ordering, there are many defenders. @DorrEtAl2023 defend it on semantic grounds. Adam @Elga2010 argues that violations of Ordering for probabilities leads to susceptibility to a money pump. Johan @Gustafsson2022 makes a similar in favour of Ordering for utilities.
+
+Even critics of Ordering have noted its unintuitive characteristics. @BradleySteele2016 argue that violations of Ordering for probabilities leads to thinking it is acceptable to pay to avoid information.^[It's uncontroversial that in some cases we pay to avoid information, e.g., we take efforts to avoid spoilers for movies. Even if the information doesn't change the value of the final product, we might pay to avoid it if the information is not partitional [@Das2023], or we don't know we'll conditionalise [@Nethnd]. But if none of these three conditions are met, and probabilities and utilities satisfy Ordering, we should never pay to avoid information [@Blackwell1951].] Harvey @Ledermannd argues that violations of Ordering for utilities leads to violations of a principle he calls Negative Dominance, which I'll discuss more in @sec-negdom.
+
+Both Bradley and Steele, and Lederman, think that ultimately Ordering should be rejected, and we should live with these unintuitive results. They are both pointing out troubling features of their own view. (Something philosophers should do more often.) In each case it isn't hard to convert the argument they give to a problem for the other kind of Ordering violation. If Ordering fails for utilities, a Bradley and Steele-style argument shows that it is worth paying to avoid information, and if it fails for probabilities, a Lederman style argument shows that Negative Dominance fails.
+
+I'm going to offer a new defence of Ordering violations. The defence has two parts. First, I'll argue that even if Ordering holds for probabilities and for values of states, it does not hold for values of actions. A bit loosely, even if Ordering is true for preferences over ends, it isn't true for preferences over means. This shows we have independent reason to reject any principle that entails Ordering is true in general. That includes Negative Dominance^[Negative Dominance doesn't on its own entail Ordering, but it does in conjunction with some other principles that I accept, and indeed will be indirectly defending in this paper.], and the semantic principles Dorr et al endorse. Second, I'm going to argue that many of the criticisms of views that permit Ordering violations presuppose a false view about how rational dynamic choice works. This is how I'll respond to Elga, Gustafsson, and Bradley and Steele.
+
+## Dynamic Choice {#sec-dynamic-choice}
+
+On that note, it's time to introduce the last of our four problems - what the general theory of rational dynamic choice should look like. First, I'll set up how I'm conceiving of dynamic choice situations.
+
+For the purposes of this paper, a **decision tree** is a sextuple ⟨*W*, *R*, *V*, *a*, *I*, Pr⟩ such that:
+
+- *W* is a finite set of nodes. One of these nodes, call it *o* for origin, is designated as the initial node.
+- *R* is a relation on *W* such that for any *x* ∈ *W*, ¬*xRo*, and if *y* ≠ *o*, there is a unique *x* such that *xRy*. Intuitively, the decision problem starts at *o*; proceeds in steps; can move from *x* to *y* iff *xRy*; and ends when it reaches a node *y* such that ¬∃*z*: *yRz*. Say that *x* is a predecessor of *y* if *xR+y*, where *R+* is the ancestral of *R*.
+- *V* is a value function, mapping terminal nodes to real numbers.
+- *a* is a function from non-terminal nodes in *W* to the set \{C, D, N\} that says who the agent is for each node. Intuitively, C is for Chooser, D is for Demon, and N is for Nature. That agent 'chooses' where the game goes next.
+- *I* is a partition of the nodes the non-terminal nodes *x: a(x) =*C. The elements of this partition are called information sets. Intuitively, when Chooser reaches a node where they must choose, they know that they are in one member of this partition, i.e., one information set, and nothing more. Any two nodes in the same information set have the same number of outbound links.
+- Pr is a conditional probability function. It says that given a _strategy_ for Chooser, and that a particular non-terminal node *x* which is assigned to Demon or Nature has reached, what the probability is that we'll move to some further node *y* such that *xRy*. If *x* is assigned to Nature, this probability is independent of Chooser's strategy.
+
+A **strategy** for one of the three players, Demon, Chooser or Nature, is a function from all the nodes in the tree which are assigned to them, to the move they will make if that node is reached.^[It doesn't matter much for our purposes, but note that in general a strategy includes what to do if one reaches a node that is ruled out by one's own prior choices.] Given any decision tree, one can generate a **strategic decision problem** where the possible actions are strategies for Chooser, and the states are pairs of strategies for Demon and strategies for Nature. One question that will be central 
+
+There are two standard positions in philosophy for how to navigate decision trees. The **resolute** view says that Chooser should use the correct static theory of choice to pick a strategy at the start, and then resolutely stick with it. The **sophisticated** theory says that Chooser should take each node as a new choice, treat their past choices as fixed, and treat their future choices as another more-or-less knowable part of the world, and do whatever is best given those constraints. My view is that both of these are wrong.
+
+The **dual mandate** approach, which I favour, says that Chooser should adopt a strategy that makes sense and stick to it, just like the resolute theory says, *and* Chooser should make choices that make sense at each point, just like the sophisticated theory says. It disagrees with the two existing theories on two counts. First, it denies that either provides a sufficient theory for a sequence of choices being rational. Second, it says that if Chooser adopts a plan that makes sense now, and will continue to make sense at each node conditional on reaching that node, Chooser does not have to regard the future as unknowable. Rather, Chooser can know that they will keep following the sensible plan they have adopted. The point is not just that Chooser knows they will continue to be rational. If Chooser has many rational choices, once they adopt one, Chooser can know they'll stick to it.
+
+I'll defend this more in @sec-dualmandate, and argue that many arguments for Ordering fail because they presuppose the Dual Mandate theory is false.
+
+# Ratificationism {#sec-ratify}
+
+Go over the 4,3,2 game
+
+Show that CDT, EDT, and most other views violate SCP
+
+
+# Incomplete Preferences
+
+Again, the 4,3,2 shows this really quickly, I think this is already written
+
+# Dynamic Choice
+
+This takes much more time.
+
+# Problem 4: Risk-Sensitivity {#sec-buchak}
+
+
+Think about what value of *x* would make Chooser indifferent between these two options, and why that would be the right value:
+
+1. \$1,000,000
+2. A gamble that returns \$2,000,000 with probability *x*, and \$0 with probability 1-*x*.
+ 
+What factors are relevant to solving for *x*? One factor is the declining marginal utility of money. Money primarily has exchange value, and if Chooser won $2,000,000, Chooser would exchange the second million for things they chose not to exchange the first million for, so the second million has less value. That's one reason that *x* is well above ½.
+
+But is it the only reason? The orthodox answer is that it is. Lara @BuchakRisk has argued that it is not. We also need to know how much Chooser values, or more likely disvalues, risk. That is, we need to know how risk-seeking, or risk-averse, Chooser is.
+
+The orthodox view is that all we need to know are three numbers. In what follows, let *b* be Chooser's current wealth in millions, and V the function from wealth (in millions), to utility. Since V is only determined up to positive affine transformations, we can stipulate two of these values for V.
+
+- V(*b*), stipulated to be 0.
+- V(*b* + 1), stipulated to be 1.
+- V(*b* + 1), which we'll label *c*.
+
+On the standard view, the gamble's value is *cx*, so Chooser is indifferent between it and the money iff *x* = 1/*c*. On Buchak's view, rational Chooser has a risk function *f*, that measures their sensitivity to risk. The function must be monotonic increasing, with *f*(0) = 0, and *f*(1) = 1. If Chooser is risk-averse, then typically *f*(*x*) < *x*. Buchak's view reduces to the orthodox view if *f*(*x*) = *x*. I'm going to argue that given the SCP, *f*(*x*) does equal *x*. I'm far from the first to argue for *f*(*x*) = *x*.^[See @Briggs2015 and @Thoma2019 for different arguments to the same conclusion.] The value of the argument here is that it uses the same principle, the SCP, that is relevant to so many other problems.
+
+The core of Buchak's theory is a non-standard way of valuing a gamble. For simplicity, we'll focus on gambles with finitely many outcomes. Associate a gamble with a random variable *O*, which takes values *o*~1~, …, *o~n~*, where *o~j~* > *o~i~* iff *j* > *i*. Buchak says that the risk-weighted expected utility of *O* is given by this formula, where *f* is the agent's risk-weighting function.
+
+$$
+REU(O) = o_1 + \sum_{i = 2}^n f(\Pr(O \geq o_i))(o_i - o_{i-1})
+$$
+
+The decision rule then is simple: choose the gamble with the highest REU.
+
+The key notion here is the risk function *f*, which we introduced earlier. I'm going to show that if *f*(*x*) = *x*^2^, then we get a violation of the SCP. This is If *f* is the identity function, then this definition becomes a slightly non-standard way of defining expected utility. Buchak allows it to be much more general. The key constraints are that *f* is monotonically increasing, that *f*(0) = 0 and *f*(1) = 1. In general, if *f*(*x*) < *x*, Chooser is more risk-averse than an expected utility maximiser, while if *f*(*x*) > *x*, Chooser is more risk-seeking. The former case is more relevant to everyday intuitions, and it's what I'll focus on. Indeed, I'll focus on the case where *r*(*x*) = *x*^2^, which is also a case Buchak uses a lot.
+
+There are a number of good reasons to like Buchak's theory, but it is inconsistent with the Single Choice Principle. I'll show this for the case *r*(*x*) = *x*^2^, but it's not much harder to produce similar examples for any value of *r* other than *r*(*x*) = *x*. In @fig-buchak at stage 1 a fair die will be rolled. If it lands 1 or 2, Nature moves Left; if it lands 3 or 4, Nature moves Middle; otherwise, Nature moves Right. If Nature moves Left, the game ends, and Chooser gets 1. Otherwise Chooser is told that Nature did not move Left, but not whether they moved Middle or Right. If Chooser selects Down, they get 1. If Chooser selects Up, they get 5 if Nature moved Middle, and 0 otherwise.
+
+```{r engine='tikz'}
+#| label: fig-buchak
+#| fig.cap: "Tree Diagram of the counterexample to REU."
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.4,font=\footnotesize]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=18mm]
+  \tikzstyle{level 2}=[level distance=13mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Nature}]{}
+        child{node[square node, label=below:{1}]{}
+          edge from parent
+            node[xshift=-10]{L}}
+        child{node(1)[solid node]{}
+          child{node[square node, label=below:{5}]{}
+              edge from parent
+              node[left]{U}
+          }
+          child{node[square node, label=below:{1}]{}
+              edge from parent
+                node[right]{D}
+          }
+          edge from parent
+            node[left]{M}}
+        child{node(2)[solid node]{}
+          child{node[square node, label=below:{0}]{}
+              edge from parent
+              node[left]{U}
+          }
+          child{node[square node, label=below:{1}]{}
+              edge from parent
+                node[right]{D}
+          }
+          edge from parent
+            node[xshift=10]{R}}
+        ;
+        
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+@tbl-buchak-early shows the strategic table of @fig-buchak, and @tbl-buchak-late shows the decision table Chooser faces at the time they have to choose.
+
+::: {#tbl-panel layout-ncol=2}
+|          | **Left**     | **Middle**     |   **Right**  |
+|:--------:|:------------:|:--------------:|:------------:|
+| **Up**   |      1       |       5        |     0        |
+| **Down** |      1       |       1        |     1        |
+
+: The strategy table at game start. {#tbl-buchak-early}
+
+|          | **Middle**   | **Right**      |
+|:--------:|:------------:|:--------------:|
+| **Up**   |      5       |       0        |
+| **Down** |      1       |       1        |
+
+: The strategy table at choice time. {#tbl-buchak-late}
+
+Two strategy tables for @fig-buchak.
+:::
+
+In @tbl-buchak-early, the REU of Down is 1 (since that's the only possible outcome), and the REU of Up is 8/9. There is a 2/3 chance of getting at least 1, so that's worth 4/9, and there's a 1/3 chance of getting another 4, so that's also worth 4/9, and adding those gives 8/9. So the optimal strategy, according to REU theory, is Down. That is, REU says to prefer the strategy _Choose Down if you have to choose_ to the strategy _Choose Up if you have to choose_. But if we get to the choice point, we're at @tbl-buchak-late. And in that table the REU of Up is 5 times 1/4, i.e., 5/4. So at that point, REU says to choose Up. What REU says to do if you have to choose is different to which strategy it chooses for the one and only point you have to choose at. That is, Buchak's theory violates the SCP, and so should be rejected.
+
+This is far from the first objection to Buchak's view, but something interesting follows from the connection, via the SCP, to demonic problems. Many decision theorists reject Buchak's view about non-demonic problems in favour of orthodox expected utility theory, but also endorse views inconsistent with the SCP.^[Evidential Decision Theorists reject both Buchak's view and the SCP, and in this respect they are far from alone.] Those theorists can't coherently use this argument against Buchak's view. Nor can they use any other argument whose premises entail the SCP, such as an argument from the Sure Thing Principle. It would take too long to argue for this here, but I suspect there is no way to do this.^[Note that if we don't want to argue from first principles, but instead try to capture intuitions about cases, we should prefer Buchak's theory because of how it handles the @Allais1953 paradox.] If we reject the SCP, the weight of reasons favours Buchak's view over orthodoxy. I'll leave this as a challenge for theorists unconvinced by @sec-ratify: what is the best argument against Buchak's view, and in favour of expectectationist orthodoxy, whose premises do not entail the SCP? The separation in the literature between demonic and non-demonic problems has obscured how hard a challenge this is.
+
+# Conclusion
+
+Paragraph about how this connects to game theory
+
+Summary of what we've shown.
