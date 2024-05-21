@@ -31,9 +31,9 @@ Contemporary decision theory has become disjointed. There is less overlap than t
 
 The Single Choice Principle (hereafter, SCP) relates theories of static choice and dynamic choice. In particular, it says that for a narrow class of games, it doesn't matter whether you think of the game as involving a static, strategic choice, or a dynamic choice that is made during a game. One way into the principle is to think about an oddity in the way Newcomb's Problem is normally introduced.
 
-# Newcomb's Problem
+# Newcomb's Problem {#sec-newcomb}
 
-## Standard Version
+## Standard Version {#sec-newcomb-standard}
 
 In the standard vignette that goes with Newcomb's Problem, it is a dynamic game. The demon makes a *prediction*, and then the human (hereafter, Chooser) makes a choice. Chooser doesn't know what Demon did, but they do know that Demon has acted. So the natural presentation of Newcomb's Problem is in a tree like @fig-standard-newcomb.^[I'll assume $1,000 is worth 1 util. I think this assumption of constant marginal utility is close to incoherent, and it will get relaxed later, but it's harmless for now.]
 
@@ -389,9 +389,106 @@ Most philosophers would say that in the dynamic form of the game, @fig-ultimatum
 
 # Defending the SCP {#sec-scp-defence}
 
-## Ramsey Test
+## A Sample Violation
 
-## Unifying the Examples
+The argument for the SCP is that violations of it are in various ways incoherent. It helps to have a sample violation on the table. Imagine Chooser is going to play the following game.
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-sample-violation
+#| fig.cap: "Switching Example"
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=13mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node [solid node,label=right:{Nature}] {}
+          child { 
+            node {45}
+            edge from parent
+              node[left] {H $\frac{8}{9}$}
+              }
+          child { 
+            node (1)[solid node]{}
+              child{
+                node{72}
+                edge from parent
+                  node[left]{Up}
+              }
+              child{
+                node{18}
+                edge from parent
+                  node[right]{Down}
+              }
+            edge from parent
+              node[right] {T $\frac{1}{9}$}}
+          edge from parent
+            node[left] {PU}}
+        child [level distance=25mm,sibling distance=25mm]{ node (2)[solid node] {}
+          child { 
+            node{36}
+            edge from parent
+              node[left] {Up}}
+          child { 
+            node{54}
+            edge from parent
+              node[right] {Down}}
+          edge from parent
+            node[right] {PD}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+@fig-sample-violation resembles @fig-demon-then-coin, with two notable differences. First, the coin is now weighted, and has an 8/9 chance of landing Heads. Second, if Chooser must choose, either option is an equilibrium.
+
+@tbl-sample-violation-late shows the decision table Chooser faces if they must make a choice in @fig-sample-violation, and @tbl-sample-violation-early shows the expected payouts of the two strategies Chooser could select.
+
+::: {#tbl-sample-violation layout-ncol=2}
+|           |       PU      |     PD     |
+|:---------:|:-------------:|:----------:|
+| **Up**    |     72        |     36     |
+| **Down**  |     18        |     54     |
+
+: Dynamic version. {#tbl-sample-violation-late}
+
+|           |       PU      |     PD     |
+|:---------:|:-------------:|:----------:|
+| **Up**    |     48        |     36     |
+| **Down**  |     42        |     54     |
+
+: Strategic version. {#tbl-sample-violation-late}
+
+Payout tables for @fig-sample-violation.
+:::
+
+I'll take as my sample violator of the SCP a Chooser who prefers Up in the dynamic version, and Down in the strategic version. As we'll see in @sec-multiple, many decision theorists agree with this Chooser. But everything I say should generalise to any violation.
+
+## Ramsey Test {#sec-ramsey}
+
+To choose a strategy is to make true a bunch of conditionals. Adopting the strategy Down in @fig-sample-violation just is saying "If I have to choose, I'll choose Down". As @RamseyTest said, the way to tell which such conditional to make true is to hypothetically add the antecedent to one's stock of belief, and then decide which unconditional claim you'd like to make true. But Chooser does not do that. If they believed that they had to choose, they would choose Up. So their strategic preference implies that they believe that if they had to choose, they would choose Down, but adding the supposition that they have to choose, they choose Up. This combination is incoherent, and so violations of the SCP are incoherent.
+
+I think this argument is decisive; it's incoherent to adopt a strategy in games like @fig-demon-then-coin or @fig-switching-example that is different from what one knows one would do if one had to carry the strategy out. That's just not how conditionals work. But in case not everyone is convinced, I'll run through some other arguments. The SCP will do a lot of work, and it is worth getting the foundations as secure as possible.
+
+## Unifying the Examples {#sec-unity}
+
+Philosophers do not agree about Newcomb's Problem. But they do agree that in each of the examples in @sec-newcomb, the same choice is rational in the strategic and dynamic form of the game. This isn't because they think that in general strategic and dynamic forms are equivalent. Indeed, in many cases it is hard to see why they think 
 
 ## Intuitions about Change
 
