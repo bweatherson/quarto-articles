@@ -17,7 +17,7 @@ A **strategy** for one of the three players, Demon, Chooser or Nature, is a func
 
 ## Resolute Choice {#sec-resolute}
 
-There are two standard positions in philosophy for how to navigate decision trees: the resolute view and the sophisticated view. We'll start with the resolute view. It says that Chooser should solve the strategic problem, and then having chosen a strategy, stick to it whatever happens. For example, Resolute Evidential Decision Theory (REDT) says Chooser should adopt the strategy with the highest conditional expected utility, and stay with it whatever happens.^[REDT is similar to the Functional Decision Theory of @LevinsteinSoares2020; the example below is also intended as a counterexample to their view.] This can lead to some odd results. @fig-redt/@tbl-redt is a variant on Newcomb's Problem.^[It is similar to what's sometimes called an open box Newcomb's Problem.]
+There are two standard positions in philosophy for how to navigate decision trees: the resolute view and the sophisticated view.^[These are ordinarily used in cases where preferences change over time, but here we're applying them in cases where preferences are constant. I'm not sure the terms have completely standard denotations across philosophy; my use is somewhat stipulative. For more background, see @Steele2018.] We'll start with the resolute view. It says that Chooser should solve the strategic problem, and then having chosen a strategy, stick to it whatever happens. For example, Resolute Evidential Decision Theory (REDT) says Chooser should adopt the strategy with the highest conditional expected utility, and stay with it whatever happens.^[REDT is similar to the Functional Decision Theory of @LevinsteinSoares2020; the example below is also intended as a counterexample to their view.] This can lead to some odd results. @fig-redt/@tbl-redt is a variant on Newcomb's Problem.^[It is similar to what's sometimes called an open box Newcomb's Problem.]
 
 ::: {.panel-tabset}
 
@@ -101,4 +101,35 @@ Since the strategy of always playing 1 has highest return, REDT says to play it.
 
 ## Sophisticated Choice {#sec-sophisticated}
 
-The **sophisticated** theory says that Chooser should take each node as a new choice, treat their past choices as fixed, and treat their future choices as another more-or-less knowable part of the world, and do whatever is best given those constraints.
+The **sophisticated** theory (at least as I'm using the term) says that Chooser should take each node as a new choice, treat their past choices as fixed, and treat their future choices as another more-or-less knowable part of the world, and do whatever is best given those constraints. The **pure sophisticated** theory adds two further constraints to that, which I'll call Openness and Separation^[The term Openness is mine, but it's a commonly used principle. The term Separation is from @Bader2019. @Rothfusnd uses 'Independence' for a similar principle].
+
+Openness
+:    Any credal distribution over Chooser's own future actions is rationally permissible provided that it gives probability 1 to Chooser selecting some rational action at each point. 
+
+Separation
+The rational choices at an information set are independent of payouts in parts of the tree which cannot be reached from that information set. 
+
+I'm going to accept the sophisticated theory, but reject both Openness and Separation. Any theory consistent with the SCP gets into trouble in @fig-sophisticated-first if we accept both of these additional claims.
+
+[Include diagram here]
+
+In fig-sophisticated-first, Chooser first decides whether to eXit, or Risk. If they eXit, they get 2. If they Risk, they play @tbl-sophisticated-first.
+
+|       |       PU      |     PD     |
+|:-----:|:-------------:|:----------:|
+|  Up   |     5         |     0      |
+|  Down |     0         |     1      |
+
+: The risky subgame in @fig-sophisticated-first. {#tbl-sophisticated-first}
+:::
+
+In @tbl-sophisticated-first, both options are possible. So by Openness, having credence 1 that they'll play Up is rational. If the eXit payout was -1, the only options to survive deletion of dominated strategies would be Risk-Up and Risk-Down, and in that situation the SCP implies that both options are rational. So by Separation, Down is choice-worthy in @fig-sophisticated-first. But this combination is absurd, since the strategy Risk-Down is dominated by both eXit-Up and eXit-Down. As @Spencer202x and @Rothfusnd put it, the result is dynamically inconsistent.^[Spencer is interested primarily in an even stricter principle than domination that gets violated here. Chooser plays Risk-Down, and the best possible payoff from it is worse than the worst possible payout from either eXit strategy.]
+
+## Dual Mandate {#sec-dual-mandate-defined}
+
+There is a better option than both of these. Following Reinhard @Selten1974, the standard approach to dynamic choice in game theory says that both the resolute and sophisticated views are half-right. They both give necessary conditions for a series of moves being choice-worthy, but neither gives a sufficient condition. Decision theorists should adopt the same approach. In a decision tree, rational Chooser will make a choice that satisfies both of the following constraints.
+
+1. They will adopt a strategy that is choice-worthy in the strategic form of the tree.
+2. At every information set, they will make a choice that is choice-worthy at that moment, holding fixed their strategy elsewhere.
+
+If we assume Ordering, imposing both 
