@@ -1,1 +1,104 @@
 # Problem 3: Dynamic Choice {#sec-dual-mandate}
+
+This section is about dynamic decision problems. I'll start by saying more carefully what they are, rather than the informal presentation we've used so far. 
+
+## Decision Trees {#sec-decision-tree}
+
+A **decision tree** is a sextuple ⟨*W*, *R*, *V*, *a*, *I*, Pr⟩ such that:
+
+- *W* is a finite set of nodes. One of these nodes, call it *o* for origin, is designated as the initial node. (This is the open circle in the diagrams.)
+- *R* is a relation on *W* such that for any *x* ∈ *W*, ¬*xRo*, and if *y* ≠ *o*, there is a unique *x* such that *xRy*. Intuitively, the decision problem starts at *o*, and continues by moving from a node *x* to another node *y* such that *xRy* until there is nowhere further to go. Say that *x* is a predecessor of *y* if *xR+y*, where *R+* is the ancestral of *R*.
+- *V* is a value function. It maps each terminal node of *W* to a real number. A node *x* is a terminal node iff there is no *y* such that *xRy*.
+- *a* is a function from non-terminal nodes in *W* to the set \{C, D, N\} that says who the agent is for each node. Intuitively, C is for Chooser, D is for Demon, and N is for Nature. That agent 'chooses' where the game goes next.
+- *I* is a partition of the nodes the non-terminal nodes *x: a(x) =*C. The elements of this partition are called information sets. Intuitively, when Chooser reaches a node where they must choose, they know that they are in one member of this partition, i.e., one information set, and nothing more. Any two nodes in the same information set have the same number of outbound links.
+- Pr is a conditional probability function. It says that given a _strategy_ for Chooser, and that a particular non-terminal node *x* which is assigned to Demon or Nature has reached, what the probability is that we'll move to some further node *y* such that *xRy*. If *x* is assigned to Nature, this probability is independent of Chooser's strategy.
+
+A **strategy** for one of the three players, Demon, Chooser or Nature, is a function from all the nodes in the tree which are assigned to them, to the move they will make if that node is reached. Given any decision tree, one can generate a **strategic decision problem** where the possible actions are strategies for Chooser, and the states are pairs of strategies for Demon and strategies for Nature. The SCP says that if there is only one cell in *I*, this strategic problem has the same solutions as the dynamic problem represented by the tree. But if *I* has more than one cell, in general the problems will be distinct.
+
+## Resolute Choice {#sec-resolute}
+
+There are two standard positions in philosophy for how to navigate decision trees: the resolute view and the sophisticated view. We'll start with the resolute view. It says that Chooser should solve the strategic problem, and then having chosen a strategy, stick to it whatever happens. For example, Resolute Evidential Decision Theory (REDT) says Chooser should adopt the strategy with the highest conditional expected utility, and stay with it whatever happens.^[REDT is similar to the Functional Decision Theory of @LevinsteinSoares2020; the example below is also intended as a counterexample to their view.] This can lead to some odd results. @fig-redt/@tbl-redt is a variant on Newcomb's Problem.^[It is similar to what's sometimes called an open box Newcomb's Problem.]
+
+::: {.panel-tabset}
+
+## Tree
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-redt
+#| fig.cap: "An open box Newcomb's Problem."
+#| fig.ext: 'png'
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node (1)[solid node, label=left:{Chooser}] {}
+          child { 
+            node {6}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {11}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[left] {P1}}
+        child { node (2)[solid node, label=right:{Chooser}] {}
+          child { 
+            node {0}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {5}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[right] {P2}};
+% information set
+%\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+%\node at ($(1)!.5!(2)$) {Chooser};
+
+\end{tikzpicture}
+```
+
+## Table
+
+|       |       P1      |     P2     |
+|:-----:|:-------------:|:----------:|
+|  1    |     6         |     0      |
+|  2    |     11        |     5      |
+
+: An open box Newcomb's Problem. {#tbl-redt}
+:::
+
+Chooser sees Demon's prediction before they act. Roughly speaking, Demon's predictions are 95% accurate. More precisely, the probability of each prediction given each strategy for Chooser is given in @tbl-redt-strategy. I've also added the expected value (according to EDT) of each strategy.
+
+|                  | P1   | P2   | Exp Util |
+|:----------------:|:----:|:----:|:--------:|
+| 1-if-P1, 1-if-P2 | 0.95 | 0.05 |    5.7   |
+| 1-if-P1, 2-if-P2 | 0.5  | 0.5  |    5.5   |
+| 2-if-P1, 1-if-P2 | 0.5  | 0.5  |    5.5   |
+| 2-if-P1, 2-if-P2 | 0.05 | 0.95 |    5.25  |
+
+: Demon's prediction probabilities for @fig-redt/@tbl-redt. {#tbl-redt-strategy}
+
+Since the strategy of always playing 1 has highest return, REDT says to play it. And it says to do that even when, as is possible, Demon plays P2, so it is guaranteed to get the worst return. This isn't very plausible, so REDT doesn't seem attractive. We'll come back to whether this is because it is resolute or because it is evidential, but there is an attractive diagnosis. REDT gives the wrong result because it gives too much weight to earlier plans; it commits the sunk cost fallacy. This diagnosis supports the sophisticated theory.
+
+## Sophisticated Choice {#sec-sophisticated}
+
+The **sophisticated** theory says that Chooser should take each node as a new choice, treat their past choices as fixed, and treat their future choices as another more-or-less knowable part of the world, and do whatever is best given those constraints.
