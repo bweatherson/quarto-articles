@@ -85,5 +85,3 @@ logacc_min <- acc_tibb  |> slice_min(order_by = logacc, n = 1)
 brier_min$c[1]
 logacc_min$c[1]
 
-# Working out what happens at c_post = 0.6
-exp_brier <- (0.94 + )
