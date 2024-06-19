@@ -116,6 +116,9 @@ year_cites |>
 load("philo_bib.RData")
 load("philo_cite.RData")
 
+philo_bib <- philo_bib |>
+  filter(journal != "Nous" | !str_detect(longcite, "Suppl") | str_detect(longcite, "Sp. Iss."))
+
 authadjust <- function(x){
   paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
 }
@@ -408,6 +411,7 @@ main_bib <- main_article_ids |>
     art_title == "Scorekeeping In A Language Game" ~ "Lewis, Scorekeeping",
     short_auth == "Rabinowicz and Ronnow-Rasmussen" ~ "R and R-R",
     short_auth == "Inwagen" ~ "van Inwagen",
+    short_auth == "Fraassen" ~ "van Fraassen",
     TRUE ~ short_auth
   )) |>
   left_join(select(philo_bib, id, longcite), by = c("old" = "id")) |>
@@ -421,6 +425,10 @@ main_bib <- main_article_ids |>
   mutate(end_of_longcite = str_replace_all(end_of_longcite, "^:", "")) |>
   mutate(end_of_longcite = str_replace_all(end_of_longcite, "^\\)", "")) |>
   mutate(end_of_longcite = str_replace_all(end_of_longcite, "^\\&", "")) |>
+  mutate(end_of_longcite = str_replace_all(end_of_longcite, "-$", "")) |>
+  mutate(end_of_longcite = str_replace_all(end_of_longcite, " 1$", "")) |>
+  mutate(end_of_longcite = str_replace_all(end_of_longcite, " 2$", "")) |>
+  mutate(end_of_longcite = str_replace_all(end_of_longcite, " 17$", "")) |>
   mutate(end_of_longcite = str_squish(end_of_longcite)) |>
   select(end_of_longcite, everything()) |>
   ungroup()
@@ -440,10 +448,6 @@ rolling_averages <- citation_tibble |>
   select(old, old_year, new_year, cites, rolling, graph_cite, short_auth)
 
 # List of cleanup on bibliographic information
-# - [ ] 196 (Fodor 1997) needs new journal and pages
-# - [ ] 210 (Sosa 1999) needs new journal and pages
-# - [ ] 214 (Cohen 1999) needs new journal and pages
-# - [ ] 239 (Wedgwood 2002)
 # - [ ] 254 just needs trailing dash removed
 # - [ ] 256 (Pryor 2004)
 # - [ ] 258 just needs trailing dash removed
@@ -469,7 +473,7 @@ rolling_spaghetti_graph <- function(x){
     geom_line() +
     theme(legend.position="bottom",
           legend.title = element_blank()) +
-    guides(fill = guide_legend(byrow = TRUE)) +
+    guides(color = guide_legend(nrow = 3, byrow = TRUE)) +
     labs(x = element_blank(),
          y = element_blank(),
          title =  paste0("Widely cited articles from ", x),
@@ -526,7 +530,7 @@ kable(temp)
 
 Of course the first year isn't the first year the journal started publishing; it's when Web of Science started indexing them. And the last year isn't when they ceased publishing; it's the most recent year indexed. Web of Science is very slow at adding journals, and at adding volumes. But it is, as far as I've found, pretty accurate within what it adds.
 
-One big exception to this is that it's never really understood how to handle the 'supplements' to _Noûs_, i.e., _Philosophical Perspectives_ and _Philosophical Issues_. Some of these are recorded as being their own thing, some of them are recorded as special issues of _Noûs_. In the latter case, the citations often only start being tracked several years after publication, and the bibliographic information is spotty. This affects some of what we see below.
+One big exception to this is that it's never really understood how to handle the 'supplements' to _Noûs_, i.e., _Philosophical Perspectives_ and _Philosophical Issues_. Some of these are recorded as being their own thing, some of them are recorded as special issues of _Noûs_. In the latter case, the citations often only start being tracked several years after publication, and the bibliographic information is spotty. I've manually removed the ones that were listed as being published in _Noûs_ but actually in one of the supplements, because the data didn't seem sufficiently reliable.
 
 Because Web of Science keeps adding journals, and journals keep getting larger, the number of articles in this study keeps going up. The only downward pressure comes from the fact that some journals haven't been indexed for 2022 or even, in some cases, 2021. @fig-number-of-articles-by-year shows how many articles each year are in the study.
 
@@ -626,7 +630,7 @@ kable(
 )
 ```
   
-A bit under half the articles (171 out of 360) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. If we restrict attention to just the last ten years, and look at which articles from 2006 to 2015 are widely cited in this sense, there is even more variation, as shown in @tbl-recent-journals-in-main-bib.
+A bit under half the articles (165 out of 360) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. @tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last ten years, and look at which articles from 2006 to 2015 are widely cited in this sense. There is one particularly striking result.
 
 ```{r}
 #| label: tbl-recent-journals-in-main-bib
@@ -652,9 +656,9 @@ There are a few reasons that articles might be widely cited immediately after th
 
 - The article might get turned into a book, and people simply cite the book. You can see that happening in the data below with articles by Ted Sider, by John MacFarlane, and by Timothy Williamson, for example. It's not part of this study, but not that many people cite Lewis's 1973 paper on counterfactuals, because they mostly cite his 1973 book on counterfactuals. But books don't always soak up the citations that papers would otherwise have received. People didn't take the discussion of natural properties in _Plurality_ to mean they should stop citing "New Work". Jason Stanley and Timothy Williamson's paper on knowing how gets more citations after Stanley's book on know how comes out. Still, it is one relatively mundane reason that a paper doesn't get much attention.
 - The article might simply get superseded. This can happen with technical papers in particular. If a paper has some useful technical developments, but they are incorporated into later and better work, perhaps people just stop citing the earlier work.
-- If the article is a negative article, it might simply convince people not to pay attention to a particular debate. This does happen a bit; I think Karen Bennett's 2003 paper on the causal exclusion problem is more influential than you see in the citation data, simply because it settled various problems convincingly enough to convince people to write about other things. Bennett's paper does get a pretty good number of citations, but even so I think it gets less than some less influential papers. But this kind of phenomena, where papers lose citations because they convince people to move on, isn't that common. People didn't stop citing _Sense and Sensibilia_ when they decided sense-data theory had been a mistake.
+- If the article is a negative article, it might simply convince people not to pay attention to a particular debate. I suspect this happens a bit, but it's hard to find clear cases of it. People didn't stop citing _Sense and Sensibilia_ when they decided sense-data theory had been a mistake, and I suspect that's the more usual situation.
 
-But sometimes articles stop getting cited because the philosophical fashion moves on, and they seem like a relic of an earlier age. You really see this in the data below with articles about **supervenience**. Now I'm enough of an old fashioned intensionalist to think that getting clear on the different kinds of supervenience is in fact a worthwhile project. But the discipline as a whole doesn't really agree. Nobody is citing the work, especially the early work, on different concepts of supervenience.
+Sometimes articles stop getting cited because the philosophical fashion moves on, and they seem like a relic of an earlier age. You really see this in the data below with articles about **supervenience**. Now I'm enough of an old fashioned intensionalist to think that getting clear on the different kinds of supervenience is in fact a worthwhile project. But the discipline as a whole doesn't really agree. Nobody is citing the work, especially the early work, on different concepts of supervenience.
 
 What would have been even more shocking to me thirty years ago is how little attention is paid in the journals now to debates about content externalism. That felt like the most important debate in philosophy for so long, and now it simply isn't.
 
