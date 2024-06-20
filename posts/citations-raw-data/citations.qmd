@@ -2,7 +2,7 @@
 title: "Some Data about Citation Trends"
 abstract: |
   In the future I plan to write something substantive about trends in citations in philosophy journals. This is a presentation of some of the underlying data, with some small remarks about the big picture trends.
-date: June 18 2024
+date: June 20 2024
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -84,13 +84,13 @@ year_cites <- citation_tibble |>
   tally(name = "all") |>
   ungroup() |> 
   left_join (citation_tibble |>
-      filter(old_year == year, new_year >= 2013) |>
+      filter(old_year == year, new_year >= pmax(2013,((year+2022.1)/2))) |>
       group_by(old) |>
       tally(name = "late") |>
       ungroup(),
     by = "old") |>
   left_join (citation_tibble |>
-               filter(old_year == year, new_year <= year + 10) |>
+               filter(old_year == year, new_year <= pmin(year+10,((year+2022)/2))) |>
                group_by(old) |>
                tally(name = "early") |>
                ungroup(),
@@ -121,6 +121,10 @@ philo_bib <- philo_bib |>
 
 authadjust <- function(x){
   paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
+}
+
+authadjust_short <- function(x){
+  str_to_title(str_extract(x,".+(?=,)"))
 }
 
 
@@ -158,14 +162,14 @@ for(year in (1976:2015)){
       slice_max(n, n=topper)
     
     recent_cited <- citation_tibble |>
-      filter(old_year == year, new_year >= 2013) |>
+      filter(old_year == year, new_year >= pmax(2013,((year+2022.1)/2))) |>
       group_by(old) |>
       tally() |>
       ungroup() |>
       slice_max(n, n=topper)
     
     orig_cited <- citation_tibble |>
-      filter(old_year == year, new_year <= year + 10) |>
+      filter(old_year == year, new_year <= pmin(year+10,((year+2022)/2))) |>
       group_by(old) |>
       tally() |>
       ungroup() |>
@@ -183,17 +187,7 @@ for(year in (1976:2015)){
   )
 }
 
-main_bib <- main_article_ids |>
-  left_join(article_title, by = c("old" = "id")) |>
-  ungroup() |>
-  rowwise() |>
-  mutate(graph_auth =  case_when(author[1] == "Pohlhaus, Gaile, Jr." ~ "Gaile Pohlhaus Jr.",
-                                 length(author) == 1 ~ authadjust(author[1]),
-                                 length(author) == 2 ~ paste0(authadjust(author[1]), " and ", authadjust(author[2])),
-                                 TRUE ~ paste0(authadjust(author[1]), ", et al"))) |>
-  mutate(graph_auth = str_replace_all(
-    graph_auth,
-    c(
+name_fix <- c(
       'Bonjour' = 'BonJour',
       'Mcdowell' = 'McDowell',
       'Mcmullin' = 'McMullin',
@@ -212,12 +206,33 @@ main_bib <- main_article_ids |>
       'Vangelder' = 'van Gelder',
       'Derosset' = 'deRosset'
     )
+
+main_bib <- main_article_ids |>
+  left_join(article_title, by = c("old" = "id")) |>
+  ungroup() |>
+  rowwise() |>
+  mutate(graph_auth =  case_when(author[1] == "Pohlhaus, Gaile, Jr." ~ "Gaile Pohlhaus Jr.",
+                                 length(author) == 1 ~ authadjust(author[1]),
+                                 length(author) == 2 ~ paste0(authadjust(author[1]), " and ", authadjust(author[2])),
+                                 length(author) == 3 ~ paste0(authadjust(author[1]), ", ", authadjust(author[2]), ", and ", authadjust(author[3])),
+                                 TRUE ~ paste0(authadjust(author[1]), ", et al"))) |>
+  mutate(short_auth = case_when(author[1] == "Pohlhaus, Gaile, Jr." ~ "Pohlhaus Jr.",
+                                 length(author) == 1 ~ authadjust_short(author[1]),
+                                 length(author) == 2 ~ paste0(authadjust_short(author[1]), " and ", authadjust_short(author[2])),
+                                 TRUE ~ paste0(authadjust_short(author[1]), " et al"))) |>
+  mutate(graph_auth = str_replace_all(
+    graph_auth,
+    name_fix
+  )) |>
+  mutate(short_auth = str_replace_all(
+    short_auth,
+    name_fix
   )) |>
   mutate(graph_cite = paste0(
     graph_auth,
     ", \"",
     art_title,
-    "\""
+    ",\""
   )) |>
   mutate(journal = str_replace_all(journal, 'Nous', 'Noûs')) |>
   mutate(graph_cite = str_replace_all(
@@ -270,7 +285,8 @@ main_bib <- main_article_ids |>
       'Matter of Individuality' = 'A Matter of Individuality',
       'Logic of Paradox' = 'The Logic of Paradox',
       'Problem of the Essential' = 'The Problem of the Essential',
-      'and a Ariew' = 'and A Ariew'
+      'and a Ariew' = 'and A Ariew',
+      'Ceteris-Paribus' = 'Ceteris Paribus'
     )
   )) |>
   mutate(graph_cite = str_replace_all(
@@ -278,6 +294,12 @@ main_bib <- main_article_ids |>
         fixed(
           c(
             'Have a Foundation' = 'Have a Foundation?',
+            'What An Antiindividualist Knows A-Priori' = 'What An Anti-Individualist Knows A Priori',
+            'Functional-Analysis and Proper Functions' = 'Functional Analysis and Proper Functions',
+            'to Modus-Ponens' = 'to Modus Ponens',
+            'Easy Possibilities (Reliability-Conditional)' = 'Easy Possibilities',
+            'Four-Dimensionalism' = 'Four Dimensionalism',
+            'The Conceptual Analysts Defense' = 'The Conceptual Analyst\'s Defense',
             'Materialism and Qualia, the Explanatory Gap' = 'Materialism and Qualia: The Explanatory Gap',
             'Saints + Implications for Moral-Philosophy' = 'Saints',
             'All the Worlds a Stage + a Philosophers Reasons To Believe the Stage-View' = 'All the World\'s a Stage',
@@ -322,79 +344,79 @@ main_bib <- main_article_ids |>
         )
       )
     ) |>
-  mutate(graph_auth = str_replace_all(
-    graph_auth,
-    c(
-      'J. S.' = 'J.S.'
-    )
-  )) |>
-  mutate(spaces_in_auth = str_count(graph_auth, " ")) |>
-  rowwise() |>
-  mutate(short_auth = case_when(
-    spaces_in_auth == 6 ~ 
-      paste0(
-        str_sub(
-          graph_auth,
-          start = str_locate_all(graph_auth, " ")[[1]][2] + 1,
-          end = str_locate_all(graph_auth, " ")[[1]][3] -1 
-        ),
-        " and ",
-        str_sub(
-          graph_auth,
-          start = str_locate_all(graph_auth, " ")[[1]][6] + 1,
-          end = str_length(graph_auth)
-        )
-      ),
-    spaces_in_auth == 5 ~ 
-      paste0(
-        str_sub(
-          graph_auth,
-          start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
-          end = str_locate_all(graph_auth, " ")[[1]][2] -1 
-        ),
-        " and ",
-        str_sub(
-          graph_auth,
-          start = str_locate_all(graph_auth, " ")[[1]][5] + 1,
-          end = str_length(graph_auth)
-        )
-      ),
-    spaces_in_auth == 4 ~ 
-      paste0(
-        str_sub(
-          graph_auth,
-          start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
-          end = str_locate_all(graph_auth, " ")[[1]][2] -1 
-        ),
-        " and ",
-        str_sub(
-          graph_auth,
-          start = str_locate_all(graph_auth, " ")[[1]][4] + 1,
-          end = str_length(graph_auth)
-        )
-      ),
-    spaces_in_auth == 3 ~ 
-      paste0(
-        str_sub(
-          graph_auth,
-          start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
-          end = str_locate_all(graph_auth, " ")[[1]][2] - 2 
-        ),
-        " et al"
-      ),
-    graph_auth == 'Gaile Pohlhaus Jr.' ~ 'Pohlhaus Jr.',
-    spaces_in_auth == 2 ~ 
-      str_sub(
-        graph_auth,
-        start = str_locate_all(graph_auth, " ")[[1]][2] + 1,
-        end = str_length(graph_auth)
-      ),
-    TRUE ~  str_sub(
-      graph_auth,
-      start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
-      end = str_length(graph_auth)
-    )
-  )) |>
+  # mutate(graph_auth = str_replace_all(
+  #   graph_auth,
+  #   c(
+  #     'J. S.' = 'J.S.'
+  #   )
+  # )) |>
+  # mutate(spaces_in_auth = str_count(graph_auth, " ")) |>
+  # rowwise() |>
+  # mutate(short_auth = case_when(
+  #   spaces_in_auth == 6 ~ 
+  #     paste0(
+  #       str_sub(
+  #         graph_auth,
+  #         start = str_locate_all(graph_auth, " ")[[1]][2] + 1,
+  #         end = str_locate_all(graph_auth, " ")[[1]][3] -1 
+  #       ),
+  #       " and ",
+  #       str_sub(
+  #         graph_auth,
+  #         start = str_locate_all(graph_auth, " ")[[1]][6] + 1,
+  #         end = str_length(graph_auth)
+  #       )
+  #     ),
+  #   spaces_in_auth == 5 ~ 
+  #     paste0(
+  #       str_sub(
+  #         graph_auth,
+  #         start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
+  #         end = str_locate_all(graph_auth, " ")[[1]][2] -1 
+  #       ),
+  #       " and ",
+  #       str_sub(
+  #         graph_auth,
+  #         start = str_locate_all(graph_auth, " ")[[1]][5] + 1,
+  #         end = str_length(graph_auth)
+  #       )
+  #     ),
+  #   spaces_in_auth == 4 ~ 
+  #     paste0(
+  #       str_sub(
+  #         graph_auth,
+  #         start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
+  #         end = str_locate_all(graph_auth, " ")[[1]][2] -1 
+  #       ),
+  #       " and ",
+  #       str_sub(
+  #         graph_auth,
+  #         start = str_locate_all(graph_auth, " ")[[1]][4] + 1,
+  #         end = str_length(graph_auth)
+  #       )
+  #     ),
+  #   spaces_in_auth == 3 ~ 
+  #     paste0(
+  #       str_sub(
+  #         graph_auth,
+  #         start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
+  #         end = str_locate_all(graph_auth, " ")[[1]][2] - 2 
+  #       ),
+  #       " et al"
+  #     ),
+  #   graph_auth == 'Gaile Pohlhaus Jr.' ~ 'Pohlhaus Jr.',
+  #   spaces_in_auth == 2 ~ 
+  #     str_sub(
+  #       graph_auth,
+  #       start = str_locate_all(graph_auth, " ")[[1]][2] + 1,
+  #       end = str_length(graph_auth)
+  #     ),
+  #   TRUE ~  str_sub(
+  #     graph_auth,
+  #     start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
+  #     end = str_length(graph_auth)
+  #   )
+  # )) |>
   mutate(short_auth = case_when(
     art_title == "Is Conceivability A Guide To Possibility" ~ "Yablo, Conceivability",
     art_title == "Paradox Without Self-Reference" ~ "Yablo, Paradox",
@@ -409,6 +431,8 @@ main_bib <- main_article_ids |>
     art_title == "Attitudes De-Dicto And De-Se" ~ "Lewis, De Se",
     art_title == "Counterfactual Dependence And Times Arrow" ~ "Lewis, Time\'s Arrow",
     art_title == "Scorekeeping In A Language Game" ~ "Lewis, Scorekeeping",
+    art_title == "Functions As Selected Effects: The Conceptual Analysts Defense" ~ "Neander, Selected",
+    art_title == "The Teleological Notion Of Function" ~ "Neander, Teleological",
     short_auth == "Rabinowicz and Ronnow-Rasmussen" ~ "R and R-R",
     short_auth == "Inwagen" ~ "van Inwagen",
     short_auth == "Fraassen" ~ "van Fraassen",
@@ -428,8 +452,17 @@ main_bib <- main_article_ids |>
   mutate(end_of_longcite = str_replace_all(end_of_longcite, "-$", "")) |>
   mutate(end_of_longcite = str_replace_all(end_of_longcite, " 1$", "")) |>
   mutate(end_of_longcite = str_replace_all(end_of_longcite, " 2$", "")) |>
+  mutate(end_of_longcite = str_replace_all(end_of_longcite, " 4$", "")) |>
   mutate(end_of_longcite = str_replace_all(end_of_longcite, " 17$", "")) |>
   mutate(end_of_longcite = str_squish(end_of_longcite)) |>
+  mutate(end_of_longcite = case_when(
+    art_title == "Disagreement, Question-Begging And Epistemic Self-Criticism" ~ "11 (6): 1-22",
+    art_title == "Grounding Explanations" ~ "13 (7): 1-26",
+    art_title == "The Possibility Of Physicalism" ~ "111 (9-10): 557-592",
+    art_title == "Unified Foundations For Essence And Ground" ~ "1 (2): 296-311",
+    old == "WOS:000366669500008" ~ "58 (7-8): 828-874",
+    TRUE ~ end_of_longcite)
+  ) |>
   select(end_of_longcite, everything()) |>
   ungroup()
 
@@ -446,16 +479,6 @@ rolling_averages <- citation_tibble |>
   mutate(rolling = slider::slide_dbl(cites, mean, .before = 4)) |>
   left_join(main_bib, by = "old") |>
   select(old, old_year, new_year, cites, rolling, graph_cite, short_auth)
-
-# List of cleanup on bibliographic information
-# - [ ] 254 just needs trailing dash removed
-# - [ ] 256 (Pryor 2004)
-# - [ ] 258 just needs trailing dash removed
-# - [ ] 321 Add page numbers
-# - [ ] 335 Add page numbers
-# - [ ] 338 remove trailing 1
-# - [ ] 343 remove trailing 2
-# - [ ] 356 pages
 
 main_bib <- main_bib |>
   mutate(full_citation = paste0(graph_cite, " _", journal, "_ ", end_of_longcite,"."))
@@ -510,9 +533,9 @@ rolling_facet_graph <- function(x){
 
 I recently downloaded citation data for 100 philosophy journals from Web of Science. This note presents some of the data about trends in citation patterns since 1976. My main interest here is in seeing which changes there have been in what was cited over time, but there are lots of interesting nuggets. Later I'll write a real paper actually going into what some of the data mean, but for now I'm just presenting it for public consumption.
 
-# Methodology
+# Methodology {#sec-methodology}
 
-## The Articles Being Studied
+## The Articles Being Studied {#sec-articles-studied}
 
 Via the University of Michigan, I got the latest available database for Web of Science circa January 2024. I created a file of every citation where both the citing article and the cited article were from one of the 100 journals in @tbl-list-of-journals, in the years that they were indexed by Web of Science.
 
@@ -607,11 +630,11 @@ ggplot(mean_citations, aes(x = new_year, y = mean_citations)) +
 
 Between about 1978 and 2004, the different forces are roughly balanced. There are more papers, and each paper cites more often, but there are more papers available to be cited, and the mean stays at about 0.1. (Of course articles do get cited outside of journals indexed in Web of Science, but it's still a bit humbling to realise that's the historical average, even if one gets published in a journal as good as one of these.) But then the forces pushing this number up take over. This is important context for a lot of the graphs below, where the typical article will have a graph of citations per year that looks a bit like this.
 
-## The Focus
+## The Focus {#sec-focus}
 
-For each year up to 2015, I made three lists. (After 2015 the citation data is all too new to be particularly useful I think.) First, a list of the articles published that year sorted by how many times they are cited. Second, the same list sorted by how many times they are cited in the first ten years after publication. Third, the same list sorted by how many times they are cited in the last ten years of the study. As we get closer to the present, the three lists overlap considerably. Given how many of the citations come from the last few years, the first and third lists overlap a lot in any case.
+For each year up to 2015, I made three lists. (After 2015 the citation data is all too new to be particularly useful I think.) First, a list of the articles published that year sorted by how many times they are cited. Second, the same list sorted by how many times they are cited in what I call _early_ years. That's either the first ten years after publication, or half of the time between publication and 2022, whichever is shorter. Third, the same list sorted by how many times they are cited in what I call _late_ years, which is either the last ten years of the study, or the years since publication that are not 'early', again whichever is shorter. Given how many of the citations come from the last few years, the first and third lists overlap a lot. As we get closer to the end of the study, the early cites tend to be very volatile, and there is a bit of impact from how easy journals made it for their papers to be cited prior to official publication through online early access.
 
-Then I found the largest _n_ such that taking the top _n_ from those three lists gave me nine total articles per year. (If forced to choose, I chose the articles with the most total citations.) So we got a mix largely of highly cited articles, and articles that were highly cited soon after publication. With nine articles each year, and forty years between 1976 and 2015, we end up with 360 articles. I won't list them here because they are all listed in one way or other below.
+After making those three lists, I found the largest _n_ such that taking the top _n_ from those three lists gave me nine total articles per year. (If forced to choose, I chose the articles with the most total citations.) So we got a mix largely of highly cited articles, and articles that were highly cited soon after publication. With nine articles each year, and forty years between 1976 and 2015, we end up with 360 articles. I won't list them here because they are all listed in one way or other below.
 
 The 360 articles are, for better and for worse, a pretty representative sample of what was happening in those journals, and in particular what was being widely talked about in those journals. They wouldn't match up with my list of the best 360 articles from those forty years, or I suspect anyone else's list of the best 360 articles. But I do think they are an interesting model of the field as it was across those years.
 
@@ -630,7 +653,7 @@ kable(
 )
 ```
   
-A bit under half the articles (165 out of 360) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. @tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last ten years, and look at which articles from 2006 to 2015 are widely cited in this sense. There is one particularly striking result.
+A bit under half the articles (166 out of 360) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. @tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last ten years, and look at which articles from 2006 to 2015 are widely cited in this sense. There is one particularly striking result.
 
 ```{r}
 #| label: tbl-recent-journals-in-main-bib
@@ -646,7 +669,7 @@ kable(
 )
 ```
 
-The big five still cover over 40% of the articles, but the journal with the most representatives is _Philosophical Studies_. Now part of that is that it publishes so many articles, but lots of journals publish lots of articles without having this much impact.
+The big five still cover nearly half of the articles, but the journal with the most representatives is _Philosophical Studies_. Now part of that is that it publishes so many articles, but lots of journals publish lots of articles without having this much impact.
 
 ## Short Observations
 
@@ -670,7 +693,30 @@ The biggest of these is **social philosophy**. In this I'm including Rae Langton
 
 The other category is papers on **probability**. Some papers from the 1990s, such as Richard Foley's 1992 paper that set out the Lockean theory of belief, and Jim Joyce's 1998 paper setting up the accuracy-dominance approoach, are much more widely discussed now than they were immediately after they came out.
 
-One of my aims with this is to use the co-citation relations between these 360 papers to find more categories, and especially categories that are linked by more than my gut feeling that they fit together. But that's a project for a much bigger project. The aim here is mostly to present some data, and if anyone has ideas about how it could be used, they should feel free to investigate them!
+One of my aims with this is to use the co-citation relations between these 360 papers to find more categories, and especially categories that are linked by more than my gut feeling that they fit together. But that's a project for a much longer piece.
+
+## Future Goals {#sec-future-goals}
+
+I'm very interested to hear ideas other people have for what might be done with this data, and surrounding data. Here are some of the ideas I have for future research.
+
+The biggest project I've started involves cluster-detection. I've created a table of how many times each pair of these 360 articles was co-cited with every other one (among the hundred journals I'm studying). I've tried running that through various cluster-detecting algorithms to see if there are naturally occurring clusters of articles. The results are a bit messy right now, but maybe with some tidying they could be usefully used to see what trends there are in topics, or in classifying journals by which kinds of articles they publish.
+
+Otherwise I've got the following tentative ideas.
+
+- Graphing the gender balance among authors over time among these 360 articles.
+- Comparing how widely cited David Lewis's 1980s AJP articles are to how widely cited all other articles from the AJP in those years were.
+- Looking at how "Epiphenomenal Qualia" came to be cited so much more than "What Mary Didn't Know".
+- Looking at the very different citation trends for articles by the Churchlands.
+- Separating out age, cohort, and period effects among the various trends shown here.
+- In particular, looking at the 1986-1990 cohort, and seeing whether the relatively low citation numbers shown here are because citations to that cohort tended to be more spread out (and so just looking at the peaks, like I'm doing here, will miss a lot), or because in general later philosophers paid less attention to articles from the late 1980s than other eras. And if it's the latter, is that something broader about the era, or about the relative importance of journals to other publications in that time?
+- Looking at the transitions from supervenience, to truthmaking, to grounding, in metaphysics over the time of the study, with special attention to the connection between that story and the debates about physicalism.
+- Making a bibtex file for these 360 articles.
+- Seeing what connections there are between paper length and number of citations.
+- Looking at how central papers on equality and egalitarianism are to political philosophy over the years.
+- Looking at the way the literature on trust developed.
+
+But there are lots of other stories here to be investigated, and I'd love to hear what other ideas people have for what could be done with it.
+
 
 ```{r}
 #| label: this-cannot-work
@@ -684,7 +730,9 @@ for (year in 1976:2015){
     the_code <- c(the_code,
                 "\n## ",
                 year,
-                "\n\n### Widely Cited Articles {-}\n\n")
+                " {#sec-s",
+                year,
+                "}\n\n### Widely Cited Articles {-}\n\n")
   temp <- filter(main_bib, old_year == year) |> rename(Articles = full_citation) |> select(Articles)
   for (i in 1:9){
     the_code <- c(the_code, i, ". ", temp$Articles[i], "\n")
@@ -692,7 +740,9 @@ for (year in 1976:2015){
 
 # Citation Count Section
   the_code <- c(the_code,
-                "\n### Citation Count {-}\n\n",
+                "\n### Citation Count {-#sec-count-",
+                year,
+                "}\n\n",
                  "\`\`\`{r}\n",
                 "#| label: tbl-citation-count-",
                 year,
@@ -708,7 +758,9 @@ for (year in 1976:2015){
   
 # Citation Rank Section
   the_code <- c(the_code,
-                "\n### Citation Rank {-}\n\n",
+                "\n### Citation Rank {-#sec-rank-",
+                year,
+                "}\n\n",
                  "\`\`\`{r}\n",
                 "#| label: tbl-citation-rank-",
                 year,
@@ -723,7 +775,9 @@ for (year in 1976:2015){
 
 # Spaghetti Graph
   the_code <- c(the_code,
-                "\n### Citation Trends {-}\n\n",
+                "\n### Citation Trends {-#sec-trends-",
+                year,
+                "}\n\n",
                 "\`\`\`{r}\n",
                 "#| label: fig-citation-spaghetti-",
                 year,
@@ -731,6 +785,8 @@ for (year in 1976:2015){
                 "#| fig-cap: Rolling five year average of citation frequency for widely cited articles from ",
                 year,
                 ".",
+                "\n",
+                "#| cache: TRUE",
                 "\n\n",
                 "rolling_spaghetti_graph(",
                 year,
@@ -748,6 +804,8 @@ for (year in 1976:2015){
                 "#| fig-cap: Faceted version of @fig-citation-spaghetti-",
                 year,
                 ".",
+                "\n",
+                "#| cache: TRUE",
                 "\n\n",
                 "rolling_facet_graph(",
                 year,
