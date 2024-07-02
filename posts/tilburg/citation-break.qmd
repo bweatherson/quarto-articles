@@ -14,9 +14,18 @@ categories:
   - unpublished
   - online only
 draft: true
+execute:
+  echo: false
+  warning: false
 format:
-  html: default
+  html:
+    fig-format: png
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
   pdf:
+    fig-format: pdf
     output-file: "A Break in the Citation Patterns"
   docx:
     output-file: "A Break in the Citation Patterns"
@@ -50,6 +59,8 @@ A second was that that time was characterised by many more flurries of interest 
 
 But while these were definitely hot topics - at one stage you could apparently start a conversation with a Princeton grad student by asking what they were working on fictionalism about - I don't really see them represented enough in those five journals to make a difference. If we were looking at _Analysis_, which was much more sensitive to trends like these, the story might be different. There was a bit on non-conceptual content, in _Philosophical Review_ in particular, but it probably made the citation record _less_ distinctive, because it connected to earlier discussions by Evans and others. So I don't think that's the explanation here.
 
+It could be that technological changes around this time, i.e., the rise of the internet, made a difference. The internet made it somewhat easier to read articles. It made it much easier to look up citation info, and so maybe citations that got cut because the author didn't want to trudge to the library to look up page numbers instead got left in. But I suspect two other things are more important. It meant philosophers across long distances could communicate in writing in real time. So written versions of ideas could spread before they were in print. That was probably connected to the growth of so many hot topics. And it was much easier to organise and publicise small workshops and conferences, especially in the eastern United States. Maybe that's part of the explanation, though I don't have any direct evidence for it, and I want to turn to Eugenio's main suggestion for what's going on.
+
 Eugenio suggests that a big part of the story is the rise of epistemology. If that's the explanation, I suspect that's telling us something about the sociology of the journals, and of the field, not about the trends. 
 
 There are two important things happen to epistemology around this time. 
@@ -66,35 +77,172 @@ Because I want to end by sketching a little study I did that might suggest a dif
 
 So far I've said a lot of things that are very vibes based, so let me give you some data. This is also based on a citation study, and one that I think complements Eugenio's study. He looked at **all** the citations in a **few** journals. I'm working on a study that flips that around: I'm looking at a smaller selection of the citations in all the philosophy journals. The point is not that he did anything wrong and I'm doing it right. The point is rather, as he says in section 3.4, that what we're doing here is building **models** of the field. All models have strengths and weaknesses; we should build several and see how they interact.
 
-So what I did was take the Web of Science data, and focus on 100 philosophy journals from 1976 onwards. The data is too unreliable before 1976; 
+So what I did was take the Web of Science data, and focus on 100 philosophy journals from 1976 onwards. The data is too unreliable before 1976; which is annoying because the years immediately before then are particularly interesting. But it's what we have. For each year from 1976-2015 I made a list of one hundred widely cited articles, with a mix of articles that were widely cited immediately after publication, articles that have been widely cited in the last few years, and articles that are widely cited tout core. (I stopped in 2015 because the citations are few enough that they introduce more noise than signal.) That gave me 4000 articles. Then I repeated the kind of analysis Eugenio did, looking at more journals (100 rather than 5), but with many fewer cited sources (just those 4000 rather than everything).
 
-Plan
+@fig-matrix shows the year by year similarity.
 
-- Periodization in history, with Roman examples
-- Early analytic - positivism - ordinary language
-- Long time since a new break
-- The book uses LAP to mean really since 1970 or so
-- Eugenio has one point suggesting maybe a break around 2000
-- I think that's interesting, and worth exploring, but ultimately not the case
-- My positive view (that I won't defend): there's an era from roughly 1970-2010 that I call the modal era, and a new one from 2010 onwards I call the social era. 
-- Modal isn't perfect: suggests that Naming and Necessity & Counterfactuals are more important exemplars of the new era than Theory of Justice and In Defence of Abortion, but it'll do. It also helps put 2010 as a break point; that's when modality ceases to be central.
+```{r}
+#| label: loader
+#| cache: false
 
-- Describe Eugenio's study
-- Key feature: narrow range of citing sources; universal cited sources
-- Talk about the breaks around 2000
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+require(lsa)
 
-- Possible hypotheses
-- Tech: Changed how people read, how they communicated, and how they organised - much easier to do conferences
-- Puzzles: Non-conceptual content, zombies, fictionalism, vagueness, contextualism, verbal disputes, self-locating belief
-- Change of heroes: Wittgenstein and Quine out, Kripke in. But hard to see it as sufficiently dramatic
-- Journal effect: Some things moved into the journals - e.g., Nous/PPR doing more epistemology once Ernie Sosa takes over.
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
 
-- My study
-- Very broad range of citing sources; narrower (journals only) cited sources
-- Weird dip in the 1980s
-- Fifth explanation: stuff from the 1980s didn't catch on
-- Some data: the graphs for 1980s years, the supervenience papers
-- It doesn't quite work - the graphs in graphs_about_influence.R aren't quite right. But it's something.    
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.title = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+```
+
+```{r}
+#| label: setup
+#| cache: true
+
+load("philo_bib.RData")
+load("philo_cite.RData")
+
+philo_bib <- philo_bib |>
+  filter(journal != "Nous" | !str_detect(longcite, "Suppl") | str_detect(longcite, "Sp. Iss."))
+
+authadjust <- function(x){
+  paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
+}
+
+authadjust_short <- function(x){
+  str_to_title(str_extract(x,".+(?=,)"))
+}
+
+
+article_years <- philo_bib |>
+  as_tibble() |>
+  select(id, year)
+
+article_title <- philo_bib |>
+  as_tibble() |>
+  select(id, author, art_title, journal) 
+
+citation_tibble <- philo_cite |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year)
+```
+
+```{r}
+#| label: setupcos
+#| cache: true
+
+require(lsa)
+
+long_article_ids <- c()
+
+for(year in (1976:2015)){
+  
+  topper <- 1
+  all_cited <- tribble(~old, ~n)
+  
+  while(nrow(all_cited) < 100){
+    
+    
+    most_cited <- citation_tibble |>
+      filter(old_year == year) |>
+      group_by(old) |>
+      tally() |>
+      ungroup() |>
+      slice_max(n, n=topper)
+    
+    recent_cited <- citation_tibble |>
+      filter(old_year == year, new_year >= pmax(2013,((year+2022.1)/2))) |>
+      group_by(old) |>
+      tally() |>
+      ungroup() |>
+      slice_max(n, n=topper)
+    
+    orig_cited <- citation_tibble |>
+      filter(old_year == year, new_year <= pmin(year+10,((year+2022)/2))) |>
+      group_by(old) |>
+      tally() |>
+      ungroup() |>
+      slice_max(n, n=topper)
+    
+    all_cited <- bind_rows(most_cited, recent_cited, orig_cited) |>
+      distinct(old, .keep_all = TRUE) |>
+      mutate(old_year = year)
+    
+    topper <- topper + 1
+  }
+  long_article_ids <- bind_rows(
+    long_article_ids,
+    slice_max(all_cited, n, n=100, with_ties = FALSE)
+  )
+}
+
+long_cites <- citation_tibble |>
+  filter(old %in% long_article_ids$old, new_year >=1983, new_year <= 2022) |>
+  ungroup() |>
+  group_by(old, new_year) |>
+  tally(name="year_cites") |>
+  ungroup() |>
+  complete(old, new_year, fill = list(year_cites = 0)) |>
+  pivot_wider(id_cols = "old", names_from = "new_year", values_from = "year_cites") |>
+  select(-old) 
+
+cos_years <- cosine(as.matrix(long_cites)) |> 
+  as.data.frame() |>
+  rownames_to_column(var = "year1") |>
+  pivot_longer(cols = !year1, names_to = "year2", values_to = "cos_value") |>
+  mutate(year1 = as.numeric(year1), year2 = as.numeric(year2))
+```
+
+```{r}
+#| label: fig-matrix
+#| cache: false
+
+cos_graph <- ggplot(cos_years, aes(x = year1, y = year2, value = cos_value)) +
+  geom_tile(aes(fill = cos_value)) +
+  xlab(element_blank()) +
+  ylab(element_blank()) +
+  labs(fill = "Cosine",
+       title = "Similarity between citations in different years")
+
+cos_graph
+```
 
 ::: {.content-visible unless-format="html"}
 ## References {-}
