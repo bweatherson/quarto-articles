@@ -3,6 +3,12 @@ title: "A Break in the Citation Patterns"
 abstract: | 
    Comments on Eugenio Petrovich's book _A Quantitative Portrait of Analytic Philosophy: Looking Through the Margins_, for the Quantitative Studies of Philosophy workshop at Tiburg, August 21-22 2024.
 date: August 21 2024
+website:
+    sidebar:
+      style: "floating"
+      background: "danger"
+      border: true
+      title: "Hello World"
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -11,9 +17,9 @@ author:
     orcid_id: 0000-0002-0830-141X
 categories:
   - history of analytic
-  - unpublished
+  - in progress
   - online only
-draft: true
+draft: false
 execute:
   echo: false
   warning: false
@@ -24,9 +30,17 @@ format:
     fig-width: 12
     fig-dpi: 300
     fig-responsive: true
+    toc: false
+    toc-depth: 3
+    toc-location: right
+    toc-title: "Sections"
+    reference-location: margin 
   pdf:
     fig-format: pdf
     output-file: "A Break in the Citation Patterns"
+    include-after-body: 
+        text: |
+          \noindent Published online in June 2024.
   docx:
     output-file: "A Break in the Citation Patterns"
 ---
@@ -35,13 +49,13 @@ First, I'd like to thank the organisers for putting on these great workshops, an
 
 I'm going to comment just on one study in the book - the intriguing suggestion that there's a break in the citation patterns around 2000. This is intriguing because it connects to a question that's long interested me: can Late Analytic Philosophy be usefully divided into eras? Are there periods within Late Analytic that are usefully separated out from the rest the way it is useful to separate out the Ordinary Language era, at least in the UK, from the times around it? No such periodization has caught on, and maybe that's because there isn't a useful one to find, but if the citations change around 2000, maybe we should think about whether that's the start of a new era.
 
-The details will matter a bit here, so let me go over what's happening at this stage of the book (i.e., section 4.4 of the book). We start with all the citations in five big journals: _Mind_, _Philosophical Review_, _Journal of Philosophy_, _Noûs_ and _Philosophy and Phenomenological Research_, for each year from 1980-2020. We represent the citations in each year as a vector, with a dimension for each article cited at any time in the study, and the magnitude of that dimension being the number of citations. That gives us 41 n-dimensional vectors, and we can look at their similarity by taking the cosine of the angle between them. The result is this graph.
+The details will matter a bit here, so let me go over what's happening at this stage of the book (i.e., section 4.4 of the book). We start with all the citations in five big journals: _Mind_, _Philosophical Review_, _Journal of Philosophy_, _Noûs_ and _Philosophy and Phenomenological Research_, for each year from 1980-2020. We represent the citations in each year as a vector, with a dimension for each article cited at any time in the study, and the magnitude of that dimension being the number of citations. That gives us 41 n-dimensional vectors, and we can look at their similarity by taking the cosine of the angle between them. The result is @fig-eugenio-matrix.
 
-![From page 103 of @Petrovich2024.](cosine-screenshot.png)
+![From page 103 of @Petrovich2024.](cosine-screenshot.png){#fig-eugenio-matrix}
 
-The darker cells are more similar years, so in the middle of the graph, we see several years where the similarity scores are relatively high: around 0.5. Each row of that graph is itself a vector, and we can look for clusters within those vectors, with the following result.
+The darker cells are more similar years, so in the middle of the graph, we see several years where the similarity scores are relatively high: around 0.5. Each row of that graph is itself a vector. Eugenio looked for clusters within those vectors, and @fig-eugenio-cluster shows what he found.
 
-![From page 103 of @Petrovich2024.](cluster-screenshot.png)
+![From page 103 of @Petrovich2024.](cluster-screenshot.png){#fig-eugenio-cluster}
 
 In this graph there are three clusters, but the blue cluster to me feels fairly connected to the green one. What strikes me about this graph is how few dark cells there are where one year is before 1996 and the other year is after 1996. Somewhere between 1996 and 2006, there seems to be a step change here. What could explain that, and does it have a larger historical significance?
 
@@ -98,9 +112,10 @@ if(knitr::is_latex_output()) {
 # Graph Themes
 old <- theme_set(theme_minimal())
 theme_set(old)
-theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+theme_update(plot.title = element_text(family = "Scala Sans Pro", size = 24, face = "bold"),
              plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
              axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             axis.title = element_text(family = "Scala Sans Pro", size = 16),
              plot.background = element_rect(fill = "#F9FFFF"),
              panel.background = element_rect(fill = "white"),
              legend.background = element_rect(fill = "#F9FFFF"),
@@ -121,6 +136,7 @@ theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
              legend.background = element_rect(fill = "white"),
              panel.grid = element_line(color = "grey92"),
              legend.text = element_text(family = "EB Garamond", size = 11),
+            legend.title = element_text(family = "EB Garamond", size = 11),
              strip.text = element_text(family = "EB Garamond", size = 12),
              legend.key.spacing.y = unit(0.5, 'lines'),
              legend.key.spacing.x = unit(0, 'cm')
@@ -214,7 +230,7 @@ for(year in (1976:2015)){
 }
 
 long_cites <- citation_tibble |>
-  filter(old %in% long_article_ids$old, new_year >=1983, new_year <= 2022) |>
+  filter(old %in% long_article_ids$old, new_year >=1980, new_year <= 2022) |>
   ungroup() |>
   group_by(old, new_year) |>
   tally(name="year_cites") |>
@@ -233,16 +249,190 @@ cos_years <- cosine(as.matrix(long_cites)) |>
 ```{r}
 #| label: fig-matrix
 #| cache: false
+#| fig-cap: "Similarity between citations for different years"
 
-cos_graph <- ggplot(cos_years, aes(x = year1, y = year2, value = cos_value)) +
+cos_graph <- ggplot(filter(cos_years, year1 >= 1983, year2 >= 1983), aes(x = year1, y = year2, value = cos_value)) +
   geom_tile(aes(fill = cos_value)) +
   xlab(element_blank()) +
   ylab(element_blank()) +
-  labs(fill = "Cosine",
-       title = "Similarity between citations in different years")
+  labs(fill = "Cosine")
 
 cos_graph
 ```
+
+This starts in 1983 because before that, citations to articles published 1976 or later are few enough that it's mostly just noise.
+
+There doesn't seem to be any sharp break around 2000. To see if I was missing something, for each year I calculated the average of the similarity measure between it and the preceding five years, and the result is @fig-rolling-average. Again, I've left out the very noisy years at the very start; the first year here is 1985, so the first year whose citations get used is 1980.
+
+```{r}
+#| label: fig-rolling-average
+#| cache: false
+
+cos_delayed <- cos_years |>
+  filter(year2 >= 1985, year1 >= year2 - 1, year1 <= year2 - 1) |>
+  group_by(year2) |>
+  summarise(past_sim_score = mean(cos_value)) |>
+  ggplot(aes(x = year2, y = past_sim_score)) +
+  geom_smooth() + 
+  geom_line() +
+  ylab("Cosine") +
+  xlab(element_blank())
+
+cos_delayed
+```
+
+The striking thing in @fig-rolling-average is how long the graph takes to start going up. The trend line even goes gently down at the start. Given the way I've set things up, that shouldn't happen. Citations tend to go backwards in time, so each year a new hundred articles are getting added to the range of possible citations. That makes a small difference at the end; the new articles are only 2% of the universe. But it makes a big difference at the start. So graph, which measures how similar a year is to the previous 5 in how it treats these 4000 articles, should slope up. Indeed, if we run the exact same study starting in 1986 rather than 1976, we get @fig-rolling-average-late, which is what I'd a priori expect.
+
+```{r}
+#| label: fig-rolling-average-late
+#| cache: false
+
+long_cites_late <- citation_tibble |>
+  filter(old %in% long_article_ids$old, new_year >=1990, new_year <= 2022, old_year >= 1986) |>
+  ungroup() |>
+  group_by(old, new_year) |>
+  tally(name="year_cites") |>
+  ungroup() |>
+  complete(old, new_year, fill = list(year_cites = 0)) |>
+  pivot_wider(id_cols = "old", names_from = "new_year", values_from = "year_cites") |>
+  select(-old) 
+
+cos_years_late <- cosine(as.matrix(long_cites)) |> 
+  as.data.frame() |>
+  rownames_to_column(var = "year1") |>
+  pivot_longer(cols = !year1, names_to = "year2", values_to = "cos_value") |>
+  mutate(year1 = as.numeric(year1), year2 = as.numeric(year2))
+
+cos_delayed_late <- cos_years_late |>
+  filter(year2 >= 1995, year1 >= year2 - 1, year1 <= year2 - 1) |>
+  group_by(year2) |>
+  summarise(past_sim_score = mean(cos_value)) |>
+  ggplot(aes(x = year2, y = past_sim_score)) +
+  geom_smooth() + 
+  geom_line() +
+  ylab("Cosine") +
+  xlab(element_blank())
+
+cos_delayed_late
+```
+
+Something odd is happening with the citations to articles from the 1980s and early 1990s. Here is my conjecture about why we see something like a break around 2000. There are three things going on at once.
+
+1. Every year there are a huge number of citations to recently published papers; lots of replies, and making small moves on top of recent work. These kind of citations keep appearing for a decade or more, but they gradually fade away.
+2. Typically, there are a handful of papers that really define a field, and while they aren't always immediately recognised as such, they tend to keep being cited, in massive volumes, for many years after the fact.
+3. The 1980s saw fewer of these papers being produced, especially after 1983. So around 2000 the usual turnover of citations, the allure of the new, had a more dramatic effect because it wasn't mixed with continued discussion of the field defining papers from 10-15 years earlier.
+
+Note here that I'm only making a claim about journal articles. There were some field defining books published in this time, notably _On the Plurality of Worlds_. And I haven't done a study of chapters in edited volumes. But the journals stopped producing articles that had much staying power.
+
+I'll end with a bit more empirical evidence to back this up. Step back from these 4000 articles and look at all the articles indexed in Web of Science. For each pair of years x, y, we can ask, for articles published in year y, what is the mean number of citations they get (in indexed journals) in year x. The answer is usually pretty low, somewhere between 0.1 and 0.5. For each value of y we get nice little graphs as we vary x. I'll present these in groups of 5, as well as showing the average value. So @fig-mean-most-recent is what things look like when x is recent, i.e., 2018-2022.
+
+```{r}
+#| label: setupyeargraph
+#| cache: false
+year_to_year <- function(end_year){
+citation_tibble |>
+  ungroup() |>
+  group_by(old_year, new_year) |>
+  filter(new_year <= 2022) |>
+  filter(old_year <= 2018) |>
+  filter(old_year >= 1976) |>
+  tally() |>
+  left_join(
+    philo_bib |>
+      group_by(year) |>
+      tally(name = "articles") |>
+      select(old_year = year, articles),
+    by = "old_year"
+  ) |>
+  mutate(mean = n/articles) |>
+  filter(new_year >= end_year - 4, new_year <= end_year, old_year <= end_year -5) |>
+  ggplot(aes(x = old_year, y = mean, group = as.factor(new_year), colour = as.factor(new_year))) + 
+    geom_line() +
+    xlab("Cited Year") +
+    ylab("Mean Citations") +
+    labs(colour = "Citing Year")
+}
+
+five_year_mean <- function(end_year){
+  citation_tibble |>
+  ungroup() |>
+  group_by(old_year, new_year) |>
+  filter(new_year <= 2022) |>
+  filter(old_year <= 2018) |>
+  filter(old_year >= 1976) |>
+  tally() |>
+  left_join(
+    philo_bib |>
+      group_by(year) |>
+      tally(name = "articles") |>
+      select(old_year = year, articles),
+    by = "old_year"
+  ) |>
+  mutate(mean = n/articles) |>
+  filter(new_year >= end_year - 4, new_year <= end_year, old_year <= end_year -5) |>
+  ungroup() |>
+  group_by(old_year) |>
+  summarise(meanmean = mean(mean)) |>
+  ggplot(aes(x = old_year, y = meanmean)) + 
+    geom_line() +
+    geom_smooth() +
+    xlab("Cited Year") +
+    ylab("Mean Citations")
+}
+
+```
+
+
+
+```{r}
+#| label: fig-mean-most-recent
+#| fig-cap: "Mean citations, in 2018-2022, of articles originally published in different years"
+#| fig-subcap: 
+#|   - "Individual Years"
+#|   - "Overall average (2018-2022)"
+#| layout-ncol: 2
+#| column: screen-inset
+
+year_to_year(2022)
+five_year_mean(2022)
+```
+
+
+
+
+There really aren't many citations to articles from the 1980s. But you might think it was a long time ago, maybe that's just the passage of time. So let's shift back twenty years earlier, and look (in @fig-mean-turn-century) at what was being cited from 1998-2002, which has been the focus throughout here.
+
+```{r}
+#| label: fig-mean-turn-century
+#| fig-cap: "Mean citations, in 1998-2002, of articles originally published in different years"
+#| fig-subcap: 
+#|   - "Individual Years"
+#|   - "Overall average (1998-2002)"
+#| layout-ncol: 2
+#| column: screen-inset
+
+year_to_year(2002)
+five_year_mean(2002)
+```
+
+Again, there are many fewer citations to articles before about 1991 than to afterwards. Again, that could just be an age effect, but let's end with looking at what happened immediately before that, in @fig-mean-before-turn.
+
+```{r}
+#| label: fig-mean-before-turn
+#| fig-cap: "Mean citations, in 1993-1997, of articles originally published in different years"
+#| fig-subcap: 
+#|   - "Individual Years"
+#|   - "Overall average (1993-1997)"
+#| layout-ncol: 2
+#| column: screen-inset
+
+year_to_year(1997)
+five_year_mean(1997)
+```
+
+In all these graphs there is a recency bias, an upward tick as we get towards the end. But in @fig-mean-before-turn that upwards bend comes really late. Articles from the 1980s on the whole just weren't sticking around. Now as I said earlier, I'm only looking at journals, and for all I've said here, this data just shows that journals, having become more central in the 1970s, retreated in importance a little in the 1980s. Or maybe the 1980s had less influence on philosophy than decades typically do. If so, that would explain the clustering that Eugenio finds.
+
+So I'll end where I started by saying how grateful I am to the organisers for putting this on, and to Eugenio for the book. What I've done here is look at a few things inspired by one section of the book - it is full of so many insights and observations and it both makes you rethink what you thought about recent philosophy, and raises many fascinating questions like the one I've been discussing. I hope it gets very widely read.
 
 ::: {.content-visible unless-format="html"}
 ## References {-}
