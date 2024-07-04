@@ -25,7 +25,7 @@ execute:
   warning: false
 format:
   html:
-    fig-format: png
+    fig-format: svg
     fig-height: 9
     fig-width: 12
     fig-dpi: 300
@@ -249,7 +249,8 @@ cos_years <- cosine(as.matrix(long_cites)) |>
 ```{r}
 #| label: fig-matrix
 #| cache: false
-#| fig-cap: "Similarity between citations for different years"
+#| fig-format: png
+#| fig-cap: "Similarity between citations for different years."
 
 cos_graph <- ggplot(filter(cos_years, year1 >= 1983, year2 >= 1983), aes(x = year1, y = year2, value = cos_value)) +
   geom_tile(aes(fill = cos_value)) +
@@ -267,6 +268,7 @@ There doesn't seem to be any sharp break around 2000. To see if I was missing so
 ```{r}
 #| label: fig-rolling-average
 #| cache: false
+#| fig-cap: "Similarity between a year's citations and the previous five years' citations (1985-2022)."
 
 cos_delayed <- cos_years |>
   filter(year2 >= 1985, year1 >= year2 - 1, year1 <= year2 - 1) |>
@@ -286,6 +288,7 @@ The striking thing in @fig-rolling-average is how long the graph takes to start 
 ```{r}
 #| label: fig-rolling-average-late
 #| cache: false
+#| fig-cap: "Similarity between a year's citations and the previous five years' citations (1995-2022)."
 
 long_cites_late <- citation_tibble |>
   filter(old %in% long_article_ids$old, new_year >=1990, new_year <= 2022, old_year >= 1986) |>
@@ -329,6 +332,7 @@ I'll end with a bit more empirical evidence to back this up. Step back from thes
 ```{r}
 #| label: setupyeargraph
 #| cache: false
+
 year_to_year <- function(end_year){
 citation_tibble |>
   ungroup() |>
@@ -349,7 +353,7 @@ citation_tibble |>
   ggplot(aes(x = old_year, y = mean, group = as.factor(new_year), colour = as.factor(new_year))) + 
     geom_line() +
     xlab("Cited Year") +
-    ylab("Mean Citations") +
+    ylab("Mean Citations per Year") +
     labs(colour = "Citing Year")
 }
 
@@ -377,7 +381,7 @@ five_year_mean <- function(end_year){
     geom_line() +
     geom_smooth() +
     xlab("Cited Year") +
-    ylab("Mean Citations")
+    ylab(paste0("Mean Citations per year (",end_year-4,"-",end_year,")"))
 }
 
 ```
