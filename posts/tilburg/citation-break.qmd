@@ -327,7 +327,11 @@ Something odd is happening with the citations to articles from the 1980s and ear
 
 Note here that I'm only making a claim about journal articles. There were some field defining books published in this time, notably _On the Plurality of Worlds_. And I haven't done a study of chapters in edited volumes. But the journals stopped producing articles that had much staying power.
 
-I'll end with a bit more empirical evidence to back this up. Step back from these 4000 articles and look at all the articles indexed in Web of Science. For each pair of years x, y, we can ask, for articles published in year y, what is the mean number of citations they get (in indexed journals) in year x. The answer is usually pretty low, somewhere between 0.1 and 0.5. For each value of y we get nice little graphs as we vary x. I'll present these in groups of 5, as well as showing the average value. So @fig-mean-most-recent is what things look like when x is recent, i.e., 2018-2022.
+I'll end with a bit more empirical evidence to back this up. The evidence is a bit tricky because I'm claiming the existence of a cohort effect in a data set with massive age and period effects, but let me quickly step through why I believe it's there.
+
+The data set I'm using is all the articles in those 100 journals indexed in Web of Science since 1976, and all citations between them. That's around 100,000 articles, and around 375,000 citations. @fig-facet-mean displays some important trend. Each facet describes citations to articles published in a particular year. In each facet, the x-axis is the year the publications are from, and the y-axis is the ratio between the average number of citations articles in that facet's year got, and the average number of citations that any article in the data set _which had already been published_ got.
+
+<!--I'll end with a bit more empirical evidence to back this up. Step back from these 4000 articles and look at all the articles indexed in Web of Science. For each pair of years x, y, we can ask, for articles published in year y, what is the mean number of citations they get (in indexed journals) in year x. The answer is usually pretty low, somewhere between 0.1 and 0.5. For each value of y we get nice little graphs as we vary x. I'll present these in groups of 5, as well as showing the average value. So @fig-mean-most-recent is what things look like when x is recent, i.e., 2018-2022.
 
 ```{r}
 #| label: setupyeargraph
@@ -434,7 +438,299 @@ year_to_year(1997)
 five_year_mean(1997)
 ```
 
-In all these graphs there is a recency bias, an upward tick as we get towards the end. But in @fig-mean-before-turn that upwards bend comes really late. Articles from the 1980s on the whole just weren't sticking around. Now as I said earlier, I'm only looking at journals, and for all I've said here, this data just shows that journals, having become more central in the 1970s, retreated in importance a little in the 1980s. Or maybe the 1980s had less influence on philosophy than decades typically do. If so, that would explain the clustering that Eugenio finds.
+In all these graphs there is a recency bias, an upward tick as we get towards the end. But in @fig-mean-before-turn that upwards bend comes really late. -->
+
+```{r}
+#| label: setupageeffect
+#| cache: false
+
+# A Bunch of scripts for Age, Period, Cohort Studies
+
+# First, we'll duplicates some stuff from find_main_articles.R, without generating the tables of highly cited articles
+require(tidyverse)
+require(slider)
+require(stringr)
+
+load("philo_bib_fix.RData")
+load("philo_cite.RData")
+
+active_philo_bib <- philo_bib_fix |>
+  filter(year >= 1976, year <= 2022)
+
+authadjust <- function(x){
+  paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
+}
+
+authadjust_short <- function(x){
+  str_to_title(str_extract(x,".+(?=,)"))
+}
+
+article_years <- active_philo_bib |>
+  as_tibble() |>
+  select(id, year)
+
+article_title <- active_philo_bib |>
+  as_tibble() |>
+  select(id, author, art_title, journal) 
+
+citation_tibble <- philo_cite |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year) |> # The next lines are new - restricting attention to 1976-2022
+  filter(new_year <= 2022, new_year >= 1976, old_year >=1976, old_year <= 2022)
+
+
+
+# Now a tibble of how many times articles in year x are cited in year y
+
+year_in_year_out <- citation_tibble |>
+  group_by(old_year, new_year) |>
+  tally(name = "citations") |> # Now add the 'missing' pairs
+  ungroup() |>
+  complete(old_year, new_year, fill = list(citations = 0))
+
+# Tibble for raw citation age
+
+raw_age_tibble <- citation_tibble |>
+  mutate(age = new_year - old_year) |>
+  group_by(age) |>
+  tally(name = "count")
+
+raw_age_plot <- raw_age_tibble |>
+  ggplot(aes(x = age, y = count)) +
+  geom_point() + # Using geom_line makes it not obvious how many points there are, because it is *so* straight
+  xlab('Age of citation') +
+  ylab('Number of citations')
+
+# raw_age_plot
+
+# There are enough at 0 for me to count same year as 'available'. I wasn't initially going to do that, but it's 2.2 
+# Now how many articles published each year, and the cumulative total, i.e., the 'available' articles
+
+# Tibble for number of publications each year, and cumulative, or 'available'
+
+articles_per_year <- active_philo_bib |>
+  rename(old_year = year) |>
+  group_by(old_year) |>
+  tally(name = "articles") |>
+  mutate(available = cumsum(articles))
+
+articles_per_year_plot <- articles_per_year |>
+  ggplot(aes(x = old_year, y = articles)) +
+  geom_point() +
+  xlab(element_blank()) +
+  ylab("Number of indexed articles")
+
+# articles_per_year_plot
+
+# Same for citations
+
+citations_per_year <- citation_tibble |>
+  group_by(new_year) |>
+  tally(name = "citations") 
+
+citations_per_year_plot <- citations_per_year |>
+  ggplot(aes(x = new_year, y = citations)) +
+  geom_point() +
+  xlab(element_blank()) +
+  ylab("Citations to indexed articles")
+
+# citations_per_year_plot
+
+# Citations per available article
+
+citation_rate_per_year <- citations_per_year |>
+  left_join(articles_per_year, by = c("new_year" = "old_year")) |>
+  mutate(mean_cites = citations/available)
+
+citation_rate_per_year_plot <- citation_rate_per_year |>
+  ggplot(aes(x = new_year, y = mean_cites)) +
+  geom_point() +
+  xlab(element_blank()) +
+  ylab("Average number of citations to already published indexed articles")
+
+# citation_rate_per_year_plot
+
+# How many articles each year are never cited 
+
+list_of_cited_articles <- citation_tibble |> group_by(old) |> tally() |> arrange(old)
+
+never_cites <- active_philo_bib |>
+  arrange(id) |>
+  anti_join(list_of_cited_articles, by = c("id" = "old")) |>
+  group_by(year) |>
+  tally(name = "never_cited") |>
+  rename(old_year = year)
+
+never_cites_graph <- never_cites |>
+  ggplot(aes(x = old_year, y = never_cited)) +
+  geom_point() +
+  xlab(element_blank()) +
+  ylab("Number of uncited articles each year")
+
+# never_cites_graph
+
+# sum(never_cites$never_cited)
+
+percent_uncited <- never_cites |>
+  left_join(articles_per_year, by = "old_year") |>
+  mutate(uncited_ratio = never_cited/articles)
+
+percent_uncited_plot <- percent_uncited |>
+  ggplot(aes(x = old_year, y = uncited_ratio)) +
+  geom_point() +
+  xlab(element_blank()) +
+  ylab("Proportion of uncited articles each year") +
+  ylim(c(0,1))
+
+# percent_uncited_plot
+
+# Plot how often articles are cited - final graph is log on both dimensions, and some jitter added
+
+article_times_cited <- citation_tibble |>
+  group_by(old) |>
+  tally(name = "citations")
+
+count_of_citations <- article_times_cited |>
+  ungroup() |>
+  group_by(citations) |>
+  tally(name = "number_of_articles")
+
+count_of_citations_plot <- count_of_citations |>
+  ggplot(aes(x = citations, y = number_of_articles)) +
+  xlab("Number of times cited") +
+  ylab("Number of articles") +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_jitter(height = 0.05)
+
+# count_of_citations_plot
+
+# Same for number of outbound citations in each article
+
+article_times_citing <- citation_tibble |>
+  group_by(new) |>
+  tally(name = "citations")
+
+count_of_citations_out <- article_times_citing |>
+  ungroup() |>
+  group_by(citations) |>
+  tally(name = "number_of_articles")
+
+count_of_citations_out_plot <- count_of_citations_out |>
+  ggplot(aes(x = citations, y = number_of_articles)) +
+  xlab("Number of outbound citations") +
+  ylab("Number of articles") +
+  scale_y_log10() +
+  geom_jitter(height = 0.05)
+
+# count_of_citations_out_plot
+
+# Find the outliers
+
+most_cited_articles <- article_times_cited |>
+  slice_max(order_by = citations, n = 10) |>
+  left_join(select(philo_bib_fix, id, full_cite), by = c("old" = "id"))
+
+
+most_citing_articles <- article_times_citing |>
+  slice_max(order_by = citations, n = 10) |>
+  left_join(select(philo_bib_fix, id, full_cite), by = c("new" = "id"))
+
+# Compare mean per year to mean per available
+
+age_effect_tibble <- year_in_year_out |>
+  filter(old_year >= 1976, old_year <= 2014, new_year >= 1979) |>
+  left_join(articles_per_year, by = "old_year") |>
+  select(-available) |>
+  left_join(select(
+    citation_rate_per_year, new_year, mean_cites
+  ), by = "new_year") |>
+  mutate(cite_ratio = citations/(articles * mean_cites))
+
+age_effect_tibble_plot <- age_effect_tibble |>
+  filter(old_year >= 1979, old_year <= 2014, new_year >= 1979) |>
+  ggplot(aes(x = new_year, y = cite_ratio)) +
+  geom_point(size = 0.5) +
+  facet_wrap(~old_year, ncol = 6) +
+  xlab(element_blank()) +
+  ylab(element_blank()) +
+  theme(axis.text = element_text(size = 10),
+  strip.text = element_text(size = 12))
+
+# age_effect_tibble_plot
+
+age_effect_grouped <- age_effect_tibble |>
+  filter(new_year >= old_year) |>
+  filter(new_year <= old_year + 25) |>
+  mutate(the_age = new_year - old_year) |>
+  group_by(the_age) |>
+  summarise(mean_effect = mean(cite_ratio))
+
+age_effect_tibble_adj <- age_effect_tibble |>
+  filter(new_year >= old_year) |>
+  filter(new_year <= old_year + 25) |>
+  mutate(the_age = new_year - old_year) |>
+  left_join(age_effect_grouped, by = "the_age")
+
+age_effect_grouped_plot <- age_effect_grouped |>
+  ggplot(aes(x = the_age, y = mean_effect)) +
+  geom_point()
+
+# age_effect_grouped_plot
+
+age_effect_everything_plot <- age_effect_tibble_adj |>
+  ggplot(aes(x = the_age, y = cite_ratio, color = as.factor(old_year))) +
+  geom_jitter(size = 0.4, alpha = 0.4) +
+  xlab("Age of cited articles") +
+  ylab("Citation ratio") +
+  geom_line(aes(x = the_age, y = mean_effect), color = "black") +
+  theme(legend.position = "none")
+
+# age_effect_grouped_plot
+
+year_by_year_with_effect <- year_in_year_out |>
+  filter(new_year >= old_year) |>
+  filter(new_year <= old_year + 25) |>
+  filter(old_year >= 1976, old_year <= 2014, new_year >= 1979) |>
+  mutate(the_age = new_year - old_year) |>
+  left_join(age_effect_grouped, by = "the_age") |>
+  left_join(
+    select(
+      age_effect_tibble, old_year, new_year, cite_ratio
+    ), by = c("old_year", "new_year")
+  ) |>
+  mutate(surplus = cite_ratio - mean_effect) |>
+  arrange(-surplus)
+
+year_by_year_average <- year_by_year_with_effect |>
+  group_by(old_year) |>
+  summarise(mean_surplus = mean(surplus))
+
+year_by_year_average_plot <- year_by_year_average |>
+  ggplot(aes(x = old_year, y = mean_surplus)) +
+  geom_point()
+
+# year_by_year_average_plot
+```
+
+```{r}
+#| label: fig-facet-mean
+#| cache: false
+#| column: screen-inset
+#| fig-cap: "Graph of age-effects on citation patterns."
+
+age_effect_tibble_plot
+```
+
+Just eyeballing @fig-facet-mean we can see two things. 
+
+First, there is an age effect which probably matches your a priori opinions. Articles aren't cited before they are published, then after publication citation rates rise very rapidly, peak, and fall off more slowly. Second, the peaks in the 1980s graphs are lower and mostly shorter than the peaks in other years. The first point is so pronounced that it makes sense to take an average of these graphs, after normalising them 
+
+Articles from the 1980s on the whole just weren't sticking around. Now as I said earlier, I'm only looking at journals, and for all I've said here, this data just shows that journals, having become more central in the 1970s, retreated in importance a little in the 1980s. Or maybe the 1980s had less influence on philosophy than decades typically do. If so, that would explain the clustering that Eugenio finds.
 
 So I'll end where I started by saying how grateful I am to the organisers for putting this on, and to Eugenio for the book. What I've done here is look at a few things inspired by one section of the book - it is full of so many insights and observations and it both makes you rethink what you thought about recent philosophy, and raises many fascinating questions like the one I've been discussing. I hope it gets very widely read.
 
