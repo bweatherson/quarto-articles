@@ -1,8 +1,8 @@
 ---
 title: "Some Data about Citation Trends"
 abstract: |
-  In the future I plan to write something substantive about trends in citations in philosophy journals. This is a presentation of some of the underlying data, with some small remarks about the big picture trends.
-date: June 20 2024
+  In the future I plan to write something substantive about trends in citations in philosophy journals. This is a presentation of some of the underlying data, with some small remarks about the big picture trends. (I earlier published a version of this that used data starting in 1976. I've now added 20 years more data.)
+date: July 10 2024
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -24,6 +24,7 @@ format:
     fig-width: 12
     fig-dpi: 300
     fig-responsive: true
+    fontsize: 1.1rem
   pdf:
     fig-format: pdf
     include-after-body: 
@@ -70,7 +71,7 @@ theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
              panel.grid = element_line(color = "grey92"),
              legend.text = element_text(family = "EB Garamond", size = 11),
              strip.text = element_text(family = "EB Garamond", size = 12),
-             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.y = unit(0.1, 'lines'),
              legend.key.spacing.x = unit(0, 'cm')
   )
 
@@ -113,40 +114,38 @@ year_cites |>
 #| label: setup
 #| cache: true
 
-load("philo_bib.RData")
-load("philo_cite.RData")
+load("philo_bib_fix.RData")
+load("philo_cite_with_jp.RData")
 
-philo_bib <- philo_bib |>
-  filter(journal != "Nous" | !str_detect(longcite, "Suppl") | str_detect(longcite, "Sp. Iss."))
+
 
 authadjust <- function(x){
   paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
 }
 
-authadjust_short <- function(x){
-  str_to_title(str_extract(x,".+(?=,)"))
-}
 
 
-article_years <- philo_bib |>
+
+article_years <- philo_bib_fix |>
   as_tibble() |>
   select(id, year)
 
-article_title <- philo_bib |>
+article_title <- philo_bib_fix |>
   as_tibble() |>
-  select(id, author, art_title, journal) 
+  select(id, art_title, journal) 
 
-citation_tibble <- philo_cite |>
+citation_tibble <- philo_cite_with_jp |>
   as_tibble() |>
   rename(new = id, old = refs) |>
   left_join(article_years, by = c("old" = "id")) |>
   rename(old_year = year)  |>
   left_join(article_years, by = c("new" = "id")) |>
-  rename(new_year = year)
+  rename(new_year = year) |>
+  filter(old_year >= 1956, new_year >= 1956, old_year <= 2022, new_year <= 2022)
 
 main_article_ids <- c()
 
-for(year in (1976:2015)){
+for(year in (1956:2015)){
   
   topper <- 1
   all_cited <- tribble(~old, ~n)
@@ -184,287 +183,12 @@ for(year in (1976:2015)){
   main_article_ids <- bind_rows(
     main_article_ids,
     slice_max(all_cited, n, n=9, with_ties = FALSE)
-  )
+  ) |> filter(n >= 20)
 }
 
-name_fix <- c(
-      'Bonjour' = 'BonJour',
-      'Mcdowell' = 'McDowell',
-      'Mcmullin' = 'McMullin',
-      'Mcgee' = 'McGee',
-      'Wedgewood' = 'Wedgwood',
-      'Mcginn' = 'McGinn',
-      'Mcgrath' = 'McGrath',
-      'Mckinsey' = 'McKinsey',
-      'Macfarlane' = 'MacFarlane',
-      'Castaneda' = 'Castañeda',
-      'Hajek' = 'Hájek',
-      'Vaninwagen' = 'van Inwagen',
-      'Vanfraassen' = 'van Fraassen',
-      'D\'arms' = 'D\'Arms',
-      'Godfreysmith' = 'Godfrey-Smith',
-      'Vangelder' = 'van Gelder',
-      'Derosset' = 'deRosset'
-    )
-
 main_bib <- main_article_ids |>
-  left_join(article_title, by = c("old" = "id")) |>
-  ungroup() |>
-  rowwise() |>
-  mutate(graph_auth =  case_when(author[1] == "Pohlhaus, Gaile, Jr." ~ "Gaile Pohlhaus Jr.",
-                                 length(author) == 1 ~ authadjust(author[1]),
-                                 length(author) == 2 ~ paste0(authadjust(author[1]), " and ", authadjust(author[2])),
-                                 length(author) == 3 ~ paste0(authadjust(author[1]), ", ", authadjust(author[2]), ", and ", authadjust(author[3])),
-                                 TRUE ~ paste0(authadjust(author[1]), ", et al"))) |>
-  mutate(short_auth = case_when(author[1] == "Pohlhaus, Gaile, Jr." ~ "Pohlhaus Jr.",
-                                 length(author) == 1 ~ authadjust_short(author[1]),
-                                 length(author) == 2 ~ paste0(authadjust_short(author[1]), " and ", authadjust_short(author[2])),
-                                 TRUE ~ paste0(authadjust_short(author[1]), " et al"))) |>
-  mutate(graph_auth = str_replace_all(
-    graph_auth,
-    name_fix
-  )) |>
-  mutate(short_auth = str_replace_all(
-    short_auth,
-    name_fix
-  )) |>
-  mutate(graph_cite = paste0(
-    graph_auth,
-    ", \"",
-    art_title,
-    ",\""
-  )) |>
-  mutate(journal = str_replace_all(journal, 'Nous', 'Noûs')) |>
-  mutate(graph_cite = str_replace_all(
-    graph_cite,
-    c(
-      ' A ' = ' a ',
-      ' And ' = ' and ',
-      ' The ' = ' the ',
-      ' Or ' = ' or ',
-      ' As ' = ' as ',
-      ' Of ' = ' of ',
-      ' On ' = ' on ',
-      ' In ' = ' in ',
-      ' For ' = ' for ',
-      ' Is ' = ' is ',
-      'Decision-Theory' = 'Decision Theory',
-      'Modern-History' = 'Modern History',
-      'Times Arrow' = 'Time\'s Arrow',
-      'Derosset' = 'deRosset',
-      'Macfarlane' = 'MacFarlane',
-      'Norms Of Assertion (Knowledge Norm Of Assertion, Kna)' = 'Norms of Assertion',
-      'Derose' = 'DeRose',
-      'Mcgrath' = 'McGrath',
-      'Trust? (Epistemic Considerations)' = 'Trust?',
-      'D\'arms' = 'D\'Arms',
-      'Dimensionalism (Persistence Through Time, Doctrine Of Temporal Parts, Perdurance)' = 'Dimensionalism',
-      'Frankfurt Attack on the Principle-Of-Alternative-Possibilities' = 'Frankfurt\'s Attack on the Principle of Alternative Possibilities',
-      'Chance And Credence - Humean Supervenience Debugged' = 'Humean Supervenience Debugged',
-      'Mckinsey' = 'McKinsey',
-      '2 Modelings ' = 'Two Modelings ',
-      'Moral Realism + A Form Of Ethical Naturalism' = 'Moral Realism',
-      'Actualism + The Exploration And Defense Of Actualism' = 'Actualism',
-      'Mcgee' = 'McGee',
-      'Vanfraassen' = 'van Fraassen',
-      'Putnam Paradox' = 'Putnam\'s Paradox',
-      '2 Distinctions' = 'Two Distinctions',
-      '3 Theses' = 'Three Theses',
-      '2 Notions' = 'Two Notions',
-      'Godfreysmith' = 'Godfrey-Smith',
-      '2 Concepts' = 'Two Concepts',
-      '2 Kinds' = 'Two Kinds',
-      '2 Types' = 'Two Types',
-      'Mcdowell' = 'McDowell',
-      '1st' = 'First',
-      'G.e. Moore' = 'G.E. Moore',
-      'To-Be' = 'To Be',
-      'De-Dicto' = 'De Dicto',
-      'De-Se' = 'De Se',
-      'Problem of Action' = 'The Problem of Action',
-      'Matter of Individuality' = 'A Matter of Individuality',
-      'Logic of Paradox' = 'The Logic of Paradox',
-      'Problem of the Essential' = 'The Problem of the Essential',
-      'and a Ariew' = 'and A Ariew',
-      'Ceteris-Paribus' = 'Ceteris Paribus'
-    )
-  )) |>
-  mutate(graph_cite = str_replace_all(
-        graph_cite,
-        fixed(
-          c(
-            'Have a Foundation' = 'Have a Foundation?',
-            'What An Antiindividualist Knows A-Priori' = 'What An Anti-Individualist Knows A Priori',
-            'Functional-Analysis and Proper Functions' = 'Functional Analysis and Proper Functions',
-            'to Modus-Ponens' = 'to Modus Ponens',
-            'Easy Possibilities (Reliability-Conditional)' = 'Easy Possibilities',
-            'Four-Dimensionalism' = 'Four Dimensionalism',
-            'The Conceptual Analysts Defense' = 'The Conceptual Analyst\'s Defense',
-            'Materialism and Qualia, the Explanatory Gap' = 'Materialism and Qualia: The Explanatory Gap',
-            'Saints + Implications for Moral-Philosophy' = 'Saints',
-            'All the Worlds a Stage + a Philosophers Reasons To Believe the Stage-View' = 'All the World\'s a Stage',
-            'Stalking the Wild Epistemic Engine + Computational Psychology and Cognition' = 'Stalking The Wild Epistemic Engine',
-            'Structures of Normative Theories + Addressing the Agent-Neutral and Agent-Centered Distinctions as Substantive Mistakes in Moral Theorizing' = 'Structures of Normative Theories',
-            'Moral Realism + a Form of Ethical Naturalism' = 'Moral Realism',
-            'Oughts, Options, and Actualism + the Exploration and Defense of Actualism' = 'Oughts, Options, and Actualism',
-            'Sense, Nonsense and the Senses, An Inquiry Into the Powers of the Human Mind + 1994 Dewey Lectures At Columbia-University, Lecture 1 - the Antinomy of Reason' = 'Sense, Nonsense, and the Senses: An Inquiry into the Powers of the Human Mind',
-            'Finkish Dispositions + Refutation of Simple Conditional Analysis' = 'Finkish Dispositions',
-            'Four-Dimensionalism (Persistence Through Time, Doctrine of Temporal Parts, Perdurance)' = 'Four-Dimensionalism',
-            'The Extended Mind (Active Externalism)' = 'The Extended Mind',
-            'Brutal Composition (Objects, Vagueness, Ontology)' = 'Brutal Composition',
-            'Consciousness The Transmutation Of A Concept' = 'Consciousness: The Transmutation Of A Concept',
-            'Dispositions and Antidotes (Reply To David Lewis)' = 'Dispositions and Antidotes',
-            'Nonexistence (Singular Negative Existentials)' = 'Nonexistence',
-            'Is Coherence Truth Conducive? (Belief)' = 'Is Coherence Truth Conducive?',
-            'Is There A Fundamental Level? (Reality, Metaphysics, Ontology)' = 'Is There A Fundamental Level?',
-            'Emotions (Ethics, Propriety, Correctness)' = 'Emotions',
-            'Antidotes (Reply To David Lewis)' = 'Antidotes',
-            'Mind (Active Externalism)' = 'Mind',
-            'Clay (Problem in Philosophy, Ontology)' = 'Clay',
-            ' (Properties, Philosophy)' = '',
-            ' (Rationality, Correct Reasoning)' = '',
-            ' (A Philosophical Consideration on Propositional Definitions of Acquired Knowing)' = '',
-            ' (Epistemic Considerations)' = '',
-            'G.e. Moore And John Mcdowell' = 'G.E. Moore and John McDowell',
-            ' (Epistemic Warrant)' = '',
-            ' (Reality, Metaphysics, Ontology)' = '',
-            ' (Knowledge Norm of Assertion, Kna)' = '',
-            ' (Keith Lehrer)' = '',
-            'Best Explanation - Criteria for Theory Choice' = 'The Best Explanation: Criteria for Theory Choice',
-            'What is Equality .1. Equality of Welfare' = 'What is Equality? Part 1: Equality of Welfare',
-            'What is Equality .2. Equality of Resources' = 'What is Equality? Part 2: Equality of Resources',
-            'Fallacy: on' = 'Fallacy: On',
-            'Chance and Credence - Humean Supervenience Debugged' = 'Humean Supervenience Debugged',
-            'The Rule-Following Considerations .5.' = 'The Rule-Following Considerations',
-            ' - ' = ': ',
-            ': a' = ': A',
-            ': the' = ': The',
-            ': on' = ': On'
-            )
-        )
-      )
-    ) |>
-  # mutate(graph_auth = str_replace_all(
-  #   graph_auth,
-  #   c(
-  #     'J. S.' = 'J.S.'
-  #   )
-  # )) |>
-  # mutate(spaces_in_auth = str_count(graph_auth, " ")) |>
-  # rowwise() |>
-  # mutate(short_auth = case_when(
-  #   spaces_in_auth == 6 ~ 
-  #     paste0(
-  #       str_sub(
-  #         graph_auth,
-  #         start = str_locate_all(graph_auth, " ")[[1]][2] + 1,
-  #         end = str_locate_all(graph_auth, " ")[[1]][3] -1 
-  #       ),
-  #       " and ",
-  #       str_sub(
-  #         graph_auth,
-  #         start = str_locate_all(graph_auth, " ")[[1]][6] + 1,
-  #         end = str_length(graph_auth)
-  #       )
-  #     ),
-  #   spaces_in_auth == 5 ~ 
-  #     paste0(
-  #       str_sub(
-  #         graph_auth,
-  #         start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
-  #         end = str_locate_all(graph_auth, " ")[[1]][2] -1 
-  #       ),
-  #       " and ",
-  #       str_sub(
-  #         graph_auth,
-  #         start = str_locate_all(graph_auth, " ")[[1]][5] + 1,
-  #         end = str_length(graph_auth)
-  #       )
-  #     ),
-  #   spaces_in_auth == 4 ~ 
-  #     paste0(
-  #       str_sub(
-  #         graph_auth,
-  #         start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
-  #         end = str_locate_all(graph_auth, " ")[[1]][2] -1 
-  #       ),
-  #       " and ",
-  #       str_sub(
-  #         graph_auth,
-  #         start = str_locate_all(graph_auth, " ")[[1]][4] + 1,
-  #         end = str_length(graph_auth)
-  #       )
-  #     ),
-  #   spaces_in_auth == 3 ~ 
-  #     paste0(
-  #       str_sub(
-  #         graph_auth,
-  #         start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
-  #         end = str_locate_all(graph_auth, " ")[[1]][2] - 2 
-  #       ),
-  #       " et al"
-  #     ),
-  #   graph_auth == 'Gaile Pohlhaus Jr.' ~ 'Pohlhaus Jr.',
-  #   spaces_in_auth == 2 ~ 
-  #     str_sub(
-  #       graph_auth,
-  #       start = str_locate_all(graph_auth, " ")[[1]][2] + 1,
-  #       end = str_length(graph_auth)
-  #     ),
-  #   TRUE ~  str_sub(
-  #     graph_auth,
-  #     start = str_locate_all(graph_auth, " ")[[1]][1] + 1,
-  #     end = str_length(graph_auth)
-  #   )
-  # )) |>
-  mutate(short_auth = case_when(
-    art_title == "Is Conceivability A Guide To Possibility" ~ "Yablo, Conceivability",
-    art_title == "Paradox Without Self-Reference" ~ "Yablo, Paradox",
-    art_title == "What Is Equality .2. Equality Of Resources" ~ "Dworkin Pt. 2",
-    art_title == "What Is Equality .1. Equality Of Welfare" ~ "Dworkin Pt. 1",
-    art_title == "In Defense Of Proper Functions" ~ "Millikan, Proper Function",
-    art_title == "Biosemantics" ~ "Millikan, Biosemantics",
-    art_title == "Concepts Of Supervenience" ~ "Kim, Concepts",
-    art_title == "Epiphenomenal And Supervenient Causation" ~ "Kim, Epiphenomenal",
-    art_title == "Probabilities Of Conditionals And Conditional Probabilities" ~ "Lewis, Probabilities",
-    art_title == "Paradoxes Of Time Travel" ~ "Lewis, Time Travel",
-    art_title == "Attitudes De-Dicto And De-Se" ~ "Lewis, De Se",
-    art_title == "Counterfactual Dependence And Times Arrow" ~ "Lewis, Time\'s Arrow",
-    art_title == "Scorekeeping In A Language Game" ~ "Lewis, Scorekeeping",
-    art_title == "Functions As Selected Effects: The Conceptual Analysts Defense" ~ "Neander, Selected",
-    art_title == "The Teleological Notion Of Function" ~ "Neander, Teleological",
-    short_auth == "Rabinowicz and Ronnow-Rasmussen" ~ "R and R-R",
-    short_auth == "Inwagen" ~ "van Inwagen",
-    short_auth == "Fraassen" ~ "van Fraassen",
-    TRUE ~ short_auth
-  )) |>
-  left_join(select(philo_bib, id, longcite), by = c("old" = "id")) |>
-  rowwise() |>
-  mutate(end_of_longcite = str_sub(longcite, str_length(longcite)-35, str_length(longcite)-5)) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, "[a-z]", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, "[A-Z]", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, "[,.?]", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, "^:", "")) |>
-  mutate(end_of_longcite = str_squish(end_of_longcite)) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, "^:", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, "^\\)", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, "^\\&", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, "-$", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, " 1$", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, " 2$", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, " 4$", "")) |>
-  mutate(end_of_longcite = str_replace_all(end_of_longcite, " 17$", "")) |>
-  mutate(end_of_longcite = str_squish(end_of_longcite)) |>
-  mutate(end_of_longcite = case_when(
-    art_title == "Disagreement, Question-Begging And Epistemic Self-Criticism" ~ "11 (6): 1-22",
-    art_title == "Grounding Explanations" ~ "13 (7): 1-26",
-    art_title == "The Possibility Of Physicalism" ~ "111 (9-10): 557-592",
-    art_title == "Unified Foundations For Essence And Ground" ~ "1 (2): 296-311",
-    old == "WOS:000366669500008" ~ "58 (7-8): 828-874",
-    TRUE ~ end_of_longcite)
-  ) |>
-  select(end_of_longcite, everything()) |>
-  ungroup()
+  left_join(philo_bib_fix, by = c("old" = "id")) |>
+  select(-longcite)
 
 rolling_averages <- citation_tibble |>
   filter(old %in% main_bib$old) |>
@@ -480,8 +204,6 @@ rolling_averages <- citation_tibble |>
   left_join(main_bib, by = "old") |>
   select(old, old_year, new_year, cites, rolling, graph_cite, short_auth)
 
-main_bib <- main_bib |>
-  mutate(full_citation = paste0(graph_cite, " _", journal, "_ ", end_of_longcite,"."))
 ```
 
 ```{r}
@@ -501,7 +223,7 @@ rolling_spaghetti_graph <- function(x){
          y = element_blank(),
          title =  paste0("Widely cited articles from ", x),
          subtitle = "Rolling five year average of citations in 100 philosophy journals") +
-    scale_x_continuous(breaks = 198:202 * 10, minor_breaks = 396:404*5) +
+    scale_x_continuous(breaks = 196:202 * 10, minor_breaks = 390:404*5) +
     ylim(0, max(20, max(
       filter(rolling_averages, old %in% filter(
         main_bib, old_year == x
@@ -520,7 +242,7 @@ rolling_facet_graph <- function(x){
     theme(legend.position="none") +
     labs(x = element_blank(),
          y = element_blank()) +
-    scale_x_continuous(breaks = 198:202 * 10, minor_breaks = 396:404*5) +
+    scale_x_continuous(breaks = 98:101 * 20, minor_breaks = 390:404*5) +
     facet_wrap(vars(short_auth)) +
     ylim(0, max(20, max(
       filter(rolling_averages, old %in% filter(
@@ -531,7 +253,7 @@ rolling_facet_graph <- function(x){
 }
 ```
 
-I recently downloaded citation data for 100 philosophy journals from Web of Science. This note presents some of the data about trends in citation patterns since 1976. My main interest here is in seeing which changes there have been in what was cited over time, but there are lots of interesting nuggets. Later I'll write a real paper actually going into what some of the data mean, but for now I'm just presenting it for public consumption.
+I recently downloaded citation data for 100 philosophy journals from Web of Science. This note presents some of the data about trends in citation patterns since 1956. My main interest here is in seeing which changes there have been in what was cited over time, but there are lots of interesting nuggets. Later I'll write a real paper actually going into what some of the data mean, but for now I'm just presenting it for public consumption.
 
 # Methodology {#sec-methodology}
 
@@ -544,7 +266,7 @@ Via the University of Michigan, I got the latest available database for Web of S
 #| tbl-cap: The journals included in this study
 
 require(knitr)
-temp <- philo_bib |>
+temp <- philo_bib_fix |>
   group_by(journal) |> 
   summarise(Articles = n(), `First Year` = min(year), `Most Recent Year` = max(year)) |>
   rename(Journal = journal)
@@ -555,15 +277,17 @@ Of course the first year isn't the first year the journal started publishing; it
 
 One big exception to this is that it's never really understood how to handle the 'supplements' to _Noûs_, i.e., _Philosophical Perspectives_ and _Philosophical Issues_. Some of these are recorded as being their own thing, some of them are recorded as special issues of _Noûs_. In the latter case, the citations often only start being tracked several years after publication, and the bibliographic information is spotty. I've manually removed the ones that were listed as being published in _Noûs_ but actually in one of the supplements, because the data didn't seem sufficiently reliable.
 
+I've also manually added citations to articles published in _Journal of Philosophy_ between 1971 and 1974. I don't have good data for what was cited in those articles. I don't know why Web of Science indexes the Journal before and after that period, but it's an important gap. Several of the most important articles of the journals era are published in the Journal in those years, so I felt it was important to include them. I hope that the manual adding I did led to values on the same scale as what I got from everything else, but this is a possible source of noise in the data.
+
 Because Web of Science keeps adding journals, and journals keep getting larger, the number of articles in this study keeps going up. The only downward pressure comes from the fact that some journals haven't been indexed for 2022 or even, in some cases, 2021. @fig-number-of-articles-by-year shows how many articles each year are in the study.
 
 ```{r}
 #| label: fig-number-of-articles-by-year
 #| fig-cap: "Number of articles in the study each year" 
 
-philo_bib |>
+philo_bib_fix |>
   group_by(year) |>
-  filter(year >= 1976, year <= 2022) |>
+  filter(year >= 1956, year <= 2022) |>
   tally() |>
   ggplot(aes(x = year, y = n)) +
     geom_line() +
@@ -571,10 +295,10 @@ philo_bib |>
     labs(x = element_blank(),
          y = element_blank(),
          title = "Number of Articles in Database Each Year") +
-  scale_x_continuous(breaks = 197:202 * 10, minor_breaks = 393:404*5) 
+  scale_x_continuous(breaks = 195:202 * 10, minor_breaks = 390:404*5) 
 ```
 
-On top of that, citation practices have changed and people now cite much more widely than they used to. So the number of citations recorded each year (to articles since 1976 indexed in these 100 journals), has risen rather dramatically, as shown in @fig-number-of-citations-by-year.
+On top of that, citation practices have changed and people now cite much more widely than they used to. So the number of citations recorded each year (to articles since 1956 indexed in these 100 journals), has risen rather dramatically, as shown in @fig-number-of-citations-by-year.
 
 ```{r}
 #| label: fig-number-of-citations-by-year
@@ -592,7 +316,7 @@ citation_tibble |>
   labs(x = element_blank(),
        y = element_blank(),
        title = "Number of Citations in Database Each Year") +
-  scale_x_continuous(breaks = 197:202 * 10, minor_breaks = 393:404*5) 
+  scale_x_continuous(breaks = 195:202 * 10, minor_breaks = 390:404*5) 
 ```
 
 On the other hand, since the overwhelming majority of citations are to articles published earlier than the citing article, a larger number of citations in total might be consistent with fewer citations per article available to be cited. If we somewhat arbitrarily set the universe of possible cited papers to be the set of papers with the same publication date as the citing article or earlier, @fig-average-of-citations-by-year shows how often the average paper was cited each year (in these 100 journals).
@@ -625,7 +349,7 @@ ggplot(mean_citations, aes(x = new_year, y = mean_citations)) +
        y = element_blank(),
        title = "Average number of citations articles get each year",
        subtitle = "Number of citations in a year divided by articles published up to that year") +
-  scale_x_continuous(breaks = 197:202 * 10, minor_breaks = 393:404*5) 
+  scale_x_continuous(breaks = 195:202 * 10, minor_breaks = 390:404*5) 
 ```
 
 Between about 1978 and 2004, the different forces are roughly balanced. There are more papers, and each paper cites more often, but there are more papers available to be cited, and the mean stays at about 0.1. (Of course articles do get cited outside of journals indexed in Web of Science, but it's still a bit humbling to realise that's the historical average, even if one gets published in a journal as good as one of these.) But then the forces pushing this number up take over. This is important context for a lot of the graphs below, where the typical article will have a graph of citations per year that looks a bit like this.
@@ -634,15 +358,17 @@ Between about 1978 and 2004, the different forces are roughly balanced. There ar
 
 For each year up to 2015, I made three lists. (After 2015 the citation data is all too new to be particularly useful I think.) First, a list of the articles published that year sorted by how many times they are cited. Second, the same list sorted by how many times they are cited in what I call _early_ years. That's either the first ten years after publication, or half of the time between publication and 2022, whichever is shorter. Third, the same list sorted by how many times they are cited in what I call _late_ years, which is either the last ten years of the study, or the years since publication that are not 'early', again whichever is shorter. Given how many of the citations come from the last few years, the first and third lists overlap a lot. As we get closer to the end of the study, the early cites tend to be very volatile, and there is a bit of impact from how easy journals made it for their papers to be cited prior to official publication through online early access.
 
-After making those three lists, I found the largest _n_ such that taking the top _n_ from those three lists gave me nine total articles per year. (If forced to choose, I chose the articles with the most total citations.) So we got a mix largely of highly cited articles, and articles that were highly cited soon after publication. With nine articles each year, and forty years between 1976 and 2015, we end up with 360 articles. I won't list them here because they are all listed in one way or other below.
+After making those three lists, I found the largest _n_ such that taking the top _n_ from those three lists gave me nine total articles per year. (If forced to choose, I chose the articles with the most total citations.) So we got a mix largely of highly cited articles, and articles that were highly cited soon after publication. With nine articles each year, and sixty years between 1976 and 2015, we should end up with 540 articles. 
 
-The 360 articles are, for better and for worse, a pretty representative sample of what was happening in those journals, and in particular what was being widely talked about in those journals. They wouldn't match up with my list of the best 360 articles from those forty years, or I suspect anyone else's list of the best 360 articles. But I do think they are an interesting model of the field as it was across those years.
+Having built that list, I decided that articles with fewer than twenty citations (in these 100 journals) were not cited often enough that it made much sense to talk about trends in their citation pattern. So I filtered the list down to only include articles with twenty or more citations. The result is that we have `r nrow(main_bib)` articles in total.
+
+The `r nrow(main_bib)` articles are, for better and for worse, a pretty representative sample of what was happening in those journals, and in particular what was being widely talked about in those journals. They wouldn't match up with my list of the best `r nrow(main_bib)` articles from those forty years, or I suspect anyone else's list of the best `r nrow(main_bib)` articles. But I do think they are an interesting model of the field as it was across those years.
 
 It was not a surprise that the famously high prestige journals have the bulk of these articles. But there was more variation within the list than some may have expected, as we see in @tbl-journals-in-main-bib.
 
 ```{r}
 #| label: tbl-journals-in-main-bib
-#| tbl-cap: Which journals the 360 articles appeared in.
+#| tbl-cap: Which journals the `r nrow(main_bib)` articles appeared in.
 
 kable(
   main_bib |>
@@ -651,9 +377,20 @@ kable(
     arrange(-Articles) |>
     rename(Journal = journal)
 )
+
+top_five_in_main_bib <- main_bib |>
+  filter(journal %in% c(
+    "Journal Of Philosophy",
+    "Philosophical Review",
+    "Mind",
+    "Noûs",
+    "Philosophy And Phenomenological Research"
+  ))
+
+recent_top_five_in_main_bib <- top_five_in_main_bib |> filter(old_year >= 2006)
 ```
   
-A bit under half the articles (166 out of 360) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. @tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last ten years, and look at which articles from 2006 to 2015 are widely cited in this sense. There is one particularly striking result.
+Around half the articles (`r nrow(top_five_in_main_bib)` out of `r nrow(main_bib)`) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. @tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last ten years, and look at which articles from 2006 to 2015 are widely cited in this sense. The percentage that are in these five journals falls slightly: it is now `r nrow(recent_top_five_in_main_bib)` out of 90. But there is one particularly striking result.
 
 ```{r}
 #| label: tbl-recent-journals-in-main-bib
@@ -669,7 +406,7 @@ kable(
 )
 ```
 
-The big five still cover nearly half of the articles, but the journal with the most representatives is _Philosophical Studies_. Now part of that is that it publishes so many articles, but lots of journals publish lots of articles without having this much impact.
+The journal with the most representatives is _Philosophical Studies_. Now part of that is that it publishes so many articles, but lots of journals publish lots of articles without having this much impact.
 
 ## Short Observations
 
@@ -706,11 +443,10 @@ Otherwise I've got the following tentative ideas.
 - Graphing the gender balance among authors over time among these 360 articles.
 - Comparing how widely cited David Lewis's 1980s AJP articles are to how widely cited all other articles from the AJP in those years were.
 - Looking at how "Epiphenomenal Qualia" came to be cited so much more than "What Mary Didn't Know".
-- Looking at the very different citation trends for articles by the Churchlands.
 - Separating out age, cohort, and period effects among the various trends shown here.
 - In particular, looking at the 1986-1990 cohort, and seeing whether the relatively low citation numbers shown here are because citations to that cohort tended to be more spread out (and so just looking at the peaks, like I'm doing here, will miss a lot), or because in general later philosophers paid less attention to articles from the late 1980s than other eras. And if it's the latter, is that something broader about the era, or about the relative importance of journals to other publications in that time?
 - Looking at the transitions from supervenience, to truthmaking, to grounding, in metaphysics over the time of the study, with special attention to the connection between that story and the debates about physicalism.
-- Making a bibtex file for these 360 articles.
+- Making a bibtex file for these 460 articles.
 - Seeing what connections there are between paper length and number of citations.
 - Looking at how central papers on equality and egalitarianism are to political philosophy over the years.
 - Looking at the way the literature on trust developed.
@@ -725,33 +461,33 @@ But there are lots of other stories here to be investigated, and I'd love to hea
 setwd("~/Documents/quarto-articles/posts/citations-raw-data")
 the_code <- c()
 
-for (year in 1976:2015){
+for (the_year in 1956:2015){
 # Widely Cited Articles subsection
     the_code <- c(the_code,
                 "\n## ",
-                year,
+                the_year,
                 " {#sec-s",
-                year,
+                the_year,
                 "}\n\n### Widely Cited Articles {-}\n\n")
-  temp <- filter(main_bib, old_year == year) |> rename(Articles = full_citation) |> select(Articles)
-  for (i in 1:9){
+  temp <- filter(main_bib, old_year == the_year) |> rename(Articles = full_cite) |> select(Articles)
+  for (i in 1:nrow(temp)){
     the_code <- c(the_code, i, ". ", temp$Articles[i], "\n")
   }
 
 # Citation Count Section
   the_code <- c(the_code,
                 "\n### Citation Count {-#sec-count-",
-                year,
+                the_year,
                 "}\n\n",
                  "\`\`\`{r}\n",
                 "#| label: tbl-citation-count-",
-                year,
+                the_year,
                 "\n",
                 "#| tbl-cap: Citation count for widely cited articles from ",
-                year,
+                the_year,
                 ".",
                 "\n\n",
-                "year_cites <- rank_table_generator(",year,")\n",
+                "year_cites <- rank_table_generator(",the_year,")\n",
                 "kable(select(year_cites, Article, All = Citations, Early = \`Early Citations\`, Late = \`Late Citations\`))\n",
                 "\`\`\`",
                 "\n\n")
@@ -759,14 +495,14 @@ for (year in 1976:2015){
 # Citation Rank Section
   the_code <- c(the_code,
                 "\n### Citation Rank {-#sec-rank-",
-                year,
+                the_year,
                 "}\n\n",
                  "\`\`\`{r}\n",
                 "#| label: tbl-citation-rank-",
-                year,
+                the_year,
                 "\n",
                 "#| tbl-cap: Citation rank for widely cited articles from ",
-                year,
+                the_year,
                 ".",
                 "\n\n",
                 "kable(select(year_cites, Article, Overall = \`Citation Rank\`, Early = \`Early Rank\`, Late = \`Late Rank\`))\n",
@@ -776,20 +512,20 @@ for (year in 1976:2015){
 # Spaghetti Graph
   the_code <- c(the_code,
                 "\n### Citation Trends {-#sec-trends-",
-                year,
+                the_year,
                 "}\n\n",
                 "\`\`\`{r}\n",
                 "#| label: fig-citation-spaghetti-",
-                year,
+                the_year,
                 "\n",
                 "#| fig-cap: Rolling five year average of citation frequency for widely cited articles from ",
-                year,
+                the_year,
                 ".",
                 "\n",
                 "#| cache: TRUE",
                 "\n\n",
                 "rolling_spaghetti_graph(",
-                year,
+                the_year,
                 ")\n",
                 "\`\`\`",
                 "\n\n"
@@ -799,16 +535,16 @@ for (year in 1976:2015){
   the_code <- c(the_code,
                 "\`\`\`{r}\n",
                 "#| label: fig-citation-facet-",
-                year,
+                the_year,
                 "\n",
                 "#| fig-cap: Faceted version of @fig-citation-spaghetti-",
-                year,
+                the_year,
                 ".",
                 "\n",
                 "#| cache: TRUE",
                 "\n\n",
                 "rolling_facet_graph(",
-                year,
+                the_year,
                 ")\n",
                 "\`\`\`",
                 "\n\n\\newpage\n\n"
