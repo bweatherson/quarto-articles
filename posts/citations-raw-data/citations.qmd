@@ -114,8 +114,8 @@ year_cites |>
 #| label: setup
 #| cache: true
 
-load("philo_bib_fix.RData")
-load("philo_cite_with_jp.RData")
+load("/Users/weath/Documents/citations-2024/philo_bib_fix.RData")
+load("/Users/weath/Documents/citations-2024/philo_cite_with_jp.RData")
 
 
 
@@ -145,7 +145,7 @@ citation_tibble <- philo_cite_with_jp |>
 
 main_article_ids <- c()
 
-for(year in (1956:2015)){
+for(year in (1956:2020)){
   
   topper <- 1
   all_cited <- tribble(~old, ~n)
@@ -175,7 +175,12 @@ for(year in (1956:2015)){
       slice_max(n, n=topper)
     
     all_cited <- bind_rows(most_cited, recent_cited, orig_cited) |>
-      distinct(old, .keep_all = TRUE) |>
+      distinct(old)
+    
+    all_cited <- citation_tibble |>
+      right_join(all_cited, by = "old") |>
+      group_by(old) |>
+      tally() |>
       mutate(old_year = year)
     
     topper <- topper + 1
@@ -183,12 +188,19 @@ for(year in (1956:2015)){
   main_article_ids <- bind_rows(
     main_article_ids,
     slice_max(all_cited, n, n=9, with_ties = FALSE)
-  ) |> filter(n >= 20)
+  ) 
 }
+
+main_article_ids <- main_article_ids |>
+  ungroup() |>
+  arrange(-year) |>
+  slice_max(n, n = 500, with_ties = FALSE)
 
 main_bib <- main_article_ids |>
   left_join(philo_bib_fix, by = c("old" = "id")) |>
   select(-longcite)
+
+article_number <- nrow(main_bib)
 
 rolling_averages <- citation_tibble |>
   filter(old %in% main_bib$old) |>
@@ -360,15 +372,15 @@ For each year up to 2015, I made three lists. (After 2015 the citation data is a
 
 After making those three lists, I found the largest _n_ such that taking the top _n_ from those three lists gave me nine total articles per year. (If forced to choose, I chose the articles with the most total citations.) So we got a mix largely of highly cited articles, and articles that were highly cited soon after publication. With nine articles each year, and sixty years between 1976 and 2015, we should end up with 540 articles. 
 
-Having built that list, I decided that articles with fewer than twenty citations (in these 100 journals) were not cited often enough that it made much sense to talk about trends in their citation pattern. So I filtered the list down to only include articles with twenty or more citations. The result is that we have `r nrow(main_bib)` articles in total.
+Having built that list, I decided that articles with fewer than twenty citations (in these 100 journals) were not cited often enough that it made much sense to talk about trends in their citation pattern. So I filtered the list down to only include articles with twenty or more citations. The result is that we have `{r} article_number` articles in total.
 
-The `r nrow(main_bib)` articles are, for better and for worse, a pretty representative sample of what was happening in those journals, and in particular what was being widely talked about in those journals. They wouldn't match up with my list of the best `r nrow(main_bib)` articles from those forty years, or I suspect anyone else's list of the best `r nrow(main_bib)` articles. But I do think they are an interesting model of the field as it was across those years.
+The `{r} article_number` articles are, for better and for worse, a pretty representative sample of what was happening in those journals, and in particular what was being widely talked about in those journals. They wouldn't match up with my list of the best `{r} article_number` articles from those forty years, or I suspect anyone else's list of the best `{r} article_number` articles. But I do think they are an interesting model of the field as it was across those years.
 
 It was not a surprise that the famously high prestige journals have the bulk of these articles. But there was more variation within the list than some may have expected, as we see in @tbl-journals-in-main-bib.
 
 ```{r}
 #| label: tbl-journals-in-main-bib
-#| tbl-cap: Which journals the `r nrow(main_bib)` articles appeared in.
+#| tbl-cap: !expr 'paste0("Which journals the ", article_number, " articles appeared in.")'
 
 kable(
   main_bib |>
@@ -390,11 +402,11 @@ top_five_in_main_bib <- main_bib |>
 recent_top_five_in_main_bib <- top_five_in_main_bib |> filter(old_year >= 2006)
 ```
   
-Around half the articles (`r nrow(top_five_in_main_bib)` out of `r nrow(main_bib)`) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. @tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last ten years, and look at which articles from 2006 to 2015 are widely cited in this sense. The percentage that are in these five journals falls slightly: it is now `r nrow(recent_top_five_in_main_bib)` out of 90. But there is one particularly striking result.
+Around half the articles (`{r} nrow(top_five_in_main_bib)` out of `{r} article_number`) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. @tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last fifteens years, and look at which articles from 2006 to 2020 are widely cited in this sense. The percentage that are in these five journals falls slightly: it is now `{r} nrow(recent_top_five_in_main_bib)` out of `{r} nrow(filter(main_bib, year >= 2006))`. And the order at the top has changed a bit, as @tbl-recent-journals-in-main-bib shows.
 
 ```{r}
 #| label: tbl-recent-journals-in-main-bib
-#| tbl-cap: Which journals the most recent 90 articles appeared in.
+#| tbl-cap: !expr 'paste0("Which journals the most recent ",nrow(filter(main_bib, year >= 2006))," articles appeared in.")'
 
 kable(
   main_bib |>
@@ -406,7 +418,7 @@ kable(
 )
 ```
 
-The journal with the most representatives is _Philosophical Studies_. Now part of that is that it publishes so many articles, but lots of journals publish lots of articles without having this much impact.
+One thing we see from @tbl-journals-in-main-bib and @tbl-recent-journals-in-main-bib is that _Philosophical Studies_ is a very important journal; it publishes more widely cited articles than some of the traditionally more prestigious journals. Now partially that is because it publishes more articles full stop. But other journals (e.g., _Synthese_ and _Erkenntnis_) also publish a lot of articles without appearing near the top of these tables.
 
 ## Short Observations
 
