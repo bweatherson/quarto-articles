@@ -192,13 +192,12 @@ for(year in (1956:2020)){
 }
 
 main_article_ids <- main_article_ids |>
-  ungroup() |>
-  arrange(-year) |>
-  slice_max(n, n = 500, with_ties = FALSE)
+  ungroup() 
 
 main_bib <- main_article_ids |>
   left_join(philo_bib_fix, by = c("old" = "id")) |>
-  select(-longcite)
+  select(-longcite) |>
+  filter(n >= 34 | old == "WOS:A1963CGU1500001")
 
 article_number <- nrow(main_bib)
 
@@ -279,6 +278,7 @@ Via the University of Michigan, I got the latest available database for Web of S
 
 require(knitr)
 temp <- philo_bib_fix |>
+  filter(year >= 1956, year <= 2022) |>
   group_by(journal) |> 
   summarise(Articles = n(), `First Year` = min(year), `Most Recent Year` = max(year)) |>
   rename(Journal = journal)
