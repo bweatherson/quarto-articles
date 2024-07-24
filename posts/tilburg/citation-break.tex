@@ -180,10 +180,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{sidenotes}{}{\usepackage{sidenotes}}
-\@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
-\makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -391,17 +387,13 @@ models have strengths and weaknesses; we should build several and see
 how they interact.
 
 So what I did was take the Web of Science data, and focus on 100
-philosophy journals from 1976 onwards. The data is too unreliable before
-1976; which is annoying because the years immediately before then are
-particularly interesting. But it's what we have. For each year from
-1976-2015 I made a list of one hundred widely cited articles, with a mix
-of articles that were widely cited immediately after publication,
-articles that have been widely cited in the last few years, and articles
-that are widely cited tout core. (I stopped in 2015 because the
-citations are few enough that they introduce more noise than signal.)
-That gave me 4000 articles. Then I repeated the kind of analysis Eugenio
-did, looking at more journals (100 rather than 5), but with many fewer
-cited sources (just those 4000 rather than everything).
+philosophy journals from 1956 onwards. For each year from 1956-2015 I
+made a list of one hundred widely cited articles, with a mix of articles
+that were widely cited immediately after publication, articles that have
+been widely cited in the last few years, and articles that are widely
+cited overall. That gave me 6000 articles. Then I repeated the kind of
+analysis Eugenio did, looking at more journals (100 rather than 5), but
+with many fewer cited sources (just those 6000 rather than everything).
 
 Figure~\ref{fig-matrix} shows the year by year similarity.
 
@@ -409,7 +401,7 @@ Figure~\ref{fig-matrix} shows the year by year similarity.
 
 \centering{
 
-\includegraphics{citation-break_files/figure-pdf/fig-matrix-1.pdf}
+\includegraphics{citation-break_files/figure-pdf/fig-matrix-1.png}
 
 }
 
@@ -418,15 +410,15 @@ years.}
 
 \end{figure}%
 
-This starts in 1983 because before that, citations to articles published
-1976 or later are few enough that it's mostly just noise.
+This starts in 1960 because before that, citations to articles published
+1956 or later are few enough that it's mostly just noise.
 
 There doesn't seem to be any sharp break around 2000. To see if I was
 missing something, for each year I calculated the average of the
 similarity measure between it and the preceding five years, and the
 result is Figure~\ref{fig-rolling-average}. Again, I've left out the
-very noisy years at the very start; the first year here is 1985, so the
-first year whose citations get used is 1980.
+very noisy years at the very start; the first year here is 1970, so the
+first year whose citations get used is 1965
 
 \begin{figure}
 
@@ -437,20 +429,20 @@ first year whose citations get used is 1980.
 }
 
 \caption{\label{fig-rolling-average}Similarity between a year's
-citations and the previous five years' citations (1985-2022).}
+citations and the previous five years' citations (1970-2022).}
 
 \end{figure}%
 
-The striking thing in Figure~\ref{fig-rolling-average} is how long the
-graph takes to start going up. The trend line even goes gently down at
-the start. Given the way I've set things up, that shouldn't happen.
-Citations tend to go backwards in time, so each year a new hundred
-articles are getting added to the range of possible citations. That
-makes a small difference at the end; the new articles are only 2\% of
-the universe. But it makes a big difference at the start. So graph,
+The striking thing in Figure~\ref{fig-rolling-average} is the long pause
+between the late 1970s and early 2000s. The trend line even goes gently
+down for a while. Given the way I've set things up, that shouldn't
+happen. Citations tend to go backwards in time, so each year a new
+hundred articles are getting added to the range of possible citations.
+That makes a small difference at the end; the new articles are only 2\%
+of the universe. But it makes a big difference at the start. So graph,
 which measures how similar a year is to the previous 5 in how it treats
 these 4000 articles, should slope up. Indeed, if we run the exact same
-study starting in 1986 rather than 1976, we get
+study starting in 1986 rather than 1956, we get
 Figure~\ref{fig-rolling-average-late}, which is what I'd a priori
 expect.
 
@@ -496,131 +488,258 @@ Note here that I'm only making a claim about journal articles. There
 were some field defining books published in this time, notably \emph{On
 the Plurality of Worlds}. And I haven't done a study of chapters in
 edited volumes. But the journals stopped producing articles that had
-much staying power.
+much staying power. Here's one way to see this.
 
-I'll end with a bit more empirical evidence to back this up. Step back
-from these 4000 articles and look at all the articles indexed in Web of
-Science. For each pair of years x, y, we can ask, for articles published
-in year y, what is the mean number of citations they get (in indexed
-journals) in year x. The answer is usually pretty low, somewhere between
-0.1 and 0.5. For each value of y we get nice little graphs as we vary x.
-I'll present these in groups of 5, as well as showing the average value.
-So Figure~\ref{fig-mean-most-recent} is what things look like when x is
-recent, i.e., 2018-2022.
+Start by looking at articles published in the first half of the 2000s,
+i.e., 2000-2004. By the end of the 2000s, the 15 most cited articles
+from the first half of the decade were shown in
+Table~\ref{tbl-early-2000s}.
 
-\begin{figure}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9346}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0654}}@{}}
 
-\begin{minipage}{0.50\linewidth}
+\caption{\label{tbl-early-2000s}Most cited 2000s articles by 2009.}
 
-\centering{
+\tabularnewline
 
-\includegraphics{citation-break_files/figure-pdf/fig-mean-most-recent-1.pdf}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+P Machamer, L Darden, and CF Craver (2000) ``Thinking About
+Mechanisms,'' \emph{Philosophy Of Science} 67~(1):~1-25. & 86 \\
+W Rabinowicz and T Ronnow-Rasmussen (2004) ``The Strike of the Demon: On
+Fitting Pro-Attitudes and Value,'' \emph{Ethics} 114~(3):~391-423. &
+71 \\
+K DeRose (2003) ``Assertion, Knowledge, and Context,''
+\emph{Philosophical Review} 111~(2):~167-203. & 67 \\
+J Knobe (2003) ``Intentional Action and Side Effects in Ordinary
+Language,'' \emph{Analysis} 63~(3):~190-194. & 58 \\
+D Lewis (2000) ``Causation as Influence,'' \emph{Journal Of Philosophy}
+97~(4):~182-197. & 57 \\
+C Travis (2004) ``The Silence of the Senses,'' \emph{Mind}
+113~(449):~57-94. & 55 \\
+DJ Chalmers and F Jackson (2001) ``Conceptual Analysis and Reductive
+Explanation,'' \emph{Philosophical Review} 110~(3):~315-360. & 54 \\
+J Stanley and T Williamson (2001) ``Knowing How,'' \emph{Journal Of
+Philosophy} 98~(8):~411-444. & 53 \\
+S Glennan (2002) ``Rethinking Mechanistic Explanation,''
+\emph{Philosophy Of Science} 69~(3):~342-353. & 46 \\
+J Pryor (2000) ``The Skeptic and the Dogmatist,'' \emph{Noûs}
+34~(4):~517-549. & 45 \\
+M Matthen and A Ariew (2002) ``Two Ways of Thinking About Fitness and
+Natural Selection,'' \emph{Journal Of Philosophy} 99~(2):~55-83. & 43 \\
+D Pitt (2004) ``The Phenomenology of Cognition, Or, What is It Like To
+Think That P?,'' \emph{Philosophy And Phenomenological Research}
+69~(1):~1-36. & 43 \\
+J MacFarlane (2003) ``Future Contingents and Relative Truth,''
+\emph{Philosophical Quarterly} 53~(212):~321-336. & 41 \\
+J Schaffer (2003) ``Is There a Fundamental Level?,'' \emph{Noûs}
+37~(3):~498-517. & 39 \\
+A Hájek (2003) ``What Conditional Probability Could Not Be,''
+\emph{Synthese} 137~(3):~273-323. & 39 \\
 
-}
+\end{longtable}
 
-\subcaption{\label{fig-mean-most-recent-1}Individual Years}
+In the most recent 5 years in the available data, 2018-2022,
+Table~\ref{tbl-late-2000s} are the most cited articles first published
+in 2000-2004.
 
-\end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9387}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0613}}@{}}
 
-\centering{
+\caption{\label{tbl-late-2000s}Most cited 2000s articles since 2018.}
 
-\includegraphics{citation-break_files/figure-pdf/fig-mean-most-recent-2.pdf}
+\tabularnewline
 
-}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+P Machamer, L Darden, and CF Craver (2000) ``Thinking About
+Mechanisms,'' \emph{Philosophy Of Science} 67~(1):~1-25. & 192 \\
+S Haslanger (2000) ``Gender and Race: (What) Are They? (What) Do We Want
+Them To Be?,'' \emph{Noûs} 34~(1):~31-55. & 182 \\
+J Pryor (2000) ``The Skeptic and the Dogmatist,'' \emph{Noûs}
+34~(4):~517-549. & 151 \\
+J D'Arms and D Jacobson (2000) ``The Moralistic Fallacy: On the
+`Appropriateness' of Emotions,'' \emph{Philosophy And Phenomenological
+Research} 61~(1):~65-90. & 109 \\
+J Stanley and T Williamson (2001) ``Knowing How,'' \emph{Journal Of
+Philosophy} 98~(8):~411-444. & 109 \\
+H Douglas (2000) ``Inductive Risk and Values in Science,''
+\emph{Philosophy Of Science} 67~(4):~559-579. & 96 \\
+J Fantl and M McGrath (2002) ``Evidence, Pragmatics, and
+Justification,'' \emph{Philosophical Review} 111~(1):~67-94. & 90 \\
+AI Goldman (2001) ``Experts: Which Ones Should You Trust?,''
+\emph{Philosophy And Phenomenological Research} 63~(1):~85-110. & 89 \\
+MGF Martin (2004) ``The Limits of Self-Awareness,'' \emph{Philosophical
+Studies} 120~(1-3):~37-89. & 80 \\
+K DeRose (2003) ``Assertion, Knowledge, and Context,''
+\emph{Philosophical Review} 111~(2):~167-203. & 75 \\
+D Lewis (2000) ``Causation as Influence,'' \emph{Journal Of Philosophy}
+97~(4):~182-197. & 73 \\
+T Kelly (2003) ``Epistemic Rationality as Instrumental Rationality: A
+Critique,'' \emph{Philosophy And Phenomenological Research}
+66~(3):~612-640. & 70 \\
+R Feldman (2000) ``The Ethics of Belief,'' \emph{Philosophy And
+Phenomenological Research} 60~(3):~667-695. & 69 \\
+W Rabinowicz and T Ronnow-Rasmussen (2004) ``The Strike of the Demon: On
+Fitting Pro-Attitudes and Value,'' \emph{Ethics} 114~(3):~391-423. &
+69 \\
+C Travis (2004) ``The Silence of the Senses,'' \emph{Mind}
+113~(449):~57-94. & 65 \\
 
-\subcaption{\label{fig-mean-most-recent-2}Overall average (2018-2022)}
+\end{longtable}
 
-\end{minipage}%
+There is a lot of overlap between Table~\ref{tbl-early-2000s} and
+Table~\ref{tbl-late-2000s}. In particular, the articles by Machamer,
+Rabinowicz, Derose, Lewis, Travis, Stanley, and Pryor are in both lists.
+Having 7 articles in both lists like that isn't particularly unusual.
 
-\caption{\label{fig-mean-most-recent}Mean citations, in 2018-2022, of
-articles originally published in different years}
+I've used decades to set this up, but really what I did was take some
+year \emph{y}, in this case 2000, focus on articles published between
+\emph{y} and \emph{y}+4, and compare two lists: which of those articles
+were in the 15 most cited before \emph{y}+9, and which were in the 15
+most cited between 2018 and 2022. If you do that for different values of
+\emph{y}, you often find 5-7 articles in both lists. But if you set
+\emph{y} to 1984, so that it focuses on the mid-to-late 1980s, there is
+very little overlap. Table~\ref{tbl-early-1980s} lists the articles from
+1984-1988 that were most cited by 1993.
 
-\end{figure}%
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9301}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0699}}@{}}
 
-There really aren't many citations to articles from the 1980s. But you
-might think it was a long time ago, maybe that's just the passage of
-time. So let's shift back twenty years earlier, and look (in
-Figure~\ref{fig-mean-turn-century}) at what was being cited from
-1998-2002, which has been the focus throughout here.
+\caption{\label{tbl-early-1980s}Most cited 1984-1988 articles by 1993.}
 
-\begin{figure}
+\tabularnewline
 
-\begin{minipage}{0.50\linewidth}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+T Burge (1986) ``Individualism and Psychology,'' \emph{Philosophical
+Review} 95~(1):~3-45. & 47 \\
+J Kim (1984) ``Concepts of Supervenience,'' \emph{Philosophy And
+Phenomenological Research} 45~(2):~153-176. & 43 \\
+J Rawls (1985) ``Justice as Fairness: Political Not Metaphysical,''
+\emph{Philosophy \& Public Affairs} 14~(3):~223-251. & 38 \\
+P Railton (1986) ``Moral Realism,'' \emph{Philosophical Review}
+95~(2):~163-207. & 33 \\
+F Jackson and P Pettit (1988) ``Functionalism and Broad Content,''
+\emph{Mind} 97~(387):~381-400. & 28 \\
+L Laudan (1987) ``Progress or Rationality: The Prospects for Normative
+Naturalism,'' \emph{American Philosophical Quarterly} 24~(1):~19-31. &
+25 \\
+A Baier (1986) ``Trust and Antitrust,'' \emph{Ethics} 96~(2):~231-260. &
+21 \\
+J Rawls (1988) ``The Priority of Right and Ideas of the Good,''
+\emph{Philosophy \& Public Affairs} 17~(4):~251-276. & 21 \\
+T Burge (1988) ``Individualism and Self-Knowledge,'' \emph{Journal Of
+Philosophy} 85~(11):~649-663. & 21 \\
+PM Churchland (1985) ``Reduction, Qualia, and the Direct Introspection
+of Brain States,'' \emph{Journal Of Philosophy} 82~(1):~8-28. & 20 \\
+RG Millikan (1986) ``Thoughts Without Laws, Cognitive Science With
+Content,'' \emph{Philosophical Review} 95~(1):~47-80. & 20 \\
+J Bigelow and R Pargetter (1987) ``Functions,'' \emph{Journal Of
+Philosophy} 84~(4):~181-196. & 20 \\
+P Railton (1984) ``Alienation, Consequentialism, and the Demands of
+Morality,'' \emph{Philosophy \& Public Affairs} 13~(2):~134-171. & 19 \\
+P Kitcher (1984) ``Species,'' \emph{Philosophy Of Science}
+51~(2):~308-333. & 19 \\
+R Feldman (1985) ``Reliability and Justification,'' \emph{Monist}
+68~(2):~159-174. & 19 \\
 
-\centering{
+\end{longtable}
 
-\includegraphics{citation-break_files/figure-pdf/fig-mean-turn-century-1.pdf}
+And Table~\ref{tbl-late-1980s} shows the almost completely distinct list
+of articles from 1984 to 1988 that have been widely cited in the last 5
+years of the data set.
 
-}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9324}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0676}}@{}}
 
-\subcaption{\label{fig-mean-turn-century-1}Individual Years}
+\caption{\label{tbl-late-1980s}Most cited 1984-1988 articles since
+2018.}
 
-\end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
+\tabularnewline
 
-\centering{
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+D Lewis (1984) ``Putnam's Paradox,'' \emph{Australasian Journal Of
+Philosophy} 62~(3):~221-236. & 80 \\
+P Railton (1984) ``Alienation, Consequentialism, and the Demands of
+Morality,'' \emph{Philosophy \& Public Affairs} 13~(2):~134-171. & 73 \\
+R Feldman and E Conee (1985) ``Evidentialism,'' \emph{Philosophical
+Studies} 48~(1):~15-34. & 70 \\
+A Baier (1986) ``Trust and Antitrust,'' \emph{Ethics} 96~(2):~231-260. &
+68 \\
+G Boolos (1984) ``To Be is To Be a Value of a Variable (Or To Be Some
+Values of Some Variables),'' \emph{Journal Of Philosophy}
+81~(8):~430-449. & 60 \\
+E McMullin (1985) ``Galilean Idealization,'' \emph{Studies In History
+And Philosophy Of Science} 16~(3):~247-273. & 59 \\
+P Railton (1986) ``Moral Realism,'' \emph{Philosophical Review}
+95~(2):~163-207. & 58 \\
+J Bogen and J Woodward (1988) ``Saving the Phenomena,''
+\emph{Philosophical Review} 97~(3):~303-352. & 57 \\
+V McGee (1985) ``A Counterexample To Modus Ponens,'' \emph{Journal Of
+Philosophy} 82~(9):~462-471. & 56 \\
+S Cohen (1984) ``Justification and Truth,'' \emph{Philosophical Studies}
+46~(3):~279-295. & 53 \\
+J Hardwig (1985) ``Epistemic Dependence,'' \emph{Journal Of Philosophy}
+82~(7):~335-349. & 53 \\
+BC van Fraassen (1984) ``Belief and the Will,'' \emph{Journal Of
+Philosophy} 81~(5):~235-256. & 51 \\
+H Frankfurt (1987) ``Equality as a Moral Ideal,'' \emph{Ethics}
+98~(1):~21-43. & 37 \\
+W Sinnottarmstrong (1984) ``Ought Conversationally Implies Can,''
+\emph{Philosophical Review} 93~(2):~249-261. & 33 \\
+F Jackson and R Pargetter (1986) ``Oughts, Options, and Actualism,''
+\emph{Philosophical Review} 95~(2):~233-255. & 33 \\
 
-\includegraphics{citation-break_files/figure-pdf/fig-mean-turn-century-2.pdf}
+\end{longtable}
 
-}
-
-\subcaption{\label{fig-mean-turn-century-2}Overall average (1998-2002)}
-
-\end{minipage}%
-
-\caption{\label{fig-mean-turn-century}Mean citations, in 1998-2002, of
-articles originally published in different years}
-
-\end{figure}%
-
-Again, there are many fewer citations to articles before about 1991 than
-to afterwards. Again, that could just be an age effect, but let's end
-with looking at what happened immediately before that, in
-Figure~\ref{fig-mean-before-turn}.
-
-\begin{figure}
-
-\begin{minipage}{0.50\linewidth}
-
-\centering{
-
-\includegraphics{citation-break_files/figure-pdf/fig-mean-before-turn-1.pdf}
-
-}
-
-\subcaption{\label{fig-mean-before-turn-1}Individual Years}
-
-\end{minipage}%
-%
-\begin{minipage}{0.50\linewidth}
-
-\centering{
-
-\includegraphics{citation-break_files/figure-pdf/fig-mean-before-turn-2.pdf}
-
-}
-
-\subcaption{\label{fig-mean-before-turn-2}Overall average (1993-1997)}
-
-\end{minipage}%
-
-\caption{\label{fig-mean-before-turn}Mean citations, in 1993-1997, of
-articles originally published in different years}
-
-\end{figure}%
-
-In all these graphs there is a recency bias, an upward tick as we get
-towards the end. But in Figure~\ref{fig-mean-before-turn} that upwards
-bend comes really late. Articles from the 1980s on the whole just
-weren't sticking around. Now as I said earlier, I'm only looking at
-journals, and for all I've said here, this data just shows that
-journals, having become more central in the 1970s, retreated in
-importance a little in the 1980s. Or maybe the 1980s had less influence
-on philosophy than decades typically do. If so, that would explain the
-clustering that Eugenio finds.
+Articles from the 1980s that made a big impact at the time were, for the
+most part, not sticking around. In part I think that's because the
+1980s, or at least the parts that were impactful at the time, were more
+`normal science'. There were a lot of articles that tried to make small
+improvements, especially on questions surrounding supervenience and
+physicalism, and there just wasn't much reason to cite those 15 or so
+years late. Maybe the absence of the articles from a decade or so ago
+that would normally be cited is part of why there's a break around the
+2000s. But this is all speculative, and I think the whole question is
+both really interesting, and in need of further study.
 
 So I'll end where I started by saying how grateful I am to the
 organisers for putting this on, and to Eugenio for the book. What I've
