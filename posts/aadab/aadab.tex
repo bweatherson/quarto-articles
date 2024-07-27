@@ -1,0 +1,634 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Anti-Anti-Desire-As-Belief
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Anti-Anti-Desire-As-Belief},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Anti-Anti-Desire-As-Belief}
+\author{Brian Weatherson}
+\date{2024}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+David Lewis put forward a decision theoretic argument against there
+being a tight connection between desires and beliefs about the good. I
+argue that his argument fails twice over. It makes inconsistent
+background assumptions about his opponents' views, and it over-generates
+so broadly that if it worked, it would also rule out some standard
+economic models. I end with a puzzle that arises from the response to
+Lewis. If one responds to moral uncertainty by saying one should
+maximise expected moral value, how does one treat cases where one's
+action is evidence for or against the goodness of different actions?
+\end{abstract}
+
+\setstretch{1.1}
+A particular anti-Humean, call her Auntie, believes there is a tight
+connection between wanting something and believing that it is good.
+David Lewis (\citeproc{ref-Lewis1988}{1988},
+\citeproc{ref-Lewis1996}{1996}) has a famous argument that Auntie's view
+is incoherent. The point of this note is to respond on Auntie's behalf.
+
+This is not because I agree with Auntie. On the broader question I think
+Lewis is right and Auntie is wrong. But Lewis's argument doesn't show
+that Auntie is wrong, and it's useful to see why it does not.
+
+The point of this paper is also not to stick up for Auntie when no one
+has stuck up for her before. There are lots of replies to Lewis on
+Auntie's behalf from all sorts of directions. What's new here is that I
+show how two criticisms in particular, one by Huw Price
+(\citeproc{ref-Price1989}{1989}) and one by Jessica Collins
+(\citeproc{ref-Collins2015}{2015}), fit together. Both of them say that
+Auntie should reject one of the assumptions that Lewis attributes to
+her. My primary contribution is to show that the two assumptions they
+reject are inconsistent. That is, Lewis's argument must fail because it
+requires attributing inconsistent background assumptions to Auntie, and
+that's certainly unfair.
+
+\section{The Ludovician Argument}\label{the-ludovician-argument}
+
+I'm not going to go over the argument in Lewis's 1988 paper, which
+relies on some really controversial assumptions. Instead I'll go over
+the 1996 argument, relying heavily on the presentation of it by Collins
+and by Ittay Nissan-Rozen (\citeproc{ref-NissanRozen2013}{2013}).
+
+Assume that we have a finite set of worlds. We will use \emph{w} as a
+variable over worlds. A world, in this sense, is a specification of the
+truth value of all the truth-apt things that are relevant to a
+particular decision. The worlds in this sense are more coarse grained
+than Ludovician concreta in that they only specify truth values of
+relevant propositions, not of all propositions. That's why we can assume
+that there are finitely many of them. But these worlds are more fine
+grained than Ludovician concreta in a different sense. They will be used
+to represent moral uncertainty. So there can be pairs of them that are
+descriptively alike but evaluatively distinct. Given the supervenience
+of the evaluative on the descriptive, this is impossible for Ludovician
+worlds.
+
+For any descriptive proposition A, assume there is a distinct
+proposition Å, meaning that A is good. Let V be an agent's value
+function, and Pr their credence function, with subscripts representing
+what those functions are like after updating. So V\textsubscript{A} and
+Pr\textsubscript{A} are the values of the value and credence functions
+after updating on A. Strictly speaking given how I've set this up, it is
+sets of worlds not individual worlds that get values. But I'll sometimes
+write V(\emph{w}) when strictly it should be V(\{\emph{w}\}); I don't
+think this can lead to any confusion. (Later I'll also write
+Pr(\emph{w}) for the probability of Pr(\{\emph{w}\}); again it shouldn't
+result in confusion.)
+
+Lewis's argument against Auntie uses five assumptions. In these
+assumptions B is an arbitrary proposition, and A is an arbitrary
+\emph{descriptive} proposition.
+
+\begin{description}
+\tightlist
+\item[Equation]
+The way to represent Auntie's anti-Humean view is V(A)~=~Pr(Å).
+\item[Invariance]
+V\textsubscript{A}(\emph{w})~=~V(\emph{w})
+\item[Additivity]
+V(A)~=~Σ\textsubscript{\emph{w}}V(\emph{w})Pr(\emph{w}~\textbar~A)
+\item[Restricted Conditionalisation]
+Pr\textsubscript{A}(B)~=~Pr(B~\textbar~A)
+\item[Good-Bad]
+All worlds are either GOOD or BAD. If \emph{w} is GOOD, then
+V(\emph{w})~=~1, and otherwise V(\emph{w})~=~0.
+\end{description}
+
+The last assumption is obviously absurd, but it is useful for setting
+out the argument. In any case, if the first four assumptions are true,
+then they should be consistent with \textbf{Good-Bad}. Given those
+assumptions, here is Lewis's argument.
+
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1071}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3929}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Pr(Å) & ~=~V(A) & \\
+& ~=~Σ\textsubscript{\emph{w}}V(\emph{w}) Pr(\emph{w}~\textbar~A) &
+(\textbf{Additivity}) \\
+& ~=~Σ\textsubscript{\emph{w}}V\textsubscript{A}(\emph{w})
+Pr(\emph{w}~\textbar~A) & (\textbf{Invariance}) \\
+& ~=~Σ\textsubscript{\emph{w}}V\textsubscript{A}(\emph{w})
+Pr\textsubscript{A}(\emph{w} \textbar~A) & (\textbf{Restricted
+Conditionalisation}) \\
+& ~=~V\textsubscript{A}(A) & (\textbf{Additivity}, applied to updated
+values) \\
+& ~=~Pr\textsubscript{A}(Å) & (\textbf{Equation}, again after
+updating) \\
+& ~=~Pr(Å~\textbar~A) & (\textbf{Restriced Conditionalisation}) \\
+\end{longtable}
+
+But it is absurd that A and Å are independent. At least, it's absurd if
+evaluative uncertainty is coherent. The following situation seems
+perfectly possible. The agent knows someone, call them Peter, who they
+greatly admire. Peter faces a difficult decision; let A be that he takes
+one option, and B that he takes the other salient option. Right now
+agent thinks it is 60\% likely that A is good, and 40\% likely that B is
+good. But agent \emph{really} admires Peter. They are sure that whatever
+Peter does, it will be good. So conditional on A, their credence in Å is
+100\%. This all seems coherent, so the conclusion of Lewis's argument
+must be mistaken. Lewis himself argues that independence leads to
+incoherence, so the last line of the argument is a reductio.
+
+Now the argument I've given might not exactly look like the argument
+Lewis gives. He spends a lot of time in each paper spelling out a
+different reason that the independence conclusion is absurd. But despite
+the amount of attention Lewis gives to this issue, whether it is
+plausible to say A and Å are always independent is not at issue. All of
+Auntie's defenders in the literature (at least all the ones I've read)
+agree that it is not plausible. They don't try to accept the conclusion
+of this reductio; rather they reject one of the premises. The premises
+I've presented here are all ones that Lewis makes at some point or other
+in setting out the argument for independence. So I think the version
+I've given here, following Collins and Ittay-Rozen, is faithful enough
+to Lewis.
+
+\section{Questioning the Assumptions}\label{questioning-the-assumptions}
+
+Let's think a bit harder about what Auntie says about this agent who is
+waiting to see what admirable Peter will do. Given Auntie's view, should
+agent prefer that Peter makes A true, or should they be indifferent
+about whether Peter makes A or B true? Both options have some
+plausibility. On the one hand, right now the agent thinks that A is a
+little likelier to be good. On the other hand, whatever Peter does, the
+agent will be completely happy with it, because they will then think
+that Peter has done the right thing.
+
+I'm not going to resolve this question for Auntie; at the end I'll come
+back to the question and place it in a broader philosophical context.
+What I do want to stress is that precisifying Auntie's view requires
+saying what she thinks about this question. And the assumptions one
+attributes to Auntie should be consistent with her answer. Lewis's
+argument does not satisfy this constraint, whatever Auntie says about
+agent and Peter.
+
+Assume, first, that agent wants Peter to do A, because it's right now
+what is thought to be better. Then agent has to reject
+\textbf{Additivity}. \textbf{Additivity} is the rule for people who
+evaluate choices conditional on those things being done, not for people
+who evaluate choices given their current values. As Collins points out,
+it's the rule for one-boxing in Newcomb's Problem, and it is weird that
+a two-boxer like Lewis should appeal to it.
+
+So assume, alternatively, that Auntie thinks the agent should be
+indifferent between Peter's choices. Then Auntie will reject
+\textbf{Equation}. According to \textbf{Equation}, the agent should
+value propositions according to their current evaluations of the
+goodness of the proposition. But on this assumption, the agent evaluates
+propositions like A and B according to how good they are thought to be
+conditional on obtaining. That is, Auntie's view is not
+\textbf{Equation}, but V(A)~=~Pr(Å~\textbar~A). This is exactly what
+Price recommended Auntie adopt immediately after Lewis's first paper
+came out.
+
+In the second paper Lewis has a response to Price's suggestion, but as
+Hàjek (\citeproc{ref-Hajek2015}{2015}) observes, it is very hard to
+understand what the response really is. Lewis states the kind of view
+Price endorses, makes a couple of observations about it, and then ends
+as if the question is settled. If it's meant to be a reductio, it's
+really not clear what the implausible conclusion is. Hàjek speculates
+that a paragraph or more simply went missing; the text is puzzling
+enough to take such speculations seriously.\footnote{Since Hàjek's paper
+  was published, we've had two volumes of correspondance by Lewis
+  published (\citeproc{ref-LewisLetters1}{Beebee and Fisher 2020a},
+  \citeproc{ref-LewisLetters2}{2020b}). But unfortunately nothing in
+  them sheds light on this interpretative question.}
+
+Whatever Auntie says about agent and Peter, she has grounds to reject
+one of the assumptions Lewis attributes to her. If she says agent
+prefers Peter to make A true, the \textbf{Additivity} assumption should
+be rejected; as indeed Collins rejects it. If she says agent is
+indifferent between Peter's actions, the \textbf{Equation} should be
+rejected; as indeed Price rejects it. Attributing both
+\textbf{Additivity} and \textbf{Equation} to Auntie implies that Auntie
+inconsistently holds that agent both prefers and does not prefer that
+Peter makes A true. Auntie certainly has grounds to reject this
+attribution of inconsistent assumptions.
+
+That is to say, while Lewis did succeed in deriving an implausible
+result from Auntie's view plus some auxiliary hypotheses, it is
+perfectly reasonable to say that the auxiliary hypotheses are to blame
+rather than Auntie's view. Once Auntie decides what to say about Peter
+and his admirer, she has a conclusive reason to reject one or other of
+these auxiliary hypothesis. Whatever other flaws Auntie's view has, it
+isn't to blame for the implausible conclusion Lewis derives from it.
+
+\section{Auntie the Capitalist}\label{auntie-the-capitalist}
+
+There is another assumption which Auntie should obviously reject:
+\textbf{Good-Bad}. Lewis acknowledges that this is a simplifying
+assumption, but says that we can restate Auntie's view without it. The
+real assumption is that there for any \emph{w}, there is a numerical
+value for \emph{w}, which measures how good it is. Let g be the function
+from worlds to goodness, so g(\emph{w})~=~\emph{x} means that \emph{w}
+has \emph{x} units of goodness. The assumption that g is a function into
+the reals isn't completely trivial, but let's assume Auntie is happy to
+live with it. Then really what Lewis needs is \textbf{Corrected
+Equation}.
+
+\begin{description}
+\tightlist
+\item[Corrected Equation]
+The way to represent Auntie's anti-Humean view is
+\newline V(A)~=~Σ\textsubscript{\emph{w}}g(\emph{w})~Pr(\emph{w}). That
+is, agent values A according to its expected goodness.
+\end{description}
+
+Lewis shows, using the same assumptions as before, that given this
+understanding of Auntie's view, it also leads to absurdity. And as
+before, I think his argument requires attributing views to Auntie that
+she would surely reject as soon as she makes her mind up about the agent
+who admires Peter. But let's say that I'm wrong about that. There is
+something else problematic about Lewis's argument at this point.
+
+Nothing else in Lewis's argument turns on the fact that g is a measure
+of goodness. The argument goes through just as well (or just as badly)
+for any numerical function that g could be. That function could be a
+measure of anything. It could, for instance, be a measure of how much
+profit agent makes in \emph{w}. In that case, \textbf{Corrected
+Equation} says that agent values propositions according to their
+expected profitability. That's just the standard theory of the firm from
+basic economics. If Lewis's argument shows that Auntie's view is
+inconsistent, it also shows that the standard theory of the firm is
+inconsistent.
+
+To be sure, there is a lot wrong with the `standard theory of the firm'
+as a theory of either real or idealised firms. But it's rather
+implausible that it's trivial, and particularly implausible that it
+could be shown to be trivial by some simple decision theory. That would
+be particularly ironic given how much of decision theory was developed
+to explain decision making by idealised firms.
+
+The lesson here is that Lewis's argument over-generates. If it shows
+anything, it shows that having one's valuation track the expected value
+of any numerical measure is inconsistent. But that can't be right.
+Having no priority in the world other than maximising expected profits
+might be morally abhorrent, but it isn't inconsistent with decision
+theory. So Lewis's argument must be wrong.
+
+\section{A Puzzle}\label{a-puzzle}
+
+That completes my objection to Lewis's argument. I'll end with a puzzle
+that arises from the discussion here.
+
+Go back to agent the agent who thinks that whatever Peter does will be
+correct. Change the case so that agent is in fact Peter. That is, in
+this version of the case, Peter isn't sure what's right, and isn't sure
+what he'll do, but is sure that whatever he does will be good. Assume
+that Peter only cares about maximising the good, even when he doesn't
+know what is in fact good.\footnote{Perhaps Peter was convinced by the
+  arguments from William MacAskill
+  (\citeproc{ref-MacAskillEtAl2020}{2020}) that this is what he should
+  do.} Question: What should Peter want to have happen, assuming all
+this?
+
+I can think of at least four coherent responses to this question.
+
+First, one might think that since Peter thinks A is more likely to be
+good, and he wants to do good, he should make A true.
+
+Second, one might think that since Peter will be sure he does the good
+thing whatever he does, he should be indifferent between making A true
+and making B true.
+
+Third, one might think that this is really just a special case of
+Newcomb's Problem, where maximising expected utility according to
+unconditional probabilities (over states causally independenrt of one's
+action) gives a different recommendation to maximising expected utility
+according to conditional probability. This answer says that whatever you
+say about Newcomb's Problem, whether you say conditional probabilities
+are to be used (as most one-boxers say), or unconditional probabilities
+are to be used (as some two-boxers say), the same goes here.
+
+The third answer isn't inconsistent with the previous two. But it is a
+distinct answer. It is an answer that people who disagree about
+Newcomb's Problem can agree is correct. But it's also a substantive
+claim, since there is a coherent way to deny it. In particular, it is
+coherent to adopt the version of causal decision theory that Lewis
+(\citeproc{ref-Lewis1981bn}{1981}) defends for descriptive uncertainty,
+and something that looks like evidential decision theory for moral
+uncertainty.
+
+Here is how that might go. Following Bradley and List
+(\citeproc{ref-BradleyList2009}{2009}), let worlds be ordered pairs
+⟨\emph{d},~\emph{v}⟩, such that \emph{d} settles the (relevant)
+descriptive facts, and \emph{v} is a numerical measure of the goodness
+of the world.\footnote{This way of thinking about worlds helps explain
+  some terminology that I left undefined earlier. A descriptive
+  proposition is a proposition \emph{p} such that for any
+  \emph{d},~\emph{v}, and \emph{v}ʹ, if ⟨\emph{d},~\emph{v}⟩ and
+  ⟨\emph{d},~\emph{v}ʹ⟩ are worlds, then ⟨\emph{d},~\emph{v}⟩~∈~\emph{p}
+  iff ⟨\emph{d},~\emph{v}ʹ⟩~∈~\emph{p}.} In the terminology used earlier
+g((\emph{d},~\emph{v}))~=~\emph{v}; the second term is how good the
+world is.
+
+Let K be a partition of the worlds such that whatever the agent does
+makes no causal difference to which member of the partition is actual.
+Intuitively, the true element of K is the conjunction of all the facts
+that are outside the causal control of the chooser. Crucially, K settles
+the \emph{facts} outside the agent's causal control; it does not settle
+anything evaluative.\footnote{That is, all the cells of the partition
+  are descriptive propositions.} For any proposition A, the value to the
+agent of A is given by this equation:
+
+\begin{quote}
+V(A) = Σ\textsubscript{\emph{k}∈K}Pr(\emph{k})
+Σ\textsubscript{⟨\emph{d},~\emph{v}⟩∈\emph{k}}
+\emph{v}Pr(⟨\emph{d},~\emph{v}⟩~\textbar~A~∧~\emph{k})
+\end{quote}
+
+The agent should then make true the proposition with the highest value
+that it is within their power to make true. The inner sum in this
+equation looks like preferred definition of decision-theoretic value for
+Evidential Decision Theorists. In this respect I'm following Lewis
+closely. As he says, ``Within a single dependency hypothesis, so to
+speak, V-maximising {[}i.e., Evidential Decision Theory{]} is right.''
+(\citeproc{ref-Lewis1981bn}{Lewis 1981, 7}). The idea here is that if
+Lewis could be right about this claim, and all moral uncertainty takes
+place within dependency hypotheses, then the puzzle here will not be
+just like Newcomb's Problem.
+
+Finally, one might think this version of the Peter example is
+incoherent. Couldn't one simply think about what to do, and then having
+made a decision, learn what the admirable person thinks is right, and
+hence what is right? Well, maybe it's not so simple. Maybe one thinks
+that one always acts in the right way, even if one's thoughts are not
+always right. Perhaps one has an inner voice, a la Socrates, that
+prevents one from \emph{acting} the wrong way, but which only kicks in
+at the moment of action.
+
+I'm inclined to think that last possibility, where one is somewhat
+confident that one will somehow find oneself unable to act wrongly, is
+just conceivable enough for the example to be coherent. Just like with
+Newcomb's Problem, all that's needed to get the problem going is that
+the action is some evidence of some underlying fact. In Newcomb's
+Problem we can get a difference between Evidential Decision Theory and
+Causal Decision Theory even with an imperfect demon, as long as their
+predictions are known to be better than chance. In this case, we can get
+a difference between maximising conditional expected goodness and
+unconditional expected goodness as long as the decider thinks their
+action is some evidence that they did the right thing. Is that a
+coherent assumption to make? I think it probably is, and if so, it
+raises an interesting question about the details of views on moral
+uncertainty.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-LewisLetters1}
+Beebee, Helen, and A. R. J. Fisher, eds. 2020a. \emph{Philosophical
+Letters of David k. Lewis}. Vol. 1. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-LewisLetters2}
+---------, eds. 2020b. \emph{Philosophical Letters of David k. Lewis}.
+Vol. 2. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-BradleyList2009}
+Bradley, Richard, and Christian List. 2009. {``Desire-as-Belief
+Revisited.''} \emph{Analysis} 69 (1): 31--37. doi:
+\href{https://doi.org/10.1093/analys/ann005}{10.1093/analys/ann005}.
+
+\bibitem[\citeproctext]{ref-Collins2015}
+Collins, Jessica. 2015. {``Decision Theory After Lewis.''} In \emph{A
+Companion to David Lewis}, edited by Barry Loewer and Jonathan Schaffer,
+446--58. John Wiley; Sons.
+
+\bibitem[\citeproctext]{ref-Hajek2015}
+Hàjek, Alan. 2015. {``On the Plurality of Lewis's Triviality Results.''}
+In \emph{A Companion to David Lewis}, edited by Barry Loewer and
+Jonathan Schaffer, 425--45. John Wiley; Sons.
+
+\bibitem[\citeproctext]{ref-Lewis1981bn}
+Lewis, David. 1981. {``Causal Decision Theory.''} \emph{Australasian
+Journal of Philosophy} 59 (1): 5--30. doi:
+\href{https://doi.org/10.1080/00048408112340011}{10.1080/00048408112340011}.
+
+\bibitem[\citeproctext]{ref-Lewis1988}
+---------. 1988. {``Desire as Belief.''} \emph{Mind} 97 (387): 323--32.
+doi:
+\href{https://doi.org/10.1093/mind/xcvii.387.323}{10.1093/mind/xcvii.387.323}.
+
+\bibitem[\citeproctext]{ref-Lewis1996}
+---------. 1996. {``Desire as Belief {II}.''} \emph{Mind} 105 (418):
+303--13. doi:
+\href{https://doi.org/10.1093/mind/105.418.303}{10.1093/mind/105.418.303}.
+
+\bibitem[\citeproctext]{ref-NissanRozen2013}
+Nissan-Rozen, Ittay. 2013. {``Jeffrey Conditionalization, the Principal
+Principle, the Desire as Belief Thesis, and Adams's Thesis.''}
+\emph{British Journal for the Philosophy of Science} 64 (4): 837--50.
+doi: \href{https://doi.org/10.1093/bjps/axs039}{10.1093/bjps/axs039}.
+
+\bibitem[\citeproctext]{ref-Price1989}
+Price, Huw. 1989. {``Defending Desire-as-Belief.''} \emph{Mind} 98
+(389): 119--27. doi:
+\href{https://doi.org/10.1093/mind/XCVIII.389.119}{10.1093/mind/XCVIII.389.119}.
+
+\bibitem[\citeproctext]{ref-MacAskillEtAl2020}
+William MacAskill, Toby Ord, Krister Bykvist. 2020. \emph{Moral
+Uncertainty}. Oxford: {O}xford {U}niversity {P}ress.
+
+\end{CSLReferences}
+
+
+
+\noindent Unpublished. Posted online in 2024.
+
+\end{document}
