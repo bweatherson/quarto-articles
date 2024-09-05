@@ -14,6 +14,7 @@ categories:
   - in progress
   - unpublished
 pdf-engine: xelatex
+bibliography: ../../autobib.bib
 draft: true
 execute:
   echo: false
@@ -97,7 +98,8 @@ window <- 0
 min_data <- 5
 
 active_philo_bib <- philo_bib_fix |>
-  filter(year >= start_year, year <= end_year)
+  filter(year >= start_year, year <= end_year) |>
+  mutate(tbl_cite = paste0(auth, " [-@",str_replace(id,":",""),"] \"", art_title, "\""))
 
 authadjust <- function(x){
   paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
@@ -171,7 +173,7 @@ for (i in 4:0){
     mutate(f_rank = row_number()) |>
     filter(f_rank <= 100) |>
     ungroup() |>
-    left_join(philo_bib_fix, by = c("old" = "id", "old_year" = "year"))
+    left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year"))
   
   still_standing <- combined_cites |>
     filter(e_rank <= 20) |>
@@ -223,13 +225,14 @@ Then choose the top twenty articles, i.e., the twenty articles that were most ci
 
 ```{r}
 #| label: tbl-early-1990s
-#| cache: true
+#| cache: false
 #| tbl-cap: "The twenty articles from 1990-1994 most widely cited at the time."
 
 kable(
   still_standing |>
     filter(range_year == 1990) |>
-    select(Article = full_cite)
+    mutate(Article = tbl_cite) |>
+    select(Article)
 )
 ```
 
@@ -239,13 +242,13 @@ The answer is just four: Stephen Yablo's paper on mental causation, Philip Kitch
 
 ```{r}
 #| label: tbl-early-1990s-expanded
-#| cache: true
+#| cache: false
 #| tbl-cap: "Early and late citations to twenty articles from 1990-1994."
 
 kable(
   still_standing |>
     filter(range_year == 1990) |>
-    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = full_cite)
+    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = tbl_cite)
 )
 ```
 
@@ -253,12 +256,12 @@ This is extremely unusual, though as we'll see in a bit it is something of an ou
 
 ```{r}
 #| label: fig-still-standing
-#| cache: true
+#| cache: false
 #| fig-cap: "How many of the twenty articles most cited at the time are still widely cited."
 
 still_standing_by_range |>
   ggplot(aes(x = range_year, y = n)) +
-  geom_point() +
+  geom_point(size = 5) +
   labs(x = element_blank(),
        y = element_blank()) +
   ylim(0, 20)
@@ -272,12 +275,12 @@ Instead of looking at how many of the twenty articles crossed a somewhat arbitra
 
 ```{r}
 #| label: fig-median-cites
-#| cache: true
+#| cache: false
 #| fig-cap: "The median number of recent citations to twenty articles most cited at the time."
 
 median_new_cites_of_classics |>
   ggplot(aes(x = range_year, y = cites)) +
-  geom_point() +
+  geom_point(size = 5) +
   labs(x = element_blank(),
        y = element_blank()) +
   ylim(0, 42)
@@ -289,7 +292,7 @@ The 1970-1974 period does surprisingly badly on this measure. That period includ
 
 ```{r}
 #| label: tbl-early-1970s-sample
-#| cache: true
+#| cache: false
 #| tbl-cap: "Four very widely cited articles from the early 1970s"
 
 kable(
@@ -297,7 +300,7 @@ kable(
     filter(range_year == 1970) |>
     arrange(desc(l_cites)) |>
     slice(1:4) |>
-    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = full_cite)
+    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = tbl_cite)
 )
 ```
 
@@ -317,13 +320,13 @@ If we set *y* to be 1990, that gives us the results we saw in @tbl-early-1990s a
 
 ```{r}
 #| label: fig-all-still-standing
-#| cache: true
+#| cache: false
 #| fig-cap: "How many of the twenty articles most cited at the time are still widely cited."
 
 all_still_standing |>
   filter(range_year >= 1965, range_year <= 2010) |>
   ggplot(aes(x = range_year, y = n)) +
-  geom_point() +
+  geom_point(size = 5) +
   labs(x = element_blank(),
        y = element_blank()) +
   ylim(0, 20)
@@ -335,7 +338,7 @@ It's easy to explain why the value for 1989 is different. The articles listed in
 
 ```{r}
 #| label: tbl-top-1989
-#| cache: true
+#| cache: false
 #| tbl-cap: "Widely cited articles from 1989"
 
 new_citation_tibble <- citation_tibble |>
@@ -361,8 +364,8 @@ the_89_late_cites <- the_89_late_cites |>
 
 the_89_both <- the_89_early_cites |>
   inner_join(the_89_late_cites, by = c("old", "old_year", "range_year")) |>
-  left_join(philo_bib_fix, by = c("old" = "id", "old_year" = "year")) |>
-  select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = full_cite)
+  left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year")) |>
+  select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = tbl_cite)
 
 kable(the_89_both)
 ```
@@ -371,7 +374,7 @@ The range 1989-1993 includes those four articles which the range 1990-1994 does 
 
 ```{r}
 #| label: tbl-top-1991
-#| cache: true
+#| cache: false
 #| tbl-cap: "Widely cited articles from 1991"
 
 new_citation_tibble <- citation_tibble |>
@@ -411,14 +414,14 @@ the_91_both <- the_91_early_cites |>
   mutate(f_rank = row_number()) |>
   filter(f_rank <= 100) |>
   ungroup() |>
-  left_join(philo_bib_fix, by = c("old" = "id", "old_year" = "year")) |>
+  left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year")) |>
   filter(e_rank <= 20)
 
 kable(
   the_91_both |>
     arrange(desc(l_cites)) |>
     filter(l_cites >= 16) |>
-    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = full_cite)
+    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = tbl_cite)
 )
 ```
 
@@ -448,14 +451,14 @@ But instead of asking how many of these twenty are 'widely cited', instead calcu
 
 ```{r}
 #| label: fig-all-median
-#| cache: true
+#| cache: false
 #| fig-cap: "The median number of recent cites for the twenty articles most cited at the time."
 
 require(ggforce)
 all_median |>
   filter(range_year >= 1965, range_year <= 2010) |>
   ggplot(aes(x = range_year, y = cites)) +
-  geom_point() +
+  geom_point(size = 5) +
   labs(x = element_blank(),
        y = element_blank()) +
   ylim(0, 42)
@@ -487,7 +490,7 @@ A simple explanation of @fig-all-median would be that no one discusses papers fr
 
 ```{r}
 #| label: fig-all-widely-cited
-#| cache: true
+#| cache: false
 #| fig-cap: "Number of widely cited articles published each year"
 
 citation_tibble |>
@@ -495,7 +498,7 @@ citation_tibble |>
   group_by(old) |>
   tally() |>
   filter(n >= 16) |>
-  left_join(philo_bib_fix, by = c("old" = "id")) |>
+  left_join(active_philo_bib, by = c("old" = "id")) |>
   select(n, auth, year, art_title, journal, everything()) |>
   ungroup() |>
 #  group_by(year) |>
@@ -509,7 +512,7 @@ The number of widely cited articles goes up, but it doesn't go up dramatically e
 
 ```{r}
 #| label: fig-all-median-unqualified
-#| cache: true
+#| cache: false
 #| fig-cap: "Median citations of the twenty most cited articles from overlapping five year periods."
 
 median_cites_unqualified <- tribble(~year, ~median)
@@ -525,7 +528,7 @@ for (y in 1974:2008){
     add_row(year = y, median = median(temp$n))
 }
 
-ggplot(median_cites_unqualified, aes(x = year, y = median)) + geom_point() +
+ggplot(median_cites_unqualified, aes(x = year, y = median)) + geom_point(size = 5) +
       labs(x = element_blank(),
        y = element_blank()) 
 ```
@@ -540,7 +543,7 @@ Second, the absolute values on @fig-all-median-unqualified are so high that it t
 
 ```{r}
 #| label: latebloomcode
-#| cache: true
+#| cache: false
 
 the_700 <- c()
 
@@ -564,7 +567,7 @@ for (y in 1974:2008){
     slice(1:20) |>
     select(-score, -the_rank) |>
     mutate(range_year = y) |>
-    left_join(philo_bib_fix, by = c("old" = "id")) |>
+    left_join(active_philo_bib, by = c("old" = "id")) |>
     select(e_cites, l_cites, auth, year, range_year, art_title, journal, everything()) 
   
   the_700 <- bind_rows(the_700, the_20)
@@ -590,7 +593,7 @@ appear_median <- the_700 |>
 #     distinct(old, .keep_all = TRUE) |>
 #     select(year, l_cites) |>
 #     ggplot(aes(x = year, y = l_cites)) + 
-#       geom_point() + 
+#       geom_point(size = 5) + 
 #       scale_y_log10() +
 #       ggrepel::geom_label_repel(data = filter(the_700, appear == 3, (l_cites <= 1 | (year >= 2000 & l_cites <= 10))), aes(label = shortcite))
 
@@ -607,7 +610,7 @@ widely_cited <- citation_tibble |>
   summarise(cites = n(), .groups = "drop") |>
   pivot_wider(id_cols = c(old, old_year), names_from = cite_age, values_from = cites) |>
   replace_na(list(e_cites = 0, l_cites = 0)) |>
-  left_join(philo_bib_fix, by = c("old" = "id", "old_year" = "year")) |>
+  left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year")) |>
   select(e_cites, l_cites, auth, old_year, art_title, journal, everything()) |>
   filter(l_cites >= 16)
 
@@ -635,7 +638,7 @@ kable(
   very_late_bloomers |>
     arrange(-l_cites) |>
     slice(1:10) |>
-    select(Citations = l_cites, Article = full_cite)
+    select(Citations = l_cites, Article = tbl_cite)
 )
 ```
 
@@ -654,8 +657,8 @@ This leaves us with the last possible explanation: the reason that the medians a
 The simplest way to see how well the data support this is to focus on those articles which appear in many of the overlapping lists of highly cited recent articles. An article published in year *y* can appear in the twenty most recent cited articles in each range from [*y*-4, *y*] to [*y*, *y*+4]. Let's start by looking at the ones that appear in four or five of these lists. @fig-four-five-recent shows how often those articles are cites from 2020 to mid-2022.
 
 ```{r}
-#| label: @fig-four-five-recent
-#| cache: true
+#| label: fig-four-five-recent
+#| cache: false
 #| fig-cap: "Number of recent citations for very highly cited articles in different years."
 
 
@@ -682,7 +685,7 @@ The thing that I think is most notable is looking at how many dots are under the
 
 ```{r}
 #| label: tbl-four-five-fade-away
-#| cache: true
+#| cache: false
 #| tbl-cap: "Highly cited articles with fewer than ten recent citations."
 
 kable(
@@ -691,15 +694,15 @@ kable(
     filter(l_cites < 10, appear >= 4) |>
     distinct(old, .keep_all = TRUE) |>
     arrange(year) |>
-    select(`Late Citations` = l_cites, Article = full_cite)
+    select(`Late Citations` = l_cites, Article = tbl_cite)
 )
 ```
 
 We see the same pattern with papers that turn up in three of the top twenty lists. @fig-three-recent shows how many of these papers there were each year, and how often they are cited from 2020 to mid-2022.
 
 ```{r}
-#| label: @fig-three-recent
-#| cache: true
+#| label: fig-three-recent
+#| cache: false
 #| fig-cap: "Number of recent citations for highly cited articles in different years."
 
 
@@ -726,7 +729,7 @@ Focus again on the papers with fewer than ten citations since 2020. On this grap
 
 ```{r}
 #| label: tbl-three-fade-away
-#| cache: true
+#| cache: false
 #| tbl-cap: "Highly cited articles with fewer than ten recent citations."
 
 kable(
@@ -735,7 +738,7 @@ kable(
     filter(l_cites < 10, appear == 3) |>
     distinct(old, .keep_all = TRUE) |>
     arrange(year) |>
-    select(`Late Citations` = l_cites, Article = full_cite)
+    select(`Late Citations` = l_cites, Article = tbl_cite)
 )
 ```
 
@@ -749,7 +752,7 @@ Asking why a paper doesn't get many citations is like asking why a particular te
 
 That's not quite what we're trying to do here. To continue the analogy, what we're asking here is why a player who used to go deep into the tournament now isn't getting out of the second round. These papers are, for the most part, still in the top ten percent of papers by citations. But they aren't in the top one percent any more, and that's what is to be explained.
 
-In some cases, the explanation is quite simple: the citations simply got **captured** by something else. When a paper is expanded into a book, or becomes a chapter of a prominent book, very often the citations will simply move to the book rather than the paper. There are three clear cases of this in @tbl-four-five-recent and @tbl-three-recent: the two papers by Rawls, and Sider's "Four Dimensionalism". Rawls's paper "Justice as Fairness" and Sider's paper "Four Dimensionalism" both became books with the same title. And this rather decreased the number of times they were cited. The other Rawls paper, "The Priority of Right and Ideas of the Good", became chapter 5 of his 1993 book _Political Liberalism_.
+In some cases, the explanation is quite simple: the citations simply got **captured** by something else. When a paper is expanded into a book, or becomes a chapter of a prominent book, very often the citations will simply move to the book rather than the paper. There are three clear cases of this in @tbl-four-five-fade-away and @tbl-three-fade-away: the two papers by Rawls, and Sider's "Four Dimensionalism". Rawls's paper "Justice as Fairness" and Sider's paper "Four Dimensionalism" both became books with the same title. And this rather decreased the number of times they were cited. The other Rawls paper, "The Priority of Right and Ideas of the Good", became chapter 5 of his 1993 book _Political Liberalism_.
 
 It's a little harder to judge whether citations are affected by being reprinted in a collected volume. Three of the four Kim papers on the list are in his 1993 collection _Supervenience and Mind_. This study doesn't look at books, so it wouldn't capture those citations. But it could be that the book was getting some of the citations that the papers would have received. There are two ways this could happen. One is that people might directly cite a reprinted passage, but simply cite the book. I looked (via Google Scholar) at the citations to _Supervenience and Mind_ in these hundred journals, and I never saw that happen for these three Kim papers. But I wouldn't trust this manual checking, and I did see it for other Kim papers, so it might happen. The other way is that many people feel (fairly enough) that they should name-check Kim somewhere in their discussion of supervenience, so there were several undirected citations to the book that perhaps would have ended up as citations to one of these papers if the book didn't exist. I don't think it's as dramatic an effect as for Rawls and Sider, but it is a consideration.
 
@@ -759,4 +762,3 @@ One notable thing about citations is that papers that people mostly disagree wit
 
 Finally, some papers might **fall out of fashion**. There was a lot more discussion of mental content, and of material constitution, in the journals in the 1980s and 1990s than there is now. That's true in particular of relatively a priori, armchair work on those topics. That, I think, is what has happened with the papers by Burke, Zimmerman, Jackson and Pettit, Schiffer, and Falvey and Owens. There are considerably more papers on these two topics if we look at the papers that are only in one or two of the top twenty lists, or which have ten to fifteen citations in recent years (and hence are still pulling the median downward).
 
-One particularly notable instance of this is Michael McKinsey's paper "Anti-Individualism and Privileged Access". It appears on three of the top twenty lists, and has ten citations in the recent literature. What's particularly distinctive about it is that three papers which cite it are also in the top twenty lists.

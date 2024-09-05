@@ -76,6 +76,39 @@ marginparsep=0in]{geometry}
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \setlength\heavyrulewidth{0ex}
 \setlength\lightrulewidth{0ex}
@@ -182,7 +215,8 @@ The main cause of the drop in citations seems to be simple changes in
 trends. In particular, so much journal attention was paid to relatively
 a priori investigations into mental content. That's not nearly as large
 a part of the philosophical landscape now, so the articles that focus on
-it are less widely cited.
+it are less widely cited. Parfit
+(\citeproc{ref-WOS:000070778500002}{1997})
 
 The dataset I'm using is the same as in
 \href{http://brian.weatherson.org/quarto/posts/citations-raw-data/citations.html}{an
@@ -318,7 +352,10 @@ shows how often each of these articles were cited in the `early' years,
 i.e., 1990-1999, and how often they are cited in the `late years', i.e.,
 from 2020 to mid 2022.
 
-\begin{longtable}[]{@{}rrl@{}}
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0496}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0455}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.9050}}@{}}
 
 \caption{\label{tbl-early-1990s-expanded}Early and late citations to
 twenty articles from 1990-1994.}
@@ -326,31 +363,61 @@ twenty articles from 1990-1994.}
 \tabularnewline
 
 \toprule\noalign{}
-Early Cites & Late Cites & Article \\
+\begin{minipage}[b]{\linewidth}\raggedleft
+Early Cites
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Late Cites
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-33 & 9 & Davidson 1990 \\
-32 & 33 & Neander 1991 \\
-27 & 66 & Yablo 1992 \\
-26 & 7 & Crane 1990 \\
-21 & 6 & Kim 1990 \\
-20 & 54 & Kitcher 1990 \\
-20 & 18 & Neander 1991 \\
-20 & 13 & Kitcher 1992 \\
-19 & 11 & Rosen 1990 \\
-19 & 8 & Burke 1992 \\
-18 & 8 & Schiffer 1992 \\
-17 & 10 & Mckinsey 1991 \\
-17 & 6 & Tye 1990 \\
-17 & 5 & Burke 1994 \\
-17 & 3 & Fodor 1991 \\
-16 & 14 & Laudan 1990 \\
-16 & 9 & Boghossian 1990 \\
-16 & 8 & Salmon 1994 \\
-16 & 8 & Putnam 1994 \\
-16 & 4 & Forbes 1990 \\
+33 & 9 & D Davidson (1990) ``The Structure and Content of Truth,''
+\emph{Journal Of Philosophy} 87~(6):~279-328. \\
+32 & 33 & K Neander (1991) ``Functions as Selected Effects: The
+Conceptual Analyst's Defense,'' \emph{Philosophy Of Science}
+58~(2):~168-184. \\
+27 & 66 & S Yablo (1992) ``Mental Causation,'' \emph{Philosophical
+Review} 101~(2):~245-280. \\
+26 & 7 & T Crane and DH Mellor (1990) ``There is No Question of
+Physicalism,'' \emph{Mind} 99~(394):~185-206. \\
+21 & 6 & JW Kim (1990) ``Supervenience as a Philosophical Concept,''
+\emph{Metaphilosophy} 21~(1-2):~1-27. \\
+20 & 54 & P Kitcher (1990) ``The Division of Cognitive Labor,''
+\emph{Journal Of Philosophy} 87~(1):~5-22. \\
+20 & 18 & K Neander (1991) ``The Teleological Notion of Function,''
+\emph{Australasian Journal Of Philosophy} 69~(4):~454-468. \\
+20 & 13 & P Kitcher (1992) ``The Naturalists Return,''
+\emph{Philosophical Review} 101~(1):~53-114. \\
+19 & 11 & G Rosen (1990) ``Modal Fictionalism,'' \emph{Mind}
+99~(395):~327-354. \\
+19 & 8 & MB Burke (1992) ``Copper Statues and Pieces of Copper: A
+Challenge To the Standard Account,'' \emph{Analysis} 52~(1):~12-17. \\
+18 & 8 & S Schiffer (1992) ``Belief Ascription,'' \emph{Journal Of
+Philosophy} 89~(10):~499-521. \\
+17 & 10 & M McKinsey (1991) ``Anti-Individualism and Privileged
+Access,'' \emph{Analysis} 51~(1):~9-16. \\
+17 & 6 & M Tye (1990) ``Vague Objects,'' \emph{Mind}
+99~(396):~535-557. \\
+17 & 5 & MB Burke (1994) ``Preserving the Principle of 1 Object To a
+Place: A Novel Account of the Relations Among Objects, Sorts, Sortals,
+and Persistance Conditions,'' \emph{Philosophy And Phenomenological
+Research} 54~(3):~591-624. \\
+17 & 3 & JA Fodor (1991) ``A Modal Argument for Narrow Content,''
+\emph{Journal Of Philosophy} 88~(1):~5-26. \\
+16 & 14 & L Laudan (1990) ``Normative Naturalism,'' \emph{Philosophy Of
+Science} 57~(1):~44-59. \\
+16 & 9 & PA Boghossian (1990) ``The Status of Content,''
+\emph{Philosophical Review} 99~(2):~157-184. \\
+16 & 8 & WC Salmon (1994) ``Causality Without Counterfactuals,''
+\emph{Philosophy Of Science} 61~(2):~297-312. \\
+16 & 8 & H Putnam (1994) ``Sense, Nonsense, and the Senses: An Inquiry
+into the Powers of the Human Mind,'' \emph{Journal Of Philosophy}
+91~(9):~445-465. \\
+16 & 4 & G Forbes (1990) ``The Indispensability of Sinn,''
+\emph{Philosophical Review} 99~(4):~535-563. \\
 
 \end{longtable}
 
@@ -411,9 +478,9 @@ period includes the four very widely cited articles listed in
 Table~\ref{tbl-early-1970s-sample}.
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0764}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0701}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.8535}}@{}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0916}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0840}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.8244}}@{}}
 
 \caption{\label{tbl-early-1970s-sample}Four very widely cited articles
 from the early 1970s}
@@ -440,39 +507,6 @@ Person,'' \emph{Journal Of Philosophy} 68 (1): 5-20. \\
 Philosophy} 70 (19): 661-679. \\
 12 & 48 & JJ Thomson (1971) ``A Defense of Abortion,'' \emph{Philosophy
 \& Public Affairs} 1~(1):~47-66. \\
-23 & 33 & H Putnam (1973) ``Meaning and Reference,'' \emph{Journal Of
-Philosophy} 70 (19): 699-711. \\
-11 & 23 & P Foot (1972) ``Morality as a System of Hypothetical
-Imperatives,'' \emph{Philosophical Review} 81~(3):~305-316. \\
-12 & 22 & D Parfit (1971) ``Personal Identity,'' \emph{Philosophical
-Review} 80~(1):~3-27. \\
-11 & 16 & T Burge (1973) ``Reference and Proper Names,'' \emph{Journal
-Of Philosophy} 70 (14): 425-439. \\
-12 & 15 & H Field (1973) ``Theory Change and the Indeterminacy of
-Reference,'' \emph{Journal Of Philosophy} 70 (14): 462-481. \\
-18 & 9 & H Field (1972) ``Tarski's Theory of Truth,'' \emph{Journal Of
-Philosophy} 69 (13): 347-375. \\
-16 & 9 & WV Quine (1970) ``On the Reasons for Indeterminacy of
-Translation,'' \emph{Journal Of Philosophy} 67~(6):~178-183. \\
-18 & 8 & J Kim (1973) ``Causation, Nomic Subsumption, and the Concept of
-Event,'' \emph{Journal Of Philosophy} 70 (8): 217-236. \\
-11 & 6 & JJ Thomson (1971) ``The Time of a Killing,'' \emph{Journal Of
-Philosophy} 68 (5): 115-132. \\
-15 & 5 & A Goldman (1971) ``The Individuation of Action,'' \emph{Journal
-Of Philosophy} 68 (21): 761-774. \\
-13 & 5 & M Devitt (1974) ``Singular Terms,'' \emph{Journal Of
-Philosophy} 71 (7): 183-205. \\
-12 & 5 & E Zahar (1973) ``Why Did Einsteins Programme Supersede
-Lorentz's (1),'' \emph{British Journal For The Philosophy Of Science}
-24~(2):~95-123. \\
-11 & 4 & J Perry (1972) ``Can the Self Divide?,'' \emph{Journal Of
-Philosophy} 69 (16): 463-488. \\
-11 & 4 & AW Wood (1972) ``Marxian Critique of Justice,''
-\emph{Philosophy \& Public Affairs} 1~(3):~244-282. \\
-11 & 1 & R Rorty (1970) ``Incorrigibility as Mark of Mental,''
-\emph{Journal Of Philosophy} 67~(12):~399-424. \\
-15 & 0 & R Rorty (1972) ``The World Well Lost,'' \emph{Journal Of
-Philosophy} 69 (19): 649-665. \\
 
 \end{longtable}
 
@@ -620,17 +654,41 @@ Lewis and Dennett ones, did not get a huge number of citations straight
 away. They counted for the period 1991-1995 but not the period 1990-1994
 because they were so often cited in 2000.
 
-There is a general methodological point here which I've never resolved
-satisfactorily. Just what we mean by saying an article was cited a lot
-`when it came out' is not entirely clear. Does Dennett's paper count as
-frequently cited when it first came out because it started getting a lot
-of citations nine years after publication? There are some borderline
-judgments to be made here.
+There is something nice about this way of counting how many `early'
+cites a paper has. What counts as a citation `at the time' in philosophy
+is somewhat vague. Philosophy moves slowly, at least relative to some
+sciences, so citations within the first five years are clearly early
+citations. Citations when the paper is ten years old or more are not
+early citations. Between those two, there is some vagueness.
 
-Anyway, this shows that there was something a bit unusual about the
-results in Section~\ref{sec-study-one} and Section~\ref{sec-study-two}.
-It was only by a very particular choice of years that the period
-1990-1994 looks so unusual.
+One way to handle that vagueness would be to stipulate what we mean by
+`early'. Any such stipulation would be somewhat arbitrary, and any
+results would have to be checked by re-running the model for other
+stipulations.
+
+The method here of looking at rolling, overlapping, intervals allows us
+to accommodate the vagueness. Consider two hypothetical papers. Paper
+one gets fifty citations the year it comes out, and is never cited
+again. Paper two is not cited for eight years, then gets fifty citations
+every year after that. Paper one will be in the top twenty papers with
+the most early cites for five different periods; all the ones it is
+eligible for. Paper two will only be in the top twenty for one of those
+intervals, the very last one it was eligible for. So for graphs like
+Figure~\ref{fig-all-still-standing}, paper one will impact (and pull
+down), five of the points, while paper two will only impact (and pull
+up), one of them. If paper two had started getting citations earlier, it
+would have impacted more of the points. In that way, graphs like
+Figure~\ref{fig-all-still-standing} take account of the vagueness in
+`early'.
+
+Later on, we will want to focus on articles, like article one, that
+affect many points in the graph, and it's useful to think about why
+different articles might be differentially important to this graph.
+
+Summing up, Figure~\ref{fig-all-still-standing} that there was something
+a bit unusual about the results in Section~\ref{sec-study-one} and
+Section~\ref{sec-study-two}. It was only by a very particular choice of
+years that the period 1990-1994 looks so unusual.
 
 But the broader picture shows that the particular period 1990-1994 was a
 bit unusual relative to its surrounds. It still leaves us with a
@@ -674,7 +732,495 @@ This is a really amazing graph. Every year from 1980 to 1995 is worse
 than every year from 1974 to 1979, and every year from 1996 to the
 present. How could this have happened?
 
-\section{Theories}\label{sec-theories}
+\section{Three Explanations}\label{sec-three-explanations}
+
+When we think about what Figure~\ref{fig-all-median} is measuring, we
+can see that there are three ways that the result might have come about.
+Each of these `ways' suggests different places to look for the
+underlying explanation, but first we need to test which of them matches
+the data.
+
+First, it might be that philosophers in recent years have systematically
+ignored journal articles published in the 1980s and 1990s. If there are
+few widely cited articles from those years, these medians will be pulled
+down.
+
+Second, it might be that the widely cited articles from the 1980s and
+1990s are particularly likely to have not been cited much at the time.
+It's easy to find examples of that. Rae Langton's 1993 paper ``Speech
+Acts and Unspeakable Acts'' has 49 citations between 2020 and mid-2022.
+But it doesn't show up in Figure~\ref{fig-all-median} because it had
+hardly any citations for more than a decade after it was published. If
+the work that philosophers now focus on from the 1980s and 1990s was
+systematically ignored when it first came out, we'd again see the shape
+of the graph in Figure~\ref{fig-all-median}.
+
+Third, it might be that the articles which were particularly heavily
+discussed at the time are discussed much less these days. So consider
+two articles from 1988, Frank Jackson and Philip Pettit's
+``Functionalism and Broad Content'', and John Rawls's ``The Priority of
+Right and Ideas of the Good''. Both of them were so widely discussed
+that they became among the twenty most cited recent articles within five
+years of publication. In the terms discussed earlier, they each impact
+five points on the graph. And this impact is to drag the points down,
+because each of them was only cited five times between 2020 and
+mid-2022. Now I say `only' even though this is still a non-trivial
+number of citations; two-thirds of the papers in the database have no
+citations at all in this time. It is, however, a lot fewer citations
+than you might expect given their immediate prominence.
+
+All three of these explanations get at part of the truth, but I think
+the data suggests the third of them is the most important. One striking
+thing that happens around 2000 is that papers like the Jackson and
+Pettit, and the Rawls, stop showing up in the data. From that point on,
+if a paper is widely discussed when it's published, it's still widely
+discussed from 2020 to mid-2022.
+
+The other two explanations don't explain quite so sharp a break. The
+second explanation does particularly badly on that score; papers that
+don't take off right away but which eventually become very widely
+discussed in recent philosophy are more common in the 2000s than in the
+1990s. The first explanation does a bit better at matching the data, but
+only a bit; there are plenty of papers in the 1980s and 1990s that are
+discussed in recent philosophy, even if they are discussed a bit less
+than papers from the 1970s and 2000s.
+
+Let's look at these explanations in turn to back up those claims.
+
+\section{Explanation 1 - The Missing Decades}\label{sec-missing-decades}
+
+A simple explanation of Figure~\ref{fig-all-median} would be that no one
+discusses papers from the 1980s and 1990s nowadays, so they don't
+discuss papers from the 1980s and 1990s that were widely discussed at
+the time. This is a quarter true at most, as the following two graphs
+show.
+
+Figure~\ref{fig-all-widely-cited} shows the number of papers published
+each year which are cited 16 or more times, i.e., which are `widely
+cited', between 2020 and 2022.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{citations-old-to-new_files/figure-pdf/fig-all-widely-cited-1.pdf}
+
+}
+
+\caption{\label{fig-all-widely-cited}Number of widely cited articles
+published each year}
+
+\end{figure}%
+
+The number of widely cited articles goes up, but it doesn't go up
+dramatically enough to explain Figure~\ref{fig-all-median}. Another way
+to see this is to look at Figure~\ref{fig-all-median-unqualified}. This
+modifies Figure~\ref{fig-all-median} by removing the qualification that
+the articles had to be widely cited at the time. For each rolling five
+year period, it records the median number of citations of the twenty
+most cited articles full stop. (That is, it is the average of the
+citations of the tenth most and eleventh most cited articles from that
+five year period.)
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{citations-old-to-new_files/figure-pdf/fig-all-median-unqualified-1.pdf}
+
+}
+
+\caption{\label{fig-all-median-unqualified}Median citations of the
+twenty most cited articles from overlapping five year periods.}
+
+\end{figure}%
+
+There is a jump at 1996; that is, the range 1996-2000 does much better
+on this metric than any five year range earlier than that. So that's why
+I think this explanation is perhaps a quarter true. But there are two
+reasons to think it isn't the whole story.
+
+First, part of the surprise in Figure~\ref{fig-all-median} was that the
+period 1980-1995 was lower than either side of it. That's not something
+we see in Figure~\ref{fig-all-median-unqualified}. This perhaps explains
+the jump around 1996, but it doesn't explain the drop around 1980.
+
+Second, the absolute values on Figure~\ref{fig-all-median-unqualified}
+are so high that it tells against the kind of explanation being offered
+here. Apart from ranges centered on the mid-1980s, in most five year
+periods there are ten or more papers that are cited forty or more times
+in the recent literature. That's easily enough to make the dip in
+Figure~\ref{fig-all-median} go away. The key thing here is to not just
+look at the shape of Figure~\ref{fig-all-median-unqualified}, but to
+look at the scale. It's just not true that philosophers are
+systemtically ignoring work from the 1980s and 1990s, even if they
+aren't paying it quite as much attention as they are paying to work from
+the early 2000s.
+
+\section{Explanation 2 - Late Bloomers}\label{sec-late-bloomers}
+
+Before looking at the data, I would have guessed that this was the right
+explanation: the distinctive thing about the 1980s and 1990s was that
+there was so much interesting work being done whose interest was only
+recognised much later. That is, to put it bluntly, not what the data
+shows at all. It's true that papers like Langton's 1993 paper exist. But
+there are many more such papers outside the 1980s and 1990s than inside
+them.
+
+Table~\ref{tbl-very-late-bloomers} comes from taking all the articles
+that never appear on the lists of twenty most cited at the time
+articles, and sorting them by how many citations they have from 2020 to
+mid-2022.
+
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0613}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9387}}@{}}
+
+\caption{\label{tbl-very-late-bloomers}Articles with the higher number
+of recent citations that are not in the top twenty for any five year
+span.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+156 & S Haslanger (2000) ``Gender and Race: (What) Are They? (What) Do
+We Want Them To Be?,'' \emph{Noûs} 34~(1):~31-55. \\
+96 & JM Joyce (1998) ``A Nonpragmatic Vindication of Probabilism,''
+\emph{Philosophy Of Science} 65~(4):~575-603. \\
+94 & D Lewis (1979) ``Scorekeeping in a Language Game,'' \emph{Journal
+Of Philosophical Logic} 8~(3):~339-359. \\
+84 & J D'Arms and D Jacobson (2000) ``The Moralistic Fallacy: On the
+`Appropriateness' of Emotions,'' \emph{Philosophy And Phenomenological
+Research} 61~(1):~65-90. \\
+74 & H Douglas (2000) ``Inductive Risk and Values in Science,''
+\emph{Philosophy Of Science} 67~(4):~559-579. \\
+67 & AI Goldman (2001) ``Experts: Which Ones Should You Trust?,''
+\emph{Philosophy And Phenomenological Research} 63~(1):~85-110. \\
+64 & K DeRose (1992) ``Contextualism and Knowledge Attributions,''
+\emph{Philosophy And Phenomenological Research} 52~(4):~913-929. \\
+60 & SL Darwall (1977) ``Two Kinds of Respect,'' \emph{Ethics}
+88~(1):~36-49. \\
+57 & AM Smith (2005) ``Responsibility for Attitudes: Activity and
+Passivity in Mental Life,'' \emph{Ethics} 115~(2):~236-271. \\
+56 & P Hieronymi (2005) ``The Wrong Kind of Reason,'' \emph{Journal Of
+Philosophy} 102~(9):~437-457. \\
+
+\end{longtable}
+
+There are two things to note about this list.
+
+One is that it is much more female than any list we've seen so far. Four
+of the ten papers are written by women. There is an interesting research
+project here about the difference in citation dynamics for papers
+written by women and men, but I'll leave that for another day.
+
+The other is that only two of the papers are from the 1990s, and none
+are from the 1980s. One of those two is Joyce's 1998 paper that
+(eventually) launched the accuracy-first program in epistemology.
+Because it is so late in the 1990s, it could only have affected the
+pattern in Figure~\ref{fig-all-median} at the very margin.
+
+That's so say, while it's true that the papers like Langton's, and
+DeRose's 1992 paper, were published in the 1990s, that's not what makes
+the decade stand out. Every decade has papers like that. If anything,
+papers like that were rarer in the 1990s, and especially the 1980s, than
+before or after. So this isn't the explanation of
+Figure~\ref{fig-all-median}.
+
+\section{Explanation 3 - Fade Aways}\label{sec-fade-aways}
+
+This leaves us with the last possible explanation: the reason that the
+medians are so low in the 1980s and 1990s is that many articles which
+are in the list of `widely cited at the time', simply aren't cited that
+much in the 2020s.
+
+The simplest way to see how well the data support this is to focus on
+those articles which appear in many of the overlapping lists of highly
+cited recent articles. An article published in year \emph{y} can appear
+in the twenty most recent cited articles in each range from
+{[}\emph{y}-4,~\emph{y}{]} to {[}\emph{y},~\emph{y}+4{]}. Let's start by
+looking at the ones that appear in four or five of these lists.
+Figure~\ref{fig-four-five-recent} shows how often those articles are
+cites from 2020 to mid-2022.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{citations-old-to-new_files/figure-pdf/fig-four-five-recent-1.pdf}
+
+}
+
+\caption{\label{fig-four-five-recent}Number of recent citations for very
+highly cited articles in different years.}
+
+\end{figure}%
+
+Note that Figure~\ref{fig-four-five-recent} uses a log scale on the
+y-axis; otherwise the whole graph would have to be compressed to
+properly show how many citations ``New Work for a Theory of Universals''
+has. Note also that the two dots in the lower left are a bit misleading.
+These two articles have zero citations since 2020, and zero points don't
+show up on a log scale. So I represented them as having 0.5 citations
+each. Also, I've added a small amount of `jitter' to the graph so
+overlapping points are visible.
+
+The thing that I think is most notable is looking at how many dots are
+under the 10 citations line. Before 1980 there are two such articles.
+Between 1980 and 1995 there are eleven. And then after 1995 there is
+just one. Table~\ref{tbl-four-five-fade-away} goes lists these articles.
+
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0641}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9359}}@{}}
+
+\caption{\label{tbl-four-five-fade-away}Highly cited articles with fewer
+than ten recent citations.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedleft
+Late Citations
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & HN Castañeda (1977) ``Perception, Belief, and Structure of Physical
+Objects and Consciousness,'' \emph{Synthese} 35~(3):~285-351. \\
+0 & J Kim (1978) ``Supervenience and Nomological Incommensurables,''
+\emph{American Philosophical Quarterly} 15~(2):~149-156. \\
+7 & J Kim (1984) ``Concepts of Supervenience,'' \emph{Philosophy And
+Phenomenological Research} 45~(2):~153-176. \\
+7 & J Rawls (1985) ``Justice as Fairness: Political Not Metaphysical,''
+\emph{Philosophy \& Public Affairs} 14~(3):~223-251. \\
+6 & L Laudan (1987) ``Progress or Rationality: The Prospects for
+Normative Naturalism,'' \emph{American Philosophical Quarterly}
+24~(1):~19-31. \\
+5 & F Jackson and P Pettit (1988) ``Functionalism and Broad Content,''
+\emph{Mind} 97~(387):~381-400. \\
+5 & J Rawls (1988) ``The Priority of Right and Ideas of the Good,''
+\emph{Philosophy \& Public Affairs} 17~(4):~251-276. \\
+9 & D Davidson (1990) ``The Structure and Content of Truth,''
+\emph{Journal Of Philosophy} 87~(6):~279-328. \\
+8 & MB Burke (1992) ``Copper Statues and Pieces of Copper: A Challenge
+To the Standard Account,'' \emph{Analysis} 52~(1):~12-17. \\
+8 & S Schiffer (1992) ``Belief Ascription,'' \emph{Journal Of
+Philosophy} 89~(10):~499-521. \\
+5 & MB Burke (1994) ``Preserving the Principle of 1 Object To a Place: A
+Novel Account of the Relations Among Objects, Sorts, Sortals, and
+Persistance Conditions,'' \emph{Philosophy And Phenomenological
+Research} 54~(3):~591-624. \\
+8 & WC Salmon (1994) ``Causality Without Counterfactuals,''
+\emph{Philosophy Of Science} 61~(2):~297-312. \\
+8 & H Putnam (1994) ``Sense, Nonsense, and the Senses: An Inquiry into
+the Powers of the Human Mind,'' \emph{Journal Of Philosophy}
+91~(9):~445-465. \\
+8 & PE Griffiths and RD Gray (1994) ``Developmental Systems and
+Evolutionary Explanation,'' \emph{Journal Of Philosophy}
+91~(6):~277-304. \\
+6 & DW Zimmerman (1995) ``Theories of Masses and Problems of
+Constitution,'' \emph{Philosophical Review} 104~(1):~53-110. \\
+8 & B Fitelson (2003) ``A Probabilistic Theory of Coherence,''
+\emph{Analysis} 63~(3):~194-199. \\
+
+\end{longtable}
+
+We see the same pattern with papers that turn up in three of the top
+twenty lists. Figure~\ref{fig-three-recent} shows how many of these
+papers there were each year, and how often they are cited from 2020 to
+mid-2022.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{citations-old-to-new_files/figure-pdf/fig-three-recent-1.pdf}
+
+}
+
+\caption{\label{fig-three-recent}Number of recent citations for highly
+cited articles in different years.}
+
+\end{figure}%
+
+As with Figure~\ref{fig-four-five-recent}, the y-axis is a log scale,
+papers with zero citations are actually recorded as having 0.5
+citations, and some jitter has been added.
+
+Focus again on the papers with fewer than ten citations since 2020. On
+this graph there are twelve such papers between 1980 and 1995, one in
+the late 1990s, and none in any other decade. This is where the 1980s
+and 1990s papers really stand out. Table~\ref{tbl-three-fade-away} lists
+the papers that appear on three lists of top twenty most cited recent
+papers, but which are not cited nearly as much in recent years.
+
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0815}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9185}}@{}}
+
+\caption{\label{tbl-three-fade-away}Highly cited articles with fewer
+than ten recent citations.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedleft
+Late Citations
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+2 & N Block (1980) ``Are Absent Qualia Impossible,'' \emph{Philosophical
+Review} 89~(2):~257-274. \\
+0 & DP Lackey (1982) ``Missiles and Morals: A Utilitarian Look At
+Nuclear Deterrence,'' \emph{Philosophy \& Public Affairs}
+11~(3):~189-231. \\
+2 & J Haugeland (1982) ``Weak Supervenience,'' \emph{American
+Philosophical Quarterly} 19~(1):~93-103. \\
+5 & J Kim (1982) ``Psychophysical Supervenience,'' \emph{Philosophical
+Studies} 41~(1):~51-70. \\
+2 & E Eells and E Sober (1983) ``Probabilistic Causality and the
+Question of Transitivity,'' \emph{Philosophy Of Science}
+50~(1):~35-57. \\
+4 & PM Churchland (1985) ``Reduction, Qualia, and the Direct
+Introspection of Brain States,'' \emph{Journal Of Philosophy}
+82~(1):~8-28. \\
+6 & T Nagel (1987) ``Moral Conflict and Political Legitimacy,''
+\emph{Philosophy \& Public Affairs} 16~(3):~215-240. \\
+1 & N Carroll (1988) ``Art, Practice, and Narrative,'' \emph{Monist}
+71~(2):~140-156. \\
+6 & JW Kim (1990) ``Supervenience as a Philosophical Concept,''
+\emph{Metaphilosophy} 21~(1-2):~1-27. \\
+7 & T Crane and DH Mellor (1990) ``There is No Question of
+Physicalism,'' \emph{Mind} 99~(394):~185-206. \\
+3 & K Falvey and J Owens (1994) ``Externalism, Self-Knowledge, and
+Skepticism,'' \emph{Philosophical Review} 103~(1):~107-137. \\
+7 & P Pietroski and G Rey (1995) ``When Other Things Aren't Equal:
+Saving Ceteris Paribus Laws From Vacuity,'' \emph{British Journal For
+The Philosophy Of Science} 46~(1):~81-110. \\
+5 & T Sider (1997) ``Four Dimensionalism,'' \emph{Philosophical Review}
+106~(2):~197-231. \\
+
+\end{longtable}
+
+Unlike the other two explanations, the timeline matches up. What's
+distinctive about the period 1980-1999, and especially the period
+1980-1995, is that there are so many papers that get discussed a lot at
+the time, but get many fewer citations in recent years.
+
+Still, this might feel less than fully satisfying as an explanation. The
+data in this section tell us what happened. They don't tell us why it
+happened. For that we need to look more closely at the papers involved.
+
+\section{When Citations End}\label{sec-when-citations-end}
+
+Asking why a paper doesn't get many citations is like asking why a
+particular tennis player didn't win Wimbledon. The simple answer in both
+cases is that not getting the citations, or the trophy, is the normal
+state of affairs. It's not something that calls out for explanation.
+
+That's not quite what we're trying to do here. To continue the analogy,
+what we're asking here is why a player who used to go deep into the
+tournament now isn't getting out of the second round. These papers are,
+for the most part, still in the top ten percent of papers by citations.
+But they aren't in the top one percent any more, and that's what is to
+be explained.
+
+In some cases, the explanation is quite simple: the citations simply got
+\textbf{captured} by something else. When a paper is expanded into a
+book, or becomes a chapter of a prominent book, very often the citations
+will simply move to the book rather than the paper. There are three
+clear cases of this in \textbf{?@tbl-four-five-recent} and
+\textbf{?@tbl-three-recent}: the two papers by Rawls, and Sider's ``Four
+Dimensionalism''. Rawls's paper ``Justice as Fairness'' and Sider's
+paper ``Four Dimensionalism'' both became books with the same title. And
+this rather decreased the number of times they were cited. The other
+Rawls paper, ``The Priority of Right and Ideas of the Good'', became
+chapter 5 of his 1993 book \emph{Political Liberalism}.
+
+It's a little harder to judge whether citations are affected by being
+reprinted in a collected volume. Three of the four Kim papers on the
+list are in his 1993 collection \emph{Supervenience and Mind}. This
+study doesn't look at books, so it wouldn't capture those citations. But
+it could be that the book was getting some of the citations that the
+papers would have received. There are two ways this could happen. One is
+that people might directly cite a reprinted passage, but simply cite the
+book. I looked (via Google Scholar) at the citations to
+\emph{Supervenience and Mind} in these hundred journals, and I never saw
+that happen for these three Kim papers. But I wouldn't trust this manual
+checking, and I did see it for other Kim papers, so it might happen. The
+other way is that many people feel (fairly enough) that they should
+name-check Kim somewhere in their discussion of supervenience, so there
+were several undirected citations to the book that perhaps would have
+ended up as citations to one of these papers if the book didn't exist. I
+don't think it's as dramatic an effect as for Rawls and Sider, but it is
+a consideration.
+
+What seems more likely, especially for the 1978 paper that didn't get
+reprinted, is that the papers were regarded as \textbf{superseded}. If
+the later papers on supervenience were simply better than the earlier
+ones, having a clearer statement of the view, or making distinctions
+that were muddled in the earlier paper, then it would be natural to cite
+the later papers. I think that's part of what goes on with the
+supervenience papers, and, I conjecture, with the papers on causation,
+laws, and explanation (Eells and Sober 1983, Salmon 1994, Griffiths and
+Gray 1994, Pietroski and Rey 1995).
+
+One notable thing about citations is that papers that people mostly
+disagree with are still very widely cited; ``Epiphenomenal Qualia'' is
+perhaps the most notable instance of this. But if philosophers
+collectively come to think of the presuppositions, or methodology, or
+philosophical approach of the paper is flawed, then the paper will get
+ignored rather than argued against. In this case, we might say the paper
+is \textbf{rejected} by most philosophers. This happens a bit before the
+time I'm looking at, for example with some papers by Rorty that
+completely drop off the radar of these journals. But maybe it is what
+happens with the Castañeda and Putnam papers here. To be clear, I'm not
+making any judgment here about whether philosophers are right to dismiss
+these works; as any journal editor knows, sometimes rejections are
+mistaken. What I am saying is that this kind of fundamental disagreement
+would explain non-citation patterns.
+
+Finally, some papers might \textbf{fall out of fashion}. There was a lot
+more discussion of mental content, and of material constitution, in the
+journals in the 1980s and 1990s than there is now. That's true in
+particular of relatively a priori, armchair work on those topics. That,
+I think, is what has happened with the papers by Burke, Zimmerman,
+Jackson and Pettit, Schiffer, and Falvey and Owens. There are
+considerably more papers on these two topics if we look at the papers
+that are only in one or two of the top twenty lists, or which have ten
+to fifteen citations in recent years (and hence are still pulling the
+median downward).
+
+One particularly notable instance of this is Michael McKinsey's paper
+``Anti-Individualism and Privileged Access''. It appears on three of the
+top twenty lists, and has ten citations in the recent literature. What's
+particularly distinctive about it is that three papers which cite it are
+also in the top twenty lists.
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-WOS:000070778500002}
+Parfit, D. 1997. {``Equality and Priority.''} \emph{Ratio} 10 (3):
+202--21.
+
+\end{CSLReferences}
 
 
 
