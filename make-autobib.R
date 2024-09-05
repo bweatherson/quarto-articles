@@ -1,5 +1,6 @@
 bibtexgen <- philo_bib_fix |>
   select(BIBTEXKEY = id, YEAR = year, JOURNAL = journal, end_of_longcite, AUTHOR = auth, TITLE = art_title) |>
+  mutate(BIBTEXKEY = str_replace(BIBTEXKEY, ":", "")) |>
   filter(grepl("[0-9]$", end_of_longcite)) |>
   filter(grepl("^[0-9]", end_of_longcite)) |>
   filter(str_length(end_of_longcite) >= 8) |>
