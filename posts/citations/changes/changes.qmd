@@ -1,0 +1,635 @@
+---
+title: "Changes in Citation Patterns"
+abstract: |
+  By looking at changes in citation patterns, we can tell something about the way in which academic philosophy has changed over the last few decades. One thing that stands out is the reduction in armchair approaches to non-fundamental questions. Another is that topics no longer disappear from philosophy. Since around 2002, every topic that has reached a certain level of prominence in the literature has retained its prominence. This is notably not the case before the late 1990s.
+date: today
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+  - in progress
+  - unpublished
+pdf-engine: xelatex
+bibliography: /Users/weath/Documents/citations-2024/autobib.bib
+csl: ../../../chicago-with-note.csl
+draft: true
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+  pdf:
+    fig-format: pdf
+    include-after-body: 
+        text: |
+          \noindent Published online in September 2024.
+  docx:
+    reference-doc: ../../../quarto-articles-template.docx
+---
+
+```{r}
+#| label: loader
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(-0.3, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+
+}
+```
+
+```{r}
+#| lable: mainscripts
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(lsa)
+
+load("/Users/weath/Documents/citations-2024/philo_bib_fix.RData")
+load("/Users/weath/Documents/citations-2024/philo_cite_with_jp.RData")
+
+start_year <- 1965
+end_year <- 2022
+window <- 0
+min_data <- 5
+
+active_philo_bib <- philo_bib_fix |>
+  filter(year >= start_year, year <= end_year) |>
+  mutate(tbl_cite = paste0(auth, " [-@",str_replace(id,":",""),"] \"", art_title, "\""))
+
+authadjust <- function(x){
+  paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
+}
+
+authadjust_short <- function(x){
+  str_to_title(str_extract(x,".+(?=,)"))
+}
+
+article_years <- active_philo_bib |>
+  as_tibble() |>
+  select(id, year)
+
+citation_tibble <- philo_cite_with_jp |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year) |> # The next lines are new - restricting attention to 1966-end_year
+  filter(new_year <= end_year, new_year >= start_year, old_year >= start_year, old_year <= end_year) 
+```
+
+```{r}
+#| label: looper
+#| cache: true
+
+all_still_standing <- c()
+all_median <- c()
+
+for (i in 4:0){
+  new_citation_tibble <- citation_tibble |>
+    mutate(range_year = floor((old_year-i)/5)*5+i)
+  all_early_cites <- new_citation_tibble |>
+    filter(new_year - range_year <= 9)
+  
+  all_late_cites <- new_citation_tibble |>
+    filter(new_year >= 2020)
+  
+  tally_late_cites <- all_late_cites |>
+    ungroup() |>
+    group_by(old) |>
+    tally() |>
+    arrange(desc(n))
+  
+  summ_early_cites <- all_early_cites |>
+    ungroup() |>
+    group_by(old, old_year, range_year) |>
+    summarise(e_cites = n(), .groups = "drop")
+  
+  summ_late_cites <- all_late_cites |>
+    ungroup() |>
+    group_by(old, old_year, range_year) |>
+    summarise(l_cites = n(), .groups = "drop")
+  
+  combined_cites <- summ_early_cites |>
+    full_join(summ_late_cites, by = c("old", "old_year", "range_year")) |>
+    mutate(
+      across(everything(), ~replace_na(.x, 0))
+    ) |>
+    mutate(
+      e_score = e_cites + l_cites/1000,
+      l_score = l_cites + e_cites/1000
+    ) |>
+    group_by(range_year) |>
+    mutate(
+      e_rank = min_rank(-e_score),
+      l_rank = min_rank(-l_score),
+      o_rank = pmin(e_rank, l_rank)
+    ) |>
+    ungroup() |>
+    arrange(o_rank, -e_score, -l_score) |>
+    group_by(range_year) |>
+    mutate(f_rank = row_number()) |>
+    filter(f_rank <= 100) |>
+    ungroup() |>
+    left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year"))
+  
+  still_standing <- combined_cites |>
+    filter(e_rank <= 20) |>
+    select(e_cites, l_cites, auth, old_year, range_year, art_title, journal, everything()) |>
+    arrange(range_year, desc(e_cites))
+  
+  still_standing_by_range <- still_standing |>
+    filter(l_cites >= 16) |>
+    ungroup() |>
+    group_by(range_year) |>
+    tally()
+  
+  median_new_cites_of_classics <- combined_cites |>
+    ungroup() |>
+    group_by(range_year) |>
+    filter(e_rank <= 20) |>
+    summarise(cites = median(l_cites))
+  
+  all_still_standing <- bind_rows(all_still_standing, still_standing_by_range)
+  all_median <- bind_rows(all_median, median_new_cites_of_classics)
+}
+
+article_count <- active_philo_bib |>
+  group_by(year) |>
+  tally() |>
+  mutate(five_year = slide_int(n, sum, .before = 4))
+
+how_many_recent_cites <- philo_cite_with_jp |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year) |> # The next lines are new - restricting attention to 1966-end_year
+  filter(new_year <= end_year, new_year >= start_year, old_year >= start_year, old_year <= end_year) |>
+  filter(new_year >= 2020) |>
+  ungroup() |>
+  group_by(old) |>
+  tally() |>
+  left_join(active_philo_bib, by = c("old" = "id")) |>
+  arrange(-n)
+
+top_20_recent <- how_many_recent_cites |>
+  select(`Late Cites` = n, Article = tbl_cite) |>
+  slice(1:20)
+
+top_20_last_quartile <- how_many_recent_cites |>
+  filter(year >= 1976, year <= 1997) |>
+  select(`Late Cites` = n, Article = tbl_cite) |>
+  slice(1:20)
+
+top_20_last_five <- how_many_recent_cites |>
+  filter(year >= 2015) |>
+  select(`Late Cites` = n, Article = tbl_cite) |>
+  slice(1:20)
+
+most_cited_years_recently <- philo_cite_with_jp |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year) |> # The next lines are new - restricting attention to 1966-end_year
+  filter(new_year <= end_year, new_year >= start_year, old_year >= start_year, old_year <= end_year) |>
+  filter(new_year >= 2020) |>
+  group_by(old_year) |>
+  tally(name = "cites") |>
+  left_join(article_count, by = c("old_year" = "year")) |>
+  select(year = old_year, cites, articles = n) |>
+  mutate(rate = cites / articles)
+
+recent_cite_frequency <- how_many_recent_cites |>
+  group_by(n) |>
+  tally(name = "art_num") |>
+  arrange(-n) |>
+  mutate(at_least = cumsum(art_num)) |>
+  arrange(n) |>
+  slice(1:10, 3:10*5)
+
+median_cites_unqualified <- tribble(~year, ~median)
+
+for (y in 1965:2010){
+  temp <- citation_tibble |>
+    filter(old_year >= y, old_year <= y + 4, new_year >= 2020) |>
+    group_by(old) |>
+    tally() |>
+    arrange(-n) |>
+    slice(1:20)
+  median_cites_unqualified <- median_cites_unqualified |>
+    add_row(year = y, median = median(temp$n))
+}
+
+the_top_few <- c()
+
+for (y in 1965:2010){
+  target_articles <- floor(
+    filter(
+      article_count, year == y + 4
+      )$five_year[1] / 130
+  )
+  target_articles <- 20
+  yearly_additions <- citation_tibble |>
+    ungroup() |>
+#    select(-range_year) |>
+    filter(old_year >= y, old_year <= y + 4) |>
+    filter(new_year <= y + 9 | new_year >= 2020) |>
+    mutate(cite_age = case_when(
+      new_year <= y + 9 ~ "e_cites",
+      new_year >= 2020 ~ "l_cites"
+    )) |>
+    group_by(old, old_year, cite_age) |>
+    summarise(cites = n(), .groups = "drop") |>
+    pivot_wider(id_cols = c(old), names_from = cite_age, values_from = cites) |>
+    replace_na(list(e_cites = 0, l_cites = 0)) |>
+    mutate(score = e_cites + l_cites/1000) |>
+    mutate(the_rank = rank(-score)) |>
+    arrange(the_rank) |>
+    slice(1:target_articles) |>
+    select(-score, -the_rank) |>
+    mutate(range_year = y) |>
+    left_join(philo_bib_fix, by = c("old" = "id")) |>
+    select(e_cites, l_cites, auth, year, range_year, art_title, journal, everything()) 
+  
+  the_top_few <- bind_rows(the_top_few, yearly_additions)
+}
+
+the_top_few <- the_top_few |>
+  ungroup() |>
+  group_by(old) |>
+  mutate(appear = n()) |>
+  select(appear, everything()) |>
+  arrange(-appear, l_cites, old)
+
+proportion_recent <- the_top_few |>
+  group_by(range_year) |>
+  summarise(med_cites = mean(l_cites))
+
+the_700 <- c()
+
+for (y in 1974:2008){
+  the_20 <- citation_tibble |>
+    ungroup() |>
+#    select(-range_year) |>
+    filter(old_year >= y, old_year <= y + 4) |>
+    filter(new_year <= y + 9 | new_year >= 2020) |>
+    mutate(cite_age = case_when(
+      new_year <= y + 9 ~ "e_cites",
+      new_year >= 2020 ~ "l_cites"
+    )) |>
+    group_by(old, old_year, cite_age) |>
+    summarise(cites = n(), .groups = "drop") |>
+    pivot_wider(id_cols = c(old), names_from = cite_age, values_from = cites) |>
+    replace_na(list(e_cites = 0, l_cites = 0)) |>
+    mutate(score = e_cites + l_cites/1000) |>
+    mutate(the_rank = rank(-score)) |>
+    arrange(the_rank) |>
+    slice(1:20) |>
+    select(-score, -the_rank) |>
+    mutate(range_year = y) |>
+    left_join(philo_bib_fix, by = c("old" = "id")) |>
+    select(e_cites, l_cites, auth, year, range_year, art_title, journal, everything()) 
+  
+  the_700 <- bind_rows(the_700, the_20)
+}
+
+the_700 <- the_700 |>
+  ungroup() |>
+  group_by(old) |>
+  mutate(appear = n()) |>
+  select(appear, everything()) |>
+  arrange(-appear, l_cites, old)
+
+appear_median <- the_700 |>
+  ungroup() |>
+  group_by(appear) |>
+  summarise(l_cites = median(l_cites))
+
+# the_700 |> 
+#     filter(appear == 3) |>
+#     ungroup() |>
+#     mutate(l_cites = replace(l_cites, l_cites == 0, 0.5)) |>
+#     ungroup() |>
+#     distinct(old, .keep_all = TRUE) |>
+#     select(year, l_cites) |>
+#     ggplot(aes(x = year, y = l_cites)) + 
+#       geom_point() + 
+#       scale_y_log10() +
+#       ggrepel::geom_label_repel(data = filter(the_700, appear == 3, (l_cites <= 1 | (year >= 2000 & l_cites <= 10))), aes(label = shortcite))
+
+the_700_graph <- the_700 |>
+  filter(appear == 3, year >= 1979) |>
+  ungroup() |>
+  mutate(l_cites = replace(l_cites, l_cites == 0, 0.5)) |>
+  distinct(old, .keep_all = TRUE) |>
+  mutate(outlier = case_when(
+    l_cites <= 5 ~ TRUE,
+    year >= 2000 & l_cites <= 9 ~ TRUE,
+    TRUE ~ FALSE))
+
+#ggplot(the_700_graph, aes(x = year, y = l_cites))  + 
+#  geom_point() + 
+#  scale_y_log10(limits = c(0.5, 250)) 
+
+widely_cited <- citation_tibble |>
+  filter(old_year >= 1974, old_year <= 2010) |>
+  filter(new_year <= old_year + 9 | new_year >= 2020) |>
+  mutate(cite_age = case_when(
+    new_year <= old_year + 9 ~ "e_cites",
+    new_year >= 2020 ~ "l_cites"
+  )) |>
+  group_by(old, old_year, cite_age) |>
+  summarise(cites = n(), .groups = "drop") |>
+  pivot_wider(id_cols = c(old, old_year), names_from = cite_age, values_from = cites) |>
+  replace_na(list(e_cites = 0, l_cites = 0)) |>
+  left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year")) |>
+  select(e_cites, l_cites, auth, old_year, art_title, journal, everything()) |>
+  filter(l_cites >= 16)
+
+widely_cited_years <- widely_cited |>
+  filter(l_cites >= 16) |>
+  group_by(old_year) |>
+  tally()
+
+very_late_bloomers <- widely_cited |>
+  anti_join(the_700, by = "old") |>
+  filter(old_year <= 2005) |>
+  arrange(-l_cites)
+```
+
+By looking at changes in citation patterns, we can tell something about the way in which academic philosophy has changed over the last few decades. One thing that stands out is the reduction in armchair approaches to non-fundamental questions. Another is that topics no longer disappear from philosophy. Since around 2002, every topic that has reached a certain level of prominence in the literature has retained its prominence. This is notably not the case before the late 1990s.
+
+# Introduction {#sec-introduction}
+
+This paper is about citations of philosophy journal articles in philosophy journal articles. The data comes from Web of Science. I'm focussing on citations between philosophy journals for two reasons. One is that the data is much cleaner. Citations to books, chapters, theses, and other sources, requires a lot of work to be even approximately correct, while citations of journals in journals are reasonably reliable. (This is especially true for journals that use end of article bibliographies; there the reliability is very high.) The second is that the data is complete. It's very hard to get a complete list of all the philosophy books published in a year, or even conceptually to think about what that would mean. It's much easier to find some journals, and get a complete list of their articles.
+
+I'm focusing on journals published since 1965. So the citations are of articles published since 1965, in articles published since 1965. That means that at the start there are very few citations, since most citations are to things a few years earlier.
+
+One problem with using Web of Science is that it is very slow to update. I'm using the XML files that are provided to subscribing institutions. The most recent such files that are provided only go through mid-2022. Much of the focus here is on citations since 2020. Crucially, this does not mean 2020-2024; it just means 2020-to-mid-2022. This still turns out to be a lot of citations.
+
+Web of Science is also slow to add journals to its index. As @tbl-list-of-journals shows, several journals are only added to the index well after 1965, or (in the case of some recently founded journals) well after their founding. The biggest impact this has on this paper is that we don't have the citation data for _Analysis_ before 1975, and that probably affects some of the results.
+
+I'm also focusing on one hundred journals. I downloaded the citation data for every journal in the categories Philosophy, and History and Philosophy of Science, and picked out the hundred journals with the most articles, which seemed to be primarily English language, analytic, and philosophy as opposed to history of science journals. The journals that I picked are listed in @tbl-list-of-journals.
+
+```{r}
+#| label: tbl-list-of-journals
+#| tbl-cap: "The journals included in this study."
+
+require(knitr)
+temp <- philo_bib_fix |>
+  filter(year >= 1956, year <= 2022) |>
+  filter(id != "gettier1963") |>
+  group_by(journal) |> 
+  summarise(Articles = n(), `First Year` = min(year), `Most Recent Year` = max(year)) |>
+  rename(Journal = journal)
+kable(temp)
+```
+
+Of course the first year isn't the first year the journal started publishing; it's when Web of Science started indexing them. And the last year isn't when they ceased publishing; it's the most recent year indexed. Web of Science is very slow at adding journals, and at adding volumes. But it is, as far as I've found, pretty accurate within what it adds.
+
+One big exception to this is that it's never really understood how to handle the 'supplements' to _Noûs_, i.e., _Philosophical Perspectives_ and _Philosophical Issues_. Some of these are recorded as being their own thing, some of them are recorded as special issues of _Noûs_. In the latter case, the citations often only start being tracked several years after publication, and the bibliographic information is spotty. I've manually removed the ones that were listed as being published in _Noûs_ but actually in one of the supplements, because the data didn't seem sufficiently reliable. The major cost of this is that Kit Fine's paper "Essence and Modality" isn't part of the study; this is something that I might need to correct.
+
+I've also manually added citations to articles published in _Journal of Philosophy_ between 1971 and 1974. I don't have good data for what was cited in those articles. I don't know why Web of Science indexes the Journal before and after that period, but it's an important gap. Several of the most important articles of the journals era are published in the Journal in those years, so I felt it was important to include them. I hope that the manual adding I did led to values on the same scale as what I got from everything else, but this is a possible source of noise in the data.
+
+Because Web of Science keeps adding journals, and journals keep getting larger, the number of articles in this study keeps going up. The only downward pressure comes from the fact that some journals haven't been indexed for 2022 or even, in some cases, 2021. @fig-number-of-articles-by-year shows how many articles each year are in the study.
+
+```{r}
+#| label: fig-number-of-articles-by-year
+#| fig-cap: "Number of articles in the study each year" 
+
+philo_bib_fix |>
+  group_by(year) |>
+  filter(year >= 1965, year <= 2022) |>
+  tally() |>
+  ggplot(aes(x = year, y = n)) +
+    geom_line() +
+
+    labs(x = element_blank(),
+         y = element_blank(),
+         title = "Number of Articles in Database Each Year") +
+  scale_x_continuous(breaks = 195:202 * 10, minor_breaks = 390:404*5) 
+```
+
+On top of that, citation practices have changed and people now cite much more widely than they used to. So the number of citations recorded each year (to articles since 1965 indexed in these hundred journals), has risen rather dramatically, as shown in @fig-number-of-citations-by-year.
+
+```{r}
+#| label: fig-number-of-citations-by-year
+#| fig-cap: "Number of citations to articles in the study each year" 
+
+citation_tibble |>
+  group_by(new_year) |>
+  filter(new_year >= 1965, new_year <= 2022) |>
+  tally() |>
+  ggplot(aes(x = new_year, y = n)) +
+  geom_line() +
+  theme(legend.position="bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical") +
+  labs(x = element_blank(),
+       y = element_blank(),
+       title = "Number of Citations in Database Each Year") +
+  scale_x_continuous(breaks = 195:202 * 10, minor_breaks = 390:404*5) 
+```
+
+On the other hand, since the overwhelming majority of citations are to articles published earlier than the citing article, a larger number of citations in total might be consistent with fewer citations per article available to be cited. If we somewhat arbitrarily set the universe of available to be cited papers as the set of papers with the same publication date as the citing article or earlier, @fig-average-of-citations-by-year shows how often the average paper was cited each year (in these 100 journals).
+
+```{r}
+#| label: fig-average-of-citations-by-year
+#| fig-cap: "Average number of citations per available article in each year" 
+
+article_years_summary <- article_years |>
+  ungroup() |>
+  group_by(year) |>
+  tally(name = "yearly_articles") |>
+  mutate(cumulative_articles = cumsum(yearly_articles))
+
+mean_citations <- citation_tibble |>
+  group_by(new_year) |>
+  tally(name = "yearly_citations") |>
+  left_join(article_years_summary, by = c("new_year" = "year")) |>
+  mutate(mean_citations = yearly_citations/cumulative_articles) |>
+  filter(new_year <= 2022)
+
+ggplot(mean_citations, aes(x = new_year, y = mean_citations)) +
+  geom_line() +
+  theme(legend.position="bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical") +
+  labs(x = element_blank(),
+       y = element_blank(),
+       title = "Average number of citations articles get each year",
+       subtitle = "Number of citations in a year divided by articles published up to that year") +
+  scale_x_continuous(breaks = 195:202 * 10, minor_breaks = 390:404*5) 
+```
+
+Between about 1978 and 2004, the different forces are roughly balanced. There are more papers, and each paper cites more often, but there are more papers available to be cited, and the mean stays at about 0.1. But then the forces pushing this number up take over.
+
+# Recent Citations {#sec-recent-citations}
+
+The focus here is going to be on articles whose recent citation patterns are markedly different to their citation pattern since 2020. To understand these, it helps to have a sense of what the citations since 2020 are like.
+
+The first thing to know about the 2020s is that the number of outbound citations per article shot up, starting in 2021. This is shown in @fig-outbound-citation-rate.
+
+```{r}
+#| label: fig-outbound-citation-rate
+#| fig-cap: "Average number of outbound citations in each year" 
+
+article_years_summary <- article_years |>
+  ungroup() |>
+  group_by(year) |>
+  tally(name = "yearly_articles") |>
+  mutate(cumulative_articles = cumsum(yearly_articles))
+
+mean_outbound_citations <- citation_tibble |>
+  group_by(new_year) |>
+  tally(name = "yearly_citations") |>
+  left_join(article_years_summary, by = c("new_year" = "year")) |>
+  mutate(mean_citations = yearly_citations/yearly_articles) |>
+  filter(new_year <= 2022)
+
+ggplot(mean_outbound_citations, aes(x = new_year, y = mean_citations)) +
+  geom_line() +
+  theme(legend.position="bottom",
+        legend.title = element_blank(),
+        legend.direction = "vertical") +
+  labs(x = element_blank(),
+       y = element_blank(),
+       title = "Average number of outbound citations in each year",
+       subtitle = "Number of citations in a year divided by articles published in that year") +
+  scale_x_continuous(breaks = 195:202 * 10, minor_breaks = 390:404*5) 
+```
+
+Remember these are outbound citations to philosophy journal articles published since 1965. At the left hand edge of @fig-outbound-citation-rate, the 'since 1965' constraint probably makes a big difference to the graph. It shouldn't really make a difference towards the right of the graph, and yet the line keeps going up.
+
+Between the number of articles published since 2020, and the high rate of outbound citations in those articles, there are a lot of citations since 2020. The whole study, from 1965 to 2022, includes `r nrow(citation_tibble)` citations. The part since 2020 alone includes `r nrow(filter(citation_tibble, new_year >= 2020))` of those citations.
+
+The study contains `r nrow(active_philo_bib)` papers. So the average paper was cited about 1.2 times since 2020. Citations are not distributed at all evenly. @tbl-count-of-recent-citations shows how many articles have at least *n* citations since 2020 for various values of *n*.
+
+```{r}
+#| label: tbl-count-of-recent-citations
+#| tbl-cap: "Frequency of articles with at least n citations, for various values of n"
+
+kable(select(
+  recent_cite_frequency, n, `Number of articles` = at_least
+))
+```
+
+Just over 1% of articles have at least fifteen citations since 2020. Just under 0.1% have at least fifty citations. I'll sometimes talk below about articles that were once the center of attention having 'only' five citations since 2020. It's worth remembering that this still means they are in the top 7% or so for citations over that time. Most things don't get cited, at least in other philosophy journals in this time period.
+
+The very top of the citation list, since 2020, is shown in @tbl-recent-high-cite.
+
+```{r}
+#| label: tbl-recent-high-cite
+#| tbl-cap: "Twenty most cited articles since 2020"
+
+kable(top_20_recent)
+```
+
+The most recent article in that list is from 2016. That might lead you to think that philosophy citations are typically to rather old articles. This isn't true. @fig-recent-cite-rate shows how often, on average, papers with different publication years are cited since 2020.
+
+```{r}
+#| label: fig-recent-cite-rate
+#| fig-cap: "Average number of cites since 2020 by year of original publication"
+
+ggplot(most_cited_years_recently, aes(x = year, y = rate)) +
+  geom_line() +
+  labs(x = element_blank(), 
+       y = element_blank(),
+       title = "Average number of recent citations",
+       subtitle = "Number of citations since 2020 to a year, divided by number of articles published that year")  +
+  scale_x_continuous(breaks = 195:202 * 10, minor_breaks = 390:404*5)
+
+```
+
+The peak is actually in 2018. Recently published articles are, on average, cited more than articles from longer ago. It's just that the citations are more widely spread out. @tbl-recent-from-last-five shows which articles since 2016 have the most citations since 2020.
+
+```{r}
+#| label: tbl-recent-from-last-five
+#| tbl-cap: "Twenty most cited articles since 2020, first published since 2016."
+
+kable(top_20_last_five)
+```
+
+The list of authors there is a little less white, and a little less male, than most of the lists we'll see below. As we'll see, that's not saying much.
+
+Many of the articles that were recently widely cited have been cited a lot almost as soon as they were published. But not all of them were. @tbl-very-late-bloomers lists the articles with the most cites since 2020 that were, in a sense I'll get to below, not widely cited when they were first published.
+
+```{r}
+#| label: tbl-very-late-bloomers
+#| tbl-cap: "Twenty most cited articles since 2020 that were not (as) widely cited when they were published."
+
+kable(
+  select(
+    very_late_bloomers,
+    Citations = l_cites,
+    Article = tbl_cite
+  ) |> slice(1:20)
+)
+```
+
+The variety of subjects there is interesting, and this will become important later. Several of these papers can be now seen as foundational papers in thriving topics within philosophy.
+
+The last thing to note, and something that will be central to what I'm discussing the rest of the paper, is that there is a 'missing middle' in @tbl-recent-high-cite. The only articles on that list between 1976 and 1997 are by David Lewis. @tbl-last-quartile shows the ten most cited articles, since 2020, published from 1976 to 1997.
+
+```{r}
+#| label: tbl-last-quartile
+#| tbl-cap: "The most cited articles since 2020 first published between 1976 and 1997."
+
+kable(top_20_last_quartile |> slice(1:10))
+```
+
+If we extended that list, the 15th, 16th, and 17th entries would also be by David Lewis.
+
+One thing I'm investigating here is how relatively little influence journal articles from the 1980s and (much of) the 1990s have on the recent literature, compared to the decades either side of that. The focus here will be on the change in citation rates, how things that were the center of attention in the 1980s and 1990s are not so important now. But in the background will be the broader topic of how much the recent literature is shaped by the 1970s, 2000s, and 2010s, but not the decades in between.

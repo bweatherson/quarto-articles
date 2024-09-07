@@ -76,39 +76,6 @@ marginparsep=0in]{geometry}
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
-% definitions for citeproc citations
-\NewDocumentCommand\citeproctext{}{}
-\NewDocumentCommand\citeproc{mm}{%
-  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
-\makeatletter
- % allow citations to break across lines
- \let\@cite@ofmt\@firstofone
- % avoid brackets around text for \cite:
- \def\@biblabel#1{}
- \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\makeatother
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
- {\begin{list}{}{%
-  \setlength{\itemindent}{0pt}
-  \setlength{\leftmargin}{0pt}
-  \setlength{\parsep}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-   \setlength{\leftmargin}{\cslhangindent}
-   \setlength{\itemindent}{-1\cslhangindent}
-  \fi
-  % set entry spacing
-  \setlength{\itemsep}{#2\baselineskip}}}
- {\end{list}}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \setlength\heavyrulewidth{0ex}
 \setlength\lightrulewidth{0ex}
@@ -183,8 +150,7 @@ marginparsep=0in]{geometry}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\usepackage{bookmark}
-
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -278,7 +244,6 @@ most cited by the end of the subsequent half-decade. (With ties broken
 by looking at what was most cited recently.) For the period 1990-1994,
 Table~\ref{tbl-early-1990s} lists the twenty articles in question.
 
-
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
 
@@ -295,70 +260,39 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-D Davidson
-(\citeproc{ref-WOSA1990EQ84600001}{1990})
-``The Structure and Content of Truth'' \\
-K Neander
-(\citeproc{ref-WOSA1991FQ15000002}{1991a})
-``Functions as Selected Effects: The Conceptual Analyst's Defense'' \\
-S Yablo
-(\citeproc{ref-WOSA1992JA62400001}{1992})
-``Mental Causation'' \\
-T Crane and DH Mellor
-(\citeproc{ref-WOSA1990DA14600002}{1990})
-``There is No Question of Physicalism'' \\
-JW Kim
-(\citeproc{ref-WOSA1990FU75100001}{1990})
-``Supervenience as a Philosophical Concept'' \\
-P Kitcher
-(\citeproc{ref-WOSA1990CH71200001}{1990})
-``The Division of Cognitive Labor'' \\
-K Neander
-(\citeproc{ref-WOSA1991GR92500005}{1991b})
-``The Teleological Notion of Function'' \\
-P Kitcher
-(\citeproc{ref-WOSA1992HF90300002}{1992})
-``The Naturalists Return'' \\
-G Rosen
-(\citeproc{ref-WOSA1990DR99100001}{1990})
-``Modal Fictionalism'' \\
-MB Burke
-(\citeproc{ref-WOSA1992HC13100003}{1992})
-``Copper Statues and Pieces of Copper: A Challenge To the Standard
-Account'' \\
-S Schiffer
-(\citeproc{ref-WOSA1992JQ78400001}{1992})
-``Belief Ascription'' \\
-M Mckinsey
-(\citeproc{ref-WOSA1991EW83300002}{1991})
-``Anti-Individualism and Privileged Access'' \\
-M Tye
-(\citeproc{ref-WOSA1990EG85000002}{1990})
-``Vague Objects'' \\
-MB Burke
-(\citeproc{ref-WOSA1994PD73500006}{1994})
-``Preserving the Principle of 1 Object To a Place: A Novel Account of
-the Relations Among Objects, Sorts, Sortals, and Persistance
-Conditions'' \\
-JA Fodor
-(\citeproc{ref-WOSA1991EN62900001}{1991})
-``A Modal Argument for Narrow Content'' \\
-L Laudan
-(\citeproc{ref-WOSA1990CX46800004}{1990})
-``Normative Naturalism'' \\
-PA Boghossian
-(\citeproc{ref-WOSA1990CV26800001}{1990})
-``The Status of Content'' \\
-WC Salmon
-(\citeproc{ref-WOSA1994NQ04900008}{1994})
-``Causality Without Counterfactuals'' \\
-H Putnam
-(\citeproc{ref-WOSA1994PF23100001}{1994})
-``Sense, Nonsense, and the Senses: An Inquiry into the Powers of the
-Human Mind'' \\
-G Forbes
-(\citeproc{ref-WOSA1990EB39300002}{1990})
-``The Indispensability of Sinn'' \\
+D Davidson {[}-@WOSA1990EQ84600001{]} ``The Structure and Content of
+Truth'' \\
+K Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected Effects:
+The Conceptual Analyst's Defense'' \\
+S Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+T Crane and DH Mellor {[}-@WOSA1990DA14600002{]} ``There is No Question
+of Physicalism'' \\
+JW Kim {[}-@WOSA1990FU75100001{]} ``Supervenience as a Philosophical
+Concept'' \\
+P Kitcher {[}-@WOSA1990CH71200001{]} ``The Division of Cognitive
+Labor'' \\
+K Neander {[}-@WOSA1991GR92500005{]} ``The Teleological Notion of
+Function'' \\
+P Kitcher {[}-@WOSA1992HF90300002{]} ``The Naturalists Return'' \\
+G Rosen {[}-@WOSA1990DR99100001{]} ``Modal Fictionalism'' \\
+MB Burke {[}-@WOSA1992HC13100003{]} ``Copper Statues and Pieces of
+Copper: A Challenge To the Standard Account'' \\
+S Schiffer {[}-@WOSA1992JQ78400001{]} ``Belief Ascription'' \\
+M Mckinsey {[}-@WOSA1991EW83300002{]} ``Anti-Individualism and
+Privileged Access'' \\
+M Tye {[}-@WOSA1990EG85000002{]} ``Vague Objects'' \\
+MB Burke {[}-@WOSA1994PD73500006{]} ``Preserving the Principle of 1
+Object To a Place: A Novel Account of the Relations Among Objects,
+Sorts, Sortals, and Persistance Conditions'' \\
+JA Fodor {[}-@WOSA1991EN62900001{]} ``A Modal Argument for Narrow
+Content'' \\
+L Laudan {[}-@WOSA1990CX46800004{]} ``Normative Naturalism'' \\
+PA Boghossian {[}-@WOSA1990CV26800001{]} ``The Status of Content'' \\
+WC Salmon {[}-@WOSA1994NQ04900008{]} ``Causality Without
+Counterfactuals'' \\
+H Putnam {[}-@WOSA1994PF23100001{]} ``Sense, Nonsense, and the Senses:
+An Inquiry into the Powers of the Human Mind'' \\
+G Forbes {[}-@WOSA1990EB39300002{]} ``The Indispensability of Sinn'' \\
 
 \end{longtable}
 
@@ -375,7 +309,6 @@ Neander's two papers on functions. Table~\ref{tbl-early-1990s-expanded}
 shows how often each of these articles were cited in the `early' years,
 i.e., 1990-1999, and how often they are cited in the `late years', i.e.,
 from 2020 to mid 2022.
-
 
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0609}}
@@ -399,70 +332,43 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-33 & 9 & D Davidson
-(\citeproc{ref-WOSA1990EQ84600001}{1990})
-``The Structure and Content of Truth'' \\
-32 & 33 & K Neander
-(\citeproc{ref-WOSA1991FQ15000002}{1991a})
-``Functions as Selected Effects: The Conceptual Analyst's Defense'' \\
-27 & 66 & S Yablo
-(\citeproc{ref-WOSA1992JA62400001}{1992})
-``Mental Causation'' \\
-26 & 7 & T Crane and DH Mellor
-(\citeproc{ref-WOSA1990DA14600002}{1990})
-``There is No Question of Physicalism'' \\
-21 & 6 & JW Kim
-(\citeproc{ref-WOSA1990FU75100001}{1990})
-``Supervenience as a Philosophical Concept'' \\
-20 & 54 & P Kitcher
-(\citeproc{ref-WOSA1990CH71200001}{1990})
-``The Division of Cognitive Labor'' \\
-20 & 18 & K Neander
-(\citeproc{ref-WOSA1991GR92500005}{1991b})
-``The Teleological Notion of Function'' \\
-20 & 13 & P Kitcher
-(\citeproc{ref-WOSA1992HF90300002}{1992})
-``The Naturalists Return'' \\
-19 & 11 & G Rosen
-(\citeproc{ref-WOSA1990DR99100001}{1990})
-``Modal Fictionalism'' \\
-19 & 8 & MB Burke
-(\citeproc{ref-WOSA1992HC13100003}{1992})
-``Copper Statues and Pieces of Copper: A Challenge To the Standard
-Account'' \\
-18 & 8 & S Schiffer
-(\citeproc{ref-WOSA1992JQ78400001}{1992})
-``Belief Ascription'' \\
-17 & 10 & M Mckinsey
-(\citeproc{ref-WOSA1991EW83300002}{1991})
-``Anti-Individualism and Privileged Access'' \\
-17 & 6 & M Tye
-(\citeproc{ref-WOSA1990EG85000002}{1990})
-``Vague Objects'' \\
-17 & 5 & MB Burke
-(\citeproc{ref-WOSA1994PD73500006}{1994})
-``Preserving the Principle of 1 Object To a Place: A Novel Account of
-the Relations Among Objects, Sorts, Sortals, and Persistance
-Conditions'' \\
-17 & 3 & JA Fodor
-(\citeproc{ref-WOSA1991EN62900001}{1991})
-``A Modal Argument for Narrow Content'' \\
-16 & 14 & L Laudan
-(\citeproc{ref-WOSA1990CX46800004}{1990})
-``Normative Naturalism'' \\
-16 & 9 & PA Boghossian
-(\citeproc{ref-WOSA1990CV26800001}{1990})
-``The Status of Content'' \\
-16 & 8 & WC Salmon
-(\citeproc{ref-WOSA1994NQ04900008}{1994})
-``Causality Without Counterfactuals'' \\
-16 & 8 & H Putnam
-(\citeproc{ref-WOSA1994PF23100001}{1994})
-``Sense, Nonsense, and the Senses: An Inquiry into the Powers of the
-Human Mind'' \\
-16 & 4 & G Forbes
-(\citeproc{ref-WOSA1990EB39300002}{1990})
-``The Indispensability of Sinn'' \\
+33 & 9 & D Davidson {[}-@WOSA1990EQ84600001{]} ``The Structure and
+Content of Truth'' \\
+32 & 33 & K Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected
+Effects: The Conceptual Analyst's Defense'' \\
+27 & 66 & S Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+26 & 7 & T Crane and DH Mellor {[}-@WOSA1990DA14600002{]} ``There is No
+Question of Physicalism'' \\
+21 & 6 & JW Kim {[}-@WOSA1990FU75100001{]} ``Supervenience as a
+Philosophical Concept'' \\
+20 & 54 & P Kitcher {[}-@WOSA1990CH71200001{]} ``The Division of
+Cognitive Labor'' \\
+20 & 18 & K Neander {[}-@WOSA1991GR92500005{]} ``The Teleological Notion
+of Function'' \\
+20 & 13 & P Kitcher {[}-@WOSA1992HF90300002{]} ``The Naturalists
+Return'' \\
+19 & 11 & G Rosen {[}-@WOSA1990DR99100001{]} ``Modal Fictionalism'' \\
+19 & 8 & MB Burke {[}-@WOSA1992HC13100003{]} ``Copper Statues and Pieces
+of Copper: A Challenge To the Standard Account'' \\
+18 & 8 & S Schiffer {[}-@WOSA1992JQ78400001{]} ``Belief Ascription'' \\
+17 & 10 & M Mckinsey {[}-@WOSA1991EW83300002{]} ``Anti-Individualism and
+Privileged Access'' \\
+17 & 6 & M Tye {[}-@WOSA1990EG85000002{]} ``Vague Objects'' \\
+17 & 5 & MB Burke {[}-@WOSA1994PD73500006{]} ``Preserving the Principle
+of 1 Object To a Place: A Novel Account of the Relations Among Objects,
+Sorts, Sortals, and Persistance Conditions'' \\
+17 & 3 & JA Fodor {[}-@WOSA1991EN62900001{]} ``A Modal Argument for
+Narrow Content'' \\
+16 & 14 & L Laudan {[}-@WOSA1990CX46800004{]} ``Normative
+Naturalism'' \\
+16 & 9 & PA Boghossian {[}-@WOSA1990CV26800001{]} ``The Status of
+Content'' \\
+16 & 8 & WC Salmon {[}-@WOSA1994NQ04900008{]} ``Causality Without
+Counterfactuals'' \\
+16 & 8 & H Putnam {[}-@WOSA1994PF23100001{]} ``Sense, Nonsense, and the
+Senses: An Inquiry into the Powers of the Human Mind'' \\
+16 & 4 & G Forbes {[}-@WOSA1990EB39300002{]} ``The Indispensability of
+Sinn'' \\
 
 \end{longtable}
 
@@ -522,7 +428,6 @@ The 1970-1974 period does surprisingly badly on this measure. That
 period includes the four very widely cited articles listed in
 Table~\ref{tbl-early-1970s-sample}.
 
-
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1071}}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0982}}
@@ -545,18 +450,13 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-22 & 88 & David Lewis
-(\citeproc{ref-10.2307_2025310}{\textbf{10.2307\_2025310?}})
-``Causation'' \\
-23 & 72 & Harry G. Frankfurt
-(\citeproc{ref-10.2307_2024717}{\textbf{10.2307\_2024717?}})
-``Freedom of the Will and the Concept of a Person'' \\
-12 & 49 & Paul Benacerraf
-(\citeproc{ref-10.2307_2025075}{\textbf{10.2307\_2025075?}})
-``Mathematical Truth'' \\
-12 & 48 & JJ Thomson
-(\citeproc{ref-WOSA1971Y116900003}{1971})
-``A Defense of Abortion'' \\
+22 & 88 & David Lewis {[}-@10.2307\_2025310{]} ``Causation'' \\
+23 & 72 & Harry G. Frankfurt {[}-@10.2307\_2024717{]} ``Freedom of the
+Will and the Concept of a Person'' \\
+12 & 49 & Paul Benacerraf {[}-@10.2307\_2025075{]} ``Mathematical
+Truth'' \\
+12 & 48 & JJ Thomson {[}-@WOSA1971Y116900003{]} ``A Defense of
+Abortion'' \\
 
 \end{longtable}
 
@@ -616,7 +516,6 @@ It's easy to explain why the value for 1989 is different. The articles
 listed in Table~\ref{tbl-top-1989} were published in 1989, and widely
 cited.
 
-
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1121}}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1028}}
@@ -638,18 +537,13 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-32 & 36 & RG Millikan
-(\citeproc{ref-WOSA1989AA09400006}{1989b})
-``In Defense of Proper Functions'' \\
-23 & 39 & GA Cohen
-(\citeproc{ref-WOSA1989AE70300010}{1989})
-``On the Currency of Egalitarian Justice'' \\
-21 & 20 & PA Boghossian and JD Velleman
-(\citeproc{ref-WOSA1989T231400005}{1989})
+32 & 36 & RG Millikan {[}-@WOSA1989AA09400006{]} ``In Defense of Proper
+Functions'' \\
+23 & 39 & GA Cohen {[}-@WOSA1989AE70300010{]} ``On the Currency of
+Egalitarian Justice'' \\
+21 & 20 & PA Boghossian and JD Velleman {[}-@WOSA1989T231400005{]}
 ``Color as a Secondary Quality'' \\
-30 & 44 & RG Millikan
-(\citeproc{ref-WOSA1989U850300001}{1989a})
-``Biosemantics'' \\
+30 & 44 & RG Millikan {[}-@WOSA1989U850300001{]} ``Biosemantics'' \\
 
 \end{longtable}
 
@@ -658,7 +552,6 @@ The range 1989-1993 includes those four articles which the range
 does adding 1995 to the set make such a difference? It's a bit more
 complicated than that. The nine articles from 1991-1995 which are widely
 cited recently are shown in Table~\ref{tbl-top-1991}.
-
 
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0686}}
@@ -681,34 +574,22 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-18 & 84 & D Lewis
-(\citeproc{ref-WOSA1994PM10400005}{1994})
-``Humean Supervenience Debugged'' \\
-31 & 66 & S Yablo
-(\citeproc{ref-WOSA1992JA62400001}{1992})
-``Mental Causation'' \\
-17 & 61 & DC Dennett
-(\citeproc{ref-WOSA1991EN62900002}{1991})
-``Real Patterns'' \\
-28 & 54 & T Burge
-(\citeproc{ref-WOSA1993ML38000001}{1993})
-``Content Preservation'' \\
-18 & 48 & M Johnston
-(\citeproc{ref-WOSA1992KC39800002}{1992})
-``How To Speak of the Colors'' \\
-36 & 33 & K Neander
-(\citeproc{ref-WOSA1991FQ15000002}{1991a})
-``Functions as Selected Effects: The Conceptual Analyst's Defense'' \\
-18 & 21 & K Neander
-(\citeproc{ref-WOSA1995RP14800001}{1995})
-``Misrepresenting and Malfunctioning'' \\
-19 & 20 & M Forster and E Sober
-(\citeproc{ref-WOSA1994NQ78600001}{1994})
-``How To Tell When Simpler, More Unified, or Less \emph{Ad Hoc} Theories
-Will Provide More Accurate Predictions'' \\
-22 & 18 & K Neander
-(\citeproc{ref-WOSA1991GR92500005}{1991b})
-``The Teleological Notion of Function'' \\
+18 & 84 & D Lewis {[}-@WOSA1994PM10400005{]} ``Humean Supervenience
+Debugged'' \\
+31 & 66 & S Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+17 & 61 & DC Dennett {[}-@WOSA1991EN62900002{]} ``Real Patterns'' \\
+28 & 54 & T Burge {[}-@WOSA1993ML38000001{]} ``Content Preservation'' \\
+18 & 48 & M Johnston {[}-@WOSA1992KC39800002{]} ``How To Speak of the
+Colors'' \\
+36 & 33 & K Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected
+Effects: The Conceptual Analyst's Defense'' \\
+18 & 21 & K Neander {[}-@WOSA1995RP14800001{]} ``Misrepresenting and
+Malfunctioning'' \\
+19 & 20 & M Forster and E Sober {[}-@WOSA1994NQ78600001{]} ``How To Tell
+When Simpler, More Unified, or Less \emph{Ad Hoc} Theories Will Provide
+More Accurate Predictions'' \\
+22 & 18 & K Neander {[}-@WOSA1991GR92500005{]} ``The Teleological Notion
+of Function'' \\
 
 \end{longtable}
 
@@ -935,7 +816,6 @@ that never appear on the lists of twenty most cited at the time
 articles, and sorting them by how many citations they have from 2020 to
 mid-2022.
 
-
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0833}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9167}}@{}}
@@ -956,37 +836,25 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-156 & S Haslanger
-(\citeproc{ref-WOS000085841900002}{2000})
-``Gender and Race: (What) Are They? (What) Do We Want Them To Be?'' \\
-96 & JM Joyce
-(\citeproc{ref-WOS000077956100002}{1998})
-``A Nonpragmatic Vindication of Probabilism'' \\
-94 & D Lewis
-(\citeproc{ref-WOSA1979HJ57600007}{1979})
-``Scorekeeping in a Language Game'' \\
-84 & J D'arms and D Jacobson
-(\citeproc{ref-WOS000087998300003}{2000})
-``The Moralistic Fallacy: On the `Appropriateness' of Emotions'' \\
-74 & H Douglas
-(\citeproc{ref-WOS000166575500001}{2000})
-``Inductive Risk and Values in Science'' \\
-67 & AI Goldman
-(\citeproc{ref-WOS000170434600004}{2001})
-``Experts: Which Ones Should You Trust?'' \\
-64 & K Derose
-(\citeproc{ref-WOSA1992KB29500008}{1992})
-``Contextualism and Knowledge Attributions'' \\
-60 & SL Darwall
-(\citeproc{ref-WOSA1977EA35800003}{1977})
-``Two Kinds of Respect'' \\
-57 & AM Smith
-(\citeproc{ref-WOS000227058600002}{2005})
-``Responsibility for Attitudes: Activity and Passivity in Mental
-Life'' \\
-56 & P Hieronymi
-(\citeproc{ref-WOS000234618400001}{2005})
-``The Wrong Kind of Reason'' \\
+156 & S Haslanger {[}-@WOS000085841900002{]} ``Gender and Race: (What)
+Are They? (What) Do We Want Them To Be?'' \\
+96 & JM Joyce {[}-@WOS000077956100002{]} ``A Nonpragmatic Vindication of
+Probabilism'' \\
+94 & D Lewis {[}-@WOSA1979HJ57600007{]} ``Scorekeeping in a Language
+Game'' \\
+84 & J D'arms and D Jacobson {[}-@WOS000087998300003{]} ``The Moralistic
+Fallacy: On the `Appropriateness' of Emotions'' \\
+74 & H Douglas {[}-@WOS000166575500001{]} ``Inductive Risk and Values in
+Science'' \\
+67 & AI Goldman {[}-@WOS000170434600004{]} ``Experts: Which Ones Should
+You Trust?'' \\
+64 & K Derose {[}-@WOSA1992KB29500008{]} ``Contextualism and Knowledge
+Attributions'' \\
+60 & SL Darwall {[}-@WOSA1977EA35800003{]} ``Two Kinds of Respect'' \\
+57 & AM Smith {[}-@WOS000227058600002{]} ``Responsibility for Attitudes:
+Activity and Passivity in Mental Life'' \\
+56 & P Hieronymi {[}-@WOS000234618400001{]} ``The Wrong Kind of
+Reason'' \\
 
 \end{longtable}
 
@@ -1053,7 +921,6 @@ under the 10 citations line. Before 1980 there are two such articles.
 Between 1980 and 1995 there are eleven. And then after 1995 there is
 just one. Table~\ref{tbl-four-five-fade-away} goes lists these articles.
 
-
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0794}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9206}}@{}}
@@ -1073,59 +940,37 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-0 & HN Castaneda
-(\citeproc{ref-WOSA1977DV15800002}{1977})
-``Perception, Belief, and Structure of Physical Objects and
-Consciousness'' \\
-0 & J Kim
-(\citeproc{ref-WOSA1978EL93700009}{1978})
-``Supervenience and Nomological Incommensurables'' \\
-7 & J Kim
-(\citeproc{ref-WOSA1984TV24600001}{1984})
-``Concepts of Supervenience'' \\
-7 & J Rawls
-(\citeproc{ref-WOSA1985APA8500001}{1985})
-``Justice as Fairness: Political Not Metaphysical'' \\
-6 & L Laudan
-(\citeproc{ref-WOSA1987F902200002}{1987})
-``Progress or Rationality: The Prospects for Normative Naturalism'' \\
-5 & F Jackson and P Pettit
-(\citeproc{ref-WOSA1988P549200004}{1988})
-``Functionalism and Broad Content'' \\
-5 & J Rawls
-(\citeproc{ref-WOSA1988Q394000001}{1988})
-``The Priority of Right and Ideas of the Good'' \\
-9 & D Davidson
-(\citeproc{ref-WOSA1990EQ84600001}{1990})
-``The Structure and Content of Truth'' \\
-8 & MB Burke
-(\citeproc{ref-WOSA1992HC13100003}{1992})
-``Copper Statues and Pieces of Copper: A Challenge To the Standard
-Account'' \\
-8 & S Schiffer
-(\citeproc{ref-WOSA1992JQ78400001}{1992})
-``Belief Ascription'' \\
-5 & MB Burke
-(\citeproc{ref-WOSA1994PD73500006}{1994})
-``Preserving the Principle of 1 Object To a Place: A Novel Account of
-the Relations Among Objects, Sorts, Sortals, and Persistance
-Conditions'' \\
-8 & WC Salmon
-(\citeproc{ref-WOSA1994NQ04900008}{1994})
-``Causality Without Counterfactuals'' \\
-8 & H Putnam
-(\citeproc{ref-WOSA1994PF23100001}{1994})
-``Sense, Nonsense, and the Senses: An Inquiry into the Powers of the
-Human Mind'' \\
-8 & PE Griffiths and RD Gray
-(\citeproc{ref-WOSA1994NP54800001}{1994})
-``Developmental Systems and Evolutionary Explanation'' \\
-6 & DW Zimmerman
-(\citeproc{ref-WOSA1995RC31600002}{1995})
-``Theories of Masses and Problems of Constitution'' \\
-8 & B Fitelson
-(\citeproc{ref-WOS000183806600006}{2003})
-``A Probabilistic Theory of Coherence'' \\
+0 & HN Castaneda {[}-@WOSA1977DV15800002{]} ``Perception, Belief, and
+Structure of Physical Objects and Consciousness'' \\
+0 & J Kim {[}-@WOSA1978EL93700009{]} ``Supervenience and Nomological
+Incommensurables'' \\
+7 & J Kim {[}-@WOSA1984TV24600001{]} ``Concepts of Supervenience'' \\
+7 & J Rawls {[}-@WOSA1985APA8500001{]} ``Justice as Fairness: Political
+Not Metaphysical'' \\
+6 & L Laudan {[}-@WOSA1987F902200002{]} ``Progress or Rationality: The
+Prospects for Normative Naturalism'' \\
+5 & F Jackson and P Pettit {[}-@WOSA1988P549200004{]} ``Functionalism
+and Broad Content'' \\
+5 & J Rawls {[}-@WOSA1988Q394000001{]} ``The Priority of Right and Ideas
+of the Good'' \\
+9 & D Davidson {[}-@WOSA1990EQ84600001{]} ``The Structure and Content of
+Truth'' \\
+8 & MB Burke {[}-@WOSA1992HC13100003{]} ``Copper Statues and Pieces of
+Copper: A Challenge To the Standard Account'' \\
+8 & S Schiffer {[}-@WOSA1992JQ78400001{]} ``Belief Ascription'' \\
+5 & MB Burke {[}-@WOSA1994PD73500006{]} ``Preserving the Principle of 1
+Object To a Place: A Novel Account of the Relations Among Objects,
+Sorts, Sortals, and Persistance Conditions'' \\
+8 & WC Salmon {[}-@WOSA1994NQ04900008{]} ``Causality Without
+Counterfactuals'' \\
+8 & H Putnam {[}-@WOSA1994PF23100001{]} ``Sense, Nonsense, and the
+Senses: An Inquiry into the Powers of the Human Mind'' \\
+8 & PE Griffiths and RD Gray {[}-@WOSA1994NP54800001{]} ``Developmental
+Systems and Evolutionary Explanation'' \\
+6 & DW Zimmerman {[}-@WOSA1995RC31600002{]} ``Theories of Masses and
+Problems of Constitution'' \\
+8 & B Fitelson {[}-@WOS000183806600006{]} ``A Probabilistic Theory of
+Coherence'' \\
 
 \end{longtable}
 
@@ -1158,7 +1003,6 @@ and 1990s papers really stand out. Table~\ref{tbl-three-fade-away} lists
 the papers that appear on three lists of top twenty most cited recent
 papers, but which are not cited nearly as much in recent years.
 
-
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1111}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8889}}@{}}
@@ -1178,46 +1022,29 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-2 & N Block
-(\citeproc{ref-WOSA1980JW85100004}{1980})
-``Are Absent Qualia Impossible'' \\
-0 & DP Lackey
-(\citeproc{ref-WOSA1982NV01500001}{1982})
-``Missiles and Morals: A Utilitarian Look At Nuclear Deterrence'' \\
-2 & J Haugeland
-(\citeproc{ref-WOSA1982NC42600008}{1982})
-``Weak Supervenience'' \\
-5 & J Kim
-(\citeproc{ref-WOSA1982NC90700004}{1982})
-``Psychophysical Supervenience'' \\
-2 & E Eells and E Sober
-(\citeproc{ref-WOSA1983QJ85300002}{1983})
-``Probabilistic Causality and the Question of Transitivity'' \\
-4 & PM Churchland
-(\citeproc{ref-WOSA1985AAC6100002}{1985})
-``Reduction, Qualia, and the Direct Introspection of Brain States'' \\
-6 & T Nagel
-(\citeproc{ref-WOSA1987J379200001}{1987})
-``Moral Conflict and Political Legitimacy'' \\
-1 & N Carroll
-(\citeproc{ref-WOSA1988Q411400001}{1988})
-``Art, Practice, and Narrative'' \\
-6 & JW Kim
-(\citeproc{ref-WOSA1990FU75100001}{1990})
-``Supervenience as a Philosophical Concept'' \\
-7 & T Crane and DH Mellor
-(\citeproc{ref-WOSA1990DA14600002}{1990})
-``There is No Question of Physicalism'' \\
-3 & K Falvey and J Owens
-(\citeproc{ref-WOSA1994NP02400004}{1994})
-``Externalism, Self-Knowledge, and Skepticism'' \\
-7 & P Pietroski and G Rey
-(\citeproc{ref-WOSA1995QL53800004}{1995})
-``When Other Things Aren't Equal: Saving Ceteris Paribus Laws From
-Vacuity'' \\
-5 & T Sider
-(\citeproc{ref-WOS000073301000002}{1997})
-``Four Dimensionalism'' \\
+2 & N Block {[}-@WOSA1980JW85100004{]} ``Are Absent Qualia
+Impossible'' \\
+0 & DP Lackey {[}-@WOSA1982NV01500001{]} ``Missiles and Morals: A
+Utilitarian Look At Nuclear Deterrence'' \\
+2 & J Haugeland {[}-@WOSA1982NC42600008{]} ``Weak Supervenience'' \\
+5 & J Kim {[}-@WOSA1982NC90700004{]} ``Psychophysical Supervenience'' \\
+2 & E Eells and E Sober {[}-@WOSA1983QJ85300002{]} ``Probabilistic
+Causality and the Question of Transitivity'' \\
+4 & PM Churchland {[}-@WOSA1985AAC6100002{]} ``Reduction, Qualia, and
+the Direct Introspection of Brain States'' \\
+6 & T Nagel {[}-@WOSA1987J379200001{]} ``Moral Conflict and Political
+Legitimacy'' \\
+1 & N Carroll {[}-@WOSA1988Q411400001{]} ``Art, Practice, and
+Narrative'' \\
+6 & JW Kim {[}-@WOSA1990FU75100001{]} ``Supervenience as a Philosophical
+Concept'' \\
+7 & T Crane and DH Mellor {[}-@WOSA1990DA14600002{]} ``There is No
+Question of Physicalism'' \\
+3 & K Falvey and J Owens {[}-@WOSA1994NP02400004{]} ``Externalism,
+Self-Knowledge, and Skepticism'' \\
+7 & P Pietroski and G Rey {[}-@WOSA1995QL53800004{]} ``When Other Things
+Aren't Equal: Saving Ceteris Paribus Laws From Vacuity'' \\
+5 & T Sider {[}-@WOS000073301000002{]} ``Four Dimensionalism'' \\
 
 \end{longtable}
 
@@ -1332,264 +1159,6 @@ considerably more papers on these two topics if we look at the papers
 that are only in one or two of the top twenty lists, or which have ten
 to fifteen citations in recent years (and hence are still pulling the
 median downward).
-
-\phantomsection\label{refs}
-\begin{CSLReferences}{1}{0}
-\bibitem[\citeproctext]{ref-WOSA1980JW85100004}
-Block, N. 1980. {``Are Absent Qualia Impossible.''} \emph{Philosophical
-Review} 89 (2): 257--74.
-
-\bibitem[\citeproctext]{ref-WOSA1990CV26800001}
-Boghossian, PA. 1990. {``The Status of Content.''} \emph{Philosophical
-Review} 99 (2): 157--84.
-
-\bibitem[\citeproctext]{ref-WOSA1989T231400005}
-Boghossian, PA, and JD Velleman. 1989. {``Color as a Secondary
-Quality.''} \emph{Mind} 98 (389): 81--103.
-
-\bibitem[\citeproctext]{ref-WOSA1993ML38000001}
-Burge, T. 1993. {``Content Preservation.''} \emph{Philosophical Review}
-102 (4): 457--88.
-
-\bibitem[\citeproctext]{ref-WOSA1992HC13100003}
-Burke, MB. 1992. {``Copper Statues and Pieces of Copper: A Challenge to
-the Standard Account.''} \emph{Analysis} 52 (1): 12--17.
-
-\bibitem[\citeproctext]{ref-WOSA1994PD73500006}
----------. 1994. {``Preserving the Principle of 1 Object to a Place: A
-Novel Account of the Relations Among Objects, Sorts, Sortals, and
-Persistance Conditions.''} \emph{Philosophy And Phenomenological
-Research} 54 (3): 591--624.
-
-\bibitem[\citeproctext]{ref-WOSA1988Q411400001}
-Carroll, N. 1988. {``Art, Practice, and Narrative.''} \emph{Monist} 71
-(2): 140--56.
-
-\bibitem[\citeproctext]{ref-WOSA1977DV15800002}
-Castaneda, HN. 1977. {``Perception, Belief, and Structure of Physical
-Objects and Consciousness.''} \emph{Synthese} 35 (3): 285--351.
-
-\bibitem[\citeproctext]{ref-WOSA1985AAC6100002}
-Churchland, PM. 1985. {``Reduction, Qualia, and the Direct Introspection
-of Brain States.''} \emph{Journal Of Philosophy} 82 (1): 8--28.
-
-\bibitem[\citeproctext]{ref-WOSA1989AE70300010}
-Cohen, GA. 1989. {``On the Currency of Egalitarian Justice.''}
-\emph{Ethics} 99 (4): 906--44.
-
-\bibitem[\citeproctext]{ref-WOSA1990DA14600002}
-Crane, T, and DH Mellor. 1990. {``There Is No Question of
-Physicalism.''} \emph{Mind} 99 (394): 185--206.
-
-\bibitem[\citeproctext]{ref-WOS000087998300003}
-D'arms, J, and D Jacobson. 2000. {``The Moralistic Fallacy: On the
-'Appropriateness' of Emotions.''} \emph{Philosophy And Phenomenological
-Research} 61 (1): 65--90.
-
-\bibitem[\citeproctext]{ref-WOSA1977EA35800003}
-Darwall, SL. 1977. {``Two Kinds of Respect.''} \emph{Ethics} 88 (1):
-36--49.
-
-\bibitem[\citeproctext]{ref-WOSA1990EQ84600001}
-Davidson, D. 1990. {``The Structure and Content of Truth.''}
-\emph{Journal Of Philosophy} 87 (6): 279--328.
-
-\bibitem[\citeproctext]{ref-WOSA1991EN62900002}
-Dennett, DC. 1991. {``Real Patterns.''} \emph{Journal Of Philosophy} 88
-(1): 27--51.
-
-\bibitem[\citeproctext]{ref-WOSA1992KB29500008}
-Derose, K. 1992. {``Contextualism and Knowledge Attributions.''}
-\emph{Philosophy And Phenomenological Research} 52 (4): 913--29.
-
-\bibitem[\citeproctext]{ref-WOS000166575500001}
-Douglas, H. 2000. {``Inductive Risk and Values in Science.''}
-\emph{Philosophy Of Science} 67 (4): 559--79.
-
-\bibitem[\citeproctext]{ref-WOSA1983QJ85300002}
-Eells, E, and E Sober. 1983. {``Probabilistic Causality and the Question
-of Transitivity.''} \emph{Philosophy Of Science} 50 (1): 35--57.
-
-\bibitem[\citeproctext]{ref-WOSA1994NP02400004}
-Falvey, K, and J Owens. 1994. {``Externalism, Self-Knowledge, and
-Skepticism.''} \emph{Philosophical Review} 103 (1): 107--37.
-
-\bibitem[\citeproctext]{ref-WOS000183806600006}
-Fitelson, B. 2003. {``A Probabilistic Theory of Coherence.''}
-\emph{Analysis} 63 (3): 194--99.
-
-\bibitem[\citeproctext]{ref-WOSA1991EN62900001}
-Fodor, JA. 1991. {``A Modal Argument for Narrow Content.''}
-\emph{Journal Of Philosophy} 88 (1): 5--26.
-
-\bibitem[\citeproctext]{ref-WOSA1990EB39300002}
-Forbes, G. 1990. {``The Indispensability of Sinn.''} \emph{Philosophical
-Review} 99 (4): 535--63.
-
-\bibitem[\citeproctext]{ref-WOSA1994NQ78600001}
-Forster, M, and E Sober. 1994. {``How to Tell When Simpler, More
-Unified, or Less \_Ad Hoc\_ Theories Will Provide More Accurate
-Predictions.''} \emph{British Journal For The Philosophy Of Science} 45
-(1): 1--35.
-
-\bibitem[\citeproctext]{ref-WOS000170434600004}
-Goldman, AI. 2001. {``Experts: Which Ones Should You Trust?''}
-\emph{Philosophy And Phenomenological Research} 63 (1): 85--110.
-
-\bibitem[\citeproctext]{ref-WOSA1994NP54800001}
-Griffiths, PE, and RD Gray. 1994. {``Developmental Systems and
-Evolutionary Explanation.''} \emph{Journal Of Philosophy} 91 (6):
-277--304.
-
-\bibitem[\citeproctext]{ref-WOS000085841900002}
-Haslanger, S. 2000. {``Gender and Race: (What) Are They? (What) Do We
-Want Them to Be?''} \emph{Noûs} 34 (1): 31--55.
-
-\bibitem[\citeproctext]{ref-WOSA1982NC42600008}
-Haugeland, J. 1982. {``Weak Supervenience.''} \emph{American
-Philosophical Quarterly} 19 (1): 93--103.
-
-\bibitem[\citeproctext]{ref-WOS000234618400001}
-Hieronymi, P. 2005. {``The Wrong Kind of Reason.''} \emph{Journal Of
-Philosophy} 102 (9): 437--57.
-
-\bibitem[\citeproctext]{ref-WOSA1988P549200004}
-Jackson, F, and P Pettit. 1988. {``Functionalism and Broad Content.''}
-\emph{Mind} 97 (387): 381--400.
-
-\bibitem[\citeproctext]{ref-WOSA1992KC39800002}
-Johnston, M. 1992. {``How to Speak of the Colors.''} \emph{Philosophical
-Studies} 68 (3): 221--63.
-
-\bibitem[\citeproctext]{ref-WOS000077956100002}
-Joyce, JM. 1998. {``A Nonpragmatic Vindication of Probabilism.''}
-\emph{Philosophy Of Science} 65 (4): 575--603.
-
-\bibitem[\citeproctext]{ref-WOSA1978EL93700009}
-Kim, J. 1978. {``Supervenience and Nomological Incommensurables.''}
-\emph{American Philosophical Quarterly} 15 (2): 149--56.
-
-\bibitem[\citeproctext]{ref-WOSA1982NC90700004}
----------. 1982. {``Psychophysical Supervenience.''} \emph{Philosophical
-Studies} 41 (1): 51--70.
-
-\bibitem[\citeproctext]{ref-WOSA1984TV24600001}
----------. 1984. {``Concepts of Supervenience.''} \emph{Philosophy And
-Phenomenological Research} 45 (2): 153--76.
-
-\bibitem[\citeproctext]{ref-WOSA1990FU75100001}
-Kim, JW. 1990. {``Supervenience as a Philosophical Concept.''}
-\emph{Metaphilosophy} 21 (1-2): 1--27.
-
-\bibitem[\citeproctext]{ref-WOSA1990CH71200001}
-Kitcher, P. 1990. {``The Division of Cognitive Labor.''} \emph{Journal
-Of Philosophy} 87 (1): 5--22.
-
-\bibitem[\citeproctext]{ref-WOSA1992HF90300002}
----------. 1992. {``The Naturalists Return.''} \emph{Philosophical
-Review} 101 (1): 53--114.
-
-\bibitem[\citeproctext]{ref-WOSA1982NV01500001}
-Lackey, DP. 1982. {``Missiles and Morals: A Utilitarian Look at Nuclear
-Deterrence.''} \emph{Philosophy \& Public Affairs} 11 (3): 189--231.
-
-\bibitem[\citeproctext]{ref-WOSA1987F902200002}
-Laudan, L. 1987. {``Progress or Rationality: The Prospects for Normative
-Naturalism.''} \emph{American Philosophical Quarterly} 24 (1): 19--31.
-
-\bibitem[\citeproctext]{ref-WOSA1990CX46800004}
----------. 1990. {``Normative Naturalism.''} \emph{Philosophy Of
-Science} 57 (1): 44--59.
-
-\bibitem[\citeproctext]{ref-WOSA1979HJ57600007}
-Lewis, D. 1979. {``Scorekeeping in a Language Game.''} \emph{Journal Of
-Philosophical Logic} 8 (3): 339--59.
-
-\bibitem[\citeproctext]{ref-WOSA1994PM10400005}
----------. 1994. {``Humean Supervenience Debugged.''} \emph{Mind} 103
-(412): 473--90.
-
-\bibitem[\citeproctext]{ref-WOSA1991EW83300002}
-Mckinsey, M. 1991. {``Anti-Individualism and Privileged Access.''}
-\emph{Analysis} 51 (1): 9--16.
-
-\bibitem[\citeproctext]{ref-WOSA1989U850300001}
-Millikan, RG. 1989a. {``Biosemantics.''} \emph{Journal Of Philosophy} 86
-(6): 281--97.
-
-\bibitem[\citeproctext]{ref-WOSA1989AA09400006}
----------. 1989b. {``In Defense of Proper Functions.''} \emph{Philosophy
-Of Science} 56 (2): 288--302.
-
-\bibitem[\citeproctext]{ref-WOSA1987J379200001}
-Nagel, T. 1987. {``Moral Conflict and Political Legitimacy.''}
-\emph{Philosophy \& Public Affairs} 16 (3): 215--40.
-
-\bibitem[\citeproctext]{ref-WOSA1991FQ15000002}
-Neander, K. 1991a. {``Functions as Selected Effects: The Conceptual
-Analyst's Defense.''} \emph{Philosophy Of Science} 58 (2): 168--84.
-
-\bibitem[\citeproctext]{ref-WOSA1991GR92500005}
----------. 1991b. {``The Teleological Notion of Function.''}
-\emph{Australasian Journal Of Philosophy} 69 (4): 454--68.
-
-\bibitem[\citeproctext]{ref-WOSA1995RP14800001}
----------. 1995. {``Misrepresenting and Malfunctioning.''}
-\emph{Philosophical Studies} 79 (2): 109--41.
-
-\bibitem[\citeproctext]{ref-WOSA1995QL53800004}
-Pietroski, P, and G Rey. 1995. {``When Other Things Aren't Equal: Saving
-Ceteris Paribus Laws from Vacuity.''} \emph{British Journal For The
-Philosophy Of Science} 46 (1): 81--110.
-
-\bibitem[\citeproctext]{ref-WOSA1994PF23100001}
-Putnam, H. 1994. {``Sense, Nonsense, and the Senses: An Inquiry into the
-Powers of the Human Mind.''} \emph{Journal Of Philosophy} 91 (9):
-445--65.
-
-\bibitem[\citeproctext]{ref-WOSA1985APA8500001}
-Rawls, J. 1985. {``Justice as Fairness: Political Not Metaphysical.''}
-\emph{Philosophy \& Public Affairs} 14 (3): 223--51.
-
-\bibitem[\citeproctext]{ref-WOSA1988Q394000001}
----------. 1988. {``The Priority of Right and Ideas of the Good.''}
-\emph{Philosophy \& Public Affairs} 17 (4): 251--76.
-
-\bibitem[\citeproctext]{ref-WOSA1990DR99100001}
-Rosen, G. 1990. {``Modal Fictionalism.''} \emph{Mind} 99 (395): 327--54.
-
-\bibitem[\citeproctext]{ref-WOSA1994NQ04900008}
-Salmon, WC. 1994. {``Causality Without Counterfactuals.''}
-\emph{Philosophy Of Science} 61 (2): 297--312.
-
-\bibitem[\citeproctext]{ref-WOSA1992JQ78400001}
-Schiffer, S. 1992. {``Belief Ascription.''} \emph{Journal Of Philosophy}
-89 (10): 499--521.
-
-\bibitem[\citeproctext]{ref-WOS000073301000002}
-Sider, T. 1997. {``Four Dimensionalism.''} \emph{Philosophical Review}
-106 (2): 197--231.
-
-\bibitem[\citeproctext]{ref-WOS000227058600002}
-Smith, AM. 2005. {``Responsibility for Attitudes: Activity and Passivity
-in Mental Life.''} \emph{Ethics} 115 (2): 236--71.
-
-\bibitem[\citeproctext]{ref-WOSA1971Y116900003}
-Thomson, JJ. 1971. {``A Defense of Abortion.''} \emph{Philosophy \&
-Public Affairs} 1 (1): 47--66.
-
-\bibitem[\citeproctext]{ref-WOSA1990EG85000002}
-Tye, M. 1990. {``Vague Objects.''} \emph{Mind} 99 (396): 535--57.
-
-\bibitem[\citeproctext]{ref-WOSA1992JA62400001}
-Yablo, S. 1992. {``Mental Causation.''} \emph{Philosophical Review} 101
-(2): 245--80.
-
-\bibitem[\citeproctext]{ref-WOSA1995RC31600002}
-Zimmerman, DW. 1995. {``Theories of Masses and Problems of
-Constitution.''} \emph{Philosophical Review} 104 (1): 53--110.
-
-\end{CSLReferences}
 
 
 

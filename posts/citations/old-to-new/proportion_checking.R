@@ -6,7 +6,7 @@ article_count <- active_philo_bib |>
   mutate(five_year = slide_int(n, sum, .before = 4))
 
 
-for (y in 1967:2010){
+for (y in 1965:2010){
   target_articles <- floor(
     filter(
       article_count, year == y + 4
