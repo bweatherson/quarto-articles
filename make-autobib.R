@@ -1,3 +1,8 @@
+require(tidyverse)
+require(bib2df)
+
+load("/Users/weath/Documents/citations-2024/philo_bib_fix.RData")
+
 bibtexgen <- philo_bib_fix |>
   select(BIBTEXKEY = id, YEAR = year, JOURNAL = journal, end_of_longcite, AUTHOR = auth, TITLE = art_title) |>
   mutate(BIBTEXKEY = str_replace(BIBTEXKEY, ":", "")) |>

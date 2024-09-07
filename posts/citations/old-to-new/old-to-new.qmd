@@ -1,0 +1,771 @@
+---
+title: "Citations, Then and Now"
+abstract: |
+  This note looks at articles that were relatively widely cited soon after publication, and asks how often they have been cited in recent years. The main finding is that between 1980 and the late 1990s, many articles that were widely cited at the time have largely disappeared from the citation record in recent times.
+date: September 3 2024
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+  - in progress
+  - unpublished
+pdf-engine: xelatex
+bibliography: ../../../autobib.bib
+csl: ../../../chicago-with-note.csl
+draft: true
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+  pdf:
+    fig-format: pdf
+    include-after-body: 
+        text: |
+          \noindent Published online in September 2024.
+  docx:
+    reference-doc: ../../../quarto-articles-template.docx
+---
+
+```{r}
+#| label: loader
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(-0.3, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+
+}
+```
+
+```{r}
+#| lable: mainscripts
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(lsa)
+
+load("/Users/weath/Documents/citations-2024/philo_bib_fix.RData")
+load("/Users/weath/Documents/citations-2024/philo_cite_with_jp.RData")
+
+start_year <- 1965
+end_year <- 2022
+window <- 0
+min_data <- 5
+
+active_philo_bib <- philo_bib_fix |>
+  filter(year >= start_year, year <= end_year) |>
+  mutate(tbl_cite = paste0(auth, " [-@",str_replace(id,":",""),"] \"", art_title, "\""))
+
+authadjust <- function(x){
+  paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
+}
+
+authadjust_short <- function(x){
+  str_to_title(str_extract(x,".+(?=,)"))
+}
+
+article_years <- active_philo_bib |>
+  as_tibble() |>
+  select(id, year)
+
+citation_tibble <- philo_cite_with_jp |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year) |> # The next lines are new - restricting attention to 1966-end_year
+  filter(new_year <= end_year, new_year >= start_year, old_year >= start_year, old_year <= end_year) |>
+  mutate(range_year = floor((old_year)/5)*5) |>
+  filter(old_year <= 2014)
+
+all_still_standing <- c()
+all_median <- c()
+
+for (i in 4:0){
+  new_citation_tibble <- citation_tibble |>
+    mutate(range_year = floor((old_year-i)/5)*5+i)
+  all_early_cites <- new_citation_tibble |>
+    filter(new_year - range_year <= 9)
+  
+  all_late_cites <- new_citation_tibble |>
+    filter(new_year >= 2020)
+  
+  tally_late_cites <- all_late_cites |>
+    ungroup() |>
+    group_by(old) |>
+    tally() |>
+    arrange(desc(n))
+  
+  summ_early_cites <- all_early_cites |>
+    ungroup() |>
+    group_by(old, old_year, range_year) |>
+    summarise(e_cites = n(), .groups = "drop")
+  
+  summ_late_cites <- all_late_cites |>
+    ungroup() |>
+    group_by(old, old_year, range_year) |>
+    summarise(l_cites = n(), .groups = "drop")
+  
+  combined_cites <- summ_early_cites |>
+    full_join(summ_late_cites, by = c("old", "old_year", "range_year")) |>
+    mutate(
+      across(everything(), ~replace_na(.x, 0))
+    ) |>
+    mutate(
+      e_score = e_cites + l_cites/1000,
+      l_score = l_cites + e_cites/1000
+    ) |>
+    group_by(range_year) |>
+    mutate(
+      e_rank = min_rank(-e_score),
+      l_rank = min_rank(-l_score),
+      o_rank = pmin(e_rank, l_rank)
+    ) |>
+    ungroup() |>
+    arrange(o_rank, -e_score, -l_score) |>
+    group_by(range_year) |>
+    mutate(f_rank = row_number()) |>
+    filter(f_rank <= 100) |>
+    ungroup() |>
+    left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year"))
+  
+  still_standing <- combined_cites |>
+    filter(e_rank <= 20) |>
+    select(e_cites, l_cites, auth, old_year, range_year, art_title, journal, everything()) |>
+    arrange(range_year, desc(e_cites))
+  
+  still_standing_by_range <- still_standing |>
+    filter(l_cites >= 16) |>
+    ungroup() |>
+    group_by(range_year) |>
+    tally()
+  
+  median_new_cites_of_classics <- combined_cites |>
+    ungroup() |>
+    group_by(range_year) |>
+    filter(e_rank <= 20) |>
+    summarise(cites = median(l_cites))
+  
+  all_still_standing <- bind_rows(all_still_standing, still_standing_by_range)
+  all_median <- bind_rows(all_median, median_new_cites_of_classics)
+}
+
+```
+
+This post is about how citation patterns change. In particular, it is about what kinds of articles are widely cited when they first come out, but less cited in the future. The key result is that there were surprisingly many of these articles in journals between 1980 and 1995. The main cause of the drop in citations seems to be simple changes in trends. In particular, so much journal attention was paid to relatively a priori investigations into mental content. That's not nearly as large a part of the philosophical landscape now, so the articles that focus on it are less widely cited.
+
+The dataset I'm using is the same as in [an earlier post](http://brian.weatherson.org/quarto/posts/citations-raw-data/citations.html), and I won't repeat it here. The big thing to know is that I'm just looking at one hundred Anglophone, relatively analytic, philosophy journals, and looking at citations in those journals to those journals. For this study I'm going to start in 1965. 
+
+Note that because of a gap in the Web of Science data, I had to manually add citations to _Journal of Philosophy_ articles from 1971 to 1974, but I don't have citations by those articles. That leads to some weirdnesses, but I don't think it drastically affects these results. 
+
+Note also that Web of Science doesn't start indexing _Analysis_ until 1975. This does affect the results substantially; there is no point looking pre-1965 because so many of the widely cited articles are in _Analysis_. I suspect having _Analysis_ would make a pretty big change to 1965-1970 as well, but I can't be sure.
+
+# Study 1 - Counting widely cited articles {#sec-study-one}
+
+The main focus here is on articles published between 1965 and 2014. I'm stopping in 2014 because I want to be able to compare how articles were cited soon after publication, with how they have been cited recently. That requires having enough non-recent years that are 'soon after publication'. Since my dataset stops in mid-2022, that implied stopping in 2014.
+
+Divide that fifty year period up into ten periods of five years each, in the obvious way. So for each decade we have the early and late half of the decade, though we just have late 1960s and early 2010s.
+
+For each half-decade, and each article published in it, find two values.
+
+- The **early cites** to the article are citations by the end of the subsequent half-decade. So for articles published between 1990 and 1994, that means citations in or before 1999.
+- The **late cites** to the article are citations in 2020, 2021, and the part of 2022 covered in the dataset.
+
+The late cites might not seem like much of a dataset. But because there are so many articles published now, and because citation practices have changed so much, that includes many many citations. The dataset I have goes back to the mid-1950s, but over a quarter of the citations are in these two and a half years.
+
+Having done that, rank the articles by the number of early cites they have, using the number of late cites as a tiebreaker. The tiebreakers are important, because citations just within journals are not very high; the typical case is that there are lots of ties.
+
+Then choose the top twenty articles, i.e., the twenty articles that were most cited by the end of the subsequent half-decade. (With ties broken by looking at what was most cited recently.) For the period 1990-1994, @tbl-early-1990s lists the twenty articles in question.
+
+```{r}
+#| label: tbl-early-1990s
+#| cache: false
+#| tbl-cap: "The twenty articles from 1990-1994 most widely cited at the time."
+
+kable(
+  still_standing |>
+    filter(range_year == 1990) |>
+    mutate(Article = tbl_cite) |>
+    select(Article)
+)
+```
+
+If we look at all the articles in the dataset, just over 1% have been cited sixteen or more times since 2020. (Just under 1% have been cited seventeen or more times.) Call this top 1% of cited articles the _widely cited_ articles in recent philosophy. Our first question is how many of these twenty articles that were the most cited at the time, are widely cited in this sense.
+
+The answer is just four: Stephen Yablo's paper on mental causation, Philip Kitcher's paper on the division of cognitive labour, and Karen Neander's two papers on functions. @tbl-early-1990s-expanded shows how often each of these articles were cited in the 'early' years, i.e., 1990-1999, and how often they are cited in the 'late years', i.e., from 2020 to mid 2022.
+
+```{r}
+#| label: tbl-early-1990s-expanded
+#| cache: false
+#| tbl-cap: "Early and late citations to twenty articles from 1990-1994."
+
+kable(
+  still_standing |>
+    filter(range_year == 1990) |>
+    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = tbl_cite)
+)
+```
+
+This is extremely unusual, though as we'll see in a bit it is something of an outlier result. If we do the same thing for each of the five year periods, we typically see about 8-10 articles be widely cited in this way, with the numbers rising as we get closer to the present. @fig-still-standing shows the numbers for each half-decade. (Note that the year on the x-axis is the start of the half-decade being shown.)
+
+```{r}
+#| label: fig-still-standing
+#| cache: false
+#| fig-cap: "How many of the twenty articles most cited at the time are still widely cited."
+
+still_standing_by_range |>
+  ggplot(aes(x = range_year, y = n)) +
+  geom_point(size = 5) +
+  labs(x = element_blank(),
+       y = element_blank()) +
+  ylim(0, 20)
+```
+
+As you can see, the period 1990-1994 really stands out here. But it's a bit crude to just look at what's above or below a threshold. Let's try being a bit more finegrained.
+
+# Study 2 - Median citations of The Twenty {#sec-study-two}
+
+Instead of looking at how many of the twenty articles crossed a somewhat arbitrarily selected threshold, we could look instead at the median number of citations they have in the period 2020-2022. I'm using median not mean because the means end up being largely determined by how widely cited the one or two most cited pieces are. If we use the same twenty articles for each five year period, and calculate the median number of citations they have in 2020-2022, we get the results seen in @fig-median-cites.
+
+```{r}
+#| label: fig-median-cites
+#| cache: false
+#| fig-cap: "The median number of recent citations to twenty articles most cited at the time."
+
+median_new_cites_of_classics |>
+  ggplot(aes(x = range_year, y = cites)) +
+  geom_point(size = 5) +
+  labs(x = element_blank(),
+       y = element_blank()) +
+  ylim(0, 42)
+```
+
+The 1990-1994 period still does poorly, but it's not as dramatic as on @fig-still-standing.
+
+The 1970-1974 period does surprisingly badly on this measure. That period includes the four very widely cited articles listed in @tbl-early-1970s-sample.
+
+```{r}
+#| label: tbl-early-1970s-sample
+#| cache: false
+#| tbl-cap: "Four very widely cited articles from the early 1970s"
+
+kable(
+  still_standing |>
+    filter(range_year == 1970) |>
+    arrange(desc(l_cites)) |>
+    slice(1:4) |>
+    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = tbl_cite)
+)
+```
+
+But several other articles that were more prominent at the time, including two by Hartry Field and two by Richard Rorty, are not nearly as prominent in the recent literature. The large number of citations to these four articles doesn't move the median that much.
+
+# Study 3 -  Rolling Periods {#sec-study-three}
+
+If you look back at @tbl-early-1990s, you see a lot of articles from 1990 and 1991 in particular. This shouldn't be a surprise. The way the twenty articles were selected was by looking at the most cited articles by a fixed date, in this case 1999. Articles published in 1990 and 1991 had a lot more time to accumulate citations by 1999 than articles published later in the half-decade.
+
+One way to fix that is to get away from having round numbers in our five year periods. For any year *y* from 1965 to 2010, we can perform the following calculations.
+
+- Select the articles published between *y* and *y+4.
+- Sort them by the number of citations they have by *y*+9 (using citations since 2020 as a tiebreaker).
+- Ask how many of the top twenty on that list are widely cited recently (i.e., have at least sixteen citations).
+
+If we set *y* to be 1990, that gives us the results we saw in @tbl-early-1990s and @tbl-early-1990s-expanded. But we can do it for years that don't end with 0 and 5. If we do it for all the years from 1965 to 2010, we get the results in @fig-all-still-standing.
+
+```{r}
+#| label: fig-all-still-standing
+#| cache: false
+#| fig-cap: "How many of the twenty articles most cited at the time are still widely cited."
+
+all_still_standing |>
+  filter(range_year >= 1965, range_year <= 2010) |>
+  ggplot(aes(x = range_year, y = n)) +
+  geom_point(size = 5) +
+  labs(x = element_blank(),
+       y = element_blank()) +
+  ylim(0, 20)
+```
+
+The odd result for 1990 itself looks like an outlier here. Why are the years around it so different?
+
+It's easy to explain why the value for 1989 is different. The articles listed in @tbl-top-1989 were published in 1989, and widely cited.
+
+```{r}
+#| label: tbl-top-1989
+#| cache: false
+#| tbl-cap: "Widely cited articles from 1989"
+
+new_citation_tibble <- citation_tibble |>
+  filter(old_year == 1989)
+
+the_89_early_cites <- new_citation_tibble |>
+  filter(new_year <= 1998)
+
+the_89_late_cites <- new_citation_tibble |>
+  filter(new_year >= 2020)
+
+the_89_early_cites <- the_89_early_cites |>
+  ungroup() |>
+  group_by(old, old_year, range_year) |>
+  summarise(e_cites = n(), .groups = "drop") |>
+  filter(e_cites >= 15)
+
+the_89_late_cites <- the_89_late_cites |>
+  ungroup() |>
+  group_by(old, old_year, range_year) |>
+  summarise(l_cites = n(), .groups = "drop") |>
+  filter(l_cites >= 16)
+
+the_89_both <- the_89_early_cites |>
+  inner_join(the_89_late_cites, by = c("old", "old_year", "range_year")) |>
+  left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year")) |>
+  select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = tbl_cite)
+
+kable(the_89_both)
+```
+
+The range 1989-1993 includes those four articles which the range 1990-1994 does not. But what is going on with the range 1991-1995? How does adding 1995 to the set make such a difference? It's a bit more complicated than that. The nine articles from 1991-1995 which are widely cited recently are shown in @tbl-top-1991.
+
+```{r}
+#| label: tbl-top-1991
+#| cache: false
+#| tbl-cap: "Widely cited articles from 1991"
+
+new_citation_tibble <- citation_tibble |>
+  filter(old_year >= 1991, old_year <= 1995)
+
+the_91_early_cites <- new_citation_tibble |>
+  filter(new_year <= 2000)
+
+the_91_late_cites <- new_citation_tibble |>
+  filter(new_year >= 2020)
+
+the_91_early_cites <- the_91_early_cites |>
+  ungroup() |>
+  group_by(old, old_year, range_year) |>
+  summarise(e_cites = n(), .groups = "drop") 
+
+the_91_late_cites <- the_91_late_cites |>
+  ungroup() |>
+  group_by(old, old_year, range_year) |>
+  summarise(l_cites = n(), .groups = "drop") 
+
+the_91_both <- the_91_early_cites |>
+  full_join(the_91_late_cites, by = c("old", "old_year", "range_year")) |>
+  mutate(
+    across(everything(), ~replace_na(.x, 0))
+  ) |>
+  mutate(
+    e_score = e_cites + l_cites/1000,
+    l_score = l_cites + e_cites/1000
+  ) |>
+  mutate(
+    e_rank = min_rank(-e_score),
+    l_rank = min_rank(-l_score),
+    o_rank = pmin(e_rank, l_rank)
+  ) |>
+  arrange(o_rank, -e_score, -l_score) |>
+  mutate(f_rank = row_number()) |>
+  filter(f_rank <= 100) |>
+  ungroup() |>
+  left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year")) |>
+  filter(e_rank <= 20)
+
+kable(
+  the_91_both |>
+    arrange(desc(l_cites)) |>
+    filter(l_cites >= 16) |>
+    select(`Early Cites` = e_cites, `Late Cites` = l_cites, Article = tbl_cite)
+)
+```
+
+What's happened here is that several of the articles, most notably the Lewis and Dennett ones, did not get a huge number of citations straight away. They counted for the period 1991-1995 but not the period 1990-1994 because they were so often cited in 2000.
+
+There is something nice about this way of counting how many 'early' cites a paper has. What counts as a citation 'at the time' in philosophy is somewhat vague. Philosophy moves slowly, at least relative to some sciences, so citations within the first five years are clearly early citations. Citations when the paper is ten years old or more are not early citations. Between those two, there is some vagueness.
+
+One way to handle that vagueness would be to stipulate what we mean by 'early'. Any such stipulation would be somewhat arbitrary, and any results would have to be checked by re-running the model for other stipulations.
+
+The method here of looking at rolling, overlapping, intervals allows us to accommodate the vagueness. Consider two hypothetical papers. Paper one gets fifty citations the year it comes out, and is never cited again. Paper two is not cited for eight years, then gets fifty citations every year after that. Paper one will be in the top twenty papers with the most early cites for five different periods; all the ones it is eligible for. Paper two will only be in the top twenty for one of those intervals, the very last one it was eligible for. So for graphs like @fig-all-still-standing, paper one will impact (and pull down), five of the points, while paper two will only impact (and pull up), one of them. If paper two had started getting citations earlier, it would have impacted more of the points. In that way, graphs like @fig-all-still-standing take account of the vagueness in 'early'.
+
+Later on, we will want to focus on articles, like article one, that affect many points in the graph, and it's useful to think about why different articles might be differentially important to this graph.
+
+Summing up, @fig-all-still-standing that there was something a bit unusual about the results in @sec-study-one and @sec-study-two. It was only by a very particular choice of years that the period 1990-1994 looks so unusual.
+
+But the broader picture shows that the particular period 1990-1994 was a bit unusual relative to its surrounds. It still leaves us with a question about those surrounds. And we need one last study to see the thing that most needs explaining.
+
+# Study 4 - Medians in Rolling Periods {#sec-study-four}
+
+As in @sec-study-three, do the following calculation for each year *y*.
+
+- Select the articles published between *y* and *y+4.
+- Sort them by the number of citations they have by *y*+9 (using citations since 2020 as a tiebreaker).
+- Focus on the top twenty in that list.
+
+But instead of asking how many of these twenty are 'widely cited', instead calculate the median number of citations since 2020 for those twenty articles. The results are shown in @fig-all-median.
+
+```{r}
+#| label: fig-all-median
+#| cache: false
+#| fig-cap: "The median number of recent cites for the twenty articles most cited at the time."
+
+require(ggforce)
+all_median |>
+  filter(range_year >= 1965, range_year <= 2010) |>
+  ggplot(aes(x = range_year, y = cites)) +
+  geom_point(size = 5) +
+  labs(x = element_blank(),
+       y = element_blank()) +
+  ylim(0, 42)
+```
+
+This is a really amazing graph. Every year from 1980 to 1995 is worse than every year from 1974 to 1979, and every year from 1996 to the present. How could this have happened?
+
+# Three Explanations {#sec-three-explanations}
+
+When we think about what @fig-all-median is measuring, we can see that there are three ways that the result might have come about. Each of these 'ways' suggests different places to look for the underlying explanation, but first we need to test which of them matches the data.
+
+First, it might be that philosophers in recent years have systematically ignored journal articles published in the 1980s and 1990s. If there are few widely cited articles from those years, these medians will be pulled down.
+
+Second, it might be that the widely cited articles from the 1980s and 1990s are particularly likely to have not been cited much at the time. It's easy to find examples of that. Rae Langton's 1993 paper "Speech Acts and Unspeakable Acts" has 49 citations between 2020 and mid-2022. But it doesn't show up in @fig-all-median because it had hardly any citations for more than a decade after it was published. If the work that philosophers now focus on from the 1980s and 1990s was systematically ignored when it first came out, we'd again see the shape of the graph in @fig-all-median.
+
+Third, it might be that the articles which were particularly heavily discussed at the time are discussed much less these days. So consider two articles from 1988, Frank Jackson and Philip Pettit's "Functionalism and Broad Content", and John Rawls's "The Priority of Right and Ideas of the Good". Both of them were so widely discussed that they became among the twenty most cited recent articles within five years of publication. In the terms discussed earlier, they each impact five points on the graph. And this impact is to drag the points down, because each of them was only cited five times between 2020 and mid-2022. Now I say 'only' even though this is still a non-trivial number of citations; two-thirds of the papers in the database have no citations at all in this time. It is, however, a lot fewer citations than you might expect given their immediate prominence.
+
+All three of these explanations get at part of the truth, but I think the data suggests the third of them is the most important. One striking thing that happens around 2000 is that papers like the Jackson and Pettit, and the Rawls, stop showing up in the data. From that point on, if a paper is widely discussed when it's published, it's still widely discussed from 2020 to mid-2022.
+
+The other two explanations don't explain quite so sharp a break. The second explanation does particularly badly on that score; papers that don't take off right away but which eventually become very widely discussed in recent philosophy are more common in the 2000s than in the 1990s. The first explanation does a bit better at matching the data, but only a bit; there are plenty of papers in the 1980s and 1990s that are discussed in recent philosophy, even if they are discussed a bit less than papers from the 1970s and 2000s.
+
+Let's look at these explanations in turn to back up those claims.
+
+# Explanation 1 - The Missing Decades {#sec-missing-decades}
+
+A simple explanation of @fig-all-median would be that no one discusses papers from the 1980s and 1990s nowadays, so they don't discuss papers from the 1980s and 1990s that were widely discussed at the time. This is  a quarter true at most, as the following two graphs show.
+
+@fig-all-widely-cited shows the number of papers published each year which are cited 16 or more times, i.e., which are 'widely cited', between 2020 and 2022.
+
+```{r}
+#| label: fig-all-widely-cited
+#| cache: false
+#| fig-cap: "Number of widely cited articles published each year"
+
+citation_tibble |>
+  filter(old_year >= 1974, old_year <= 2006, new_year >= 2020) |>
+  group_by(old) |>
+  tally() |>
+  filter(n >= 16) |>
+  left_join(active_philo_bib, by = c("old" = "id")) |>
+  select(n, auth, year, art_title, journal, everything()) |>
+  ungroup() |>
+#  group_by(year) |>
+ # tally() |>
+  ggplot(aes(x = year)) + geom_bar() +
+    labs(x = element_blank(),
+       y = element_blank()) 
+```
+
+The number of widely cited articles goes up, but it doesn't go up dramatically enough to explain @fig-all-median. Another way to see this is to look at @fig-all-median-unqualified. This modifies @fig-all-median by removing the qualification that the articles had to be widely cited at the time. For each rolling five year period, it records the median number of citations of the twenty most cited articles full stop. (That is, it is the average of the citations of the tenth most and eleventh most cited articles from that five year period.)
+
+```{r}
+#| label: fig-all-median-unqualified
+#| cache: false
+#| fig-cap: "Median citations of the twenty most cited articles from overlapping five year periods."
+
+median_cites_unqualified <- tribble(~year, ~median)
+
+for (y in 1974:2008){
+  temp <- citation_tibble |>
+    filter(old_year >= y, old_year <= y + 4, new_year >= 2020) |>
+    group_by(old) |>
+    tally() |>
+    arrange(-n) |>
+    slice(1:20)
+  median_cites_unqualified <- median_cites_unqualified |>
+    add_row(year = y, median = median(temp$n))
+}
+
+ggplot(median_cites_unqualified, aes(x = year, y = median)) + geom_point(size = 5) +
+      labs(x = element_blank(),
+       y = element_blank()) 
+```
+
+There is a jump at 1996; that is, the range 1996-2000 does much better on this metric than any five year range earlier than that. So that's why I think this explanation is perhaps a quarter true. But there are two reasons to think it isn't the whole story.
+
+First, part of the surprise in @fig-all-median was that the period 1980-1995 was lower than either side of it. That's not something we see in @fig-all-median-unqualified. This perhaps explains the jump around 1996, but it doesn't explain the drop around 1980.
+
+Second, the absolute values on @fig-all-median-unqualified are so high that it tells against the kind of explanation being offered here. Apart from ranges centered on the mid-1980s, in most five year periods there are ten or more papers that are cited forty or more times in the recent literature. That's easily enough to make the dip in @fig-all-median go away. The key thing here is to not just look at the shape of @fig-all-median-unqualified, but to look at the scale. It's just not true that philosophers are systemtically ignoring work from the 1980s and 1990s, even if they aren't paying it quite as much attention as they are paying to work from the early 2000s.
+
+# Explanation 2 - Late Bloomers {#sec-late-bloomers}
+
+```{r}
+#| label: latebloomcode
+#| cache: false
+
+the_700 <- c()
+
+for (y in 1974:2008){
+  the_20 <- citation_tibble |>
+    ungroup() |>
+    select(-range_year) |>
+    filter(old_year >= y, old_year <= y + 4) |>
+    filter(new_year <= y + 9 | new_year >= 2020) |>
+    mutate(cite_age = case_when(
+      new_year <= y + 9 ~ "e_cites",
+      new_year >= 2020 ~ "l_cites"
+    )) |>
+    group_by(old, old_year, cite_age) |>
+    summarise(cites = n(), .groups = "drop") |>
+    pivot_wider(id_cols = c(old), names_from = cite_age, values_from = cites) |>
+    replace_na(list(e_cites = 0, l_cites = 0)) |>
+    mutate(score = e_cites + l_cites/1000) |>
+    mutate(the_rank = rank(-score)) |>
+    arrange(the_rank) |>
+    slice(1:20) |>
+    select(-score, -the_rank) |>
+    mutate(range_year = y) |>
+    left_join(active_philo_bib, by = c("old" = "id")) |>
+    select(e_cites, l_cites, auth, year, range_year, art_title, journal, everything()) 
+  
+  the_700 <- bind_rows(the_700, the_20)
+}
+
+the_700 <- the_700 |>
+  ungroup() |>
+  group_by(old) |>
+  mutate(appear = n()) |>
+  select(appear, everything()) |>
+  arrange(-appear, l_cites, old)
+
+appear_median <- the_700 |>
+  ungroup() |>
+  group_by(appear) |>
+  summarise(l_cites = median(l_cites))
+
+# the_700 |> 
+#     filter(appear == 3) |>
+#     ungroup() |>
+#     mutate(l_cites = replace(l_cites, l_cites == 0, 0.5)) |>
+#     ungroup() |>
+#     distinct(old, .keep_all = TRUE) |>
+#     select(year, l_cites) |>
+#     ggplot(aes(x = year, y = l_cites)) + 
+#       geom_point(size = 5) + 
+#       scale_y_log10() +
+#       ggrepel::geom_label_repel(data = filter(the_700, appear == 3, (l_cites <= 1 | (year >= 2000 & l_cites <= 10))), aes(label = shortcite))
+
+
+
+widely_cited <- citation_tibble |>
+  filter(old_year >= 1974, old_year <= 2010) |>
+  filter(new_year <= old_year + 9 | new_year >= 2020) |>
+  mutate(cite_age = case_when(
+    new_year <= old_year + 9 ~ "e_cites",
+    new_year >= 2020 ~ "l_cites"
+  )) |>
+  group_by(old, old_year, cite_age) |>
+  summarise(cites = n(), .groups = "drop") |>
+  pivot_wider(id_cols = c(old, old_year), names_from = cite_age, values_from = cites) |>
+  replace_na(list(e_cites = 0, l_cites = 0)) |>
+  left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year")) |>
+  select(e_cites, l_cites, auth, old_year, art_title, journal, everything()) |>
+  filter(l_cites >= 16)
+
+widely_cited_years <- widely_cited |>
+  filter(l_cites >= 16) |>
+  group_by(old_year) |>
+  tally()
+
+very_late_bloomers <- widely_cited |>
+  anti_join(the_700, by = "old") |>
+  filter(old_year <= 2005) |>
+  arrange(-l_cites)
+```
+
+Before looking at the data, I would have guessed that this was the right explanation: the distinctive thing about the 1980s and 1990s was that there was so much interesting work being done whose interest was only recognised much later. That is, to put it bluntly, not what the data shows at all. It's true that papers like Langton's 1993 paper exist. But there are many more such papers outside the 1980s and 1990s than inside them.
+
+@tbl-very-late-bloomers comes from taking all the articles that never appear on the lists of twenty most cited at the time articles, and sorting them by how many citations they have from 2020 to mid-2022.
+
+```{r}
+#| label: tbl-very-late-bloomers
+#| cache: false
+#| tbl-cap: "Articles with the higher number of recent citations that are not in the top twenty for any five year span."
+
+kable(
+  very_late_bloomers |>
+    arrange(-l_cites) |>
+    slice(1:10) |>
+    select(Citations = l_cites, Article = tbl_cite)
+)
+```
+
+There are two things to note about this list.
+
+One is that it is much more female than any list we've seen so far. Four of the ten papers are written by women. There is an interesting research project here about the difference in citation dynamics for papers written by women and men, but I'll leave that for another day.
+
+The other is that only two of the papers are from the 1990s, and none are from the 1980s. One of those two is Joyce's 1998 paper that (eventually) launched the accuracy-first program in epistemology. Because it is so late in the 1990s, it could only have affected the pattern in @fig-all-median at the very margin.
+
+That's so say, while it's true that the papers like Langton's, and DeRose's 1992 paper, were published in the 1990s, that's not what makes the decade stand out. Every decade has papers like that. If anything, papers like that were rarer in the 1990s, and especially the 1980s, than before or after. So this isn't the explanation of @fig-all-median.
+
+# Explanation 3 - Fade Aways {#sec-fade-aways}
+
+This leaves us with the last possible explanation: the reason that the medians are so low in the 1980s and 1990s is that many articles which are in the list of 'widely cited at the time', simply aren't cited that much in the 2020s.
+
+The simplest way to see how well the data support this is to focus on those articles which appear in many of the overlapping lists of highly cited recent articles. An article published in year *y* can appear in the twenty most recent cited articles in each range from [*y*-4, *y*] to [*y*, *y*+4]. Let's start by looking at the ones that appear in four or five of these lists. @fig-four-five-recent shows how often those articles are cites from 2020 to mid-2022.
+
+```{r}
+#| label: fig-four-five-recent
+#| cache: false
+#| fig-cap: "Number of recent citations for very highly cited articles in different years."
+
+
+the_700_first_graph <- the_700 |>
+  filter(appear >= 4, year >= 1975) |>
+  ungroup() |>
+  mutate(l_cites = replace(l_cites, l_cites == 0, 0.5)) |>
+  distinct(old, .keep_all = TRUE) |>
+  mutate(outlier = case_when(
+    l_cites <= 5 ~ TRUE,
+    year >= 2000 & l_cites <= 9 ~ TRUE,
+    TRUE ~ FALSE))
+
+ggplot(the_700_first_graph, aes(x = year, y = l_cites))  + 
+  geom_jitter() + 
+  scale_y_log10(limits = c(0.5, 250)) +
+  labs(x = element_blank(),
+       y = element_blank())
+```
+
+Note that @fig-four-five-recent uses a log scale on the y-axis; otherwise the whole graph would have to be compressed to properly show how many citations "New Work for a Theory of Universals" has. Note also that the two dots in the lower left are a bit misleading. These two articles have zero citations since 2020, and zero points don't show up on a log scale. So I represented them as having 0.5 citations each. Also, I've added a small amount of 'jitter' to the graph so overlapping points are visible.
+
+The thing that I think is most notable is looking at how many dots are under the 10 citations line. Before 1980 there are two such articles. Between 1980 and 1995 there are eleven. And then after 1995 there is just one. @tbl-four-five-fade-away goes lists these articles.
+
+```{r}
+#| label: tbl-four-five-fade-away
+#| cache: false
+#| tbl-cap: "Highly cited articles with fewer than ten recent citations."
+
+kable(
+  the_700 |>
+    ungroup() |>
+    filter(l_cites < 10, appear >= 4) |>
+    distinct(old, .keep_all = TRUE) |>
+    arrange(year) |>
+    select(`Late Citations` = l_cites, Article = tbl_cite)
+)
+```
+
+We see the same pattern with papers that turn up in three of the top twenty lists. @fig-three-recent shows how many of these papers there were each year, and how often they are cited from 2020 to mid-2022.
+
+```{r}
+#| label: fig-three-recent
+#| cache: false
+#| fig-cap: "Number of recent citations for highly cited articles in different years."
+
+
+the_700_second_graph <- the_700 |>
+  filter(appear == 3, year >= 1975) |>
+  ungroup() |>
+  mutate(l_cites = replace(l_cites, l_cites == 0, 0.5)) |>
+  distinct(old, .keep_all = TRUE) |>
+  mutate(outlier = case_when(
+    l_cites <= 5 ~ TRUE,
+    year >= 2000 & l_cites <= 9 ~ TRUE,
+    TRUE ~ FALSE))
+
+ggplot(the_700_second_graph, aes(x = year, y = l_cites))  + 
+  geom_jitter() + 
+  scale_y_log10(limits = c(0.5, 250)) +
+  labs(x = element_blank(),
+       y = element_blank())
+```
+
+As with @fig-four-five-recent, the y-axis is a log scale, papers with zero citations are actually recorded as having 0.5 citations, and some jitter has been added.
+
+Focus again on the papers with fewer than ten citations since 2020. On this graph there are twelve such papers between 1980 and 1995, one in the late 1990s, and none in any other decade. This is where the 1980s and 1990s papers really stand out. @tbl-three-fade-away lists the papers that appear on three lists of top twenty most cited recent papers, but which are not cited nearly as much in recent years.
+
+```{r}
+#| label: tbl-three-fade-away
+#| cache: false
+#| tbl-cap: "Highly cited articles with fewer than ten recent citations."
+
+kable(
+  the_700 |>
+    ungroup() |>
+    filter(l_cites < 10, appear == 3) |>
+    distinct(old, .keep_all = TRUE) |>
+    arrange(year) |>
+    select(`Late Citations` = l_cites, Article = tbl_cite)
+)
+```
+
+Unlike the other two explanations, the timeline matches up. What's distinctive about the period 1980-1999, and especially the period 1980-1995, is that there are so many papers that get discussed a lot at the time, but get many fewer citations in recent years.
+
+Still, this might feel less than fully satisfying as an explanation. The data in this section tell us what happened. They don't tell us why it happened. For that we need to look more closely at the papers involved.
+
+# When Citations End {#sec-when-citations-end}
+
+Asking why a paper doesn't get many citations is like asking why a particular tennis player didn't win Wimbledon. The simple answer in both cases is that not getting the citations, or the trophy, is the normal state of affairs. It's not something that calls out for explanation.
+
+That's not quite what we're trying to do here. To continue the analogy, what we're asking here is why a player who used to go deep into the tournament now isn't getting out of the second round. These papers are, for the most part, still in the top ten percent of papers by citations. But they aren't in the top one percent any more, and that's what is to be explained.
+
+In some cases, the explanation is quite simple: the citations simply got **captured** by something else. When a paper is expanded into a book, or becomes a chapter of a prominent book, very often the citations will simply move to the book rather than the paper. There are three clear cases of this in @tbl-four-five-fade-away and @tbl-three-fade-away: the two papers by Rawls, and Sider's "Four Dimensionalism". Rawls's paper "Justice as Fairness" and Sider's paper "Four Dimensionalism" both became books with the same title. And this rather decreased the number of times they were cited. The other Rawls paper, "The Priority of Right and Ideas of the Good", became chapter 5 of his 1993 book _Political Liberalism_.
+
+It's a little harder to judge whether citations are affected by being reprinted in a collected volume. Three of the four Kim papers on the list are in his 1993 collection _Supervenience and Mind_. This study doesn't look at books, so it wouldn't capture those citations. But it could be that the book was getting some of the citations that the papers would have received. There are two ways this could happen. One is that people might directly cite a reprinted passage, but simply cite the book. I looked (via Google Scholar) at the citations to _Supervenience and Mind_ in these hundred journals, and I never saw that happen for these three Kim papers. But I wouldn't trust this manual checking, and I did see it for other Kim papers, so it might happen. The other way is that many people feel (fairly enough) that they should name-check Kim somewhere in their discussion of supervenience, so there were several undirected citations to the book that perhaps would have ended up as citations to one of these papers if the book didn't exist. I don't think it's as dramatic an effect as for Rawls and Sider, but it is a consideration.
+
+What seems more likely, especially for the 1978 paper that didn't get reprinted, is that the papers were regarded as **superseded**. If the later papers on supervenience were simply better than the earlier ones, having a clearer statement of the view, or making distinctions that were muddled in the earlier paper, then it would be natural to cite the later papers. I think that's part of what goes on with the supervenience papers, and, I conjecture, with the papers on causation, laws, and explanation (Eells and Sober 1983, Salmon 1994, Griffiths and Gray 1994, Pietroski and Rey 1995).
+
+It isn't necessarily a bad thing if papers are superseded in this way. If a field is progressing, you'd expect there to be papers which are widely cited when they come out because they move the debate forward, but which are less cited in the future, when the lessons from them have been incorporated into other work. 
+
+A related phenomena is that citations might get **consolidated**. I'll come back to this when I look more at the papers from the 2000s; for now a brief description will suffice. Think about the following kind of situation, which has happened a few times in philosophy. A philosopher has a Big Idea, which interests a lot of people, many of whom think it is true. They spell out this Big Idea over a series of papers. At the time they are all widely cited. Later on, one of these papers is generally regarded as the best statement, or at least the canonical statement, of the Big Idea, and it keeps getting cited. But the other papers do not. In particular, if someone just wants to gesture at the Big Idea, they cite the paper that has become canonical; they only cite the other papers if they want to engage with some point of detail that isn't in the canonical work. Consolidation, like papers being superseded, is often a sign of progress, or at least movement; it means that there is an emerging consensus about what is valuable in the Big Idea.
+
+One notable thing about citations is that papers that people mostly disagree with are still very widely cited; "Epiphenomenal Qualia" is perhaps the most notable instance of this. But if philosophers collectively come to think of the presuppositions, or methodology, or philosophical approach of the paper is flawed, then the paper will get ignored rather than argued against. In this case, we might say the paper is **rejected** by most philosophers. This happens a bit before the time I'm looking at, for example with some papers by Rorty that completely drop off the radar of these journals. But maybe it is what happens with the Castañeda and Putnam papers here. To be clear, I'm not making any judgment here about whether philosophers are right to dismiss these works; as any journal editor knows, sometimes rejections are mistaken. What I am saying is that this kind of fundamental disagreement would explain non-citation patterns.
+
+Finally, some papers might **fall out of fashion**. There was a lot more discussion of mental content, and of material constitution, in the journals in the 1980s and 1990s than there is now. That's true in particular of relatively a priori, armchair work on those topics. That, I think, is what has happened with the papers by Burke, Zimmerman, Jackson and Pettit, Schiffer, and Falvey and Owens. There are considerably more papers on these two topics if we look at the papers that are only in one or two of the top twenty lists, or which have ten to fifteen citations in recent years (and hence are still pulling the median downward).
+
