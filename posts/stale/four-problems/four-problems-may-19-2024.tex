@@ -183,8 +183,7 @@ marginparsep=0in]{geometry}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\usepackage{bookmark}
-
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -234,9 +233,9 @@ involving a static, strategic choice, or a dynamic choice that is made
 during a game. One way into the principle is to think about an oddity in
 the way Newcomb's Problem is normally introduced.
 
-\section{Newcomb's Problem}\label{newcombs-problem}
+\section{Newcomb's Problem}\label{sec-newcomb}
 
-\subsection{Standard Version}\label{standard-version}
+\subsection{Standard Version}\label{sec-newcomb-standard}
 
 In the standard vignette that goes with Newcomb's Problem, it is a
 dynamic game. The demon makes a \emph{prediction}, and then the human
@@ -501,13 +500,13 @@ Table~\ref{tbl-ultimatum}.
 \caption{\label{tbl-ultimatum}Two representations of the strategic form
 of ultimatum game}
 
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}[t]{0.50\linewidth}
 
 \subcaption{\label{tbl-ultimatum-game}Demon's Decisions}
 
 \centering{
 
-\begin{tabular}{ccc}
+\begin{tabular}[t]{ccc}
 \toprule
  & D2C1 & D1C2\\
 \midrule
@@ -522,13 +521,13 @@ of ultimatum game}
 
 \end{minipage}%
 %
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}[t]{0.50\linewidth}
 
 \subcaption{\label{tbl-ultimatum-demon}Demon's Predictions}
 
 \centering{
 
-\begin{tabular}{ccccc}
+\begin{tabular}[t]{ccccc}
 \toprule
  & PTT & PTL & PLT & PLL\\
 \midrule
@@ -582,11 +581,137 @@ Chooser is going to play the following game.
 
 \end{figure}%
 
-\subsection{Ramsey Test}\label{ramsey-test}
+Figure~\ref{fig-sample-violation} resembles
+Figure~\ref{fig-demon-then-coin}, with two notable differences. First,
+the coin is now weighted, and has an 8/9 chance of landing Heads.
+Second, if Chooser must choose, either option is an equilibrium.
 
-\subsection{Unifying the Examples}\label{unifying-the-examples}
+Table~\ref{tbl-sample-violation-late} shows the decision table Chooser
+faces if they must make a choice in Figure~\ref{fig-sample-violation},
+and \textbf{?@tbl-sample-violation-early} shows the expected payouts of
+the two strategies Chooser could select.
+
+\begin{table}
+
+\caption{\label{tbl-sample-violation}Payout tables for
+Figure~\ref{fig-sample-violation}.}
+
+\begin{minipage}[t]{0.50\linewidth}
+
+\subcaption{\label{tbl-sample-violation-late}Dynamic version.}
+
+\centering{
+
+\begin{tabular}[t]{ccc}
+\toprule
+ & PU & PD\\
+\midrule
+\textbf{Up} & 72 & 36\\
+\textbf{Down} & 18 & 54\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\subcaption{\label{tbl-sample-violation-late}Strategic version.}
+
+\centering{
+
+\begin{tabular}[t]{ccc}
+\toprule
+ & PU & PD\\
+\midrule
+\textbf{Up} & 48 & 36\\
+\textbf{Down} & 42 & 54\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+I'll take as my sample violator of the SCP a Chooser who prefers Up in
+the dynamic version, and Down in the strategic version. As we'll see in
+Section~\ref{sec-multiple}, many decision theorists agree with this
+Chooser. But everything I say should generalise to any violation.
+
+\subsection{Ramsey Test}\label{sec-ramsey}
+
+To choose a strategy is to make true a bunch of conditionals. Adopting
+the strategy Down in Figure~\ref{fig-sample-violation} just is saying
+``If I have to choose, I'll choose Down''. As
+(\citeproc{ref-RamseyTest}{\textbf{RamseyTest?}}) said, the way to tell
+which such conditional to make true is to hypothetically add the
+antecedent to one's stock of belief, and then decide which unconditional
+claim you'd like to make true. But Chooser does not do that. If they
+believed that they had to choose, they would choose Up. So their
+strategic preference implies that they believe that if they had to
+choose, they would choose Down, but adding the supposition that they
+have to choose, they choose Up. This combination is incoherent, and so
+violations of the SCP are incoherent.
+
+I think this argument is decisive; it's incoherent to adopt a strategy
+in games like Figure~\ref{fig-demon-then-coin} or
+\textbf{?@fig-switching-example} that is different from what one knows
+one would do if one had to carry the strategy out. That's just not how
+conditionals work. But in case not everyone is convinced, I'll run
+through some other arguments. The SCP will do a lot of work, and it is
+worth getting the foundations as secure as possible.
 
 \subsection{Intuitions about Change}\label{intuitions-about-change}
+
+This argument starts with a story. Imagine the game master (GM) is
+chatting to Chooser (C), before Chooser plays
+\textbf{?@fig-switching-example}.
+
+\begin{quote}
+GM: What are you thinking of playing?\\
+C: I might not have a choice.\\
+GM: True, but assume you have to choose.\\
+C: Then Up, I guess.\\
+GM: You know, Demon can be really slow in making a prediction. Do you
+want to write your choice down in an envelope, and we'll open it if it's
+needed? C: Oh sure. I'm writing Down.\\
+GM: Why did you change your mind?
+\end{quote}
+
+We could continue the conversation, but I want to focus on the
+presupposition of GM's last question. It seems appropriate to presuppose
+here that Chooser has changed their mind. This presupposition requires
+the SCP. If the SCP is false, Chooser has simply given different answers
+to different questions. First they were asked what to do in the dynamic
+game, and they said Up. Then they were asked what to do in the strategic
+game, and they said Down. Giving different answers to different
+questions is not changing one's mind.
+
+GM's question seems appropriate. Chooser was first asked what they
+planned to do in a particular situation. Then they were asked for a
+strategy that would only be activated in that very situation. When they
+give different answers to those questions, it sounds like they changed
+their mind. That implies the questions are fundamentally the same, which
+is what the SCP says.
+
+\subsection{Unifying the Examples}\label{sec-unity}
+
+Philosophers do not agree about Newcomb's Problem. But they do agree
+that in each of the examples in Section~\ref{sec-newcomb}, the same
+choice is rational in the strategic and dynamic form of the game. This
+isn't because they think that in general strategic and dynamic forms are
+equivalent. Indeed, for many theorists there is no unifying story about
+why each of these pairs of problems gets the same answer. It is just a
+fact that the theory treats the dynamic and strategic problems the same
+way.
+
+I think it is better to have an explanation for why each of the pairs of
+problems gets the same answers, and for that explanation to be the same
+across the three pairs. The SCP provides such an explanation, and that's
+a point in its favour.
 
 \subsection{No Reward}\label{no-reward}
 
@@ -622,9 +747,33 @@ treating dynamic and strategic problems separately can't apply here;
 there isn't enough of an `elsewhere' for one's bad decision at the one
 and only place one moves to be compensated.
 
-\subsection{Sure Thing}\label{sure-thing}
+\subsection{Sure Thing}\label{sec-surething}
 
-\section{Flagging Assumptions}\label{flagging-assumptions}
+Finally, there is one very natural argument for the SCP that for various
+reasons I don't want to lean on too heavily. If Chooser violates the
+SCP, then they violate the Sure Thing Principle. They think Up is at
+least as good as Down both conditional on the game ending without them
+making a choice, and on that not happening. But they think Down is
+better overall. If Sure Thing can be taken as a basic assumption, the
+SCP immediately follows.
+
+There are three problems with this line of reasoning. The first is
+pragmatic. It's well known that various theories I'm arguing against
+here, like EDT, and Buchak's non-standard treatment of risk, violate
+Sure Thing. It's not a new argument against them to say that they
+violate the SCP, if the only reason to believe the SCP is Sure Thing.
+The second is that it isn't obvious that the theories that are best
+supported by the SCP are not consistent with Sure Thing. Dmitri
+(\citeproc{ref-Gallow202x}{\textbf{Gallow202x?}}) argues that what he
+calls `stable' decision theories are bound to violate Sure Thing. It's
+arguable that his arguments can be generalised to provide a reason to
+think theories supported by the SCP (which will typically not be stable
+in his sense) also violate Sure Thing. And the third is that even if
+this argument fails, there is a bad company objection to Sure Thing that
+I'll get to in \textbf{?@sec-negdom}. So it's useful that we have the
+other four arguments to fall back on.
+
+\section{Flagging Assumptions}\label{sec-flagging}
 
 I'm going to make three assumptions in what follows, and it helps to
 have them on the table.
@@ -719,8 +868,8 @@ and among equilibria, one should choose the equilibrium with the highest
 expected payout. Versions of this theory are endorsed by Jeffrey
 (\citeproc{ref-Jeffrey1983}{1983}), Arntzenius
 (\citeproc{ref-Arntzenius2008}{2008}), and
-(\citeproc{ref-Gustaffson2011}{\textbf{Gustaffson2011?}}). Given 1 and
-2, this theory says to choose up.
+(\citeproc{ref-Gustafson2011}{\textbf{Gustafson2011?}}). Given 1 and 2,
+this theory says to choose up.
 
 Finally, consider the theory that says one should (in two options games)
 minimise possible regret. That is, one should choose Up if the possible
@@ -734,8 +883,410 @@ though they go on to say very different things about cases with three or
 more options. Given constraints 2 and 3, these theories also say to
 choose Up.
 
-I'll argue that even given these three constraints, both Up and Down are
-choice-worthy. Since it's hard to see any reason to
+I'll argue that in any such problem, both Up and Down are choice-worthy.
+I'm not the first to say this. Jack
+(\citeproc{ref-Spencer202x}{\textbf{Spencer202x?}}) and Melissa Fusco
+(\citeproc{ref-Fuscond}{n.d.}) also say that both equilibria are
+choice-worthy.\footnote{Fusco and Spencer disagree on a lot of other
+  questions, and I think the SCP tends to favour Fusco's side of their
+  disagreement, but it would be a huge digression to sort out those
+  details.} This implies that in any problem where Up and Down are both
+strict equilibria, they are both choice-worthy, since there is nothing
+more that could make Up uniquely choice-worthy. Just what is the
+relationship between being an equilibrium and being choice-worthy is a
+question for another day, but in 2*2 games, they pick out the same
+options.
+
+Consider the dynamic game shown in Figure~\ref{fig-edt}.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{four-problems-may-19-2024_files/figure-pdf/fig-edt-1.png}
+
+}
+
+\caption{\label{fig-edt}A tree that shows SCP is inconsistent with
+several theories.}
+
+\end{figure}%
+
+The payouts on the right are taken from Table~\ref{tbl-generic-demon},
+and the payout if the game exits without a choice is half way between
+the two payouts if Demon predicts Down. I've left the probability of
+exit if Demon predicts Up as a variable \emph{p}. The decision tables
+for the one choice in the dynamic game, and the strategic choice for the
+whole game, are in Table~\ref{tbl-edt}.
+
+\begin{table}
+
+\caption{\label{tbl-edt}Payout tables for Figure~\ref{fig-edt}.}
+
+\begin{minipage}[t]{0.50\linewidth}
+
+\subcaption{\label{tbl-edt-late}Dynamic version.}
+
+\centering{
+
+\begin{tabular}[t]{ccc}
+\toprule
+ & PU & PD\\
+\midrule
+\textbf{Up} & \emph{a} & \emph{b}\\
+\textbf{Down} & \emph{c} & \emph{d}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\subcaption{\label{tbl-edt-late}Strategic version.}
+
+\centering{
+
+\begin{tabular}[t]{ccc}
+\toprule
+ & PU & PD\\
+\midrule
+\textbf{Up} & \emph{p}(\emph{b}+\emph{d})/2 +
+(1-\emph{p})\emph{a} & \emph{b}\\
+\textbf{Down} & \emph{p}(\emph{b}+\emph{d})/2 +
+(1-\emph{p})\emph{c} & \emph{d}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+If \emph{p} is large enough, then in \textbf{?@tbl-edt-early}, the
+bottom-right will be larger than the top-left, and the bottom-left will
+be larger than the top-right. So if constraints 1-3 are sufficient
+conditions for one option to be uniquely choice-worthy, then if \emph{p}
+is large enough, Down will be uniquely choice-worthy in
+\textbf{?@tbl-edt-early}. But Up is uniquely choice-worthy in
+Table~\ref{tbl-edt-late}, so this will violate the SCP.
+
+How large does \emph{p} have to be? As long as
+\emph{p}~\textgreater~(2\emph{a}~‑~2\emph{d})/(2\emph{a}~‑~\emph{b}~‑~\emph{d}),
+then the bottom-left will be greater than the top-right. This is
+consistent with \emph{p}~\textless~1, since
+\emph{d}~\textgreater~\emph{b}. As long as
+\emph{p}~\textgreater~(2\emph{b}~‑~2\emph{c})/(\emph{b}~+~\emph{d}~‑2\emph{c}),
+then the bottom-right will be greater than the top-left. Again, since
+\emph{d}~\textgreater~\emph{b}, this is consistent with
+\emph{p}~\textless~1. We can guarantee both conditions are met if:
+
+\[
+p = 1 - \frac{(d-b)^2}{(2a-b-d)(b+d-2c)}
+\]
+
+Assume we use the values from Table~\ref{tbl-sample-violation-late}, so
+\emph{a}~=~72, \emph{b}~=~36, \emph{c}~=~18, and \emph{d}~=~54. Then
+this formula says that \emph{p}~=~1/9. If we set \emph{p} to 1/9, we get
+the tree shown in Figure~\ref{fig-sample-violation}. What I've argued
+here is that that example is perfectly general. If constraints 1-3
+suffice for Up being uniquely choice-worthy, then any game where there
+are two equilibria but Up is uniquely choice-worthy can be embedded in a
+dynamic game where it is the game Chooser will face if they ever have to
+choose, but in the strategic form of the game, Down is uniquely
+choice-worthy. So saying 1-3 suffices for Up being uniquely
+choice-worthy leads to systematic violations of the SCP. Since the SCP
+is true, these theories must be false.
+
+If constraints 2 and 3 don't suffice to say that a particular strict
+equilibrium in a 2\emph{2 game is not choice-worthy, it's hard to see
+what further constraints could make a difference. So I conclude that, if
+the SCP is true, then in 2}2 games with two strict equilibria, both
+options are choice-worthy. This shows that
+(\citeproc{ref-Spencer202x}{\textbf{Spencer202x?}}) and Fusco
+(\citeproc{ref-Fuscond}{n.d.}) are right about these
+
+That's a case where a theorist who thinks constraints 1-3 suffice for Up
+being uniquely choice-worthy will violate the SCP. As we noted at the
+start of this section, many theories do say those constraints suffice
+for unique choice-worthiness, so they are all wrong.
+
+In a 2*2 game with multiple strict equilibria, the only theory that's
+compatible with the SCP, and hence the only plausible theory, is that
+both equilibria are choice-worthy.
+
+\section{Problem 2: Ordering}\label{sec-ordering}
+
+\subsection{Introducing the Problem}\label{sec-ordering-intro}
+
+Standard approaches to decision theory assign to Chooser a probability
+function and a utility function, both defined over (some) propositions.
+The domain of each function is some subset of the reals; the interval
+{[}0,1{]} for the probability, and some bounded interval for the
+utilities. The real numbers have a distinctive topology. Among other
+things, they are totally ordered: for any two numbers, either one is
+greater, or they are equal. So assuming that probabilities and utilities
+are numerical involves assuming that for any two propositions, the
+probability(/utility) of the first is either greater than, less than, or
+equal to, that of the other. Call this assumption Ordering.
+
+Ordering is controversial, both for probabilities and utilities. For
+probabilities, it has been criticised since Keynes's \emph{Treatise on
+Probability} (\citeproc{ref-Keynes1921}{1921}), and in recent times has
+been criticised by, among others, Peter Walley
+(\citeproc{ref-Walley1991}{1991}) and James Joyce
+(\citeproc{ref-Joyce2010}{2010}). For utilities, the most prominent
+contemporary critic is Ruth Chang (\citeproc{ref-Chang2002}{2002},
+\citeproc{ref-Chang2015}{2015}).
+
+Just like there are many critics of Ordering, there are many defenders.
+Dorr, Nebel, and Zuehl (\citeproc{ref-DorrEtAl2023}{2023}) defend it on
+semantic grounds. Adam Elga (\citeproc{ref-Elga2010}{2010}) argues that
+violations of Ordering for probabilities leads to susceptibility to a
+money pump. Johan Gustafsson (\citeproc{ref-Gustafsson2022}{2022}) makes
+a similar in favour of Ordering for utilities.
+
+Even critics of Ordering have noted its unintuitive characteristics.
+Bradley and Steele (\citeproc{ref-BradleySteele2016}{2016}) argue that
+violations of Ordering for probabilities imply it can be rational to pay
+to avoid information. Harvey Lederman (\citeproc{ref-Ledermannd}{2024})
+argues that violations of Ordering for utilities leads to violations of
+a principle he calls Negative Dominance, which I'll return to below.
+
+Both Bradley and Steele, and Lederman, think that ultimately Ordering
+should be rejected, and we should live with these unintuitive results.
+They are both pointing out troubling features of their own view.
+(Something philosophers should do more often.) In each case it isn't
+hard to convert the argument they give to a problem for the other kind
+of Ordering violation. If Ordering fails for utilities, a Bradley and
+Steele-style argument shows that it is worth paying to avoid
+information, and if it fails for probabilities, a Lederman style
+argument shows that Negative Dominance fails.
+
+I'm going to offer a new defence of Ordering violations. The defence has
+two parts. In this section, I'll argue that even if Ordering holds for
+probabilities and for values of states, it does not hold for values of
+actions. A bit loosely, even if Ordering is true for preferences over
+ends, it isn't true for preferences over means. This shows we have
+independent reason to reject any principle that entails Ordering is true
+in general. That includes many of the premises in arguments that have
+been offered against Ordering. Then in \textbf{?@sec-dual-mandate}, I'm
+going to argue that many of the criticisms of views that permit Ordering
+violations presuppose a false view about how rational dynamic choice
+works.
+
+\subsection{Argument from Sweeteners}\label{sec-sweeteners}
+
+In Section~\ref{sec-multiple} I argued that in
+Table~\ref{tbl-sample-violation-late}, both Up and Down are
+choice-worthy. This is consistent with Ordering only if Chooser is
+indifferent between Up and Down. If Chooser is indifferent, then
+`sweetening' one of the options, by increasing its payout in all states,
+should break the tie between them. But it doesn't. If we start with
+Table~\ref{tbl-edt-late} and add 1 to the payout for Up, we get
+Table~\ref{tbl-sweetened}. And the argument in
+Section~\ref{sec-multiple} shows that both Up and Down are choice-worthy
+in Table~\ref{tbl-sweetened}.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Table~\ref{tbl-sample-violation-late} with \textbf{Up}
+sweetened by 1.}\label{tbl-sweetened}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & 73 & 37 \\
+\textbf{Down} & 18 & 54 \\
+\end{longtable}
+
+So the SCP implies that Ordering fails in cases like these. Up and Down
+are both choice-worthy, so neither is better than the other, and they
+aren't equally good.
+
+\subsection{Argument from Beta}\label{sec-beta}
+
+There is something odd about using preference orderings in an empirical
+theory of choice. We never observe preference orderings; we only ever
+observe choices. A tradition tracing back to
+(\citeproc{ref-Samuelson1937}{\textbf{Samuelson1937?}}) says decision
+theory should start with choice dispositions, not preferences. For any
+set of options S, let C(S) be the set of options Chooser regards as
+choice-worthy.\footnote{Empirically, Chooser may select different
+  members of S on different occasions.} This need not be a radical break
+with the idea that decision theory is based around preferences. Given
+some intuitive constraints on C, we can generate a preference relation
+out of it, and that preference relation will satisfy Ordering. It turns
+out, however, that the SCP is inconsistent with some of those
+constraints.
+
+Amartya (\citeproc{ref-Sen197x}{\textbf{Sen197x?}}) noted that (given
+some other intuitive but not uncontroversial constraints), Ordering is
+equivalent to the following condition on C. He gave it the unmemorable
+name Principle Beta.
+
+\begin{description}
+\tightlist
+\item[Beta]
+If S \subseteq S', and \{A, B\} \subseteq C(S), then A \in C(S') iff B
+\in C(S').
+\end{description}
+
+That is, if A and B are both initially choice-worthy, then after some
+options are added, either they are both choice-worthy, or neither
+is.\footnote{To see why this might be plausible, imagine each option has
+  a numerical value, and the choice-worthy ones are those with maximal
+  value.} If Beta fails, then either Ordering fails, or something much
+less intuitive than Ordering or Beta fails. And the SCP is inconsistent
+with Beta.
+
+Extend Table~\ref{tbl-sample-violation-late} so there is a third option:
+eXit. This option returns 60 whatever Demon does. And if Demon predicts
+eXit, they flip a fair coin to decide whether to play PU or PD. So the
+table looks like Table~\ref{tbl-beta-violation}.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{A violation of Principle
+Beta}\label{tbl-beta-violation}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & 73 & 37 \\
+\textbf{Down} & 18 & 54 \\
+\textbf{eXit} & 60 & 60 \\
+\end{longtable}
+
+In this table, Down is not choice-worthy, since it is dominated. So
+although the SCP says that C(\{U,~D\})~=~(\{U,~D\}),
+C(\{U,~D,~X\})~=~(\{U,~X\}), violating Beta. So the SCP is inconsistent
+with Ordering.
+
+\subsection{Argument from Dominance}\label{sec-neg-dom}
+
+Harvey Lederman (\citeproc{ref-Ledermannd}{2024}) notes that given some
+other plausible assumptions, Ordering is inconsistent with a principle
+he calls Negative Dominance.\footnote{Though note that, like Sen,
+  Lederman raises doubts about these `other plausible assumptions'. Note
+  also that I've rephrased his principle a little to match the notation
+  of this paper.}
+
+\begin{description}
+\tightlist
+\item[Negative Dominance]
+If \emph{p} is a lottery proposition, and A~\textgreater~B, then either
+A~\textgreater{}\textsubscript{\emph{p}}~B, or
+A~\textgreater\textasciitilde{}\neg *p*\textasciitilde~B.
+\end{description}
+
+In \textbf{Negative Dominance}, \textgreater{} is a strict preference
+relation, and \textgreater{}\textsubscript{\emph{p}} is the preference
+relation conditional on \emph{p}. The principle says that if A is
+strictly preferred to B, it also must be strictly preferred conditional
+on at least one outcome of a lottery. Most theories that violate
+Ordering violate Negative Dominance, and conversely most theories that
+violate Negative Dominance violate Ordering. Given the SCP, it seems
+plausible Negative Dominance fails. Let H be that a particular fair coin
+lands Heads, T that it lands Tails, H8 a bet that pays 8 if H and 0
+otherwise, and T8 a bet that pays 8 if T and 0 otherwise. In
+Table~\ref{tbl-negdom}, Chooser can plau Up, Down or eXit, and Demon has
+made an arbitrarily accurate prediction, but since PX is not an option,
+they'll flip a coin to decide between PU and PD if they predict eXit.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{A violation of Negative
+Dominance}\label{tbl-negdom}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & 1+H8 & 0 \\
+\textbf{Down} & 0 & 1+T8 \\
+\textbf{eXit} & 2 & 2 \\
+\end{longtable}
+
+This is a violation of Negative Dominance given these three assumptions.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  A strategy is not choice-worthy if it is dominated, including if it is
+  dominated by a mixed strategy.
+\item
+  If A is choice-worthy and B is not, then A~\textgreater~B.
+\item
+  If B is choice-worthy and A is available, then ¬(A~\textgreater~B).
+\end{enumerate}
+
+In Table~\ref{tbl-negdom}, eXit is dominated by a 50/50 mix of Up and
+Down, so it is not choice-worthy. But conditional on either way the coin
+lands, it is choice-worthy. Conditional on Heads, Table~\ref{tbl-negdom}
+becomes Table~\ref{tbl-negdom-heads}.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Table~\ref{tbl-negdom} conditional on
+Heads}\label{tbl-negdom-heads}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & 9 & 0 \\
+\textbf{Down} & 0 & 1 \\
+\textbf{eXit} & 2 & 2 \\
+\end{longtable}
+
+In Table~\ref{tbl-negdom-heads}, Down is dominated and so eliminated.
+And post-deletion, the arguments in Section~\ref{sec-multiple} show both
+options are choice-worthy. A similar argument shows that eXit is
+choice-worthy conditional on Tails. So given the three assumptions,
+which seem fairly plausible links between choice-worthiness and
+preference, the SCP implies that Negative Dominance fails.
+
+Most theories which reject Ordering also violate a principle I'll call
+\textbf{Strict Dominance}. This is roughly a converse to Lederman's
+Negative Dominance.
+
+\begin{description}
+\tightlist
+\item[Strict Dominance]
+If \emph{p} is a lottery proposition, and
+A~\textgreater{}\textsubscript{\emph{p}}~B and
+A~\textgreater\textasciitilde{}\neg *p*\textasciitilde~B. then
+A~\textgreater~B.
+\end{description}
+
+Strict Dominance isn't quite the traditional Sure Thing Principle, since
+it uses strict preference and the Sure Thing Principle normally uses at
+least as good as. But it's fairly close. Close enough, indeed, that it's
+a bit disconcerting it fails. This is why I mentioned back in
+Section~\ref{sec-surething} that there is a bad company objection to the
+Sure Thing principle.
 
 \section{The Four Problems}\label{the-four-problems}
 
@@ -1185,13 +1736,13 @@ decision table Chooser faces at the time they have to choose.
 \caption{\label{tbl-panel}Two strategy tables for
 Figure~\ref{fig-buchak}.}
 
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}[t]{0.50\linewidth}
 
 \subcaption{\label{tbl-buchak-early}The strategy table at game start.}
 
 \centering{
 
-\begin{tabular}{cccc}
+\begin{tabular}[t]{cccc}
 \toprule
  & \textbf{Left} & \textbf{Middle} & \textbf{Right}\\
 \midrule
@@ -1204,13 +1755,13 @@ Figure~\ref{fig-buchak}.}
 
 \end{minipage}%
 %
-\begin{minipage}{0.50\linewidth}
+\begin{minipage}[t]{0.50\linewidth}
 
 \subcaption{\label{tbl-buchak-late}The strategy table at choice time.}
 
 \centering{
 
-\begin{tabular}{ccc}
+\begin{tabular}[t]{ccc}
 \toprule
  & \textbf{Middle} & \textbf{Right}\\
 \midrule
@@ -1332,6 +1883,12 @@ Comparability.''} \emph{Noûs} 57 (2): 414--53. doi:
 \bibitem[\citeproctext]{ref-Elga2010}
 Elga, Adam. 2010. {``Subjective Probabilities Should Be Sharp.''}
 \emph{Philosophers' Imprint} 10: 1--11.
+
+\bibitem[\citeproctext]{ref-Fuscond}
+Fusco, Melissa. n.d. {``Absolution of a Causal Decision Theorist.''}
+\emph{No{û}s}. doi:
+\href{https://doi.org/10.1111/nous.12459}{10.1111/nous.12459}. Early
+view.
 
 \bibitem[\citeproctext]{ref-Gallow2020}
 Gallow, J. Dmitri. 2020. {``The Causal Decision Theorist's Guide to
