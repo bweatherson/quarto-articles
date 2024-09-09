@@ -45,6 +45,7 @@ require(tidyverse)
 require(slider)
 require(stringr)
 require(knitr)
+require(toOrdinal)
 
 if(knitr::is_latex_output()) {
   knitr::opts_chunk$set(dev = 'cairo_pdf')
@@ -102,7 +103,7 @@ min_data <- 5
 
 active_philo_bib <- philo_bib_fix |>
   filter(year >= start_year, year <= end_year) |>
-  mutate(tbl_cite = paste0(auth, " [-@",str_replace(id,":",""),"] \"", art_title, "\""))
+  mutate(tbl_cite = paste0(display_author, " [-@",str_replace(id,":",""),"] \"", art_title, "\""))
 
 authadjust <- function(x){
   paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
@@ -183,7 +184,7 @@ for (i in 4:0){
   
   still_standing <- combined_cites |>
     filter(e_rank <= 20) |>
-    select(e_cites, l_cites, auth, old_year, range_year, art_title, journal, everything()) |>
+    select(e_cites, l_cites, display_author, old_year, range_year, art_title, journal, everything()) |>
     arrange(range_year, desc(e_cites))
   
   still_standing_by_range <- still_standing |>
@@ -223,17 +224,17 @@ how_many_recent_cites <- philo_cite_with_jp |>
   arrange(-n)
 
 top_20_recent <- how_many_recent_cites |>
-  select(`Late Cites` = n, Article = tbl_cite) |>
+  select(`Recent Citations` = n, Article = tbl_cite) |>
   slice(1:20)
 
 top_20_last_quartile <- how_many_recent_cites |>
   filter(year >= 1976, year <= 1997) |>
-  select(`Late Cites` = n, Article = tbl_cite) |>
+  select(`Recent Citations` = n, Article = tbl_cite) |>
   slice(1:20)
 
 top_20_last_five <- how_many_recent_cites |>
   filter(year >= 2015) |>
-  select(`Late Cites` = n, Article = tbl_cite) |>
+  select(`Recent Citations` = n, Article = tbl_cite) |>
   slice(1:20)
 
 most_cited_years_recently <- philo_cite_with_jp |>
@@ -301,7 +302,7 @@ for (y in 1965:2010){
     select(-score, -the_rank) |>
     mutate(range_year = y) |>
     left_join(philo_bib_fix, by = c("old" = "id")) |>
-    select(e_cites, l_cites, auth, year, range_year, art_title, journal, everything()) 
+    select(e_cites, l_cites, display_author, year, range_year, art_title, journal, everything()) 
   
   the_top_few <- bind_rows(the_top_few, yearly_additions)
 }
@@ -317,9 +318,9 @@ proportion_recent <- the_top_few |>
   group_by(range_year) |>
   summarise(med_cites = mean(l_cites))
 
-the_700 <- c()
+the_920 <- c()
 
-for (y in 1974:2008){
+for (y in 1965:2010){
   the_20 <- citation_tibble |>
     ungroup() |>
 #    select(-range_year) |>
@@ -339,25 +340,64 @@ for (y in 1974:2008){
     slice(1:20) |>
     select(-score, -the_rank) |>
     mutate(range_year = y) |>
-    left_join(philo_bib_fix, by = c("old" = "id")) |>
-    select(e_cites, l_cites, auth, year, range_year, art_title, journal, everything()) 
+    left_join(active_philo_bib, by = c("old" = "id")) |>
+    select(e_cites, l_cites, display_author, year, range_year, art_title, journal, everything()) 
   
-  the_700 <- bind_rows(the_700, the_20)
+  the_920 <- bind_rows(the_920, the_20)
 }
 
-the_700 <- the_700 |>
+the_920 <- the_920 |>
   ungroup() |>
   group_by(old) |>
   mutate(appear = n()) |>
   select(appear, everything()) |>
-  arrange(-appear, l_cites, old)
+  arrange(-appear, l_cites, old) |>
+  ungroup()
 
-appear_median <- the_700 |>
+the_4600 <- c()
+
+for (y in 1965:2010){
+  the_100 <- citation_tibble |>
+    ungroup() |>
+#    select(-range_year) |>
+    filter(old_year >= y, old_year <= y + 4) |>
+    filter(new_year <= y + 9 | new_year >= 2020) |>
+    mutate(cite_age = case_when(
+      new_year <= y + 9 ~ "e_cites",
+      new_year >= 2020 ~ "l_cites"
+    )) |>
+    group_by(old, old_year, cite_age) |>
+    summarise(cites = n(), .groups = "drop") |>
+    pivot_wider(id_cols = c(old), names_from = cite_age, values_from = cites) |>
+    replace_na(list(e_cites = 0, l_cites = 0)) |>
+    mutate(score = e_cites + l_cites/1000) |>
+    mutate(the_rank = rank(-score)) |>
+    arrange(the_rank) |>
+    slice(1:100) |>
+    select(-score, -the_rank) |>
+    mutate(range_year = y) |>
+    left_join(active_philo_bib, by = c("old" = "id")) |>
+    select(e_cites, l_cites, display_author, year, range_year, art_title, journal, everything()) |>
+    arrange(-l_cites, -e_cites) |>
+    mutate(rank = row_number())
+  
+  the_4600 <- bind_rows(the_4600, the_100)
+}
+
+the_4600 <- the_4600 |>
+  ungroup() |>
+  group_by(old) |>
+  mutate(appear = n()) |>
+  select(appear, everything()) |>
+  arrange(-appear, l_cites, old) |>
+  ungroup()
+
+appear_median <- the_920 |>
   ungroup() |>
   group_by(appear) |>
   summarise(l_cites = median(l_cites))
 
-# the_700 |> 
+# the_920 |> 
 #     filter(appear == 3) |>
 #     ungroup() |>
 #     mutate(l_cites = replace(l_cites, l_cites == 0, 0.5)) |>
@@ -367,9 +407,9 @@ appear_median <- the_700 |>
 #     ggplot(aes(x = year, y = l_cites)) + 
 #       geom_point() + 
 #       scale_y_log10() +
-#       ggrepel::geom_label_repel(data = filter(the_700, appear == 3, (l_cites <= 1 | (year >= 2000 & l_cites <= 10))), aes(label = shortcite))
+#       ggrepel::geom_label_repel(data = filter(the_920, appear == 3, (l_cites <= 1 | (year >= 2000 & l_cites <= 10))), aes(label = shortcite))
 
-the_700_graph <- the_700 |>
+the_920_graph <- the_920 |>
   filter(appear == 3, year >= 1979) |>
   ungroup() |>
   mutate(l_cites = replace(l_cites, l_cites == 0, 0.5)) |>
@@ -379,7 +419,7 @@ the_700_graph <- the_700 |>
     year >= 2000 & l_cites <= 9 ~ TRUE,
     TRUE ~ FALSE))
 
-#ggplot(the_700_graph, aes(x = year, y = l_cites))  + 
+#ggplot(the_920_graph, aes(x = year, y = l_cites))  + 
 #  geom_point() + 
 #  scale_y_log10(limits = c(0.5, 250)) 
 
@@ -395,7 +435,7 @@ widely_cited <- citation_tibble |>
   pivot_wider(id_cols = c(old, old_year), names_from = cite_age, values_from = cites) |>
   replace_na(list(e_cites = 0, l_cites = 0)) |>
   left_join(active_philo_bib, by = c("old" = "id", "old_year" = "year")) |>
-  select(e_cites, l_cites, auth, old_year, art_title, journal, everything()) |>
+  select(e_cites, l_cites, display_author, old_year, art_title, journal, everything()) |>
   filter(l_cites >= 16)
 
 widely_cited_years <- widely_cited |>
@@ -404,7 +444,7 @@ widely_cited_years <- widely_cited |>
   tally()
 
 very_late_bloomers <- widely_cited |>
-  anti_join(the_700, by = "old") |>
+  anti_join(the_920, by = "old") |>
   filter(old_year <= 2005) |>
   arrange(-l_cites)
 ```
@@ -613,7 +653,7 @@ Many of the articles that were recently widely cited have been cited a lot almos
 kable(
   select(
     very_late_bloomers,
-    Citations = l_cites,
+    `Recent Citations` = l_cites,
     Article = tbl_cite
   ) |> slice(1:20)
 )
@@ -633,3 +673,91 @@ kable(top_20_last_quartile |> slice(1:10))
 If we extended that list, the 15th, 16th, and 17th entries would also be by David Lewis.
 
 One thing I'm investigating here is how relatively little influence journal articles from the 1980s and (much of) the 1990s have on the recent literature, compared to the decades either side of that. The focus here will be on the change in citation rates, how things that were the center of attention in the 1980s and 1990s are not so important now. But in the background will be the broader topic of how much the recent literature is shaped by the 1970s, 2000s, and 2010s, but not the decades in between.
+
+# Where Are They Now? {#sec-where-are}
+
+Focus for now on the period from 1965 to 2014. That fifty year period naturally divides into ten half-decades. 
+
+For each half-decade, find the articles first published in that half-decade that are most cited by the end of the subsequent half-decade. For example, for the early 1990s (1990-1994), find the articles that are most cited by the end of the 1990s. These are shown in @tbl-20-from-early-90s.
+
+```{r}
+#| label: tbl-20-from-early-90s
+#| tbl-cap: "The twenty articles from the early 1990s most cited by the end of the 1990s."
+
+kable(
+  the_920 |>
+    filter(range_year == 1990) |>
+    arrange(-l_cites) |>
+    ungroup() |>
+    select('Recent Citations' = l_cites, Article = tbl_cite)
+)
+```
+
+A few notes about this table.
+
+On the left are the number of citations each article has in the dataset since 2020; i.e., between 2020 and mid-2022 in the hundred journals I'm focusing on.
+
+Citations come in whole numbers and they aren't large, so ties are common. For finding the twenty most cited articles by the end of the 1990s, I used the number of citations since 2020 as a tie-breaker. In this case there were two papers, "What An Anti-Individualist Knows A Priori" [@WOSA1992HT19500013], and "Must Psychology Be Individualistic" [WOSA1991FF02900001], which had 16 citations in the 1990s, the same as many other papers in @tbl-20-from-early-90s. But they only had two cites each since 2020, and they were not included on the list on this tie-breaker rule.
+
+The effect of using this as a tie-breaker is to somewhat increase the numbers in the left-hand column. Despite this, the numbers there are surprisingly low. The median number of citations is just 8.5. This doesn't feel like a lot for the twenty papers that, at the time, most dominated discussion in the journals. If we do the same calculation for each of the other ten half-decades, and graph the results, we get @fig-median-by-half-decades.
+
+```{r}
+#| label: fig-median-by-half-decades
+#| fig-cap: "Median citations since 2020 for the 20 articles most cited at the time in different half-decades."
+
+ggplot(filter(
+        all_median, range_year %% 5 == 0, range_year <= 2010
+        ),
+       aes(x = range_year, y = cites)) +
+  geom_point(size = 2) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Median cites")
+```
+
+The value for 1990 is rather low, in fact the second-lowest of all the half-decades. But all the values in the 1980s and 1990s are surprisingly low. In none of those four periods does the median top-20 article, in terms of citations at the time, land in the top 1% of articles in terms in recent citations.
+
+@fig-median-by-half-decades is a bit misleading though, because it gives too much weight to articles published at the start of half-decades. It is much easier to get articles published in 1990 or 1991 onto lists like @tbl-20-from-early-90s than articles published in 1993 or 1994; they simply have more time to accure citations before the somewhat arbitrary 'end of the 90s' cutoff.
+
+The way to fix that problem is to think more abstractly about what @tbl-20-from-early-90s represents. For some year *y* (in this case 1990), we find the twenty articles published between *y* and *y*+4 with the most citations by *y*+9. When *y* is a multiple of 10 there are relatively natural ways to state what we're doing: articles from the early 90s with the most citations in the 90s. But we could do exactly the same thing for years that are not multiples of 5. If *y* is 1988, we could find the twenty articles published between 1988 and 1992 with the most citations by 1997; that's the same idea as @tbl-20-from-early-90s, just using years that aren't as natural to represent in base 10.
+
+If find that list of twenty articles for every value of *y* from 1965 to 2010, we can fill in the gaps between the dots in @fig-median-by-half-decades. The result is @fig-all-median. (I'll come back to what the colors represent.)
+
+```{r}
+#| label: fig-all-median
+#| fig-cap: "Median citations since 2020 for the 20 articles most cited at the time in different 5 year periods."
+
+ggplot(all_median |>
+         filter(range_year >= 1965,
+                range_year <= 2010) |>
+         mutate(colortype = case_when(
+           range_year <= 1973 ~ 1,
+           range_year <= 1979 ~ 2,
+           range_year <= 1995 ~ 3,
+           TRUE ~ 4)),
+       aes(x = range_year, y = cites)
+         ) +
+  geom_point(aes(x = range_year, y = cites, size = 2, color = as.factor(colortype))) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Median cites") +
+  theme(legend.position = "none")
+```
+
+@fig-all-median is a measure of how often articles that were widely cited at the time they were published are cited in the recent literature.
+
+Each dot represents twenty articles published in the five years starting with the year on the x-axis. Those five year periods overlap, and so the twenty articles each dot represents can overlap too. @tbl-the-fives lists the articles that appear in five different 'top-twenty' lists, alongside how often they have been cited since 2020.
+
+```{r}
+#| label: tbl-the-fives
+#| tbl-cap: "Articles appearing in five of the top twenty lists."
+
+kable(
+  the_920 |>
+    ungroup() |>
+    filter(appear == 5) |>
+    distinct(old, .keep_all = TRUE) |>
+    arrange(year, -l_cites) |>
+    select(`Recent Citations` = l_cites, Article = tbl_cite)
+)
+```
