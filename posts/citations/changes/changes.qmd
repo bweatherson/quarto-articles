@@ -46,6 +46,7 @@ require(slider)
 require(stringr)
 require(knitr)
 require(toOrdinal)
+require(kableExtra)
 
 if(knitr::is_latex_output()) {
   knitr::opts_chunk$set(dev = 'cairo_pdf')
@@ -129,7 +130,7 @@ citation_tibble <- philo_cite_with_jp |>
 
 ```{r}
 #| label: looper
-#| cache: false
+#| cache: true
 
 all_still_standing <- c()
 all_median <- c()
@@ -600,10 +601,13 @@ The study contains `r nrow(active_philo_bib)` papers. So the average paper was c
 ```{r}
 #| label: tbl-count-of-recent-citations
 #| tbl-cap: "Frequency of articles with at least n citations, for various values of n"
+#| html-table-processing: none
 
-kable(select(
+select(
   recent_cite_frequency, n, `Number of articles` = at_least
-))
+) |>
+  kable() |>
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), full_width = FALSE)
 ```
 
 Just over 1% of articles have at least fifteen citations since 2020. Just under 0.1% have at least fifty citations. I'll sometimes talk below about articles that were once the center of attention having 'only' five citations since 2020. It's worth remembering that this still means they are in the top 7% or so for citations over that time. Most things don't get cited, at least in other philosophy journals in this time period.
@@ -613,8 +617,10 @@ The very top of the citation list, since 2020, is shown in @tbl-recent-high-cite
 ```{r}
 #| label: tbl-recent-high-cite
 #| tbl-cap: "Twenty most cited articles since 2020"
+#| column: page-right
+#| tbl-colwidths: [15,85]
 
-kable(top_20_recent)
+kable(top_20_recent, align = 'll')
 ```
 
 The most recent article in that list is from 2016. That might lead you to think that philosophy citations are typically to rather old articles. This isn't true. @fig-recent-cite-rate shows how often, on average, papers with different publication years are cited since 2020.
@@ -638,8 +644,10 @@ The peak is actually in 2018. Recently published articles are, on average, cited
 ```{r}
 #| label: tbl-recent-from-last-five
 #| tbl-cap: "Twenty most cited articles since 2020, first published since 2016."
+#| column: page-right
+#| tbl-colwidths: [15,85]
 
-kable(top_20_last_five)
+kable(top_20_last_five, align = 'll')
 ```
 
 The list of authors there is a little less white, and a little less male, than most of the lists we'll see below. As we'll see, that's not saying much.
@@ -649,17 +657,19 @@ Many of the articles that were recently widely cited have been cited a lot almos
 ```{r}
 #| label: tbl-very-late-bloomers
 #| tbl-cap: "Twenty most cited articles since 2020 that were not (as) widely cited when they were published."
+#| column: page-right
+#| tbl-colwidths: [15,85]
 
 kable(
   select(
     very_late_bloomers,
     `Recent Citations` = l_cites,
     Article = tbl_cite
-  ) |> slice(1:20)
+  ) |> slice(1:20), align = 'll'
 )
 ```
 
-The variety of subjects there is interesting, and this will become important later. Several of these papers can be now seen as foundational papers in thriving topics within philosophy.
+The variety of subjects there is interesting, and this will become important later. Several of these papers can be now seen as foundational papers in thriving topics within philosophy.^[Citation counts are usually not a particularly reliable guide to philosophical quality, but this table might be an exception. A pro-seminar based around the fin de siècle papers from the top of this list would give students a very good guide to both what has been happening in philosophy, and how to do it well. You could, for instance, do the articles by Haslanger, Joyce, D'Arms and Jacobson, Douglas, Goldman, Smith, and Hieronymi, perhaps pairing each with a recent article building on that foundational work.]
 
 The last thing to note, and something that will be central to what I'm discussing the rest of the paper, is that there is a 'missing middle' in @tbl-recent-high-cite. The only articles on that list between 1976 and 1997 are by David Lewis. @tbl-last-quartile shows the ten most cited articles, since 2020, published from 1976 to 1997.
 
@@ -667,7 +677,7 @@ The last thing to note, and something that will be central to what I'm discussin
 #| label: tbl-last-quartile
 #| tbl-cap: "The most cited articles since 2020 first published between 1976 and 1997."
 
-kable(top_20_last_quartile |> slice(1:10))
+kable(top_20_last_quartile |> slice(1:10), align = 'll')
 ```
 
 If we extended that list, the 15th, 16th, and 17th entries would also be by David Lewis.
@@ -683,13 +693,15 @@ For each half-decade, find the articles first published in that half-decade that
 ```{r}
 #| label: tbl-20-from-early-90s
 #| tbl-cap: "The twenty articles from the early 1990s most cited by the end of the 1990s."
+#| column: page-right
+#| tbl-colwidths: [15,85]
 
 kable(
   the_920 |>
     filter(range_year == 1990) |>
     arrange(-l_cites) |>
     ungroup() |>
-    select('Recent Citations' = l_cites, Article = tbl_cite)
+    select('Recent Citations' = l_cites, Article = tbl_cite), align = 'll'
 )
 ```
 
@@ -697,7 +709,7 @@ A few notes about this table.
 
 On the left are the number of citations each article has in the dataset since 2020; i.e., between 2020 and mid-2022 in the hundred journals I'm focusing on.
 
-Citations come in whole numbers and they aren't large, so ties are common. For finding the twenty most cited articles by the end of the 1990s, I used the number of citations since 2020 as a tie-breaker. In this case there were two papers, "What An Anti-Individualist Knows A Priori" [@WOSA1992HT19500013], and "Must Psychology Be Individualistic" [WOSA1991FF02900001], which had 16 citations in the 1990s, the same as many other papers in @tbl-20-from-early-90s. But they only had two cites each since 2020, and they were not included on the list on this tie-breaker rule.
+Citations come in whole numbers and they aren't large, so ties are common. For finding the twenty most cited articles by the end of the 1990s, I used the number of citations since 2020 as a tie-breaker. In this case there were two papers, "What An Anti-Individualist Knows A Priori" [@WOSA1992HT19500013], and "Must Psychology Be Individualistic" [@WOS1991FF02900001], which had 16 citations in the 1990s, the same as many other papers in @tbl-20-from-early-90s. But they only had two cites each since 2020, and they were not included on the list on this tie-breaker rule.
 
 The effect of using this as a tie-breaker is to somewhat increase the numbers in the left-hand column. Despite this, the numbers there are surprisingly low. The median number of citations is just 8.5. This doesn't feel like a lot for the twenty papers that, at the time, most dominated discussion in the journals. If we do the same calculation for each of the other ten half-decades, and graph the results, we get @fig-median-by-half-decades.
 
@@ -751,6 +763,8 @@ Each dot represents twenty articles published in the five years starting with th
 ```{r}
 #| label: tbl-the-fives
 #| tbl-cap: "Articles appearing in five of the top twenty lists."
+#| column: page-right
+#| tbl-colwidths: [15,85]
 
 kable(
   the_920 |>
@@ -758,6 +772,6 @@ kable(
     filter(appear == 5) |>
     distinct(old, .keep_all = TRUE) |>
     arrange(year, -l_cites) |>
-    select(`Recent Citations` = l_cites, Article = tbl_cite)
+    select(`Recent Citations` = l_cites, Article = tbl_cite), align = 'll'
 )
 ```
