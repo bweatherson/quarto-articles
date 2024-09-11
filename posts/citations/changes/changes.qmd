@@ -280,9 +280,9 @@ for (y in 1965:2010){
   target_articles <- floor(
     filter(
       article_count, year == y + 4
-      )$five_year[1] / 130
+      )$five_year[1] * 0.003
   )
-  target_articles <- 20
+#  target_articles <- 20
   yearly_additions <- citation_tibble |>
     ungroup() |>
 #    select(-range_year) |>
@@ -317,7 +317,7 @@ the_top_few <- the_top_few |>
 
 proportion_recent <- the_top_few |>
   group_by(range_year) |>
-  summarise(med_cites = mean(l_cites))
+  summarise(med_cites = median(l_cites))
 
 the_920 <- c()
 
@@ -709,7 +709,7 @@ A few notes about this table.
 
 On the left are the number of citations each article has in the dataset since 2020; i.e., between 2020 and mid-2022 in the hundred journals I'm focusing on.
 
-Citations come in whole numbers and they aren't large, so ties are common. For finding the twenty most cited articles by the end of the 1990s, I used the number of citations since 2020 as a tie-breaker. In this case there were two papers, "What An Anti-Individualist Knows A Priori" [@WOSA1992HT19500013], and "Must Psychology Be Individualistic" [@WOS1991FF02900001], which had 16 citations in the 1990s, the same as many other papers in @tbl-20-from-early-90s. But they only had two cites each since 2020, and they were not included on the list on this tie-breaker rule.
+Citations come in whole numbers and they aren't large, so ties are common. For finding the twenty most cited articles by the end of the 1990s, I used the number of citations since 2020 as a tie-breaker. In this case there were two papers, "What An Anti-Individualist Knows A Priori" [@WOSA1992HT19500013], and "Must Psychology Be Individualistic" [@WOSA1991FF02900001], which had 16 citations in the 1990s, the same as many other papers in @tbl-20-from-early-90s. But they only had two cites each since 2020, and they were not included on the list on this tie-breaker rule.
 
 The effect of using this as a tie-breaker is to somewhat increase the numbers in the left-hand column. Despite this, the numbers there are surprisingly low. The median number of citations is just 8.5. This doesn't feel like a lot for the twenty papers that, at the time, most dominated discussion in the journals. If we do the same calculation for each of the other ten half-decades, and graph the results, we get @fig-median-by-half-decades.
 
@@ -775,3 +775,267 @@ kable(
     select(`Recent Citations` = l_cites, Article = tbl_cite), align = 'll'
 )
 ```
+
+The existence of papers like this tells us something about the kind of thing that @fig-all-median is measuring. Ultimately we're trying to look at this question:
+
+- In the recent literature, how widely cited are articles which were widely cited when they were first published?
+
+One immediate challenge is that the last clause in that, 'when they were first published' is rather vague. Philosophy moves slowly, so citations within five years of publication definitely count for judging whether a paper was widely cited when it was first published. But citations ten years later do not seem to count. Between five and ten though, where is the boundary?
+
+One option would be to pick an arbitrary boundary, perhaps seven years, and work with that. But it would be better if we could have a measure that respected the vagueness in the original question. There are a lot of ways to do that, and the measure I'm using is one of them. To see how that's true, it helps to use some extreme (and fictional) cases. Consider two papers, which I'll simply call A and B. Both of them, we'll imagine, were published in 1990.
+
+- Paper A was cited 10 times every year from 1991-1996, and never cited again.
+- Paper B was not cited at all until 1999, then cited twenty times a year every year since.
+
+Both Paper A and Paper B will show up in @fig-all-median. But Paper A will make a much bigger impact on the graph. 
+
+Paper A will be part of the 'top twenty' for the ranges 1990-1994, 1991-1995, 1992-1996, 1993-1997, and 1994-1998. In every one of those years, it will pull down the median value as shown on @fig-all-median, since it is not cited at all since 2020.
+
+Paper B will only be part of the 'top twenty' for the range 1990-1999. It will the median for that range, since it was cited 60 times since 2020.
+
+The general pattern is that because I'm using overlapping ranges, and not using a simple on-off criteria for whether a citation is soon after publication, papers which get cited even earlier can make more impact on this graph. That's not to say this is the only measure that one could use to answer the question, but it's one reason that this is a particularly helpful measure to use.
+
+# The Missing Middle {#sec-missing-middle}
+
+Here's a very striking thing about @fig-all-median. All the blue dots, representing the ranges from 1980-1984 to 1995-1999, are below all the purple dots, representing later ranges, and, more strikingly, all the green dots, representing ranges from 1974-1978 to 1979-1983. There are a few reasons that you might expect the graph to trend upwards. But the uniformity here, every blue dot being below the all the greens and purples, and the two notable falls, in the early 1980s and again in the early 1990s, are striking.
+
+What could explain this pattern?
+
+Before I get to that, I want to run over some data that suggests this is really a pattern, and not just an artifact of the way I'm measuring things. So this section will go over a few other ways of representing the data that mostly show a similar pattern.
+
+In @fig-all-median, I'm looking at the median citations for twenty articles from each five year period. You might worry that this is a bad way to look at things. As @fig-number-of-articles-by-year shows, there are more articles published in later years. Being in the top twenty gets harder and harder as the competition expands. Perhaps all that @fig-all-median shows is that some articles which aren't really _widely cited at the time_ in a natural sense are nevertheless ending up in top twenties.
+
+There is a grain of truth to this worry. One reason I'm using ranges, rather than focussing on the most cited articles in individual years, is that there are some years where very few articles at all are widely cited at the time. This was particularly true in 1980, 1985, and 1990. (I think it's just a coincidence that they are all multiples of 5.) Using ranges moderated that a little.
+
+Still, the cut off of top _twenty_ might seem inappropriate given the changing size of the population of articles. So I reran the analysis instead looking at articles that were in the top 0.3% of articles cited from the five year range. I picked that percentage because for the 1980s and 1990s that gives us approximately twenty articles per range. But it means fewer articles before 1980, and considerably more articles after 2000. The results are shown in @fig-proportion-median.
+
+```{r}
+#| label: fig-proportion-median
+#| fig-cap: "Median citations since 2020 for the 0.3% most cited at the time in different 5 year periods."
+
+ggplot(proportion_recent |>
+         filter(range_year >= 1965,
+                range_year <= 2010) |>
+         mutate(colortype = case_when(
+           range_year <= 1973 ~ 1,
+           range_year <= 1979 ~ 2,
+           range_year <= 1995 ~ 3,
+           TRUE ~ 4)),
+       aes(x = range_year, y = med_cites)
+         ) +
+  geom_point(aes(x = range_year, y = med_cites, size = 2, color = as.factor(colortype))) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Median cites") +
+  theme(legend.position = "none")
+```
+
+Not a lot changes from @fig-all-median to @fig-proportion-median. Some of the red dots move up, the last of the red dots and first of the green dots switch values, and the gap between the blue and purple dots decreases. But the shape is the same. Since it easier to talk about twenty articles per range than 0.3%, and the shape is roughly the same, I'll stick to looking at top twenties.
+
+It's usually a mistake to look at arithmetic means of citations, since they are so affected by outliers. But we can rerun the calculation behind @fig-all-median using means. The results, as shown in @fig-all-mean, are a little different since every range that includes "New Work for a Theory of Universals" [@WOSA1983RR51600001] gets raised a lot. But the shape is still fairly similar.
+
+```{r}
+#| label: fig-all-mean
+#| fig-cap: "Mean citations since 2020 for the top twenty most cited at the time in different 5 year periods."
+
+all_mean <- the_920 |>
+  ungroup() |>
+  group_by(range_year) |>
+  summarise(mean_cites = mean(l_cites))
+
+ggplot(all_mean |>
+         filter(range_year >= 1965,
+                range_year <= 2010) |>
+         mutate(colortype = case_when(
+           range_year <= 1973 ~ 1,
+           range_year <= 1979 ~ 2,
+           range_year <= 1995 ~ 3,
+           TRUE ~ 4)),
+       aes(x = range_year, y = mean_cites)
+         ) +
+  geom_point(aes(x = range_year, y = mean_cites, size = 2, color = as.factor(colortype))) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Mean cites") +
+  theme(legend.position = "none")
+```
+
+One natural way to mitigate the impact of these outliers is to take the geometric mean of the values rather than the arithmetic mean. The problem here is that some of the articles have zero citations, and the geometric mean of any set of (non-negative) integers including a zero is zero. Rather than having that value swamp, I've taken the geometric means of the number of recent citations of the twenty articles after replacing all zero values with 0.5. So for the purposes of @fig-all-geometric-mean, articles with no citations since 2020 are recorded as having half a citation. The shape is back to something similar to @fig-all-median.
+
+```{r}
+#| label: fig-all-geometric-mean
+#| fig-cap: "Geometric mean citations since 2020 for the top twenty most cited at the time in different 5 year periods."
+
+all_geom_mean <- the_920 |>
+  ungroup() |>
+  mutate(l_cites = case_when(
+    l_cites == 0 ~ 0.5,
+    TRUE ~ l_cites
+  )) |>
+  group_by(range_year) |>
+  summarise(mean_cites = exp(mean(log(l_cites))))
+
+ggplot(all_geom_mean |>
+         filter(range_year >= 1965,
+                range_year <= 2010) |>
+         mutate(colortype = case_when(
+           range_year <= 1973 ~ 1,
+           range_year <= 1979 ~ 2,
+           range_year <= 1995 ~ 3,
+           TRUE ~ 4)),
+       aes(x = range_year, y = mean_cites)
+         ) +
+  geom_point(aes(x = range_year, y = mean_cites, size = 2, color = as.factor(colortype))) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Geometric mean cites") +
+  theme(legend.position = "none")
+```
+
+The value for 1978-1982 is pulled down, and the values for the ranges after 1990 are a bit higher, but the shape is still pretty similar to @fig-all-median.
+
+Maybe this is an artifact of looking at the top twenty rather than some different number. We could be more restrictive, or more expansive, with the number of articles from each range we regard as widely cited. In @fig-diff-top-median, I show what happens if we recreate @fig-all-median using top tens and top forties.
+
+::::{.column-page}
+
+::: {#fig-diff-top-median layout-ncol=2 fig-cap="Recreation of @fig-all-median using different numbers of articles per five year range."}
+
+```{r}
+#| label: fig-diff-top-median-10
+#| fig-cap: "Top ten."
+
+top_10_median <- the_4600 |>
+  ungroup() |>
+  filter(rank <= 10) |>
+  group_by(range_year) |>
+  summarise(median_cites = median(l_cites))
+
+top_40_median <- the_4600 |>
+  ungroup() |>
+  filter(rank <= 40) |>
+  group_by(range_year) |>
+  summarise(median_cites = median(l_cites))
+
+ggplot(top_10_median |>
+         filter(range_year >= 1965,
+                range_year <= 2010) |>
+         mutate(colortype = case_when(
+           range_year <= 1973 ~ 1,
+           range_year <= 1979 ~ 2,
+           range_year <= 1995 ~ 3,
+           TRUE ~ 4)),
+       aes(x = range_year, y = median_cites)
+         ) +
+  geom_point(aes(x = range_year, y = median_cites, size = 2, color = as.factor(colortype))) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Median cites") +
+  theme(legend.position = "none")
+```
+
+```{r}
+#| label: fig-diff-top-median-40
+#| fig-cap: "Top forty."
+
+ggplot(top_40_median |>
+         filter(range_year >= 1965,
+                range_year <= 2010) |>
+         mutate(colortype = case_when(
+           range_year <= 1973 ~ 1,
+           range_year <= 1979 ~ 2,
+           range_year <= 1995 ~ 3,
+           TRUE ~ 4)),
+       aes(x = range_year, y = median_cites)
+         ) +
+  geom_point(aes(x = range_year, y = median_cites, size = 2, color = as.factor(colortype))) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Median cites") +
+  theme(legend.position = "none")
+```
+:::
+::::
+
+On the top tens graph, the pattern is the same as @fig-all-median, and perhaps a little more pronounces. The blue dots are also below the last three red dots; we could have started that period with the 1971-1975 range and seen the same pattern. On the top forties graph, the numbers are compressed. There is one relatively high blue dot (for 1991-1995), the first purple dot is still rather low, and some of the green dots are not that high. But I think the shape, of a rise in the 1970s followed by a fall and not much movement until the late 1990s, is still there.
+
+Finally, we might worry that @fig-all-median simply shows that philosophers have a disposition to note cite things more than twenty-five years old. If that were right, we'd expect to see the graphs look rather different if we imagined doing the same study with different stopping points. In @fig-different-ends I reran the study using first 2015-2017, and then 2010-2012, as the values for 'recent' cites. In both cases I stopped doing calculations just before the point where the ranges for _citations at the time_ and _recent citations_ would overlap.
+
+::::{.column-page}
+::: {#fig-different-ends layout-ncol=2 fig-cap="Recreation of @fig-all-median using different years as the range for later citations."}
+
+```{r}
+#| label: fig-different-ends-2015
+#| fig-cap: "Recent = 2015-2017"
+
+middle_cites <- citation_tibble |>
+  filter(new_year >= 2015, new_year <= 2017) |>
+  group_by(old, old_year) |>
+  tally(name = "m_cites") |>
+  ungroup() |>
+  select(old, m_cites)
+
+the_920_middle <- the_920 |>
+  left_join(middle_cites, by = "old") |>
+  mutate(m_cites = replace_na(m_cites, 0)) |>
+  ungroup() |>
+  group_by(range_year) |>
+  summarise(median_cites = median(m_cites))
+
+ggplot(the_920_middle |>
+         filter(range_year >= 1965,
+                range_year <= 2005) |>
+         mutate(colortype = case_when(
+           range_year <= 1973 ~ 1,
+           range_year <= 1979 ~ 2,
+           range_year <= 1995 ~ 3,
+           TRUE ~ 4)),
+       aes(x = range_year, y = median_cites)
+         ) +
+  geom_point(aes(x = range_year, y = median_cites, size = 2, color = as.factor(colortype))) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Median cites") +
+  theme(legend.position = "none")
+```
+
+```{r}
+#| label: fig-different-ends-2010
+#| fig-cap: "Recent = 2010-2012"
+
+middle_cites <- citation_tibble |>
+  filter(new_year >= 2010, new_year <= 2012) |>
+  group_by(old, old_year) |>
+  tally(name = "m_cites") |>
+  ungroup() |>
+  select(old, m_cites)
+
+the_920_middle <- the_920 |>
+  left_join(middle_cites, by = "old") |>
+  mutate(m_cites = replace_na(m_cites, 0)) |>
+  ungroup() |>
+  group_by(range_year) |>
+  summarise(median_cites = median(m_cites))
+
+ggplot(the_920_middle |>
+         filter(range_year >= 1965,
+                range_year <= 2000) |>
+         mutate(colortype = case_when(
+           range_year <= 1973 ~ 1,
+           range_year <= 1979 ~ 2,
+           range_year <= 1995 ~ 3,
+           TRUE ~ 4)),
+       aes(x = range_year, y = median_cites)
+         ) +
+  geom_point(aes(x = range_year, y = median_cites, size = 2, color = as.factor(colortype))) +
+  geom_line() +
+  labs(x = "First year of range",
+       y = "Median cites") +
+  theme(legend.position = "none")
+
+```
+:::
+::::
+
+It's not quite true that in both graphs every blue dot is below every green dot and every purple dot, but it's pretty close. What's clearly true is that it's not just a disposition among philosophers to stop citing articles once they reach a certain age. 
+
+There is something about the 1980s and (most of) the 1990s that is doing this. The articles that were widely cited then stop being widely cited at least as early as 2010. This is true across a number of ways of counting what is widely cited at the time. The next task is to look at what changed in philosophy that brought this about.
