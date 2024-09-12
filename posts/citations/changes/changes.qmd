@@ -1040,3 +1040,69 @@ ggplot(the_920_middle |>
 It's not quite true that in both graphs every blue dot is below every green dot and every purple dot, but it's pretty close. What's clearly true is that it's not just a disposition among philosophers to stop citing articles once they reach a certain age. 
 
 There is something about the 1980s and (most of) the 1990s that is doing this. The articles that were widely cited then stop being widely cited at least as early as 2010. This is true across a number of ways of counting what is widely cited at the time. The next task is to look at what changed in philosophy that brought this about.
+
+# Looking at Papers {#sec-looking-papers}
+
+One possible thought of what explains @fig-all-median is that the influential articles from the 1980s and 1990s aren't impacting that graph because they weren't cited enough at the time to be in the top twenties. For example, "Speech Acts and Unspeakable Acts" [@citeLangton] is widely cited since 2020, but was not much cited at the time.
+
+This can't be the whole story though. There are always papers that get more citations long after publication than they had at the time. Indeed, if you look back to @tbl-very-late-bloomers, you see that there are more of these articles after 2000 than before.
+
+Had every article from the 1980s and 1990s that's now widely cited been widely cited at the time, the dip in @fig-all-median wouldn't be there. But that's an implausible counterfactual; it's never true that _all_ the articles with the most long-term influence are widely cited straight away.
+
+A better explanation goes in the other direction. During the 1980s and 1990s, there was a particularly high frequency of articles which were widely cited at the time, but which have relatively few citations in recent years. 'Relatively' is an important word there. The articles I'm about to focus on typically have 5-9 citations in philosophy journals since 2020. As @tbl-count-of-recent-citations shows, that means they are still cited more often than the overwhelming majority of articles in philosophy journals. But they are cited much less often than you'd expect given their prominence at the time. Or, if you prefer, they were much more cited at the time than you'd expect knowing just the recent literature.
+
+Anyway, @fig-jitter-citations is a scatterplot of how often various articles have been cited. Each dot represents an article that appears in three or more of the top twenty lists, for articles widely cited at the time.
+
+<!--Include graph-->
+
+The y-axis is the number of citations since 2020. Since these numbers can get very large, this is put on a log scale. Since log scales create problems with zero values, I've replaced all zero citation values with 0.5. The x-axis is no longer a range, it's simply the first year of publication. Since there are often pairs of articles with the same publication year and the same number of citations since 2020, I've added some 'jitter' to the graph.
+
+The striking thing is that the bottom right part of the graph is empty. Focus on the part of the graph below the *y*=10 line, representing ten citations since 2020. After 2000, there are hardly any dots there. @tbl-below-ten lists all the papers since 1974 which appear on three top twenty lists with fewer than ten citations since 2020, i.e., all the dots below the *y*=10 line since 1974. (The points before 1974 are interesting, but I think that's ultimately a different category.)
+
+<!--Include table-->
+
+There are two questions we might be interested in here. Why are there so many such articles before the late 1990s, and why are there so few after? It's a bit easier to start with the first, because we can see the particular articles.
+
+The list on @tbl-below-ten seems to have a few natural categories.
+
+Some papers have relatively few citations because they **became books**, or parts of books, and most citations these days are to the book. The most obvious of these are the papers by Rawls [-@citeRawls1, -@citeRawls2] and @citeSider. It's possible the papers by Kim should be included in that category too, though in that case the book (_Supervenience and Mind_) reprinted the papers rather than incorporated them. And, as can be seen by the number of citations to Lewis articles, the existence of collections of papers doesn't have the same systematic effect on citations.
+
+There are several papers on **causation and laws**, i.e., (include list). These actually rather surprise me; it's not like these topics are not discussed in the recent literature. "Causation as Influence" [@citeCaI] has many citations since 2020. My best guess, and this will come up a bit in what follows, is that there is much less interest these days in papers that take relatively armchair approaches to these topics. Of course, one could say the same thing about "Causation as Influence", so this isn't the whole story. Still, I think it's part of the story.
+
+There are three papers on **mental content**: (include list). If we look beyond the top twenties, and at other papers that are somewhat widely cited at the time, we see many more papers on mental content. Mental content is still a huge topic in contemporary philosophy, but these big picture, largely armchair, debates about externalism and internalism have largely receded. Contemporary work tends to be more focused on questions of detail, or more sensitive to recent empirical work, or both.
+
+```{r}
+#| label: scripts-for-wide-tables
+
+the_4600_simplified <- the_4600 |>
+  distinct(old, .keep_all = TRUE) |>
+  select(old, `Recent Citations` = l_cites, `Article` = tbl_cite)
+
+the_4600_wide <- the_4600 |>
+  select(old, year, range_year, rank) |>
+  mutate(range_age = as.ordinal(year - range_year + 5)) |>
+  mutate(rank = as.character(rank)) |>
+  select(-range_year) |>
+  complete(nesting(old, year), range_age, fill = list(rank = "--")) |>
+  pivot_wider(names_from = range_age, values_from = rank) |>
+  left_join(the_4600_simplified, by = "old") |>
+  select(`Recent Cites`, Article, everything()) |>
+  select(-year)
+  
+table_of_perform <- function(refs){
+  kable(
+    the_4600_wide |>
+      filter(old %in% refs) |>
+      select(-old)
+    )
+  }
+```
+
+In @tbl-mental-content, the column on the left shows how often the article was cited since 2020, and the five columns on the right show how the article ranked at the time among different ranges. So for (include citation), the table says:
+
+-  among articles published between (first range), it had the (n'th) most citations by (year for first range)
+- (include other four)
+
+The dashes in the table mean that the article was not in the top hundred for that range; I didn't measure beyond that.
+
+Now many of these articles are still widely cited: (include citation) still has (include cites) since 2020, which is more than 99% of all published articles. 
