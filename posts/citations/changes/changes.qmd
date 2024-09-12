@@ -379,7 +379,8 @@ for (y in 1965:2010){
     mutate(range_year = y) |>
     left_join(active_philo_bib, by = c("old" = "id")) |>
     select(e_cites, l_cites, display_author, year, range_year, art_title, journal, everything()) |>
-    arrange(-l_cites, -e_cites) |>
+    arrange(-e_cites, -l_cites) |>
+    ungroup() |>
     mutate(rank = row_number())
   
   the_4600 <- bind_rows(the_4600, the_100)
@@ -1053,21 +1054,49 @@ A better explanation goes in the other direction. During the 1980s and 1990s, th
 
 Anyway, @fig-jitter-citations is a scatterplot of how often various articles have been cited. Each dot represents an article that appears in three or more of the top twenty lists, for articles widely cited at the time.
 
-<!--Include graph-->
+```{r}
+#| label: fig-jitter-citations
+#| fig-cap: "Number of recent citations for articles appearing in three or more top twenty lists."
+
+ggplot(the_920 |>
+         distinct(old, .keep_all = TRUE) |>
+         filter(appear >= 3) |>
+         mutate(l_cites = case_when(
+           l_cites == 0 ~ 0.5,
+           TRUE ~ l_cites
+         )),
+       aes(x = year, y = l_cites)) +
+  geom_jitter(size = 2) +
+  scale_y_log10(limits = c(0.4, 250)) +
+  labs(x = "Publication Year",
+       y = "Recent Citations")
+```
 
 The y-axis is the number of citations since 2020. Since these numbers can get very large, this is put on a log scale. Since log scales create problems with zero values, I've replaced all zero citation values with 0.5. The x-axis is no longer a range, it's simply the first year of publication. Since there are often pairs of articles with the same publication year and the same number of citations since 2020, I've added some 'jitter' to the graph.
 
 The striking thing is that the bottom right part of the graph is empty. Focus on the part of the graph below the *y*=10 line, representing ten citations since 2020. After 2000, there are hardly any dots there. @tbl-below-ten lists all the papers since 1974 which appear on three top twenty lists with fewer than ten citations since 2020, i.e., all the dots below the *y*=10 line since 1974. (The points before 1974 are interesting, but I think that's ultimately a different category.)
 
-<!--Include table-->
+```{r}
+#| label: tbl-below-ten
+#| tbl-cap: "Articles which appear on three or more top twenty lists, with fewer than ten recent citations."
+
+kable(
+  the_920 |>
+    distinct(old, .keep_all = TRUE) |>
+    filter(appear >= 3) |>
+    filter(l_cites < 10, year >=1974) |>
+    arrange(year) |>
+    select(`Recent Citations` = l_cites, Article = tbl_cite)
+)
+```
 
 There are two questions we might be interested in here. Why are there so many such articles before the late 1990s, and why are there so few after? It's a bit easier to start with the first, because we can see the particular articles.
 
 The list on @tbl-below-ten seems to have a few natural categories.
 
-Some papers have relatively few citations because they **became books**, or parts of books, and most citations these days are to the book. The most obvious of these are the papers by Rawls [-@citeRawls1, -@citeRawls2] and @citeSider. It's possible the papers by Kim should be included in that category too, though in that case the book (_Supervenience and Mind_) reprinted the papers rather than incorporated them. And, as can be seen by the number of citations to Lewis articles, the existence of collections of papers doesn't have the same systematic effect on citations.
+Some papers have relatively few citations because they **became books**, or parts of books, and most citations these days are to the book. The most obvious of these are the papers by Rawls [-@WOSA1985APA8500001, -@WOSA1988Q394000001] and @WOS000073301000002. It's possible the papers by Kim should be included in that category too, though in that case the book (_Supervenience and Mind_) reprinted the papers rather than incorporated them. And, as can be seen by the number of citations to Lewis articles, the existence of collections of papers doesn't have the same systematic effect on citations.
 
-There are several papers on **causation and laws**, i.e., (include list). These actually rather surprise me; it's not like these topics are not discussed in the recent literature. "Causation as Influence" [@citeCaI] has many citations since 2020. My best guess, and this will come up a bit in what follows, is that there is much less interest these days in papers that take relatively armchair approaches to these topics. Of course, one could say the same thing about "Causation as Influence", so this isn't the whole story. Still, I think it's part of the story.
+There are several papers on **laws**, especially ceteris paribus laws, i.e., (include list). These actually rather surprise me; it's not like these topics are not discussed in the recent literature. "Causation as Influence" [@citeCaI] has many citations since 2020. My best guess, and this will come up a bit in what follows, is that there is much less interest these days in papers that take relatively armchair approaches to these topics. Of course, one could say the same thing about "Causation as Influence", so this isn't the whole story. Still, I think it's part of the story.
 
 There are three papers on **mental content**: (include list). If we look beyond the top twenties, and at other papers that are somewhat widely cited at the time, we see many more papers on mental content. Mental content is still a huge topic in contemporary philosophy, but these big picture, largely armchair, debates about externalism and internalism have largely receded. Contemporary work tends to be more focused on questions of detail, or more sensitive to recent empirical work, or both.
 
@@ -1080,21 +1109,20 @@ the_4600_simplified <- the_4600 |>
 
 the_4600_wide <- the_4600 |>
   select(old, year, range_year, rank) |>
-  mutate(range_age = as.ordinal(year - range_year + 5)) |>
+  mutate(range_age = toOrdinal::toOrdinal(range_year - year + 5)) |>
   mutate(rank = as.character(rank)) |>
   select(-range_year) |>
   complete(nesting(old, year), range_age, fill = list(rank = "--")) |>
   pivot_wider(names_from = range_age, values_from = rank) |>
   left_join(the_4600_simplified, by = "old") |>
-  select(`Recent Cites`, Article, everything()) |>
-  select(-year)
+  select(`Recent Citations`, Article, everything()) |>
+  arrange(year)
   
 table_of_perform <- function(refs){
-  kable(
     the_4600_wide |>
       filter(old %in% refs) |>
-      select(-old)
-    )
+      arrange(year) |>
+      select(-old, -year)
   }
 ```
 
