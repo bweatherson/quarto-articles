@@ -1,0 +1,2522 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Most Cited Articles at the Time
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Most Cited Articles at the Time},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Most Cited Articles at the Time}
+\author{Brian Weatherson}
+\date{2024}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Imagine people at different times over the past half-century asking the
+following question: What philosophy journal article, published less than
+ten years ago, has the most citations in philosophy journals? That's a
+pretty good operationalisation of the question, what current philosophy
+work are philosophers talking about the most. It isn't a great guide to
+what the best work is, or what the most important work will turn out to
+be, but it does say something important about how philosophy felt at
+different times. In this note I run through some data on that question.
+\end{abstract}
+
+\setstretch{1.1}
+Imagine people at different times over the past half-century asking the
+following question: \emph{What philosophy journal article, published
+less than ten years ago, has the most citations in philosophy journals?}
+That's a pretty good operationalisation of the question, what current
+philosophy work are philosophers talking about the most. It isn't a
+great guide to what the best work is, or what the most important work
+will turn out to be, but it does say something important about how
+philosophy felt at different times. In this note I run through some data
+on that question.
+
+I'm using the data I described in
+\href{https://brian.weatherson.org/quarto/posts/citations/raw-data/citations.html}{this
+note}, and I won't repeat it here. The short version is that I'm using
+Web of Science data, restricted to one hundred philosophy journals, and
+with one notable exception looking at entries in their database where
+there is an index reference for both the article being cited, and the
+article doing the citing. The exception is that I used other data from
+Web of Science to make up for one important missing slice of their data:
+\emph{Journal of Philosophy} articles from 1971 to 1974. Hopefully I'll
+do more such back-filling in the future.\footnote{If anyone wants to
+  help, the top of my agenda is filling in citations to \emph{Analysis}
+  articles pre-1975. That I think is the most important miss right now.}
+
+All that said, the answer to the italicised question is in
+Table~\ref{tbl-toppers}.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+
+\caption{\label{tbl-toppers}The article that was, at the time, the most
+cited article less than ten years old.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Year
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\begin{minipage}[t]{\linewidth}\raggedright
+1974
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Richard Rorty {[}-@WOSA1965CJV5800002{]} ``Mind-Body Identity, Privacy,
+and Categories''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1975
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Keith S. Donnellan {[}-@WOSA1966ZC83800001{]} ``Reference and Definite
+Descriptions''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1976
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Donald Davidson {[}-@WOSA1967ZP14500007{]} ``Truth and Meaning''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1977
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Bas C. van Fraassen {[}-@WOSA1968ZE29500003{]} ``Presupposition,
+Implication, and Self-Reference''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1978
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Hilary Putnam {[}-@10.2307\_2025079{]} ``Meaning and Reference''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1979
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Harry G. Frankfurt {[}-@10.2307\_2024717{]} ``Freedom of the Will and
+the Concept of a Person''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+(tie)
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Hilary Putnam {[}-@10.2307\_2025079{]} ``Meaning and Reference''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1980
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Harry G. Frankfurt {[}-@10.2307\_2024717{]} ``Freedom of the Will and
+the Concept of a Person''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1981
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David Lewis {[}-@10.2307\_2025310{]} ``Causation''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1982
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David Lewis {[}-@10.2307\_2025310{]} ``Causation''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1983
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Alvin I. Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
+Perceptual Knowledge''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1984
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Saul Kripke {[}-@WOSA1975BF60000005{]} ``Outline of a Theory of Truth''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+(tie)
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Alvin I. Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
+Perceptual Knowledge''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1985
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Alvin I. Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
+Perceptual Knowledge''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1986
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+John Perry {[}-@WOSA1979HE39600001{]} ``The Problem of the Essential
+Indexical''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1987
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+John Perry {[}-@WOSA1979HE39600001{]} ``The Problem of the Essential
+Indexical''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1988
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+John Perry {[}-@WOSA1979HE39600001{]} ``The Problem of the Essential
+Indexical''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1989
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+John Rawls {[}-@WOSA1980KH88100001{]} ``Rational and Full Autonomy''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1990
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Paul M. Churchland {[}-@WOSA1981LD54600001{]} ``Eliminative Materialism
+and the Propositional Attitudes''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1991
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
+Universals''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1992
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
+Universals''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1993
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Jaegwon Kim {[}-@WOSA1984TV24600001{]} ``Concepts of Supervenience''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1994
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Tyler Burge {[}-@WOSA1986AYX3200001{]} ``Individualism and Psychology''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1995
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Tyler Burge {[}-@WOSA1986AYX3200001{]} ``Individualism and Psychology''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1996
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Frank Jackson and Philip Pettit {[}-@WOSA1988P549200004{]}
+``Functionalism and Broad Content''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1997
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Frank Jackson and Philip Pettit {[}-@WOSA1988P549200004{]}
+``Functionalism and Broad Content''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1998
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Ruth Garrett Millikan {[}-@WOSA1989AA09400006{]} ``In Defense of Proper
+Functions''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+1999
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Donald Davidson {[}-@WOSA1990EQ84600001{]} ``The Structure and Content
+of Truth''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2000
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Karen Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected
+Effects: The Conceptual Analyst's Defense''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2001
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Stephen Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2002
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Tyler Burge {[}-@WOSA1993ML38000001{]} ``Content Preservation''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2003
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2004
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2005
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2006
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David Lewis {[}-@WOS000089124200002{]} ``Causation as Influence''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2007
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Peter Machamer, Lindley Darden, and Carl F. Craver
+{[}-@WOS000087305900001{]} ``Thinking About Mechanisms''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2008
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Peter Machamer, Lindley Darden, and Carl F. Craver
+{[}-@WOS000087305900001{]} ``Thinking About Mechanisms''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2009
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Peter Machamer, Lindley Darden, and Carl F. Craver
+{[}-@WOS000087305900001{]} ``Thinking About Mechanisms''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2010
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+David J. Chalmers and Frank Jackson {[}-@WOS000174798400001{]}
+``Conceptual Analysis and Reductive Explanation''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2011
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Keith DeRose {[}-@WOS000184740400001{]} ``Assertion, Knowledge, and
+Context''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2012
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Keith DeRose {[}-@WOS000184740400001{]} ``Assertion, Knowledge, and
+Context''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2013
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Wlodek Rabinowicz and Toni Rønnow‐Rasmussen {[}-@WOS000222134800001{]}
+``The Strike of the Demon: On Fitting Pro-Attitudes and Value''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2014
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Adam Elga {[}-@WOS000249103800005{]} ``Reflection and Disagreement''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2015
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Adam Elga {[}-@WOS000249103800005{]} ``Reflection and Disagreement''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2016
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Adam Elga {[}-@WOS000249103800005{]} ``Reflection and Disagreement''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2017
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+John Hawthorne and Jason Stanley {[}-@WOS000262624000001{]} ``Knowledge
+and Action''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2018
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Duncan Pritchard {[}-@WOS000311002900002{]} ``Anti-Luck Virtue
+Epistemology''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2019
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Duncan Pritchard {[}-@WOS000311002900002{]} ``Anti-Luck Virtue
+Epistemology''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2020
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Duncan Pritchard {[}-@WOS000311002900002{]} ``Anti-Luck Virtue
+Epistemology''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2021
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Jessica M. Wilson {[}-@WOS000344393500001{]} ``No Work for a Theory of
+Grounding''
+\end{minipage} \\
+\begin{minipage}[t]{\linewidth}\raggedright
+2022
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+Jessica M. Wilson {[}-@WOS000344393500001{]} ``No Work for a Theory of
+Grounding''
+\end{minipage} \\
+
+\end{longtable}
+
+For the years I am familiar with, that seems like a pretty good guide to
+what recent work was being most talked about. So I hope it's a good
+guide to the years I'm less familiar with.
+
+In \href{https://websites.umich.edu/~weath/lda/topic85.html}{A History
+of Philosophy Journals} I'd said that the word counting data suggested
+that ``Meaning and Reference'' (\citeproc{ref-10.2307_2025079}{Putnam
+1973}) took a while to become influential. The citation data \emph{does
+not} back up that suggestion.
+
+The centrality of philosophy of mind, and in particular of a fairly a
+priori approaches to philosophy of mind, to late twentieth-century
+philosophy is very interesting. I think people who are only familiar
+with contemporary work might be surprised at how widely discussed some
+of those papers were.
+
+For some purposes it's a bit more informative to see more data. So I'll
+show the top 10s for each of these years. Some of these lists have more
+than 10 entries, because there are so many ties in the data.\footnote{These
+  are somewhat automatically generated. If you see any spellings or
+  names that need correcting, please let me know.}
+
+Here's a possible experiment you can do if you have old philosophers
+(like my age) around you. Take the list of the top ten recent articles
+from one of the years they were in graduate school, and see how many of
+the articles they (had to) read while they were a graduate student.
+
+I certainly have a much better sense of the articles from the 1990s and
+2000s lists than the more recent lists. And I suspect that lots of
+people have a better feel for what was in the articles listed below for
+their graduate school and early career years than for either side.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1965}Most cited articles published less than
+ten years ago as of 1974.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1974
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Richard Rorty {[}-@WOSA1965CJV5800002{]} ``Mind-Body Identity, Privacy,
+and Categories'' \\
+Keith S. Donnellan {[}-@WOSA1966ZC83800001{]} ``Reference and Definite
+Descriptions'' \\
+Donald Davidson {[}-@WOSA1967ZC34800001{]} ``Causal Relations'' \\
+Gilbert Harman {[}-@WOSA1965CGZ7300007{]} ``The Inference To the Best
+Explanation'' \\
+Bas C. van Fraassen {[}-@WOSA1968ZE29500003{]} ``Presupposition,
+Implication, and Self-Reference'' \\
+Paul K. Feyerabend {[}-@WOSA1965CEU4300003{]} ``On the Meaning of
+Scientific Terms'' \\
+J. L. Mackie {[}-@WOSA1965CKS0700001{]} ``Causes and Conditions'' \\
+Bas C. van Fraassen {[}-@WOSA1966ZC32000001{]} ``Singular Terms,
+Truth-Value Gaps, and Free Logic'' \\
+Brian Ellis and Peter Bowman {[}-@WOSA1967ZC89200002{]}
+``Conventionality in Distant Simulataneity'' \\
+Donald Davidson {[}-@WOSA1967ZP14500007{]} ``Truth and Meaning'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1966}Most cited articles published less than
+ten years ago as of 1975.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1975
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Keith S. Donnellan {[}-@WOSA1966ZC83800001{]} ``Reference and Definite
+Descriptions'' \\
+Donald Davidson {[}-@WOSA1967ZC34800001{]} ``Causal Relations'' \\
+Donald Davidson {[}-@WOSA1967ZP14500007{]} ``Truth and Meaning'' \\
+Bas C. van Fraassen {[}-@WOSA1968ZE29500003{]} ``Presupposition,
+Implication, and Self-Reference'' \\
+Bas C. van Fraassen {[}-@WOSA1966ZC32000001{]} ``Singular Terms,
+Truth-Value Gaps, and Free Logic'' \\
+Roderick M. Chisholm and Ernest Sosa {[}-@WOSA1966ZJ00300005{]} ``Logic
+of Intrinsically Better'' \\
+Alvin I. Goldman {[}-@WOSA1967ZC33900001{]} ``A Causal Theory of
+Knowing'' \\
+Brian Ellis and Peter Bowman {[}-@WOSA1967ZC89200002{]}
+``Conventionality in Distant Simulataneity'' \\
+Hector-Neri Castañeda {[}-@WOSA1967ZH25100001{]} ``Indicators and
+Quasi-Indicators'' \\
+Jaegwon Kim {[}-@WOSA1966ZJ00300003{]} ``On the Psycho-Physical Identity
+Theory'' \\
+Peter T. Geach {[}-@WOSA1967ZB43300001{]} ``Identity'' \\
+Kenneth F. Schaffner {[}-@WOSA1967ZC89200003{]} ``Approaches To
+Reduction'' \\
+James W. Cornman {[}-@WOSA1968ZB81400002{]} ``Elimination of Sensations
+and Sensations'' \\
+John Perry {[}-@WOSA1970Y384600002{]} ``Same F'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1967}Most cited articles published less than
+ten years ago as of 1976.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1976
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Donald Davidson {[}-@WOSA1967ZP14500007{]} ``Truth and Meaning'' \\
+Donald Davidson {[}-@WOSA1967ZC34800001{]} ``Causal Relations'' \\
+Alvin I. Goldman {[}-@WOSA1967ZC33900001{]} ``A Causal Theory of
+Knowing'' \\
+Bas C. van Fraassen {[}-@WOSA1968ZE29500003{]} ``Presupposition,
+Implication, and Self-Reference'' \\
+Keith Lehrer and Thomas Paxson Jr. {[}-@WOSA1969Y443200001{]}
+``Knowledge: Undefeated Justified True Belief'' \\
+Brian Skyrms {[}-@WOSA1967ZC33900002{]} ``Explication of X Knows That
+P'' \\
+Gilbert Harman {[}-@WOSA1968ZB45300003{]} ``Knowledge, Inference, and
+Explanation'' \\
+Harry G. Frankfurt {[}-@10.2307\_2024717{]} ``Freedom of the Will and
+the Concept of a Person'' \\
+Peter D. Klein {[}-@10.2307\_2024845{]} ``A Proposed Definition of
+Propositional Knowledge'' \\
+Brian Ellis and Peter Bowman {[}-@WOSA1967ZC89200002{]}
+``Conventionality in Distant Simulataneity'' \\
+W. V. Quine {[}-@WOSA1970ZE32000003{]} ``On the Reasons for
+Indeterminacy of Translation'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1968}Most cited articles published less than
+ten years ago as of 1977.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1977
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Bas C. van Fraassen {[}-@WOSA1968ZE29500003{]} ``Presupposition,
+Implication, and Self-Reference'' \\
+Hartry Field {[}-@10.2307\_2024879{]} ``Tarski's Theory of Truth'' \\
+Gilbert Harman {[}-@WOSA1968ZB45300003{]} ``Knowledge, Inference, and
+Explanation'' \\
+Keith Lehrer and Thomas Paxson Jr. {[}-@WOSA1969Y443200001{]}
+``Knowledge: Undefeated Justified True Belief'' \\
+Barry Stroud {[}-@WOSA1968ZE29900001{]} ``Transcendental Arguments'' \\
+W. V. Quine {[}-@WOSA1970ZE32000003{]} ``On the Reasons for
+Indeterminacy of Translation'' \\
+Harry G. Frankfurt {[}-@10.2307\_2024717{]} ``Freedom of the Will and
+the Concept of a Person'' \\
+Peter D. Klein {[}-@10.2307\_2024845{]} ``A Proposed Definition of
+Propositional Knowledge'' \\
+Carl G. Hempel {[}-@WOSA1968ZC89600003{]} ``Maximal Specificity and
+Lawlikeness in Probabilistic Explanation'' \\
+Terence Parsons {[}-@WOSA1969Y406000002{]} ``Essentialism and Quantified
+Modal Logic'' \\
+Judith Jarvis Thomson {[}-@WOSA1971Y116900003{]} ``A Defense of
+Abortion'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1969}Most cited articles published less than
+ten years ago as of 1978.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1978
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hilary Putnam {[}-@10.2307\_2025079{]} ``Meaning and Reference'' \\
+Harry G. Frankfurt {[}-@10.2307\_2024717{]} ``Freedom of the Will and
+the Concept of a Person'' \\
+Hartry Field {[}-@10.2307\_2024879{]} ``Tarski's Theory of Truth'' \\
+Jaegwon Kim {[}-@10.2307\_2025096{]} ``Causation, Nomic Subsumption, and
+the Concept of Event'' \\
+W. V. Quine {[}-@WOSA1970ZE32000003{]} ``On the Reasons for
+Indeterminacy of Translation'' \\
+David Lewis {[}-@10.2307\_2025310{]} ``Causation'' \\
+Paul Benacerraf {[}-@10.2307\_2025075{]} ``Mathematical Truth'' \\
+Keith Lehrer and Thomas Paxson Jr. {[}-@WOSA1969Y443200001{]}
+``Knowledge: Undefeated Justified True Belief'' \\
+Alvin I. Goldman {[}-@10.2307\_2024949{]} ``The Individuation of
+Action'' \\
+Richard Rorty {[}-@10.2307\_2025059{]} ``The World Well Lost'' \\
+Judith Jarvis Thomson {[}-@WOSA1971Y116900003{]} ``A Defense of
+Abortion'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1970}Most cited articles published less than
+ten years ago as of 1979.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1979
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Harry G. Frankfurt {[}-@10.2307\_2024717{]} ``Freedom of the Will and
+the Concept of a Person'' \\
+Hilary Putnam {[}-@10.2307\_2025079{]} ``Meaning and Reference'' \\
+David Lewis {[}-@10.2307\_2025310{]} ``Causation'' \\
+Hartry Field {[}-@10.2307\_2024879{]} ``Tarski's Theory of Truth'' \\
+Jaegwon Kim {[}-@10.2307\_2025096{]} ``Causation, Nomic Subsumption, and
+the Concept of Event'' \\
+W. V. Quine {[}-@WOSA1970ZE32000003{]} ``On the Reasons for
+Indeterminacy of Translation'' \\
+Alvin I. Goldman {[}-@10.2307\_2024949{]} ``The Individuation of
+Action'' \\
+Richard Rorty {[}-@10.2307\_2025059{]} ``The World Well Lost'' \\
+Michael Devitt {[}-@10.2307\_2025347{]} ``Singular Terms'' \\
+Paul Benacerraf {[}-@10.2307\_2025075{]} ``Mathematical Truth'' \\
+Hartry Field {[}-@10.2307\_2025110{]} ``Theory Change and the
+Indeterminacy of Reference'' \\
+Derek Parfit {[}-@WOSA1971Y036400001{]} ``Personal Identity'' \\
+Judith Jarvis Thomson {[}-@WOSA1971Y116900003{]} ``A Defense of
+Abortion'' \\
+Elie Zahar {[}-@WOSA1973Q107900001{]} ``Why Did Einstein's Programme
+Supersede Lorentz's (I)'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1971}Most cited articles published less than
+ten years ago as of 1980.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1980
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Harry G. Frankfurt {[}-@10.2307\_2024717{]} ``Freedom of the Will and
+the Concept of a Person'' \\
+David Lewis {[}-@10.2307\_2025310{]} ``Causation'' \\
+Hilary Putnam {[}-@10.2307\_2025079{]} ``Meaning and Reference'' \\
+Hartry Field {[}-@10.2307\_2024879{]} ``Tarski's Theory of Truth'' \\
+Jaegwon Kim {[}-@10.2307\_2025096{]} ``Causation, Nomic Subsumption, and
+the Concept of Event'' \\
+Alvin I. Goldman {[}-@10.2307\_2024949{]} ``The Individuation of
+Action'' \\
+Richard Rorty {[}-@10.2307\_2025059{]} ``The World Well Lost'' \\
+Judith Jarvis Thomson {[}-@WOSA1971Y116900003{]} ``A Defense of
+Abortion'' \\
+Michael Devitt {[}-@10.2307\_2025347{]} ``Singular Terms'' \\
+Elie Zahar {[}-@WOSA1973Q107900001{]} ``Why Did Einstein's Programme
+Supersede Lorentz's (I)'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1972}Most cited articles published less than
+ten years ago as of 1981.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1981
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David Lewis {[}-@10.2307\_2025310{]} ``Causation'' \\
+Hilary Putnam {[}-@10.2307\_2025079{]} ``Meaning and Reference'' \\
+Jaegwon Kim {[}-@10.2307\_2025096{]} ``Causation, Nomic Subsumption, and
+the Concept of Event'' \\
+Hartry Field {[}-@10.2307\_2024879{]} ``Tarski's Theory of Truth'' \\
+Paul Benacerraf {[}-@10.2307\_2025075{]} ``Mathematical Truth'' \\
+Michael Devitt {[}-@10.2307\_2025347{]} ``Singular Terms'' \\
+Richard Rorty {[}-@10.2307\_2025059{]} ``The World Well Lost'' \\
+Elie Zahar {[}-@WOSA1973Q107900001{]} ``Why Did Einstein's Programme
+Supersede Lorentz's (I)'' \\
+Robert L. Causey {[}-@10.2307\_2024853{]} ``Attribute-Identities in
+Microreductions'' \\
+Alvin I. Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
+Perceptual Knowledge'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1973}Most cited articles published less than
+ten years ago as of 1982.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1982
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David Lewis {[}-@10.2307\_2025310{]} ``Causation'' \\
+Hilary Putnam {[}-@10.2307\_2025079{]} ``Meaning and Reference'' \\
+Jaegwon Kim {[}-@10.2307\_2025096{]} ``Causation, Nomic Subsumption, and
+the Concept of Event'' \\
+Paul Benacerraf {[}-@10.2307\_2025075{]} ``Mathematical Truth'' \\
+Michael Devitt {[}-@10.2307\_2025347{]} ``Singular Terms'' \\
+Alvin I. Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
+Perceptual Knowledge'' \\
+Hartry Field {[}-@10.2307\_2025110{]} ``Theory Change and the
+Indeterminacy of Reference'' \\
+Elie Zahar {[}-@WOSA1973Q107900001{]} ``Why Did Einstein's Programme
+Supersede Lorentz's (I)'' \\
+Saul Kripke {[}-@WOSA1975BF60000005{]} ``Outline of a Theory of
+Truth'' \\
+Tyler Burge {[}-@WOSA1977DH28800002{]} ``Belief De Re'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1974}Most cited articles published less than
+ten years ago as of 1983.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1983
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Alvin I. Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
+Perceptual Knowledge'' \\
+Michael Devitt {[}-@10.2307\_2025347{]} ``Singular Terms'' \\
+Saul Kripke {[}-@WOSA1975BF60000005{]} ``Outline of a Theory of
+Truth'' \\
+Tyler Burge {[}-@WOSA1977DH28800002{]} ``Belief De Re'' \\
+Keith S. Donnellan {[}-@WOSA1974R925600001{]} ``Speaking of Nothing'' \\
+John Perry {[}-@WOSA1977EA01800002{]} ``Frege on Demonstratives'' \\
+Terence Parsons {[}-@10.2307\_2025232{]} ``A Prolegomenon to Meinongian
+Semantics'' \\
+N. L. Wilson {[}-@WOSA1974AC91800001{]} ``Facts, Events and Their
+Identity Conditions'' \\
+Hector-Neri Castañeda {[}-@WOSA1977DV15800002{]} ``Perception, Belief,
+and Structure of Physical Objects and Consciousness'' \\
+Gary Watson {[}-@WOSA1975W282300001{]} ``Free Agency'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1975}Most cited articles published less than
+ten years ago as of 1984.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1984
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Saul Kripke {[}-@WOSA1975BF60000005{]} ``Outline of a Theory of
+Truth'' \\
+Alvin I. Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
+Perceptual Knowledge'' \\
+John Perry {[}-@WOSA1979HE39600001{]} ``The Problem of the Essential
+Indexical'' \\
+Tyler Burge {[}-@WOSA1977DH28800002{]} ``Belief De Re'' \\
+Hector-Neri Castañeda {[}-@WOSA1977DV15800002{]} ``Perception, Belief,
+and Structure of Physical Objects and Consciousness'' \\
+Jaegwon Kim {[}-@WOSA1978EL93700009{]} ``Supervenience and Nomological
+Incommensurables'' \\
+David Lewis {[}-@WOSA1976BZ95100001{]} ``Probabilities of Conditionals
+and Conditional Probabilities'' \\
+John Perry {[}-@WOSA1977EA01800002{]} ``Frege on Demonstratives'' \\
+Norman Daniels {[}-@WOSA1979GW47300003{]} ``Wide Reflective Equilibrium
+and Theory Acceptance in Ethics'' \\
+David Lewis {[}-@WOSA1979JB14500003{]} ``Counterfactual Dependence and
+Time's Arrow'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1976}Most cited articles published less than
+ten years ago as of 1985.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1985
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Alvin I. Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
+Perceptual Knowledge'' \\
+John Perry {[}-@WOSA1979HE39600001{]} ``The Problem of the Essential
+Indexical'' \\
+Tyler Burge {[}-@WOSA1977DH28800002{]} ``Belief De Re'' \\
+John Perry {[}-@WOSA1977EA01800002{]} ``Frege on Demonstratives'' \\
+David Lewis {[}-@WOSA1979JB14500003{]} ``Counterfactual Dependence and
+Time's Arrow'' \\
+Hector-Neri Castañeda {[}-@WOSA1977DV15800002{]} ``Perception, Belief,
+and Structure of Physical Objects and Consciousness'' \\
+Jaegwon Kim {[}-@WOSA1978EL93700009{]} ``Supervenience and Nomological
+Incommensurables'' \\
+Norman Daniels {[}-@WOSA1979GW47300003{]} ``Wide Reflective Equilibrium
+and Theory Acceptance in Ethics'' \\
+David Lewis {[}-@WOSA1976BZ95100001{]} ``Probabilities of Conditionals
+and Conditional Probabilities'' \\
+David Lewis {[}-@WOSA1979JC64200001{]} ``Attitudes De Dicto and De
+Se'' \\
+John Rawls {[}-@WOSA1980KH88100001{]} ``Rational and Full Autonomy'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1977}Most cited articles published less than
+ten years ago as of 1986.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1986
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+John Perry {[}-@WOSA1979HE39600001{]} ``The Problem of the Essential
+Indexical'' \\
+Tyler Burge {[}-@WOSA1977DH28800002{]} ``Belief De Re'' \\
+John Perry {[}-@WOSA1977EA01800002{]} ``Frege on Demonstratives'' \\
+Norman Daniels {[}-@WOSA1979GW47300003{]} ``Wide Reflective Equilibrium
+and Theory Acceptance in Ethics'' \\
+David Lewis {[}-@WOSA1979JB14500003{]} ``Counterfactual Dependence and
+Time's Arrow'' \\
+David Lewis {[}-@WOSA1979JC64200001{]} ``Attitudes De Dicto and De
+Se'' \\
+Hector-Neri Castañeda {[}-@WOSA1977DV15800002{]} ``Perception, Belief,
+and Structure of Physical Objects and Consciousness'' \\
+Jaegwon Kim {[}-@WOSA1978EL93700009{]} ``Supervenience and Nomological
+Incommensurables'' \\
+John Rawls {[}-@WOSA1980KH88100001{]} ``Rational and Full Autonomy'' \\
+Paul M. Churchland {[}-@WOSA1981LD54600001{]} ``Eliminative Materialism
+and the Propositional Attitudes'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1978}Most cited articles published less than
+ten years ago as of 1987.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1987
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+John Perry {[}-@WOSA1979HE39600001{]} ``The Problem of the Essential
+Indexical'' \\
+David Lewis {[}-@WOSA1979JC64200001{]} ``Attitudes De Dicto and De
+Se'' \\
+Paul M. Churchland {[}-@WOSA1981LD54600001{]} ``Eliminative Materialism
+and the Propositional Attitudes'' \\
+Jaegwon Kim {[}-@WOSA1978EL93700009{]} ``Supervenience and Nomological
+Incommensurables'' \\
+Norman Daniels {[}-@WOSA1979GW47300003{]} ``Wide Reflective Equilibrium
+and Theory Acceptance in Ethics'' \\
+David Lewis {[}-@WOSA1979JB14500003{]} ``Counterfactual Dependence and
+Time's Arrow'' \\
+John Rawls {[}-@WOSA1980KH88100001{]} ``Rational and Full Autonomy'' \\
+Nancy Cartwright {[}-@WOSA1979JB14500001{]} ``Causal Laws and Effective
+Strategies'' \\
+David Lewis {[}-@WOSA1981LW58400001{]} ``Causal Decision Theory'' \\
+Robert Merrihew Adams {[}-@WOSA1979GF70700001{]} ``Primitive Thisness
+and Primitive Identity'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1979}Most cited articles published less than
+ten years ago as of 1988.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1988
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+John Perry {[}-@WOSA1979HE39600001{]} ``The Problem of the Essential
+Indexical'' \\
+John Rawls {[}-@WOSA1980KH88100001{]} ``Rational and Full Autonomy'' \\
+Paul M. Churchland {[}-@WOSA1981LD54600001{]} ``Eliminative Materialism
+and the Propositional Attitudes'' \\
+Norman Daniels {[}-@WOSA1979GW47300003{]} ``Wide Reflective Equilibrium
+and Theory Acceptance in Ethics'' \\
+David Lewis {[}-@WOSA1979JC64200001{]} ``Attitudes De Dicto and De
+Se'' \\
+David Lewis {[}-@WOSA1979JB14500003{]} ``Counterfactual Dependence and
+Time's Arrow'' \\
+Nancy Cartwright {[}-@WOSA1979JB14500001{]} ``Causal Laws and Effective
+Strategies'' \\
+David Lewis {[}-@WOSA1981LW58400001{]} ``Causal Decision Theory'' \\
+Larry Laudan {[}-@WOSA1981LY92900002{]} ``A Confutation of Convergent
+Realism'' \\
+Robert Merrihew Adams {[}-@WOSA1979GF70700001{]} ``Primitive Thisness
+and Primitive Identity'' \\
+Ruth Barcan Marcus {[}-@WOSA1980JJ63300001{]} ``Moral Dilemmas and
+Consistency'' \\
+David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
+Universals'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1980}Most cited articles published less than
+ten years ago as of 1989.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1989
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+John Rawls {[}-@WOSA1980KH88100001{]} ``Rational and Full Autonomy'' \\
+Paul M. Churchland {[}-@WOSA1981LD54600001{]} ``Eliminative Materialism
+and the Propositional Attitudes'' \\
+David Lewis {[}-@WOSA1981LW58400001{]} ``Causal Decision Theory'' \\
+Larry Laudan {[}-@WOSA1981LY92900002{]} ``A Confutation of Convergent
+Realism'' \\
+David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
+Universals'' \\
+Ruth Barcan Marcus {[}-@WOSA1980JJ63300001{]} ``Moral Dilemmas and
+Consistency'' \\
+Norman Daniels {[}-@WOSA1980JZ97600005{]} ``Reflective Equilibrium and
+Archimedean Points'' \\
+Patricia S. Churchland {[}-@WOSA1980JM77300001{]} ``A Perspective on
+Mind-Brain Research'' \\
+Ned Block {[}-@WOSA1980JW85100004{]} ``Are Absent Qualia Impossible'' \\
+Frank Jackson {[}-@WOSA1982NH65300003{]} ``Epiphenomenal Qualia'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1981}Most cited articles published less than
+ten years ago as of 1990.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1990
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Paul M. Churchland {[}-@WOSA1981LD54600001{]} ``Eliminative Materialism
+and the Propositional Attitudes'' \\
+David Lewis {[}-@WOSA1981LW58400001{]} ``Causal Decision Theory'' \\
+David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
+Universals'' \\
+John Rawls {[}-@WOSA1985APA8500001{]} ``Justice as Fairness: Political
+Not Metaphysical'' \\
+Larry Laudan {[}-@WOSA1981LY92900002{]} ``A Confutation of Convergent
+Realism'' \\
+Ronald Dworkin {[}-@WOSA1981MH21100001{]} ``What is Equality? Part 2:
+Equality of Resources'' \\
+Frank Jackson {[}-@WOSA1982NH65300003{]} ``Epiphenomenal Qualia'' \\
+Jaegwon Kim {[}-@WOSA1982NC90700004{]} ``Psychophysical
+Supervenience'' \\
+Jaegwon Kim {[}-@WOSA1984TV24600001{]} ``Concepts of Supervenience'' \\
+Dudley Shapere {[}-@WOSA1982PW68500001{]} ``The Concept of Observation
+in Science and Philosophy'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1982}Most cited articles published less than
+ten years ago as of 1991.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1991
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
+Universals'' \\
+John Rawls {[}-@WOSA1985APA8500001{]} ``Justice as Fairness: Political
+Not Metaphysical'' \\
+Tyler Burge {[}-@WOSA1986AYX3200001{]} ``Individualism and
+Psychology'' \\
+Frank Jackson {[}-@WOSA1982NH65300003{]} ``Epiphenomenal Qualia'' \\
+Jaegwon Kim {[}-@WOSA1984TV24600001{]} ``Concepts of Supervenience'' \\
+John Haugeland {[}-@WOSA1982NC42600008{]} ``Weak Supervenience'' \\
+Dudley Shapere {[}-@WOSA1982PW68500001{]} ``The Concept of Observation
+in Science and Philosophy'' \\
+Jaegwon Kim {[}-@WOSA1982NC90700004{]} ``Psychophysical
+Supervenience'' \\
+Anil Gupta {[}-@WOSA1982NW89300001{]} ``Truth and Paradox'' \\
+Philip Kitcher {[}-@WOSA1984SZ73700006{]} ``Species'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1983}Most cited articles published less than
+ten years ago as of 1992.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1992
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
+Universals'' \\
+Jaegwon Kim {[}-@WOSA1984TV24600001{]} ``Concepts of Supervenience'' \\
+John Rawls {[}-@WOSA1985APA8500001{]} ``Justice as Fairness: Political
+Not Metaphysical'' \\
+Tyler Burge {[}-@WOSA1986AYX3200001{]} ``Individualism and
+Psychology'' \\
+Philip Kitcher {[}-@WOSA1984SZ73700006{]} ``Species'' \\
+Hilary Kornblith {[}-@WOSA1983PZ01000002{]} ``Justified Belief and
+Epistemically Responsible Action'' \\
+Ellery Eells and Elliot Sober {[}-@WOSA1983QJ85300002{]} ``Probabilistic
+Causality and the Question of Transitivity'' \\
+Peter Railton {[}-@WOSA1986C044900001{]} ``Moral Realism'' \\
+Peter Railton {[}-@WOSA1984SH40600002{]} ``Alienation, Consequentialism,
+and the Demands of Morality'' \\
+Jerry Fodor {[}-@WOSA1984SL56000004{]} ``Observation Reconsidered'' \\
+David Lewis {[}-@WOSA1984TQ70900001{]} ``Putnam's Paradox'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1984}Most cited articles published less than
+ten years ago as of 1993.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1993
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Jaegwon Kim {[}-@WOSA1984TV24600001{]} ``Concepts of Supervenience'' \\
+Tyler Burge {[}-@WOSA1986AYX3200001{]} ``Individualism and
+Psychology'' \\
+John Rawls {[}-@WOSA1985APA8500001{]} ``Justice as Fairness: Political
+Not Metaphysical'' \\
+Peter Railton {[}-@WOSA1986C044900001{]} ``Moral Realism'' \\
+Peter Railton {[}-@WOSA1984SH40600002{]} ``Alienation, Consequentialism,
+and the Demands of Morality'' \\
+Philip Kitcher {[}-@WOSA1984SZ73700006{]} ``Species'' \\
+Jerry Fodor {[}-@WOSA1984SL56000004{]} ``Observation Reconsidered'' \\
+David Lewis {[}-@WOSA1984TQ70900001{]} ``Putnam's Paradox'' \\
+Paul M. Churchland {[}-@WOSA1985AAC6100002{]} ``Reduction, Qualia, and
+the Direct Introspection of Brain States'' \\
+Frank Jackson and Philip Pettit {[}-@WOSA1988P549200004{]}
+``Functionalism and Broad Content'' \\
+John Rawls {[}-@WOSA1988Q394000001{]} ``The Priority of Right and Ideas
+of the Good'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1985}Most cited articles published less than
+ten years ago as of 1994.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1994
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Tyler Burge {[}-@WOSA1986AYX3200001{]} ``Individualism and
+Psychology'' \\
+John Rawls {[}-@WOSA1985APA8500001{]} ``Justice as Fairness: Political
+Not Metaphysical'' \\
+Peter Railton {[}-@WOSA1986C044900001{]} ``Moral Realism'' \\
+Frank Jackson and Philip Pettit {[}-@WOSA1988P549200004{]}
+``Functionalism and Broad Content'' \\
+Paul M. Churchland {[}-@WOSA1985AAC6100002{]} ``Reduction, Qualia, and
+the Direct Introspection of Brain States'' \\
+Richard Feldman {[}-@WOSA1985APJ3700001{]} ``Reliability and
+Justification'' \\
+Annette Baier {[}-@WOSA1986AYY3900001{]} ``Trust and Antitrust'' \\
+Ruth Garrett Millikan {[}-@WOSA1989U850300001{]} ``Biosemantics'' \\
+William P. Alston {[}-@WOSA1985AML6300004{]} ``Concepts of Epistemic
+Justification'' \\
+Ruth Garrett Millikan {[}-@WOSA1986AYX3200002{]} ``Thoughts Without
+Laws, Cognitive Science With Content'' \\
+Larry Laudan {[}-@WOSA1987F902200002{]} ``Progress or Rationality: The
+Prospects for Normative Naturalism'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1986}Most cited articles published less than
+ten years ago as of 1995.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1995
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Tyler Burge {[}-@WOSA1986AYX3200001{]} ``Individualism and
+Psychology'' \\
+Peter Railton {[}-@WOSA1986C044900001{]} ``Moral Realism'' \\
+Frank Jackson and Philip Pettit {[}-@WOSA1988P549200004{]}
+``Functionalism and Broad Content'' \\
+Annette Baier {[}-@WOSA1986AYY3900001{]} ``Trust and Antitrust'' \\
+Ruth Garrett Millikan {[}-@WOSA1986AYX3200002{]} ``Thoughts Without
+Laws, Cognitive Science With Content'' \\
+Larry Laudan {[}-@WOSA1987F902200002{]} ``Progress or Rationality: The
+Prospects for Normative Naturalism'' \\
+John Rawls {[}-@WOSA1988Q394000001{]} ``The Priority of Right and Ideas
+of the Good'' \\
+Ruth Garrett Millikan {[}-@WOSA1989U850300001{]} ``Biosemantics'' \\
+Ned Block {[}-@WOSA1986E325200027{]} ``Advertisement for a Semantics for
+Psychology'' \\
+John Bigelow and Robert Pargetter {[}-@WOSA1987G947600001{]}
+``Functions'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1987}Most cited articles published less than
+ten years ago as of 1996.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1996
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Frank Jackson and Philip Pettit {[}-@WOSA1988P549200004{]}
+``Functionalism and Broad Content'' \\
+Larry Laudan {[}-@WOSA1987F902200002{]} ``Progress or Rationality: The
+Prospects for Normative Naturalism'' \\
+Ruth Garrett Millikan {[}-@WOSA1989U850300001{]} ``Biosemantics'' \\
+John Rawls {[}-@WOSA1988Q394000001{]} ``The Priority of Right and Ideas
+of the Good'' \\
+Ruth Garrett Millikan {[}-@WOSA1989AA09400006{]} ``In Defense of Proper
+Functions'' \\
+John Bigelow and Robert Pargetter {[}-@WOSA1987G947600001{]}
+``Functions'' \\
+John Earman and John Norton {[}-@WOSA1987M488500005{]} ``What Price
+Spacetime Substantivalism: The Hole Story'' \\
+Karen Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected
+Effects: The Conceptual Analyst's Defense'' \\
+Mohan Matthen {[}-@WOSA1988L846200001{]} ``Biological Functions and
+Perceptual Content'' \\
+James Bogen and James Woodward {[}-@WOSA1988N938600001{]} ``Saving the
+Phenomena'' \\
+Tyler Burge {[}-@WOSA1988R020000007{]} ``Individualism and
+Self-Knowledge'' \\
+G. A. Cohen {[}-@WOSA1989AE70300010{]} ``On the Currency of Egalitarian
+Justice'' \\
+Paul A. Boghossian and J. David Velleman {[}-@WOSA1989T231400005{]}
+``Color as a Secondary Quality'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1988}Most cited articles published less than
+ten years ago as of 1997.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1997
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Frank Jackson and Philip Pettit {[}-@WOSA1988P549200004{]}
+``Functionalism and Broad Content'' \\
+Ruth Garrett Millikan {[}-@WOSA1989AA09400006{]} ``In Defense of Proper
+Functions'' \\
+Ruth Garrett Millikan {[}-@WOSA1989U850300001{]} ``Biosemantics'' \\
+Karen Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected
+Effects: The Conceptual Analyst's Defense'' \\
+John Rawls {[}-@WOSA1988Q394000001{]} ``The Priority of Right and Ideas
+of the Good'' \\
+Tyler Burge {[}-@WOSA1988R020000007{]} ``Individualism and
+Self-Knowledge'' \\
+Philip Kitcher {[}-@WOSA1990CH71200001{]} ``The Division of Cognitive
+Labor'' \\
+Donald Davidson {[}-@WOSA1990EQ84600001{]} ``The Structure and Content
+of Truth'' \\
+James Bogen and James Woodward {[}-@WOSA1988N938600001{]} ``Saving the
+Phenomena'' \\
+G. A. Cohen {[}-@WOSA1989AE70300010{]} ``On the Currency of Egalitarian
+Justice'' \\
+Paul A. Boghossian and J. David Velleman {[}-@WOSA1989T231400005{]}
+``Color as a Secondary Quality'' \\
+Stephen Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1989}Most cited articles published less than
+ten years ago as of 1998.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1998
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Ruth Garrett Millikan {[}-@WOSA1989AA09400006{]} ``In Defense of Proper
+Functions'' \\
+Ruth Garrett Millikan {[}-@WOSA1989U850300001{]} ``Biosemantics'' \\
+Karen Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected
+Effects: The Conceptual Analyst's Defense'' \\
+Donald Davidson {[}-@WOSA1990EQ84600001{]} ``The Structure and Content
+of Truth'' \\
+Stephen Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+G. A. Cohen {[}-@WOSA1989AE70300010{]} ``On the Currency of Egalitarian
+Justice'' \\
+M Crimmins and John Perry {[}-@WOSA1989CF70700001{]} ``The Prince and
+the Phone Booth: Reporting Puzzling Beliefs'' \\
+Paul A. Boghossian and J. David Velleman {[}-@WOSA1989T231400005{]}
+``Color as a Secondary Quality'' \\
+Philip Kitcher {[}-@WOSA1990CH71200001{]} ``The Division of Cognitive
+Labor'' \\
+Tim Crane and D. H. Mellor {[}-@WOSA1990DA14600002{]} ``There is No
+Question of Physicalism'' \\
+Karen Neander {[}-@WOSA1991GR92500005{]} ``The Teleological Notion of
+Function'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1990}Most cited articles published less than
+ten years ago as of 1999.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+1999
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Donald Davidson {[}-@WOSA1990EQ84600001{]} ``The Structure and Content
+of Truth'' \\
+Karen Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected
+Effects: The Conceptual Analyst's Defense'' \\
+Stephen Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+Tim Crane and D. H. Mellor {[}-@WOSA1990DA14600002{]} ``There is No
+Question of Physicalism'' \\
+Jaegwon Kim {[}-@WOSA1990FU75100001{]} ``Supervenience as a
+Philosophical Concept'' \\
+Philip Kitcher {[}-@WOSA1990CH71200001{]} ``The Division of Cognitive
+Labor'' \\
+Karen Neander {[}-@WOSA1991GR92500005{]} ``The Teleological Notion of
+Function'' \\
+Philip Kitcher {[}-@WOSA1992HF90300002{]} ``The Naturalists Return'' \\
+Gideon Rosen {[}-@WOSA1990DR99100001{]} ``Modal Fictionalism'' \\
+Michael B. Burke {[}-@WOSA1992HC13100003{]} ``Copper Statues and Pieces
+of Copper: A Challenge To the Standard Account'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1991}Most cited articles published less than
+ten years ago as of 2000.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2000
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Karen Neander {[}-@WOSA1991FQ15000002{]} ``Functions as Selected
+Effects: The Conceptual Analyst's Defense'' \\
+Stephen Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+Tyler Burge {[}-@WOSA1993ML38000001{]} ``Content Preservation'' \\
+Karen Neander {[}-@WOSA1991GR92500005{]} ``The Teleological Notion of
+Function'' \\
+Michael B. Burke {[}-@WOSA1992HC13100003{]} ``Copper Statues and Pieces
+of Copper: A Challenge To the Standard Account'' \\
+P. E. Griffiths and R. D. Gray {[}-@WOSA1994NP54800001{]}
+``Developmental Systems and Evolutionary Explanation'' \\
+Michael McKinsey {[}-@WOSA1991EW83300002{]} ``Anti-Individualism and
+Privileged Access'' \\
+Philip Kitcher {[}-@WOSA1992HF90300002{]} ``The Naturalists Return'' \\
+Anthony Brueckner {[}-@WOSA1992HT19500013{]} ``What An
+Anti-Individualist Knows A Priori'' \\
+Michael B. Burke {[}-@WOSA1994PD73500006{]} ``Preserving the Principle
+of One Object To a Place: A Novel Account of the Relations Among
+Objects, Sorts, Sortals, and Persistance Conditions'' \\
+Hilary Putnam {[}-@WOSA1994PF23100001{]} ``Sense, Nonsense, and the
+Senses: An Inquiry into the Powers of the Human Mind'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1992}Most cited articles published less than
+ten years ago as of 2001.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2001
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Stephen Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+Tyler Burge {[}-@WOSA1993ML38000001{]} ``Content Preservation'' \\
+David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge'' \\
+P. E. Griffiths and R. D. Gray {[}-@WOSA1994NP54800001{]}
+``Developmental Systems and Evolutionary Explanation'' \\
+Hilary Putnam {[}-@WOSA1994PF23100001{]} ``Sense, Nonsense, and the
+Senses: An Inquiry into the Powers of the Human Mind'' \\
+Michael B. Burke {[}-@WOSA1992HC13100003{]} ``Copper Statues and Pieces
+of Copper: A Challenge To the Standard Account'' \\
+Malcom Forster and Elliot Sober {[}-@WOSA1994NQ78600001{]} ``How To Tell
+When Simpler, More Unified, or Less \emph{Ad Hoc} Theories Will Provide
+More Accurate Predictions'' \\
+Philip Kitcher {[}-@WOSA1992HF90300002{]} ``The Naturalists Return'' \\
+Michael B. Burke {[}-@WOSA1994PD73500006{]} ``Preserving the Principle
+of One Object To a Place: A Novel Account of the Relations Among
+Objects, Sorts, Sortals, and Persistance Conditions'' \\
+M Johnston {[}-@WOSA1992KC39800002{]} ``How To Speak of the Colors'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1993}Most cited articles published less than
+ten years ago as of 2002.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2002
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Tyler Burge {[}-@WOSA1993ML38000001{]} ``Content Preservation'' \\
+David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge'' \\
+Hilary Putnam {[}-@WOSA1994PF23100001{]} ``Sense, Nonsense, and the
+Senses: An Inquiry into the Powers of the Human Mind'' \\
+P. E. Griffiths and R. D. Gray {[}-@WOSA1994NP54800001{]}
+``Developmental Systems and Evolutionary Explanation'' \\
+Malcom Forster and Elliot Sober {[}-@WOSA1994NQ78600001{]} ``How To Tell
+When Simpler, More Unified, or Less \emph{Ad Hoc} Theories Will Provide
+More Accurate Predictions'' \\
+Keith DeRose {[}-@WOSA1995RC31600001{]} ``Solving the Skeptical
+Problem'' \\
+Hartry Field {[}-@WOSA1994NY27600001{]} ``Deflationist Views of Meaning
+and Content'' \\
+Michael B. Burke {[}-@WOSA1994PD73500006{]} ``Preserving the Principle
+of One Object To a Place: A Novel Account of the Relations Among
+Objects, Sorts, Sortals, and Persistance Conditions'' \\
+David Lewis {[}-@WOSA1994PM10400005{]} ``Humean Supervenience
+Debugged'' \\
+Kevin Falvey and Joseph Owens {[}-@WOSA1994NP02400004{]} ``Externalism,
+Self-Knowledge, and Skepticism'' \\
+Dean W. Zimmerman {[}-@WOSA1995RC31600002{]} ``Theories of Masses and
+Problems of Constitution'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1994}Most cited articles published less than
+ten years ago as of 2003.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2003
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge'' \\
+Hartry Field {[}-@WOSA1994NY27600001{]} ``Deflationist Views of Meaning
+and Content'' \\
+Malcom Forster and Elliot Sober {[}-@WOSA1994NQ78600001{]} ``How To Tell
+When Simpler, More Unified, or Less \emph{Ad Hoc} Theories Will Provide
+More Accurate Predictions'' \\
+Hilary Putnam {[}-@WOSA1994PF23100001{]} ``Sense, Nonsense, and the
+Senses: An Inquiry into the Powers of the Human Mind'' \\
+Keith DeRose {[}-@WOSA1995RC31600001{]} ``Solving the Skeptical
+Problem'' \\
+David Lewis {[}-@WOSA1994PM10400005{]} ``Humean Supervenience
+Debugged'' \\
+P. E. Griffiths and R. D. Gray {[}-@WOSA1994NP54800001{]}
+``Developmental Systems and Evolutionary Explanation'' \\
+Michael B. Burke {[}-@WOSA1994PD73500006{]} ``Preserving the Principle
+of One Object To a Place: A Novel Account of the Relations Among
+Objects, Sorts, Sortals, and Persistance Conditions'' \\
+C. B. Martin {[}-@WOSA1994MT56900001{]} ``Dispositions and
+Conditionals'' \\
+Dean W. Zimmerman {[}-@WOSA1995RC31600002{]} ``Theories of Masses and
+Problems of Constitution'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1995}Most cited articles published less than
+ten years ago as of 2004.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2004
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge'' \\
+Keith DeRose {[}-@WOSA1995RC31600001{]} ``Solving the Skeptical
+Problem'' \\
+Dean W. Zimmerman {[}-@WOSA1995RC31600002{]} ``Theories of Masses and
+Problems of Constitution'' \\
+Rae Langton and David Lewis {[}-@WOS000073836400005{]} ``Defining
+`Intrinsic'\,'' \\
+Paul Pietroski and Georges Rey {[}-@WOSA1995QL53800004{]} ``When Other
+Things Aren't Equal: Saving Ceteris Paribus Laws From Vacuity'' \\
+Jessica Brown {[}-@WOSA1995RR76900005{]} ``The Incompatibility of
+Anti-Individualism and Privileged Access'' \\
+Donald Davidson {[}-@WOSA1996UM62300001{]} ``The Folly of Trying To
+Define Truth'' \\
+Elizabeth S. Anderson {[}-@WOS000078432400003{]} ``What is the Point of
+Equality?'' \\
+Ned Block and Robert Stalnaker {[}-@WOS000084347100001{]} ``Conceptual
+Analysis, Dualism, and the Explanatory Gap'' \\
+David Lewis {[}-@WOSA1997WP33800001{]} ``Finkish Dispositions'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1996}Most cited articles published less than
+ten years ago as of 2005.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2005
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge'' \\
+David Lewis {[}-@WOS000089124200002{]} ``Causation as Influence'' \\
+Ned Block and Robert Stalnaker {[}-@WOS000084347100001{]} ``Conceptual
+Analysis, Dualism, and the Explanatory Gap'' \\
+Peter Machamer, Lindley Darden, and Carl F. Craver
+{[}-@WOS000087305900001{]} ``Thinking About Mechanisms'' \\
+David Lewis {[}-@WOSA1997WP33800001{]} ``Finkish Dispositions'' \\
+Rae Langton and David Lewis {[}-@WOS000073836400005{]} ``Defining
+`Intrinsic'\,'' \\
+Donald Davidson {[}-@WOSA1996UM62300001{]} ``The Folly of Trying To
+Define Truth'' \\
+Elizabeth S. Anderson {[}-@WOS000078432400003{]} ``What is the Point of
+Equality?'' \\
+Nathan Salmon {[}-@WOS000075762200001{]} ``Nonexistence'' \\
+Alexander Bird {[}-@WOS000072823100011{]} ``Dispositions and
+Antidotes'' \\
+Theodore Sider {[}-@WOS000073301000002{]} ``Four Dimensionalism'' \\
+Judith Jarvis Thomson {[}-@WOS000073884600001{]} ``The Statue and the
+Clay'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1997}Most cited articles published less than
+ten years ago as of 2006.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2006
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David Lewis {[}-@WOS000089124200002{]} ``Causation as Influence'' \\
+Ned Block and Robert Stalnaker {[}-@WOS000084347100001{]} ``Conceptual
+Analysis, Dualism, and the Explanatory Gap'' \\
+Peter Machamer, Lindley Darden, and Carl F. Craver
+{[}-@WOS000087305900001{]} ``Thinking About Mechanisms'' \\
+Elizabeth S. Anderson {[}-@WOS000078432400003{]} ``What is the Point of
+Equality?'' \\
+Rae Langton and David Lewis {[}-@WOS000073836400005{]} ``Defining
+`Intrinsic'\,'' \\
+David Lewis {[}-@WOSA1997WP33800001{]} ``Finkish Dispositions'' \\
+Judith Jarvis Thomson {[}-@WOS000073884600001{]} ``The Statue and the
+Clay'' \\
+Jaegwon Kim {[}-@WOS000082592000002{]} ``Making Sense of Emergence'' \\
+David J. Chalmers and Frank Jackson {[}-@WOS000174798400001{]}
+``Conceptual Analysis and Reductive Explanation'' \\
+Alexander Bird {[}-@WOS000072823100011{]} ``Dispositions and
+Antidotes'' \\
+Sydney Shoemaker {[}-@WOS000073255600004{]} ``Causal and Metaphysical
+Necessity'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1998}Most cited articles published less than
+ten years ago as of 2007.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2007
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Peter Machamer, Lindley Darden, and Carl F. Craver
+{[}-@WOS000087305900001{]} ``Thinking About Mechanisms'' \\
+Elizabeth S. Anderson {[}-@WOS000078432400003{]} ``What is the Point of
+Equality?'' \\
+David Lewis {[}-@WOS000089124200002{]} ``Causation as Influence'' \\
+Ned Block and Robert Stalnaker {[}-@WOS000084347100001{]} ``Conceptual
+Analysis, Dualism, and the Explanatory Gap'' \\
+Rae Langton and David Lewis {[}-@WOS000073836400005{]} ``Defining
+`Intrinsic'\,'' \\
+Jaegwon Kim {[}-@WOS000082592000002{]} ``Making Sense of Emergence'' \\
+David J. Chalmers and Frank Jackson {[}-@WOS000174798400001{]}
+``Conceptual Analysis and Reductive Explanation'' \\
+Judith Jarvis Thomson {[}-@WOS000073884600001{]} ``The Statue and the
+Clay'' \\
+Tomoji Shogenji {[}-@WOS000085486100019{]} ``Is Coherence Truth
+Conducive?'' \\
+Alexander Bird {[}-@WOS000072823100011{]} ``Dispositions and
+Antidotes'' \\
+Nathan Salmon {[}-@WOS000075762200001{]} ``Nonexistence'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-1999}Most cited articles published less than
+ten years ago as of 2008.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2008
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Peter Machamer, Lindley Darden, and Carl F. Craver
+{[}-@WOS000087305900001{]} ``Thinking About Mechanisms'' \\
+Elizabeth S. Anderson {[}-@WOS000078432400003{]} ``What is the Point of
+Equality?'' \\
+Ned Block and Robert Stalnaker {[}-@WOS000084347100001{]} ``Conceptual
+Analysis, Dualism, and the Explanatory Gap'' \\
+David Lewis {[}-@WOS000089124200002{]} ``Causation as Influence'' \\
+David J. Chalmers and Frank Jackson {[}-@WOS000174798400001{]}
+``Conceptual Analysis and Reductive Explanation'' \\
+Jaegwon Kim {[}-@WOS000082592000002{]} ``Making Sense of Emergence'' \\
+James Pryor {[}-@WOS000165361800002{]} ``The Skeptic and the
+Dogmatist'' \\
+Tomoji Shogenji {[}-@WOS000085486100019{]} ``Is Coherence Truth
+Conducive?'' \\
+Christopher Peacocke {[}-@WOS000168307800002{]} ``Does Perception Have a
+Nonconceptual Content?'' \\
+Jason Stanley and Timothy Williamson {[}-@WOS000170277300002{]}
+``Knowing How'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2000}Most cited articles published less than
+ten years ago as of 2009.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2009
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Peter Machamer, Lindley Darden, and Carl F. Craver
+{[}-@WOS000087305900001{]} ``Thinking About Mechanisms'' \\
+David Lewis {[}-@WOS000089124200002{]} ``Causation as Influence'' \\
+David J. Chalmers and Frank Jackson {[}-@WOS000174798400001{]}
+``Conceptual Analysis and Reductive Explanation'' \\
+James Pryor {[}-@WOS000165361800002{]} ``The Skeptic and the
+Dogmatist'' \\
+Jason Stanley and Timothy Williamson {[}-@WOS000170277300002{]}
+``Knowing How'' \\
+Keith DeRose {[}-@WOS000184740400001{]} ``Assertion, Knowledge, and
+Context'' \\
+Christopher Peacocke {[}-@WOS000168307800002{]} ``Does Perception Have a
+Nonconceptual Content?'' \\
+Mohan Matthen and André Ariew {[}-@WOS000173660000001{]} ``Two Ways of
+Thinking About Fitness and Natural Selection'' \\
+Adam Elga {[}-@WOS000086383700001{]} ``Self-Locating Belief and the
+`Sleeping Beauty' Problem'' \\
+Richard Kimberly Heck {[}-@WOS000169238500001{]} ``Nonconceptual Content
+and the `Space of Reasons'\,'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2001}Most cited articles published less than
+ten years ago as of 2010.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2010
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+David J. Chalmers and Frank Jackson {[}-@WOS000174798400001{]}
+``Conceptual Analysis and Reductive Explanation'' \\
+Jason Stanley and Timothy Williamson {[}-@WOS000170277300002{]}
+``Knowing How'' \\
+Keith DeRose {[}-@WOS000184740400001{]} ``Assertion, Knowledge, and
+Context'' \\
+Mohan Matthen and André Ariew {[}-@WOS000173660000001{]} ``Two Ways of
+Thinking About Fitness and Natural Selection'' \\
+Christopher Peacocke {[}-@WOS000168307800002{]} ``Does Perception Have a
+Nonconceptual Content?'' \\
+Stuart Glennan {[}-@WOS000178763700030{]} ``Rethinking Mechanistic
+Explanation'' \\
+Wlodek Rabinowicz and Toni Rønnow‐Rasmussen {[}-@WOS000222134800001{]}
+``The Strike of the Demon: On Fitting Pro-Attitudes and Value'' \\
+Patrick Rysiew {[}-@WOS000172282100001{]} ``The Context-Sensitivity of
+Knowledge Attributions'' \\
+Joshua Knobe {[}-@WOS000183806600005{]} ``Intentional Action and Side
+Effects in Ordinary Language'' \\
+Denis M. Walsh, Tim Lewens, and André Ariew {[}-@WOS000178572000004{]}
+``The Trials of Life: Natural Selection and Random Drift'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2002}Most cited articles published less than
+ten years ago as of 2011.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2011
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Keith DeRose {[}-@WOS000184740400001{]} ``Assertion, Knowledge, and
+Context'' \\
+Wlodek Rabinowicz and Toni Rønnow‐Rasmussen {[}-@WOS000222134800001{]}
+``The Strike of the Demon: On Fitting Pro-Attitudes and Value'' \\
+Stuart Glennan {[}-@WOS000178763700030{]} ``Rethinking Mechanistic
+Explanation'' \\
+Mohan Matthen and André Ariew {[}-@WOS000173660000001{]} ``Two Ways of
+Thinking About Fitness and Natural Selection'' \\
+Joshua Knobe {[}-@WOS000183806600005{]} ``Intentional Action and Side
+Effects in Ordinary Language'' \\
+Charles Travis {[}-@WOS000188660700003{]} ``The Silence of the
+Senses'' \\
+Nico Kolodny {[}-@WOS000231037900002{]} ``Why Be Rational?'' \\
+Denis M. Walsh, Tim Lewens, and André Ariew {[}-@WOS000178572000004{]}
+``The Trials of Life: Natural Selection and Random Drift'' \\
+Stewart Cohen {[}-@WOS000178597300004{]} ``Basic Knowledge and the
+Problem of Easy Knowledge'' \\
+Kit Fine {[}-@WOS000182357000001{]} ``The Non-Identity of a Material
+Thing and Its Matter'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2003}Most cited articles published less than
+ten years ago as of 2012.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2012
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Keith DeRose {[}-@WOS000184740400001{]} ``Assertion, Knowledge, and
+Context'' \\
+Wlodek Rabinowicz and Toni Rønnow‐Rasmussen {[}-@WOS000222134800001{]}
+``The Strike of the Demon: On Fitting Pro-Attitudes and Value'' \\
+Joshua Knobe {[}-@WOS000183806600005{]} ``Intentional Action and Side
+Effects in Ordinary Language'' \\
+Nico Kolodny {[}-@WOS000231037900002{]} ``Why Be Rational?'' \\
+Charles Travis {[}-@WOS000188660700003{]} ``The Silence of the
+Senses'' \\
+Adam Elga {[}-@WOS000249103800005{]} ``Reflection and Disagreement'' \\
+David Christensen {[}-@WOS000207419300002{]} ``Epistemology of
+Disagreement: The Good News'' \\
+John MacFarlane {[}-@WOS000183846000001{]} ``Future Contingents and
+Relative Truth'' \\
+Jonathan Schaffer {[}-@WOS000184542900005{]} ``Is There a Fundamental
+Level?'' \\
+A Hájek {[}-@WOS000186731300001{]} ``What Conditional Probability Could
+Not Be'' \\
+Nishi Shah {[}-@WOS000224335200001{]} ``How Truth Governs Belief'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2004}Most cited articles published less than
+ten years ago as of 2013.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2013
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Wlodek Rabinowicz and Toni Rønnow‐Rasmussen {[}-@WOS000222134800001{]}
+``The Strike of the Demon: On Fitting Pro-Attitudes and Value'' \\
+Adam Elga {[}-@WOS000249103800005{]} ``Reflection and Disagreement'' \\
+David Christensen {[}-@WOS000207419300002{]} ``Epistemology of
+Disagreement: The Good News'' \\
+Nico Kolodny {[}-@WOS000231037900002{]} ``Why Be Rational?'' \\
+Charles Travis {[}-@WOS000188660700003{]} ``The Silence of the
+Senses'' \\
+Matthew Weiner {[}-@WOS000240474600003{]} ``Must We Know What We
+Say?'' \\
+Jennifer Lackey {[}-@WOS000250773100002{]} ``Norms of Assertion'' \\
+John Hawthorne and Jason Stanley {[}-@WOS000262624000001{]} ``Knowledge
+and Action'' \\
+David Pitt {[}-@WOS000223274200001{]} ``The Phenomenology of Cognition,
+Or, What is It Like To Think That P?'' \\
+Andy Egan {[}-@WOS000245280800001{]} ``Epistemic Modals, Relativism and
+Assertion'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2005}Most cited articles published less than
+ten years ago as of 2014.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2014
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Adam Elga {[}-@WOS000249103800005{]} ``Reflection and Disagreement'' \\
+David Christensen {[}-@WOS000207419300002{]} ``Epistemology of
+Disagreement: The Good News'' \\
+Nico Kolodny {[}-@WOS000231037900002{]} ``Why Be Rational?'' \\
+John Hawthorne and Jason Stanley {[}-@WOS000262624000001{]} ``Knowledge
+and Action'' \\
+John MacFarlane {[}-@WOS000244463400002{]} ``Relativism and
+Disagreement'' \\
+Matthew Weiner {[}-@WOS000240474600003{]} ``Must We Know What We
+Say?'' \\
+Andy Egan {[}-@WOS000245280800001{]} ``Epistemic Modals, Relativism and
+Assertion'' \\
+Jennifer Lackey {[}-@WOS000250773100002{]} ``Norms of Assertion'' \\
+Nishi Shah and J. David Velleman {[}-@WOS000240571800003{]} ``Doxastic
+Deliberation'' \\
+Shaun Nichols and Joshua Knobe {[}-@WOS000250773100004{]} ``Moral
+Responsibility and Determinism: The Cognitive Science of Folk
+Intuitions'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2006}Most cited articles published less than
+ten years ago as of 2015.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2015
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Adam Elga {[}-@WOS000249103800005{]} ``Reflection and Disagreement'' \\
+David Christensen {[}-@WOS000207419300002{]} ``Epistemology of
+Disagreement: The Good News'' \\
+John Hawthorne and Jason Stanley {[}-@WOS000262624000001{]} ``Knowledge
+and Action'' \\
+Jennifer Lackey {[}-@WOS000250773100002{]} ``Norms of Assertion'' \\
+S Street {[}-@WOS000234431300006{]} ``A Darwinian Dilemma for Realist
+Theories of Value'' \\
+Andy Egan {[}-@WOS000245280800001{]} ``Epistemic Modals, Relativism and
+Assertion'' \\
+Roger White {[}-@WOS000243445600002{]} ``Problems for Dogmatism'' \\
+John MacFarlane {[}-@WOS000244463400002{]} ``Relativism and
+Disagreement'' \\
+Michael Huemer {[}-@WOS000246866000002{]} ``Compassionate Phenomenal
+Conservatism'' \\
+Shaun Nichols and Joshua Knobe {[}-@WOS000250773100004{]} ``Moral
+Responsibility and Determinism: The Cognitive Science of Folk
+Intuitions'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2007}Most cited articles published less than
+ten years ago as of 2016.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2016
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Adam Elga {[}-@WOS000249103800005{]} ``Reflection and Disagreement'' \\
+David Christensen {[}-@WOS000207419300002{]} ``Epistemology of
+Disagreement: The Good News'' \\
+John Hawthorne and Jason Stanley {[}-@WOS000262624000001{]} ``Knowledge
+and Action'' \\
+Jennifer Lackey {[}-@WOS000250773100002{]} ``Norms of Assertion'' \\
+John MacFarlane {[}-@WOS000244463400002{]} ``Relativism and
+Disagreement'' \\
+Michael Huemer {[}-@WOS000246866000002{]} ``Compassionate Phenomenal
+Conservatism'' \\
+Andy Egan {[}-@WOS000245280800001{]} ``Epistemic Modals, Relativism and
+Assertion'' \\
+Tamar Szabo Gendler {[}-@WOS000262624000004{]} ``Alief and Belief'' \\
+Shaun Nichols and Joshua Knobe {[}-@WOS000250773100004{]} ``Moral
+Responsibility and Determinism: The Cognitive Science of Folk
+Intuitions'' \\
+Stacey Swain, Joshua Alexander, and Jonathan M. Weinberg
+{[}-@WOS000252590700006{]} ``The Instability of Philosophical
+Intuitions: Running Hot and Cold on Truetemp'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2008}Most cited articles published less than
+ten years ago as of 2017.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2017
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+John Hawthorne and Jason Stanley {[}-@WOS000262624000001{]} ``Knowledge
+and Action'' \\
+Tamar Szabo Gendler {[}-@WOS000262624000004{]} ``Alief and Belief'' \\
+Stacey Swain, Joshua Alexander, and Jonathan M. Weinberg
+{[}-@WOS000252590700006{]} ``The Instability of Philosophical
+Intuitions: Running Hot and Cold on Truetemp'' \\
+Duncan Pritchard {[}-@WOS000311002900002{]} ``Anti-Luck Virtue
+Epistemology'' \\
+Michael Fara {[}-@WOS000262858900004{]} ``Masked Abilities and
+Compatibilism'' \\
+Jonathan Schaffer {[}-@WOS000275147000005{]} ``The Least Discerning and
+Most Promiscuous Truthmaker'' \\
+John MacFarlane {[}-@WOS000262577100002{]} ``Nonindexical
+Contextualism'' \\
+Niko Kolodny and John MacFarlane {[}-@WOS000280778100001{]} ``Ifs and
+Oughts'' \\
+Eric Schwitzgebel {[}-@WOS000272164200003{]} ``The Unreliability of
+Naive Introspection'' \\
+Ross P. Cameron {[}-@WOS000252713500001{]} ``Turtles All the Way Down:
+Regress, Priority and Fundamentality'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2009}Most cited articles published less than
+ten years ago as of 2018.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2018
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Duncan Pritchard {[}-@WOS000311002900002{]} ``Anti-Luck Virtue
+Epistemology'' \\
+Niko Kolodny and John MacFarlane {[}-@WOS000280778100001{]} ``Ifs and
+Oughts'' \\
+Paul Audi {[}-@WOS000318890500001{]} ``Grounding: Toward a Theory of the
+In-Virtue-Of Relation'' \\
+Jonathan Schaffer {[}-@WOS000275147000005{]} ``The Least Discerning and
+Most Promiscuous Truthmaker'' \\
+John MacFarlane {[}-@WOS000262577100002{]} ``Nonindexical
+Contextualism'' \\
+James Woodward {[}-@WOS000278111100001{]} ``Causation in Biology:
+Stability, Specificity, and the Choice of Levels of Explanation'' \\
+David Christensen {[}-@WOS000208774400001{]} ``Disagreement,
+Question-Begging and Epistemic Self-Criticism'' \\
+David Christensen {[}-@WOS000279407600010{]} ``Higher-Order
+Evidence'' \\
+Eric Schwitzgebel {[}-@WOS000284854700005{]} ``Acting Contrary To Our
+Professed Beliefs or the Gulf Between Occurrent Judgment and
+Dispositional Belief'' \\
+Karen Bennett {[}-@WOS000298592300002{]} ``By Our Bootstraps'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2010}Most cited articles published less than
+ten years ago as of 2019.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2019
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Duncan Pritchard {[}-@WOS000311002900002{]} ``Anti-Luck Virtue
+Epistemology'' \\
+Jessica M. Wilson {[}-@WOS000344393500001{]} ``No Work for a Theory of
+Grounding'' \\
+Niko Kolodny and John MacFarlane {[}-@WOS000280778100001{]} ``Ifs and
+Oughts'' \\
+Paul Audi {[}-@WOS000318890500001{]} ``Grounding: Toward a Theory of the
+In-Virtue-Of Relation'' \\
+David Christensen {[}-@WOS000208774400001{]} ``Disagreement,
+Question-Begging and Epistemic Self-Criticism'' \\
+James Woodward {[}-@WOS000278111100001{]} ``Causation in Biology:
+Stability, Specificity, and the Choice of Levels of Explanation'' \\
+Karen Bennett {[}-@WOS000298592300002{]} ``By Our Bootstraps'' \\
+Jonathan Schaffer {[}-@WOS000275147000005{]} ``The Least Discerning and
+Most Promiscuous Truthmaker'' \\
+David Christensen {[}-@WOS000279407600010{]} ``Higher-Order
+Evidence'' \\
+Eric Schwitzgebel {[}-@WOS000284854700005{]} ``Acting Contrary To Our
+Professed Beliefs or the Gulf Between Occurrent Judgment and
+Dispositional Belief'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2011}Most cited articles published less than
+ten years ago as of 2020.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2020
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Duncan Pritchard {[}-@WOS000311002900002{]} ``Anti-Luck Virtue
+Epistemology'' \\
+Jessica M. Wilson {[}-@WOS000344393500001{]} ``No Work for a Theory of
+Grounding'' \\
+Paul Audi {[}-@WOS000318890500001{]} ``Grounding: Toward a Theory of the
+In-Virtue-Of Relation'' \\
+David Plunkett and Tim Sundell {[}-@WOS000332023600001{]} ``Disagreement
+and the Semantics of Normative and Evaluative Terms'' \\
+Karen Bennett {[}-@WOS000298592300002{]} ``By Our Bootstraps'' \\
+David Christensen {[}-@WOS000208774400001{]} ``Disagreement,
+Question-Begging and Epistemic Self-Criticism'' \\
+Kristie Dotson {[}-@WOS000289948200002{]} ``Tracking Epistemic Violence,
+Tracking Practices of Silencing'' \\
+C. S. Jenkins {[}-@WOS000209153800006{]} ``Is Metaphysical Dependence
+Irreflexive?'' \\
+Miriam Schoenfield {[}-@WOS000334424500001{]} ``Permission To Believe:
+Why Permissivism is True and What It Tells Us About Irrelevant
+Influences on Belief'' \\
+David J. Chalmers {[}-@WOS000295159700002{]} ``Verbal Disputes'' \\
+David Michael Kaplan and Carl F. Craver {[}-@WOS000295735100004{]} ``The
+Explanatory Force of Dynamical and Mathematical Models in Neuroscience:
+A Mechanistic Perspective'' \\
+Alexander Skiles {[}-@WOS000360509700002{]} ``Against Grounding
+Necessitarianism'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2012}Most cited articles published less than
+ten years ago as of 2021.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2021
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Jessica M. Wilson {[}-@WOS000344393500001{]} ``No Work for a Theory of
+Grounding'' \\
+Duncan Pritchard {[}-@WOS000311002900002{]} ``Anti-Luck Virtue
+Epistemology'' \\
+Paul Audi {[}-@WOS000318890500001{]} ``Grounding: Toward a Theory of the
+In-Virtue-Of Relation'' \\
+David Plunkett and Tim Sundell {[}-@WOS000332023600001{]} ``Disagreement
+and the Semantics of Normative and Evaluative Terms'' \\
+Jonathan Schaffer {[}-@WOS000368189400004{]} ``Grounding in the Image of
+Causation'' \\
+Alexander Skiles {[}-@WOS000360509700002{]} ``Against Grounding
+Necessitarianism'' \\
+Miriam Schoenfield {[}-@WOS000334424500001{]} ``Permission To Believe:
+Why Permissivism is True and What It Tells Us About Irrelevant
+Influences on Belief'' \\
+Jacob Ross and Mark Schroeder {[}-@WOS000333404400001{]} ``Belief,
+Credence, and Pragmatic Encroachment'' \\
+Shamik Dasgupta {[}-@WOS000354150500006{]} ``The Possibility of
+Physicalism'' \\
+Sophie Horowitz {[}-@WOS000344362900006{]} ``Epistemic Akrasia'' \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-top-ten-2013}Most cited articles published less than
+ten years ago as of 2022.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+2022
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Jessica M. Wilson {[}-@WOS000344393500001{]} ``No Work for a Theory of
+Grounding'' \\
+Jonathan Schaffer {[}-@WOS000368189400004{]} ``Grounding in the Image of
+Causation'' \\
+David Plunkett and Tim Sundell {[}-@WOS000332023600001{]} ``Disagreement
+and the Semantics of Normative and Evaluative Terms'' \\
+Shamik Dasgupta {[}-@WOS000354150500006{]} ``The Possibility of
+Physicalism'' \\
+Alexander Skiles {[}-@WOS000360509700002{]} ``Against Grounding
+Necessitarianism'' \\
+Miriam Schoenfield {[}-@WOS000334424500001{]} ``Permission To Believe:
+Why Permissivism is True and What It Tells Us About Irrelevant
+Influences on Belief'' \\
+Jacob Ross and Mark Schroeder {[}-@WOS000333404400001{]} ``Belief,
+Credence, and Pragmatic Encroachment'' \\
+Sophie Horowitz {[}-@WOS000344362900006{]} ``Epistemic Akrasia'' \\
+Maria Lasonen-Aarnio {[}-@WOS000333404400003{]} ``Higher-Order Evidence
+and the Limits of Defeat'' \\
+Paul Boghossian {[}-@WOS000335566200001{]} ``What is Inference?'' \\
+
+\end{longtable}
+
+Last, I'll end by noting that not only is not every good article there
+(e.g., none of mine are), but many \emph{widely cited} articles are not
+listed here. Plenty of articles that are now widely cited took a while
+to get attention. Table~\ref{tbl-late-bloomers} is a list of the twenty
+articles most cited from 2020-2022 (the most recent years I have data)
+that have not been listed so far.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+
+\caption{\label{tbl-late-bloomers}Most cited articles since 2020 not on
+any of the earlier lists}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Articles
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sally Haslanger {[}-@WOS000085841900002{]} ``Gender and Race: (What) Are
+They? (What) Do We Want Them To Be?'' \\
+James M. Joyce {[}-@WOS000077956100002{]} ``A Nonpragmatic Vindication
+of Probabilism'' \\
+Harry G. Frankfurt {[}-@WOSA1969Y444700002{]} ``Alternate Possibilities
+and Moral Responsibility'' \\
+Peter Singer {[}-@WOSA1972Z066400001{]} ``Famine, Affluence, and
+Morality'' \\
+Heather Douglas {[}-@WOS000166575500001{]} ``Inductive Risk and Values
+in Science'' \\
+Alvin I. Goldman {[}-@WOS000170434600004{]} ``Experts: Which Ones Should
+You Trust?'' \\
+Keith DeRose {[}-@WOSA1992KB29500008{]} ``Contextualism and Knowledge
+Attributions'' \\
+Maria Lasonen Aarnio {[}-@WOS000286680600001{]} ``Unreasonable
+Knowledge'' \\
+Stephen L. Darwall {[}-@WOSA1977EA35800003{]} ``Two Kinds of
+Respect'' \\
+Alastair Wilson {[}-@WOS000449886300001{]} ``Metaphysical Causation'' \\
+FI Dretske {[}-@WOSA1970ZE33800001{]} ``Epistemic Operators'' \\
+Thomas Kelly {[}-@WOS000183034300004{]} ``Epistemic Rationality as
+Instrumental Rationality: A Critique'' \\
+Richard Boyd {[}-@WOSA1991FC38500010{]} ``Realism, Anti-foundationalism
+and the Enthusiasm for Natural Kinds'' \\
+Jane Friedman {[}-@WOS000465095900003{]} ``Inquiry and Belief'' \\
+Rae Langton {[}-@WOSA1993MJ74900002{]} ``Speech Acts and Unspeakable
+Acts'' \\
+Sarah Stroud {[}-@WOS000237910100003{]} ``Epistemic Partiality in
+Friendship'' \\
+Richard Feldman and Earl Conee {[}-@WOSA1985ANT6600002{]}
+``Evidentialism'' \\
+Georg Brun {[}-@WOS000388169500004{]} ``Explication as a Method of
+Conceptual Re-Engineering'' \\
+Rima Basu {[}-@WOS000477039200013{]} ``The Wrongs of Racist Beliefs'' \\
+Nishi Shah {[}-@WOS000240552100001{]} ``A New Argument for
+Evidentialism'' \\
+David Enoch, Levi Spectre, and Talia Fisher {[}-@WOS000312244200002{]}
+``Statistical Evidence, Sensitivity, and the Legal Value of
+Knowledge'' \\
+
+\end{longtable}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-10.2307_2025079}
+Putnam, Hilary. 1973. {``Meaning and Reference.''} \emph{Journal Of
+Philosophy} 70 (19): 699--711.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+?meta:citation.container-title}, 2024, pp. ?meta:citation.page.
+
+\end{document}

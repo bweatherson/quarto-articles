@@ -1,0 +1,233 @@
+---
+title: "Most Cited Articles at the Time"
+abstract: |
+  Imagine people at different times over the past half-century asking the following question: What philosophy journal article, published less than ten years ago, has the most citations in philosophy journals? That's a pretty good operationalisation of the question, what current philosophy work are philosophers talking about the most. It isn't a great guide to what the best work is, or what the most important work will turn out to be, but it does say something important about how philosophy felt at different times. In this note I run through some data on that question.
+date: today
+image: "aadab.jpg"
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+  - unpublished
+  - in progress
+pdf-engine: xelatex
+csl: ../../chicago-with-note.csl
+bibliography: 
+  - /Users/weath/Documents/citations-2024/autobib.bib
+  - /Users/weath/Documents/citations-2024/supplement.bib
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+format-links: [html]
+---
+
+Imagine people at different times over the past half-century asking the following question: _What philosophy journal article, published less than ten years ago, has the most citations in philosophy journals?_ That's a pretty good operationalisation of the question, what current philosophy work are philosophers talking about the most. It isn't a great guide to what the best work is, or what the most important work will turn out to be, but it does say something important about how philosophy felt at different times. In this note I run through some data on that question.
+
+I'm using the data I described in [this note](https://brian.weatherson.org/quarto/posts/citations/raw-data/citations.html), and I won't repeat it here. The short version is that I'm using Web of Science data, restricted to one hundred philosophy journals, and with one notable exception looking at entries in their database where there is an index reference for both the article being cited, and the article doing the citing. The exception is that I used other data from Web of Science to make up for one important missing slice of their data: _Journal of Philosophy_ articles from 1971 to 1974. Hopefully I'll do more such back-filling in the future.^[If anyone wants to help, the top of my agenda is filling in citations to _Analysis_ articles pre-1975. That I think is the most important miss right now. I also don't have PDF or Word versions of this post, because I can't figure out how to get citations inside tables in either format. I would like to know how to get that to work, if, dear reader, you have suggestions.]
+
+All that said, the answer to the italicised question is in @tbl-toppers.
+
+
+
+```{r}
+#| label: tbl-toppers
+#| tbl-cap: "The article that was, at the time, the most cited article less than ten years old."
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+require(toOrdinal)
+require(gt)
+
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(-0.3, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+
+}
+
+load("/Users/weath/Documents/citations-2024/philo_bib_fix.RData")
+load("/Users/weath/Documents/citations-2024/philo_cite_with_jp.RData")
+
+start_year <- 1965
+end_year <- 2022
+
+active_philo_bib <- philo_bib_fix |>
+  filter(year >= start_year, year <= end_year) |>
+  mutate(tbl_cite = paste0(display_author, " [-@",str_replace(id,":",""),"] \"", art_title, "\""))
+
+article_years <- active_philo_bib |>
+  as_tibble() |>
+  select(id, year)
+
+citation_tibble <- philo_cite_with_jp |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year) |> # The next lines are new - restricting attention to 1966-end_year
+  filter(new_year <= end_year, new_year >= start_year, old_year >= start_year, old_year <= end_year) 
+
+the_4900 <- c()
+
+for (y in 1965:2013){
+  the_100 <- citation_tibble |>
+    ungroup() |>
+#    select(-range_year) |>
+    filter(old_year >= y, old_year <= y + 4) |>
+    filter(new_year <= y + 9) |>
+    group_by(old, old_year) |>
+    summarise(e_cites = n(), .groups = "drop") |>
+    arrange(-e_cites) |>
+    slice(1:100) |>
+    mutate(range_year = y) |>
+    left_join(active_philo_bib, by = c("old" = "id")) |>
+    select(e_cites, display_author, year, range_year, art_title, journal, everything()) |>
+    arrange(-e_cites) |>
+    ungroup() |>
+    mutate(rank = min_rank(-e_cites))
+  
+  the_4900 <- bind_rows(the_4900, the_100)
+}
+
+the_4900_ordered <- the_4900 |>
+  ungroup() |>
+  group_by(old) |>
+  mutate(appear = n()) |>
+  select(appear, everything()) |>
+  arrange(rank, range_year) |>
+  ungroup()
+
+toppers <- the_4900_ordered |>
+  filter(rank == 1) |>
+  mutate(tie_check = slide_dbl(range_year, mean, .before = 1) - range_year) |>
+  mutate(range_year = case_when(
+    tie_check == 0 & range_year > 1965 ~ "(tie)",
+    TRUE ~ as.character(range_year + 9)
+  )) |>
+  select(Year = range_year, Article = tbl_cite)
+
+kable(toppers)
+```
+
+For the years I am familiar with, that seems like a pretty good guide to what recent work was being most talked about. So I hope it's a good guide to the years I'm less familiar with.
+
+In [A History of Philosophy Journals](https://websites.umich.edu/~weath/lda/topic85.html) I'd said that the word counting data suggested that "Meaning and Reference" [@10.2307_2025079] took a while to become influential. The citation data _does not_ back up that suggestion.
+
+The centrality of philosophy of mind, and in particular of a fairly a priori approaches to philosophy of mind, to late twentieth-century philosophy is very interesting. I think people who are only familiar with contemporary work might be surprised at how widely discussed some of those papers were.
+
+For some purposes it's a bit more informative to see more data. So I'll show the top 10s for each of these years.  Some of these lists have more than 10 entries, because there are so many ties in the data.^[These are somewhat automatically generated. If you see any spellings or names that need correcting, please let me know.]
+
+Here's a possible experiment you can do if you have old philosophers (like my age) around you. Take the list of the top ten recent articles from one of the years they were in graduate school, and see how many of the articles they (had to) read while they were a graduate student.
+
+I certainly have a much better sense of the articles from the 1990s and 2000s lists than the more recent lists. And I suspect that lots of people have a better feel for what was in the articles listed below for their graduate school and early career years than for either side. 
+
+```{r}
+#| label: codegen
+the_code <- c()
+
+for (y in 1965:2013){
+the_code <- c(the_code,
+                "\n\n",
+                 "\`\`\`{r}\n",
+                "#| label: tbl-top-ten-",
+                y,
+                "\n",
+                "#| tbl-cap: \"Most cited articles published less than ten years ago as of ",
+                y + 9,
+                ".\"",
+                "\n\n",
+                "kable(the_4900_ordered |> filter(rank <= 10, range_year == ", y, ") |> select(tbl_cite), col.names = c(as.character(",y+9,")))",
+                "\n\n",
+                "\`\`\`",
+                "\n\n"
+)
+}
+
+cat(the_code, sep="", file = "_yearlytables.qmd")
+
+```
+
+{{< include _yearlytables.qmd >}}
+
+
+<!--
+```{r}
+#| output: asis
+
+require(kableExtra)
+
+for (y in 1965:2013){
+  print(
+    kable(
+      the_4900_ordered |> 
+        filter(rank <= 10, range_year == y) |>
+        select(tbl_cite),
+      col.names = c(as.character(y+9))
+    ) |> kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), full_width = TRUE)
+  ) 
+}
+```
+-->
+
+Last, I'll end by noting that not only is not every good article there (e.g., none of mine are), but many _widely cited_ articles are not listed here. Plenty of articles that are now widely cited took a while to get attention. @tbl-late-bloomers is a list of the twenty articles most cited from 2020-2022 (the most recent years I have data) that have not been listed so far. I think this is an interesting list to end on because it's a somewhat more gender-balance list of authors, and a somewhat broader range of topics, and that hopefully says something positive about what philosophy in the 2020s is like.
+
+```{r}
+#| label: tbl-late-bloomers
+#| tbl-cap: "Most cited articles since 2020 not on any of the earlier lists"
+
+temp <- the_4900 |> filter(rank <= 10)
+citation_tibble |>
+  filter(new_year >= 2020) |>
+  filter(!old %in% temp$old) |>
+  group_by(old) |>
+  tally(name = "citations") |>
+  arrange(-citations) |>
+  slice_max(order_by = citations, n = 20) |>
+  left_join(active_philo_bib, by = c("old" = "id")) |>
+  select(`Articles` = tbl_cite) |>
+  kable()
+```
