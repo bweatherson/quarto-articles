@@ -1,0 +1,64 @@
+# Clarifying the Single Choice Principle {#sec-scp-clarify}
+
+Think back to games involving cards. Imagine our hero, Chooser, is playing a game in which someone else has just drawn a card. In some sense, the game state is different if the card is an Ace than if it is a King. But Chooser's strategy cannot depend on that. Chooser can only react to what they know. So Chooser's strategy cannot be a list of things about what to do at every game state, in this sense of game state, where they have to choose.
+
+The standard way game theorists handle this involves the notion of _information sets_. Say that the different _nodes_ of the game are individuated finely enough that they encode everything that has happened to that point which could make a difference to the outcome. So if the other person drew an Ace, that will move the game to a different node than if they drew a King. Say that some nodes are in the same information set if (a) the same person must choose at every node in the set, and (b) at any node in the set, every other node in the set is compatible with that chooser's information at the time of choice.^[There is an implicit assumption here that epistemic possibility is an equivalence relation. That's too strong and for some purposes should be relaxed. It is, however, a harmless enough idealisation for the purposes of this paper.] To continue our card game, if the other player draws a King rather than an Ace, then Chooser has to move, those moves will take place at different nodes in the same information set.
+
+This terminology allows for a more perspicuous formulation of SCP.
+
+Single Choice Principle
+:    Any decision problem where all the nodes where Chooser must choose are in a single information set, Dynamic-Strategic Equivalence holds.
+
+I'll work through XX examples where SCP applies, and then note an example where it does not.
+
+Here is a rather boring game. A card will be drawn, and not shown to Chooser. If it is neither and Ace nor a King, the game ends, as a draw. (When a game ends, I always assume this is announced to all players.) Otherwise, Chooser is asked to guess whether it is an Ace or a King. If they guess correctly, they win, otherwise, they lose. The game tree for this game is @fig-ace-king.
+
+[Include figure]
+
+The dashed lines around the two nodes on the right indicates that they are in the same information set. There are two nodes where Chooser must choose, but they are in the same information set, so SCP applies. In this case, SCP is hardly controversial. Either guess is equally rational in the tree in @fig-ace-king, and either guess is equally rational in the strategic form of the game shown in @tbl-ace-king.
+
+|             |  Other  |  Ace  |  King  |
+|------------:|:-------:|:-----:|:------:|
+| Guess Ace   |   0     |   1   |   -1   |
+| Guess King  |   0     |  -1   |    1   |
+
+: Strategic form of Ace-King game {#tbl-ace-king}
+
+Another kind of game where SCP applies is exemplified by Newcomb's Problem. The standard vignette that goes with Newcomb's Problem suggests it is a dynamic choice problem. Demon _predicts_ what Chooser will do, and Chooser _then_ selects one box or two. The fact that Demon's predictions changes the content of an _opaque_ box means that the different moves Demon could make lead to different nodes in the same information set. All this is shown in @fig-newcomb.
+
+[Include figure]
+
+But while this is the standard vignette, it is not the way Newcomb's Problem is usually represented. Rather, Newcomb's Problem is usually represented in a table like @tbl-newcomb, which is a correct representation of the strategic form of @fig-newcomb.
+
+|           |    P1    |    P2     |
+|----------:|:--------:|:---------:|
+| Choose 1  |    1000  |    0      |
+| Choose 2  |    1001  |    1      |
+
+: Strategic form of Newcomb's Problem {#tbl-newcomb}
+
+In tables like @tbl-newcomb, I'll typically have Demon select the column, and I'll write PX to mean that the Demon predicted X. So here, 'P1' means Demon predicted Chooser would take 1 box.
+
+There is rather a lot of dispute about Newcomb's Problem. To the best of my knowledge, no party to that dispute says that the difference between @fig-newcomb and @tbl-newcomb makes a difference to that dispute. Everyone moves freely between them. This is evidence that everyone accepts SCP restricted to Newcomb's Problem. If such a restricted form of SCP holds, then it probably holds somewhat more broadly. (At the very least, it should still hold if we change the payoffs.)
+
+So far I've shown how SCP can apply to cases involving gambles, and to cases involving Demons. The most important applications will involve mixing those things. In particular, we'll be interested in cases like @fig-main-example.
+
+@fig-main-example is a three stage decision problem. At stage 3, if we get that far, Chooser will select Up or Down. At stage 1, Demon will predict what Chooser will do at stage 3, again if we get that far. At stage 2, if Demon predicts Down, nothing happens and we move to stage 3. But if Demon predicts Up, a biased coin will be flipped. The coin has probability 3/4 of landing Heads. If it lands Heads, the game ends, and Chooser gets 0. If it lands Tails, we move to stage 3. Then after Chooser makes their choice, the payouts are delivered. Chooser gets nothing if Demon predicted incorrectly; gets 4 if Demon correctly predicted Up, and 2 if Demon correctly predicted Down.
+
+[Include figure]
+
+There is only 1 chice point for Chooser, so the strategy table for @fig-main-example is very simple. It is shown in @tbl-main-example.
+
+|           |  H & PU  |  H & PD   |  T & PU  |  T & PD  |
+|----------:|:--------:|:---------:|:--------:|:--------:|
+| Up        |    0     |    0      |     4    |    0     |
+| Down      |    0     |    2      |     0    |    2     |
+
+: Strategy table for @fig-main-example {#tbl-main-example-early}
+
+The SCP says that the rationally acceptable moves in @fig-main-example and @tbl-main-example are the same. If this wasn't true, we'd get a very weird result. If some strategy is rational in @tbl-main-example but not @fig-main-example, then it would be rational for Chooser to think _If I have to choose, I'm doing X_, and then, after learning that they have to choose and nothing else, it would be irrational to do X. Alternatively, if some move X is rational in @fig-main-example but not in @tbl-main-example, it would be irrational to think _If I have to choose, I'll do X_, even though, after learning that they had to choose and nothing else, it would be rational to do X. Either way, this seems to violate some fundamental rules about how conditionals work.
+
+So, I conclude, the SCP is correct. It follows from simple principles about conditionals, and it explains why, although everything else about Newcomb's Problem has been contested, no one has argued that the difference in representation between @fig-newcomb and @tbl-newcomb matters.
+
+This conclusion, however, turns out to have fairly dramatic consequences across much of decision theory.
+
