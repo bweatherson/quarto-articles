@@ -9,24 +9,153 @@ This terminology allows for a more perspicuous formulation of SCP.
 Single Choice Principle
 :    Any decision problem where all the nodes where Chooser must choose are in a single information set, Dynamic-Strategic Equivalence holds.
 
-I'll work through XX examples where SCP applies, and then note an example where it does not.
+I'll work through some examples where SCP applies, and then note an example where it does not.
 
 Here is a rather boring game. A card will be drawn, and not shown to Chooser. If it is neither and Ace nor a King, the game ends, as a draw. (When a game ends, I always assume this is announced to all players.) Otherwise, Chooser is asked to guess whether it is an Ace or a King. If they guess correctly, they win, otherwise, they lose. The game tree for this game is @fig-ace-king.
 
-[Include figure]
+```{r tikz-fonts}
+#| echo: FALSE
+#| output: FALSE
+
+if(knitr::is_latex_output()) {
+font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{EB Garamond}",
+                                   "\\usetikzlibrary{calc}",
+                                   "\\usetikzlibrary{backgrounds}",
+                                   "\\definecolor{backgroundcolor}{RGB}{255,255,255}"))
+} else {
+  font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{Scala Sans Pro}",
+                                   "\\usetikzlibrary{calc}",
+                                   "\\usetikzlibrary{backgrounds}",
+                                   "\\definecolor{backgroundcolor}{RGB}{249,255,255}"))
+}
+options(tinytex.engine = "xelatex")
+```
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-ace-king
+#| fig.cap: "The Ace-King game."
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 6
+
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=15mm,sibling distance=20mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+  \tikzstyle{level 3}=[level distance=15mm,sibling distance=15mm]
+      
+      \node[hollow node,label=above:{Nature}]{}
+          child { 
+            node {0}
+            edge from parent
+              node[xshift=-30] {Other}}
+          child {
+            node (1)[solid node] {}
+              child { 
+                 node {1}
+                 edge from parent
+                 node[left] {Ace}}
+              child { 
+                 node {0}
+                 edge from parent
+                 node[right] {King}}
+              edge from parent
+                 node[xshift=-10] {Ace}
+          }
+          child {
+            node (2)[solid node] {}
+              child { 
+                 node {0}
+                 edge from parent
+                 node[left] {Ace}}
+              child { 
+                 node {1}
+                 edge from parent
+                 node[right] {King}}
+              edge from parent
+                 node[xshift=30] {King}
+          };
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
 
 The dashed lines around the two nodes on the right indicates that they are in the same information set. There are two nodes where Chooser must choose, but they are in the same information set, so SCP applies. In this case, SCP is hardly controversial. Either guess is equally rational in the tree in @fig-ace-king, and either guess is equally rational in the strategic form of the game shown in @tbl-ace-king.
 
-|             |  Other  |  Ace  |  King  |
-|------------:|:-------:|:-----:|:------:|
-| Guess Ace   |   0     |   1   |   -1   |
-| Guess King  |   0     |  -1   |    1   |
+|             |       Other  |         Ace  |        King  |
+|------------:|:------------:|:------------:|:------------:|
+| Guess Ace   |   0          |   1          |         -1   |
+| Guess King  |   0          |         -1   |          1   |
 
 : Strategic form of Ace-King game {#tbl-ace-king}
 
 Another kind of game where SCP applies is exemplified by Newcomb's Problem. The standard vignette that goes with Newcomb's Problem suggests it is a dynamic choice problem. Demon _predicts_ what Chooser will do, and Chooser _then_ selects one box or two. The fact that Demon's predictions changes the content of an _opaque_ box means that the different moves Demon could make lead to different nodes in the same information set. All this is shown in @fig-newcomb.
 
-[Include figure]
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-newcomb
+#| fig.cap: "Newcomb's Problem."
+#| fig.ext: 'png'
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 6
+
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=15mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node (1)[solid node] {}
+          child { 
+            node {1000}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {1001}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[left] {P1}}
+        child { node (2)[solid node] {}
+          child { 
+            node {0}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {1}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[right] {P2}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+
+\end{tikzpicture}
+```
 
 But while this is the standard vignette, it is not the way Newcomb's Problem is usually represented. Rather, Newcomb's Problem is usually represented in a table like @tbl-newcomb, which is a correct representation of the strategic form of @fig-newcomb.
 
@@ -45,7 +174,68 @@ So far I've shown how SCP can apply to cases involving gambles, and to cases inv
 
 @fig-main-example is a three stage decision problem. At stage 3, if we get that far, Chooser will select Up or Down. At stage 1, Demon will predict what Chooser will do at stage 3, again if we get that far. At stage 2, if Demon predicts Down, nothing happens and we move to stage 3. But if Demon predicts Up, a biased coin will be flipped. The coin has probability 3/4 of landing Heads. If it lands Heads, the game ends, and Chooser gets 0. If it lands Tails, we move to stage 3. Then after Chooser makes their choice, the payouts are delivered. Chooser gets nothing if Demon predicted incorrectly; gets 4 if Demon correctly predicted Up, and 2 if Demon correctly predicted Down.
 
-[Include figure]
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-main-example
+#| fig.cap: "The main example of SCP"
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 6
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=13mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node [solid node,label=right:{Nature}] {}
+          child { 
+            node {0}
+            edge from parent
+              node[left] {H (¾)}
+              }
+          child { 
+            node (1)[solid node]{}
+              child{
+                node{4}
+                edge from parent
+                  node[left]{U}
+              }
+              child{
+                node{0}
+                edge from parent
+                  node[right]{D}
+              }
+            edge from parent
+              node[right] {T (¼)}}
+          edge from parent
+            node[left] {PU}}
+        child [level distance=25mm,sibling distance=25mm]{ node (2)[solid node] {}
+          child { 
+            node{0}
+            edge from parent
+              node[left] {U}}
+          child { 
+            node{2}
+            edge from parent
+              node[right] {D}}
+          edge from parent
+            node[right] {PD}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
 
 There is only 1 chice point for Chooser, so the strategy table for @fig-main-example is very simple. It is shown in @tbl-main-example.
 
@@ -54,7 +244,7 @@ There is only 1 chice point for Chooser, so the strategy table for @fig-main-exa
 | Up        |    0     |    0      |     4    |    0     |
 | Down      |    0     |    2      |     0    |    2     |
 
-: Strategy table for @fig-main-example {#tbl-main-example-early}
+: Strategy table for @fig-main-example {#tbl-main-example}
 
 The SCP says that the rationally acceptable moves in @fig-main-example and @tbl-main-example are the same. If this wasn't true, we'd get a very weird result. If some strategy is rational in @tbl-main-example but not @fig-main-example, then it would be rational for Chooser to think _If I have to choose, I'm doing X_, and then, after learning that they have to choose and nothing else, it would be irrational to do X. Alternatively, if some move X is rational in @fig-main-example but not in @tbl-main-example, it would be irrational to think _If I have to choose, I'll do X_, even though, after learning that they had to choose and nothing else, it would be rational to do X. Either way, this seems to violate some fundamental rules about how conditionals work.
 
