@@ -13,26 +13,6 @@ I'll work through some examples where SCP applies, and then note an example wher
 
 Here is a rather boring game. A card will be drawn, and not shown to Chooser. If it is neither and Ace nor a King, the game ends, as a draw. (When a game ends, I always assume this is announced to all players.) Otherwise, Chooser is asked to guess whether it is an Ace or a King. If they guess correctly, they win, otherwise, they lose. The game tree for this game is @fig-ace-king.
 
-```{r tikz-fonts}
-#| echo: FALSE
-#| output: FALSE
-
-if(knitr::is_latex_output()) {
-font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
-                                   "\\setmainfont{EB Garamond}",
-                                   "\\usetikzlibrary{calc}",
-                                   "\\usetikzlibrary{backgrounds}",
-                                   "\\definecolor{backgroundcolor}{RGB}{255,255,255}"))
-} else {
-  font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
-                                   "\\setmainfont{Scala Sans Pro}",
-                                   "\\usetikzlibrary{calc}",
-                                   "\\usetikzlibrary{backgrounds}",
-                                   "\\definecolor{backgroundcolor}{RGB}{249,255,255}"))
-}
-options(tinytex.engine = "xelatex")
-```
-
 ```{r engine='tikz', engine.opts=font_opts}
 #| label: fig-ace-king
 #| fig.cap: "The Ace-King game."
@@ -248,7 +228,22 @@ There is only 1 chice point for Chooser, so the strategy table for @fig-main-exa
 
 The SCP says that the rationally acceptable moves in @fig-main-example and @tbl-main-example are the same. If this wasn't true, we'd get a very weird result. If some strategy is rational in @tbl-main-example but not @fig-main-example, then it would be rational for Chooser to think _If I have to choose, I'm doing X_, and then, after learning that they have to choose and nothing else, it would be irrational to do X. Alternatively, if some move X is rational in @fig-main-example but not in @tbl-main-example, it would be irrational to think _If I have to choose, I'll do X_, even though, after learning that they had to choose and nothing else, it would be rational to do X. Either way, this seems to violate some fundamental rules about how conditionals work.
 
-So, I conclude, the SCP is correct. It follows from simple principles about conditionals, and it explains why, although everything else about Newcomb's Problem has been contested, no one has argued that the difference in representation between @fig-newcomb and @tbl-newcomb matters.
+So, I conclude, SCP is correct. It follows from simple principles about conditionals, and it explains why, although everything else about Newcomb's Problem has been contested, no one has argued that the difference in representation between @fig-newcomb and @tbl-newcomb matters.
 
-This conclusion, however, turns out to have fairly dramatic consequences across much of decision theory.
+Further, SCP is consistent with every decision rule in standard game theory. Introductory game theory textbooks describe many 'solution concepts' for games, from avoiding dominated strategies to refinements of Bayesian Perfect Equilibrium. All of them are consistent with SCP.  
+
+If we try strengthening SCP in natural ways, we get something inconsistent with standard approaches to game theory. Consider, for instance, the Single Turn Principle (hereafter, STP).
+
+Single Turn Principle
+:    In any decision problem where Chooser is guaranteed to have at most one turn, i.e., to make at most one choice between the start and the end of the problem, Dynamic-Strategic Equivalence holds.
+
+STP is strictly stronger than SCP. STP clearly entails SCP, but it rules out choosing strategy AR in @tbl-ultimatum. In the dynamic version of that problem, @fig-ultimatum, strategy AA is best. So even though in this game Chooser only has one turn, theories which say AR is acceptable violate the STP. This includes the rule that says any strategy which is part of a Nash equilibrium is choice-worthy. So STP is inconsistent with some familiar game theoretic approaches.^[As noted earlier, it's also inconsistent with several decision theories, but that's a feature it shares with SCP]
+
+I'm making an assumption here that I will make throughout, namely that moves in a dynamic game must be justifiable looking forward. A move at a node in a problem must make sense given Chooser's decision theory, and given just the facts about Chooser's beliefs about the state of the game, and the likely outcomes given each move. This isn't a trivial assumption, it rules out views like Functional Decision Theory [@SoaresLevinstein2020], but I have two reasons for making the assumption.
+
+One is simply space concerns; arguing against views like Functional Decision Theory would take some time, and brings in wholly different considerations.^[In a longer version of this paper, I argue that Functional Decision Theory has very unintuitive results in cases where Demon is a bit less than 100% reliable.] The other is that it is very intuitive that in a one-shot version of @fig-ultimatum, where Chooser/Respondant has to choose between getting more money or less money, they should choose getting more money.
+
+This is not to assume that decision making in dynamic settings should be entirely forward looking. Indeed, in @sec-dynamic I'll argue against that assumption. It is to assume that if forward looking considerations imply that only one choice is rational, e.g., that Chooser knows they'll get \$1 with one choice and \$0 with the other and they prefer more money to less, that choice must be made.
+
+So I'm not assuming STP; it would rule out too much in game theory. I am, however, going to take SCP as given in what follows. It turns out to rule out quite a bit in decision theory.
 
