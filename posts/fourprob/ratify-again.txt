@@ -25,7 +25,68 @@ Since the game has two strict equilibria, both *b* and *c* are positive. Assume 
 
 Consider the dynamic decision problem shown in @fig-two-good. In this tree, we'll leave both the probability of tails, *p*, and the exit payout, *e*/(1-*p*), as unknows to be solved for. (This problem differs from @fig-insert-ref in that we don't assume the coin in stage two is fair, but we do assume the probability of Heads is known to Chooser.)
 
-[Insert figure]
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-two-good
+#| fig.cap: "A problem where if Chooser moves, they are in @tbl-two-good."
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 6
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=13mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node [solid node,label=right:{Nature}] {}
+          child { 
+            node {\emph{e}/(1-\emph{p})}
+            edge from parent
+              node[left] {H (1-\emph{p})}
+              }
+          child { 
+            node (1)[solid node]{}
+              child{
+                node{\emph{a}}
+                edge from parent
+                  node[left]{U}
+              }
+              child{
+                node{\emph{a}-\emph{b}}
+                edge from parent
+                  node[right]{D}
+              }
+            edge from parent
+              node[right] {T (\emph{p})}}
+          edge from parent
+            node[left] {PU}}
+        child [level distance=25mm,sibling distance=25mm]{ node (2)[solid node] {}
+          child { 
+            node{\emph{d}-\emph{c}}
+            edge from parent
+              node[left] {U}}
+          child { 
+            node{\emph{d}}
+            edge from parent
+              node[right] {D}}
+          edge from parent
+            node[right] {PD}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
 
 The strategic form of @fig-two-good is given by @tbl-two-good-strategic.
 
@@ -49,7 +110,6 @@ If we can find values of *p*, *e*, *m* and *x* such that @tbl-two-good-strategic
 
 Now it's just a bit of algebra to figure out the four unknowns *p*, *e*, *m* and *x* given the four equations, i.e., the equality of matching cells in @tbl-two-good-strategic and @tbl-two-good-inverted.
 
-$$
 \begin{align*}
 (1) && pa + e &= md + x && \text{(Top left)} \\
 (2) && d - c &= m(a - b) + x && \text{(Top right)} \\
@@ -64,10 +124,9 @@ $$
 (11) && x &= d - c - \frac{c(a - b)}{b} && \text{(6), (10)} \\
 (12) && x &= d - c - \frac{ca}{b} + c && \text{(11)} \\
 (13) && x &= d - \frac{ca}{b} && \text{(12)} \\
-(14) && \frac{ac^2}(b^2} + e &= \frac{dc}{b} + d - \frac{ca}{b} && \text{(1), (6), (9), (13)} \\
-(15) && e &= \frac{bcd + db^2 - abc - ac^2} && \text{(14)}
+(14) && \frac{ac^2}{b^2} + e &= \frac{dc}{b} + d - \frac{ca}{b} && \text{(1), (6), (9), (13)} \\
+(15) && e &= \frac{bcd + db^2 - abc - ac^2}{b^2} && \text{(14)}
 \end{align*}
-$$
 
 Lines 6, 9, 13 and 15 give the values for the four variables. Since *b* and *c* are positive, *m* and *p* are also positive.^[Note that all we need here is that *b* and *c* have the same sign. So this argument has consequences for the case where there is no pure equilibrium. But I'm setting aside those cases, which raise issues about mixed strategies, for this paper.] Since *b* > *c*, *p* < 1, so *p* is a probability.
 

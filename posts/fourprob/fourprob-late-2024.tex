@@ -332,7 +332,20 @@ money. I'll add two more simplifications. First, only proper splits are
 allowed; Proposer can't suggest that one or other party gets all the
 money. Second, the dollars cannot be split. So the only proposals are
 that Proposer gets \$1 and Respondant gets \$2, or that Proposer gets
-\$2 and Respondant gets \$1. Call these Proposals P1 and P2.
+\$2 and Respondant gets \$1. Call these Proposals P1 and P2. The game
+tree for this game is Figure~\ref{fig-ultimatum}.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{fourprob-late-2024_files/figure-pdf/fig-ultimatum-1.png}
+
+}
+
+\caption{\label{fig-ultimatum}Simplified Ultimatum.}
+
+\end{figure}%
 
 In this game, Respondant has four possible strategies. I'll write XY for
 responding to P1 with X and P2 with Y. So the strategy RA is the (odd)
@@ -486,7 +499,7 @@ choose, but they are in the same information set, so SCP applies. In
 this case, SCP is hardly controversial. Either guess is equally rational
 in the tree in Figure~\ref{fig-ace-king}, and either guess is equally
 rational in the strategic form of the game shown in
-Table~\ref{tbl-ace-king}.
+Table~\ref{tbl-ace-king}. \newpage
 
 \begin{longtable}[]{@{}rccc@{}}
 \caption{Strategic form of Ace-King
@@ -511,7 +524,8 @@ it is a dynamic choice problem. Demon \emph{predicts} what Chooser will
 do, and Chooser \emph{then} selects one box or two. The fact that
 Demon's predictions changes the content of an \emph{opaque} box means
 that the different moves Demon could make lead to different nodes in the
-same information set. All this is shown in Figure~\ref{fig-newcomb}.
+same information set. All this is shown in
+Figure~\ref{fig-newcomb}.\newpage
 
 \begin{figure}
 
@@ -569,12 +583,12 @@ Figure~\ref{fig-main-example} is a three stage decision problem. At
 stage 3, if we get that far, Chooser will select Up or Down. At stage 1,
 Demon will predict what Chooser will do at stage 3, again if we get that
 far. At stage 2, if Demon predicts Down, nothing happens and we move to
-stage 3. But if Demon predicts Up, a biased coin will be flipped. The
-coin has probability 3/4 of landing Heads. If it lands Heads, the game
-ends, and Chooser gets 0. If it lands Tails, we move to stage 3. Then
-after Chooser makes their choice, the payouts are delivered. Chooser
-gets nothing if Demon predicted incorrectly; gets 4 if Demon correctly
-predicted Up, and 2 if Demon correctly predicted Down.
+stage 3. But if Demon predicts Up, a fair coin will be flipped. If it
+lands Heads, the game ends, and Chooser gets 0. If it lands Tails, we
+move to stage 3. Then after Chooser makes their choice, the payouts are
+delivered. Chooser gets nothing if Demon predicted incorrectly; gets 6
+if Demon correctly predicted Up, and 4 if Demon correctly predicted
+Down.
 
 \begin{figure}
 
@@ -605,8 +619,8 @@ Figure~\ref{fig-main-example}}\label{tbl-main-example}\tabularnewline
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Up & 0 & 0 & 4 & 0 \\
-Down & 0 & 2 & 0 & 2 \\
+Up & 0 & 0 & 6 & 0 \\
+Down & 0 & 4 & 0 & 4 \\
 \end{longtable}
 
 The SCP says that the rationally acceptable moves in
@@ -623,14 +637,67 @@ even though, after learning that they had to choose and nothing else, it
 would be rational to do X. Either way, this seems to violate some
 fundamental rules about how conditionals work.
 
-So, I conclude, the SCP is correct. It follows from simple principles
-about conditionals, and it explains why, although everything else about
+So, I conclude, SCP is correct. It follows from simple principles about
+conditionals, and it explains why, although everything else about
 Newcomb's Problem has been contested, no one has argued that the
 difference in representation between Figure~\ref{fig-newcomb} and
 Table~\ref{tbl-newcomb} matters.
 
-This conclusion, however, turns out to have fairly dramatic consequences
-across much of decision theory.
+Further, SCP is consistent with every decision rule in standard game
+theory. Introductory game theory textbooks describe many `solution
+concepts' for games, from avoiding dominated strategies to refinements
+of Bayesian Perfect Equilibrium. All of them are consistent with SCP.
+
+If we try strengthening SCP in natural ways, we get something
+inconsistent with standard approaches to game theory. Consider, for
+instance, the Single Turn Principle (hereafter, STP).
+
+\begin{description}
+\tightlist
+\item[Single Turn Principle]
+In any decision problem where Chooser is guaranteed to have at most one
+turn, i.e., to make at most one choice between the start and the end of
+the problem, Dynamic-Strategic Equivalence holds.
+\end{description}
+
+STP is strictly stronger than SCP. STP clearly entails SCP, but it rules
+out choosing strategy AR in Table~\ref{tbl-ultimatum}. In the dynamic
+version of that problem, Figure~\ref{fig-ultimatum}, strategy AA is
+best. So even though in this game Chooser only has one turn, theories
+which say AR is acceptable violate the STP. This includes the rule that
+says any strategy which is part of a Nash equilibrium is choice-worthy.
+So STP is inconsistent with some familiar game theoretic
+approaches.\footnote{As noted earlier, it's also inconsistent with
+  several decision theories, but that's a feature it shares with SCP.}
+
+I'm making an assumption here that I will make throughout, namely that
+moves in a dynamic game must be justifiable looking forward. A move at a
+node in a problem must make sense given Chooser's decision theory, and
+given just the facts about Chooser's beliefs about the state of the
+game, and the likely outcomes given each move. This isn't a trivial
+assumption, it rules out views like Functional Decision Theory
+(\citeproc{ref-LevinsteinSoares2020}{Levinstein and Soares 2020}), but I
+have two reasons for making the assumption.
+
+One is simply space concerns; arguing against views like Functional
+Decision Theory would take some time, and brings in wholly different
+considerations.\footnote{In a longer version of this paper, I argue that
+  Functional Decision Theory has very unintuitive results in cases where
+  Demon is a bit less than 100\% reliable.} The other is that it is very
+intuitive that in a one-shot version of Figure~\ref{fig-ultimatum},
+where Chooser/Respondant has to choose between getting more money or
+less money, they should choose getting more money.
+
+This is not to assume that decision making in dynamic settings should be
+entirely forward looking. Indeed, in \textbf{?@sec-dynamic} I'll argue
+against that assumption. It is to assume that if forward looking
+considerations imply that only one choice is rational, e.g., that
+Chooser knows they'll get \$1 with one choice and \$0 with the other and
+they prefer more money to less, that choice must be made.
+
+So I'm not assuming STP; it would rule out too much in game theory. I
+am, however, going to take SCP as given in what follows. It turns out to
+rule out quite a bit in decision theory.
 
 \section{Problem 1: Risk-Sensitivity}\label{sec-buchak}
 
@@ -713,9 +780,9 @@ introduced earlier. I'm going to show that if
 \emph{f}(\emph{x})~=~\emph{x}\textsuperscript{2}, then we get a
 violation of SCP. I won't go through the details of how this generalises
 to all other values of \emph{f} other than identity\footnote{If \emph{f}
-  if the identity function, Buchak's way of valuing gambles just becomes
-  orthodox expected utility theory}, but it should be easy enough to see
-how to use the recipe here to find a problem for any other value of
+  is the identity function, Buchak's way of valuing gambles just becomes
+  orthodox expected utility theory.}, but it should be easy enough to
+see how to use the recipe here to find a problem for any other value of
 \emph{f}.
 
 As is standard, I'll assume that random moves in a game are made by a
@@ -806,11 +873,400 @@ different to which strategy it chooses for the one and only point you
 have to choose at. That is, Buchak's theory violates the SCP, and so
 should be rejected.
 
+\section{Problem 2: Demons and Multiple Equilibria}\label{sec-multiple}
+
+This section is about problems like Newcomb's Problem
+(\citeproc{ref-Nozick1969}{Nozick 1969}). I'm not going to start with
+Newcomb's Problem itself; I would end up replaying familiar lines if I
+started there. Instead I'll start with a very generic form of similar
+problems.
+
+Table~\ref{tbl-generic-demon} is (the strategic form of) a completely
+generic form of a 2-by-2 decision problem involving demons. At stage 2,
+Chooser will pick Up or Down. At stage 1, Demon will predict what
+Chooser will do. I'll only discuss cases where Demon is (believed to be)
+arbitrarily close to perfect in their predictions.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{A generic demon
+problem}\label{tbl-generic-demon}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & \emph{a} & \emph{b} \\
+\textbf{Down} & \emph{c} & \emph{d} \\
+\end{longtable}
+
+Say that an option is a strict equilibrium if, assuming Demon predicts
+correctly, Chooser's payout for choosing it is (strictly) greater than
+their payout for choosing any other option. So Up is a strict
+equilibrium if \emph{a}~\textgreater~\emph{c}. The focus in this section
+is going to be on problems where both Ip and Down are strict equilibria,
+so \emph{a}~\textgreater~\emph{c}, and \emph{d}~\textgreater~\emph{b}.
+While Newcomb's Problem itself is not such a case, most of the views
+that have been proposed to deal with Newcomb's Problem have consequences
+for the case where both Up and Down are strict equilibria, and they
+typically say things that violate SCP.
+
+To simplify matters, I'm going to make two further assumptions which are
+widely, but not universally, shared. First, I'll assume that the names
+of the options are irrelevant. In particular, I'll assume that if Up is
+rationally permissible in Table~\ref{tbl-generic-demon}, then Down is
+permissible in Table~\ref{tbl-inverted-generic}.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Table~\ref{tbl-generic-demon} with labels
+inverted}\label{tbl-inverted-generic}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & \emph{d} & \emph{c} \\
+\textbf{Down} & \emph{b} & \emph{a} \\
+\end{longtable}
+
+Second, I'll assume that the values in the table settle which options
+are rational. This assumption is denied by theorists such as Skyrms
+(\citeproc{ref-Skyrms1982}{1982}) and Joyce
+(\citeproc{ref-Joyce2012}{2012}), who say that in problems like these,
+Chooser's starting view about what option they will eventually select
+also makes a difference to what they should do. Those views are not
+subject to the objections I'm about to make----provided Chooser's
+credences satisfy some rather tight constraints.
+
+I'm going to largely focus on versions of Table~\ref{tbl-generic-demon}
+where \emph{a} and \emph{d} are positive, and \emph{b}~=~\emph{c}~=~0.
+This kind of problem is called Nice Demon by Skyrms
+(\citeproc{ref-Skyrms1982}{1982}) and Weirich
+(\citeproc{ref-Weirich1988}{1988}), and is shown in
+Table~\ref{tbl-nice-demon}. I'm going to mostly discuss the case,
+discussed by Weirich but not Skyrms, where \emph{a}~≠~\emph{d}. The main
+conclusion is that given SCP, both Up and Down are permissible in these
+cases.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Nice demon}\label{tbl-nice-demon}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & \emph{a} & 0 \\
+\textbf{Down} & 0 & \emph{d} \\
+\end{longtable}
+
+There is a quick argument, independent of SCP, for the same conclusion.
+Whatever values \emph{a} and \emph{d} are, it's permissible for Chooser
+to be arbitrarily confident that they will play Up. Given that
+confidence, Chooser should think that Up maximises expected utility.
+It's permissible to choose an option that maximises expected utility
+given permissible credences. Therefore Up is rationally permissible.
+Since Up was arbitrary in this argument, it is also permissible to
+choose Down, so both are permissible.
+
+Weirich (\citeproc{ref-Weirich1988}{1988, 563}) makes a version of this
+argument, and then says that since the conclusion is obviously false,
+something must be wrong with it. He thinks that Chooser should not be
+allowed to use credences about their own future actions in the way the
+argument presupposes. This allows him to say, along with many others,
+that if \emph{d}~\textgreater~\emph{a}, then only Down is rationally
+permissible. I'm not going to rely on this argument, but simply note
+that it doesn't seem like a bad argument to me, and in any case I will
+be endorsing its conclusion.\footnote{Spencer
+  (\citeproc{ref-Spencer2023}{2023}) makes a related argument in the
+  course of defending the permissibility of both options.}
+
+There are three interesting families of views which differ markedly with
+each other in general, but which agree that in
+Table~\ref{tbl-nice-demon}, whichever of \emph{a} and \emph{d} is larger
+determines which option is uniquely choiceworthy.
+
+The first family of views is just a single, famous, view: Evidential
+Decision Theory. It says that in any version of
+Table~\ref{tbl-generic-demon}, if \emph{a}~≠~\emph{d}, then whichever is
+larger should be chosen. Hence it says that in
+Table~\ref{tbl-nice-demon}, the larger value should be chosen.
+
+The second family of views are what Eells and Harper
+(\citeproc{ref-EellsHarper1991}{1991}) call Maximum Ratifiability views.
+They say that when there are multiple ratifiable options, the value with
+the highest expected utility should be chosen. Such views differ on what
+to do when there are no ratifiable options, which is why I'm calling
+this a family of views. But they all agree on
+Table~\ref{tbl-nice-demon}. Maximum Ratifiability is defended by Jeffrey
+(\citeproc{ref-Jeffrey1983}{1983}), Sobel
+(\citeproc{ref-Sobel1983}{1983}), Harper
+(\citeproc{ref-Harper1984}{1985}), Weirich
+(\citeproc{ref-Weirich1988}{1988}), Arntzenius
+(\citeproc{ref-Arntzenius2008}{2008}), and Gustafsson
+(\citeproc{ref-Gustafsson2011}{2011}).
+
+The third family of views say that in any version of
+Table~\ref{tbl-generic-demon}, one should minimise possible regret. That
+is, one should choose Up if the possible Regret from choosing Up,
+\emph{d}~-~\emph{b}, is less than the possible regret from choosing
+Down, \emph{a}~-~\emph{c}. Wedgwood
+(\citeproc{ref-Wedgwood2013a}{2013}), Gallow
+(\citeproc{ref-Gallow2020}{2020}), Podgorski
+(\citeproc{ref-Podgorski2022}{2022}), and Barnett
+(\citeproc{ref-Barnett2022}{2022}) endorse such a view, though they go
+on to say very different things about cases with three or more options.
+These views also say that in Table~\ref{tbl-nice-demon}, whichever of
+\emph{a} and \emph{d} is larger determines the uniquely choiceworthy
+option.
+
+All of these views violate SCP.
+
+\section{General Ratifiability}\label{sec-general-ratify}
+
+In the previous section I argued that in any instance of Nice Demon,
+where Chooser gets a reward iff Demon's prediction is correct, both
+options are choice-worthy. In this section I generalise that result. In
+any instance of \#tbl-generic-demon where both choices are strict
+equilibria, both options are choiceworthy.\footnote{I'm grateful to
+  Dmitri Gallow for suggestions which greatly strengthened and
+  simplified the proof that follows.}
+
+The proof relies on five assumptions, three of which were used in the
+last section. The first assumption is SCP.
+
+The second assumption is that in any instance of
+Table~\ref{tbl-generic-demon}, the four payouts, plus the conditional
+probabilities of a correct prediction given each choice by Chooser,
+settle which options are choice-worthy. This isn't universally shared,
+but it is very widely shared.\footnote{Indeed, it is common in
+  philosophy papers to specify nothing but these values and then ask for
+  intuitions about the case, which suggests many people do presuppose
+  that only these values are necessary.}
+
+The third assumption is that the labels are irrelevant. If Up is
+choice-worthy in Table~\ref{tbl-generic-demon}, then Down is
+choice-worthy in \textbf{?@tbl-inverted-demon}. Call this assumption
+\textbf{Label Neutrality}.
+
+The fourth assumption, which is new in this section, is that the values
+in the table are utilities, and hence are only unique up to positive
+affine transformation. So whatever choices are rational in a table, the
+same choices are rational if each payout is multiplied by a positive
+constant, and/or some (other constant) is added. Call this assumption
+\textbf{Affine Transformtation}.
+
+The fifth and final assumption is that in two option decision problems
+with two strict equilibria, at least one (pure) option is choice-worthy.
+That is, these problems are not dilemmas (even if Chooser only plays
+pure strategies).
+
+Given those assumptions, we'll show that both options are choice-worthy
+in two option problems where both options are strict equilibria. It
+simplifies the proof a little to work not with
+Table~\ref{tbl-generic-demon}, but with a slightly relabeled version, as
+shown in Table~\ref{tbl-two-good}.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{A problem with two strict
+equilibria.}\label{tbl-two-good}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & \emph{a} & \emph{d}-\emph{c} \\
+\textbf{Down} & \emph{a}-\emph{b} & \emph{d} \\
+\end{longtable}
+
+Since the game has two strict equilibria, both \emph{b} and \emph{c} are
+positive. Assume without loss of generality that \emph{a} and \emph{d}
+are also positive. (If not use \textbf{Affine Transformation} to make
+them both positive.) Assume, also without loss of generality, that
+\emph{b}~\textgreater~\emph{c}. (If not, use \textbf{Label Neutrality}
+to flip the labels.)
+
+Consider the dynamic decision problem shown in
+Figure~\ref{fig-two-good}. In this tree, we'll leave both the
+probability of tails, \emph{p}, and the exit payout,
+\emph{e}/(1-\emph{p}), as unknows to be solved for. (This problem
+differs from \textbf{?@fig-insert-ref} in that we don't assume the coin
+in stage two is fair, but we do assume the probability of Heads is known
+to Chooser.)
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{fourprob-late-2024_files/figure-pdf/fig-two-good-1.png}
+
+}
+
+\caption{\label{fig-two-good}A problem where if Chooser moves, they are
+in Table~\ref{tbl-two-good}.}
+
+\end{figure}%
+
+The strategic form of Figure~\ref{fig-two-good} is given by
+Table~\ref{tbl-two-good-strategic}.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{The strategic form of
+Figure~\ref{fig-two-good}.}\label{tbl-two-good-strategic}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & \emph{pa} + \emph{e} & \emph{d}-\emph{c} \\
+\textbf{Down} & \emph{p}(\emph{a}-\emph{b}) + \emph{e} & \emph{d} \\
+\end{longtable}
+
+By SCP, Up is choice-worthy in Table~\ref{tbl-two-good} iff Up is
+choice-worthy in Table~\ref{tbl-two-good-strategic}. By \textbf{Label
+Neutrality} and \textbf{Affine Transformation}, Up is choice-worthy in
+Table~\ref{tbl-two-good} iff Down is choice-worthy in
+Table~\ref{tbl-two-good-inverted}. (This is because we get from
+Table~\ref{tbl-two-good} to Table~\ref{tbl-two-good-inverted} by first
+flipping the labels, then multiplying the payouts by \emph{m} and adding
+\emph{x} to every payout.)
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Inverted and transformed version of
+Table~\ref{tbl-two-good}.}\label{tbl-two-good-inverted}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & \emph{md} + \emph{x} & \emph{m}(\emph{a}-\emph{b}) +
+\emph{x} \\
+\textbf{Down} & \emph{m}(\emph{d}-\emph{c}) + \emph{x} & \emph{ma} +
+\emph{x} \\
+\end{longtable}
+
+If we can find values of \emph{p}, \emph{e}, \emph{m} and \emph{x} such
+that Table~\ref{tbl-two-good-strategic} and
+Table~\ref{tbl-two-good-inverted} are identical, it will follow that Up
+is choice-worthy in Table~\ref{tbl-two-good} iff Down is choice-worthy.
+(Note we must also check that \emph{m} is positive, and \emph{p} is a
+probability, i.e., in {[}0, 1{]}.) From that plus the no dilemmas
+assumption, it follows that Up and Down are both choice-worthy in
+Table~\ref{tbl-two-good}, as required.
+
+Now it's just a bit of algebra to figure out the four unknowns \emph{p},
+\emph{e}, \emph{m} and \emph{x} given the four equations, i.e., the
+equality of matching cells in Table~\ref{tbl-two-good-strategic} and
+Table~\ref{tbl-two-good-inverted}.
+
+\begin{align*}
+(1) && pa + e &= md + x && \text{(Top left)} \\
+(2) && d - c &= m(a - b) + x && \text{(Top right)} \\
+(3) && p(a - b) + e &= m(d - c) + x && \text{(Bottom left)} \\
+(4) && d &= ma + x && \text{(Bottom right)} \\
+(5) && c &= mb && \text{(4) - (2)} \\
+(6) && m &= \frac{c}{b} && \text{(5)} \\
+(7) && pb &= mc && \text{(1) - (3)} \\
+(8) && pb &= \frac{c^2}{b} && \text{(6), (7)} \\
+(9) && p &= \frac{c^2}{b^2} && \text{(8)} \\
+(10) && x &= d - c - m(a - b) && \text{(2)} \\
+(11) && x &= d - c - \frac{c(a - b)}{b} && \text{(6), (10)} \\
+(12) && x &= d - c - \frac{ca}{b} + c && \text{(11)} \\
+(13) && x &= d - \frac{ca}{b} && \text{(12)} \\
+(14) && \frac{ac^2}{b^2} + e &= \frac{dc}{b} + d - \frac{ca}{b} && \text{(1), (6), (9), (13)} \\
+(15) && e &= \frac{bcd + db^2 - abc - ac^2}{b^2} && \text{(14)}
+\end{align*}
+
+Lines 6, 9, 13 and 15 give the values for the four variables. Since
+\emph{b} and \emph{c} are positive, \emph{m} and \emph{p} are also
+positive.\footnote{Note that all we need here is that \emph{b} and
+  \emph{c} have the same sign. So this argument has consequences for the
+  case where there is no pure equilibrium. But I'm setting aside those
+  cases, which raise issues about mixed strategies, for this paper.}
+Since \emph{b}~\textgreater~\emph{c}, \emph{p}~\textless~1, so \emph{p}
+is a probability.
+
+I won't go through all the algebra, but substituting these values for
+the four variables back into either Table~\ref{tbl-two-good-strategic}
+or Table~\ref{tbl-two-good-inverted} gives
+Table~\ref{tbl-two-good-final}.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Final version of
+Table~\ref{tbl-two-good}.}\label{tbl-two-good-final}\tabularnewline
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& PU & PD \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Up} & (\emph{bd} + \emph{cd} - \emph{ac})/\emph{b} & \emph{d} -
+\emph{c} \\
+\textbf{Down} & (\emph{bd} + \emph{cd} - \emph{ac} -
+\emph{c}\textsuperscript{2})/\emph{b} & \emph{d} \\
+\end{longtable}
+
+That's enough to show, given the assumptions we started with that Up and
+Down are both choice-worthy in Table~\ref{tbl-two-good}.
+
+This doesn't yet show that any ratifiable choice is choice-worthy; it
+doesn't even show anything for cases where Chooser has three options.
+But it does show that SCP is inconsistent with any view that accepts the
+other four assumptions, and which says that only one option is
+choice-worthy in Table~\ref{tbl-two-good}. That, as I discussed in the
+previous section, includes a large number of decision theories
+philosophers have defended.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
 \bibitem[\citeproctext]{ref-Ahmed2014}
 Ahmed, Arif. 2014. \emph{Evidence, Decision and Causality}. Cambridge:
 {C}ambridge {U}niversity {P}ress.
+
+\bibitem[\citeproctext]{ref-Arntzenius2008}
+Arntzenius, Frank. 2008. {``No Regrets; or, Edith Piaf Revamps Decision
+Theory.''} \emph{Erkenntnis} 68 (2): 277--97. doi:
+\href{https://doi.org/10.1007/s10670-007-9084-8}{10.1007/s10670-007-9084-8}.
+
+\bibitem[\citeproctext]{ref-Barnett2022}
+Barnett, David James. 2022. {``Graded Ratifiability.''} \emph{Journal of
+Philosophy} 119 (2): 57--88. doi:
+\href{https://doi.org/10.5840/jphil202211925}{10.5840/jphil202211925}.
 
 \bibitem[\citeproctext]{ref-Briggs2015}
 Briggs, Ray. 2015. {``Costs of Abandoning the Sure-Thing Principle.''}
@@ -831,6 +1287,17 @@ Eells, Ellery, and William Harper. 1991. {``Ratifiability, Game Theory,
 and the Principle of Independence of Irrelevant Alternatives.''}
 \emph{Australasian Journal of Philosophy} 69 (1): 1--19. doi:
 \href{https://doi.org/10.1080/00048409112344491}{10.1080/00048409112344491}.
+
+\bibitem[\citeproctext]{ref-Gallow2020}
+Gallow, J. Dmitri. 2020. {``The Causal Decision Theorist's Guide to
+Managing the News.''} \emph{The Journal of Philosophy} 117 (3): 117--49.
+doi:
+\href{https://doi.org/10.5840/jphil202011739}{10.5840/jphil202011739}.
+
+\bibitem[\citeproctext]{ref-Gustafsson2011}
+Gustafsson, Johan E. 2011. {``A Note in Defence of Ratificationism.''}
+\emph{Erkenntnis} 75 (1): 147--50. doi:
+\href{https://doi.org/10.1007/s10670-010-9267-6}{10.1007/s10670-010-9267-6}.
 
 \bibitem[\citeproctext]{ref-Hammond1976}
 Hammond, Peter J. 1976. {``Changing Tastes and Coherent Dynamic
@@ -854,22 +1321,64 @@ Decision Theory.''} \emph{Erkenntnis} 24 (1): 25--36. doi:
 and Invited Papers:344--62. East Lansing, MI: Philosophy of Science
 Association.
 
+\bibitem[\citeproctext]{ref-Jeffrey1983}
+Jeffrey, Richard. 1983. {``Bayesianism with a Human Face.''} In
+\emph{Testing Scientific Theories}, edited by J. Earman (ed.).
+Minneapolis: University of Minnesota Press.
+
+\bibitem[\citeproctext]{ref-Joyce2012}
+Joyce, James M. 2012. {``Regret and Instability in Causal Decision
+Theory.''} \emph{Synthese} 187 (1): 123--45. doi:
+\href{https://doi.org/10.1007/s11229-011-0022-6}{10.1007/s11229-011-0022-6}.
+
 \bibitem[\citeproctext]{ref-Keynes1921}
 Keynes, John Maynard. 1921. \emph{Treatise on Probability}. London:
 Macmillan.
+
+\bibitem[\citeproctext]{ref-LevinsteinSoares2020}
+Levinstein, Benjamin Anders, and Nate Soares. 2020. {``Cheating Death in
+Damascus.''} \emph{Journal of Philosophy} 117 (5): 237--66. doi:
+\href{https://doi.org/10.5840/jphil2020117516}{10.5840/jphil2020117516}.
 
 \bibitem[\citeproctext]{ref-McClennen1990}
 McClennen, Edward. 1990. \emph{Rationality and Dynamic Choice}.
 Cambridge: {C}ambridge {U}niversity {P}ress.
 
+\bibitem[\citeproctext]{ref-Nozick1969}
+Nozick, Robert. 1969. {``Newcomb's Problem and Two Principles of
+Choice.''} In \emph{Essays in Honor of Carl {G}. Hempel: A Tribute on
+the Occasion of His Sixty-Fifth Birthday. Hempel: A Tribute on the
+Occasion of His Sixty-Fifth Birthday}, edited by Nicholas Rescher,
+114--46. Riedel: Springer.
+
 \bibitem[\citeproctext]{ref-Pettigrew2019}
 Pettigrew, Richard. 2019. \emph{Choosing for Changing Selves}. Oxford:
 {O}xford {U}niversity {P}ress.
+
+\bibitem[\citeproctext]{ref-Podgorski2022}
+Podgorski, Aberlard. 2022. {``Tournament Decision Theory.''}
+\emph{No{û}s} 56 (1): 176--203. doi:
+\href{https://doi.org/10.1111/nous.12353}{10.1111/nous.12353}.
 
 \bibitem[\citeproctext]{ref-RamseyGeneralProp}
 Ramsey, Frank. (1929) 1990. {``General Propositions and Causality.''} In
 \emph{Philosophical Papers}, edited by D. H. Mellor, 145--63. Cambridge:
 Cambridge University Press.
+
+\bibitem[\citeproctext]{ref-Skyrms1982}
+Skyrms, Brian. 1982. {``Causal Decision Theory.''} \emph{Journal of
+Philosophy} 79 (11): 695--711.
+
+\bibitem[\citeproctext]{ref-Sobel1983}
+Sobel, Jordan Howard. 1983. {``Expected Utilities and Rational Actions
+and Choices.''} \emph{Theoria} 49 (3): 159--83. doi:
+\href{https://doi.org/10.1111/j.1755-2567.1983.tb00212.x}{10.1111/j.1755-2567.1983.tb00212.x}.
+
+\bibitem[\citeproctext]{ref-Spencer2023}
+Spencer, Jack. 2023. {``Can It Be Irrational to Knowingly Choose the
+Best?''} \emph{Australasian Journal of Philosophy} 101 (1): 128--39.
+doi:
+\href{https://doi.org/10.1080/00048402.2021.1958880}{10.1080/00048402.2021.1958880}.
 
 \bibitem[\citeproctext]{ref-Stalnaker1999}
 Stalnaker, Robert. 1999. {``Extensive and Strategic Forms: Games and
@@ -881,11 +1390,20 @@ Thoma, Johanna. 2019. {``Risk Aversion and the Long Run.''}
 \emph{Ethics} 129 (2): 230--53. doi:
 \href{https://doi.org/10.1086/699256}{10.1086/699256}.
 
+\bibitem[\citeproctext]{ref-Wedgwood2013a}
+Wedgwood, Ralph. 2013. {``Gandalf's Solution to the Newcomb Problem.''}
+\emph{Synthese} 190 (14): 2643--75. doi:
+\href{https://doi.org/10.1007/s11229-011-9900-1}{10.1007/s11229-011-9900-1}.
+
+\bibitem[\citeproctext]{ref-Weirich1988}
+Weirich, Paul. 1988. {``Hierarchical Maximization of Two Kinds of
+Expected Utility.''} \emph{Philosophy of Science} 55 (4): 560--82. doi:
+\href{https://doi.org/10.1086/289461}{10.1086/289461}.
+
 \end{CSLReferences}
 
 
 
-\noindent Published in\emph{
-?meta:citation.container-title}, 2024, pp. ?meta:citation.page.
+\noindent Published online in September 2024.
 
 \end{document}
