@@ -1,11 +1,11 @@
-# Problem 4: Dynamics {#sec-dynamics}
+# Problem 4: Dynamics {#sec-dynamic}
 
 Start with a detour into introductory game theory. Chooser is playing a game with Guy; Chooser will select the row, and Guy will (simultaneously) select the column. The payouts from their choices are shown in @tbl-chooser-guy, with Chooser's payout first in each cell.
 
-|       |   Left    |    Right    |
+|       |   **Left**    |    **Right**    |
 |------:|:---------:|:-----------:|
-| Up    |   6,1     |    0,0      |
-| Down  |   0,0     |    4,1      |
+| **Up**    |   6,1     |    0,0      |
+| **Down**  |   0,0     |    4,1      |
 
 : A simple coordination game. {#tbl-chooser-guy}
 
@@ -13,14 +13,70 @@ Textbook approaches to this game say that it has two 'solutions': (Up, Left) and
 
 Now imagine that Chooser has a prior choice. They can either accept a payout of 5 (and Guy will get nothing), or gamble and play @tbl-chooser-guy. The dynamic problem Chooser now faces is shown in @fig-chooser-guy-two, and the strategy table for that problem is shown in @tbl-chooser-guy-two.
 
-[Insert figure]
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-chooser-guy-two
+#| fig.cap: "A coordination game with an exit option."
+#| fig.ext: 'png'
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 6
 
-|               |   Left    |    Right    |
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=25mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Chooser}]{}
+        child {node {5,0}
+              edge from parent
+              node[left] {Exit}}
+        child { node [solid node, label=right:{Guy}]{}
+        child { node (1)[solid node] {}
+          child { 
+            node {6,1}
+            edge from parent
+              node[left] {Up}}
+          child { 
+            node {0,0}
+            edge from parent
+              node[right] {Down}}
+          edge from parent
+            node[left] {Left}}
+        child { node (2)[solid node] {}
+          child { 
+            node {0,0}
+            edge from parent
+              node[left] {Up}}
+          child { 
+            node {4,1}
+            edge from parent
+              node[right] {Down}}
+          edge from parent
+            node[right] {Right}}
+        edge from parent
+          node[right] {Gamble}            };
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+|               |   **Left**    |    **Right**    |
 |--------------:|:---------:|:-----------:|
-| Exit-Up       |    5,0    |    5,0      |
-| Exit-Down     |    5,0    |    5,0      |
-| Gamble-Up     |   6,1     |    0,0      |
-| Gamble-Down   |   0,0     |    4,1      |
+| **Exit-Up    **   |    5,0    |    5,0      |
+| **Exit-Down  **   |    5,0    |    5,0      |
+| **Gamble-Up  **   |   6,1     |    0,0      |
+| **Gamble-Down**   |   0,0     |    4,1      |
 
 : The strategic form of @fig-chooser-guy-two. {#tbl-chooser-guy-two}
 
@@ -36,13 +92,13 @@ The notion of choice-worthiness here is not purely forward-looking. It is not ra
 
 But while the textbook notion of rationality is not purely forward looking, it is not purely strategic either. It is not rational to reject any offer in @fig-ultimatum, the simplified Ultimatum game, even though the strategy AR is part of an equilibrium.
 
-The core idea, which goes back to @Selten1974, is that rational play in games must be both dynamically and strategically rational. For a strategy in a dynamic game to be part of an equilibrium, it must be rationally permissible to choose that strategy in the strategic form of the game, and every move must be rational when it is made given purely forward looking considerations. The first conjunct rules out Gamble-Down in @fig-chooser-guy two; the second conjunct rules out AR in @fig-ultimatum.
+The core idea, which goes back to Reinhard Selten [-@Selten1965; -@Selten1975], is that rational play in games must be both dynamically and strategically rational. For a strategy in a dynamic game to be part of an equilibrium, it must be rationally permissible to choose that strategy in the strategic form of the game, and every move must be rational when it is made given purely forward looking considerations. The first conjunct rules out Gamble-Down in @fig-chooser-guy-two; the second conjunct rules out AR in @fig-ultimatum.
 
 I propose that we take the same approach to dynamic choice in single player decision problems. Replace Guy in the above examples with Demon, and say that Demon will play Left if they predict Up, Right if they predict Down, and we get an interesting problem for SCP. According to SCP, in the version of @fig-chooser-guy-two where Demon is involved, 1-3 above are still all true.
 
 This looks like a problem. Indeed, it is basically a version of the problem that Elga raises for incomplete probabilities, and Gustafsson raises for incomplete values. The solution is simply to say that rational players are not purely forward-looking; they adopt rational strategies, and they do things that are rational independent of what they have previously done.
 
-I call this view of dynamic choice the **Dual Mandate** theory, since it requires Chooser to be rational according to both forward-looking and strategic considerations. The idea behind it isn't new; @Selten1974 was outlining a similar view in game theory half a century ago. But it hasn't been discussed much in the philosophy literature. @Gustafsson2022 [73] calls a similar view the _Conservative Approach_, and notes it is discussed by @Rabinowicz1995; that might be the closest thing to a precusor in philosophy.
+I call this view of dynamic choice the **Dual Mandate** theory, since it requires Chooser to be rational according to both forward-looking and strategic considerations. The idea behind it isn't new; @Selten1975 was outlining a similar view in game theory half a century ago. But it hasn't been discussed much in the philosophy literature. @Gustafsson2022 [73] calls a similar view the _Conservative Approach_.^[Gustafsson notes that something similar is discussed by @Rabinowicz1995, and indeed Rabinowicz's "wise choice" view is probably the closest precursor to the Dual Mandate theory in the philosophy literature. Like the Dual Mandate view, Rabinowicz's theory aims to reconcile resolute and sophisticated choice. But the Dual Mandate accepts premises that Rabinowicz rejects, namely the separability of preference, and the reduction to normal form. See @Steele2010 for more careful discussion of Rabinowicz's view.]
 
 The Dual Mandate theory isn't entailed by SCP, but it is closely related to it. 
 
@@ -54,13 +110,13 @@ Dual Mandate says that Chooser can adopt the plan Gamble-Up in @fig-chooser-guy-
 
 > But, if you don't prefer following the plan to deviating from it, then it's hard to see what would be irrational about choosing to deviate. [@Gustafsson2022 73]
 
-This is a good challenge, but there are (at least) two interesting replies to it.^[There is a connection between this challenge and the debate about whether intentions, as Michael @Bratman1987 understands them, can provide reasons. It would take us way too far afield to chase these down, but see @SetiyaSEP [§4] for a good summary of the debate.]
+This is a good challenge, but there are (at least) two interesting replies to it.^[There is a connection between this challenge and the debate about whether intentions, as Michael @Bratman1987 understands them, can provide reasons. It would take us way too far afield to chase these down, but see @sep-intention [§4] for a good summary of the debate.]
 
 The first reply, following @Stalnaker1999, says that rational agents know what they are doing. When Chooser adopts the strategy Gamble-Up, they must, if they are rational, know that's what they will do. If they play Down at stage 2, then since their belief they would play Gamble-Down is false, it can't be knowledge. Hence they were not rational at the first step. So it isn't consistent with rationality throughout the game that they play Gamble-Down.
 
-I think that reply is good, but in case not everyone does, I'll offer a second. This reply is based on arguments by Richard Holton [-@Holton2000; -@Holton2009], but I'm going to, somewhat anachronistically, spell it out using the inquiry-centric language popularised by Jane Friedman [-@Friedman2019; -@Friedman2020]. Start with the very familiar idea that being rational is about being reasons-responsive. Then make a key distinction, between reasons to open an inquiry, and reasons to close that inquiry in a particular way.
+I think that reply is good, but in case not everyone does, I'll offer a second. This reply is based on arguments by Richard Holton [-@Holton1999; -@Holton2009], but I'm going to, somewhat anachronistically, spell it out using the inquiry-centric language popularised by Jane Friedman [-@Friedman2019a; -@Friedman2020]. Start with the very familiar idea that being rational is about being reasons-responsive. Then make a key distinction, between reasons to open an inquiry, and reasons to close that inquiry in a particular way.
 
-With that distinction in mind, here's a picture of dynamic choice. At the start of any dynamic decision problem, Chooser should adopt a strategy. It should be a strategy that makes strategic sense, i.e., the choice of strategy should be at least ratifiable, and it should be a strategy Chooser can carry out. From that point, Chooser should simply carry out the strategy unless they have reason to reconsider their choices. If the strategy is about to say _Do an irrational thing_, like recommending leaving money on the table, Chooser has a reason to reconsider the strategy. But unless the strategy recommends an irrational act, Chooser has no reason to reconsider it. It's irrational to do what one has no reason to do, so Chooser would be irrational to even open inquiry into the question _Should I keep following the strategy?_.
+With that distinction in mind, here's a picture of dynamic choice. At the start of any dynamic decision problem, Chooser should adopt a strategy. It should be a strategy that makes strategic sense, i.e., the choice of strategy should be at least ratifiable, and it should be a strategy Chooser can carry out. From that point, Chooser should simply carry out the strategy unless they have reason to reconsider their choices.^[As @Bratman2014 says, sometimes non-reconsideration can be the rational act.] If the strategy is about to say _Do an irrational thing_, like recommending leaving money on the table, Chooser has a reason to reconsider the strategy. But unless the strategy recommends an irrational act, Chooser has no reason to reconsider it. It's irrational to do what one has no reason to do, so Chooser would be irrational to even open inquiry into the question _Should I keep following the strategy?_.
 
 That's what would be irrational about 'choosing to deviate'. It's not the _deviate_ part that's irrational; it's the _choosing_. Chooser can only choose what to do at stage two of the decision problem by opening inquiry into the question _What should I do now?_. And that's precisely what they should not do, unless the strategy is leading them to an irrational act. Since Up is not irrational, they have no reason to even ask whether to keep following their strategy.
 
