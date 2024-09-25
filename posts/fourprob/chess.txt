@@ -23,32 +23,11 @@ This is not an implausible view, in part because of some special features of che
 
 Games in general need not have any of these features. _Settlers of Catan_, for example, has none of them. There are random dice rolls and card draws; while the dice are public, the cards are private; and there are mutually beneficial trades between players. Some theories say that in games with these features, especially the last, Dynamic-Strategic Equivalence can fail. (The other two features will require us to be careful in how we state Dynamic-Strategic Equivalence.)
 
-Consider a very simplified version of the Ultimatum game. In this version, the players have \$3 to distribute. As in the standard version, Proposer will suggest a split of the money, and Respondant will accept or reject the split. If they reject it, neither player will get any money. I'll add two more simplifications. First, only proper splits are allowed; Proposer can't suggest that one or other party gets all the money. Second, the dollars cannot be split. So the only proposals are that Proposer gets \$1 and Respondant gets \$2, or that Proposer gets \$2 and Respondant gets \$1. Call these Proposals P1 and P2. The game tree for this game is @fig-ultimatum.
-
-```{r tikz-fonts}
-#| echo: FALSE
-#| output: FALSE
-
-if(knitr::is_latex_output()) {
-font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
-                                   "\\setmainfont{EB Garamond}",
-                                   "\\usetikzlibrary{calc}",
-                                   "\\usetikzlibrary{backgrounds}",
-                                   "\\definecolor{backgroundcolor}{RGB}{255,255,255}"))
-} else {
-  font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
-                                   "\\setmainfont{Scala Sans Pro}",
-                                   "\\usetikzlibrary{calc}",
-                                   "\\usetikzlibrary{backgrounds}",
-                                   "\\definecolor{backgroundcolor}{RGB}{249,255,255}"))
-}
-options(tinytex.engine = "xelatex")
-```
+Consider a very simplified version of the Ultimatum game. In this version, the players have \$3 to distribute. As in the standard version, Proposer will suggest a split of the money, and Respondant will accept or reject the split. If they reject it, neither player will get any money. I'll add two more simplifications. First, only proper splits are allowed; Proposer can't suggest that one or other party gets all the money. Second, the dollars cannot be split. So the only proposals are that Proposer gets \$1 and Respondant gets \$2, or that Proposer gets \$2 and Respondant gets \$1. Call these Proposals P1 and P2. The game tree for this game is @fig-ultimatum. (Note that *Respondant's* payouts are shown first; this is because they are going to be the key character in what follows.)
 
 ```{r engine='tikz', engine.opts=font_opts}
 #| label: fig-ultimatum
 #| fig.cap: "Simplified Ultimatum."
-#| fig.ext: 'png'
 #| cache: TRUE
 #| echo: FALSE
 #| fig.width: 6
@@ -71,7 +50,7 @@ options(tinytex.engine = "xelatex")
           child {
             node (1)[solid node, label=left:{Respondant}] {}
               child { 
-                 node {\$1, \$2}
+                 node {\$2, \$1}
                  edge from parent
                  node[left] {Accept}}
               child { 
@@ -84,7 +63,7 @@ options(tinytex.engine = "xelatex")
           child {
             node (2)[solid node] {}
               child { 
-                 node {\$2, \$1}
+                 node {\$1, \$2}
                  edge from parent
                  node[left] {Accept}}
               child { 
@@ -100,7 +79,7 @@ options(tinytex.engine = "xelatex")
 \end{tikzpicture}
 ```
 
-In this game, Respondant has four possible strategies. I'll write XY for responding to P1 with X and P2 with Y. So the strategy RA is the (odd) strategy of rejecting the offer of \$2 and accepting the offer of \$1. Using this terminology, this version of Ultimatum is given by @tbl-ultimatum. (As usual, I'll write the row players payouts first. This is a little misleading because we normally put the payoff of the first mover first. But it will fit better with how I'll use the game in a few paragraph.)
+In this game, Respondant has four possible strategies. I'll write XY for responding to P1 with X and P2 with Y. So the strategy RA is the (odd) strategy of rejecting the offer of \$2 and accepting the offer of \$1. Using this terminology, this version of Ultimatum is given by @tbl-ultimatum. (As usual, I'll write the payouts for row first, even though in this case they move second.)
 
 |           |   **P1**   |   **P2**    |
 |----------:|:----------:|:-----------:|
