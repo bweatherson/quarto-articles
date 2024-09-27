@@ -161,7 +161,74 @@ The rule I am calling Conservatism is perhaps the dominant decision-theoretic ru
 
 Assume a Conservative is holding ψ, and ϕ is a bet which is almost indifferent to ψ. Further assume that ψ + \$10 is strictly preferred to ϕ. The following is a simple-minded objection to Conservatism which doesn't work; I include it to distinguish it from an objection which does work. Assume the only trades which are possible are to swap ψ for ϕ, and, if that swap is made, to swap ϕ for ψ + \$10. It would clearly be in the agent's best interests to make each of these swaps, but since they are a Conservative they can't make the first swap, hence Conservatism is an irrational rule. The decision-tree is set out in Figure 1.
 
-![Figure 1](vdt_tree.pdf)
+```{r tikz-fonts}
+#| echo: FALSE
+#| output: FALSE
+
+if(knitr::is_html_output()) {
+  font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{Scala Sans Pro}",
+                                   "\\usetikzlibrary{calc}",
+                                   "\\usetikzlibrary{backgrounds}",
+                                   "\\definecolor{backgroundcolor}{RGB}{249,255,255}"),
+                                   fig.ext = "svg")
+
+} else {
+font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{EB Garamond}",
+                                   "\\usetikzlibrary{calc}",
+                                   "\\usetikzlibrary{backgrounds}",
+                                   "\\definecolor{backgroundcolor}{RGB}{255,255,255}"),
+                                   fig.ext = "pdf")
+}
+options(tinytex.engine = "xelatex")
+```
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-beta
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 6
+
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+
+\begin{tikzpicture}[scale=1.8, 
+background rectangle/.style={fill=backgroundcolor}, 
+show background rectangle,
+grow = right]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=15mm,sibling distance=17.3mm]
+  \tikzstyle{level 2}=[level distance=15mm,sibling distance=17.3mm]
+      
+      \node[solid node,label=below:{$t_1$}]{}
+        child { node [hollow node, 
+                      label=below:{$t_2$}]{}
+            child {
+                node [square node, label=right:{$\phi$ + \$10}]{}
+                edge from parent
+                node[above, rotate=-30] {Accept}}
+            child {
+              node [square node, label=right:{$\psi$}]{}
+                edge from parent
+                node[above, rotate=30] {Refuse}}
+            edge from parent
+              node[above, rotate=-30] {Accept}
+                }
+          child {                 
+            node [square node, label=right:{$\phi$}]{}
+                edge from parent
+                node[above, rotate=30] {Refuse}}
+          ;
+\end{tikzpicture}
+```
 
 Here's what goes wrong with this objection. When considering the first swap, the Conservative won't be comparing ψ and ϕ; rather they will be comparing holding ψ with the possibility of having a choice between having ϕ and having ψ + \$10. If they had the latter choice, they would choose ψ + \$10, hence the original choice is between ψ and ψ + \$10. That isn't much of a choice at all, they will clearly choose the ψ + \$10. That is, it is consistent with the Conservative rule to accept both trades.
 
