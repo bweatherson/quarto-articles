@@ -14,8 +14,8 @@ categories:
   - in progress
   - unpublished
 pdf-engine: xelatex
-csl: ../../../chicago-with-note.csl
-bibliography: ../../../brian-quarto.bib
+csl: ../../chicago-with-note.csl
+bibliography: ../../brian-quarto.bib
 execute:
   echo: false
   warning: false
@@ -33,7 +33,7 @@ format:
         text: |
           \noindent Published online in June 2024.
   docx:
-    reference-doc: ../../../quarto-articles-template.docx
+    reference-doc: ../../quarto-articles-template.docx
 ---
 
 ```{r}
@@ -200,7 +200,6 @@ main_article_ids <- main_article_ids |>
 
 main_bib <- main_article_ids |>
   left_join(philo_bib_fix, by = c("old" = "id")) |>
-  select(-longcite) |>
   filter(n >= 34)
 
 article_number <- nrow(main_bib)
@@ -482,10 +481,10 @@ kable(main_bib |> select(Articles = full_cite) |> rowid_to_column(var="n"))
 #| label: this-cannot-work
 
 # Note: Run this fragment before rendering document
-setwd("~/Documents/quarto-articles/posts/citations/raw-data")
+setwd("~/Documents/quarto-articles/posts/citations-raw-data")
 the_code <- c()
 
-for (the_year in 1956:2015){
+for (the_year in c(1956:1962, 1964:2015)){
 # Widely Cited Articles subsection
     the_code <- c(the_code,
                 "\n## ",
