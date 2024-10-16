@@ -1,0 +1,293 @@
+---
+params:
+  seed: 290890
+  cats: 5
+  rounds: 1000
+title: "Summary of an LDA"
+abstract: |
+  Input: Papers from _Philosophical Studies_ 1980-2019. Seed: 290890 Categories: 5. Iterations: 1000.
+date: October 15, 2024
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - lda summary
+format:
+  html: default
+format-links: [html]
+csl: ../../chicago-with-note.csl
+bibliography: 
+  - /Users/weath/Documents/citations-2024/autobib.bib
+  - /Users/weath/Documents/citations-2024/supplement.bib
+---
+
+```{r packages}
+#| echo: false
+#| warning: false
+
+for (ipkg in c("tidyverse", "tidytext", "tm", "topicmodels", "lsa")) {
+  if (!require(ipkg, character.only = TRUE)) {
+    install.packages(ipkg)
+    library(ipkg, character.only = TRUE)
+  }
+}
+```
+
+This is a summary of a model produced by running the LDA algorithm over the articles published in _Philosophical Studies_ from 1980-2019. I set it to generate five categories, because it seemed that the bulk of articles in _Philosophical Studies_ fell into one of Ethics, Language, Epistemology, Mind, or Metaphysics, each of them broadly construed. (So Ethics includes anything that would be naturally published in _Ethics_, including meta-ethics, and political philosophy.)
+
+_Philosophical Studies_ publishes little history of philosophy, and not much logic, so we didn't need categories for those. It also doesn't publish a great deal on aesthetics, or philosophy of religion. It does publish some philosophy of science. But most of the philosophy of science it publishes is either epistemology of science/formal epistemology, and hence in epistemology, or metaphysics of science, and hence in metaphysics. So five categories gives us a reasonable overview of what it publishes.
+
+The model assigns, to each article, a probability of being in each of the five categories. I'll say the article is **in** the category that is assigned highest probability.
+
+For each of the five categories, I've asked it to output these features. Note that the name of the category is mine; the model just does a five-way split, and then I describe it. The descriptions are based on what you see below.
+
+First, it lists the terms (i.e., words) that are most associated with the category.
+
+Second, it lists a similarity score. This is roughly a measure of how closely the classification of articles in the category resembles the classification of those articles (in _Philosophical Studies_ 1980-2019) cited by articles in the category. So I found the average classification of articles in the category, the average classification of the articles cited by articles in the category, turned each of those averages into five-dimensional vectors, and calculated the cosine of the angle between them. This is a reasonable measure of similarity, and as you can see, the numbers are high. This is no coincidence. I built many of these models, and this is the one with the highest average similarity score.
+
+Third, it lists the articles that it is most confident are in the category, in descending order of confidence.
+
+Fourth, it displays the full five-way classification for the twenty highest cited articles in the category. For this purpose I'm including citations in other philosophy journals (as indexed by Web of Science).
+
+Fifth, it displays the full five-way classification for articles at the intersection of that category with the other four categories. So you can see which articles it thinks are at the intersection of Ethics and Metaphysics, or Mind and Epistemology.
+
+After running through the five categories in this way, I've listed the articles the model was least confident about, and whose five-way classification was closest to a flat probability distribution.
+
+The databases I'm using switched from using first initials to first names in the mid-2000s. I've been manually adding first names, but I haven't completed doing this yet. That's why some authors just have initials, and others have full names.
+
+```{r catnames}
+#| echo: false
+
+catnames <- tribble(
+  ~topic, ~subject,
+  4, "Ethics",
+  5, "Language",
+  3, "Epistemology",
+  1, "Mind",
+  2, "Metaphysics",
+)
+```
+
+```{r loader}
+#| echo: false
+#| warning: false
+
+load("ps_cites.RData")
+load("ps_meta.RData")
+load("ps_join.RData")
+load("ps_to_ps.RData")
+load("common_ps_words.RData")
+
+load(
+  paste0(
+    "lda-models/ps_lda_s",
+    params$seed,
+    "_c",
+    params$cats,
+    "_r",
+    params$rounds,
+    ".RData"
+  )
+)
+```
+
+```{r process}
+#| echo: false
+#| warning: false
+
+  all_gamma <- tidy(my_lda, matrix = "gamma")  |>
+    left_join(catnames, by = "topic")
+  
+  all_classifications <- all_gamma |>
+    group_by(document) |>
+    top_n(1, gamma) |>
+    ungroup()
+  
+  all_titles_and_topics <- left_join(all_classifications,
+                                              ps_meta,
+                                              by = c("document" = "jstor_id"))
+  
+  phil_topics <- tidy(my_lda, matrix = "beta") |>
+    left_join(catnames, by = "topic")
+  
+  word_score <- phil_topics |>
+    group_by(term) |>
+    dplyr::summarise(avgbeta = mean(beta), sdbeta = sd(beta))
+  
+  busy_topics <- phil_topics |>
+    left_join(word_score, by = "term") |>
+    right_join(common_ps_words, by = c("term" = "ngram")) |>
+    mutate(score = (beta - avgbeta) * log(tn) / sdbeta)
+```
+
+```{r categorylists}
+#| echo: false
+
+all_classifications <- all_gamma |>
+  group_by(document) |>
+  top_n(1, gamma) |>
+  ungroup()
+
+meta_with_gamma <- ps_meta |>
+  left_join(all_classifications,
+            by = c("jstor_id" = "document"))
+
+gamma_sd <- all_gamma |>
+  group_by(document) |>
+  summarise(sd = sd(gamma))
+
+wide_gamma <- all_gamma |>
+  mutate(gamma = round(gamma, 3)) |>
+  pivot_wider(
+    id_cols = document,
+    names_from = subject,
+#    names_prefix = "t",
+    values_from = gamma
+  )
+
+wos_cites <- ps_meta |>
+  select(wos_id, cites)
+
+wos_gamma <- wide_gamma |>
+  left_join(ps_join, by = c("document" = "jstor_id")) |>
+  left_join(gamma_sd, by = "document") |>
+  left_join(select(meta_with_gamma, jstor_id, subject), by = c("document" = "jstor_id")) |>
+  select(wos_id,
+         Ethics,
+         Language,
+         Epistemology,
+         Mind,
+         Metaphysics,
+         sd,
+         subject) |>
+  mutate(Article = paste0(
+    "@",
+    str_replace(wos_id, ":", "")
+  )) |>
+  left_join(wos_cites, by = "wos_id") |>
+  arrange(-cites)
+
+cross_gamma <- all_gamma |>
+  ungroup() |>
+  left_join(
+    select(
+      all_classifications,
+      document,
+      subject
+    ),
+    by = "document"
+  ) |>
+  rename(first_subject= subject.y,
+         second_subject = subject.x) |>
+  filter(first_subject != second_subject) |>
+  group_by(first_subject, second_subject) |>
+  slice_max(order_by = gamma, n = 3) |>
+  left_join(ps_join, by = c("document" = "jstor_id")) |>
+  ungroup() |>
+  arrange(factor(second_subject, levels = catnames$subject))
+```
+
+```{r}
+#| echo: false
+#| output: asis
+
+  distinctive_articles <- all_titles_and_topics |>
+    ungroup() |>
+    group_by(subject) |>
+    slice_max(order_by = gamma, n = 15)
+  
+  for (tt in catnames$subject) {
+  active_topics <- busy_topics |>
+    filter(subject == tt) |>
+    ungroup() |>
+    slice_max(n = 20, score)
+  
+  active_articles <- meta_with_gamma |>
+    filter(subject == tt) |>
+    mutate(citation = paste0(
+      author,
+      " [-@",
+      str_replace(wos_id, ":", ""),
+      "] ",
+      "\"",
+      title,
+      "\""
+    )) |>
+    ungroup() |>
+    slice_max(n = 10, gamma)
+    
+  active_gamma <- all_gamma |>
+      filter(document %in% active_articles$jstor_id) |>
+      group_by(subject) |>
+      summarise(gamma = mean(gamma))
+    
+  cross_listed_articles <- filter(
+    cross_gamma,
+    first_subject == tt
+  )$wos_id
+  
+  cites_gamma <- ps_to_ps |>
+      filter(new %in% active_articles$jstor_id) |>
+      left_join(all_gamma,
+                by = c("old" = "document"),
+                relationship = "many-to-many"
+      ) |>
+      ungroup() |>
+      group_by(subject) |>
+      summarise(gamma = mean(gamma))
+    
+    sim_score <- as.numeric(
+      cosine(
+        active_gamma$gamma,
+        cites_gamma$gamma
+      )
+    )
+  
+  cat("# ", 
+      tt,
+      "\n\n")
+  cat("**Terms**: ")
+  cat(active_topics$term,
+      sep = ", ")
+  cat("\n\n")
+  cat("**Score**: ", sim_score, "\n\n")
+  cat("**Characteristic Articles**: \n\n - ")
+  cat(active_articles$citation, sep = "\n- ")
+  cat("\n\n")
+  cat("**Highly Cited Articles**: \n\n")
+  cat(sep = "\n", knitr::knit_child(quiet = TRUE, text = c(
+    "```{r}",
+    "#| echo: false",
+    sprintf("#| label: tbl-%s", tt),
+    sprintf("#| tbl-cap: Highly cited articles in %s", tt),
+    "knitr::kable(wos_gamma |> filter(subject == tt) |> select(Article, catnames$subject) |> slice(1:20)) ",
+    "```"
+  )))
+  cat(sep = "\n", knitr::knit_child(quiet = TRUE, text = c(
+    "```{r}",
+    "#| echo: false",
+    sprintf("#| label: tbl-cross-%s", tt),
+    sprintf("#| tbl-cap: Notable cross category articles in %s", tt),
+    "knitr::kable(wos_gamma |> filter(wos_id %in% cross_listed_articles) |> slice(match(cross_listed_articles, wos_id)) |> select(Article, catnames$subject)) ",
+    "```"
+  )))
+}
+```
+
+# Remainders
+
+Finally, it's helpful to see the articles that the model is most confused about. @tbl-confusing lists the articles with the lowest standard deviation across the probabilities for the various categories. Ideally, these should be articles that really don't fall neatly into any of the five categories, but I'll leave it for you to decide whether these articles fit the bill.
+
+```{r}
+#| label: tbl-confusing
+#| echo: false
+#| tbl-cap: "Articles the model is confused about."
+
+knitr::kable(wos_gamma |>
+  arrange(sd) |>
+  slice_min(order_by = sd, n = 20) |>
+  select(Article, catnames$subject))
+```
