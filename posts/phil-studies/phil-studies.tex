@@ -1,0 +1,398 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+    \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Trends in Philosophical Studies
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\setkomafont{descriptionlabel}{\normalfont\scshape\bfseries}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Trends in Philosophical Studies},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Trends in \emph{Philosophical Studies}}
+\author{Brian Weatherson}
+\date{2024}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+\emph{Philosophical Studies} has become one of the most important
+journals for work in several large topics in philosophy. This paper uses
+data from the word distributions in those papers, and the citations of
+the papers, to look at how it has changed over time, and how it became
+so central.
+\end{abstract}
+
+
+\setstretch{1.1}
+\section{Intro}\label{intro}
+
+TKTK
+
+\section{Sources}\label{sec-sources}
+
+This article is primarily based on data-driven analysis of articles
+published in philosophy journals, and in particular in
+\emph{Philosophical Studies}, from 1980 to 2019. The studies here are
+primarily based on two sources: citation data from Web of Science, and
+word lists from JSTOR.
+
+Through {[}University X{]} I downloaded the Web of Science (hereafter,
+WoS) Core Collection in XML format. Within it, I selected 100 prominent
+philosophy journals that WoS indexes. The journals I selected are, like
+\emph{Philosophical Studies} primarily English-language, analytic
+philosophy journals. I filtered the citations for just citations from
+and to those 100 journals. So what we're working with is citations of
+philosophy journals in philosophy journals.
+
+This is obviously a small subset of all citations. It excludes citations
+in academic journals in other fields, in books and edited volumes, and
+in many other places that Google Scholar indexes, such as dissertations,
+lecture notes, slides, and draft manuscripts. Losing that information is
+a cost, but there are three large upsides. First, these citations are
+much more accurate; I haven't found any false positives when using this
+filtered set, and only a handful of false negatives. Second, we can be
+more confident that our data set is relatively complete; finding a full
+list of philosophy journals is easier than finding a full list of edited
+volumes in philosophy. Third, by looking at citations internal to
+philosophy, we can get a sense of philosophy's self-image, and how it
+changes over time.
+
+There are a number of delicate methodological issues I've elided in that
+last paragraph; I'll go over these in more detail at the end in
+\textbf{?@sec-methodology}.
+
+The downloadable citation data is not particularly up to date. I am
+including citations beyond 2019, because it's helpful to get a sense of
+how some of these articles have been received in more recent years. But
+the data I have only goes through mid-2022. I'll often simply say 2022;
+but note that even that year is incomplete.
+
+The other source I used is JSTOR, and in particular the Data for
+Research (DfR) program that they provide through their Constellate
+project. This lets you download lists of the words used in various
+journal articles, along with a count of how often each word is
+used.\footnote{It also provides bigrams and trigrams, which I've
+  occasionally used.} It also provides word counts for the articles,
+which I have used in Section~\ref{sec-overview}. The words an author
+uses are a pretty good guide to what they are talking about; if the word
+`denotation' is used frequently, it's probably a philosophy of language
+article.
+
+\section{Overview}\label{sec-overview}
+
+Articles in \emph{Philosophical Studies} get cited a lot. Our first
+study is simply a count of citations in the 100 journals to articles
+published in the 100 journals between 1980 and 2019.
+Table~\ref{tbl-all-cites} shows the five journals with the largest
+number of citations.
+
+\emph{Philosophical Studies} is in first place on that list in part
+because it publishes so much. Table~\ref{tbl-all-articles} lists the top
+five journals by the number of articles they have published.
+
+Just publishing a lot of articles is no guarantee of having a lot of
+citations. TKTK. This makes sense. Citations tend to follow something
+like a log-normal distribution
+(\citeproc{ref-Brzezinski2015}{\textbf{Brzezinski2015?}}). The bulk of
+the citations come from a handful of highly cited articles. Publishing
+more articles
+
+\section{Articles}\label{articles}
+
+Notes - including things that JSTOR counts as book reviews Not including
+things that WOS counts as discussions This is, to put it mildly, a bit
+random; some precis are included, some aren't; some replies are
+included, some aren't. In general if the word `comment' appears in the
+title excluded, but it's a bit random. But going with them seems best.
+Alternative is to work through 100 other journals if we wanted an
+apples-to-apples comparison. Missing the supplement in 2013, which I
+don't understand, and was coded differently in the two databases
+
+\section{Studies}\label{studies}
+
+Number of articles Length of articles Number of articles over 10K, 15K,
+20K Average citations over the 100 journals - boring because can't
+compare Average citations compared to top 25 - more interesting Maybe
+redo that graph as a ratio
+
+\section{Comparisons}\label{comparisons}
+
+Articles with highest ratio of PS cites/general cites Articles with
+lowest ratio of PS cites/general cites Previously I just did that with
+articles published in PS; that seems wrong
+
+Hmm, this could be complicated. Study: For each decade find 20 most
+cited, and look at how often they are cited in PS.
+
+For 1980s, the low is 0 for Rawls (1980) and Dennett (1971). But Rawls
+is cited in Post (1984), under a variant name, and Dennett is cited in
+Lormond (1985), but to the reprint. Maybe just live with the messiness
+High five in 1980s are all language, or language-adjacent: Lewis (1979)
+(both de se and time's arrow), two Perry papers, and Donnellan
+
+For 1990s, the low is 0 for McDowell's Virtue and Reason. Is in
+Brighouse (1990), but the citation is incomplete and uses the wrong
+year. Oddly the third lowest is for Discrimination and Perceptual
+Knowledge, only 2/38. And this looks right. The highs in 1990s are still
+language based, though with metaphysics seeping in (Kim on
+supervenience, Lewis on Universals)
+
+For 2000s, lows include Cummins (1975) (which is hard to track, such a
+common name), Anderson (1999), and Mechanisms paper (2000). The highs
+are very epistemology based - Goldman is among them, and the two big
+contextualism papers by DeRose and Lewis. Obviously the editor at the
+time was also a prominent contextualist, but his papers are not cited in
+the journal at a particularly out of the ordinary rate. (There are many
+cases in history where editors are cited a lot, but this isn't one of
+them.) Just outside top 20, but Jackson and Chalmers has nearly 1/3 its
+cites in PS. Tracing back to Davies and Humberstone's original paper.
+Remarkably, Elusive Knowledge is most cited in the decade; normally this
+kind of calculation pushes towards less cited, high variance cases.
+
+For 2010s, still mechanisms, Anderson (1999), also Kripke (1975) are the
+low ones Top 5 is more varied, both in topic and time: Kolodny (2005),
+Pryor (2000), Lewis (1986), Frankfurt (1969), Jackson (1982). Could be
+result of publishing more papers, but striking that it's pulling these
+older papers in.
+
+\section{The LDA}\label{the-lda}
+
+Build the model Note the five categories Graph the trends Flag the
+methodology
+
+\section{Language}\label{language}
+
+Find the 40 most cited in each topic over the 40 years (i.e., most cited
+per year) Look how often they are cited in PS Look how often they are
+cited across the 100 See if the trends in PS track wider trends Find
+other journals that have similar trends (Analysis, PQ, AJP)
+
+\section{Metaphysics}\label{metaphysics}
+
+Note the two Schaffer papers, and differences in citing Schaffer
+(\citeproc{ref-WOS000368189400004}{2016}) Is that because little
+grounding There is some - see graph of words Maybe just count how
+`modal' vs `postmodal' the 2019 papers are Maybe do a small LDA of the
+metaphysics papers
+
+\section{Ethics}\label{ethics}
+
+Is there anything to say here? Does it go more political? Still not
+citing Anderson, but something?
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-WOS000368189400004}
+Schaffer, Jonathan. 2016. {``Grounding in the Image of Causation.''}
+\emph{Philosophical Studies} 173 (1): 49--100.
+
+\end{CSLReferences}
+
+
+
+\noindent Published online in October 2024.
+
+
+\end{document}
