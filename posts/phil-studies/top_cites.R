@@ -32,4 +32,16 @@ ggplot(citation_deciles, aes(x = year, y = cites, color = decile)) +
   geom_point(size = 1.5, alpha = 1.5) +
   geom_smooth(se = F, method = "loess", formula = 'y ~ x', linewidth = 0.1)
 
-ajp_annual_cites
+temp_ajp <- short_bib |>
+  filter(journal == "Australasian Journal Of Philosophy",
+         year >= 1980,
+         year <= 1984) |>
+  arrange(-cites)
+
+view(temp_ajp)
+
+short_bib |>
+  filter(year >= 1980, year <= 2019) |>
+  filter(journal %in% comparison_journals) |>
+  group_by(journal) |>
+  tally()
