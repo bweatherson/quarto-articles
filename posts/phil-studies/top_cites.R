@@ -31,3 +31,5 @@ citation_deciles <- short_bib |>
 ggplot(citation_deciles, aes(x = year, y = cites, color = decile)) + 
   geom_point(size = 1.5, alpha = 1.5) +
   geom_smooth(se = F, method = "loess", formula = 'y ~ x', linewidth = 0.1)
+
+ajp_annual_cites
