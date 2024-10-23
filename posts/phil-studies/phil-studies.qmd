@@ -448,13 +448,148 @@ ggplot(this_table,
 
 The height of the peak of the right-hand graph in @fig-quartiles-ps-vs-19 is striking. _Philosophical Studies_ was publishing a lot of articles, and at least a quarter of them are getting well into double-digit citations just in philosophy journals. This tells us that the influence _Philosophical Studies_ was having in philosophy changed, especially over the 2000s. To see how it changed, we need to look inside the journal.
 
-# Articles
+# History of _Philosophical Studies_ {#sec-articles}
 
-Notes - including things that JSTOR counts as book reviews
-Not including things that WOS counts as discussions
-This is, to put it mildly, a bit random; some precis are included, some aren't; some replies are included, some aren't. In general if the word 'comment' appears in the title excluded, but it's a bit random. But going with them seems best.
-Alternative is to work through 100 other journals if we wanted an apples-to-apples comparison.
-Missing the supplement in 2013, which I don't understand, and was coded differently in the two databases
+## Editorial History
+
+A change like we see in the early 2000s is often a sign of editorial change in the journal. This isn't the case at _Philosophical Studies_, which has had a remarkably stable editorial history.
+
+It was founded by Herbert Feigl and Wilfrid Sellars, both then at the University of Minnesota, in 1950, as the "first American journal expressly devoted to analytic philosophy" [@deVries2005 1-2]. They stayed as editors until Feigl's retirement in 1971, though after 1954 Sellars was listed as the first editor. At Feigl's retirement the journal moved from the University of Minnesota Press to Reidel, where it has stayed ever since.^[Springer is the current continuant of Reidel after several mergers and takeovers.] Sellars edited the journal alone until Keith Lehrer was brought on as associate editor in 1974, starting an association with the journal that would last nearly half a century. The next year Lehrer, who had just moved from Rochester to Arizona, became editor. He stayed in that role until 1982, having been joined by John Pollock (also at Rochester) in 1979. From 1982, Pollock was Editor-in-Chief, and Lehrer went back to being Associate Editor. In 1992 the journal moved 100 miles up I-10, as Stewart Cohen, then at Arizona State, took over as Editor.^[While the journal was at Arizona, at grad student assistant was recognised on the title page as an editorial assistant. Many prominent philosophers had this role over the years, including, in 1983, Stewart Cohen.] Cohen stayed as editor through the rest of the time covered in this study, eventually being an editor of the journal for longer than even Wilfrid Sellars. Thomas Blackson joined as book symposium editor in 2003. Jennifer Lackey and Wayne Davis, who would eventually take over from Cohen, joined as Associate Editors in 2014. In 2016 Cohen was made Editor-in-Chief, while Davis and Lackey were made Editors. None of these changes seem to line up with changes in the citation rate of the journal, so we'll have to look a little deeper to see what happened.
+
+## Publication Rate
+
+Unlike many other journals, _Philosophical Studies_ has had dramatic changes over the years in the number of papers, and number of pages, it publishes per year. The move from University of Minnesota Press to Reidel already led to a large expansion in the size of the journal. And the changes haven't stopped there.^[The studies here all use JSTOR data, not Web of Science, because JSTOR includes word counts. But I'm still using Web of Science's classifications of articles, so this includes some pieces that JSTOR considers to be book reviews.]
+
+We'll start with some basic quantity data about the journal. @fig-article-count-by-year shows how many articles _Philosophical Studies_ has published each year; @fig-word-count-by-year shows the total word count for the journal each year; @fig-word-max-by-year shows the count of the longest article each year; and @fig-word-quartiles shows the 25th, 50th, and 75th percentile article by word count for each year.
+
+```{r}
+#| label: article-summary-setup
+#| cache: true
+
+ps_meta <- read_csv("posts/phil-studies/PS-metadata.csv",
+                    show_col_types = FALSE) |>
+  filter(docSubType == "research-article" | docSubType == "book-review") |>
+  mutate(id = paste0("PS-", str_sub(id, start = 29))) |>
+  mutate(journal = "Philosophical Studies") |>
+  select(id, 
+         title, 
+         journal, 
+         year = publicationYear, 
+         num = issueNumber, 
+         volume = volumeNumber, 
+         author = creator, 
+         fpage = pageStart,
+         lpage = pageEnd,
+         words = wordCount) 
+
+ps_meta_binder <- ps_meta |>
+  select(id, volume, fpage) |>
+  select(jstor_id = id, volume, fpage)
+
+ps_papers <- philo_bib |>
+  filter(journal == "Philosophical Studies") |>
+  filter(year >= 1980) |>
+  filter(year <= 2019)
+
+ps_papers_binder <- ps_papers |>
+  select(wos_id = id, volume, fpage) |>
+  mutate(volume = as.numeric(volume)) |>
+  mutate(fpage = as.character(fpage))
+
+ps_join <- inner_join(
+  ps_meta_binder,
+  ps_papers_binder,
+  by = c("volume", "fpage")
+) |>
+  select(wos_id, jstor_id)
+
+ps_meta_filter <- ps_meta |>
+  filter(id %in% ps_join$jstor_id)
+
+article_count_by_year <- ps_meta_filter |>
+  group_by(year) |>
+  tally(name = "Articles")
+
+word_count_by_year <- ps_meta_filter |>
+  group_by(year) |>
+  summarise(wordcount = sum(words))
+
+word_max_by_year <- ps_meta_filter |>
+  group_by(year) |>
+  summarise(wordmax = max(words))
+
+word_quartile_by_year <- ps_meta_filter |>
+  group_by(year) |>
+  summarise(Q1 = round(quantile(words, 0.25),1),
+            Q2 = round(quantile(words, 0.5),1),
+            Q3 = round(quantile(words, 0.75),1),
+            .groups = "drop") |>
+  pivot_longer(cols = starts_with("Q"),
+               names_to = "statistic",
+               values_to = "value") |>
+  ungroup() |>
+  group_by(statistic) |>
+  mutate(rolling = slide_dbl(value, mean, .before = 4)) |>
+  ungroup()
+```
+
+```{r}
+#| label: fig-article-count-by-year
+#| fig-cap: "Number of articles published each year"
+
+ggplot(article_count_by_year,
+       aes(x = year, y = Articles)) +
+  geom_point() +
+  labs(x = element_blank(),
+       y = "Number of Articles") +
+  scale_x_continuous(breaks = c(1990, 2000, 2010)) +
+  scale_y_continuous(limits = c(0, 275))
+
+```
+
+```{r}
+#| label: fig-word-count-by-year
+#| fig-cap: "Number of words published each year"
+
+ggplot(word_count_by_year,
+       aes(x = year, y = wordcount)) +
+  geom_point() +
+  labs(x = element_blank(),
+       y = "Number of Words") +
+  scale_x_continuous(breaks = c(1990, 2000, 2010)) +
+  scale_y_continuous(labels = scales::scientific,
+                     limits = c(0, 2500000))
+
+```
+
+```{r}
+#| label: fig-word-max-by-year
+#| fig-cap: "Longest article published each year"
+
+ggplot(word_max_by_year,
+       aes(x = year, y = wordmax)) +
+  geom_point() +
+  labs(x = element_blank(),
+       y = "Number of Words") +
+  scale_x_continuous(breaks = c(1990, 2000, 2010)) +
+  scale_y_continuous(limits = c(0, 30000))
+
+```
+
+```{r}
+#| label: fig-word-quartiles
+#| fig-cap: "25th, 50th, and 75th percentile word lengths each year."
+
+ggplot(word_quartile_by_year,
+       aes(x = year, y = value, color = statistic)) +
+  geom_point() +
+  theme(legend.position = "none") +
+  labs(x = element_blank(),
+       y = "Word Count") +
+  scale_x_continuous(breaks = c(1990, 2000, 2010)) +
+  scale_y_continuous(limits = c(0, 12500)) +
+  geom_line(aes(x = year, y = rolling, color = statistic))
+```
 
 # Studies
 
