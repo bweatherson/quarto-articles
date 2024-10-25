@@ -158,7 +158,210 @@ journal_citation_rate <- left_join(
   arrange(desc(`Citation Rate`))
 ```
 
+```{r}
+#| label: moresetup
+#| cache: true
 
+ranked_journal_citation_rate <- journal_citation_rate |>
+  rowid_to_column(var = "Rank")
+
+comp_journal_count <- 20
+comp_tag <- paste0(
+  "Other top ",
+  comp_journal_count,
+  " journals"
+)
+
+first_year <- philo_bib |>
+  group_by(journal) |>
+  summarise(first_year = min(year)) |>
+  left_join(journal_citation_rate, by = c("journal" = "Journal")) |>
+  filter(first_year <= 1980) |>
+  arrange(-`Citation Rate`)
+
+comparison_journals <- first_year$journal[1:comp_journal_count]
+
+ps_comp_rate <- active_cites |>
+  ungroup() |>
+  group_by(old_year, cited_journal) |>
+  filter(old_journal %in% comparison_journals) |>
+  tally(name = "citations") |>
+  ungroup() |>
+  rename(year = old_year) |>
+  left_join(
+    philo_bib |>
+      filter(year >= 1980, year <= 2019,
+             journal %in% comparison_journals) |>
+      mutate(cited_journal = case_when(
+        journal == "Philosophical Studies" ~ "PS",
+        TRUE ~ "NPS")) |>
+      group_by(year, cited_journal) |>
+      tally(name = "articles"),
+    by = c("cited_journal", "year")) |>
+  mutate(rate = citations/articles) |>
+  ungroup() |>
+  group_by(cited_journal) |>
+  arrange(year) |>
+  mutate(slide_arts = slide_dbl(articles, sum, .before = 4),
+         slide_cites = slide_dbl(citations, sum, .before = 4),
+         slide_rate = slide_cites/slide_arts) 
+    
+
+ps_comp_rate_wide <- ps_comp_rate |>
+  pivot_wider(
+    id_cols = year,
+    names_from = cited_journal,
+    values_from = slide_rate) |>
+  mutate(comp = round(PS/NPS, 3))
+
+citation_count <- active_cites |>
+  group_by(old) |>
+  tally(name = "cites")
+
+short_bib <- philo_bib |>
+  select(id, year, displayauth, title, journal) |>
+  left_join(citation_count, by = c("id" = "old")) |>
+  replace_na(list(cites = 0))
+
+ps_top_cites <- short_bib |>
+  filter(journal == "Philosophical Studies") |>
+  slice_max(order_by = cites, n = 30) |>
+  arrange(-cites) |>
+  rowid_to_column(var = "Rank") |>
+  filter(year >= 2003, year <= 2007) |>
+  mutate(id = sub(":", "", id)) |>
+  mutate(Article = paste0(
+    "@",
+    sub(":", "", id)
+  )) |>
+  select(Rank, Article)
+
+ps_meta <- read_csv("posts/phil-studies/PS-metadata.csv",
+                    show_col_types = FALSE) |>
+  filter(docSubType == "research-article" | docSubType == "book-review") |>
+  mutate(id = paste0("PS-", str_sub(id, start = 29))) |>
+  mutate(journal = "Philosophical Studies") |>
+  select(id, 
+         title, 
+         journal, 
+         year = publicationYear, 
+         num = issueNumber, 
+         volume = volumeNumber, 
+         author = creator, 
+         fpage = pageStart,
+         lpage = pageEnd,
+         words = wordCount) 
+
+ps_meta_binder <- ps_meta |>
+  select(id, volume, fpage) |>
+  select(jstor_id = id, volume, fpage)
+
+ps_papers <- philo_bib |>
+  filter(journal == "Philosophical Studies") |>
+  filter(year >= 1980) |>
+  filter(year <= 2019)
+
+ps_papers_binder <- ps_papers |>
+  select(wos_id = id, volume, fpage) |>
+  mutate(volume = as.numeric(volume)) |>
+  mutate(fpage = as.character(fpage))
+
+ps_join <- inner_join(
+  ps_meta_binder,
+  ps_papers_binder,
+  by = c("volume", "fpage")
+) |>
+  select(wos_id, jstor_id)
+
+ps_meta_filter <- ps_meta |>
+  filter(id %in% ps_join$jstor_id)
+
+article_count_by_year <- ps_meta_filter |>
+  group_by(year) |>
+  tally(name = "Articles")
+
+word_count_by_year <- ps_meta_filter |>
+  group_by(year) |>
+  summarise(wordcount = sum(words))
+
+word_max_by_year <- ps_meta_filter |>
+  group_by(year) |>
+  summarise(wordmax = max(words))
+
+word_quartile_by_year <- ps_meta_filter |>
+  group_by(year) |>
+  summarise(Q1 = round(quantile(words, 0.25),1),
+            Q2 = round(quantile(words, 0.5),1),
+            Q3 = round(quantile(words, 0.75),1),
+            .groups = "drop") |>
+  pivot_longer(cols = starts_with("Q"),
+               names_to = "statistic",
+               values_to = "value") |>
+  ungroup() |>
+  group_by(statistic) |>
+  mutate(rolling = slide_dbl(value, mean, .before = 4)) |>
+  ungroup()
+
+issue_list <- read_csv("~/Documents/quarto-articles/posts/phil-studies/PS_Special.csv",
+                       show_col_types = FALSE)
+
+issue_count_by_year_type <- ps_papers |>
+  mutate(issue = case_when(
+    is.na(issue) ~ "S",
+    TRUE ~ issue
+  )) |>
+  group_by(volume, issue) |>
+  slice(1) |>
+  left_join(issue_list |> 
+              rename(volume = Volume, issue = Issue) |>
+              mutate(volume = as.character(volume)), by = c("volume", "issue")) |>
+  replace_na(list(Type = "Normal", Count = 1)) |>
+  ungroup() |>
+  arrange(year, volume, issue) |>
+  group_by(year, Type) |>
+  summarise(count = sum(Count), .groups = "drop")
+
+issue_count_by_year <- issue_count_by_year_type |>
+  group_by(year) |>
+  summarise(count = sum(count), .groups = "drop")
+
+issue_count_by_year_normal  <- issue_count_by_year_type |>
+  filter(Type == "Normal") |>
+  group_by(year) |>
+  summarise(count = sum(count), .groups = "drop")
+
+issue_count_by_year_abnormal  <- issue_count_by_year_type |>
+  filter(Type != "Normal") |>
+  group_by(year) |>
+  summarise(count = sum(count), .groups = "drop")
+
+issue_count_by_type <- issue_count_by_year_type |>
+  group_by(Type) |>
+  summarise(count = sum(count), .groups = "drop")
+
+issue_type_by_decade <- issue_count_by_year_type |>
+  mutate(Type = case_when(
+    Type == "Normal" ~ "Normal",
+    TRUE ~ "Special"),
+         Decade = paste0(floor(year/10),"0s")) |>
+  group_by(Decade, Type) |>
+  summarise(count = sum(count), .groups = "drop") |>
+  pivot_wider(id_cols = Decade,
+              names_from = Type,
+              values_from = count)
+
+issue_type_by_decade_expanded <- issue_count_by_year_type |>
+  mutate(Type = case_when(
+    Type == "Conference" ~ "Topic",
+    TRUE ~ Type),
+    Decade = paste0(floor(year/10),"0s")) |>
+  group_by(Decade, Type) |>
+  summarise(count = sum(count), .groups = "drop") |>
+  pivot_wider(id_cols = Decade,
+              names_from = Type,
+              values_from = count) %>%
+  replace(is.na(.), 0)
+```
 # Intro
 
 TKTK 
@@ -213,9 +416,6 @@ If we look not at total citations, but at citations per article as in @tbl-citat
 #| label: tbl-citation-rate
 #| tbl-cap: "Leading journals by citation rate (Articles published 1980-2019)."
 
-ranked_journal_citation_rate <- journal_citation_rate |>
-  rowid_to_column(var = "Rank")
-
 this_table <- bind_rows(
   ranked_journal_citation_rate |> slice(1:5),
   tibble(
@@ -254,55 +454,6 @@ In particular, in this section I'll compare _Philosophical Studies_ to a list of
 ```{r}
 #| label: fig-compare-cites-dots
 #| fig-cap: "Average citation rates for _Philosophical Studies_ and peer journals."
-
-comp_journal_count <- 20
-comp_tag <- paste0(
-  "Other top ",
-  comp_journal_count,
-  " journals"
-)
-
-first_year <- philo_bib |>
-  group_by(journal) |>
-  summarise(first_year = min(year)) |>
-  left_join(journal_citation_rate, by = c("journal" = "Journal")) |>
-  filter(first_year <= 1980) |>
-  arrange(-`Citation Rate`)
-
-comparison_journals <- first_year$journal[1:comp_journal_count]
-
-ps_comp_rate <- active_cites |>
-  ungroup() |>
-  group_by(old_year, cited_journal) |>
-  filter(old_journal %in% comparison_journals) |>
-  tally(name = "citations") |>
-  ungroup() |>
-  rename(year = old_year) |>
-  left_join(
-    philo_bib |>
-      filter(year >= 1980, year <= 2019,
-             journal %in% comparison_journals) |>
-      mutate(cited_journal = case_when(
-        journal == "Philosophical Studies" ~ "PS",
-        TRUE ~ "NPS")) |>
-      group_by(year, cited_journal) |>
-      tally(name = "articles"),
-    by = c("cited_journal", "year")) |>
-  mutate(rate = citations/articles) |>
-  ungroup() |>
-  group_by(cited_journal) |>
-  arrange(year) |>
-  mutate(slide_arts = slide_dbl(articles, sum, .before = 4),
-         slide_cites = slide_dbl(citations, sum, .before = 4),
-         slide_rate = slide_cites/slide_arts) 
-    
-
-ps_comp_rate_wide <- ps_comp_rate |>
-  pivot_wider(
-    id_cols = year,
-    names_from = cited_journal,
-    values_from = slide_rate) |>
-  mutate(comp = round(PS/NPS, 3))
 
 ggplot(ps_comp_rate |>
          left_join(
@@ -343,28 +494,6 @@ What's more useful is to look at how things changed in the mid-2000s. Part of th
 ```{r}
 #| label: tbl-top-mid-2000s
 #| tbl-cap: "Highly cited articles from 2003-2007."
-
-citation_count <- active_cites |>
-  group_by(old) |>
-  tally(name = "cites")
-
-short_bib <- philo_bib |>
-  select(id, year, displayauth, title, journal) |>
-  left_join(citation_count, by = c("id" = "old")) |>
-  replace_na(list(cites = 0))
-
-ps_top_cites <- short_bib |>
-  filter(journal == "Philosophical Studies") |>
-  slice_max(order_by = cites, n = 30) |>
-  arrange(-cites) |>
-  rowid_to_column(var = "Rank") |>
-  filter(year >= 2003, year <= 2007) |>
-  mutate(id = sub(":", "", id)) |>
-  mutate(Article = paste0(
-    "@",
-    sub(":", "", id)
-  )) |>
-  select(Rank, Article)
 
 kable(ps_top_cites)
 ```
@@ -454,84 +583,13 @@ The height of the peak of the right-hand graph in @fig-quartiles-ps-vs-19 is str
 
 A change like we see in the early 2000s is often a sign of editorial change in the journal. This isn't the case at _Philosophical Studies_, which has had a remarkably stable editorial history.
 
-It was founded by Herbert Feigl and Wilfrid Sellars, both then at the University of Minnesota, in 1950, as the "first American journal expressly devoted to analytic philosophy" [@deVries2005 1-2]. They stayed as editors until Feigl's retirement in 1971, though after 1954 Sellars was listed as the first editor. At Feigl's retirement the journal moved from the University of Minnesota Press to Reidel, where it has stayed ever since.^[Springer is the current continuant of Reidel after several mergers and takeovers.] Sellars edited the journal alone until Keith Lehrer was brought on as associate editor in 1974, starting an association with the journal that would last nearly half a century. The next year Lehrer, who had just moved from Rochester to Arizona, became editor. He stayed in that role until 1982, having been joined by John Pollock (also at Rochester) in 1979. From 1982, Pollock was Editor-in-Chief, and Lehrer went back to being Associate Editor. In 1992 the journal moved 100 miles up I-10, as Stewart Cohen, then at Arizona State, took over as Editor.^[While the journal was at Arizona, at grad student assistant was recognised on the title page as an editorial assistant. Many prominent philosophers had this role over the years, including, in 1983, Stewart Cohen.] Cohen stayed as editor through the rest of the time covered in this study, eventually being an editor of the journal for longer than even Wilfrid Sellars. Thomas Blackson joined as book symposium editor in 2003. Jennifer Lackey and Wayne Davis, who would eventually take over from Cohen, joined as Associate Editors in 2014. In 2016 Cohen was made Editor-in-Chief, while Davis and Lackey were made Editors. None of these changes seem to line up with changes in the citation rate of the journal, so we'll have to look a little deeper to see what happened.
+It was founded by Herbert Feigl and Wilfrid Sellars, both then at the University of Minnesota, in 1950, as the "first American journal expressly devoted to analytic philosophy" [@DeVries2005 1-2]. They stayed as editors until Feigl's retirement in 1971, though after 1954 Sellars was listed as the first editor. At Feigl's retirement the journal moved from the University of Minnesota Press to Reidel, where it has stayed ever since.^[Springer is the current continuant of Reidel after several mergers and takeovers.] Sellars edited the journal alone until Keith Lehrer was brought on as associate editor in 1974, starting an association with the journal that would last nearly half a century. The next year Lehrer, who had just moved from Rochester to Arizona, became editor. He stayed in that role until 1982, having been joined by John Pollock (also at Rochester) in 1979. From 1982, Pollock was Editor-in-Chief, and Lehrer went back to being Associate Editor. In 1992 the journal moved 100 miles up I-10, as Stewart Cohen, then at Arizona State, took over as Editor.^[While the journal was at Arizona, at grad student assistant was recognised on the title page as an editorial assistant. Many prominent philosophers had this role over the years, including, in 1983, Stewart Cohen.] Cohen stayed as editor through the rest of the time covered in this study, eventually being an editor of the journal for longer than even Wilfrid Sellars. Thomas Blackson joined as book symposium editor in 2003. Jennifer Lackey and Wayne Davis, who would eventually take over from Cohen, joined as Associate Editors in 2014. In 2016 Cohen was made Editor-in-Chief, while Davis and Lackey were made Editors. None of these changes seem to line up with changes in the citation rate of the journal, so we'll have to look a little deeper to see what happened.
 
 ## Publication Rate
 
 Unlike many other journals, _Philosophical Studies_ has had dramatic changes over the years in the number of papers, and number of pages, it publishes per year. The move from University of Minnesota Press to Reidel already led to a large expansion in the size of the journal. And the changes haven't stopped there.^[The studies here all use JSTOR data, not Web of Science, because JSTOR includes word counts. But I'm still using Web of Science's classifications of articles, so this includes some pieces that JSTOR considers to be book reviews.]
 
 We'll start with some basic quantity data about the journal. @fig-article-count-by-year shows how many articles _Philosophical Studies_ has published each year; @fig-word-count-by-year shows the total word count for the journal each year; @fig-word-max-by-year shows the count of the longest article each year; and @fig-word-quartiles shows the 25th, 50th, and 75th percentile article by word count for each year.
-
-```{r}
-#| label: article-summary-setup
-#| cache: true
-
-ps_meta <- read_csv("posts/phil-studies/PS-metadata.csv",
-                    show_col_types = FALSE) |>
-  filter(docSubType == "research-article" | docSubType == "book-review") |>
-  mutate(id = paste0("PS-", str_sub(id, start = 29))) |>
-  mutate(journal = "Philosophical Studies") |>
-  select(id, 
-         title, 
-         journal, 
-         year = publicationYear, 
-         num = issueNumber, 
-         volume = volumeNumber, 
-         author = creator, 
-         fpage = pageStart,
-         lpage = pageEnd,
-         words = wordCount) 
-
-ps_meta_binder <- ps_meta |>
-  select(id, volume, fpage) |>
-  select(jstor_id = id, volume, fpage)
-
-ps_papers <- philo_bib |>
-  filter(journal == "Philosophical Studies") |>
-  filter(year >= 1980) |>
-  filter(year <= 2019)
-
-ps_papers_binder <- ps_papers |>
-  select(wos_id = id, volume, fpage) |>
-  mutate(volume = as.numeric(volume)) |>
-  mutate(fpage = as.character(fpage))
-
-ps_join <- inner_join(
-  ps_meta_binder,
-  ps_papers_binder,
-  by = c("volume", "fpage")
-) |>
-  select(wos_id, jstor_id)
-
-ps_meta_filter <- ps_meta |>
-  filter(id %in% ps_join$jstor_id)
-
-article_count_by_year <- ps_meta_filter |>
-  group_by(year) |>
-  tally(name = "Articles")
-
-word_count_by_year <- ps_meta_filter |>
-  group_by(year) |>
-  summarise(wordcount = sum(words))
-
-word_max_by_year <- ps_meta_filter |>
-  group_by(year) |>
-  summarise(wordmax = max(words))
-
-word_quartile_by_year <- ps_meta_filter |>
-  group_by(year) |>
-  summarise(Q1 = round(quantile(words, 0.25),1),
-            Q2 = round(quantile(words, 0.5),1),
-            Q3 = round(quantile(words, 0.75),1),
-            .groups = "drop") |>
-  pivot_longer(cols = starts_with("Q"),
-               names_to = "statistic",
-               values_to = "value") |>
-  ungroup() |>
-  group_by(statistic) |>
-  mutate(rolling = slide_dbl(value, mean, .before = 4)) |>
-  ungroup()
-```
 
 ```{r}
 #| label: fig-article-count-by-year
