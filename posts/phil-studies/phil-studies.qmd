@@ -459,7 +459,7 @@ It used to be common for philosophy colloquia to include papers that were read o
 
 Everything I've said so far is about _articles_ in _Philosophical Studies_. As I'll go over in @sec-what-is-an-article, this is a less clear category than we might like. To get to why that's so, I'll first go over the sources I'm using.
 
-## Special Issues
+## Special Issues {#sec-special-issues}
 
 _Philosophical Studies_ has had many special issues, especially since the mid-1990s. These fall into four main categories. The first three are papers from three long-running conferences that _Philosophical Studies_ published selected papers from:
 
@@ -541,7 +541,9 @@ citation_with_type <- ps_papers |>
               rename(volume = Volume, issue = Issue) |>
               mutate(volume = as.character(volume)) |>
               mutate(Type = case_when(
-                Type == "Conference" ~ "Topic",
+                Type == "Conference" ~ "One-off",
+                Type == "Topic" ~ "One-off",
+                Type == "Bellingham" ~ "BSPC",
                 TRUE ~ Type)
                      ), 
             by = c("volume", "issue")) |>
@@ -554,12 +556,107 @@ citation_with_type <- ps_papers |>
 citation_by_type <- citation_with_type |>
   ungroup() |>
   group_by(Type) |>
-  summarise(cites = round(mean(cites),1))
+    summarise(Median = round(quantile(cites, 0.5),1),
+            Q3 = round(quantile(cites, 0.75),1),
+            Mean = round(mean(cites),1)) |>
+  arrange(-Mean)
 
 citation_by_type_decade <- citation_with_type |>
   mutate(Decade = paste0(floor(year/10),"0s")) |>
   group_by(Type, Decade) |>
   summarise(cites = round(mean(cites),1), .groups = "drop")
+```
+
+```{r}
+#| label: tibbles-for-special
+#| cache: true
+
+current_articles <- short_bib |>
+  filter(journal %in% comparison_journals,
+         journal != "Philosophical Studies") |>
+  mutate(cited_journal = "other") |>
+  bind_rows(short_bib |>
+              filter(journal == "Philosophical Studies") |>
+              mutate(cited_journal = "ps")) |>
+  group_by(cited_journal, year) |>
+  filter(year >= 1980, year <= 2019)
+
+journal_list <- (current_articles |>
+                   group_by(cited_journal) |>
+                   tally())$cited_journal
+
+third_quartile <- tribble(
+  ~cited_journal, ~year, ~q3
+)
+
+for (the_cited_journal in journal_list){
+  for (the_year in 1980:2019){
+    temp <- current_articles |>
+      filter(cited_journal == the_cited_journal,
+             year <= the_year + 2,
+             year >= the_year - 2)
+    third_quartile <- third_quartile |>
+      add_row(
+        cited_journal = the_cited_journal,
+        year = the_year,
+        q3 = quantile(temp$cites, prob = 0.75)
+      )
+  }
+}
+
+citation_with_all_type <- ps_papers |>
+  select(id, year, displayauth, title, volume, issue) |>
+  left_join(issue_list |> 
+              rename(volume = Volume, issue = Issue) |>
+              mutate(volume = as.character(volume)), 
+            by = c("volume", "issue")) |>
+  select(-Count) |>
+  left_join(citation_count, by = c("id" = "old")) |>
+  replace_na(list(
+    Type = "Normal",
+    cites = 0))
+
+for (the_year in 1980:2019){
+  temp <- citation_with_all_type |>
+    filter(Type == "Normal",
+           year <= the_year + 2,
+           year >= the_year - 2)
+  third_quartile <- third_quartile |>
+    add_row(
+      cited_journal = "psnorm",
+      year = the_year,
+      q3 = quantile(temp$cites, prob = 0.75)
+    )
+}
+
+for (the_year in 1980:2019){
+  temp <- citation_with_all_type |>
+    filter(Type == "Normal" | Type == "Topic",
+           year <= the_year + 2,
+           year >= the_year - 2)
+  third_quartile <- third_quartile |>
+    add_row(
+      cited_journal = "psnoconf",
+      year = the_year,
+      q3 = quantile(temp$cites, prob = 0.75)
+    )
+}
+
+third_quartile_wide <- third_quartile |>
+  pivot_wider(
+    id_cols = year,
+    names_from = cited_journal,
+    values_from = q3) |>
+  mutate(psrat = ps/other,
+         normrat = psnorm/other,
+         xconfrat = psnoconf/other)
+
+third_quartile_ratio <- third_quartile_wide |>
+  select(1, 6:8) |>
+  pivot_longer(
+    cols = ends_with("rat"),
+    names_to = "type",
+    values_to = "ratio")
 ```
 
 ```{r}
@@ -606,11 +703,11 @@ There is one place we're I've overridden WoS's classifications. It has categorie
 
 There is one last tricky category to flag. The special issues on the Oberlin Colloquium sometimes include commentaries on the main articles. These are mostly not counted as articles, and I think rightly so. Occasionally, as when Andy @Egan2011 was the commentator on an important paper by Tamar Szabò @WOS000295087100003, the commentary gets a reasonable number of citations. But mostly these commentaries are rarely if ever cited, and I think they aren't really what most people think of as journal articles. So I've been happy to exclude them.^[If these aren't articles, what are they? WoS calls Egan's paper 'Editorial-Matter'. That's wrong, but I'm not sure what I would say in their position.]
 
-# Inbound Citations {#sec-overview}
+# Outbound Citations {#sec-overview}
 
 ## Overview of Citations {#sec-citations-overview}
 
-Articles in _Philosophical Studies_ get cited a lot. Our first study is simply a count of citations in the 100 journals to articles published in the 100 journals between 1980 and 2019. @tbl-all-cites shows the five journals with the largest number of citations.
+Articles in _Philosophical Studies_ get cited a lot. @tbl-all-cites shows the five journals with the largest number of citations of articles published between 1980 and 2019 in the 100 journals we're looking at.
 
 ```{r}
 #| label: tbl-all-cites
@@ -634,7 +731,7 @@ kable(
 )
 ```
 
-_Synthese_ has 20% more articles, but 25% fewer citations. The other three journals on that list are somewhat special cases. Two of them get a lot of citations outside of philosophy, and this is only a study of citations in philosophy journals, and _Analysis_ only publishes short papers, and so while they get a lot of citations per page, they don't get as many citations per article as other journals.
+_Synthese_ has 20% more articles, but 25% fewer citations. The other three journals on @tbl-all-articles are somewhat special cases. Two of them get a lot of citations outside of philosophy, and this is only a study of citations in philosophy journals. _Analysis_ only publishes short papers, and so while they get a lot of citations per page, they don't get as many citations per article as other journals.^[Recall that in @sec-what-is-an-article I noted that some _Analysis_ style papers in other journals are not even counted because they are classified as Discussions or Notes, not Articles. These excluded articles are cited at much lower rates than the typical _Analysis_ article.]
 
 Still, we'd expect on general principles that raw volume of publication wouldn't make a big difference. Citations tend to follow something like a log-normal distribution [@Brzezinski2015]. The bulk of the citations come from a handful of highly cited articles. Publishing more articles helps, but is no guarantee. 
 
@@ -659,9 +756,9 @@ kable(
 
 I've included _Philosophy and Phenomenological Research_ there because, like _Philosophical Studies_, it publishes many book symposia. And, like _Philosophical Studies_, the articles in these symposia are typically not cited very much.
 
-## Large Trend
+## Large Trend {#sec-large-trend}
 
-Even with those possible errors in mind, it is striking to look at the step-change in citations to _Philosophical Studies_ that occurred in the mid-2000s. Cross-temporal comparisons of citations are hard because changes in the number of journals, the number of articles in those journals, and citation norms, make most comparisons tricky. To try to screen off some of that noise, I'll mostly compare citations to articles published in _Philosophical Studies_ to citations to other articles published at the same time.
+There is a striking step-change in citations to _Philosophical Studies_ that occurred in the mid-2000s. Cross-temporal comparisons of citations are hard because changes in the number of journals, the number of articles in those journals, and citation norms, make most comparisons tricky. To try to screen off some of that noise, I'll mostly compare citations to articles published in _Philosophical Studies_ to citations to other articles published at the same time.
 
 In particular, in this section I'll compare _Philosophical Studies_ to a list of nineteen other prominent philosophy journals. From the one hundred journals that I'm primarily looking at, I selected the twenty that have the highest rate of citations per published article, and which Web of Science has indexed every year since 1980.^[The last constraint notably rules out _Philosophers' Imprint_ and _Mind and Language_.] That list includes _Philosophical Studies_, and the other nineteen journals are the comparison class.
 
@@ -705,6 +802,8 @@ The difference in @fig-compare-cites-rolling between the earlier and recent year
 
 My very anecdotal impression is that _Philosophical Studies_ is viewed as being more prestigious by younger philosophers than by older philosophers. A toy model of prestige, where it is heavily anchored to how often a journal was cited when one was in graduate school, would explain that difference. That said, I have not done (and am not going to do) a careful study of comparative prestige judgments to know if there is even an effect here to find, or whether my informal sample was not reflective of the wider population.
 
+## Means, Medians and Quartiles {#sec-means-and-ways}
+
 In some ways looking at the averages here understates the impact of _Philosophical Studies_ in the 2000s. Average numbers of citations can be very misleading. @tbl-quartiles-two-journals compares five year periods from two journals: the _Australasian Journal of Philosophy_ (AJP) from 1980-1984, and _Philosophical Studies_ (PS) from 2003-2007. Q1, Q2 and Q3 are the 25th, 50th, and 75th percentile citations, and Mean is the average number of citations.
 
 ```{r}
@@ -744,9 +843,9 @@ this_table <- short_bib |>
   )
 ```
 
-The mean number of citations per article is higher for AJP 1980-1984 than for _Philosophical Studies_ 2003-2007. But that's because of the `r sum(temp_ajp$cites)` citations to articles from the AJP in those years, `sum(filter(temp_ajp, displayauth == "David Lewis")$cites)` of them are to five articles by David Lewis. The citations to _Philosophical Studies_ are much more widely spread around. Comparing the 75th percentiles is more indicative of what's being published in the journals.
+The mean number of citations per article is higher for AJP 1980-1984 than for _Philosophical Studies_ 2003-2007. But that's because of the `r sum(temp_ajp$cites)` citations to articles from the AJP in those years, `r sum(filter(temp_ajp, displayauth == "David Lewis")$cites)` of them are to five articles by David Lewis. The citations to _Philosophical Studies_ are much more widely spread around. Comparing the 75th percentiles is more indicative of what's being published in the journals.
 
-Part of the difference between AJP 1980-1984 and _Philosophical Studies_ 2003-2007 is a general trend in the discipline to spread around the citations more. But it's not just that. _Philosophical Studies_ stands out for how widely spread around its citations are. @fig-quartiles-ps-vs-19 shows this. I've taken the same 19 journals that I used in @fig-compare-cites-rolling, and calculated the same quartile statistics for _Philosophical Studies_, and for those 19 journals collectively, each year from 1980 to 2019. The individual year numbers are rather noisy, so I've also included a five-year rolling average.
+Part of the difference between AJP 1980-1984 and _Philosophical Studies_ 2003-2007 is a general trend in the discipline to spread around the citations more. But it's not just that. _Philosophical Studies_ stands out for how widely spread around its citations are. @fig-quartiles-ps-vs-19 shows this. I've taken the same 19 journals that I used in @fig-compare-cites-rolling, and calculated the same quartile statistics for _Philosophical Studies_, and for those 19 journals collectively, for five-year moving windows each year from 1980 to 2019. The individual year numbers are rather noisy, so I've also included a five-year rolling average.
 
 ```{r}
 #| label: fig-quartiles-ps-vs-19
@@ -786,17 +885,12 @@ ggplot(this_table,
   geom_line(aes(x = year, y = rolling, color = statistic))
 ```
 
-The height of the peak of the right-hand graph in @fig-quartiles-ps-vs-19 is striking. _Philosophical Studies_ was publishing a lot of articles, and at least a quarter of them are getting well into double-digit citations just in philosophy journals. This tells us that the influence _Philosophical Studies_ was having in philosophy changed, especially over the 2000s. To see how it changed, we need to look inside the journal.
+The height of the peak of the right-hand graph in @fig-quartiles-ps-vs-19 is striking. _Philosophical Studies_ was publishing a lot of articles, and at least a quarter of them are getting well into double-digit citations just in philosophy journals. This tells us that the influence _Philosophical Studies_ was having in philosophy changed, especially over the 2000s.
 
-# History of _Philosophical Studies_ {#sec-articles}
+## Citations of Special Issues {#sec-citations-of-special-issues}
 
-## Editorial History
 
-A change like we see in the early 2000s is often a sign of editorial change in the journal. This isn't the case at _Philosophical Studies_, which has had a remarkably stable editorial history.
 
-It was founded by Herbert Feigl and Wilfrid Sellars, both then at the University of Minnesota, in 1950, as the "first American journal expressly devoted to analytic philosophy" [@DeVries2005 1-2]. They stayed as editors until Feigl's retirement in 1971, though after 1954 Sellars was listed as the first editor. At Feigl's retirement the journal moved from the University of Minnesota Press to Reidel, where it has stayed ever since.^[Springer is the current continuant of Reidel after several mergers and takeovers.] Sellars edited the journal alone until Keith Lehrer was brought on as associate editor in 1974, starting an association with the journal that would last nearly half a century. The next year Lehrer, who had just moved from Rochester to Arizona, became editor. He stayed in that role until 1982, having been joined by John Pollock (also at Rochester) in 1979. From 1982, Pollock was Editor-in-Chief, and Lehrer went back to being Associate Editor. In 1992 the journal moved 100 miles up I-10, as Stewart Cohen, then at Arizona State, took over as Editor.^[While the journal was at Arizona, at grad student assistant was recognised on the title page as an editorial assistant. Many prominent philosophers had this role over the years, including, in 1983, Stewart Cohen.] Cohen stayed as editor through the rest of the time covered in this study, eventually being an editor of the journal for longer than even Wilfrid Sellars. Thomas Blackson joined as book symposium editor in 2003. Jennifer Lackey and Wayne Davis, who would eventually take over from Cohen, joined as Associate Editors in 2014. In 2016 Cohen was made Editor-in-Chief, while Davis and Lackey were made Editors. None of these changes seem to line up with changes in the citation rate of the journal, so we'll have to look a little deeper to see what happened.
-
-## Publication Rate
 
 
 # Studies
