@@ -1,7 +1,6 @@
-require(tidyverse)
-require(slider)
+require(tidyverse, slider)
 
-load("~/Documents/citations-2025/philo_bib.RData")
+#load("~/Documents/citations-2025/philo_bib.RData")
 
 comp_journal_count <- 20
 comp_tag <- paste0(

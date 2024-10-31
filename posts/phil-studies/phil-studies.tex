@@ -24,9 +24,9 @@
 \usepackage{lmodern}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
 Bold]{EB Garamond Math}
-  \setsansfont[]{Europa-Bold}
+    \setsansfont[]{Europa-Bold}
   \setmathfont[]{Garamond-Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -42,14 +42,28 @@ marginparsep=0in]{geometry}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{3}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
 \providecommand{\tightlist}{%
@@ -181,10 +195,12 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
+
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -192,6 +208,7 @@ marginparsep=0in]{geometry}
   pdfauthor={Brian Weatherson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Trends in \emph{Philosophical Studies}}
 \author{Brian Weatherson}
@@ -207,39 +224,281 @@ the papers, to look at how it has changed over time, and how it became
 so central.
 \end{abstract}
 
+
 \setstretch{1.1}
-\section{Intro}\label{intro}
+\section{Introduction}\label{sec-introduction}
 
-TKTK Weatherson (\citeproc{ref-Weatherson2003}{2003})
+\emph{Philosophical Studies} is the most cited journal in other
+philosophy journals in recent times, so it is worthy of study both in
+its own right, and as a mirror of broader trends in philosophy. This
+paper mixes two techniques, topic modeling and citation analysis, to
+look at the nature of \emph{Philosophical Studies}, and how it has
+changed over time, from 1980 to 2019.
 
-\section{Sources}\label{sec-sources}
+In the first half of the paper, I look at the growth the citation rate
+(i.e., number of citations per article) in \emph{Philosophical Studies}.
+If we take its peers to be the twenty philosophy journals with the
+highest citation rates over the last forty years, it has gone from
+having a citation rate 10-20 percent below the average, to a rate 10-20
+percent above the average. And it's done this despite increasing its
+publication volume, which one would normally expect to decrease citation
+rate. This is explained in part by the move to publishing more special
+issues, with the special issues from the Bellingham Summer Philosophy
+Conference being particularly important, and in part by the topic mix in
+\emph{Philosophical Studies} changing in ways that prefigured changes in
+the broader philosophical community.
 
-This article is primarily based on data-driven analysis of articles
-published in philosophy journals, and in particular in
-\emph{Philosophical Studies}, from 1980 to 2019. The studies here are
-primarily based on two sources: citation data from Web of Science, and
-word lists from JSTOR.
+This leads to the second half of the paper, on just how the topic mix of
+the journal changed over the years. The short version of those changes
+is shown in \textbf{?@fig-five-topics}.
+
+In the late twentieth century, \emph{Philosophical Studies} was focussed
+on philosophy of language, and in particular on core analytic questions
+about reference and description. These were central to philosophy in the
+1970s after \emph{Naming and Necessity}, and stayed central to graduate
+education at top schools well into the twenty-first century. But the
+focus of other journals moved away from these questions possibly a bit
+earlier than \emph{Philosophical Studies} did.
+
+After the turn of the century, the journal moved into two topics that
+did not hurt its citation rates. First, it was part of the enormous
+discussion on epistemology, and in particular on contextualism in
+epistemology, in the 2000s. Second, in the 2010s, it, along with much of
+the rest of the discipline, moved more strongly into social philosophy.
+
+One notable way in which \emph{Philosophical Studies} bucked a trend in
+philosophy is that it did not move heavily into work on grounding. As
+you can see in \textbf{?@fig-five-topics}, this wasn't because it moved
+away from metaphysics more broadly. But is has, more than most journals,
+resisted the turn to what Ted
+(\citeproc{ref-Sider2021}{\textbf{Sider2021?}}) calls `postmodal
+metaphysics'.
+
+\section{Overview}\label{sec-overview}
+
+\subsection{Editorial History}\label{editorial-history}
+
+\emph{Philosophical Studies} was founded by Herbert Feigl and Wilfrid
+Sellars, both then at the University of Minnesota, in 1950, as the
+``first American journal expressly devoted to analytic philosophy''
+(\citeproc{ref-DeVries2005}{\textbf{DeVries2005?}}). They stayed as
+editors until Feigl's retirement in 1971, though after 1954 Sellars was
+listed as the first editor. At Feigl's retirement the journal moved from
+the University of Minnesota Press to Reidel, where it has stayed ever
+since.\footnote{Springer is the current continuant of Reidel after
+  several mergers and takeovers.} Sellars edited the journal alone until
+Keith Lehrer was brought on as associate editor in 1974, starting an
+association with the journal that would last nearly half a century.
+
+In 1975 Lehrer, who had just moved from Rochester to Arizona, became
+editor. He stayed in that role until 1982, having been joined by John
+Pollock (also at Arizona) in 1979. From 1982, Pollock was
+Editor-in-Chief, and Lehrer went back to being Associate Editor.
+
+In 1992 the journal moved 100 miles up I-10, as Stewart Cohen, then at
+Arizona State, took over as Editor.\footnote{While the journal was at
+  Arizona, at grad student assistant was recognised on the title page as
+  an editorial assistant. Many prominent philosophers had this role over
+  the years, including, in 1983, Stewart Cohen.} Cohen stayed as editor
+through the rest of the time covered in this study, eventually being an
+editor of the journal for longer than even Wilfrid Sellars.
+
+Thomas Blackson joined as book symposium editor in 2003. In 2010, Cohen
+moved to the University of Arizona, and so the journal was edited out of
+Tuscon for a second time. Jennifer Lackey and Wayne Davis, who would
+eventually take over from Cohen, joined as Associate Editors in 2014. In
+2016 Cohen was made Editor-in-Chief, while Davis and Lackey became
+Editors, and that was the arrangement that persisted through 2019, the
+end of the focus of this paper.
+
+There are three things about this editorial history that will become
+important in what follows. One is that the names here include several of
+the most important epistemologists of the last half century. A second is
+that the journal has had a very stable editorial history; a summary like
+this for most other peer journals would take twice as long to write. And
+the third is that the biggest single change, the transition from John
+Pollock to Stewart Cohen as Editor in 1992, does not seem to have had an
+immediate impact on the journal. You see dramatic changes straight away
+at \emph{Mind} when G.~E.~Moore takes over in 1921, and again when
+Gilbert Ryle takes over in 1947.\footnote{See
+  (\citeproc{ref-Lewy1976}{\textbf{Lewy1976?}}) on Moore, and
+  \emph{include citation from LDA} on Ryle.} The effects of the switch
+from Pollock to Cohen are much more delayed.
+
+\subsection{Articles}\label{articles}
+
+\emph{Philosophical Studies} increased its output considerably when it
+moved to Reidel, and then increased it again between 1980 and 2019.
+Figure~\ref{fig-article-count-by-year} shows how many articles
+\emph{Philosophical Studies} has published each year;
+Figure~\ref{fig-word-count-by-year} shows the total word count for the
+journal each year; Figure~\ref{fig-word-max-by-year} shows the count of
+the longest article each year; and Figure~\ref{fig-word-quartiles} shows
+the 25th, 50th, and 75th percentile article by word count for each year.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{phil-studies_files/figure-pdf/fig-article-count-by-year-1.pdf}
+
+}
+
+\caption{\label{fig-article-count-by-year}Number of articles published
+each year}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{phil-studies_files/figure-pdf/fig-word-count-by-year-1.pdf}
+
+}
+
+\caption{\label{fig-word-count-by-year}Number of words published each
+year}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{phil-studies_files/figure-pdf/fig-word-max-by-year-1.pdf}
+
+}
+
+\caption{\label{fig-word-max-by-year}Longest article published each
+year}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{phil-studies_files/figure-pdf/fig-word-quartiles-1.pdf}
+
+}
+
+\caption{\label{fig-word-quartiles}25th, 50th, and 75th percentile word
+lengths each year.}
+
+\end{figure}%
+
+Some of these changes reflect wider disciplinary changes, but others do
+not. Most journals have a much more stable publication rate, though
+there is more variation in commercially published journals. Articles
+have been getting longer all across philosophy. What's striking here is
+the 25th percentile rising to over 8000 words by the end of the 2010s.
+
+It used to be common for philosophy colloquia to include papers that
+were read out by the author. This was a bad practice, and it's been
+mostly gone for several years. But starting in the mid-2010s it became
+an impractical practice. No one was writing papers that even could be
+read out in the length of a typical colloquium slot.
+
+Everything I've said so far is about \emph{articles} in
+\emph{Philosophical Studies}. As I'll go over in
+Section~\ref{sec-what-is-an-article}, this is a less clear category than
+we might like. To get to why that's so, I'll first go over the sources
+I'm using.
+
+\subsection{Special Issues}\label{sec-special-issues}
+
+\emph{Philosophical Studies} has had many special issues, especially
+since the mid-1990s. These fall into four main categories. The first
+three are papers from three long-running conferences that
+\emph{Philosophical Studies} published selected papers from:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The APA Pacific Divsion
+\item
+  The Oberlin Colloquium
+\item
+  The Bellingham Summer Philosophy Conference (BSPC)
+\end{enumerate}
+
+The fourth is a less unified set of one-off issues, either on a special
+topic, or, in two cases, conferences that \emph{Philosophical Studies}
+published once but did not continue with. I'll call all of these
+\textbf{One-off} issues.
+
+Often these were double, or occasionally triple, issues. I'm counting
+these as 2, or 3, issues, because provides a better sense of what
+proportion of the papers in a year are from special issues. As
+Table~\ref{tbl-issues-by-decade} shows, the special issues become a big
+part of what \emph{Philosophical Studies} does in the 1990s.
+
+\begin{longtable}[]{@{}lrrrr@{}}
+
+\caption{\label{tbl-issues-by-decade}How many of each type of special
+issue were published each decade.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Type & 1980s & 1990s & 2000s & 2010s \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Normal & 62 & 79 & 111 & 107 \\
+One-off & 4 & 14 & 13 & 10 \\
+APA Pacific & 0 & 18 & 12 & 10 \\
+Oberlin & 0 & 6 & 5 & 4 \\
+BSPC & 0 & 0 & 8 & 5 \\
+
+\end{longtable}
+
+The special issues differ from the normal issues in some striking ways,
+so it will be helpful to keep their presence in mind.
+
+\section{Methods}\label{sec-methods}
+
+\subsection{Sources}\label{sec-sources}
+
+The studies here are primarily based on two sources: citation data from
+Web of Science, and word lists from JSTOR.
 
 Through {[}University X{]} I downloaded the Web of Science (hereafter,
 WoS) Core Collection in XML format. Within it, I selected 100 prominent
 philosophy journals that WoS indexes. The journals I selected are, like
 \emph{Philosophical Studies} primarily English-language, analytic
 philosophy journals. I filtered the citations for just citations from
-and to those 100 journals. So what we're working with is citations of
-philosophy journals in philosophy journals.
+and to those 100 journals. WoS has a special way of recording citations
+in indexed articles to other articles that it has indexed. These records
+are easy to extract, and are considerably more reliable than citation
+records in general.\footnote{That's not to say they are perfect. They
+  certainly have false negatives, especially when there are any errors
+  in the original citation. As
+  (\citeproc{ref-Petrovich2023}{\textbf{Petrovich2023?}}) notes, they
+  are more reliable when the citations are in a bibliography than when
+  they are in footnotes. They also do badly with supplements. So for
+  this study I've excluded all the supplemenmts to \emph{Noûs}, i.e.,
+  those issues of \emph{Philosophical Perspectives} and
+  \emph{Philosophical Issues} which were listed as supplements to
+  \emph{Noûs}. I did include the supplemental issue \emph{Philosophical
+  Studies} issued in 2013, because the data there looked reliable
+  enough.} What follows uses just those citations. So it is citations
+from indexed journals to indexed journals, where WoS recognised that
+both the cited and citing journal were in its database.
 
 This is obviously a small subset of all citations. It excludes citations
 in academic journals in other fields, in books and edited volumes, and
 in many other places that Google Scholar indexes, such as dissertations,
 lecture notes, slides, and draft manuscripts. Losing that information is
 a cost, but there are three large upsides. First, these citations are
-much more accurate; I haven't found any false positives when using this
-filtered set, and only a handful of false negatives. Second, we can be
-more confident that our data set is relatively complete; finding a full
-list of philosophy journals is easier than finding a full list of edited
-volumes in philosophy. Third, by looking at citations internal to
-philosophy, we can get a sense of philosophy's self-image, and how it
-changes over time.
+much more accurate. Second, we can be more confident that our data set
+is relatively complete; finding a full list of philosophy journals is
+easier than finding a full list of edited volumes in philosophy. Third,
+by looking at citations internal to philosophy, we can get a sense of
+philosophy's self-image, and how it changes over time.
 
 The downloadable citation data is not particularly up to date. I am
 including citations beyond 2019, because it's helpful to get a sense of
@@ -258,15 +517,76 @@ uses are a pretty good guide to what they are talking about; if the word
 `denotation' is used frequently, it's probably a philosophy of language
 article.
 
-\section{Inbound Citations}\label{sec-overview}
+\subsection{Articles?}\label{sec-what-is-an-article}
+
+I said I'm talking about articles here, but what exactly is an
+\emph{article}? A more helpful question is, which things that philosophy
+journals publish are not articles?
+
+Some things are easy. The table of contents is not an article. Nor is a
+correction, or a report on editorial change. Book reviews are not
+articles. If they were, \emph{Philosophical Review} would have the
+lowest rate of citations per article, not the highest. Both WoS and
+JSTOR also distinguish articles from discussion notes, especially if the
+journal has a designated discussions section. Without this distinction,
+\emph{Mind} would have a much lower rate of citations per article.
+
+Both of these last two categories are relevant to \emph{Philosophical
+Studies}, even though it does not run book reviews or have designated
+discussion sections. They are relevant because it has many book
+symposia. The classifiers, WoS and JSTOR, struggle with how to classify
+articles in these symposia. They disagree with each other, and with
+their own past practice.
+
+I have some sympathy for the classifiers; these are really borderline
+cases. Mostly what they settled on was that the précis and replies by
+the book author are not articles, and that the contributions by
+commentators are. But they did not stick precisely to this.
+
+For the most part, I've gone with WoS's classifications. It would be
+practical, just barely, to go through \emph{Philosophical Studies} issue
+by issue and reclassify the book symposium entries so all and only the
+commentaries are articles. But it would not be practical to do this for
+all one hundred journals. And for this paper, we're mostly interested in
+comparing articles in \emph{Philosophical Studies} with articles in
+other journals, so it's best to not modify only one journal.
+
+There is one place we're I've overridden WoS's classifications. It has
+categories of Discussion, Note, and Review, each of which is about
+0.75\% of the articles across the 100 journals. The three categories
+include similar enough articles that I'll treat them as a unified
+category. Mostly these are discussion notes, or longer book reviews,
+that we want to exclude. But, especially in \emph{Philosophical Review},
+they occasionally put ordinary articles here. So important articles by
+Stanley Cavell (\citeproc{ref-WOSA1962CGX0500005}{1962}), Jonathan
+Schaffer (\citeproc{ref-WOS000272855000002}{2010}), and Harvey Lederman
+(\citeproc{ref-WOS000810220800002}{2022}) all got listed as not being
+articles.\footnote{The Cavell article was in the discussion section of
+  the January 1962 issue of the Review, so this classification is
+  understandable. The other two are not.} I've counted any piece in
+these three categories 20 pages or longer as an article.
+
+There is one last tricky category to flag. The special issues on the
+Oberlin Colloquium sometimes include commentaries on the main articles.
+These are mostly not counted as articles, and I think rightly so.
+Occasionally, as when Andy Egan (\citeproc{ref-Egan2011}{2011}) was the
+commentator on an important paper by Tamar Szabò Gendler
+(\citeproc{ref-WOS000295087100003}{2011}), the commentary gets a
+reasonable number of citations. But mostly these commentaries are rarely
+if ever cited, and I think they aren't really what most people think of
+as journal articles. So I've been happy to exclude them.\footnote{If
+  these aren't articles, what are they? WoS calls Egan's paper
+  `Editorial-Matter'. That's wrong, but I'm not sure what I would say in
+  their position.}
+
+\section{Outbound Citations}\label{sec-overview}
 
 \subsection{Overview of Citations}\label{sec-citations-overview}
 
-Articles in \emph{Philosophical Studies} get cited a lot. Our first
-study is simply a count of citations in the 100 journals to articles
-published in the 100 journals between 1980 and 2019.
+Articles in \emph{Philosophical Studies} get cited a lot.
 Table~\ref{tbl-all-cites} shows the five journals with the largest
-number of citations.
+number of citations of articles published between 1980 and 2019 in the
+100 journals we're looking at.
 
 \begin{longtable}[]{@{}lr@{}}
 
@@ -316,11 +636,17 @@ Analysis & 2236 \\
 \end{longtable}
 
 \emph{Synthese} has 20\% more articles, but 25\% fewer citations. The
-other three journals on that list are somewhat special cases. Two of
-them get a lot of citations outside of philosophy, and this is only a
-study of citations in philosophy journals, and \emph{Analysis} only
-publishes short papers, and so while they get a lot of citations per
-page, they don't get as many citations per article as other journals.
+other three journals on Table~\ref{tbl-all-articles} are somewhat
+special cases. Two of them get a lot of citations outside of philosophy,
+and this is only a study of citations in philosophy journals.
+\emph{Analysis} only publishes short papers, and so while they get a lot
+of citations per page, they don't get as many citations per article as
+other journals.\footnote{Recall that in
+  Section~\ref{sec-what-is-an-article} I noted that some \emph{Analysis}
+  style papers in other journals are not even counted because they are
+  classified as Discussions or Notes, not Articles. These excluded
+  articles are cited at much lower rates than the typical
+  \emph{Analysis} article.}
 
 Still, we'd expect on general principles that raw volume of publication
 wouldn't make a big difference. Citations tend to follow something like
@@ -377,98 +703,15 @@ because, like \emph{Philosophical Studies}, it publishes many book
 symposia. And, like \emph{Philosophical Studies}, the articles in these
 symposia are typically not cited very much.
 
-\subsection{Articles?}\label{sec-what-is-article}
+\subsection{Large Trend}\label{sec-large-trend}
 
-This raises a tricky question of what exactly counts as an
-\emph{article}. We all have a sense of what a paradigm article, like
-``Two Notions of Necessity'' (\citeproc{ref-WOSA1980KA40400001}{Davies
-and Humberstone 1980}) is an article; the table of contents is not, and
-nor are corrections. Nor are book reviews; if they were then
-\emph{Philosophical Review} would have ten times as many articles
-listed. But there are trickier cases. Which parts of a book symposium
-are articles? A symposium typically has a précis, some commentary
-articles, and some replies. One could make a case for all of these being
-articles, or none of them. They are all somewhat borderline cases.
-\emph{Philosophical Studies} also publishes various conference
-proceedings. The main papers at these conferences are clearly articles;
-in fact, they include some of the most highly cited articles the journal
-has published. But in some cases they also publish commentaries on the
-papers, and one could go either way on classifying those as articles or
-something else.\footnote{One of these conference proceedings, in 2011,
-  included Tamar Szabò Gendler's influential ``The Epistemic Costs of
-  Implicit Bias'' (\citeproc{ref-WOS000295087100003}{Gendler 2011}),
-  which is the first article in the journals I'm looking at with the
-  phrase `implicit bias' in the title. It also included a widely cited
-  commentary on that article by Andy Egan
-  (\citeproc{ref-Egan2011}{2011}). Web of Science classified the
-  commentary as ``Editorial Matter''. While that's clearly wrong, I'm
-  not sure what the right classification should be. Unlike Egan's
-  commentary, most of these commentaries get very few citations, so
-  excluding them doesn't make a huge difference to the totals, and
-  slightly increases the average.}
-
-Web of Science has five main classifications of entries other than
-corrections, front matter, etc: Articles, which is what we're primarily
-using, Book-Review, which we're wholly excluding, and then Discussion,
-Review, and Note. These sometimes get used for things that either are
-clearly not articles, e.g., lists or work published on a topic recently,
-and sometimes for short pieces that are probably best excluded from
-citation analysis. The short pieces listed as discussion notes that
-journals like \emph{Mind}, \emph{Australasian Journal of Philosophy},
-and \emph{British Journal for the Philosophy of Science} frequently
-print often fall into this category.
-
-Sometimes, however, more substantive pieces get listed under one of
-these categories. This seemed to be a particular problem with
-\emph{Philosophical Review}, I suspect simply because of the word
-`Review' in the name. Major works by Stanley Cavell
-(\citeproc{ref-WOSA1962CGX0500005}{1962}), Jonathan Schaffer
-(\citeproc{ref-WOS000272855000002}{2010}), and Harvey Lederman
-(\citeproc{ref-WOS000810220800002}{2022}) all got listed as not being
-articles.\footnote{The Cavell article was in the discussion section of
-  the January 1962 issue of the Review, so this classification is
-  understandable. The other two are not.} For purposes of this paper,
-I've decided to treat anything twenty pages or longer as an article,
-even if it was listed as a Discussion, Review, or Note. One could argue
-that this includes too much. Should the review essay that Sophie Grace
-Chappell (\citeproc{ref-WOS000540751100005}{2020}) wrote on Cora
-Diamond's recent book count as an article? It was originally listed as a
-review, but because it's twenty pages, I counted it. You could make a
-case either way. This doesn't much affect \emph{Philosophical Studies},
-but I'm bringing it up to note the complexities here.
-
-Another way to see the complexities comes from comparing the two data
-sources that I'm using for this piece: Web of Science and JSTOR. The two
-do not agree on which articles in book symposia are capital-A Articles,
-as well as on some conference papers. Unfortunately, this is not because
-they have different principles for how to classify these pieces. Rather,
-they are both a bit haphazard in their classifications, but in slightly
-different ways. Both of them will sometimes count symposia entries as
-book reviews (or occasionally as discussions, notes, or reviews), and
-sometimes not, and if there's a pattern in either case, I haven't found
-it. My view is that these are all borderline cases, and so none of the
-classifications is determinately wrong, but it would be nice to have a
-more consistent principle.
-
-Because it would be impractical to reclassify all 200,000 entries from
-the journals I'm looking at, I've decided to mostly go with Web of
-Science's classifications, subject to the proviso above that I've added
-back in things twenty pages or longer from three small categories.
-Different ways of classifying papers, at least as plausible as the one
-I'm using from Web of Science, could move any of these citation numbers
-by ten percent or more, so take all the numbers I'm listing as having
-large error bars. But hopefully they are at least directionally useful.
-
-\subsection{Large Trend}\label{large-trend}
-
-Even with those possible errors in mind, it is striking to look at the
-step-change in citations to \emph{Philosophical Studies} that occurred
-in the mid-2000s. Cross-temporal comparisons of citations are hard
-because changes in the number of journals, the number of articles in
-those journals, and citation norms, make most comparisons tricky. To try
-to screen off some of that noise, I'll mostly compare citations to
-articles published in \emph{Philosophical Studies} to citations to other
-articles published at the same time.
+There is a striking step-change in citations to \emph{Philosophical
+Studies} that occurred in the mid-2000s. Cross-temporal comparisons of
+citations are hard because changes in the number of journals, the number
+of articles in those journals, and citation norms, make most comparisons
+tricky. To try to screen off some of that noise, I'll mostly compare
+citations to articles published in \emph{Philosophical Studies} to
+citations to other articles published at the same time.
 
 In particular, in this section I'll compare \emph{Philosophical Studies}
 to a list of nineteen other prominent philosophy journals. From the one
@@ -523,7 +766,7 @@ ratio between them.
 
 \caption{\label{fig-compare-cites-rolling}Ratio of citations to
 Philosophical Studies to citations to other journals, for five year
-rolling windows}
+rolling windows.}
 
 \end{figure}%
 
@@ -542,25 +785,278 @@ do) a careful study of comparative prestige judgments to know if there
 is even an effect here to find, or whether my informal sample was not
 reflective of the wider population.
 
-What's more useful is to look at how things changed in the mid-2000s.
+\subsection{Means, Medians and Quartiles}\label{sec-means-and-ways}
 
-\section{Articles}\label{articles}
+In some ways looking at the averages here understates the impact of
+\emph{Philosophical Studies} in the 2000s. Average numbers of citations
+can be very misleading. Table~\ref{tbl-quartiles-two-journals} compares
+five year periods from two journals: the \emph{Australasian Journal of
+Philosophy} (AJP) from 1980-1984, and \emph{Philosophical Studies} (PS)
+from 2003-2007. Q1, Q2 and Q3 are the 25th, 50th, and 75th percentile
+citations, and Mean is the average number of citations.
 
-Notes - including things that JSTOR counts as book reviews Not including
-things that WOS counts as discussions This is, to put it mildly, a bit
-random; some precis are included, some aren't; some replies are
-included, some aren't. In general if the word `comment' appears in the
-title excluded, but it's a bit random. But going with them seems best.
-Alternative is to work through 100 other journals if we wanted an
-apples-to-apples comparison. Missing the supplement in 2013, which I
-don't understand, and was coded differently in the two databases
+\begin{longtable}[]{@{}lrr@{}}
 
-\section{Studies}\label{studies}
+\caption{\label{tbl-quartiles-two-journals}Statistics for AJP 1980-1984,
+and PS 2003-2007.}
 
-Number of articles Length of articles Number of articles over 10K, 15K,
-20K Average citations over the 100 journals - boring because can't
-compare Average citations compared to top 25 - more interesting Maybe
-redo that graph as a ratio
+\tabularnewline
+
+\toprule\noalign{}
+Statistic & AJP 1980-1984 & PS 2003-2007 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Q1 & 0.0 & 2.0 \\
+Q2 & 2.0 & 5.0 \\
+Q3 & 7.0 & 14.0 \\
+Mean & 16.7 & 13.5 \\
+
+\end{longtable}
+
+The mean number of citations per article is higher for AJP 1980-1984
+than for \emph{Philosophical Studies} 2003-2007. But that's because of
+the 1892 citations to articles from the AJP in those years, 1269 of them
+are to five articles by David Lewis. The citations to
+\emph{Philosophical Studies} are much more widely spread around.
+Comparing the 75th percentiles is more indicative of what's being
+published in the journals.
+
+Part of the difference between AJP 1980-1984 and \emph{Philosophical
+Studies} 2003-2007 is a general trend in the discipline to spread around
+the citations more. But it's not just that. \emph{Philosophical Studies}
+stands out for how widely spread around its citations are.
+Figure~\ref{fig-quartiles-ps-vs-19} shows this. I've taken the same 19
+journals that I used in Figure~\ref{fig-compare-cites-rolling}, and
+calculated the same quartile statistics for \emph{Philosophical
+Studies}, and for those 19 journals collectively, for five-year moving
+windows each year from 1980 to 2019. The results are shown in
+Figure~\ref{fig-quartiles-ps-vs-19}. Note that the dot for each year is
+really the five-year window centrered on that year.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{phil-studies_files/figure-pdf/fig-quartiles-ps-vs-19-1.pdf}
+
+}
+
+\caption{\label{fig-quartiles-ps-vs-19}Ratio of 75 percentile of
+\emph{Philosophical Studies} citations to 75th percentile of citations
+for other leading journals, five year rolling window.}
+
+\end{figure}%
+
+The pattern is rather similar to Figure~\ref{fig-compare-cites-rolling}.
+Before 2000, the ratio was below one for 11 out of 20 years. After 2000,
+the only time it is below one is right at the end, where the data is
+very noisy. (The citation counts are very low for such recently
+published articles, so it's hard to read too much into the numbers.)
+There is a particular peak in the mid-2000s, just as in
+Figure~\ref{fig-compare-cites-rolling}. Perhaps the biggest difference
+is that in the 1980s, the ratio of the means was below one, but the
+ratio of the 75th percentiles is sometimes above one. The explanation
+for that is that there were very few \emph{Philosophical Studies}
+articles from those years with huge citation counts, even though a
+quarter of the articles were being fairly frequently cited.
+
+\subsection{Citations of Special
+Issues}\label{sec-citations-of-special-issues}
+
+Part of the explanation of the pattern in
+Figure~\ref{fig-compare-cites-rolling} and
+Figure~\ref{fig-quartiles-ps-vs-19} is that the special issues that
+\emph{Philosophical Studies} published in the 2000s were very heavily
+cited. Table~\ref{tbl-citation-by-type} shows three summary statistics,
+mean, median, and 75th percentile (Q3), for the normal
+\emph{Philosophical Studies} issues, and for the four classes of special
+issues. Table~\ref{tbl-citation-by-type-decade} shows the means for the
+five classes over each of the four decades from 1980-2019. (The blank
+cells mean that there aren't any special issues of that type that
+decade.)
+
+\begin{longtable}[]{@{}lrrr@{}}
+
+\caption{\label{tbl-citation-by-type}Summary citation statistics for the
+five types of \emph{Philosophical Studies} issues.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Type & Median & Q3 & Mean \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+BSPC & 12 & 39 & 22.0 \\
+Oberlin & 4 & 12 & 15.6 \\
+One-off & 4 & 12 & 11.0 \\
+APA Pacific & 2 & 7 & 7.4 \\
+Normal & 3 & 8 & 7.1 \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+
+\caption{\label{tbl-citation-by-type-decade}Mean citations by decade for
+the five types of \emph{Philosophical Studies} issues.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Type & 1980s & 1990s & 2000s & 2010s \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Normal & 6.2 & 7.1 & 9.3 & 6.5 \\
+One-off & 8.7 & 12.9 & 14.2 & 8.6 \\
+APA Pacific & & 4.7 & 14.6 & 5.3 \\
+Oberlin & & 16.5 & 19.2 & 13.0 \\
+BSPC & & & 27.7 & 16.7 \\
+
+\end{longtable}
+
+The numbers for BSPC are particularly striking. In the full set of
+articles I'm working from, i.e., all the indexed articles from 100
+journals, only 1.1\% of articles have 39 or more citations. But one
+quarter of the articles that \emph{Philosophical Studies} published from
+BSPC are in that 1.1\%. Surprisingly, given the numbers here, none of
+the 10 most cited articles in \emph{Philosophical Studies}, and only one
+of the 30 most cited articles, was from a BSPC special issue. The high
+average isn't being caused by outliers, but many BSPC articles being
+cited very frequently. By contrast, four of the ten most cited articles
+were from the Oberlin colloquium. This is why the Q3 numbers for BSPC
+and Oberlin are so different, even though the means aren't that far
+apart.
+
+The fact that the normal issues have such lower citation statistics than
+the special issues might make us think that the explanation of
+Figure~\ref{fig-compare-cites-rolling} and
+Figure~\ref{fig-quartiles-ps-vs-19} can be found entirely in the special
+issues. Indeed, if we just compare the normal issues of
+\emph{Philosophical Studies} to the other 19 journals, the effect we
+were seeing basically vanishes. This can be seen in
+Figure~\ref{fig-quartiles-normal-only}.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{phil-studies_files/figure-pdf/fig-quartiles-normal-only-1.pdf}
+
+}
+
+\caption{\label{fig-quartiles-normal-only}Ratio of 75 percentile of
+normal issues of \emph{Philosophical Studies} citations to 75th
+percentile of citations for other leading journals, five year rolling
+window.}
+
+\end{figure}%
+
+This is surely part of the explanation of what's going on. But
+Figure~\ref{fig-quartiles-normal-only} is not an apples-to-apples
+comparison; we've removed the special issues from \emph{Philosophical
+Studies}, but not from the other 19. This could be a significant issue.
+I looked at the most cited article since 2005 in each of the 20 journals
+that go into Figure~\ref{fig-quartiles-normal-only}, and in 6 of them
+(including \emph{Philosophical Studies}), the most cited article was in
+a special issue. Or, in one case, a special unit in a regular issue.
+It's really hard to tell exactly which issues are special issues from
+the archival record, and even harder to tell what the refereeing process
+was for those special issues.\footnote{BSPC selected almost all its
+  papers via anonymous review, and then the papers were refereed again
+  before going into \emph{Philosophical Studies}. I have no idea how
+  common that was for the other special issues.} The best we can say is
+that special issues are sufficiently widespread, and sufficiently widely
+cited, that Figure~\ref{fig-quartiles-normal-only} might be a misleading
+comparison. The success of special issues is part of why
+\emph{Philosophical Studies} was so widely cited in the 2000s, but maybe
+not all of it.
+
+Rather than go further down this rabbit hole, let's turn to what was in
+\emph{Philosophical Studies} over the years, starting with its inbound
+citations.
+
+\section{Inbound Citatations}\label{sec-inbound-citations}
+
+This section looks at the papers cited in \emph{Philosophical Studies}
+in each of the last four decades. For each decade, I find the 20 papers
+most cited in all philosophy journals over that decade. (They need not
+be published in the decade, indeed some of them are published nearly a
+half-century earlier.) I'll then look at which of them have the highest
+and lowest proportion of their citations in \emph{Philosophical
+Studies}, and comment on what that tells us about the journal, and the
+discipline as a whole.
+
+\subsection{1980s}\label{s}
+
+%quarto-define-uuid: 85b77c8a-261c-4f58-9b04-f21c67e0a758-1-85b77c8a-261c-4f58-9b04-f21c67e0a758
+Lewis (\citeproc{ref-WOSA1979JB14500003}{1979b})
+%quarto-end-define-uuid
+%quarto-define-uuid: 85b77c8a-261c-4f58-9b04-f21c67e0a758-2-85b77c8a-261c-4f58-9b04-f21c67e0a758
+Perry (\citeproc{ref-WOSA1979HE39600001}{1979})
+%quarto-end-define-uuid
+%quarto-define-uuid: 85b77c8a-261c-4f58-9b04-f21c67e0a758-3-85b77c8a-261c-4f58-9b04-f21c67e0a758
+Lewis (\citeproc{ref-WOSA1979JC64200001}{1979a})
+%quarto-end-define-uuid
+%quarto-define-uuid: 85b77c8a-261c-4f58-9b04-f21c67e0a758-4-85b77c8a-261c-4f58-9b04-f21c67e0a758
+Perry (\citeproc{ref-WOSA1977EA01800002}{1977})
+%quarto-end-define-uuid
+%quarto-define-uuid: 85b77c8a-261c-4f58-9b04-f21c67e0a758-5-85b77c8a-261c-4f58-9b04-f21c67e0a758
+Donnellan (\citeproc{ref-WOSA1966ZC83800001}{1966})
+%quarto-end-define-uuid
+%quarto-define-uuid: 85b77c8a-261c-4f58-9b04-f21c67e0a758-6-85b77c8a-261c-4f58-9b04-f21c67e0a758
+Grice (\citeproc{ref-WOSA1957CGZ6000005}{1957})
+%quarto-end-define-uuid
+%quarto-define-uuid: 85b77c8a-261c-4f58-9b04-f21c67e0a758-7-85b77c8a-261c-4f58-9b04-f21c67e0a758
+Dennett (\citeproc{ref-10.2307_2025382}{1971})
+%quarto-end-define-uuid
+%quarto-define-uuid: 85b77c8a-261c-4f58-9b04-f21c67e0a758-8-85b77c8a-261c-4f58-9b04-f21c67e0a758
+Rawls (\citeproc{ref-WOSA1980KH88100001}{1980})
+%quarto-end-define-uuid
+
+\begin{longtable}[]{@{}rlrrl@{}}
+
+\caption{\label{tbl-1980s-inbound}Highly cited articles in the 1980s.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Rank & Citation & PS Citations & All Citations & Percent \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 &
+85b77c8a-261c-4f58-9b04-f21c67e0a758-1-85b77c8a-261c-4f58-9b04-f21c67e0a758
+& 8 & 36 & 22.22\% \\
+2 &
+85b77c8a-261c-4f58-9b04-f21c67e0a758-2-85b77c8a-261c-4f58-9b04-f21c67e0a758
+& 13 & 59 & 22.03\% \\
+3 &
+85b77c8a-261c-4f58-9b04-f21c67e0a758-3-85b77c8a-261c-4f58-9b04-f21c67e0a758
+& 7 & 34 & 20.59\% \\
+4 &
+85b77c8a-261c-4f58-9b04-f21c67e0a758-4-85b77c8a-261c-4f58-9b04-f21c67e0a758
+& 6 & 33 & 18.18\% \\
+5 &
+85b77c8a-261c-4f58-9b04-f21c67e0a758-5-85b77c8a-261c-4f58-9b04-f21c67e0a758
+& 9 & 55 & 16.36\% \\
+& \ldots{} & & & \\
+18 &
+85b77c8a-261c-4f58-9b04-f21c67e0a758-6-85b77c8a-261c-4f58-9b04-f21c67e0a758
+& 1 & 36 & 2.78\% \\
+19 &
+85b77c8a-261c-4f58-9b04-f21c67e0a758-7-85b77c8a-261c-4f58-9b04-f21c67e0a758
+& 0 & 30 & 0.00\% \\
+20 &
+85b77c8a-261c-4f58-9b04-f21c67e0a758-8-85b77c8a-261c-4f58-9b04-f21c67e0a758
+& 0 & 49 & 0.00\% \\
+
+\end{longtable}
 
 \section{Comparisons}\label{comparisons}
 
@@ -636,15 +1132,14 @@ Cavell, S. 1962. {``The Availability of Wittgenstein's Later
 Philosophy.''} \emph{Philosophical Review} 71 (1): 67--93. doi:
 \href{https://doi.org/10.2307/2183682}{10.2307/2183682}.
 
-\bibitem[\citeproctext]{ref-WOS000540751100005}
-Chappell, Sophie Grace. 2020. {``Cora Diamond: Reading Wittgenstein with
-Anscombe, Going on to Ethics.''} \emph{Ethics} 130 (4): 588--608. doi:
-\href{https://doi.org/10.1086/708537}{10.1086/708537}.
+\bibitem[\citeproctext]{ref-10.2307_2025382}
+Dennett, D. C. 1971. {``Intentional Systems.''} \emph{Journal Of
+Philosophy} 68 (4): 87--106.
 
-\bibitem[\citeproctext]{ref-WOSA1980KA40400001}
-Davies, M, and L Humberstone. 1980. {``Two Notions of Necessity.''}
-\emph{Philosophical Studies} 38 (1): 1--30. doi:
-\href{https://doi.org/10.1007/BF00354523}{10.1007/BF00354523}.
+\bibitem[\citeproctext]{ref-WOSA1966ZC83800001}
+Donnellan, Keith S. 1966. {``Reference and Definite Descriptions.''}
+\emph{Philosophical Review} 75 (3): 281--304. doi:
+\href{https://doi.org/10.2307/2183143}{10.2307/2183143}.
 
 \bibitem[\citeproctext]{ref-Egan2011}
 Egan, Andy. 2011. {``Comments on Gendler's, 'the Epistemic Costs of
@@ -656,10 +1151,39 @@ Gendler, Tamar Szabo. 2011. {``On the Epistemic Costs of Implicit
 Bias.''} \emph{Philosophical Studies} 156 (1): 33--63. doi:
 \href{https://doi.org/10.1007/s11098-011-9801-7}{10.1007/s11098-011-9801-7}.
 
+\bibitem[\citeproctext]{ref-WOSA1957CGZ6000005}
+Grice, HP. 1957. {``Meaning.''} \emph{Philosophical Review} 66 (3):
+377--88. doi: \href{https://doi.org/10.2307/2182440}{10.2307/2182440}.
+
 \bibitem[\citeproctext]{ref-WOS000810220800002}
 Lederman, Harvey. 2022. {``The Introspective Model of Genuine Knowledge
 in Wang Yangming.''} \emph{Philosophical Review} 131 (2): 169--213. doi:
 \href{https://doi.org/10.1215/00318108-9554691}{10.1215/00318108-9554691}.
+
+\bibitem[\citeproctext]{ref-WOSA1979JC64200001}
+Lewis, David. 1979a. {``Attitudes de Dicto and de Se.''}
+\emph{Philosophical Review} 88 (4): 513--43. doi:
+\href{https://doi.org/10.2307/2184843}{10.2307/2184843}.
+
+\bibitem[\citeproctext]{ref-WOSA1979JB14500003}
+---------. 1979b. {``Counterfactual Dependence and Time's Arrow.''}
+\emph{Noûs} 13 (4): 455--76. doi:
+\href{https://doi.org/10.2307/2215339}{10.2307/2215339}.
+
+\bibitem[\citeproctext]{ref-WOSA1977EA01800002}
+Perry, John. 1977. {``Frege on Demonstratives.''} \emph{Philosophical
+Review} 86 (4): 474--97. doi:
+\href{https://doi.org/10.2307/2184564}{10.2307/2184564}.
+
+\bibitem[\citeproctext]{ref-WOSA1979HE39600001}
+---------. 1979. {``The Problem of the Essential Indexical.''}
+\emph{Noûs} 13 (1): 3--21. doi:
+\href{https://doi.org/10.2307/2214792}{10.2307/2214792}.
+
+\bibitem[\citeproctext]{ref-WOSA1980KH88100001}
+Rawls, John. 1980. {``Kantian Constructivism in Moral Theory.''}
+\emph{Journal Of Philosophy} 77 (9): 515--35. doi:
+\href{https://doi.org/10.2307/2025790}{10.2307/2025790}.
 
 \bibitem[\citeproctext]{ref-WOS000272855000002}
 Schaffer, Jonathan. 2010. {``Monism: The Priority of the Whole.''}
@@ -671,16 +1195,11 @@ Schaffer, Jonathan. 2010. {``Monism: The Priority of the Whole.''}
 \emph{Philosophical Studies} 173 (1): 49--100. doi:
 \href{https://doi.org/10.1007/s11098-014-0438-1}{10.1007/s11098-014-0438-1}.
 
-\bibitem[\citeproctext]{ref-Weatherson2003}
-Weatherson, Brian. 2003. {``From Classical to Intuitionistic
-Probability.''} \emph{Notre Dame Journal of Formal Logic} 44 (2):
-111--23. doi:
-\href{https://doi.org/10.1305/ndjfl/1082637807}{10.1305/ndjfl/1082637807}.
-
 \end{CSLReferences}
 
 
 
 \noindent Published online in October 2024.
+
 
 \end{document}
