@@ -27,7 +27,9 @@ format:
       include-after-body: 
         text: |
           \noindent Published online in September 2024.
-format-links: [html, pdf]
+    docx:
+      output-file: "Four Problems in Decision Theory"
+format-links: [html]
 ---
 
 Decision theory has become too disjointed. Problems that should be discussed together have spawned separate literatures. This paper aims to put the parts back together.
@@ -82,9 +84,9 @@ The idealisation is that I'm going to not assume it's you and me playing, but tw
 
 The evaluation is that for Chooser, some moves are rational and some are not. This is true whether Chooser is playing the dynamic or the strategic form. 
 
-To start I won't ask what moves are rational, but instead ask about the connection between the two games. In particular, are the evaluations for the two games related in the following way.
+To start I won't ask which moves are rational, but instead ask about the connection between the two games. In particular, are the evaluations for the two games related in the following way.
 
-Dynamic-Strategic Equivalance (for chess)
+Dynamic-Strategic Equivalence (for chess)
 :    In chess, move _M_ at game state _S_ in the dynamic game is rational iff some strategy which includes _If S, do M_ is rational in the strategic game.
 
 This is not an implausible view, in part because of some special features of chess. Chess includes no random moves by Nature, no information that is revealed to some players and not others, and it is zero-sum. By 'zero-sum', I mean that there is no pair of players and pair of game states such that both players are better off in one of the states than the other. Dynamic-Strategic Equivalence is fairly plausible for games with all three features.
@@ -147,7 +149,7 @@ Consider a very simplified version of the Ultimatum game. In this version, the p
 \end{tikzpicture}
 ```
 
-In this game, Respondent has four possible strategies. I'll write XY for responding to P1 with X and P2 with Y. So the strategy RA is the (odd) strategy of rejecting the offer of \$2 and accepting the offer of \$1. Using this terminology, this version of Ultimatum is given by @tbl-ultimatum. (As usual, I'll write the payouts for row first, even though in this case they move second.) \newpage
+In this game, Respondent has four possible strategies. I'll write XY for responding to P1 with X and P2 with Y. So the strategy RA is the (odd) strategy of rejecting the offer of \$2 and accepting the offer of \$1. Using this terminology, this version of Ultimatum is given by @tbl-ultimatum. (As usual, I'll write the payouts for row first, even though in this case they move second.) 
 
 |           |   **P1**   |   **P2**    |
 |----------:|:----------:|:-----------:|
@@ -158,11 +160,11 @@ In this game, Respondent has four possible strategies. I'll write XY for respond
 
 :  Ultimatum game {#tbl-ultimatum}
 
-Assuming both players prefer more money to less, there are four Nash equilibria of this game: (AA, P2), (AR, P1), and (RA, P2). But there is only one dynamic equilibrium of the game: (AA, P2). In a one-shot version of the dynamic game, there is no payoff to ever playing R; it's always a choice between more money and less. So Respondent must play AA, and so Proposer is best off playing P2.
+Assuming both players prefer more money to less, there are three Nash equilibria of this game: (AA, P2), (AR, P1), and (RA, P2). But there is only one dynamic equilibrium of the game: (AA, P2). In a one-shot version of the dynamic game, there is no payoff to ever playing R; it's always a choice between more money and less. So Respondent must play AA, and so Proposer is best off playing P2.
 
-Let's bring this back to decision theory. Assume that Respondent is Chooser, our main subject. Assume also that Proposer is Demon, the familiar character from Newcomb's Problem. Demon, as I'll understand him, is arbitrarily good at predicting Chooser's _strategy_, and Chooser knows this.^[If we wanted realistic cases, we would make Demon only somewhat good at predicting strategies. It would still be possible to get versions of most of the examples here working, but they would be more complicated and harder to follow. Making Demon arbitrarily good loses some realism, but gains some simplicity.]
+Let's bring this back to decision theory. Assume that Respondent is Chooser, our main subject. Assume also that Proposer is Demon, the familiar character from Newcomb's Problem. Demon, as I'll understand them, is arbitrarily good at predicting Chooser's _strategy_, and Chooser knows this.^[If we wanted realistic cases, we would make Demon only somewhat good at predicting strategies. It would still be possible to get versions of most of the examples here working, but they would be more complicated and harder to follow. Making Demon arbitrarily good loses some realism, but gains some simplicity.]
 
-Some decisions theories say that this version of Ultimatum violates Dynamic-Strategic Equivalence (hereafter, just Equivalence). Causal decision theorists that say Chooser should pick the optimal equilibrium, e.g., @Harper1984 say that Chooser should play AR in the strategic game, but AA in the dynamic game. Evidential decision theorists, e.g., @Ahmed2014, say the same thing.
+Some decision theories say that this version of Ultimatum violates Dynamic-Strategic Equivalence (hereafter, just Equivalence). Causal decision theorists who say Chooser should pick the optimal equilibrium, e.g., @Harper1984 say that Chooser should play AR in the strategic game, but AA in the dynamic game. Evidential decision theorists, e.g., @Ahmed2014, say the same thing.
 
 I'm going to ultimately reject these theories, but not because of what they say about this case. It is not obvious whether Dynamic-Strategic Equivalence should hold here. As I just noted, some approaches to game theory say that it should not.^[I think Equivalence does hold here because in the strategic game AA is the only option that is not weakly dominated. But I'm not going to argue for weak dominance in this paper, or work out just how it relates to Equivalence in the general case. Here, as often in this paper, I'm indebted to @Stalnaker1999.]
 
@@ -186,7 +188,7 @@ Single Choice Principle
 
 I'll work through some examples where SCP applies, and then note an example where it does not.
 
-Here is a rather boring game. A card will be drawn, and not shown to Chooser. If it is neither and Ace nor a King, the game ends, as a draw. (When a game ends, I always assume this is announced to all players.) Otherwise, Chooser is asked to guess whether it is an Ace or a King. If they guess correctly, they win, otherwise, they lose. The game tree for this game is @fig-ace-king.
+Here is a rather boring game. A card will be drawn, and not shown to Chooser. If it is neither an Ace nor a King, the game ends, as a draw. (When a game ends, I always assume this is announced to all players.) Otherwise, Chooser is asked to guess whether it is an Ace or a King. If they guess correctly, they win, otherwise, they lose. The game tree for this game is @fig-ace-king.
 
 ```{r engine='tikz', engine.opts=font_opts}
 #| label: fig-ace-king
@@ -194,7 +196,6 @@ Here is a rather boring game. A card will be drawn, and not shown to Chooser. If
 #| cache: TRUE
 #| echo: FALSE
 #| fig.width: 5
-
 
 \begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
   \tikzset{
@@ -247,6 +248,7 @@ Here is a rather boring game. A card will be drawn, and not shown to Chooser. If
 ```
 
 The dashed lines around the two nodes on the right indicates that they are in the same information set. There are two nodes where Chooser must choose, but they are in the same information set, so SCP applies. In this case, SCP is hardly controversial. Either guess is equally rational in the tree in @fig-ace-king, and either guess is equally rational in the strategic form of the game shown in @tbl-ace-king.
+
 
 |             |   **Other**  |     **Ace**  |    **King**  |
 |------------:|:------------:|:------------:|:------------:|
@@ -310,7 +312,7 @@ Another kind of game where SCP applies is exemplified by Newcomb's Problem. The 
 \end{tikzpicture}
 ```
 
-But while this is the standard vignette, it is not the way Newcomb's Problem is usually represented. Rather, Newcomb's Problem is usually represented in a table like @tbl-newcomb, which is a correct representation of the strategic form of @fig-newcomb. \newpage
+But while this is the standard vignette, it is not the way Newcomb's Problem is usually represented. Rather, Newcomb's Problem is usually represented in a table like @tbl-newcomb, which is a correct representation of the strategic form of @fig-newcomb.
 
 |           |    **P1**    |    **P2**     |
 |----------:|:--------:|:---------:|
@@ -389,7 +391,7 @@ So far I've shown how SCP can apply to cases involving gambles, and to cases inv
 \end{tikzpicture}
 ```
 
-There is only 1 chice point for Chooser, so the strategy table for @fig-main-example is very simple. It is shown in @tbl-main-example.
+There is only 1 choice point for Chooser, so the strategy table for @fig-main-example is very simple. It is shown in @tbl-main-example.
 
 |           |  **H** ∧ **PU**  |  **H** ∧ **PD**   |  **T** ∧ **PU**  |  **T** ∧ **PD**  |
 |----------:|:--------:|:---------:|:--------:|:--------:|
@@ -540,7 +542,13 @@ This section is about problems like Newcomb's Problem [@Nozick1969]. I'm not goi
 
 Say that an option is a strict equilibrium if, assuming Demon predicts correctly, Chooser's payout for choosing it is (strictly) greater than their payout for choosing any other option. So Up is a strict equilibrium if *a* > *c*. The focus in this section is going to be on problems where both Up and Down are strict equilibria, so *a* > *c*, and *d* > *b*. While Newcomb's Problem itself is not such a case, most of the views that have been proposed to deal with Newcomb's Problem have consequences for the case where both Up and Down are strict equilibria. In those cases, they typically say things that violate SCP.
 
-To simplify matters, I'm going to make two further assumptions which are widely, but not universally, shared. First, I'll assume that the names of the options are irrelevant. In particular, I'll assume that if Up is rationally permissible in @tbl-generic-demon, then Down is permissible in @tbl-inverted-generic. Call this assumption **Label Neutrality**.
+To simplify matters, I'm going to make two further assumptions.
+
+First, in any instance of @tbl-generic-demon, the four payouts, plus the conditional probabilities of a correct prediction given each choice by Chooser, settle which options are choice-worthy. This assumption isn't universally shared, but it is very widely shared. Indeed, it is common in philosophy papers to specify nothing but these values and then ask for intuitions about the case, which suggests many people do presuppose that only these values are necessary to determine what is choice-worthy. Call this assumption **Settling**, because the values (i.e., the payouts and the conditional probability of correct payouts) settle what is choice-worthy.
+
+**Settling** is rejected by theorists such as @Skyrms1982 and @Joyce2012, who say that in problems like these, Chooser's starting view about what option they will eventually select also makes a difference to what they should do. Those views are not subject to the objections I'm about to make––provided Chooser's credences satisfy some rather tight constraints.
+
+The second assumption is that the names of the options are irrelevant. In particular, I'll assume that if Up is rationally permissible in @tbl-generic-demon, then Down is permissible in @tbl-inverted-generic. Call this assumption **Label Neutrality**.
 
 |           |   **PU**     |   **PD**     |
 |:---------:|:------------:|:------------:|
@@ -548,10 +556,6 @@ To simplify matters, I'm going to make two further assumptions which are widely,
 |  **Down** |     *b*      |     *a*      |
 
 : @tbl-generic-demon with labels inverted. {#tbl-inverted-generic}
-
-The second assumption is that in any instance of @tbl-generic-demon, the four payouts, plus the conditional probabilities of a correct prediction given each choice by Chooser, settle which options are choice-worthy. This assumption isn't universally shared, but it is very widely shared. Indeed, it is common in philosophy papers to specify nothing but these values and then ask for intuitions about the case, which suggests many people do presuppose that only these values are necessary to determine what is choice-worthy. Call this assumption **Settling**, because the values (i.e., the payouts and the conditional probability of correct payouts) settle what is choice-worthy.
-
-**Settling** is rejected by theorists such as @Skyrms1982 and @Joyce2012, who say that in problems like these, Chooser's starting view about what option they will eventually select also makes a difference to what they should do. Those views are not subject to the objections I'm about to make––provided Chooser's credences satisfy some rather tight constraints.
 
 In this section I'm going to focus on versions of @tbl-generic-demon where *a* and *d* are positive, and *b* = *c* = 0. This kind of problem is called Nice Demon by @Skyrms1982 and @Weirich1988, and is shown in @tbl-nice-demon. I'm going to mostly discuss the case, discussed by Weirich but not Skyrms, where *a* ≠ *d*. The main conclusion is that given the three assumptions just introduced - SCP, **Label Neutrality** and **Settling** - both Up and Down are choice-worthy.
 
@@ -612,7 +616,7 @@ In the previous section I argued that in any instance of Nice Demon, where Choos
 
 The proof relies on five assumptions, three of which were used in the last section: SCP, **Label Neutrality** and **Settling**.
 
-The fourth assumption is that the values in the table are utilities, and hence are only unique up to positive affine transformation. So whatever choices are rational in a table, the same choices are rational if each payout is multiplied by a positive constant, and/or some (other constant) is added. Call this assumption **Affine Transformtation**.
+The fourth assumption is that the values in the table are utilities, and hence are only unique up to positive affine transformation. So whatever choices are rational in a table, the same choices are rational if each payout is multiplied by a positive constant, and/or some (other constant) is added. Call this assumption **Affine Transformation**.
 
 The fifth and final assumption is that in two option decision problems with two strict equilibria, at least one (pure) option is choice-worthy. That is, these problems are not dilemmas (even if Chooser only plays pure strategies).
 
@@ -978,7 +982,7 @@ This might already seem surprising. The textbook approach says that:
 
 The notion of choice-worthiness here is not purely forward-looking. It is not rational to play Down after playing Gamble because that combination is irrational, in fact strictly dominated, even though Down is consistent with purely forward looking considerations that bear on what's rational.
 
-But while the textbook notion of rationality is not purely forward looking, it is not purely strategic either. It is not rational to reject any offer in @fig-ultimatum, the simplified Ultimatum game, even though the strategy AR is part of an equilibrium.
+But while the textbook notion of rationality is not purely forward looking, it is not purely strategic either. It is never rational to an offer in @fig-ultimatum, the simplified Ultimatum game, even though the strategy AR is part of an equilibrium.
 
 The core idea, which goes back to Reinhard Selten [-@Selten1965; -@Selten1975], is that rational play in games must be both dynamically and strategically rational. For a strategy in a dynamic game to be part of an equilibrium, it must be rationally permissible to choose that strategy in the strategic form of the game, and every move must be rational when it is made given purely forward looking considerations. The first conjunct rules out Gamble-Down in @fig-chooser-guy-two; the second conjunct rules out AR in @fig-ultimatum.
 
@@ -1070,7 +1074,3 @@ One is 'mixed strategy'. There are as many interpretations of that as there are 
 The other ambiguous term here is 'ideal'. Getting clear on this might be more pressing. Is the ideal Chooser a standard for evaluation, as in ideal observer theory, or a tool for simplifying explanations, as in ideal gas theory? Wallace's second bullet point suggests he is thinking of the second kind of ideal, and if he is I'm inclined to agree that's what we should be focusing on. Sorting out this question requires a very deep dive into what the purpose of doing decision theory is, and might be necessary before saying what the ideal Chooser can and can't do.
 
 So while the Single Choice Principle resolves several questions in decision theory, as we saw from sections [-@sec-buchak] to [-@sec-dynamic], it leaves many open. Indeed, it raises (or re-raises) some hard questions about the nature of decision theoretic ideals. So this paper is not one of those attempts to have the last word, by putting forward a universal theory of decision. It is, hopefully, a helpful first word, showing where such a theory is (and is not) most likely to be found.
-
-::: {.content-visible unless-format="html"}
-## References {-}
-:::
