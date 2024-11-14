@@ -1,0 +1,100 @@
+
+## 1990s
+
+- Still issues about content externalism. Now moved to mind, as 'arthritis', 'Fodor' and 'mentalese' show
+- But really lagging here. 'Arthritis' is at 16.2%, 'Mentalese' at 19.4%.
+- Big story is causation, and we'll just word 'causal' to look at it. (Do graph just for it.)
+- Very centered in 1990s - 7 of the 14 years where it most appears are in the 1990s, and 1991 is a weird outlier.
+- Note "relevance" is because "causal relevance" is used a lot
+
+```{r}
+#| label: fig-1990s-words
+#| fig-cap: "Words that appear more often in the 1990s."
+#| fig-subcap: 
+#|   - "More common words"
+#|   - "Less common words"
+#| layout-ncol: 1
+
+word_graphs(c("arthritis", "sentence", "language"), 3)
+word_graphs(c("network", "fodor", "burge", "player", "hesperus", "efficacy"), 3)
+```
+
+
+```{r}
+#| label: fig-2000s-words
+#| fig-cap: "Words that appear more often in the 2000s."
+#| fig-subcap: 
+#|   - "More common words"
+#|   - "Less common words"
+#| layout-ncol: 1
+
+word_graphs(c("contextualism", "fictionalism", "physicalism"), 3)
+word_graphs(c("contextualist", "fictionalist", "physicalist"), 3)
+word_graphs(c("water", "rigid", "demonstrative"), 3)
+```
+
+```{r}
+#| label: fig-2010s-words
+#| fig-cap: "Words that appear more often in the 2010s."
+#| fig-subcap: 
+#|   - "More common words"
+#|   - "Less common words"
+#| layout-ncol: 1
+
+word_graphs(c("normative", "epistemic", "evidence", "reasons"), 2)
+word_graphs(c("argue", "account", "explain", "response", "view"), 2)
+word_graphs(c("social", "testimony", "gender", "reactive"), 2) # Move social to its own
+word_graphs(c("grounding", "credence", "explanation"), 2)
+word_graphs(c("schaffer", "schellenberg", "schwitzgebel", "cappelen"), 2)
+word_graphs(c("lackey", "sider", "hawthorne", "gendler"), 2)
+word_graphs(c("schaffer", "schellenberg", "schwitzgebel", "cappelen",
+              "lackey", "sider", "hawthorne", "gendler",
+              "fodor", "burge", "quine", "davidson"), 4)
+```
+
+
+Is this a trend specific to _Philosophical Studies_, or does it tell us something more broadly about philosophy journals? The answer is a bit of both, but mostly it is a general trend. The fact that "The Problem of the Essential Indexical" is near the top of @tbl-1990s-inbound, and near the bottom of @tbl-2010s-inbound suggests that a certain kind of philosophy of language has declined more at _Philosophical Studies_ than elsewhere. But some of the trends seem more widespread.
+
+```{r}
+#| label: workoutlanguageratio
+
+language_articles <- (phil_studies_gamma |>
+                        filter(topic == 4,
+                               gamma > 0.5) |>
+                        left_join(ps_join,
+                                  by = c("document" = "jstor_id")) |>
+                        select(id = wos_id))$id
+
+language_cites <- active_cites |>
+  filter(
+    new_year >= 2005,
+    old %in% language_articles) |>
+  ungroup() |>
+  group_by(citing_journal) |>
+  tally()
+
+all_ps_articles <- citation_with_type$id
+
+all_ps_cites <- active_cites |>
+  filter(
+    new_year >= 2005,
+    old %in% all_ps_articles) |>
+  ungroup() |>
+  group_by(citing_journal) |>
+  tally()
+
+language_citation_rate <- language_cites$n[2] / sum(language_cites$n)
+all_ps_citation_rate <- all_ps_cites$n[2] / sum(all_ps_cites$n)
+```
+
+Ideally, we could build a topic model for all 100 of the journals, and see how many of them are language articles in this sense. But that would be computationally impractical. Fortunately, we can estimate it another way. The graph in @fig-language starts turning downwards around 2005. If that was a phenomenon unique to _Philosophical Studies_, it should show up in the citation data. In particular, it should show up in philosophy of language articles having a lower than usual share of their citations in _Philosophical Studies_. 
+
+So I found the 694 _Philosophical Studies_ articles that the model said were at least 50% likely to be philosophy of language articles, and looked at what proportion of their citations, since 2005, were in _Philosophical Studies_. The answer was around 14.7%. Then I did the same thing for all _Philosophical Studies_ articles, asking what percentage of their citations were in _Philosophical Studies_. The answer was 13.4%. The difference between these numbers isn't significant. What is significant is that we don't see evidence that philosophy of language, especially the kind of philosophy of language that _Philosophical Studies_ published, was still a major part of the other journals, while dropping in importance in _Philosophical Studies_ itself.
+
+That last qualification, about the kind of philosophy of language that was published, is perhaps significant. Even when philosophy of language was the largest topic in the journal, there wasn't much interaction with linguists working on formal semantics. Before 2000, only one paper mentioned Irene Heim [@WOSA1988P180000006], and only two mentioned Angelika Kratzer [@WOSA1986D182100003; @WOSA1984SK63200001]. There were more mentions of Chomsky, though they were mostly in passing, and in any case Chomsky is more significant as a syntactician than a semanticist. The closest thing I see to interdisciplinary work are some applications of Montague grammar, e.g., by [@WOSA1984TJ24700012]. But there is a much sharper division between philosophers of language and linguists working on semantics in _Philosophical Studies_ before 2000 than you see in more recent work in philosophy of language. As the field moved towards more interdisciplinary work, _Philosophical Studies_ moved its focus onto other topics, especially epistemology.
+
+I've focused largely on philosophy of language because the decline in importance of what were once core questions of analytic philosophy, about description and reference, is the single biggest story in the trends. But there are two other trends worth noting, although they are much smaller.
+
+There is a small uptick in epistemology articles in the journal in the 2000s. Interestingly, this matches a finding by Eugenio @Petrovich2024, who (using a different method) sees a notable uptick in epistemology in five other leading journals starting around 2000. As we'll see @sec-citations-topic, this is related to the notable increase in citations to _Philosophical Studies_ starting around the same time.
+
+And there is a trend upwards in ethics over the last few years, though it's only returning ethics to the position it was in earlier years. I'll have more to say about this in @sec-social; the short version is that what's happening inside ethics, and in particular the focus on social questions, is more interesting than the size of the category.
