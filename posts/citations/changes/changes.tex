@@ -24,9 +24,9 @@
 \usepackage{lmodern}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
 Bold]{EB Garamond Math}
-  \setsansfont[]{Europa-Bold}
+    \setsansfont[]{Europa-Bold}
   \setmathfont[]{Garamond-Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -42,14 +42,28 @@ marginparsep=0in]{geometry}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{3}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
 \providecommand{\tightlist}{%
@@ -76,6 +90,39 @@ marginparsep=0in]{geometry}
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \setlength\heavyrulewidth{0ex}
 \setlength\lightrulewidth{0ex}
@@ -147,10 +194,12 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
+
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -158,6 +207,7 @@ marginparsep=0in]{geometry}
   pdfauthor={Brian Weatherson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Changes in Citation Patterns}
 \author{Brian Weatherson}
@@ -174,6 +224,7 @@ longer disappear from philosophy. Since around 2002, every topic that
 has reached a certain level of prominence in the literature has retained
 its prominence. This is notably not the case before the late 1990s.
 \end{abstract}
+
 
 \setstretch{1.1}
 By looking at changes in citation patterns, we can tell something about
@@ -534,6 +585,7 @@ time period.
 The very top of the citation list, since 2020, is shown in
 Table~\ref{tbl-recent-high-cite}.
 
+
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0833}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9167}}@{}}
@@ -553,45 +605,66 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-246 & David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
-Universals'' \\
-156 & S Haslanger {[}-@WOS000085841900002{]} ``Gender and Race: (What)
-Are They? (What) Do We Want Them To Be?'' \\
-127 & P Machamer, L Darden, et al {[}-@WOS000087305900001{]} ``Thinking
-About Mechanisms'' \\
-112 & A Clark and D Chalmers {[}-@WOS000073222300002{]} ``The Extended
-Mind'' \\
-111 & Jonathan Schaffer {[}-@WOS000368189400004{]} ``Grounding in the
-Image of Causation'' \\
-108 & T Nagel {[}-@WOSA1974U469700001{]} ``What is It Like To Be a
-Bat'' \\
-107 & David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge'' \\
-105 & Jessica M. Wilson {[}-@WOS000344393500001{]} ``No Work for a
-Theory of Grounding'' \\
-100 & J Pryor {[}-@WOS000165361800002{]} ``The Skeptic and the
-Dogmatist'' \\
-100 & John Hawthorne and Jason Stanley {[}-@WOS000262624000001{]}
+246 & David Lewis
+(\citeproc{ref-WOSA1983RR51600001}{1983})
+``New Work for a Theory of Universals'' \\
+156 & S Haslanger
+(\citeproc{ref-WOS000085841900002}{2000})
+``Gender and Race: (What) Are They? (What) Do We Want Them To Be?'' \\
+127 & P Machamer, L Darden, et al
+(\citeproc{ref-WOS000087305900001}{2000})
+``Thinking About Mechanisms'' \\
+112 & A Clark and D Chalmers
+(\citeproc{ref-WOS000073222300002}{1998})
+``The Extended Mind'' \\
+111 & Jonathan Schaffer
+(\citeproc{ref-WOS000368189400004}{2016})
+``Grounding in the Image of Causation'' \\
+108 & T Nagel
+(\citeproc{ref-WOSA1974U469700001}{1974})
+``What is It Like To Be a Bat'' \\
+107 & David Lewis
+(\citeproc{ref-WOSA1996VY21200001}{1996})
+``Elusive Knowledge'' \\
+105 & Jessica M. Wilson
+(\citeproc{ref-WOS000344393500001}{2014})
+``No Work for a Theory of Grounding'' \\
+100 & J Pryor
+(\citeproc{ref-WOS000165361800002}{2000})
+``The Skeptic and the Dogmatist'' \\
+100 & John Hawthorne and Jason Stanley
+(\citeproc{ref-WOS000262624000001}{2008})
 ``Knowledge and Action'' \\
-99 & David Plunkett and Tim Sundell {[}-@WOS000332023600001{]}
+99 & David Plunkett and Tim Sundell
+(\citeproc{ref-WOS000332023600001}{2013})
 ``Disagreement and the Semantics of Normative and Evaluative Terms'' \\
-97 & Adam Elga {[}-@WOS000249103800005{]} ``Reflection and
-Disagreement'' \\
-96 & JM Joyce {[}-@WOS000077956100002{]} ``A Nonpragmatic Vindication of
-Probabilism'' \\
-96 & S Kripke {[}-@WOSA1975BF60000005{]} ``Outline of a Theory of
-Truth'' \\
-95 & HG Frankfurt {[}-@WOSA1969Y444700002{]} ``Alternate Possibilities
-and Moral Responsibility'' \\
-95 & P Singer {[}-@WOSA1972Z066400001{]} ``Famine, Affluence, and
-Morality'' \\
-94 & David Christensen {[}-@WOS000207419300002{]} ``Epistemology of
-Disagreement: The Good News'' \\
-94 & David Lewis {[}-@WOSA1979HJ57600007{]} ``Scorekeeping in a Language
-Game'' \\
-91 & ES Anderson {[}-@WOS000078432400003{]} ``What is the Point of
-Equality?'' \\
-90 & Kristie Dotson {[}-@WOS000289948200002{]} ``Tracking Epistemic
-Violence, Tracking Practices of Silencing'' \\
+97 & Adam Elga
+(\citeproc{ref-WOS000249103800005}{2007})
+``Reflection and Disagreement'' \\
+96 & JM Joyce
+(\citeproc{ref-WOS000077956100002}{1998})
+``A Nonpragmatic Vindication of Probabilism'' \\
+96 & S Kripke
+(\citeproc{ref-WOSA1975BF60000005}{1975})
+``Outline of a Theory of Truth'' \\
+95 & HG Frankfurt
+(\citeproc{ref-WOSA1969Y444700002}{1969})
+``Alternate Possibilities and Moral Responsibility'' \\
+95 & P Singer
+(\citeproc{ref-WOSA1972Z066400001}{1972})
+``Famine, Affluence, and Morality'' \\
+94 & David Christensen
+(\citeproc{ref-WOS000207419300002}{2007})
+``Epistemology of Disagreement: The Good News'' \\
+94 & David Lewis
+(\citeproc{ref-WOSA1979HJ57600007}{1979c})
+``Scorekeeping in a Language Game'' \\
+91 & ES Anderson
+(\citeproc{ref-WOS000078432400003}{1999})
+``What is the Point of Equality?'' \\
+90 & Kristie Dotson
+(\citeproc{ref-WOS000289948200002}{2011})
+``Tracking Epistemic Violence, Tracking Practices of Silencing'' \\
 
 \end{longtable}
 
@@ -619,6 +692,7 @@ citations are more widely spread out.
 Table~\ref{tbl-recent-from-last-five} shows which articles since 2016
 have the most citations since 2020.
 
+
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0764}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9236}}@{}}
@@ -638,43 +712,68 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-111 & Jonathan Schaffer {[}-@WOS000368189400004{]} ``Grounding in the
-Image of Causation'' \\
-75 & Alexander Skiles {[}-@WOS000360509700002{]} ``Against Grounding
-Necessitarianism'' \\
-67 & Cian Dorr {[}-@WOS000397575900003{]} ``To Be F is To Be G'' \\
-66 & Alison Hills {[}-@WOS000387458900001{]} ``Understanding Why'' \\
-58 & Jane Friedman {[}-@WOS000400022600006{]} ``Why Suspend
-Judging?'' \\
-56 & Alastair Wilson {[}-@WOS000449886300001{]} ``Metaphysical
-Causation'' \\
-51 & Jane Friedman {[}-@WOS000465095900003{]} ``Inquiry and Belief'' \\
-49 & David Plunkett {[}-@WOS000366669500008{]} ``Which Concepts Should
-We Use?: Metalinguistic Negotiations and the Methodology of
-Philosophy'' \\
-49 & Jonathan Schaffer {[}-@WOS000404667500001{]} ``The Ground Between
-the Gaps'' \\
-47 & Miranda Fricker {[}-@WOS000368807300008{]} ``What's the Point of
-Blame? A Paradigm Based Explanation'' \\
-47 & Conor Mchugh and Jonathan Way {[}-@WOS000373095100002{]}
+111 & Jonathan Schaffer
+(\citeproc{ref-WOS000368189400004}{2016})
+``Grounding in the Image of Causation'' \\
+75 & Alexander Skiles
+(\citeproc{ref-WOS000360509700002}{2015})
+``Against Grounding Necessitarianism'' \\
+67 & Cian Dorr
+(\citeproc{ref-WOS000397575900003}{2016})
+``To Be F is To Be G'' \\
+66 & Alison Hills
+(\citeproc{ref-WOS000387458900001}{2016})
+``Understanding Why'' \\
+58 & Jane Friedman
+(\citeproc{ref-WOS000400022600006}{2017})
+``Why Suspend Judging?'' \\
+56 & Alastair Wilson
+(\citeproc{ref-WOS000449886300001}{2018})
+``Metaphysical Causation'' \\
+51 & Jane Friedman
+(\citeproc{ref-WOS000465095900003}{2019})
+``Inquiry and Belief'' \\
+49 & David Plunkett
+(\citeproc{ref-WOS000366669500008}{2015})
+``Which Concepts Should We Use?: Metalinguistic Negotiations and the
+Methodology of Philosophy'' \\
+49 & Jonathan Schaffer
+(\citeproc{ref-WOS000404667500001}{2017})
+``The Ground Between the Gaps'' \\
+47 & Miranda Fricker
+(\citeproc{ref-WOS000368807300008}{2016})
+``What's the Point of Blame? A Paradigm Based Explanation'' \\
+47 & Conor Mchugh and Jonathan Way
+(\citeproc{ref-WOS000373095100002}{2016})
 ``Fittingness First'' \\
-45 & Georg Brun {[}-@WOS000388169500004{]} ``Explication as a Method of
-Conceptual Re-Engineering'' \\
-45 & Rima Basu {[}-@WOS000477039200013{]} ``The Wrongs of Racist
-Beliefs'' \\
-44 & John Hawthorne, Daniel Rothschild, et al {[}-@WOS000373229500014{]}
+45 & Georg Brun
+(\citeproc{ref-WOS000388169500004}{2016})
+``Explication as a Method of Conceptual Re-Engineering'' \\
+45 & Rima Basu
+(\citeproc{ref-WOS000477039200013}{2019})
+``The Wrongs of Racist Beliefs'' \\
+44 & John Hawthorne, Daniel Rothschild, et al
+(\citeproc{ref-WOS000373229500014}{2016})
 ``Belief is Weak'' \\
-43 & Michael J. Raven {[}-@WOS000359831800003{]} ``Ground'' \\
-43 & David J. Chalmers {[}-@WOS000445442600001{]} ``The Meta-Problem of
-Consciousness'' \\
-42 & Alex Worsnip {[}-@WOS000419946900001{]} ``The Conflict of Evidence
-and Coherence'' \\
-42 & C. Thi Nguyen {[}-@WOS000539283800001{]} ``Echo Chambers and
-Epistemic Bubbles'' \\
-41 & Katharine Jenkins {[}-@WOS000366750800006{]} ``Amelioration and
-Inclusion: Gender Identity and the Concept of Woman'' \\
-41 & Shamik Dasgupta {[}-@WOS000374968600007{]} ``Metaphysical
-Rationalism'' \\
+43 & Michael J. Raven
+(\citeproc{ref-WOS000359831800003}{2015})
+``Ground'' \\
+43 & David J. Chalmers
+(\citeproc{ref-WOS000445442600001}{2018})
+``The Meta-Problem of Consciousness'' \\
+42 & Alex Worsnip
+(\citeproc{ref-WOS000419946900001}{2018})
+``The Conflict of Evidence and Coherence'' \\
+42 & C. Thi Nguyen
+(\citeproc{ref-WOS000539283800001}{2020})
+``Echo Chambers and Epistemic Bubbles'' \\
+41 & Katharine Jenkins
+(\citeproc{ref-WOS000366750800006}{2016})
+``Amelioration and Inclusion: Gender Identity and the Concept of
+Woman'' \\
+41 & Shamik Dasgupta
+(\citeproc{ref-WOS000374968600007}{2016})
+``Metaphysical Rationalism'' \\
 
 \end{longtable}
 
@@ -687,6 +786,7 @@ lot almost as soon as they were published. But not all of them were.
 Table~\ref{tbl-very-late-bloomers} lists the articles with the most
 cites since 2020 that were, in a sense I'll get to below, not widely
 cited when they were first published.
+
 
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0833}}
@@ -707,42 +807,69 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-156 & S Haslanger {[}-@WOS000085841900002{]} ``Gender and Race: (What)
-Are They? (What) Do We Want Them To Be?'' \\
-96 & JM Joyce {[}-@WOS000077956100002{]} ``A Nonpragmatic Vindication of
-Probabilism'' \\
-94 & David Lewis {[}-@WOSA1979HJ57600007{]} ``Scorekeeping in a Language
-Game'' \\
-84 & J D'Arms and D Jacobson {[}-@WOS000087998300003{]} ``The Moralistic
-Fallacy: On the `Appropriateness' of Emotions'' \\
-74 & H Douglas {[}-@WOS000166575500001{]} ``Inductive Risk and Values in
-Science'' \\
-67 & AI Goldman {[}-@WOS000170434600004{]} ``Experts: Which Ones Should
-You Trust?'' \\
-64 & K DeRose {[}-@WOSA1992KB29500008{]} ``Contextualism and Knowledge
-Attributions'' \\
-60 & SL Darwall {[}-@WOSA1977EA35800003{]} ``Two Kinds of Respect'' \\
-57 & AM Smith {[}-@WOS000227058600002{]} ``Responsibility for Attitudes:
-Activity and Passivity in Mental Life'' \\
-56 & P Hieronymi {[}-@WOS000234618400001{]} ``The Wrong Kind of
-Reason'' \\
-54 & R Feldman {[}-@WOS000087151200013{]} ``The Ethics of Belief'' \\
-53 & T Kelly {[}-@WOS000183034300004{]} ``Epistemic Rationality as
-Instrumental Rationality: A Critique'' \\
-52 & R Boyd {[}-@WOSA1991FC38500010{]} ``Realism, Anti-foundationalism
-and the Enthusiasm for Natural Kinds'' \\
-50 & P Kitcher {[}-@WOSA1981NA08400001{]} ``Explanatory Unification'' \\
-50 & S Yablo {[}-@WOSA1993KQ63200001{]} ``Is Conceivability a Guide To
-Possibility'' \\
-49 & R Langton {[}-@WOSA1993MJ74900002{]} ``Speech Acts and Unspeakable
-Acts'' \\
-46 & A Baker {[}-@WOS000228926500001{]} ``Are There Genuine Mathematical
-Explanations of Physical Phenomena?'' \\
-46 & R Feldman and E Conee {[}-@WOSA1985ANT6600002{]}
+156 & S Haslanger
+(\citeproc{ref-WOS000085841900002}{2000})
+``Gender and Race: (What) Are They? (What) Do We Want Them To Be?'' \\
+96 & JM Joyce
+(\citeproc{ref-WOS000077956100002}{1998})
+``A Nonpragmatic Vindication of Probabilism'' \\
+94 & David Lewis
+(\citeproc{ref-WOSA1979HJ57600007}{1979c})
+``Scorekeeping in a Language Game'' \\
+84 & J D'Arms and D Jacobson
+(\citeproc{ref-WOS000087998300003}{2000})
+``The Moralistic Fallacy: On the `Appropriateness' of Emotions'' \\
+74 & H Douglas
+(\citeproc{ref-WOS000166575500001}{2000})
+``Inductive Risk and Values in Science'' \\
+67 & AI Goldman
+(\citeproc{ref-WOS000170434600004}{2001})
+``Experts: Which Ones Should You Trust?'' \\
+64 & K DeRose
+(\citeproc{ref-WOSA1992KB29500008}{1992})
+``Contextualism and Knowledge Attributions'' \\
+60 & SL Darwall
+(\citeproc{ref-WOSA1977EA35800003}{1977})
+``Two Kinds of Respect'' \\
+57 & AM Smith
+(\citeproc{ref-WOS000227058600002}{2005})
+``Responsibility for Attitudes: Activity and Passivity in Mental
+Life'' \\
+56 & P Hieronymi
+(\citeproc{ref-WOS000234618400001}{2005})
+``The Wrong Kind of Reason'' \\
+54 & R Feldman
+(\citeproc{ref-WOS000087151200013}{2000})
+``The Ethics of Belief'' \\
+53 & T Kelly
+(\citeproc{ref-WOS000183034300004}{2003})
+``Epistemic Rationality as Instrumental Rationality: A Critique'' \\
+52 & R Boyd
+(\citeproc{ref-WOSA1991FC38500010}{1991})
+``Realism, Anti-foundationalism and the Enthusiasm for Natural
+Kinds'' \\
+50 & P Kitcher
+(\citeproc{ref-WOSA1981NA08400001}{1981})
+``Explanatory Unification'' \\
+50 & S Yablo
+(\citeproc{ref-WOSA1993KQ63200001}{1993})
+``Is Conceivability a Guide To Possibility'' \\
+49 & R Langton
+(\citeproc{ref-WOSA1993MJ74900002}{1993})
+``Speech Acts and Unspeakable Acts'' \\
+46 & A Baker
+(\citeproc{ref-WOS000228926500001}{2005})
+``Are There Genuine Mathematical Explanations of Physical
+Phenomena?'' \\
+46 & R Feldman and E Conee
+(\citeproc{ref-WOSA1985ANT6600002}{1985})
 ``Evidentialism'' \\
-43 & K Jones {[}-@WOSA1996VL52500002{]} ``Trust as An Affective
-Attitude'' \\
-42 & R Chang {[}-@WOS000177540500001{]} ``The Possibility of Parity'' \\
+43 & K Jones
+(\citeproc{ref-WOSA1996VL52500002}{1996})
+``Trust as An Affective Attitude'' \\
+42 & R Chang
+(\citeproc{ref-WOS000177540500001}{2002})
+``The Possibility of Parity'' \\
 
 \end{longtable}
 
@@ -755,6 +882,7 @@ discussing the rest of the paper, is that there is a `missing middle' in
 Table~\ref{tbl-recent-high-cite}. The only articles on that list between
 1976 and 1997 are by David Lewis. Table~\ref{tbl-last-quartile} shows
 the ten most cited articles, since 2020, published from 1976 to 1997.
+
 
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1209}}
@@ -775,22 +903,36 @@ Article
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-246 & David Lewis {[}-@WOSA1983RR51600001{]} ``New Work for a Theory of
-Universals'' \\
-107 & David Lewis {[}-@WOSA1996VY21200001{]} ``Elusive Knowledge'' \\
-94 & David Lewis {[}-@WOSA1979HJ57600007{]} ``Scorekeeping in a Language
-Game'' \\
-90 & David Lewis {[}-@WOSA1979JC64200001{]} ``Attitudes De Dicto and De
-Se'' \\
-89 & F Jackson {[}-@WOSA1982NH65300003{]} ``Epiphenomenal Qualia'' \\
-84 & David Lewis {[}-@WOSA1994PM10400005{]} ``Humean Supervenience
-Debugged'' \\
-82 & AI Goldman {[}-@WOSA1976CP00100001{]} ``Discrimination and
-Perceptual Knowledge'' \\
-77 & David Lewis {[}-@WOSA1979JB14500003{]} ``Counterfactual Dependence
-and Time's Arrow'' \\
-68 & G Priest {[}-@WOSA1979GW33200004{]} ``The Logic of Paradox'' \\
-66 & S Yablo {[}-@WOSA1992JA62400001{]} ``Mental Causation'' \\
+246 & David Lewis
+(\citeproc{ref-WOSA1983RR51600001}{1983})
+``New Work for a Theory of Universals'' \\
+107 & David Lewis
+(\citeproc{ref-WOSA1996VY21200001}{1996})
+``Elusive Knowledge'' \\
+94 & David Lewis
+(\citeproc{ref-WOSA1979HJ57600007}{1979c})
+``Scorekeeping in a Language Game'' \\
+90 & David Lewis
+(\citeproc{ref-WOSA1979JC64200001}{1979a})
+``Attitudes De Dicto and De Se'' \\
+89 & F Jackson
+(\citeproc{ref-WOSA1982NH65300003}{1982})
+``Epiphenomenal Qualia'' \\
+84 & David Lewis
+(\citeproc{ref-WOSA1994PM10400005}{1994})
+``Humean Supervenience Debugged'' \\
+82 & AI Goldman
+(\citeproc{ref-WOSA1976CP00100001}{1976})
+``Discrimination and Perceptual Knowledge'' \\
+77 & David Lewis
+(\citeproc{ref-WOSA1979JB14500003}{1979b})
+``Counterfactual Dependence and Time's Arrow'' \\
+68 & G Priest
+(\citeproc{ref-WOSA1979GW33200004}{1979})
+``The Logic of Paradox'' \\
+66 & S Yablo
+(\citeproc{ref-WOSA1992JA62400001}{1992})
+``Mental Causation'' \\
 
 \end{longtable}
 
@@ -806,8 +948,268 @@ But in the background will be the broader topic of how much the recent
 literature is shaped by the 1970s, 2000s, and 2010s, but not the decades
 in between.
 
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-WOS000078432400003}
+Anderson, Elizabeth S. 1999. {``What Is the Point of Equality?''}
+\emph{Ethics} 109 (2): 287--337.
+
+\bibitem[\citeproctext]{ref-WOS000228926500001}
+Baker, Alan. 2005. {``Are There Genuine Mathematical Explanations of
+Physical Phenomena?''} \emph{Mind} 114 (454): 223--38.
+
+\bibitem[\citeproctext]{ref-WOS000477039200013}
+Basu, Rima. 2019. {``The Wrongs of Racist Beliefs.''}
+\emph{Philosophical Studies} 176 (9): 2497--2515.
+
+\bibitem[\citeproctext]{ref-WOSA1991FC38500010}
+Boyd, Richard. 1991. {``Realism, Anti-Foundationalism and the Enthusiasm
+for Natural Kinds.''} \emph{Philosophical Studies} 61 (1-2): 127--48.
+
+\bibitem[\citeproctext]{ref-WOS000388169500004}
+Brun, Georg. 2016. {``Explication as a Method of Conceptual
+Re-Engineering.''} \emph{Erkenntnis} 81 (6): 1211--41.
+
+\bibitem[\citeproctext]{ref-WOS000445442600001}
+Chalmers, David J. 2018. {``The Meta-Problem of Consciousness.''}
+\emph{Journal Of Consciousness Studies} 25 (9-10): 6--61.
+
+\bibitem[\citeproctext]{ref-WOS000177540500001}
+Chang, Ruth. 2002. {``The Possibility of Parity.''} \emph{Ethics} 112
+(4): 659--88.
+
+\bibitem[\citeproctext]{ref-WOS000207419300002}
+Christensen, David. 2007. {``Epistemology of Disagreement: The Good
+News.''} \emph{Philosophical Review} 116 (2): 187--217.
+
+\bibitem[\citeproctext]{ref-WOS000073222300002}
+Clark, Andy, and David J. Chalmers. 1998. {``The Extended Mind.''}
+\emph{Analysis} 58 (1): 7--19.
+
+\bibitem[\citeproctext]{ref-WOS000087998300003}
+D'Arms, Justin, and Dan Jacobson. 2000. {``The Moralistic Fallacy: On
+the 'Appropriateness' of Emotions.''} \emph{Philosophy And
+Phenomenological Research} 61 (1): 65--90.
+
+\bibitem[\citeproctext]{ref-WOSA1977EA35800003}
+Darwall, Stephen L. 1977. {``Two Kinds of Respect.''} \emph{Ethics} 88
+(1): 36--49.
+
+\bibitem[\citeproctext]{ref-WOS000374968600007}
+Dasgupta, Shamik. 2016. {``Metaphysical Rationalism.''} \emph{Noûs} 50
+(2): 379--418.
+
+\bibitem[\citeproctext]{ref-WOSA1992KB29500008}
+DeRose, Keith. 1992. {``Contextualism and Knowledge Attributions.''}
+\emph{Philosophy And Phenomenological Research} 52 (4): 913--29.
+
+\bibitem[\citeproctext]{ref-WOS000397575900003}
+Dorr, Cian. 2016. {``To Be f Is to Be g.''} \emph{Philosophical
+Perspectives} 30 (1): 39--134.
+
+\bibitem[\citeproctext]{ref-WOS000289948200002}
+Dotson, Kristie. 2011. {``Tracking Epistemic Violence, Tracking
+Practices of Silencing.''} \emph{Hypatia} 26 (2): 236--57.
+
+\bibitem[\citeproctext]{ref-WOS000166575500001}
+Douglas, Heather. 2000. {``Inductive Risk and Values in Science.''}
+\emph{Philosophy Of Science} 67 (4): 559--79.
+
+\bibitem[\citeproctext]{ref-WOS000249103800005}
+Elga, Adam. 2007. {``Reflection and Disagreement.''} \emph{Noûs} 41 (3):
+478--502.
+
+\bibitem[\citeproctext]{ref-WOS000087151200013}
+Feldman, Richard. 2000. {``The Ethics of Belief.''} \emph{Philosophy And
+Phenomenological Research} 60 (3): 667--95.
+
+\bibitem[\citeproctext]{ref-WOSA1985ANT6600002}
+Feldman, Richard, and Earl Conee. 1985. {``Evidentialism.''}
+\emph{Philosophical Studies} 48 (1): 15--34.
+
+\bibitem[\citeproctext]{ref-WOSA1969Y444700002}
+Frankfurt, Harry G. 1969. {``Alternate Possibilities and Moral
+Responsibility.''} \emph{Journal Of Philosophy} 66 (23): 829--39.
+
+\bibitem[\citeproctext]{ref-WOS000368807300008}
+Fricker, Miranda. 2016. {``What's the Point of Blame? A Paradigm Based
+Explanation.''} \emph{Noûs} 50 (1): 165--83.
+
+\bibitem[\citeproctext]{ref-WOS000400022600006}
+Friedman, Jane. 2017. {``Why Suspend Judging?''} \emph{Noûs} 51 (2):
+302--26.
+
+\bibitem[\citeproctext]{ref-WOS000465095900003}
+---------. 2019. {``Inquiry and Belief.''} \emph{Noûs} 53 (2): 296--315.
+
+\bibitem[\citeproctext]{ref-WOSA1976CP00100001}
+Goldman, Alvin I. 1976. {``Discrimination and Perceptual Knowledge.''}
+\emph{Journal Of Philosophy} 73 (20): 771--91.
+
+\bibitem[\citeproctext]{ref-WOS000170434600004}
+---------. 2001. {``Experts: Which Ones Should You Trust?''}
+\emph{Philosophy And Phenomenological Research} 63 (1): 85--110.
+
+\bibitem[\citeproctext]{ref-WOS000085841900002}
+Haslanger, Sally. 2000. {``Gender and Race: (What) Are They? (What) Do
+We Want Them to Be?''} \emph{Noûs} 34 (1): 31--55.
+
+\bibitem[\citeproctext]{ref-WOS000373229500014}
+Hawthorne, John, Daniel Rothschild, and Levi Spectre. 2016. {``Belief Is
+Weak.''} \emph{Philosophical Studies} 173 (5): 1393--1404.
+
+\bibitem[\citeproctext]{ref-WOS000262624000001}
+Hawthorne, John, and Jason Stanley. 2008. {``Knowledge and Action.''}
+\emph{Journal Of Philosophy} 5 (10): 571--90.
+
+\bibitem[\citeproctext]{ref-WOS000234618400001}
+Hieronymi, Pamela. 2005. {``The Wrong Kind of Reason.''} \emph{Journal
+Of Philosophy} 102 (9): 437--57.
+
+\bibitem[\citeproctext]{ref-WOS000387458900001}
+Hills, Alison. 2016. {``Understanding Why.''} \emph{Noûs} 50 (4):
+661--88.
+
+\bibitem[\citeproctext]{ref-WOSA1982NH65300003}
+Jackson, Frank. 1982. {``Epiphenomenal Qualia.''} \emph{Philosophical
+Quarterly} 32 (127): 127--36.
+
+\bibitem[\citeproctext]{ref-WOS000366750800006}
+Jenkins, Katharine. 2016. {``Amelioration and Inclusion: Gender Identity
+and the Concept of Woman.''} \emph{Ethics} 126 (2): 394--421.
+
+\bibitem[\citeproctext]{ref-WOSA1996VL52500002}
+Jones, Karen. 1996. {``Trust as an Affective Attitude.''} \emph{Ethics}
+107 (1): 4--25.
+
+\bibitem[\citeproctext]{ref-WOS000077956100002}
+Joyce, James M. 1998. {``A Nonpragmatic Vindication of Probabilism.''}
+\emph{Philosophy Of Science} 65 (4): 575--603.
+
+\bibitem[\citeproctext]{ref-WOS000183034300004}
+Kelly, Thomas. 2003. {``Epistemic Rationality as Instrumental
+Rationality: A Critique.''} \emph{Philosophy And Phenomenological
+Research} 66 (3): 612--40.
+
+\bibitem[\citeproctext]{ref-WOSA1981NA08400001}
+Kitcher, Philip. 1981. {``Explanatory Unification.''} \emph{Philosophy
+Of Science} 48 (4): 507--31.
+
+\bibitem[\citeproctext]{ref-WOSA1975BF60000005}
+Kripke, Saul. 1975. {``Outline of a Theory of Truth.''} \emph{Journal Of
+Philosophy} 72 (19): 690--716.
+
+\bibitem[\citeproctext]{ref-WOSA1993MJ74900002}
+Langton, Rae. 1993. {``Speech Acts and Unspeakable Acts.''}
+\emph{Philosophy \& Public Affairs} 22 (4): 293--330.
+
+\bibitem[\citeproctext]{ref-WOSA1979JC64200001}
+Lewis, David. 1979a. {``Attitudes de Dicto and de Se.''}
+\emph{Philosophical Review} 88 (4): 513--43.
+
+\bibitem[\citeproctext]{ref-WOSA1979JB14500003}
+---------. 1979b. {``Counterfactual Dependence and Time's Arrow.''}
+\emph{Noûs} 13 (4): 455--76.
+
+\bibitem[\citeproctext]{ref-WOSA1979HJ57600007}
+---------. 1979c. {``Scorekeeping in a Language Game.''} \emph{Journal
+Of Philosophical Logic} 8 (3): 339--59.
+
+\bibitem[\citeproctext]{ref-WOSA1983RR51600001}
+---------. 1983. {``New Work for a Theory of Universals.''}
+\emph{Australasian Journal Of Philosophy} 61 (4): 343--77.
+
+\bibitem[\citeproctext]{ref-WOSA1994PM10400005}
+---------. 1994. {``Humean Supervenience Debugged.''} \emph{Mind} 103
+(412): 473--90.
+
+\bibitem[\citeproctext]{ref-WOSA1996VY21200001}
+---------. 1996. {``Elusive Knowledge.''} \emph{Australasian Journal Of
+Philosophy} 74 (4): 549--67.
+
+\bibitem[\citeproctext]{ref-WOS000087305900001}
+Machamer, Peter, Lindley Darden, and Carl F. Craver. 2000. {``Thinking
+about Mechanisms.''} \emph{Philosophy Of Science} 67 (1): 1--25.
+
+\bibitem[\citeproctext]{ref-WOS000373095100002}
+McHugh, Conor, and Jonathan Way. 2016. {``Fittingness First.''}
+\emph{Ethics} 126 (3): 575--606.
+
+\bibitem[\citeproctext]{ref-WOSA1974U469700001}
+Nagel, Thomas. 1974. {``What Is It Like to Be a Bat.''}
+\emph{Philosophical Review} 83 (4): 435--50.
+
+\bibitem[\citeproctext]{ref-WOS000539283800001}
+Nguyen, C. Thi. 2020. {``Echo Chambers and Epistemic Bubbles.''}
+\emph{Episteme} 17 (2): 141--61.
+
+\bibitem[\citeproctext]{ref-WOS000366669500008}
+Plunkett, David. 2015. {``Which Concepts Should We Use?: Metalinguistic
+Negotiations and the Methodology of Philosophy.''} \emph{Inquiry} 58
+(7-8): 828--74.
+
+\bibitem[\citeproctext]{ref-WOS000332023600001}
+Plunkett, David, and Tim Sundell. 2013. {``Disagreement and the
+Semantics of Normative and Evaluative Terms.''} \emph{Philosophers'
+Imprint} 13 (23): 1--37.
+
+\bibitem[\citeproctext]{ref-WOSA1979GW33200004}
+Priest, Graham. 1979. {``The Logic of Paradox.''} \emph{Journal Of
+Philosophical Logic} 8 (2): 219--41.
+
+\bibitem[\citeproctext]{ref-WOS000165361800002}
+Pryor, James. 2000. {``The Skeptic and the Dogmatist.''} \emph{Noûs} 34
+(4): 517--49.
+
+\bibitem[\citeproctext]{ref-WOS000359831800003}
+Raven, Michael J. 2015. {``Ground.''} \emph{Philosophy Compass} 10 (5):
+322--33.
+
+\bibitem[\citeproctext]{ref-WOS000368189400004}
+Schaffer, Jonathan. 2016. {``Grounding in the Image of Causation.''}
+\emph{Philosophical Studies} 173 (1): 49--100.
+
+\bibitem[\citeproctext]{ref-WOS000404667500001}
+---------. 2017. {``The Ground Between the Gaps.''} \emph{Philosophers'
+Imprint} 17 (11): 1--26.
+
+\bibitem[\citeproctext]{ref-WOSA1972Z066400001}
+Singer, Peter. 1972. {``Famine, Affluence, and Morality.''}
+\emph{Philosophy \& Public Affairs} 1 (3): 229--43.
+
+\bibitem[\citeproctext]{ref-WOS000360509700002}
+Skiles, Alexander. 2015. {``Against Grounding Necessitarianism.''}
+\emph{Erkenntnis} 80 (4): 717--51.
+
+\bibitem[\citeproctext]{ref-WOS000227058600002}
+Smith, Angela M. 2005. {``Responsibility for Attitudes: Activity and
+Passivity in Mental Life.''} \emph{Ethics} 115 (2): 236--71.
+
+\bibitem[\citeproctext]{ref-WOS000449886300001}
+Wilson, Alastair. 2018. {``Metaphysical Causation.''} \emph{Noûs} 52
+(4): 723--51.
+
+\bibitem[\citeproctext]{ref-WOS000344393500001}
+Wilson, Jessica M. 2014. {``No Work for a Theory of Grounding.''}
+\emph{Inquiry} 57 (5-6): 535--79.
+
+\bibitem[\citeproctext]{ref-WOS000419946900001}
+Worsnip, Alex. 2018. {``The Conflict of Evidence and Coherence.''}
+\emph{Philosophy And Phenomenological Research} 96 (1): 3--44.
+
+\bibitem[\citeproctext]{ref-WOSA1992JA62400001}
+Yablo, Stephen. 1992. {``Mental Causation.''} \emph{Philosophical
+Review} 101 (2): 245--80.
+
+\bibitem[\citeproctext]{ref-WOSA1993KQ63200001}
+---------. 1993. {``Is Conceivability a Guide to Possibility.''}
+\emph{Philosophy And Phenomenological Research} 53 (1): 1--42.
+
+\end{CSLReferences}
+
 
 
 \noindent Published online in September 2024.
+
 
 \end{document}

@@ -24,9 +24,9 @@
 \usepackage{lmodern}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
 Bold]{EB Garamond Math}
-  \setsansfont[]{Europa-Bold}
+    \setsansfont[]{Europa-Bold}
   \setmathfont[]{Garamond-Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -42,14 +42,28 @@ marginparsep=0in]{geometry}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{3}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
 \providecommand{\tightlist}{%
@@ -180,6 +194,7 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
+
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -193,6 +208,7 @@ marginparsep=0in]{geometry}
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
+
 \title{Can We Do Without Pragmatic Encroachment?}
 \author{Brian Weatherson}
 \date{2005}
@@ -205,6 +221,7 @@ credence and belief. A view is set out and defended where evidence and
 rational credence are not interest-relative, but belief, rational
 belief, and knowledge are.
 \end{abstract}
+
 
 \setstretch{1.1}
 \section{Introduction}\label{introduction}
@@ -1859,5 +1876,6 @@ Press.
 
 \noindent Published in\emph{
 Philosophical Perspectives}, 2005, pp. 417-443.
+
 
 \end{document}

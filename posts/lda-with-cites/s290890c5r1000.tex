@@ -24,9 +24,9 @@
 \usepackage{lmodern}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
 Bold]{EB Garamond Math}
-  \setsansfont[]{Europa-Bold}
+    \setsansfont[]{Europa-Bold}
   \setmathfont[]{Garamond-Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -42,14 +42,28 @@ marginparsep=0in]{geometry}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{3}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
 \providecommand{\tightlist}{%
@@ -180,10 +194,12 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
+
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -192,6 +208,7 @@ marginparsep=0in]{geometry}
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
+
 \title{Summary of an LDA}
 \author{Brian Weatherson}
 \date{2024}
@@ -199,341 +216,76 @@ marginparsep=0in]{geometry}
 \begin{document}
 \maketitle
 \begin{abstract}
-Input: Papers from \emph{Philosophical Studies} 1980-2019. Seed: 14884
+Input: Papers from \emph{Philosophical Studies} 1980-2019. Seed: 290890
 Categories: 5. Iterations: 1000.
 \end{abstract}
 
+
 \setstretch{1.1}
-\begin{longtable}[]{@{}lrrrrr@{}}
+This is a summary of a model produced by running the LDA algorithm over
+the articles published in \emph{Philosophical Studies} from 1980-2019. I
+set it to generate five categories, because it seemed that the bulk of
+articles in \emph{Philosophical Studies} fell into one of Ethics,
+Language, Epistemology, Mind, or Metaphysics, each of them broadly
+construed. (So Ethics includes anything that would be naturally
+published in \emph{Ethics}, including meta-ethics, and political
+philosophy.)
 
-\caption{\label{tbl-confusing}Articles the model is confused about.}
+\emph{Philosophical Studies} publishes little history of philosophy, and
+not much logic, so we didn't need categories for those. It also doesn't
+publish a great deal on aesthetics, or philosophy of religion. It does
+publish some philosophy of science. But most of the philosophy of
+science it publishes is either epistemology of science/formal
+epistemology, and hence in epistemology, or metaphysics of science, and
+hence in metaphysics. So five categories gives us a reasonable overview
+of what it publishes.
 
-\tabularnewline
+The model assigns, to each article, a probability of being in each of
+the five categories. I'll say the article is \textbf{in} the category
+that is assigned highest probability.
 
-\toprule\noalign{}
-Article & t1 & t2 & t3 & t4 & t5 \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-@WOS000335566200009 & 0.169 & 0.293 & 0.203 & 0.295 & 0.040 \\
-@WOS000165761700005 & 0.247 & 0.182 & 0.074 & 0.146 & 0.352 \\
-@WOSA1985ATA4800001 & 0.184 & 0.063 & 0.159 & 0.212 & 0.383 \\
-@WOS000316746200006 & 0.042 & 0.260 & 0.335 & 0.110 & 0.253 \\
-@WOS000263525300003 & 0.146 & 0.073 & 0.138 & 0.376 & 0.267 \\
-@WOSA1984SK63200007 & 0.263 & 0.311 & 0.249 & 0.000 & 0.176 \\
-@WOS000294571800001 & 0.126 & 0.213 & 0.125 & 0.129 & 0.407 \\
-@WOS000176688100002 & 0.054 & 0.238 & 0.094 & 0.272 & 0.343 \\
-@WOSA1993MT74500007 & 0.367 & 0.208 & 0.082 & 0.078 & 0.264 \\
-@WOSA1991GJ27900002 & 0.334 & 0.290 & 0.210 & 0.019 & 0.147 \\
-@WOSA1987J066300004 & 0.278 & 0.376 & 0.078 & 0.106 & 0.162 \\
-@WOS000292563800007 & 0.290 & 0.324 & 0.173 & 0.000 & 0.213 \\
-@WOSA1997XE13600001 & 0.279 & 0.073 & 0.167 & 0.102 & 0.379 \\
-@WOS000277449400005 & 0.023 & 0.248 & 0.343 & 0.108 & 0.277 \\
-@WOSA1994PH74700004 & 0.193 & 0.167 & 0.000 & 0.321 & 0.319 \\
-@WOS000245391600008 & 0.168 & 0.176 & 0.311 & 0.000 & 0.345 \\
-@WOSA1985AEK1800009 & 0.155 & 0.316 & 0.185 & 0.000 & 0.343 \\
-@WOS000239571000003 & 0.299 & 0.163 & 0.180 & 0.000 & 0.357 \\
-@WOSA1988Q669800002 & 0.134 & 0.417 & 0.045 & 0.177 & 0.227 \\
-@WOS000272802100003 & 0.427 & 0.242 & 0.109 & 0.110 & 0.112 \\
+For each of the five categories, I've asked it to output these features.
+Note that the name of the category is mine; the model just does a
+five-way split, and then I describe it. The descriptions are based on
+what you see below.
 
-\end{longtable}
+First, it lists the terms (i.e., words) that are most associated with
+the category.
 
-\section{Topic 1}\label{topic-1}
+Second, it lists a similarity score. This is roughly a measure of how
+closely the classification of articles in the category resembles the
+classification of those articles (in \emph{Philosophical Studies}
+1980-2019) cited by articles in the category. So I found the average
+classification of articles in the category, the average classification
+of the articles cited by articles in the category, turned each of those
+averages into five-dimensional vectors, and calculated the cosine of the
+angle between them. This is a reasonable measure of similarity, and as
+you can see, the numbers are high. This is no coincidence. I built many
+of these models, and this is the one with the highest average similarity
+score.
 
-\textbf{Terms}: see, experience, certain, without, mental, states, way,
-kind, phenomenal, new, experiences, concepts, perceptual, mind, role,
-concept, state, something, color, visual
+Third, it lists the articles that it is most confident are in the
+category, in descending order of confidence.
 
-\textbf{Score}: 0.9931169
+Fourth, it displays the full five-way classification for the twenty
+highest cited articles in the category. For this purpose I'm including
+citations in other philosophy journals (as indexed by Web of Science).
 
-\textbf{Characteristic Articles}:
+Fifth, it displays the full five-way classification for articles at the
+intersection of that category with the other four categories. So you can
+see which articles it thinks are at the intersection of Ethics and
+Metaphysics, or Mind and Epistemology.
 
-\begin{itemize}
-\tightlist
-\item
-  Susanna Schellenberg (\citeproc{ref-WOS000277959000002}{2010}) ``The
-  particularity and phenomenology of perceptual experience''
-\item
-  René Jagnow (\citeproc{ref-WOS000297667100005}{2012})
-  ``Representationalism and the perspectival character of perceptual
-  experience''
-\item
-  Benjamin Kozuch (\citeproc{ref-WOS000330732800013}{2014}) ``Prefrontal
-  lesion evidence against higher-order theories of consciousness''
-\item
-  Ori Beck (\citeproc{ref-WOS000457417800002}{2019}) ``Rethinking naive
-  realism''
-\item
-  Sebastian Watzl (\citeproc{ref-WOS000323740000019}{2013}) ``Silencing
-  the experience of change''
-\item
-  Josh Weisberg (\citeproc{ref-WOS000291493000006}{2011})
-  ``Misrepresenting consciousness''
-\item
-  Rami Ali (\citeproc{ref-WOS000424908500003}{2018}) ``Does
-  hallucinating involve perceiving?''
-\item
-  Athanasios Raftopoulos (\citeproc{ref-WOS000265826600001}{2009})
-  ``Reference, Perception, and Attention''
-\item
-  Jeff Speaks (\citeproc{ref-WOS000297496600003}{2011}) ``Spectrum
-  inversion without a difference in representation is impossible''
-\item
-  Anna Farennikova (\citeproc{ref-WOS000326939300001}{2013}) ``Seeing
-  absence''
-\end{itemize}
+After running through the five categories in this way, I've listed the
+articles the model was least confident about, and whose five-way
+classification was closest to a flat probability distribution.
 
-\textbf{Highly Cited Articles}:
+The databases I'm using switched from using first initials to first
+names in the mid-2000s. I've been manually adding first names, but I
+haven't completed doing this yet. That's why some authors just have
+initials, and others have full names.
 
-\phantomsection\label{tbl-1}
-\begin{longtable}[]{@{}lrrrrr@{}}
-\toprule\noalign{}
-Article & t1 & t2 & t3 & t4 & t5 \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Johnston (\citeproc{ref-WOSA1992KC39800002}{1992}) & 0.895 & 0.031 &
-0.074 & 0.000 & 0.000 \\
-Martin (\citeproc{ref-WOS000223334900003}{2004}) & 0.919 & 0.042 & 0.039
-& 0.000 & 0.000 \\
-Rosenthal (\citeproc{ref-WOSA1986C316000003}{1986}) & 1.000 & 0.000 &
-0.000 & 0.000 & 0.000 \\
-Johnston (\citeproc{ref-WOS000223334900005}{2004}) & 0.953 & 0.017 &
-0.000 & 0.000 & 0.029 \\
-Neander (\citeproc{ref-WOSA1995RP14800001}{1995}) & 0.879 & 0.059 &
-0.000 & 0.061 & 0.000 \\
-Kim (\citeproc{ref-WOSA1982NC90700004}{1982}) & 0.610 & 0.275 & 0.055 &
-0.060 & 0.000 \\
-Hill (\citeproc{ref-WOSA1997XH01200003}{1997}) & 0.882 & 0.000 & 0.071 &
-0.000 & 0.046 \\
-Gendler (\citeproc{ref-WOS000295087100003}{2011}) & 0.634 & 0.000 &
-0.083 & 0.281 & 0.003 \\
-RN Boyd (\citeproc{ref-WOS000082592000005}{1999}) & 0.628 & 0.365 &
-0.000 & 0.007 & 0.000 \\
-Schellenberg (\citeproc{ref-WOS000277959000002}{2010}) & 1.000 & 0.000 &
-0.000 & 0.000 & 0.000 \\
-Kind (\citeproc{ref-WOS000185281000002}{2003}) & 0.960 & 0.039 & 0.000 &
-0.000 & 0.000 \\
-Byrne (\citeproc{ref-WOSA1997WX72100001}{1997}) & 0.977 & 0.000 & 0.000
-& 0.000 & 0.023 \\
-Nanay (\citeproc{ref-WOS000280821200004}{2010}) & 0.991 & 0.008 & 0.000
-& 0.000 & 0.000 \\
-Chris Heathwood (\citeproc{ref-WOS000245280800002}{2007}) & 0.644 &
-0.000 & 0.029 & 0.327 & 0.000 \\
-Ginsborg (\citeproc{ref-WOS000251971400006}{2008}) & 1.000 & 0.000 &
-0.000 & 0.000 & 0.000 \\
-Pereboom and Kornblith (\citeproc{ref-WOSA1991GJ27900001}{1991}) & 0.559
-& 0.441 & 0.000 & 0.000 & 0.000 \\
-Sytsma and Machery (\citeproc{ref-WOS000282589300009}{2010}) & 0.923 &
-0.000 & 0.015 & 0.062 & 0.000 \\
-Dretske (\citeproc{ref-WOS000082592000007}{1999}) & 1.000 & 0.000 &
-0.000 & 0.000 & 0.000 \\
-F. Egan (\citeproc{ref-WOS000340618000008}{2014}) & 0.879 & 0.088 &
-0.000 & 0.006 & 0.028 \\
-Brogaard (\citeproc{ref-WOS000312741600003}{2013}) & 1.000 & 0.000 &
-0.000 & 0.000 & 0.000 \\
-\end{longtable}
-
-\section{Topic 2}\label{topic-2}
-
-\textbf{Terms}: world, time, actual, facts, existence, laws, possible,
-metaphysical, nothing, worlds, philosophy, since, fundamental, exist,
-lewis, just, fact, causal, property, relations
-
-\textbf{Score}: 0.9997802
-
-\textbf{Characteristic Articles}:
-
-\begin{itemize}
-\tightlist
-\item
-  Maureen Donnelly (\citeproc{ref-WOS000289572300002}{2011})
-  ``Endurantist and perdurantist accounts of persistence''
-\item
-  Louis deRosset (\citeproc{ref-WOS000295275500002}{2011}) ``What is the
-  Grounding Problem?''
-\item
-  Elizabeth Miller (\citeproc{ref-WOS000352225800011}{2015}) ``Humean
-  scientific explanation''
-\item
-  Karen Bennett (\citeproc{ref-WOS000221820200001}{2004})
-  ``Spatio-Temporal Coincidence and the Grounding Problem''
-\item
-  J. Dmitri Gallow (\citeproc{ref-WOS000368189400009}{2016}) ``A theory
-  of structural determination''
-\item
-  D. A. Denby (\citeproc{ref-WOS000168713400004}{2001}) ``Determinable
-  Nominalism''
-\item
-  Maureen Donnelly; Thomas Bittner
-  (\citeproc{ref-WOS000263525300002}{2009}) ``Summation Relations and
-  Portions of Stuff''
-\item
-  Michael Bertrand (\citeproc{ref-WOS000398358500011}{2017})
-  ``Fundamental ontological structure: an argument against pluralism''
-\item
-  Gabriel Uzquiano (\citeproc{ref-WOS000238428200006}{2006}) ``The Price
-  of Universality''
-\item
-  Yuri Balashov (\citeproc{ref-WOS000231710200001}{2005}) ``Special
-  Relativity, Coexistence and Temporal Parts: A Reply to Gilmore''
-\end{itemize}
-
-\textbf{Highly Cited Articles}:
-
-\phantomsection\label{tbl-2}
-\begin{longtable}[]{@{}lrrrrr@{}}
-\toprule\noalign{}
-Article & t1 & t2 & t3 & t4 & t5 \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Schaffer (\citeproc{ref-WOS000368189400004}{2016}) & 0.088 & 0.869 &
-0.013 & 0.000 & 0.030 \\
-Richard Boyd (\citeproc{ref-WOSA1991FC38500010}{1991}) & 0.221 & 0.605 &
-0.174 & 0.000 & 0.000 \\
-Kim (\citeproc{ref-WOS000082592000002}{1999}) & 0.168 & 0.832 & 0.000 &
-0.000 & 0.000 \\
-Markosian (\citeproc{ref-WOS000077322700001}{1998}) & 0.000 & 0.983 &
-0.000 & 0.000 & 0.017 \\
-Lewis (\citeproc{ref-WOSA1983RF82200005}{1983}) & 0.000 & 0.999 & 0.000
-& 0.000 & 0.000 \\
-Loewer (\citeproc{ref-WOS000307407600006}{2012}) & 0.000 & 0.903 & 0.057
-& 0.039 & 0.000 \\
-Plantinga (\citeproc{ref-WOSA1983QU18900001}{1983}) & 0.000 & 0.813 &
-0.000 & 0.000 & 0.187 \\
-Schaffer (\citeproc{ref-WOS000266504600006}{2009}) & 0.000 & 1.000 &
-0.000 & 0.000 & 0.000 \\
-Karen Bennett (\citeproc{ref-WOS000289572300004}{2011}) & 0.000 & 0.972
-& 0.000 & 0.018 & 0.010 \\
-J. Cohen and Callender (\citeproc{ref-WOS000266504600001}{2009}) & 0.000
-& 0.792 & 0.155 & 0.053 & 0.000 \\
-Cameron (\citeproc{ref-WOS000256757600001}{2008}) & 0.000 & 0.886 &
-0.000 & 0.012 & 0.102 \\
-K. Bennett (\citeproc{ref-WOS000221820200001}{2004}) & 0.000 & 1.000 &
-0.000 & 0.000 & 0.000 \\
-Bourget and Chalmers (\citeproc{ref-WOS000340619100006}{2014}) & 0.135 &
-0.450 & 0.195 & 0.219 & 0.000 \\
-Millikan (\citeproc{ref-WOS000082592000004}{1999}) & 0.495 & 0.505 &
-0.000 & 0.000 & 0.000 \\
-Paul (\citeproc{ref-WOS000307407600001}{2012}) & 0.201 & 0.668 & 0.103 &
-0.000 & 0.027 \\
-Sober (\citeproc{ref-WOSA1983QH70700004}{1983}) & 0.000 & 1.000 & 0.000
-& 0.000 & 0.000 \\
-Cuneo and Shafer-Landau (\citeproc{ref-WOS000344541000001}{2014}) &
-0.054 & 0.482 & 0.186 & 0.238 & 0.041 \\
-Dasgupta (\citeproc{ref-WOS000266504600002}{2009}) & 0.004 & 0.838 &
-0.038 & 0.000 & 0.119 \\
-Cameron (\citeproc{ref-WOS000249408500004}{2007}) & 0.000 & 0.876 &
-0.067 & 0.011 & 0.046 \\
-Cameron (\citeproc{ref-WOS000282589300006}{2010}) & 0.000 & 0.727 &
-0.000 & 0.000 & 0.273 \\
-\end{longtable}
-
-\section{Topic 3}\label{topic-3}
-
-\textbf{Terms}: one, belief, epistemic, knowledge, beliefs, believe,
-evidence, justification, know, justified, arguments, believing,
-relevant, probability, think, doesnt, knows, dont, come, reasoning
-
-\textbf{Score}: 0.9989018
-
-\textbf{Characteristic Articles}:
-
-\begin{itemize}
-\tightlist
-\item
-  David James Barnett (\citeproc{ref-WOS000342461900001}{2014}) ``What's
-  the matter with epistemic circularity?''
-\item
-  Joshua Schechter (\citeproc{ref-WOS000316746200008}{2013}) ``Rational
-  self-doubt and the failure of closure''
-\item
-  Miriam Schoenfield (\citeproc{ref-WOS000305689500003}{2012})
-  ``Chilling out on epistemic rationality: A defense of imprecise
-  credences (and other imprecise doxastic attitudes)''
-\item
-  Paulina Sliwa; Sophie Horowitz
-  (\citeproc{ref-WOS000361721200001}{2015}) ``Respecting all the
-  evidence''
-\item
-  Zach Barnett (\citeproc{ref-WOS000454895300001}{2019}) ``Belief
-  dependence: How do the numbers count?''
-\item
-  Mark Schroeder (\citeproc{ref-WOS000307818400006}{2012}) ``Stakes,
-  withholding, and pragmatic encroachment on knowledge''
-\item
-  Luca Moretti (\citeproc{ref-WOS000348378400015}{2015}) ``In defence of
-  dogmatism''
-\item
-  Michael Blome-Tillmann (\citeproc{ref-WOS000349021600013}{2015})
-  ``Solving the Moorean Puzzle''
-\item
-  Omar Mirza (\citeproc{ref-WOS000259527100001}{2008}) ``A User's Guide
-  to the Evolutionary Argument against Naturalism''
-\item
-  Rachel Elizabeth Fraser
-  (\citeproc{ref-WOS000384351700013}{\textbf{WOS000384351700013?}})
-  ``Risk, doubt, and transmission''
-\end{itemize}
-
-\textbf{Highly Cited Articles}:
-
-\phantomsection\label{tbl-3}
-\begin{longtable}[]{@{}lrrrrr@{}}
-\toprule\noalign{}
-Article & t1 & t2 & t3 & t4 & t5 \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Feldman and Conee (\citeproc{ref-WOSA1985ANT6600002}{1985}) & 0.018 &
-0.000 & 0.897 & 0.085 & 0.000 \\
-S. Cohen (\citeproc{ref-WOSA1984TN86300001}{1984}) & 0.000 & 0.000 &
-0.993 & 0.007 & 0.000 \\
-White (\citeproc{ref-WOS000243445600002}{2006}) & 0.038 & 0.000 & 0.962
-& 0.000 & 0.000 \\
-Conee and Feldman (\citeproc{ref-WOS000072502200001}{1998}) & 0.311 &
-0.000 & 0.594 & 0.000 & 0.095 \\
-Boghossian (\citeproc{ref-WOS000335566200001}{2014}) & 0.137 & 0.011 &
-0.802 & 0.014 & 0.035 \\
-Friedman (\citeproc{ref-WOS000312934500003}{2013}) & 0.000 & 0.000 &
-0.981 & 0.000 & 0.019 \\
-Buchak (\citeproc{ref-WOS000336029900007}{2014}) & 0.000 & 0.000 & 0.627
-& 0.373 & 0.000 \\
-Weatherson (\citeproc{ref-WOS000184910100001}{2003}) & 0.093 & 0.078 &
-0.529 & 0.050 & 0.249 \\
-Kelly (\citeproc{ref-WOS000178572700004}{2002}) & 0.000 & 0.000 & 0.500
-& 0.500 & 0.000 \\
-Enoch (\citeproc{ref-WOS000275530000006}{2010}) & 0.000 & 0.055 & 0.845
-& 0.100 & 0.000 \\
-Dretske (\citeproc{ref-WOSA1981MP93300005}{1981}) & 0.027 & 0.000 &
-0.973 & 0.000 & 0.000 \\
-Sosa (\citeproc{ref-WOS000244463400008}{2007}) & 0.376 & 0.018 & 0.522 &
-0.084 & 0.000 \\
-Elgin (\citeproc{ref-WOS000244463400003}{2007}) & 0.196 & 0.114 & 0.597
-& 0.000 & 0.093 \\
-Fraassen (\citeproc{ref-WOSA1995QE80400001}{1995}) & 0.000 & 0.029 &
-0.858 & 0.083 & 0.030 \\
-Inwagen (\citeproc{ref-WOS000076351200004}{1998}) & 0.000 & 0.371 &
-0.553 & 0.013 & 0.062 \\
-Schroeder (\citeproc{ref-WOS000255094400004}{2008}) & 0.000 & 0.000 &
-0.921 & 0.028 & 0.051 \\
-Hawthorne, Rothschild, and Spectre
-(\citeproc{ref-WOS000373229500014}{2016}) & 0.000 & 0.000 & 0.929 &
-0.000 & 0.071 \\
-Ganson (\citeproc{ref-WOS000256091800009}{2008}) & 0.000 & 0.000 & 0.822
-& 0.178 & 0.000 \\
-Burge (\citeproc{ref-WOSA1997WT06900002}{1997}) & 0.150 & 0.000 & 0.837
-& 0.000 & 0.013 \\
-Brown (\citeproc{ref-WOS000241143100001}{2006}) & 0.000 & 0.000 & 0.617
-& 0.000 & 0.383 \\
-\end{longtable}
-
-\section{Topic 4}\label{topic-4}
+\section{Ethics}\label{ethics}
 
 \textbf{Terms}: moral, may, action, might, agent, right, person, act,
 actions, people, morally, agents, even, responsibility, make, social,
@@ -557,8 +309,8 @@ intention, want, simply, others
   Hobbesian derivation of the principle of universalization''
 \item
   Holly M. Smith; David E. Black
-  (\citeproc{ref-WOS000490595100006}{\textbf{WOS000490595100006?}})
-  ``The morality of creating and eliminating duties''
+  (\citeproc{ref-WOS000490595100006}{2019}) ``The morality of creating
+  and eliminating duties''
 \item
   Richard J. Arneson (\citeproc{ref-WOS000078716600004}{1999}) ``Against
   Rawlsian Equality of Opportunity''
@@ -576,65 +328,147 @@ intention, want, simply, others
   Nathan Hanna (\citeproc{ref-WOS000268500100001}{2009}) ``Liberalism
   and the General Justifiability of Punishment''
 \item
-  Gina Schouten
-  (\citeproc{ref-WOS000428959200005}{\textbf{WOS000428959200005?}})
-  ``Political liberalism and autonomy education: Are citizenship-based
-  arguments enough?''
+  Gina Schouten (\citeproc{ref-WOS000428959200005}{2018}) ``Political
+  liberalism and autonomy education: Are citizenship-based arguments
+  enough?''
 \end{itemize}
 
 \textbf{Highly Cited Articles}:
 
-\phantomsection\label{tbl-4}
-\begin{longtable}[]{@{}lrrrrr@{}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-Ethics}Highly cited articles in Ethics}
+
+\tabularnewline
+
 \toprule\noalign{}
-Article & t1 & t2 & t3 & t4 & t5 \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Street (\citeproc{ref-WOS000234431300006}{2006}) & 0.296 & 0.044 & 0.000
-& 0.660 & 0.000 \\
-Arneson (\citeproc{ref-WOSA1989U808000004}{1989}) & 0.000 & 0.000 &
-0.000 & 1.000 & 0.000 \\
-Strawson (\citeproc{ref-WOSA1994PB07700001}{1994}) & 0.020 & 0.000 &
-0.023 & 0.957 & 0.000 \\
-Schroeder (\citeproc{ref-WOS000263525300005}{2009}) & 0.000 & 0.000 &
-0.411 & 0.589 & 0.000 \\
-Vranas (\citeproc{ref-WOS000250135300002}{2007}) & 0.000 & 0.047 & 0.034
-& 0.897 & 0.022 \\
-Ryan (\citeproc{ref-WOS000184343600003}{2003}) & 0.000 & 0.000 & 0.395 &
-0.605 & 0.000 \\
-Smith (\citeproc{ref-WOS000254114200005}{2008}) & 0.011 & 0.000 & 0.000
-& 0.989 & 0.000 \\
-Guerrero (\citeproc{ref-WOS000249408500003}{2007}) & 0.000 & 0.000 &
-0.209 & 0.791 & 0.000 \\
-Sliwa (\citeproc{ref-WOS000305689500002}{2012}) & 0.000 & 0.000 & 0.325
-& 0.675 & 0.000 \\
-Setiya (\citeproc{ref-WOS000329460300003}{2014}) & 0.000 & 0.111 & 0.435
-& 0.453 & 0.000 \\
-Tuomela and Miller (\citeproc{ref-WOSA1988P180000003}{1988}) & 0.000 &
-0.000 & 0.083 & 0.795 & 0.122 \\
-Haslanger (\citeproc{ref-WOS000368189400006}{2016}) & 0.249 & 0.293 &
-0.000 & 0.423 & 0.035 \\
-Knobe (\citeproc{ref-WOS000240410600002}{2006}) & 0.156 & 0.000 & 0.000
-& 0.818 & 0.026 \\
-C. Heathwood (\citeproc{ref-WOS000237560100003}{2006}) & 0.138 & 0.026 &
-0.000 & 0.836 & 0.000 \\
-Streumer (\citeproc{ref-WOS000251190100004}{2007}) & 0.000 & 0.066 &
-0.000 & 0.859 & 0.075 \\
-DP Hunt (\citeproc{ref-WOS000085286500004}{2000}) & 0.000 & 0.030 &
-0.000 & 0.970 & 0.000 \\
-Basu (\citeproc{ref-WOS000477039200013}{2019}) & 0.000 & 0.000 & 0.287 &
-0.713 & 0.000 \\
-Fitzpatrick (\citeproc{ref-WOS000351097700005}{2015}) & 0.166 & 0.078 &
-0.273 & 0.484 & 0.000 \\
-Darwell (\citeproc{ref-WOS000072623200008}{1998}) & 0.310 & 0.000 &
-0.000 & 0.690 & 0.000 \\
-Way (\citeproc{ref-WOS000272850100003}{2010}) & 0.000 & 0.028 & 0.448 &
-0.524 & 0.000 \\
+Street (\citeproc{ref-WOS000234431300006}{2006})
+& 0.660 & 0.000 & 0.000 & 0.296 & 0.044 \\
+Arneson (\citeproc{ref-WOSA1989U808000004}{1989})
+& 1.000 & 0.000 & 0.000 & 0.000 & 0.000 \\
+Strawson (\citeproc{ref-WOSA1994PB07700001}{1994})
+& 0.957 & 0.000 & 0.023 & 0.020 & 0.000 \\
+Schroeder (\citeproc{ref-WOS000263525300005}{2009})
+& 0.589 & 0.000 & 0.411 & 0.000 & 0.000 \\
+Vranas (\citeproc{ref-WOS000250135300002}{2007})
+& 0.897 & 0.022 & 0.034 & 0.000 & 0.047 \\
+Ryan (\citeproc{ref-WOS000184343600003}{2003})
+& 0.605 & 0.000 & 0.395 & 0.000 & 0.000 \\
+A. M. Smith (\citeproc{ref-WOS000254114200005}{2008})
+& 0.989 & 0.000 & 0.000 & 0.011 & 0.000 \\
+Guerrero (\citeproc{ref-WOS000249408500003}{2007})
+& 0.791 & 0.000 & 0.209 & 0.000 & 0.000 \\
+Sliwa (\citeproc{ref-WOS000305689500002}{2012})
+& 0.675 & 0.000 & 0.325 & 0.000 & 0.000 \\
+Setiya (\citeproc{ref-WOS000329460300003}{2014})
+& 0.453 & 0.000 & 0.435 & 0.000 & 0.111 \\
+Tuomela and Miller (\citeproc{ref-WOSA1988P180000003}{1988})
+& 0.795 & 0.122 & 0.083 & 0.000 & 0.000 \\
+Haslanger (\citeproc{ref-WOS000368189400006}{2016})
+& 0.423 & 0.035 & 0.000 & 0.249 & 0.293 \\
+Knobe (\citeproc{ref-WOS000240410600002}{2006})
+& 0.818 & 0.026 & 0.000 & 0.156 & 0.000 \\
+Heathwood (\citeproc{ref-WOS000237560100003}{2006})
+& 0.836 & 0.000 & 0.000 & 0.138 & 0.026 \\
+Streumer (\citeproc{ref-WOS000251190100004}{2007})
+& 0.859 & 0.075 & 0.000 & 0.000 & 0.066 \\
+Hunt (\citeproc{ref-WOS000085286500004}{2000})
+& 0.970 & 0.000 & 0.000 & 0.000 & 0.030 \\
+Basu (\citeproc{ref-WOS000477039200013}{2019})
+& 0.713 & 0.000 & 0.287 & 0.000 & 0.000 \\
+Fitzpatrick (\citeproc{ref-WOS000351097700005}{2015})
+& 0.484 & 0.000 & 0.273 & 0.166 & 0.078 \\
+Darwell (\citeproc{ref-WOS000072623200008}{1998})
+& 0.690 & 0.000 & 0.000 & 0.310 & 0.000 \\
+Way (\citeproc{ref-WOS000272850100003}{2010})
+& 0.524 & 0.000 & 0.448 & 0.000 & 0.028 \\
+
 \end{longtable}
 
-\section{Topic 5}\label{topic-5}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-cross-Ethics}Notable cross category articles in
+Ethics}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Tannsjo (\citeproc{ref-WOS000249252100001}{2007})
+& 0.494 & 0.416 & 0.000 & 0.000 & 0.090 \\
+Hu (\citeproc{ref-WOS000357051200010}{2015})
+& 0.478 & 0.372 & 0.150 & 0.000 & 0.000 \\
+Sinclair (\citeproc{ref-WOS000384351700014}{2016})
+& 0.577 & 0.367 & 0.000 & 0.044 & 0.011 \\
+Copp (\citeproc{ref-WOSA1991FY01300001}{1991})
+& 0.522 & 0.003 & 0.461 & 0.000 & 0.013 \\
+Skidmore (\citeproc{ref-WOS000177424800002}{2002})
+& 0.505 & 0.044 & 0.451 & 0.000 & 0.000 \\
+Way (\citeproc{ref-WOS000272850100003}{2010})
+& 0.524 & 0.000 & 0.448 & 0.000 & 0.028 \\
+Funkhouser and Spaulding (\citeproc{ref-WOS000264104900001}{2009})
+& 0.533 & 0.000 & 0.000 & 0.466 & 0.000 \\
+McKitrick (\citeproc{ref-WOS000360809900003}{2015})
+& 0.539 & 0.000 & 0.000 & 0.461 & 0.000 \\
+Deijl (\citeproc{ref-WOS000468881900007}{2019})
+& 0.548 & 0.000 & 0.000 & 0.452 & 0.000 \\
+Brannmark (\citeproc{ref-WOS000400234300008}{2017})
+& 0.518 & 0.000 & 0.000 & 0.000 & 0.482 \\
+Quinn (\citeproc{ref-WOSA1993KR41800008}{1993})
+& 0.522 & 0.000 & 0.000 & 0.000 & 0.478 \\
+Zuk (\citeproc{ref-WOS000360809900002}{2015})
+& 0.511 & 0.011 & 0.000 & 0.000 & 0.478 \\
+
+\end{longtable}
+
+\section{Language}\label{language}
 
 \textbf{Terms}: use, sentence, sentences, semantic, context, language,
 meaning, reference, used, said, term, semantics, speaker, truth,
@@ -681,61 +515,780 @@ express, utterance, expressed, linguistic, predicate, john
 
 \textbf{Highly Cited Articles}:
 
-\phantomsection\label{tbl-5}
-\begin{longtable}[]{@{}lrrrrr@{}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-Language}Highly cited articles in Language}
+
+\tabularnewline
+
 \toprule\noalign{}
-Article & t1 & t2 & t3 & t4 & t5 \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Davies and Humberstone (\citeproc{ref-WOSA1980KA40400001}{1980}) & 0.067
-& 0.000 & 0.000 & 0.005 & 0.927 \\
-A. Egan (\citeproc{ref-WOS000245280800001}{2007}) & 0.000 & 0.000 &
-0.226 & 0.000 & 0.774 \\
-MacFarlane (\citeproc{ref-WOS000244463400002}{2007}) & 0.000 & 0.000 &
-0.331 & 0.000 & 0.669 \\
-Chalmers (\citeproc{ref-WOS000220800700007}{2004}) & 0.010 & 0.152 &
-0.139 & 0.000 & 0.699 \\
-Sundell (\citeproc{ref-WOS000294571800007}{2011}) & 0.000 & 0.000 &
-0.018 & 0.000 & 0.982 \\
-Michael Glanzberg (\citeproc{ref-WOS000249408500001}{2007}) & 0.000 &
-0.000 & 0.000 & 0.123 & 0.877 \\
-Richard (\citeproc{ref-WOS000222384400012}{2004}) & 0.000 & 0.000 &
-0.065 & 0.000 & 0.934 \\
-Schaffer (\citeproc{ref-WOS000222384400005}{2004}) & 0.000 & 0.000 &
-0.422 & 0.000 & 0.578 \\
-Hacking (\citeproc{ref-WOSA1991FC38500009}{1991}) & 0.265 & 0.339 &
-0.000 & 0.000 & 0.396 \\
-Wettstein (\citeproc{ref-WOSA1981MH17100009}{1981}) & 0.000 & 0.000 &
-0.000 & 0.000 & 1.000 \\
-Stanley (\citeproc{ref-WOS000222384400007}{2004}) & 0.000 & 0.005 &
-0.295 & 0.000 & 0.700 \\
-Davis (\citeproc{ref-WOS000245280900001}{2007}) & 0.000 & 0.000 & 0.470
-& 0.000 & 0.530 \\
-Corazza, Fish, and Gorvett (\citeproc{ref-WOS000173796600001}{2002}) &
-0.000 & 0.000 & 0.000 & 0.022 & 0.978 \\
-Nolan (\citeproc{ref-WOS000341924300014}{2014}) & 0.000 & 0.417 & 0.000
-& 0.000 & 0.583 \\
-Linsky and Zalta (\citeproc{ref-WOSA1996WD28900009}{1996}) & 0.000 &
-0.445 & 0.000 & 0.000 & 0.554 \\
-Richard (\citeproc{ref-WOSA1981LB30400001}{1981}) & 0.000 & 0.000 &
-0.000 & 0.000 & 1.000 \\
-M. Glanzberg (\citeproc{ref-WOS000169253800001}{2001}) & 0.000 & 0.074 &
-0.067 & 0.000 & 0.859 \\
-Olearyhawthorne and Cortens (\citeproc{ref-WOSA1995RP14800002}{1995}) &
-0.026 & 0.470 & 0.000 & 0.000 & 0.504 \\
-Finlay (\citeproc{ref-WOS000264104900002}{2009}) & 0.000 & 0.000 & 0.000
-& 0.495 & 0.505 \\
-Wikforss (\citeproc{ref-WOS000168427500004}{2001}) & 0.172 & 0.000 &
-0.180 & 0.083 & 0.565 \\
+Davies and Humberstone (\citeproc{ref-WOSA1980KA40400001}{1980})
+& 0.005 & 0.927 & 0.000 & 0.067 & 0.000 \\
+A. Egan (\citeproc{ref-WOS000245280800001}{2007})
+& 0.000 & 0.774 & 0.226 & 0.000 & 0.000 \\
+MacFarlane (\citeproc{ref-WOS000244463400002}{2007})
+& 0.000 & 0.669 & 0.331 & 0.000 & 0.000 \\
+Chalmers (\citeproc{ref-WOS000220800700007}{2004})
+& 0.000 & 0.699 & 0.139 & 0.010 & 0.152 \\
+Sundell (\citeproc{ref-WOS000294571800007}{2011})
+& 0.000 & 0.982 & 0.018 & 0.000 & 0.000 \\
+Glanzberg (\citeproc{ref-WOS000249408500001}{2007})
+& 0.123 & 0.877 & 0.000 & 0.000 & 0.000 \\
+Richard (\citeproc{ref-WOS000222384400012}{2004})
+& 0.000 & 0.934 & 0.065 & 0.000 & 0.000 \\
+Schaffer (\citeproc{ref-WOS000222384400005}{2004})
+& 0.000 & 0.578 & 0.422 & 0.000 & 0.000 \\
+Hacking (\citeproc{ref-WOSA1991FC38500009}{1991})
+& 0.000 & 0.396 & 0.000 & 0.265 & 0.339 \\
+Wettstein (\citeproc{ref-WOSA1981MH17100009}{1981})
+& 0.000 & 1.000 & 0.000 & 0.000 & 0.000 \\
+Stanley (\citeproc{ref-WOS000222384400007}{2004})
+& 0.000 & 0.700 & 0.295 & 0.000 & 0.005 \\
+Davis (\citeproc{ref-WOS000245280900001}{2007})
+& 0.000 & 0.530 & 0.470 & 0.000 & 0.000 \\
+Corazza, Fish, and Gorvett (\citeproc{ref-WOS000173796600001}{2002})
+& 0.022 & 0.978 & 0.000 & 0.000 & 0.000 \\
+Nolan (\citeproc{ref-WOS000341924300014}{2014})
+& 0.000 & 0.583 & 0.000 & 0.000 & 0.417 \\
+Linsky and Zalta (\citeproc{ref-WOSA1996WD28900009}{1996})
+& 0.000 & 0.554 & 0.000 & 0.000 & 0.445 \\
+Richard (\citeproc{ref-WOSA1981LB30400001}{1981})
+& 0.000 & 1.000 & 0.000 & 0.000 & 0.000 \\
+Glanzberg (\citeproc{ref-WOS000169253800001}{2001})
+& 0.000 & 0.859 & 0.067 & 0.000 & 0.074 \\
+O'Leary-Hawthorne and Cortens (\citeproc{ref-WOSA1995RP14800002}{1995})
+& 0.000 & 0.504 & 0.000 & 0.026 & 0.470 \\
+Finlay (\citeproc{ref-WOS000264104900002}{2009})
+& 0.495 & 0.505 & 0.000 & 0.000 & 0.000 \\
+Wikforss (\citeproc{ref-WOS000168427500004}{2001})
+& 0.083 & 0.565 & 0.180 & 0.172 & 0.000 \\
+
+\end{longtable}
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-cross-Language}Notable cross category articles in
+Language}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Finlay (\citeproc{ref-WOS000264104900002}{2009})
+& 0.495 & 0.505 & 0.000 & 0.000 & 0.000 \\
+Goble (\citeproc{ref-WOSA1991GZ30500005}{1991})
+& 0.470 & 0.529 & 0.000 & 0.000 & 0.000 \\
+Kivy (\citeproc{ref-WOSA1980KU39500003}{1980})
+& 0.442 & 0.446 & 0.000 & 0.112 & 0.000 \\
+Davis (\citeproc{ref-WOS000245280900001}{2007})
+& 0.000 & 0.530 & 0.470 & 0.000 & 0.000 \\
+Foley and Fumerton (\citeproc{ref-WOSA1985ANT6600007}{1985})
+& 0.000 & 0.542 & 0.458 & 0.000 & 0.000 \\
+Fogelin and Moor (\citeproc{ref-WOSA1991GZ30500006}{1991})
+& 0.000 & 0.551 & 0.448 & 0.000 & 0.000 \\
+Antony (\citeproc{ref-WOS000176751700001}{2002})
+& 0.000 & 0.489 & 0.000 & 0.484 & 0.026 \\
+Gert (\citeproc{ref-WOSA1997YD40400001}{1997})
+& 0.067 & 0.443 & 0.052 & 0.438 & 0.000 \\
+Hill (\citeproc{ref-WOS000370073500013}{2016})
+& 0.000 & 0.514 & 0.060 & 0.424 & 0.000 \\
+Thomason (\citeproc{ref-WOSA1982PQ97400003}{1982})
+& 0.000 & 0.506 & 0.000 & 0.000 & 0.493 \\
+O'Leary-Hawthorne and Cortens (\citeproc{ref-WOSA1995RP14800002}{1995})
+& 0.000 & 0.504 & 0.000 & 0.026 & 0.470 \\
+Jubien (\citeproc{ref-WOS000169758900003}{2001})
+& 0.000 & 0.491 & 0.000 & 0.059 & 0.450 \\
+
+\end{longtable}
+
+\section{Epistemology}\label{epistemology}
+
+\textbf{Terms}: one, belief, epistemic, knowledge, beliefs, believe,
+evidence, justification, know, justified, arguments, believing,
+relevant, probability, think, doesnt, knows, dont, come, reasoning
+
+\textbf{Score}: 0.9989018
+
+\textbf{Characteristic Articles}:
+
+\begin{itemize}
+\tightlist
+\item
+  David James Barnett (\citeproc{ref-WOS000342461900001}{2014}) ``What's
+  the matter with epistemic circularity?''
+\item
+  Joshua Schechter (\citeproc{ref-WOS000316746200008}{2013}) ``Rational
+  self-doubt and the failure of closure''
+\item
+  Miriam Schoenfield (\citeproc{ref-WOS000305689500003}{2012})
+  ``Chilling out on epistemic rationality: A defense of imprecise
+  credences (and other imprecise doxastic attitudes)''
+\item
+  Paulina Sliwa; Sophie Horowitz
+  (\citeproc{ref-WOS000361721200001}{2015}) ``Respecting all the
+  evidence''
+\item
+  Zach Barnett (\citeproc{ref-WOS000454895300001}{2019}) ``Belief
+  dependence: How do the numbers count?''
+\item
+  Mark Schroeder (\citeproc{ref-WOS000307818400006}{2012}) ``Stakes,
+  withholding, and pragmatic encroachment on knowledge''
+\item
+  Luca Moretti (\citeproc{ref-WOS000348378400015}{2015}) ``In defence of
+  dogmatism''
+\item
+  Michael Blome-Tillmann (\citeproc{ref-WOS000349021600013}{2015})
+  ``Solving the Moorean Puzzle''
+\item
+  Omar Mirza (\citeproc{ref-WOS000259527100001}{2008}) ``A User's Guide
+  to the Evolutionary Argument against Naturalism''
+\item
+  Rachel Elizabeth Fraser (\citeproc{ref-WOS000384351700013}{2016})
+  ``Risk, doubt, and transmission''
+\end{itemize}
+
+\textbf{Highly Cited Articles}:
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-Epistemology}Highly cited articles in Epistemology}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Feldman and Conee (\citeproc{ref-WOSA1985ANT6600002}{1985})
+& 0.085 & 0.000 & 0.897 & 0.018 & 0.000 \\
+S. Cohen (\citeproc{ref-WOSA1984TN86300001}{1984})
+& 0.007 & 0.000 & 0.993 & 0.000 & 0.000 \\
+White (\citeproc{ref-WOS000243445600002}{2006})
+& 0.000 & 0.000 & 0.962 & 0.038 & 0.000 \\
+Conee and Feldman (\citeproc{ref-WOS000072502200001}{1998})
+& 0.000 & 0.095 & 0.594 & 0.311 & 0.000 \\
+Boghossian (\citeproc{ref-WOS000335566200001}{2014})
+& 0.014 & 0.035 & 0.802 & 0.137 & 0.011 \\
+Friedman (\citeproc{ref-WOS000312934500003}{2013})
+& 0.000 & 0.019 & 0.981 & 0.000 & 0.000 \\
+Buchak (\citeproc{ref-WOS000336029900007}{2014})
+& 0.373 & 0.000 & 0.627 & 0.000 & 0.000 \\
+Weatherson (\citeproc{ref-WOS000184910100001}{2003})
+& 0.050 & 0.249 & 0.529 & 0.093 & 0.078 \\
+Kelly (\citeproc{ref-WOS000178572700004}{2002})
+& 0.500 & 0.000 & 0.500 & 0.000 & 0.000 \\
+Enoch (\citeproc{ref-WOS000275530000006}{2010})
+& 0.100 & 0.000 & 0.845 & 0.000 & 0.055 \\
+Dretske (\citeproc{ref-WOSA1981MP93300005}{1981})
+& 0.000 & 0.000 & 0.973 & 0.027 & 0.000 \\
+Sosa (\citeproc{ref-WOS000244463400008}{2007})
+& 0.084 & 0.000 & 0.522 & 0.376 & 0.018 \\
+Elgin (\citeproc{ref-WOS000244463400003}{2007})
+& 0.000 & 0.093 & 0.597 & 0.196 & 0.114 \\
+Fraassen (\citeproc{ref-WOSA1995QE80400001}{1995})
+& 0.083 & 0.030 & 0.858 & 0.000 & 0.029 \\
+Inwagen (\citeproc{ref-WOS000076351200004}{1998})
+& 0.013 & 0.062 & 0.553 & 0.000 & 0.371 \\
+Schroeder (\citeproc{ref-WOS000255094400004}{2008})
+& 0.028 & 0.051 & 0.921 & 0.000 & 0.000 \\
+Hawthorne, Rothschild, and Spectre(\citeproc{ref-WOS000373229500014}{2016})
+& 0.000 & 0.071 & 0.929 & 0.000 & 0.000 \\
+Ganson (\citeproc{ref-WOS000256091800009}{2008})
+& 0.178 & 0.000 & 0.822 & 0.000 & 0.000 \\
+Burge (\citeproc{ref-WOSA1997WT06900002}{1997})
+& 0.000 & 0.013 & 0.837 & 0.150 & 0.000 \\
+Brown (\citeproc{ref-WOS000241143100001}{2006})
+& 0.000 & 0.383 & 0.617 & 0.000 & 0.000 \\
+
+\end{longtable}
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-cross-Epistemology}Notable cross category articles
+in Epistemology}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Kelly (\citeproc{ref-WOS000178572700004}{2002})
+& 0.500 & 0.000 & 0.500 & 0.000 & 0.000 \\
+Gruber (\citeproc{ref-WOS000413603900011}{2017})
+& 0.477 & 0.000 & 0.523 & 0.000 & 0.000 \\
+Dufner and Schmidtz (\citeproc{ref-WOSA1988R296400005}{1988})
+& 0.448 & 0.000 & 0.552 & 0.000 & 0.000 \\
+Piller (\citeproc{ref-WOSA1996UE45300003}{1996})
+& 0.000 & 0.494 & 0.506 & 0.000 & 0.000 \\
+Feldman (\citeproc{ref-WOS000222384400002}{2004})
+& 0.019 & 0.472 & 0.509 & 0.000 & 0.000 \\
+Rourke (\citeproc{ref-WOS000313361100009}{2013})
+& 0.000 & 0.462 & 0.538 & 0.000 & 0.000 \\
+Schellenberg (\citeproc{ref-WOS000372265500006}{2016})
+& 0.000 & 0.000 & 0.501 & 0.499 & 0.000 \\
+Glüer (\citeproc{ref-WOS000372265500010}{2016})
+& 0.000 & 0.004 & 0.541 & 0.455 & 0.000 \\
+Barnes (\citeproc{ref-WOS000176751400004}{2002})
+& 0.000 & 0.000 & 0.562 & 0.438 & 0.000 \\
+Fine (\citeproc{ref-WOSA1991FC38500007}{1991})
+& 0.000 & 0.000 & 0.501 & 0.000 & 0.499 \\
+Schupbach (\citeproc{ref-WOS000261288500003}{2008})
+& 0.000 & 0.000 & 0.506 & 0.000 & 0.494 \\
+Legum (\citeproc{ref-WOSA1980KU39500008}{1980})
+& 0.000 & 0.000 & 0.509 & 0.000 & 0.491 \\
+
+\end{longtable}
+
+\section{Mind}\label{mind}
+
+\textbf{Terms}: see, experience, certain, without, mental, states, way,
+kind, phenomenal, new, experiences, concepts, perceptual, mind, role,
+concept, state, something, color, visual
+
+\textbf{Score}: 0.9931169
+
+\textbf{Characteristic Articles}:
+
+\begin{itemize}
+\tightlist
+\item
+  Susanna Schellenberg (\citeproc{ref-WOS000277959000002}{2010}) ``The
+  particularity and phenomenology of perceptual experience''
+\item
+  René Jagnow (\citeproc{ref-WOS000297667100005}{2012})
+  ``Representationalism and the perspectival character of perceptual
+  experience''
+\item
+  Benjamin Kozuch (\citeproc{ref-WOS000330732800013}{2014}) ``Prefrontal
+  lesion evidence against higher-order theories of consciousness''
+\item
+  Ori Beck (\citeproc{ref-WOS000457417800002}{2019}) ``Rethinking naive
+  realism''
+\item
+  Sebastian Watzl (\citeproc{ref-WOS000323740000019}{2013}) ``Silencing
+  the experience of change''
+\item
+  Josh Weisberg (\citeproc{ref-WOS000291493000006}{2011})
+  ``Misrepresenting consciousness''
+\item
+  Rami Ali (\citeproc{ref-WOS000424908500003}{2018}) ``Does
+  hallucinating involve perceiving?''
+\item
+  Athanasios Raftopoulos (\citeproc{ref-WOS000265826600001}{2009})
+  ``Reference, Perception, and Attention''
+\item
+  Jeff Speaks (\citeproc{ref-WOS000297496600003}{2011}) ``Spectrum
+  inversion without a difference in representation is impossible''
+\item
+  Anna Farennikova (\citeproc{ref-WOS000326939300001}{2013}) ``Seeing
+  absence''
+\end{itemize}
+
+\textbf{Highly Cited Articles}:
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-Mind}Highly cited articles in Mind}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Johnston (\citeproc{ref-WOSA1992KC39800002}{1992})
+& 0.000 & 0.000 & 0.074 & 0.895 & 0.031 \\
+Martin (\citeproc{ref-WOS000223334900003}{2004})
+& 0.000 & 0.000 & 0.039 & 0.919 & 0.042 \\
+Rosenthal (\citeproc{ref-WOSA1986C316000003}{1986})
+& 0.000 & 0.000 & 0.000 & 1.000 & 0.000 \\
+Johnston (\citeproc{ref-WOS000223334900005}{2004})
+& 0.000 & 0.029 & 0.000 & 0.953 & 0.017 \\
+Neander (\citeproc{ref-WOSA1995RP14800001}{1995})
+& 0.061 & 0.000 & 0.000 & 0.879 & 0.059 \\
+Kim (\citeproc{ref-WOSA1982NC90700004}{1982})
+& 0.060 & 0.000 & 0.055 & 0.610 & 0.275 \\
+Hill (\citeproc{ref-WOSA1997XH01200003}{1997})
+& 0.000 & 0.046 & 0.071 & 0.882 & 0.000 \\
+Gendler (\citeproc{ref-WOS000295087100003}{2011})
+& 0.281 & 0.003 & 0.083 & 0.634 & 0.000 \\
+Boyd (\citeproc{ref-WOS000082592000005}{1999})
+& 0.007 & 0.000 & 0.000 & 0.628 & 0.365 \\
+Schellenberg (\citeproc{ref-WOS000277959000002}{2010})
+& 0.000 & 0.000 & 0.000 & 1.000 & 0.000 \\
+Kind (\citeproc{ref-WOS000185281000002}{2003})
+& 0.000 & 0.000 & 0.000 & 0.960 & 0.039 \\
+Byrne (\citeproc{ref-WOSA1997WX72100001}{1997})
+& 0.000 & 0.023 & 0.000 & 0.977 & 0.000 \\
+Nanay (\citeproc{ref-WOS000280821200004}{2010})
+& 0.000 & 0.000 & 0.000 & 0.991 & 0.008 \\
+Heathwood (\citeproc{ref-WOS000245280800002}{2007})
+& 0.327 & 0.000 & 0.029 & 0.644 & 0.000 \\
+Ginsborg (\citeproc{ref-WOS000251971400006}{2008})
+& 0.000 & 0.000 & 0.000 & 1.000 & 0.000 \\
+Pereboom and Kornblith (\citeproc{ref-WOSA1991GJ27900001}{1991})
+& 0.000 & 0.000 & 0.000 & 0.559 & 0.441 \\
+Sytsma and Machery (\citeproc{ref-WOS000282589300009}{2010})
+& 0.062 & 0.000 & 0.015 & 0.923 & 0.000 \\
+Dretske (\citeproc{ref-WOS000082592000007}{1999})
+& 0.000 & 0.000 & 0.000 & 1.000 & 0.000 \\
+F. Egan (\citeproc{ref-WOS000340618000008}{2014})
+& 0.006 & 0.028 & 0.000 & 0.879 & 0.088 \\
+Brogaard (\citeproc{ref-WOS000312741600003}{2013})
+& 0.000 & 0.000 & 0.000 & 1.000 & 0.000 \\
+
+\end{longtable}
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-cross-Mind}Notable cross category articles in Mind}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Scarantino and Nielsen (\citeproc{ref-WOS000361721200007}{2015})
+& 0.492 & 0.000 & 0.000 & 0.508 & 0.000 \\
+Mallon (\citeproc{ref-WOS000360809900017}{2015})
+& 0.475 & 0.000 & 0.000 & 0.525 & 0.000 \\
+Mugg (\citeproc{ref-WOS000325717500001}{2013})
+& 0.459 & 0.026 & 0.000 & 0.515 & 0.000 \\
+Schweizer (\citeproc{ref-WOSA1991FY01300003}{1991})
+& 0.000 & 0.454 & 0.000 & 0.496 & 0.050 \\
+Silverberg (\citeproc{ref-WOSA1992JE91400002}{1992})
+& 0.000 & 0.424 & 0.000 & 0.576 & 0.000 \\
+Butler (\citeproc{ref-WOSA1995QV87300002}{1995})
+& 0.000 & 0.392 & 0.000 & 0.608 & 0.000 \\
+Gundersen (\citeproc{ref-WOS000288455900007}{2011})
+& 0.000 & 0.000 & 0.440 & 0.459 & 0.100 \\
+J. Smith (\citeproc{ref-WOS000240410600005}{2006})
+& 0.000 & 0.067 & 0.438 & 0.494 & 0.000 \\
+Byrne (\citeproc{ref-WOS000340618000007}{2014})
+& 0.000 & 0.000 & 0.427 & 0.573 & 0.000 \\
+Sartorelli (\citeproc{ref-WOS000376271100010}{2016})
+& 0.000 & 0.000 & 0.000 & 0.510 & 0.490 \\
+Choi (\citeproc{ref-WOS000227726800005}{2005})
+& 0.000 & 0.000 & 0.000 & 0.526 & 0.474 \\
+Robinson (\citeproc{ref-WOSA1993KK09800001}{1993})
+& 0.000 & 0.000 & 0.000 & 0.533 & 0.467 \\
+
+\end{longtable}
+
+\section{Metaphysics}\label{metaphysics}
+
+\textbf{Terms}: world, time, actual, facts, existence, laws, possible,
+metaphysical, nothing, worlds, philosophy, since, fundamental, exist,
+lewis, just, fact, causal, property, relations
+
+\textbf{Score}: 0.9997802
+
+\textbf{Characteristic Articles}:
+
+\begin{itemize}
+\tightlist
+\item
+  Maureen Donnelly (\citeproc{ref-WOS000289572300002}{2011})
+  ``Endurantist and perdurantist accounts of persistence''
+\item
+  Louis deRosset (\citeproc{ref-WOS000295275500002}{2011}) ``What is the
+  Grounding Problem?''
+\item
+  Elizabeth Miller (\citeproc{ref-WOS000352225800011}{2015}) ``Humean
+  scientific explanation''
+\item
+  Karen Bennett (\citeproc{ref-WOS000221820200001}{2004})
+  ``Spatio-Temporal Coincidence and the Grounding Problem''
+\item
+  J. Dmitri Gallow (\citeproc{ref-WOS000368189400009}{2016}) ``A theory
+  of structural determination''
+\item
+  D. A. Denby (\citeproc{ref-WOS000168713400004}{2001}) ``Determinable
+  Nominalism''
+\item
+  Maureen Donnelly; Thomas Bittner
+  (\citeproc{ref-WOS000263525300002}{2009}) ``Summation Relations and
+  Portions of Stuff''
+\item
+  Michael Bertrand (\citeproc{ref-WOS000398358500011}{2017})
+  ``Fundamental ontological structure: an argument against pluralism''
+\item
+  Gabriel Uzquiano (\citeproc{ref-WOS000238428200006}{2006}) ``The Price
+  of Universality''
+\item
+  Yuri Balashov (\citeproc{ref-WOS000231710200001}{2005}) ``Special
+  Relativity, Coexistence and Temporal Parts: A Reply to Gilmore''
+\end{itemize}
+
+\textbf{Highly Cited Articles}:
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-Metaphysics}Highly cited articles in Metaphysics}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Schaffer (\citeproc{ref-WOS000368189400004}{2016})
+& 0.000 & 0.030 & 0.013 & 0.088 & 0.869 \\
+Boyd (\citeproc{ref-WOSA1991FC38500010}{1991})
+& 0.000 & 0.000 & 0.174 & 0.221 & 0.605 \\
+Kim (\citeproc{ref-WOS000082592000002}{1999})
+& 0.000 & 0.000 & 0.000 & 0.168 & 0.832 \\
+Markosian (\citeproc{ref-WOS000077322700001}{1998})
+& 0.000 & 0.017 & 0.000 & 0.000 & 0.983 \\
+Lewis (\citeproc{ref-WOSA1983RF82200005}{1983})
+& 0.000 & 0.000 & 0.000 & 0.000 & 0.999 \\
+Loewer (\citeproc{ref-WOS000307407600006}{2012})
+& 0.039 & 0.000 & 0.057 & 0.000 & 0.903 \\
+Plantinga (\citeproc{ref-WOSA1983QU18900001}{1983})
+& 0.000 & 0.187 & 0.000 & 0.000 & 0.813 \\
+Schaffer (\citeproc{ref-WOS000266504600006}{2009})
+& 0.000 & 0.000 & 0.000 & 0.000 & 1.000 \\
+Bennett (\citeproc{ref-WOS000289572300004}{2011})
+& 0.018 & 0.010 & 0.000 & 0.000 & 0.972 \\
+J. Cohen and Callender (\citeproc{ref-WOS000266504600001}{2009})
+& 0.053 & 0.000 & 0.155 & 0.000 & 0.792 \\
+Cameron (\citeproc{ref-WOS000256757600001}{2008})
+& 0.012 & 0.102 & 0.000 & 0.000 & 0.886 \\
+Bennett (\citeproc{ref-WOS000221820200001}{2004})
+& 0.000 & 0.000 & 0.000 & 0.000 & 1.000 \\
+Bourget and Chalmers (\citeproc{ref-WOS000340619100006}{2014})
+& 0.219 & 0.000 & 0.195 & 0.135 & 0.450 \\
+Millikan (\citeproc{ref-WOS000082592000004}{1999})
+& 0.000 & 0.000 & 0.000 & 0.495 & 0.505 \\
+Paul (\citeproc{ref-WOS000307407600001}{2012})
+& 0.000 & 0.027 & 0.103 & 0.201 & 0.668 \\
+Sober (\citeproc{ref-WOSA1983QH70700004}{1983})
+& 0.000 & 0.000 & 0.000 & 0.000 & 1.000 \\
+Cuneo and Shafer-Landau (\citeproc{ref-WOS000344541000001}{2014})
+& 0.238 & 0.041 & 0.186 & 0.054 & 0.482 \\
+Dasgupta (\citeproc{ref-WOS000266504600002}{2009})
+& 0.000 & 0.119 & 0.038 & 0.004 & 0.838 \\
+Cameron (\citeproc{ref-WOS000249408500004}{2007})
+& 0.011 & 0.046 & 0.067 & 0.000 & 0.876 \\
+Cameron (\citeproc{ref-WOS000282589300006}{2010})
+& 0.000 & 0.273 & 0.000 & 0.000 & 0.727 \\
+
+\end{longtable}
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-cross-Metaphysics}Notable cross category articles in
+Metaphysics}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Rubio (\citeproc{ref-WOS000448297600003}{2018})
+& 0.498 & 0.000 & 0.000 & 0.000 & 0.502 \\
+Carroll (\citeproc{ref-WOSA1988P180000005}{1988})
+& 0.473 & 0.000 & 0.000 & 0.000 & 0.526 \\
+Bernstein (\citeproc{ref-WOS000329240100001}{2014})
+& 0.460 & 0.000 & 0.042 & 0.000 & 0.498 \\
+Yablo (\citeproc{ref-WOS000396059900011}{2017})
+& 0.000 & 0.489 & 0.000 & 0.000 & 0.511 \\
+Heinaman (\citeproc{ref-WOSA1984TN86300007}{1984})
+& 0.000 & 0.485 & 0.000 & 0.000 & 0.515 \\
+Akiba (\citeproc{ref-WOS000173796600004}{2002})
+& 0.000 & 0.478 & 0.000 & 0.000 & 0.522 \\
+Koscholke (\citeproc{ref-WOS000436827600006}{2018})
+& 0.000 & 0.000 & 0.500 & 0.000 & 0.500 \\
+Meijs (\citeproc{ref-WOS000245084700001}{2007})
+& 0.000 & 0.000 & 0.467 & 0.000 & 0.533 \\
+Pruss (\citeproc{ref-WOS000286205400002}{2011})
+& 0.000 & 0.000 & 0.464 & 0.026 & 0.510 \\
+Millikan (\citeproc{ref-WOS000082592000004}{1999})
+& 0.000 & 0.000 & 0.000 & 0.495 & 0.505 \\
+Jackson (\citeproc{ref-WOS000245391100008}{2006})
+& 0.000 & 0.000 & 0.000 & 0.491 & 0.508 \\
+Campbell (\citeproc{ref-WOS000170287300002}{2001})
+& 0.000 & 0.000 & 0.000 & 0.482 & 0.518 \\
+
+\end{longtable}
+
+\section{Remainders}\label{remainders}
+
+Finally, it's helpful to see the articles that the model is most
+confused about. Table~\ref{tbl-confusing} lists the articles with the
+lowest standard deviation across the probabilities for the various
+categories. Ideally, these should be articles that really don't fall
+neatly into any of the five categories, but I'll leave it for you to
+decide whether these articles fit the bill.
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2985}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1045}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1940}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1791}}@{}}
+
+\caption{\label{tbl-confusing}Articles the model is confused about.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Article
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Ethics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Language
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Epistemology
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mind
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Metaphysics
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Hermes (\citeproc{ref-WOS000335566200009}{2014})
+& 0.295 & 0.040 & 0.203 & 0.169 & 0.293 \\
+Andler (\citeproc{ref-WOS000165761700005}{2000})
+& 0.146 & 0.352 & 0.074 & 0.247 & 0.182 \\
+Fischer (\citeproc{ref-WOSA1985ATA4800001}{1985})
+& 0.212 & 0.383 & 0.159 & 0.184 & 0.063 \\
+Lynch (\citeproc{ref-WOS000316746200006}{2013})
+& 0.110 & 0.253 & 0.335 & 0.042 & 0.260 \\
+Todd (\citeproc{ref-WOS000263525300003}{2009})
+& 0.376 & 0.267 & 0.138 & 0.146 & 0.073 \\
+Markie (\citeproc{ref-WOSA1984SK63200007}{1984})
+& 0.000 & 0.176 & 0.249 & 0.263 & 0.311 \\
+Kurth (\citeproc{ref-WOS000294571800001}{2011})
+& 0.129 & 0.407 & 0.125 & 0.126 & 0.213 \\
+Lukich (\citeproc{ref-WOS000176688100002}{2002})
+& 0.272 & 0.343 & 0.094 & 0.054 & 0.238 \\
+Benardete (\citeproc{ref-WOSA1993MT74500007}{1993})
+& 0.078 & 0.264 & 0.082 & 0.367 & 0.208 \\
+Davidson (\citeproc{ref-WOSA1991GJ27900002}{1991})
+& 0.019 & 0.147 & 0.210 & 0.334 & 0.290 \\
+Kalderon (\citeproc{ref-WOSA1987J066300004}{1987})
+& 0.106 & 0.162 & 0.078 & 0.278 & 0.376 \\
+Diaz-Leon (\citeproc{ref-WOS000292563800007}{2011})
+& 0.000 & 0.213 & 0.173 & 0.290 & 0.324 \\
+Gampel (\citeproc{ref-WOSA1997XE13600001}{1997})
+& 0.102 & 0.379 & 0.167 & 0.279 & 0.073 \\
+Daly and Liggins (\citeproc{ref-WOS000277449400005}{2010})
+& 0.108 & 0.277 & 0.343 & 0.023 & 0.248 \\
+Gallois (\citeproc{ref-WOSA1994PH74700004}{1994})
+& 0.321 & 0.319 & 0.000 & 0.193 & 0.167 \\
+Feit (\citeproc{ref-WOS000245391600008}{2006})
+& 0.000 & 0.345 & 0.311 & 0.168 & 0.176 \\
+Losonsky (\citeproc{ref-WOSA1985AEK1800009}{1985})
+& 0.000 & 0.343 & 0.185 & 0.155 & 0.316 \\
+Mozersky (\citeproc{ref-WOS000239571000003}{2006})
+& 0.000 & 0.357 & 0.180 & 0.299 & 0.163 \\
+Aune (\citeproc{ref-WOSA1988Q669800002}{1988})
+& 0.177 & 0.227 & 0.045 & 0.134 & 0.417 \\
+Harms (\citeproc{ref-WOS000272802100003}{2010})
+& 0.110 & 0.112 & 0.109 & 0.427 & 0.242 \\
+
 \end{longtable}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-WOS000173796600004}
+Akiba, K. 2002. {``A Deflationist Approach to Indeterminacy and
+Vagueness.''} \emph{Philosophical Studies} 107 (1): 69--86.
+
 \bibitem[\citeproctext]{ref-WOS000424908500003}
 Ali, Rami. 2018. {``Does Hallucinating Involve Perceiving?''}
 \emph{Philosophical Studies} 175 (3): 601--27.
+
+\bibitem[\citeproctext]{ref-WOS000165761700005}
+Andler, D. 2000. {``The Normativity of Context.''} \emph{Philosophical
+Studies} 100 (3): 273--303.
+
+\bibitem[\citeproctext]{ref-WOS000176751700001}
+Antony, MV. 2002. {``Concepts of Consciousness, Kinds of Consciousness,
+Meanings of 'Consciousness'.''} \emph{Philosophical Studies} 109 (1):
+1--16.
 
 \bibitem[\citeproctext]{ref-WOSA1989U808000004}
 Arneson, RJ. 1989. {``Equality and Equal Opportunity for Welfare.''}
@@ -744,6 +1297,10 @@ Arneson, RJ. 1989. {``Equality and Equal Opportunity for Welfare.''}
 \bibitem[\citeproctext]{ref-WOS000078716600004}
 ---------. 1999. {``Against Rawlsian Equality of Opportunity.''}
 \emph{Philosophical Studies} 93 (1): 77--112.
+
+\bibitem[\citeproctext]{ref-WOSA1988Q669800002}
+Aune, B. 1988. {``Action and Ontology.''} \emph{Philosophical Studies}
+54 (2): 195--213.
 
 \bibitem[\citeproctext]{ref-WOS000289572300003}
 Balaguer, Mark. 2011. {``Is There a Fact of the Matter Between Direct
@@ -754,6 +1311,10 @@ Reference Theory and (Neo-)fregeanism?''} \emph{Philosophical Studies}
 Balashov, Y. 2005. {``Special Relativity, Coexistence and Temporal
 Parts: A Reply to Gilmore.''} \emph{Philosophical Studies} 124 (1):
 1--40.
+
+\bibitem[\citeproctext]{ref-WOS000176751400004}
+Barnes, G. 2002. {``Conceivability, Explanation, and Defeat.''}
+\emph{Philosophical Studies} 108 (3): 327--38.
 
 \bibitem[\citeproctext]{ref-WOS000342461900001}
 Barnett, David James. 2014. {``What's the Matter with Epistemic
@@ -771,13 +1332,21 @@ Basu, Rima. 2019. {``The Wrongs of Racist Beliefs.''}
 Beck, Ori. 2019. {``Rethinking Naive Realism.''} \emph{Philosophical
 Studies} 176 (3): 607--33.
 
+\bibitem[\citeproctext]{ref-WOSA1993MT74500007}
+Benardete, JA. 1993. {``Real Definitions: Quine and Aristotle.''}
+\emph{Philosophical Studies} 72 (2-3): 265--82.
+
 \bibitem[\citeproctext]{ref-WOS000221820200001}
-Bennett, K. 2004. {``Spatio-Temporal Coincidence and the Grounding
+Bennett, Karen. 2004. {``Spatio-Temporal Coincidence and the Grounding
 Problem.''} \emph{Philosophical Studies} 118 (3): 339--71.
 
 \bibitem[\citeproctext]{ref-WOS000289572300004}
-Bennett, Karen. 2011. {``Construction Area (No Hard Hat Required).''}
+---------. 2011. {``Construction Area (No Hard Hat Required).''}
 \emph{Philosophical Studies} 154 (1): 79--104.
+
+\bibitem[\citeproctext]{ref-WOS000329240100001}
+Bernstein, Sara. 2014. {``Omissions as Possibilities.''}
+\emph{Philosophical Studies} 167 (1): 1--23.
 
 \bibitem[\citeproctext]{ref-WOS000398358500011}
 Bertrand, Michael. 2017. {``Fundamental Ontological Structure: An
@@ -801,9 +1370,13 @@ Boyd, Richard. 1991. {``Realism, Anti-Foundationalism and the Enthusiasm
 for Natural Kinds.''} \emph{Philosophical Studies} 61 (1-2): 127--48.
 
 \bibitem[\citeproctext]{ref-WOS000082592000005}
-Boyd, RN. 1999. {``Kinds, Complexity and Multiple Realization: Comments
+---------. 1999. {``Kinds, Complexity and Multiple Realization: Comments
 on Millikan's 'Historical Kinds and the Special Sciences'.''}
 \emph{Philosophical Studies} 95 (1-2): 67--98.
+
+\bibitem[\citeproctext]{ref-WOS000400234300008}
+Brannmark, Johan. 2017. {``Good-Making and Organic Unity.''}
+\emph{Philosophical Studies} 174 (6): 1499--1516.
 
 \bibitem[\citeproctext]{ref-WOS000318797300012}
 Braun, David. 2013. {``Contextualism about 'Might' and Says-That
@@ -825,9 +1398,17 @@ Buchak, Lara. 2014. {``Belief, Credence, and Norms.''}
 Burge, Tyler. 1997. {``Interlocution, Perception, and Memory.''}
 \emph{Philosophical Studies} 86 (1): 21--47.
 
+\bibitem[\citeproctext]{ref-WOSA1995QV87300002}
+Butler, K. 1995. {``Compositionality in Cognitive Models: The Real
+Issue.''} \emph{Philosophical Studies} 78 (2): 125--51.
+
 \bibitem[\citeproctext]{ref-WOSA1997WX72100001}
-Byrne, A. 1997. {``Some Like It Hot: Consciousness and Higher-Order
+Byrne, Alex. 1997. {``Some Like It Hot: Consciousness and Higher-Order
 Thoughts.''} \emph{Philosophical Studies} 86 (2): 103--29.
+
+\bibitem[\citeproctext]{ref-WOS000340618000007}
+---------. 2014. {``Perception and Evidence.''} \emph{Philosophical
+Studies} 70 (1): 101--13.
 
 \bibitem[\citeproctext]{ref-WOS000249408500004}
 Cameron, Ross P. 2007. {``The Contingency of Composition.''}
@@ -842,9 +1423,21 @@ Trouble.''} \emph{Philosophical Studies} 140 (1): 1--18.
 ---------. 2010. {``How to Have a Radically Minimal Ontology.''}
 \emph{Philosophical Studies} 151 (2): 249--64.
 
+\bibitem[\citeproctext]{ref-WOS000170287300002}
+Campbell, S. 2001. {``Persons and Substances.''} \emph{Philosophical
+Studies} 104 (3): 253--67.
+
+\bibitem[\citeproctext]{ref-WOSA1988P180000005}
+Carroll, JW. 1988. {``Iterated n-Player Prisoners-Dilemma Games.''}
+\emph{Philosophical Studies} 53 (3): 411--15.
+
 \bibitem[\citeproctext]{ref-WOS000220800700007}
 Chalmers, David J. 2004. {``Epistemic Two-Dimensional Semantics.''}
 \emph{Philosophical Studies} 118 (1-2): 153--226.
+
+\bibitem[\citeproctext]{ref-WOS000227726800005}
+Choi, S. 2005. {``Dispositions and Mimickers.''} \emph{Philosophical
+Studies} 122 (2): 183--88.
 
 \bibitem[\citeproctext]{ref-WOS000266504600001}
 Cohen, Jonathan, and Craig Callender. 2009. {``A Better Best System
@@ -858,10 +1451,13 @@ Studies} 46 (3): 279--95.
 Conee, Earl, and Richard Feldman. 1998. {``The Generality Problem for
 Reliabilism.''} \emph{Philosophical Studies} 89 (1): 1--29.
 
+\bibitem[\citeproctext]{ref-WOSA1991FY01300001}
+Copp, D. 1991. {``Moral Skepticism.''} \emph{Philosophical Studies} 62
+(3): 203--33.
+
 \bibitem[\citeproctext]{ref-WOS000173796600001}
-Corazza, E, W Fish, and J Gorvett. 2002. {``Who Is i? (Indexical
-Reference, Answering Machine Paradox).''} \emph{Philosophical Studies}
-107 (1): 1--21.
+Corazza, Eros, William Fish, and Jonathan Gorvett. 2002. {``Who Is
+{I}?''} \emph{Philosophical Studies} 107 (1): 1--21.
 
 \bibitem[\citeproctext]{ref-WOS000344541000001}
 Cuneo, Terence, and Russ Shafer-Landau. 2014. {``The Moral Fixed Points:
@@ -872,6 +1468,10 @@ New Directions for Moral Nonnaturalism.''} \emph{Philosophical Studies}
 Dahl, NO. 1986. {``Obligation and Moral Worth: Reflections on Prichard
 and Kant.''} \emph{Philosophical Studies} 50 (3): 369--99.
 
+\bibitem[\citeproctext]{ref-WOS000277449400005}
+Daly, Chris, and David Liggins. 2010. {``In Defence of Error Theory.''}
+\emph{Philosophical Studies} 149 (2): 209--30.
+
 \bibitem[\citeproctext]{ref-WOS000072623200008}
 Darwell, S. 1998. {``Empathy, Sympathy, Care.''} \emph{Philosophical
 Studies} 89 (2-3): 261--82.
@@ -879,6 +1479,10 @@ Studies} 89 (2-3): 261--82.
 \bibitem[\citeproctext]{ref-WOS000266504600002}
 Dasgupta, Shamik. 2009. {``Individuals: An Essay in Revisionary
 Metaphysics.''} \emph{Philosophical Studies} 145 (1): 35--67.
+
+\bibitem[\citeproctext]{ref-WOSA1991GJ27900002}
+Davidson, JDonald. 1991. {``Appearances, Antirealism, and Aristotle.''}
+\emph{Philosophical Studies} 63 (2): 147--66.
 
 \bibitem[\citeproctext]{ref-WOSA1980KA40400001}
 Davies, M, and L Humberstone. 1980. {``Two Notions of Necessity.''}
@@ -888,6 +1492,10 @@ Davies, M, and L Humberstone. 1980. {``Two Notions of Necessity.''}
 Davis, Wayne A. 2007. {``Knowledge Claims and Context: Loose Use.''}
 \emph{Philosophical Studies} 132 (3): 395--438.
 
+\bibitem[\citeproctext]{ref-WOS000468881900007}
+Deijl, Willem Van Der. 2019. {``Is Pleasure All That Is Good about
+Experience?''} \emph{Philosophical Studies} 176 (7): 1769--87.
+
 \bibitem[\citeproctext]{ref-WOS000168713400004}
 Denby, DA. 2001. {``Determinable Nominalism.''} \emph{Philosophical
 Studies} 102 (3): 297--327.
@@ -895,6 +1503,10 @@ Studies} 102 (3): 297--327.
 \bibitem[\citeproctext]{ref-WOS000295275500002}
 deRosset, Louis. 2011. {``What Is the Grounding Problem?''}
 \emph{Philosophical Studies} 156 (2): 173--97.
+
+\bibitem[\citeproctext]{ref-WOS000292563800007}
+Diaz-Leon, E. 2011. {``Reductive Explanation, Concepts, and a Priori
+Entailment.''} \emph{Philosophical Studies} 155 (1): 99--116.
 
 \bibitem[\citeproctext]{ref-WOS000289572300002}
 Donnelly, Maureen. 2011. {``Endurantist and Perdurantist Accounts of
@@ -911,6 +1523,10 @@ Dretske, F. 1981. {``The Pragmatic Dimension of Knowledge.''}
 \bibitem[\citeproctext]{ref-WOS000082592000007}
 ---------. 1999. {``The Mind's Awareness of Itself.''}
 \emph{Philosophical Studies} 95 (1-2): 103--24.
+
+\bibitem[\citeproctext]{ref-WOSA1988R296400005}
+Dufner, T, and D Schmidtz. 1988. {``The Tickle Defense Defense.''}
+\emph{Philosophical Studies} 54 (3): 383--86.
 
 \bibitem[\citeproctext]{ref-WOS000245280800001}
 Egan, Andy. 2007. {``Epistemic Modals, Relativism and Assertion.''}
@@ -937,29 +1553,69 @@ Everett, A. 2003. {``Empty Names and 'Gappy' Propositions.''}
 Farennikova, Anna. 2013. {``Seeing Absence.''} \emph{Philosophical
 Studies} 166 (3): 429--54.
 
+\bibitem[\citeproctext]{ref-WOS000245391600008}
+Feit, Neil. 2006. {``The Doctrine of Propositions, Internalism, and
+Global Supervenience.''} \emph{Philosophical Studies} 131 (2): 447--57.
+
+\bibitem[\citeproctext]{ref-WOS000222384400002}
+Feldman, Richard. 2004. {``Comments on DeRose's "Single Scoreboard
+Semantics".''} \emph{Philosophical Studies} 119 (1-2): 23--33.
+
 \bibitem[\citeproctext]{ref-WOSA1985ANT6600002}
 Feldman, Richard, and Earl Conee. 1985. {``Evidentialism.''}
 \emph{Philosophical Studies} 48 (1): 15--34.
+
+\bibitem[\citeproctext]{ref-WOSA1991FC38500007}
+Fine, A. 1991. {``Piecemeal Realism.''} \emph{Philosophical Studies} 61
+(1-2): 79--96.
 
 \bibitem[\citeproctext]{ref-WOS000264104900002}
 Finlay, Stephen. 2009. {``Oughts and Ends.''} \emph{Philosophical
 Studies} 143 (3): 315--40.
 
+\bibitem[\citeproctext]{ref-WOSA1985ATA4800001}
+Fischer, JM. 1985. {``Functionalism and Propositions.''}
+\emph{Philosophical Studies} 48 (3): 295--311.
+
 \bibitem[\citeproctext]{ref-WOS000351097700005}
 Fitzpatrick, William J. 2015. {``Debunking Evolutionary Debunking of
 Ethical Realism.''} \emph{Philosophical Studies} 72 (4): 883--904.
+
+\bibitem[\citeproctext]{ref-WOSA1991GZ30500006}
+Fogelin, RJ, and JH Moor. 1991. {``Lehrer on Incompatible Though Equally
+Coherent Systems.''} \emph{Philosophical Studies} 64 (2): 229--32.
+
+\bibitem[\citeproctext]{ref-WOSA1985ANT6600007}
+Foley, R, and R Fumerton. 1985. {``Davidson Theism.''}
+\emph{Philosophical Studies} 48 (1): 83--89.
 
 \bibitem[\citeproctext]{ref-WOSA1995QE80400001}
 Fraassen, Bas C. van. 1995. {``Belief and the Problem of Ulysses and the
 Sirens.''} \emph{Philosophical Studies} 77 (1): 7--37.
 
+\bibitem[\citeproctext]{ref-WOS000384351700013}
+Fraser, Rachel. 2016. {``Risk, Doubt and Transmission.''}
+\emph{Philosophical Studies} 173 (10): 2803--21.
+
 \bibitem[\citeproctext]{ref-WOS000312934500003}
 Friedman, Jane. 2013. {``Suspended Judgment.''} \emph{Philosophical
 Studies} 162 (2): 165--81.
 
+\bibitem[\citeproctext]{ref-WOS000264104900001}
+Funkhouser, Eric, and Shannon Spaulding. 2009. {``Imagination and Other
+Scripts.''} \emph{Philosophical Studies} 143 (3): 291--314.
+
+\bibitem[\citeproctext]{ref-WOSA1994PH74700004}
+Gallois, A. 1994. {``Asymmetry in Attitudes and the Nature of Time.''}
+\emph{Philosophical Studies} 76 (1): 51--69.
+
 \bibitem[\citeproctext]{ref-WOS000368189400009}
 Gallow, J. Dmitri. 2016. {``A Theory of Structural Determination.''}
 \emph{Philosophical Studies} 73 (1): 159--86.
+
+\bibitem[\citeproctext]{ref-WOSA1997XE13600001}
+Gampel, EH. 1997. {``The Normativity of Meaning.''} \emph{Philosophical
+Studies} 86 (3): 221--42.
 
 \bibitem[\citeproctext]{ref-WOS000256091800009}
 Ganson, Dorit. 2008. {``Evidentialism and Pragmatic Constraints on
@@ -969,26 +1625,47 @@ Outright Belief.''} \emph{Philosophical Studies} 139 (3): 441--58.
 Gendler, Tamar Szabo. 2011. {``On the Epistemic Costs of Implicit
 Bias.''} \emph{Philosophical Studies} 156 (1): 33--63.
 
+\bibitem[\citeproctext]{ref-WOSA1997YD40400001}
+Gert, HJ. 1997. {``Wittgenstein on Description.''} \emph{Philosophical
+Studies} 88 (3): 221--43.
+
 \bibitem[\citeproctext]{ref-WOS000251971400006}
 Ginsborg, Hannah. 2008. {``Was Kant a Nonconceptualist?''}
 \emph{Philosophical Studies} 137 (1): 65--77.
 
 \bibitem[\citeproctext]{ref-WOS000169253800001}
-Glanzberg, M. 2001. {``The Liar in Context (Paradox).''}
-\emph{Philosophical Studies} 103 (3): 217--51.
+Glanzberg, Michael. 2001. {``The Liar in Context.''} \emph{Philosophical
+Studies} 103 (3): 217--51.
 
 \bibitem[\citeproctext]{ref-WOS000249408500001}
-Glanzberg, Michael. 2007. {``Context, Content, and Relativism.''}
+---------. 2007. {``Context, Content, and Relativism.''}
 \emph{Philosophical Studies} 136 (1): 1--29.
+
+\bibitem[\citeproctext]{ref-WOS000372265500010}
+Glüer, Kathrin. 2016. {``Intentionalism, Defeasibility, and
+Justification.''} \emph{Philosophical Studies} 173 (4): 1007--30.
+
+\bibitem[\citeproctext]{ref-WOSA1991GZ30500005}
+Goble, L. 1991. {``Murder Most Gentle: The Paradox Deepens.''}
+\emph{Philosophical Studies} 64 (2): 217--27.
 
 \bibitem[\citeproctext]{ref-WOS000168263400001}
 Graff, D. 2001. {``Descriptions as Predicates.''} \emph{Philosophical
 Studies} 102 (1): 1--42.
 
+\bibitem[\citeproctext]{ref-WOS000413603900011}
+Gruber, Robert. 2017. {``Actual Utility, the Mismatch Problem, and the
+Move to Expected Utility.''} \emph{Philosophical Studies} 174 (12):
+3097--3108.
+
 \bibitem[\citeproctext]{ref-WOS000249408500003}
 Guerrero, Alexander A. 2007. {``Don't Know, Don't Kill: Moral Ignorance,
 Culpability, and Caution.''} \emph{Philosophical Studies} 136 (1):
 59--97.
+
+\bibitem[\citeproctext]{ref-WOS000288455900007}
+Gundersen, Eline Busck. 2011. {``The Chameleon's Revenge.''}
+\emph{Philosophical Studies} 153 (3): 435--41.
 
 \bibitem[\citeproctext]{ref-WOSA1991FC38500009}
 Hacking, I. 1991. {``A Tradition of Natural Kinds.''}
@@ -1003,6 +1680,10 @@ Harman, Elizabeth. 2007. {``Sacred Mountains and Beloved Fetuses: Can
 Loving or Worshipping Something Give It Moral Status?''}
 \emph{Philosophical Studies} 133 (1): 55--81.
 
+\bibitem[\citeproctext]{ref-WOS000272802100003}
+Harms, William F. 2010. {``Determining Truth Conditions in Signaling
+Games.''} \emph{Philosophical Studies} 147 (1): 23--35.
+
 \bibitem[\citeproctext]{ref-WOS000368189400006}
 Haslanger, Sally. 2016. {``What Is a (Social) Structural Explanation?''}
 \emph{Philosophical Studies} 73 (1): 113--30.
@@ -1012,33 +1693,56 @@ Hawthorne, John, Daniel Rothschild, and Levi Spectre. 2016. {``Belief Is
 Weak.''} \emph{Philosophical Studies} 173 (5): 1393--1404.
 
 \bibitem[\citeproctext]{ref-WOS000237560100003}
-Heathwood, C. 2006. {``Desire Satisfactionism and Hedonism.''}
+Heathwood, Chris. 2006. {``Desire Satisfactionism and Hedonism.''}
 \emph{Philosophical Studies} 128 (3): 539--63.
 
 \bibitem[\citeproctext]{ref-WOS000245280800002}
-Heathwood, Chris. 2007. {``The Reduction of Sensory Pleasure to
-Desire.''} \emph{Philosophical Studies} 133 (1): 23--44.
+---------. 2007. {``The Reduction of Sensory Pleasure to Desire.''}
+\emph{Philosophical Studies} 133 (1): 23--44.
+
+\bibitem[\citeproctext]{ref-WOSA1984TN86300007}
+Heinaman, R. 1984. {``Emphasis, Causation and Extensionality.''}
+\emph{Philosophical Studies} 46 (3): 367--80.
+
+\bibitem[\citeproctext]{ref-WOS000335566200009}
+Hermes, Charles. 2014. {``Functions and Altered States in Dispositional
+Analysis: A Reply to Vihvelin.''} \emph{Philosophical Studies} 169 (1):
+97--103.
 
 \bibitem[\citeproctext]{ref-WOSA1997XH01200003}
-Hill, CS. 1997. {``Imaginability, Conceivability, Possibility and the
-Mind-Body Problem.''} \emph{Philosophical Studies} 87 (1): 61--85.
+Hill, Christopher S. 1997. {``Imaginability, Conceivability, Possibility
+and the Mind-Body Problem.''} \emph{Philosophical Studies} 87 (1):
+61--85.
+
+\bibitem[\citeproctext]{ref-WOS000370073500013}
+---------. 2016. {``Précis of Meaning, Mind, and Knowledge.''}
+\emph{Philosophical Studies} 173 (3): 827--29.
+
+\bibitem[\citeproctext]{ref-WOS000357051200010}
+Hu, Ivan. 2015. {``Epistemicism, Paradox, and Conditional Obligation.''}
+\emph{Philosophical Studies} 172 (8): 2123--39.
 
 \bibitem[\citeproctext]{ref-WOS000220800700003}
 Humberstone, L. 2004. {``Two-Dimensional Adventures.''}
 \emph{Philosophical Studies} 118 (1-2): 17--65.
+
+\bibitem[\citeproctext]{ref-WOS000085286500004}
+Hunt, David. 2000. {``Moral Responsibility and Unavoidable Action.''}
+\emph{Philosophical Studies} 97 (2): 195--227.
 
 \bibitem[\citeproctext]{ref-WOS000321100100003}
 Hunt, David, and Seth Shabo. 2013. {``Frankfurt Cases and the
 (in)significance of Timing: A Defense of the Buffering Strategy.''}
 \emph{Philosophical Studies} 164 (3): 599--622.
 
-\bibitem[\citeproctext]{ref-WOS000085286500004}
-Hunt, DP. 2000. {``Moral Responsibility and Unavoidable Action.''}
-\emph{Philosophical Studies} 97 (2): 195--227.
-
 \bibitem[\citeproctext]{ref-WOS000076351200004}
-Inwagen, P Van. 1998. {``Modal Epistemology (Possibility Arguments).''}
-\emph{Philosophical Studies} 92 (1-2): 67--84.
+Inwagen, P Van. 1998. {``Modal Epistemology.''} \emph{Philosophical
+Studies} 92 (1-2): 67--84.
+
+\bibitem[\citeproctext]{ref-WOS000245391100008}
+Jackson, Frank. 2006. {``On Ensuring That Physicalism Is Not a Dual
+Attribute Theory in Sheep's Clothing.''} \emph{Philosophical Studies}
+131 (1): 227--49.
 
 \bibitem[\citeproctext]{ref-WOS000297667100005}
 Jagnow, Rene. 2012. {``Representationalism and the Perspectival
@@ -1052,6 +1756,14 @@ Studies} 68 (3): 221--63.
 \bibitem[\citeproctext]{ref-WOS000223334900005}
 ---------. 2004. {``The Obscure Object of Hallucination.''}
 \emph{Philosophical Studies} 120 (1-3): 113--83.
+
+\bibitem[\citeproctext]{ref-WOS000169758900003}
+Jubien, M. 2001. {``Propositions and the Objects of Thought.''}
+\emph{Philosophical Studies} 104 (1): 47--62.
+
+\bibitem[\citeproctext]{ref-WOSA1987J066300004}
+Kalderon, ME. 1987. {``Epiphenomenalism and Content.''}
+\emph{Philosophical Studies} 52 (1): 71--90.
 
 \bibitem[\citeproctext]{ref-WOSA1989CE37600001}
 Kamm, FM. 1989. {``Harming Some to Save Others.''} \emph{Philosophical
@@ -1071,19 +1783,36 @@ Kim, Jaegwon. 1982. {``Psychophysical Supervenience.''}
 Studies} 95 (1-2): 3--36.
 
 \bibitem[\citeproctext]{ref-WOS000185281000002}
-Kind, A. 2003. {``What's so Transparent about Transparency?
-(Representationalism, Ambiguities).''} \emph{Philosophical Studies} 115
-(3): 225--44.
+Kind, A. 2003. {``What's so Transparent about Transparency?''}
+\emph{Philosophical Studies} 115 (3): 225--44.
+
+\bibitem[\citeproctext]{ref-WOSA1980KU39500003}
+Kivy, P. 1980. {``A Failure of Aesthetic Emotivism.''}
+\emph{Philosophical Studies} 38 (4): 351--65.
 
 \bibitem[\citeproctext]{ref-WOS000240410600002}
 Knobe, Joshua. 2006. {``The Concept of Intentional Action: A Case Study
 in the Uses of Folk Psychology.''} \emph{Philosophical Studies} 130 (2):
 203--31.
 
+\bibitem[\citeproctext]{ref-WOS000436827600006}
+Koscholke, Jakob. 2018. {``A Weak Symmetry Condition for Probabilistic
+Measures of Confirmation.''} \emph{Philosophical Studies} 175 (8):
+1927--44.
+
 \bibitem[\citeproctext]{ref-WOS000330732800013}
 Kozuch, Benjamin. 2014. {``Prefrontal Lesion Evidence Against
 Higher-Order Theories of Consciousness.''} \emph{Philosophical Studies}
 167 (3): 721--46.
+
+\bibitem[\citeproctext]{ref-WOS000294571800001}
+Kurth, Charlie. 2011. {``Logic for Morals, Morals from Logic.''}
+\emph{Philosophical Studies} 155 (2): 161--80.
+
+\bibitem[\citeproctext]{ref-WOSA1980KU39500008}
+Legum, RA. 1980. {``Probability and Foundationalism: Another Look at the
+Lewis-Reichenbach Debate.''} \emph{Philosophical Studies} 38 (4):
+419--25.
 
 \bibitem[\citeproctext]{ref-WOS000290226000006}
 Lepore, Ernie, and Kirk Ludwig. 2011. {``Truth and Meaning Redux.''}
@@ -1101,9 +1830,29 @@ Nonconcrete.''} \emph{Philosophical Studies} 84 (2-3): 283--94.
 Loewer, Barry. 2012. {``Two Accounts of Laws and Time.''}
 \emph{Philosophical Studies} 60 (1): 115--37.
 
+\bibitem[\citeproctext]{ref-WOSA1985AEK1800009}
+Losonsky, M. 1985. {``Reference and Rorty Veil.''} \emph{Philosophical
+Studies} 47 (2): 291--94.
+
+\bibitem[\citeproctext]{ref-WOS000176688100002}
+Lukich, M. 2002. {``'Non-Natural' Qualities in g.e. Moore: Inherent or
+Contingent?''} \emph{Philosophical Studies} 108 (1-2): 15--21.
+
+\bibitem[\citeproctext]{ref-WOS000316746200006}
+Lynch, Michael P. 2013. {``Expressivism and Plural Truth.''}
+\emph{Philosophical Studies} 163 (2): 385--401.
+
 \bibitem[\citeproctext]{ref-WOS000244463400002}
 MacFarlane, John. 2007. {``Relativism and Disagreement.''}
 \emph{Philosophical Studies} 132 (1): 17--31.
+
+\bibitem[\citeproctext]{ref-WOS000360809900017}
+Mallon, Ron. 2015. {``Performance, Self-Explanation, and Agency.''}
+\emph{Philosophical Studies} 172 (10): 2777--98.
+
+\bibitem[\citeproctext]{ref-WOSA1984SK63200007}
+Markie, PJ. 1984. {``De Dicto and de Se.''} \emph{Philosophical Studies}
+45 (2): 231--37.
 
 \bibitem[\citeproctext]{ref-WOS000077322700001}
 Markosian, N. 1998. {``Brutal Composition.''} \emph{Philosophical
@@ -1112,6 +1861,14 @@ Studies} 92 (3): 211--49.
 \bibitem[\citeproctext]{ref-WOS000223334900003}
 Martin, MGF. 2004. {``The Limits of Self-Awareness.''}
 \emph{Philosophical Studies} 120 (1-3): 37--89.
+
+\bibitem[\citeproctext]{ref-WOS000360809900003}
+McKitrick, Jennifer. 2015. {``A Dispositional Account of Gender.''}
+\emph{Philosophical Studies} 172 (10): 2575--89.
+
+\bibitem[\citeproctext]{ref-WOS000245084700001}
+Meijs, W. 2007. {``A Corrective to Bovens and Hartmann's Measure of
+Coherence.''} \emph{Philosophical Studies} 133 (2): 151--80.
 
 \bibitem[\citeproctext]{ref-WOS000352225800011}
 Miller, Elizabeth. 2015. {``Humean Scientific Explanation.''}
@@ -1133,6 +1890,14 @@ Universalization.''} \emph{Philosophical Studies} 158 (1): 83--107.
 Moretti, Luca. 2015. {``In Defence of Dogmatism.''} \emph{Philosophical
 Studies} 72 (1): 261--82.
 
+\bibitem[\citeproctext]{ref-WOS000239571000003}
+Mozersky, J. M. 2006. {``A Tenseless Account of the Presence of
+Experience.''} \emph{Philosophical Studies} 129 (3): 441--76.
+
+\bibitem[\citeproctext]{ref-WOS000325717500001}
+Mugg, Joshua. 2013. {``What Are the Cognitive Costs of Racism? A Reply
+to Gendler.''} \emph{Philosophical Studies} 166 (2): 217--29.
+
 \bibitem[\citeproctext]{ref-WOS000280821200004}
 Nanay, Bence. 2010. {``Perception and Imagination: Amodal Perception as
 Mental Imagery.''} \emph{Philosophical Studies} 150 (2): 239--54.
@@ -1150,7 +1915,7 @@ Nolan, Daniel. 2014. {``Hyperintensional Metaphysics.''}
 \emph{Philosophical Studies} 71 (1): 149--60.
 
 \bibitem[\citeproctext]{ref-WOSA1995RP14800002}
-Olearyhawthorne, J, and A Cortens. 1995. {``Towards Ontological
+O'Leary-Hawthorne, J, and A Cortens. 1995. {``Towards Ontological
 Nihilism.''} \emph{Philosophical Studies} 79 (2): 143--65.
 
 \bibitem[\citeproctext]{ref-WOS000307407600001}
@@ -1161,6 +1926,10 @@ Paul, L. A. 2012. {``Metaphysics as Modeling: The Handmaiden's Tale.''}
 Pereboom, D, and Hilary Kornblith. 1991. {``The Metaphysics of
 Irreducibility.''} \emph{Philosophical Studies} 63 (2): 125--45.
 
+\bibitem[\citeproctext]{ref-WOSA1996UE45300003}
+Piller, C. 1996. {``McGee,vann Counterexample to Modus Ponens.''}
+\emph{Philosophical Studies} 82 (1): 27--54.
+
 \bibitem[\citeproctext]{ref-WOSA1983QU18900001}
 Plantinga, A. 1983. {``On Existentialism.''} \emph{Philosophical
 Studies} 44 (1): 1--20.
@@ -1168,6 +1937,14 @@ Studies} 44 (1): 1--20.
 \bibitem[\citeproctext]{ref-WOS000406495600010}
 Poller, Olga. 2017. {``The Descriptive Content of Names as Predicate
 Modifiers.''} \emph{Philosophical Studies} 174 (9): 2329--60.
+
+\bibitem[\citeproctext]{ref-WOS000286205400002}
+Pruss, Alexander R. 2011. {``The a-Theory of Time and Induction.''}
+\emph{Philosophical Studies} 152 (3): 335--45.
+
+\bibitem[\citeproctext]{ref-WOSA1993KR41800008}
+Quinn, PL. 1993. {``Social Evil, a Response to Adams.''}
+\emph{Philosophical Studies} 69 (2-3): 187--94.
 
 \bibitem[\citeproctext]{ref-WOS000265826600001}
 Raftopoulos, Athanasios. 2009. {``Reference, Perception, and
@@ -1185,17 +1962,38 @@ Studies} 39 (1): 1--13.
 ---------. 2004. {``Contextualism and Relativism.''} \emph{Philosophical
 Studies} 119 (1-2): 215--42.
 
+\bibitem[\citeproctext]{ref-WOSA1993KK09800001}
+Robinson, D. 1993. {``Epiphenomenalism, Laws and Properties.''}
+\emph{Philosophical Studies} 69 (1): 1--34.
+
 \bibitem[\citeproctext]{ref-WOSA1986C316000003}
 Rosenthal, DM. 1986. {``Two Concepts of Consciousness.''}
 \emph{Philosophical Studies} 49 (3): 329--59.
+
+\bibitem[\citeproctext]{ref-WOS000313361100009}
+Rourke, Jason. 2013. {``A Counterexample to the Contrastive Account of
+Knowledge.''} \emph{Philosophical Studies} 162 (3): 637--43.
+
+\bibitem[\citeproctext]{ref-WOS000448297600003}
+Rubio, Daniel. 2018. {``God Meets Satan's Apple: The Paradox of
+Creation.''} \emph{Philosophical Studies} 175 (12): 2987--3004.
 
 \bibitem[\citeproctext]{ref-WOS000184343600003}
 Ryan, S. 2003. {``Doxastic Compatibilism and the Ethics of Belief.''}
 \emph{Philosophical Studies} 114 (1-2): 47--79.
 
+\bibitem[\citeproctext]{ref-WOS000376271100010}
+Sartorelli, Joseph. 2016. {``Biological Process, Essential Origin, and
+Identity.''} \emph{Philosophical Studies} 173 (6): 1603--19.
+
 \bibitem[\citeproctext]{ref-WOSA1994NF00700001}
 Saymour, M. 1994. {``Indirect Discourse and Quotation.''}
 \emph{Philosophical Studies} 74 (1): 1--38.
+
+\bibitem[\citeproctext]{ref-WOS000361721200007}
+Scarantino, Andrea, and Michael Nielsen. 2015. {``Voodoo Dolls and Angry
+Lions: How Emotions Explain Arational Actions.''} \emph{Philosophical
+Studies} 172 (11): 2975--98.
 
 \bibitem[\citeproctext]{ref-WOS000222384400005}
 Schaffer, Jonathan. 2004. {``From Contextualism to Contrastivism.''}
@@ -1217,10 +2015,20 @@ Closure.''} \emph{Philosophical Studies} 163 (2): 429--52.
 Schellenberg, Susanna. 2010. {``The Particularity and Phenomenology of
 Perceptual Experience.''} \emph{Philosophical Studies} 149 (1): 19--48.
 
+\bibitem[\citeproctext]{ref-WOS000372265500006}
+---------. 2016. {``Phenomenal Evidence and Factive Evidence Defended:
+Replies to McGrath, Pautz, and Neta.''} \emph{Philosophical Studies} 73
+(4): 929--46.
+
 \bibitem[\citeproctext]{ref-WOS000305689500003}
 Schoenfield, Miriam. 2012. {``Chilling Out on Epistemic Rationality a
 Defense of Imprecise Credences (and Other Imprecise Doxastic
 Attitudes).''} \emph{Philosophical Studies} 58 (2): 197--219.
+
+\bibitem[\citeproctext]{ref-WOS000428959200005}
+Schouten, Gina. 2018. {``Political Liberalism and Autonomy Education:
+Are Citizenship-Based Arguments Enough?''} \emph{Philosophical Studies}
+175 (5): 1071--93.
 
 \bibitem[\citeproctext]{ref-WOS000255094400004}
 Schroeder, Mark. 2008. {``Having Reasons.''} \emph{Philosophical
@@ -1234,9 +2042,30 @@ Reasons.''} \emph{Philosophical Studies} 143 (2): 223--48.
 ---------. 2012. {``Stakes, Withholding, and Pragmatic Encroachment on
 Knowledge.''} \emph{Philosophical Studies} 160 (2): 265--85.
 
+\bibitem[\citeproctext]{ref-WOS000261288500003}
+Schupbach, Jonah N. 2008. {``On the Alleged Impossibility of Bayesian
+Coherentism.''} \emph{Philosophical Studies} 141 (3): 323--31.
+
+\bibitem[\citeproctext]{ref-WOSA1991FY01300003}
+Schweizer, P. 1991. {``Blind Grasping and Fregean Senses.''}
+\emph{Philosophical Studies} 62 (3): 263--87.
+
 \bibitem[\citeproctext]{ref-WOS000329460300003}
 Setiya, Kieran. 2014. {``What Is a Reason to Act?''} \emph{Philosophical
 Studies} 167 (2): 221--35.
+
+\bibitem[\citeproctext]{ref-WOSA1992JE91400002}
+Silverberg, A. 1992. {``Putnam on Functionalism.''} \emph{Philosophical
+Studies} 67 (2): 111--31.
+
+\bibitem[\citeproctext]{ref-WOS000384351700014}
+Sinclair, Neil. 2016. {``Reasons, Inescapability and Persuasion.''}
+\emph{Philosophical Studies} 173 (10): 2823--44.
+
+\bibitem[\citeproctext]{ref-WOS000177424800002}
+Skidmore, J. 2002. {``Skepticism about Practical Reason: Transcendental
+Arguments and Their Limits.''} \emph{Philosophical Studies} 109 (2):
+121--41.
 
 \bibitem[\citeproctext]{ref-WOS000305689500002}
 Sliwa, Paulina. 2012. {``In Defense of Moral Testimony.''}
@@ -1249,6 +2078,15 @@ Evidence.''} \emph{Philosophical Studies} 172 (11): 2835--58.
 \bibitem[\citeproctext]{ref-WOS000254114200005}
 Smith, Angela M. 2008. {``Control, Responsibility, and Moral
 Assessment.''} \emph{Philosophical Studies} 138 (3): 367--92.
+
+\bibitem[\citeproctext]{ref-WOS000490595100006}
+Smith, Holly M., and David E. Black. 2019. {``The Morality of Creating
+and Eliminating Duties.''} \emph{Philosophical Studies} 176 (12):
+3211--40.
+
+\bibitem[\citeproctext]{ref-WOS000240410600005}
+Smith, J. 2006. {``Which Immunity to Error?''} \emph{Philosophical
+Studies} 130 (2): 273--83.
 
 \bibitem[\citeproctext]{ref-WOSA1983QH70700004}
 Sober, Elliot. 1983. {``Equilibrium Explanation.''} \emph{Philosophical
@@ -1292,6 +2130,19 @@ Sytsma, Justin, and Edouard Machery. 2010. {``Two Conceptions of
 Subjective Experience.''} \emph{Philosophical Studies} 151 (2):
 299--327.
 
+\bibitem[\citeproctext]{ref-WOS000249252100001}
+Tannsjo, Torbjorn. 2007. {``Moral Relativism.''} \emph{Philosophical
+Studies} 135 (2): 123--43.
+
+\bibitem[\citeproctext]{ref-WOSA1982PQ97400003}
+Thomason, RH. 1982. {``Identity and Vagueness.''} \emph{Philosophical
+Studies} 42 (3): 329--32.
+
+\bibitem[\citeproctext]{ref-WOS000263525300003}
+Todd, Cain Samuel. 2009. {``Imaginability, Morality, and Fictional
+Truth: Dissolving the Puzzle of 'Imaginative Resistance'.''}
+\emph{Philosophical Studies} 143 (2): 187--211.
+
 \bibitem[\citeproctext]{ref-WOSA1988P180000003}
 Tuomela, R, and K Miller. 1988. {``We-Intentions.''} \emph{Philosophical
 Studies} 53 (3): 367--89.
@@ -1332,11 +2183,21 @@ Studies} 131 (3): 525--57.
 Wikforss, AM. 2001. {``Semantic Normativity.''} \emph{Philosophical
 Studies} 102 (2): 203--26.
 
+\bibitem[\citeproctext]{ref-WOS000396059900011}
+Yablo, Stephen. 2017. {``Precis of Aboutness.''} \emph{Philosophical
+Studies} 174 (3): 771--77.
+
+\bibitem[\citeproctext]{ref-WOS000360809900002}
+Zuk, Peter D. 2015. {``A Third Version of Constructivism: Rethinking
+Spinoza's Metaethics.''} \emph{Philosophical Studies} 172 (10):
+2565--74.
+
 \end{CSLReferences}
 
 
 
 \noindent Published in\emph{
 ?meta:citation.container-title}, 2024, pp. ?meta:citation.page.
+
 
 \end{document}

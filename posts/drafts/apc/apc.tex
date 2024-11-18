@@ -24,9 +24,9 @@
 \usepackage{lmodern}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
 Bold]{EB Garamond Math}
-  \setsansfont[]{Europa-Bold}
+    \setsansfont[]{Europa-Bold}
   \setmathfont[]{Garamond-Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -42,14 +42,28 @@ marginparsep=0in]{geometry}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{3}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -69,7 +83,7 @@ marginparsep=0in]{geometry}
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
 \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
@@ -79,7 +93,7 @@ marginparsep=0in]{geometry}
 \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
 \newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
 \newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
 \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
@@ -191,6 +205,7 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{sidenotes}{}{\usepackage{sidenotes}}
 \@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
 \makeatother
+
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -203,6 +218,7 @@ marginparsep=0in]{geometry}
   pdfauthor={Brian Weatherson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Age, Period, and Cohort Effects in Philosophy Journal Citations}
 \author{Brian Weatherson}
@@ -223,6 +239,7 @@ in philosophy, such as around 1970 and around 2010. And there are fewer
 citations to articles from periods of consolidation, especially in the
 late 1970s through the 1980s.
 \end{abstract}
+
 
 \setstretch{1.1}
 \begin{Shaded}
@@ -765,7 +782,7 @@ each year with no citations in the dataset.}
 
 \centering{
 
-\captionsetup{labelsep=none}\includegraphics{apc_files/figure-pdf/fig-countofcitations-1.pdf}
+\includegraphics{apc_files/figure-pdf/fig-countofcitations-1.pdf}
 
 }
 
@@ -783,7 +800,7 @@ each year with no citations in the dataset.}
 
 \centering{
 
-\captionsetup{labelsep=none}\includegraphics{apc_files/figure-pdf/fig-countofcitationsout-1.pdf}
+\includegraphics{apc_files/figure-pdf/fig-countofcitationsout-1.pdf}
 
 }
 
@@ -888,7 +905,7 @@ Credence,'' \emph{Philosophy Compass} 15 (6): & 72 \\
 
 \centering{
 
-\captionsetup{labelsep=none}\includegraphics{apc_files/figure-pdf/fig-ageeffecttibble-1.pdf}
+\includegraphics{apc_files/figure-pdf/fig-ageeffecttibble-1.pdf}
 
 }
 
@@ -1036,5 +1053,6 @@ at various ages, adjusted for period and compared to mean for that age.}
 
 
 \noindent Unpublished. Posted online in 2024.
+
 
 \end{document}

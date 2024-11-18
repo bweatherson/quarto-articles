@@ -24,9 +24,9 @@
 \usepackage{lmodern}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
 Bold]{EB Garamond Math}
-  \setsansfont[]{Europa-Bold}
+    \setsansfont[]{Europa-Bold}
   \setmathfont[]{Garamond-Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -42,14 +42,28 @@ marginparsep=0in]{geometry}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{3}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
 \providecommand{\tightlist}{%
@@ -180,6 +194,7 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
+
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -193,6 +208,7 @@ marginparsep=0in]{geometry}
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
+
 \title{Stalnaker on Sleeping Beauty}
 \author{Brian Weatherson}
 \date{2011}
@@ -204,6 +220,7 @@ A contribution to a book symposium on Stalnaker's Our Knowledge of the
 Internal World, focussing on the way his framework helps cast new light
 on the Sleeping Beauty problem.
 \end{abstract}
+
 
 \setstretch{1.1}
 The Sleeping Beauty puzzle provides a nice illustration of the approach
@@ -310,15 +327,15 @@ is, you can do the same kind of thing. And it's plausible that this is a
 puts it `I can believe that my pants are on fire without believing that
 Egan's pants are on fire, and I can hope that someone turns a fire
 extinguisher on me right now without hoping that someone turns a fire
-extinguisher on Egan at 5:41pm.'' (\citeproc{ref-Egan2004-JACSPA-2}{Egan
-2004, 64}) There is an important puzzle here that needs to be addressed,
-and can't obviously be addressed in the framework Lewis accepted before
-1979, where the content of a propositional attitude is a set of Lewisian
-concreta. If possible worlds are Lewisian concreta, then Lewisians like
-Egan are correct to respond to puzzles about location by saying,
-``sometimes (as when we want to know who or where we are) \textbf{the
-world is not enough}''. (\citeproc{ref-Egan2004-JACSPA-2}{Egan 2004,
-64})
+extinguisher on Egan at 5:41pm.'\,'
+(\citeproc{ref-Egan2004-JACSPA-2}{Egan 2004, 64}) There is an important
+puzzle here that needs to be addressed, and can't obviously be addressed
+in the framework Lewis accepted before 1979, where the content of a
+propositional attitude is a set of Lewisian concreta. If possible worlds
+are Lewisian concreta, then Lewisians like Egan are correct to respond
+to puzzles about location by saying, ``sometimes (as when we want to
+know who or where we are) \textbf{the world is not enough}''.
+(\citeproc{ref-Egan2004-JACSPA-2}{Egan 2004, 64})
 
 But this response is too self-centered. Not all locational thoughts are
 self-locational thoughts. I can be just as uncertain about where
@@ -971,5 +988,6 @@ University Press.
 
 \noindent Published in\emph{
 Philosophical Studies}, 2011, pp. 445–456.
+
 
 \end{document}
