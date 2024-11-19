@@ -1,7 +1,7 @@
 ---
-title: "Trends in *Philosophical Studies*"
+title: "Trends in *Philosophical Studies*, 1980-2019"
 abstract: |
-  *Philosophical Studies* has become one of the most important journals for work in several large topics in philosophy. This paper uses data from the word distributions in those papers, and the citations of the papers, to look at how it has changed over time, and how it became so central.
+  *Philosophical Studies* is the most cited journal in English-language philosophy. This essay looks at how it became so central, and how the changes in its subject matter over time reflect changes in English language philosophy. Special attention is paid to the role of special issues of the journal, notably the publication of conference proceedings, and to the rise in papers in social philosophy in the second half of the 2010s.
 date: today
 draft: true
 execute:
@@ -626,7 +626,7 @@ words_overall <- words_with_cites |>
 
 # Introduction {#sec-introduction}
 
-_Philosophical Studies_ is the most cited journal in philosophy journals in recent times, so it is worthy of study both in its own right, and as a mirror of broader trends in philosophy. This paper mixes two techniques, topic modeling and citation analysis, to look at the nature of _Philosophical Studies_, and how it has changed over time, from 1980 to 2019.
+_Philosophical Studies_ is the most cited journal in philosophy journals, so it is worthy of study both in its own right, and as a mirror of broader trends in philosophy. This paper uses a variety of tools from data analysis to look at the nature of _Philosophical Studies_, and how it has changed over time, from 1980 to 2019.
 
 In the first half of the paper, I look at the growth the citation rate (i.e., number of citations per article) in _Philosophical Studies_. If we take its peers to be the twenty philosophy journals with the highest citation rates over the last forty years, it has gone from having a citation rate 10-20 percent below the average, to a rate 10-20 percent above the average. And it's done this despite increasing its publication volume, which one would normally expect to decrease citation rate. This is explained in part by the move to publishing more special issues, with the special issues from the Bellingham Summer Philosophy Conference being particularly important, and in part by the topic mix in _Philosophical Studies_ changing in ways that tracked changes in the broader philosophical community.
 
@@ -684,7 +684,6 @@ ggplot(article_count_by_year,
        y = "Number of Articles") +
   scale_x_continuous(breaks = c(1990, 2000, 2010)) +
   scale_y_continuous(limits = c(0, 275))
-
 ```
 
 ```{r}
@@ -700,7 +699,6 @@ ggplot(word_count_by_year,
   scale_x_continuous(breaks = c(1990, 2000, 2010)) +
   scale_y_continuous(labels = scales::scientific,
                      limits = c(0, 2500000))
-
 ```
 
 ```{r}
@@ -715,7 +713,6 @@ ggplot(word_max_by_year,
        y = "Number of Words") +
   scale_x_continuous(breaks = c(1990, 2000, 2010)) +
   scale_y_continuous(limits = c(0, 30000))
-
 ```
 
 ```{r}
@@ -985,7 +982,7 @@ I have some sympathy for the classifiers; these are really borderline cases. Mos
 
 For the most part, I've gone with WoS's classifications. It would be practical, just barely, to go through _Philosophical Studies_ issue by issue and reclassify the book symposium entries so all and only the commentaries are articles. But it would not be practical to do this for all one hundred journals. And for this paper, we're mostly interested in comparing articles in _Philosophical Studies_ with articles in other journals, so it's best to not modify only one journal.
 
-There is one place we're I've overridden WoS's classifications. It has categories of Discussion, Note, and Review, each of which make up about 0.75% of the articles across the 100 journals. The three categories include similar enough pieces that I'll treat them as a unified category. Mostly these are discussion notes, or longer book reviews, that we want to exclude. But, especially in _Philosophical Review_, they occasionally put ordinary articles here. So important articles by Stanley @WOSA1962CGX0500005, Jonathan @WOS000272855000002, and Harvey @WOS000810220800002 all got listed as not being articles.^[The Cavell article was in the discussion section of the January 1962 issue of the Review, so this classification is understandable. The other two are not.] I've counted any piece in these three categories 20 pages or longer as an article.
+There is one place we're I've overridden WoS's classifications. It has categories of Discussion, Note, and Review, each of which make up about 0.75% of the articles across the 100 journals. The three categories include similar enough pieces that I'll treat them as a unified category. Mostly these are discussion notes, or longer book reviews, that we want to exclude. But, especially in _Philosophical Review_, they occasionally put ordinary articles here. So important articles by Stanley @WOSA1962CGX0500005, Jonathan @WOS000272855000002, and Harvey @WOS000810220800002 all got listed as not being articles.^[The Cavell article was in the discussion section of the January 1962 issue of the Review, so this classification is understandable. The other two are not.] I've counted any piece in these three categories twenty pages or longer as an article.
 
 There is one last tricky category to flag. The special issues on the Oberlin Colloquium sometimes include commentaries on the main articles. These are mostly not counted as articles, and I think rightly so. Occasionally, as when Andy @Egan2011 was the commentator on an important paper by Tamar Szabò @WOS000295087100003, the commentary gets a reasonable number of citations. But mostly these commentaries are rarely if ever cited, and I think they aren't really what most people think of as journal articles. So I've been happy to exclude them.^[If these aren't articles, what are they? WoS classifies Egan's paper as 'Editorial-Matter'. That's wrong, but I'm not sure what I would say in their position.]
 
@@ -1088,7 +1085,7 @@ The difference in @fig-compare-cites-rolling between the earlier and later years
 
 My very anecdotal impression is that _Philosophical Studies_ is viewed as being more prestigious by younger philosophers than by older philosophers. A toy model of prestige, where it is heavily anchored to how often a journal was cited when one was in graduate school, would explain that difference. That said, I have not done (and am not going to do) a careful study of comparative prestige judgments to know if there is even an effect here to find, or whether my informal sample was not reflective of the wider population.
 
-I won't repeat the analysis here, but if we measure median citations, or 75th percentile citations, rather than means, we still get a result as in @fig-compare-cites-rolling. On any of these measures, _Philosophical Studies_ was below the middle of this group of twenty before 2000, and above it afterwards.
+I won't repeat the analysis here, but if build @fig-compare-cites-rolling using median citations, or 75th percentile citations, rather than means, the shape of the graph doesn't change much. On any of these measures, _Philosophical Studies_ was below the middle of this group of twenty before 2000, and above it afterwards.
 
 ## Citations of Special Issues {#sec-citations-of-special-issues}
 
@@ -1224,7 +1221,6 @@ ps_base_rate <- sum(ps_top_cites$ps_cites) / sum(ps_top_cites$all_cites)
 ps_top_cites <- ps_top_cites |>
   mutate(ps_prob = pbinom(ps_cites, all_cites, ps_base_rate)) |>
   arrange(ps_prob)
-
 ```
 
 This section looks at the eighty journal articles that are most cited across the hundred journals between 1980 and 2019, and looks at what proportion of their citations are in _Philosophical Studies_. On average, those articles have about 10% of their citations in _Philosophical Studies_, but the proportion varies greatly by articles. @tbl-mainly-in-ps lists the twelve articles whose citations are most concentrated in _Philosophical Studies_.^[The ranking here is not by proportion of cites in _Philosophical Studies_, but instead by the probability that an article would have this many cites in _Philosophical Studies_, given how many overall citations it has and that highly cited articles have about 10% of their citations in _Philosophical Studies_. I think this is a slightly better way to separate the signal from the noise.]
@@ -1239,7 +1235,7 @@ kable(ps_top_cites |>
         select(Article = Citation, `PS Citations` = ps_cites, `All Citations` = all_cites))
 ```
 
-There are articles here in the five main topics _Philosophical Studies_ covers: language, ethics, metaphysics, mind, and epistemology (hereafter, LEMME). I extended the list to 12 because the last two articles, @WOSA1969Y444700002 and @WOSA1966ZC83800001	will be important in what follows.
+There are articles here in the five main topics _Philosophical Studies_ covers: language, ethics, metaphysics, mind, and epistemology (hereafter, LEMME). I extended the list to 12 because the last two articles, @WOSA1969Y444700002 and @WOSA1966ZC83800001, are important at different times. @WOSA1966ZC83800001 is one of the most cited articles in _Philosophical Studies_ in the 1980s, and @WOSA1966ZC83800001 is one of the most cited in the 2010s.
 
 The other end of the scale looks quite different, as shown in @tbl-mainly-out-ps. There we see articles in political philosophy, philosophy of science, and logic.
 
@@ -1253,7 +1249,7 @@ kable(ps_top_cites |>
         select(Article = Citation, `PS Citations` = ps_cites, `All Citations` = all_cites))
 ```
 
-These tables tell us that the LEMME topics are at the heart of what _Philosophical Studies_ has published over those four decades. I'll use that fact in the next analysis.
+These tables tell us that the LEMME topics are at the heart of what _Philosophical Studies_ has published over these four decades. I'll use that fact in the next analysis.
 
 # A Topic Model for _Philosophical Studies_ {#sec-topic-model}
 
@@ -1271,7 +1267,7 @@ Often when topic models are used, articles are classified by their maximal proba
 
 Finally, the models are rather random. Somewhat metaphorically, they work by picking a random starting point, and scanning for a local maximum. The scanning procedure is deterministic, but the starting point is not. This can make a difference to individual articles. Every model I built was unsure how to classify "What Do Philosophers Believe?" [@WOS000340619100006]. The one I'm using said it was 50% metaphysics, and 50% spread between the other four topics, but other models said it was 60% mind, or largely ethics. All this makes sense; the article cuts across all the fields.
 
-But this randomness raises a problem: how do we choose which random starting point to use? We could just use the first one we run, but that might be a very idiosyncratic output. We could hand code the starting point, but that would introduce our own biases. We could build many models and just which one looks most like familiar topics, but that would introduce even more biases.
+But this randomness raises a problem: how do we choose which random starting point to use? We could just use the first one we run, but that might be a very idiosyncratic output. We could hand code the starting point, but that would introduce our own biases. We could build many models and just which one looks most like familiar topics, but that would just introduce different biases.
 
 Here I got around this problem by using citation data. I had the computer build (or at least start building) several thousand models. I told it to focus on the ones where articles were classified in a similar way to articles that they cited. In general, the greater the similarity between the classification of articles and classification of citations of those articles, the more the model resembled familiar topics. So rather than using my own judgment about the best model^[If I had used my own judgment, I would have picked a model similar to, but not quite identical to, this one. But I'd rather trust citation data than my idiosyncratic judgments.], I used the one that best conformed to the citation data.^[There was one real oddity in this model. It put articles on phenomenal properties in metaphysics, and articles on dispositions in mind. Most other models did not do this, and I would have preferred this one didn't either. But overall, this model did best at co-classifying articles and articles they cite, and every model is odd in some respect, so I stuck with this model.]
 
@@ -1279,11 +1275,11 @@ Here I got around this problem by using citation data. I had the computer build 
 
 I picked five topics for the model hoping, correctly, that it would land on something like the LEMME topics. And that's more or less what happened.
 
-I labeled the topics, and mostly the labels are straightforward.  The only one of those labels that might be misleading is 'ethics'. In the model, that topic includes all papers on norms broadly construed. So it includes papers on decision theory^[I think this is the right way to classify decision theory; it could sensibly be called 'formal ethics'. But I'm not relying on my views here, just noting that the model was remarkably confident that decision theory papers go in ethics.], on political philosophy (though there aren't a lot of those), and even some papers on epistemic norms. So Kelly's "The Rationality of Belief and Some Other Propositional Attitudes" [@WOS000178572700004] is classified as 50% ethics and 50% epistemology.^[The model I'm using actually had it at 51% ethics. Most models I looked at had it around 50/50, but usually with a higher probability for epistemology. The precise numbers aren't particularly meaningful.] It's a little odd that it isn't classified like "Justification and Truth" [@WOSA1984TN86300001], which is classified as 99.3% epistemology. But the model (and all the other models I built) put all articles about norms together, including articles about epistemic norms.
+I labeled the topics, and mostly the labels are straightforward.  The only one of those labels that might be misleading is 'ethics'. In the model, that topic includes all papers on norms broadly construed. So it includes papers on decision theory^[I think this is the right way to classify decision theory; it could sensibly be called 'formal ethics'. But I'm not relying on my views here, just noting that the model was remarkably confident that decision theory papers go in ethics.], on political philosophy (though there aren't a lot of those), and even some papers on epistemic norms. So Kelly's "The Rationality of Belief and Some Other Propositional Attitudes" [@WOS000178572700004] is classified as 50% ethics and 50% epistemology.^[The model I'm using actually had it at 51% ethics. Most models I looked at had it around 51/49 the other direction, but we shouldn't treat this difference as meaningful.] Other articles which seem similar to me are classified as 99% or more epistemology. This model (and all the others I looked at) put any article with explicit discussion of norms at least partially in ethics.
 
 What happens to articles that are not from the LEMME topics? The simple answer is that they are mostly not published in _Philosophical Studies_. That's part of what we learn from @tbl-mainly-out-ps. If there were more political philosophy papers, for example, we would see more citations to Rawls or Anderson.
 
-Philosophy of science raises a complication though. There is a good sense in which _Philosophical Studies_ publishes a fair bit of philosophy of science; it publishes many papers that could easily appear in journals such as _Philosophy of Science_. Despite that, the five way classification used here makes sense. The important thing is that the philosophy of science articles that _Philosophical Studies_ publish also fall into one of those five topics. So there are a lot of articles on Bayesian epistemology, e.g., "Belief and the Problem of Ulysses and the Sirens" [@WOSA1995QE80400001], but it makes sense to count them in epistemology. There are also a lot of articles on the metaphysics of science, e.g., "Realism, Anti-foundationalism and the Enthusiasm for Natural Kinds" [@WOSA1991FC38500010], but we don't lose much if we count these as metaphysics. What _Philosophical Studies_ doesn't have (or, more precisely, doesn't have much of) are articles like "Thinking about Mechanisms" [@WOS000087305900001], that are clearly philosophy of science articles but not in one of these five topics. So we aren't losing much by not having a separate topic for those articles. And we can see that by looking at the fact that "Thinking about Mechanisms", and several other papers like it, are cited rather rarely in _Philosophical Studies_.
+Philosophy of science raises a complication though. There is a good sense in which _Philosophical Studies_ publishes a fair bit of philosophy of science; it publishes many papers that could easily appear in _Philosophy of Science_. Despite that, the five way classification used here makes sense. The important thing is that the philosophy of science articles that _Philosophical Studies_ publish also fall into one of those five topics. So there are a lot of articles on Bayesian epistemology, e.g., "Belief and the Problem of Ulysses and the Sirens" [@WOSA1995QE80400001], but it makes sense to count them in epistemology. There are also a lot of articles on the metaphysics of science, e.g., "Realism, Anti-foundationalism and the Enthusiasm for Natural Kinds" [@WOSA1991FC38500010], but we don't lose much if we count these as metaphysics. What _Philosophical Studies_ doesn't have (or, more precisely, doesn't have much of) are articles like "Thinking about Mechanisms" [@WOS000087305900001], that are clearly philosophy of science articles but not in one of these five topics. So we aren't losing much by not having a separate topic for those articles. And we can see that by looking at the fact that "Thinking about Mechanisms", and several other papers like it, are cited rather rarely in _Philosophical Studies_.
 
 The main use I'll put this model to is looking for changes in publication rates, and @sec-words-and-trends will go over those changes in more detail. I'll end this section by looking at how these five topics relate to the special issues, and the citation rates of articles in those five topics.
 
@@ -1322,7 +1318,7 @@ The differences are not as stark as in @tbl-citation-by-type, but they are still
 kable(citations_by_topic_decade)
 ```
 
-The difference between the 2000s and every other decade in @tbl-topics-cites-decades is stark. But the lack of citations to language articles before the 2000s is also stark. I'll come back to this point in @sec-1980s-articles, as part of a broader look at how the topic distribution in _Philosophical Studies_ changed over time.
+The difference between the 2000s and every other decade in @tbl-topics-cites-decades is stark. But the really striking thing is the lack of citations to language articles before the 2000s. I'll come back to this point in @sec-1980s-articles, as part of a broader look at how the topic distribution in _Philosophical Studies_ changed over time.
 
 # Words and Trends {#sec-words-and-trends}
 
@@ -1346,7 +1342,6 @@ ggplot(topic_rate_by_year |>
   scale_y_continuous(lim = c(0, 0.4), breaks = c(0.1, 0.2, 0.3)) +
   labs(x = element_blank(),
        y = element_blank())
-
 ```
 
 If you don't trust black box methods like topic modeling, you can see a similar trend just in the word usage. @fig-frege-russell shows the frequency of the words "description" and "reference" over time.
@@ -1370,8 +1365,7 @@ word_graphs <- function(x, y){
     scale_x_continuous(limits = c(1980, 2019),
                        breaks = c(1990, 2010),
                        minor_breaks = 396:404 * 5) +
-    labs(x = element_blank(), y = element_blank())
-    
+    labs(x = element_blank(), y = element_blank())   
 }
 
 
@@ -1408,11 +1402,11 @@ word_graphs_shaded <- function(x, y, d){
 word_graphs(c("reference", "description"), 2)
 ```
 
-These trends in word usage are a more fine-grained guide to what is happening in _Philosophical Studies_ than the five topic model. I did use topic modeling to build many more fine-grained models for the journal, but there was too much variation between the models to use any one model as the basis for this section. I will refer to those models in passing, when there was a relevant feature they shared. But for this section I'll primarily rely on word distribution. I'll also look at the citations of articles that use a word.
+These trends in word usage are a more fine-grained guide to what is happening in _Philosophical Studies_ than the five topic model. I did use topic modeling to build many more fine-grained models for the journal, but there was too much variation between the models to use any one model as the basis for this section. Instead I'll look at word frequency, and how it relates to citation patterns.
 
 The main study I'll talk about looks at the relative frequency of the roughly 6000 most common word types over the four decades from 1980-2019. For each word, and each decade, I'll look at how improbable it is that the word is used that often in that decade, given how many words the journal printed that decade, and how often the word is used overall.
 
-This is easiest to work through with an example. The word "contextualism" is used 2282 times between 1980 and 2019, with 984 of those uses in the 2000s. Overall, 26.48% of the words published are in issues from the 2000s. A random process with 2282 trials (for each usage), and a 'success' probability 0f 26.48%, has a probability of roughly 10^-65^ of succeeding 984 or more times. That is, if the uses of 'contextualism' were distributed at random over the journal, the probability at least that many would appear in the 2000s is 10^-65^. Not surprisingly, we get the result papers using "contextualism" are concentrated in the 2000s. I'll use these probabilities as measures of concentration in what follows. When the decade is clear, I'll simply write the probability after the word, e.g., contextualism (10^-65^), to indicate how concentrated it is.
+This is easiest to work through with an example. The word "contextualism" is used 2282 times between 1980 and 2019, with 984 of those uses in the 2000s. Overall, 26.48% of the words published are in issues from the 2000s. A random process with 2282 trials (one for each usage), and a 'success' probability 0f 26.48%, has a probability of roughly 10^-65^ of succeeding 984 or more times. That is, if the uses of 'contextualism' were distributed at random over the journal, the probability at least that many would appear in the 2000s is 10^-65^. Not surprisingly, we get the result papers using "contextualism" are concentrated in the 2000s. I'll use these probabilities as measures of concentration in what follows. When the decade is clear, I'll simply write the probability after the word, e.g., contextualism (10^-65^), to indicate how concentrated it is.
 
 ## Three Initial Observations
 
@@ -1451,7 +1445,6 @@ ps_uni_grouped |>
   geom_point() +
   labs(x = element_blank(),
          y = element_blank())
-
 ```
 
 I'll leave it for someone else to figure out what proportion of the change in @fig-gender-words is due to there being more references to particular women, and what proportion is due to philosophers using female pronouns for arbitrary or fictional characters.
@@ -1462,7 +1455,7 @@ From the 1990s to at least the mid 2010s, the bulk of ethics papers in _Philosop
 
 There were several papers on utilitarianism. So there was a lot of discussion of "utility" (10^-15^), "utilitarianism" (10^-41^) and "utilitarian" (10^-45^). One can use almost any philosophical term in a paper attacking the theory it names; indeed the 1980s paper with the most uses of "Kantian" [@WOSA1989CE37600004] is an anti-Kantian paper. But most of these papers were supporting utilitarianism. (Some of the uses of "utility", both in the 1980s and afterwards, were in decision theory papers.)
 
-There were also many papers on abortion.^[One of these, [@WOSA1985ANT6600005; @WOSA1986AZA8100007], got printed twice because the pages were out of order the first time.] These were largely *anti*-abortion arguments. They did not get much uptake in philosophy journals. The nine^[Or ten, if you count both printings of the Gensler piece.] papers from the 1980s that use "abortion" five times or more average less than one citation per article in philosophy journals. Google Scholar tells me that some of them have more uptake elsewhere, including in bioethics journals outside this study, but they weren't picked up on in philosophy. After the 1980s, _Philosophical Studies_ largely lost interest in this topic. Over the last forty years, "A Defense of Abortion" [@WOSA1971Y116900003] is cited less often in _Philosophical Studies_ than you'd expect given its citation rate elsewhere.
+There were also many papers on abortion.^[One of these, [@WOSA1985ANT6600005; @WOSA1986AZA8100007], got printed twice because the pages were out of order the first time.] These were largely *anti*-abortion arguments. They did not get much uptake in philosophy journals. The nine^[Or ten, if you count both printings of the Gensler piece.] papers from the 1980s that use "abortion" five times or more average less than one citation per article in philosophy journals. Google Scholar shows that some of them have more uptake elsewhere, especially in specialist bioethics journals. After the 1980s, _Philosophical Studies_ largely lost interest in this topic. Over the last forty years, "A Defense of Abortion" [@WOSA1971Y116900003] is cited less often in _Philosophical Studies_ than you'd expect given its citation rate elsewhere.
 
 The big story of the 1980s is the centrality of philosophy of language to the journal, and how different this is to what the journal became in later years. The kind of philosophy of language _Philosophical Studies_ published in the 1980s (and 1990s) was centered around issues about reference and description that became central to philosophy over the 1960s and 1970s.
 
@@ -1503,7 +1496,7 @@ As @fig-frege-russell shows, there is still a lot of talk about 'description' an
 
 Looking back, a lot of this discussion feels stale by the mid-1990s. There is a sense that the important things to say have been said. This shows up in the citation data. The _Philosophical Studies_ papers using these terms have a disproportionately high rate of citation in _Philosophical Studies_ itself. The rest of the field was moving on, but _Philosophical Studies_ was a step behind.
 
-Even the giants of the field weren't immune to this change in philosophical fashion. Fodor published _The Elm and the Expert_ in 1995. It has around 500 citations on Google Scholar. Most of us would be happy with that kind of recognition, but by Fodor's standards it was a flop. _Holism_ [@FodorLepore1992] has over 1500 Google Scholar citations; _Concepts_ [@Fodor1998] has nearly 3000. Content externalism was not as central to philosophy as it had been for decades.
+Even the giants of the field weren't immune to this change in philosophical fashion. Fodor published _The Elm and the Expert_ in 1995. It has around 500 citations on Google Scholar. Most of us would be happy with that kind of recognition, but by Fodor's standards it was a flop. _Holism_ [@FodorLepore1992] has over 1500 Google Scholar citations; _Concepts_ [@Fodor1998] has nearly 3000. Content externalism was not as central to philosophy as it had been in earlier decades.
 
 The other big trend in _Philosophical Studies_ this decade is causation. The word 'causal' (10^-68^) is heavily concentrated in this decade. This is for three reasons. First, there were lots of papers simply on causation. Second, there were more uses of causal notions in analysing other concepts. This was hardly unique to the 1990s, but it was more frequent then.
 
@@ -1730,7 +1723,6 @@ Over the 2010s, the space between ethics and epistemology continued to shrink. T
 #| fig-asp: 0.45
 #| cache: true
 
-
 word_graphs_shaded(c("normative", "reasons"), 2, 2010)
 ```
 
@@ -1746,7 +1738,7 @@ The biggest story of the 2010s though, is the social turn across philosophy. The
 word_graphs_shaded(c("social"), 1, 2010)
 ```
 
-@fig-social might be misleading unless you know how philosophers use 'social'.^[I'm indebted here to XXXX.] Almost anything involving multiple people will be classed as social. There isn't a distinction here between interpersonal, or what @Darwall2006 calls second-personal, phenomena, and phenomena that only emerge at the level of large societies. So the increased discussion of reactive attitudes, especially blame, is part of this social turn. I'm not sure this is optimal; society-level phenomena are rather different from phenomena that arise in groups of two or three. But that's how the terminology has developed, and I'll follow common practice here.
+@fig-social might be misleading unless you know how philosophers use 'social'.^[I'm indebted here to Ishani Maitra.] Almost anything involving multiple people will be classed as social. There isn't a distinction here between interpersonal, or what @Darwall2006 calls second-personal, phenomena, and phenomena that only emerge at the level of large societies. So the increased discussion of reactive attitudes, especially blame, is part of this social turn. I'm not sure this is optimal; society-level phenomena are rather different from phenomena that arise in groups of two or three. But that's how the terminology has developed, and I'll follow common practice here.
 
 The social turn can be seen in the word usage graphs for many different kinds of words. @fig-social-general, @fig-social-ethics, and @fig-social-epistemology display some notable examples.
 
