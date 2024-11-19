@@ -79,15 +79,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -196,9 +198,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -256,7 +255,7 @@ is shown in Figure~\ref{fig-five-topics}.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-five-topics-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-five-topics-1.pdf}}
 
 }
 
@@ -346,7 +345,7 @@ the 25th, 50th, and 75th percentile article by word count for each year.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-article-count-by-year-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-article-count-by-year-1.pdf}}
 
 }
 
@@ -359,7 +358,7 @@ each year}
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-word-count-by-year-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-word-count-by-year-1.pdf}}
 
 }
 
@@ -372,7 +371,7 @@ year}
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-word-max-by-year-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-word-max-by-year-1.pdf}}
 
 }
 
@@ -385,7 +384,7 @@ year}
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-word-quartiles-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-word-quartiles-1.pdf}}
 
 }
 
@@ -666,11 +665,11 @@ Table~\ref{tbl-citation-rate}, we get a list that looks a bit more like
 a familiar ranking of philosophy journals by prestige.
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.0633}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.5190}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1139}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1266}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1772}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0633}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.5190}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1139}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1266}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1772}}@{}}
 
 \caption{\label{tbl-citation-rate}Leading journals by citation rate
 (Articles published 1980-2019).}
@@ -733,7 +732,7 @@ dots, for \emph{Philosophical Studies}. After 2000, and especially from
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-compare-cites-dots-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-compare-cites-dots-1.pdf}}
 
 }
 
@@ -752,7 +751,7 @@ dots separately, I've just displayed the ratio between them.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-compare-cites-rolling-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-compare-cites-rolling-1.pdf}}
 
 }
 
@@ -865,7 +864,7 @@ Figure~\ref{fig-means-normal-only}.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-means-normal-only-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-means-normal-only-1.pdf}}
 
 }
 
@@ -938,7 +937,7 @@ Lewis (\citeproc{ref-WOSA1979JB14500003}{1979})
 & 50 & 291 \\
 Lewis (\citeproc{ref-WOSA1996VY21200001}{1996})
 & 65 & 406 \\
-D. J. Chalmers and Jackson (\citeproc{ref-WOS000174798400001}{2001})
+Chalmers and Jackson (\citeproc{ref-WOS000174798400001}{2001})
 & 27 & 138 \\
 Lewis (\citeproc{ref-WOSA1984TQ70900001}{1984})
 & 32 & 175 \\
@@ -1268,7 +1267,7 @@ this more visible.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-language-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-language-1.pdf}}
 
 }
 
@@ -1286,7 +1285,7 @@ time.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-frege-russell-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-frege-russell-1.pdf}}
 
 }
 
@@ -1326,6 +1325,26 @@ decade is clear, I'll simply write the probability after the word, e.g.,
 contextualism (10\textsuperscript{-65}), to indicate how concentrated it
 is.
 
+Second, I'll look at where articles that use a word are cited. On
+average, articles in \emph{Philosophical Studies} have about 14\% of
+their citations in \emph{Philosophical Studies}. But this proportion
+varies in systematic ways.
+
+For words associated with topics the journal does not concentrate on,
+the proportion is much lower. Articles that use the word ``homeostatic''
+five or more times have 7.1\% of their citations in \emph{Philosophical
+Studies}. For ``democratic'', it's only 8.2\%.
+
+But for words associated with topics the journal does publish on
+frequently, the proportion is much higher. Articles using the word
+``Pereboom's'' five or more times, most of which are discussing Derk
+Pereboom's free will scepticism, have 25.6\% of their citations in
+\emph{Philosophical Studies}.
+
+When a word appears particularly frequently in one kind of article, this
+measure is helpful for distinguishing trends relatively specific to
+\emph{Philosophical Studies} from trends in the wider journal ecosystem.
+
 \subsection{Three Initial
 Observations}\label{three-initial-observations}
 
@@ -1364,7 +1383,7 @@ the years.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-gender-words-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-gender-words-1.pdf}}
 
 }
 
@@ -1488,7 +1507,7 @@ discussion.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-1980s-words-big-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-1980s-words-big-1.pdf}}
 
 }
 
@@ -1501,7 +1520,7 @@ discussion.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-1980s-words-small-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-1980s-words-small-1.pdf}}
 
 }
 
@@ -1568,7 +1587,7 @@ of causation for thinking about explanation.
 
 The causal exclusion argument has a strange history after the 1990s. By
 the late 2000s it had largely faded from philosophy of mind. This was in
-part because it was an in-house dispute between physicalists, and D.
+part because it was an in-house dispute between physicalists, and
 Chalmers (\citeproc{ref-Chalmers1996}{1996}) had made the prior question
 of whether physicalism was true more pressing. And it was in part
 because of various objections, K. Bennett
@@ -1590,7 +1609,7 @@ this won't be part of our story going forward.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-1990s-words-big-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-1990s-words-big-1.pdf}}
 
 }
 
@@ -1603,7 +1622,7 @@ this won't be part of our story going forward.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-1990s-words-small-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-1990s-words-small-1.pdf}}
 
 }
 
@@ -1635,7 +1654,7 @@ nouns/adjectives for proponents of those views.\footnote{A similar graph
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-2000s-isms-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-2000s-isms-1.pdf}}
 
 }
 
@@ -1691,7 +1710,7 @@ is not a handful of articles using the term repeatedly, but that in the
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-2000s-epistemology-big-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-2000s-epistemology-big-1.pdf}}
 
 }
 
@@ -1704,7 +1723,7 @@ appear more often in the 2000s.}
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-2000s-epistemology-small-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-2000s-epistemology-small-1.pdf}}
 
 }
 
@@ -1747,7 +1766,7 @@ how many more citations there are to articles in philosophy journals.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-citations-by-year-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-citations-by-year-1.pdf}}
 
 }
 
@@ -1771,7 +1790,7 @@ less.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-analytic-words-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-analytic-words-1.pdf}}
 
 }
 
@@ -1789,7 +1808,7 @@ but rather than the words they use for theories are changing.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-theory-words-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-theory-words-1.pdf}}
 
 }
 
@@ -1806,7 +1825,7 @@ outdated view.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-objection-words-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-objection-words-1.pdf}}
 
 }
 
@@ -1825,7 +1844,7 @@ pattern.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-empirical-words-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-empirical-words-1.pdf}}
 
 }
 
@@ -1900,7 +1919,7 @@ and, most of all, grounding. As Figure~\ref{fig-grounding} shows,
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-grounding-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-grounding-1.pdf}}
 
 }
 
@@ -1934,7 +1953,7 @@ shows how dramatic this was over the 2010s.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-normative-reasons-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies_files/figure-pdf/fig-normative-reasons-1.pdf}}
 
 }
 
@@ -1958,7 +1977,7 @@ growth: how often the word `social' is used.
 
 \centering{
 
-\includegraphics{phil-studies_files/figure-pdf/fig-social-1.pdf}
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{phil-studies_files/figure-pdf/fig-social-1.pdf}
 
 }
 
@@ -1978,165 +1997,6 @@ this social turn. I'm not sure this is optimal; society-level phenomena
 are rather different from phenomena that arise in groups of two or
 three. But that's how the terminology has developed, and I'll follow
 common practice here.
-
-The social turn can be seen in the word usage graphs for many different
-kinds of words. Figure~\ref{fig-social-general},
-Figure~\ref{fig-social-ethics}, and Figure~\ref{fig-social-epistemology}
-display some notable examples.
-
-\begin{figure}
-
-\centering{
-
-\includegraphics{phil-studies_files/figure-pdf/fig-social-general-1.pdf}
-
-}
-
-\caption{\label{fig-social-general}Uses of terms for groups.}
-
-\end{figure}%
-
-\begin{figure}
-
-\centering{
-
-\includegraphics{phil-studies_files/figure-pdf/fig-social-ethics-1.pdf}
-
-}
-
-\caption{\label{fig-social-ethics}Uses of terms associated with
-interpersonal ethics.}
-
-\end{figure}%
-
-\begin{figure}
-
-\centering{
-
-\includegraphics{phil-studies_files/figure-pdf/fig-social-epistemology-1.pdf}
-
-}
-
-\caption{\label{fig-social-epistemology}Uses of terms from social
-epistemology and social philosophy of language}
-
-\end{figure}%
-
-There are other terms where graphs like this don't work because the term
-was so rare before 2010. Between 1980 and 2009, the terms `slur',
-`slurs' and `slurring' appeared a total of 10 times. Between 2010 and
-2019 they appeared 266 times.
-
-So we have some evidence for a social turn in \emph{Philosophical
-Studies}. I'll end with some reasons to think this isn't particularly
-distinctive to \emph{Philosophical Studies}.
-
-One reason comes from where articles are cited. On average, articles in
-\emph{Philosophical Studies} have about 14\% of their citations in
-\emph{Philosophical Studies}. But this proportion varies in systematic
-ways. For words associated with topics the journal does not concentrate
-on, the proportion is much lower. Articles that use the word
-``institutions'' five or more times have 3.6\% of their citations in
-\emph{Philosophical Studies}. For ``simulation'', the proportion is
-6.8\%. But for words associated with topics the journal does publish on
-frequently, the proportion is much higher. Articles using the word
-``analyticity'' five or more times have 23.5\% of their citations in
-\emph{Philosophical Studies}. When a word appears particularly
-frequently in one kind of article, this measure is helpful for
-distinguishing trends relatively specific to \emph{Philosophical
-Studies} from trends in the wider journal ecosystem.
-
-For some topics that are prominent in the 2000s and 2010s, this
-proportion is rather high. We see that with `grounding' (16.8\%),
-`context-sensitive' (18.3\%), and `incompatibilism' (24.3\%). But for
-many of the words in the graphs above, the percentage is lower than
-average. Examples of this include `data' (10.1\%), `participants'
-(9.3\%), `groups' (8.2\%), `interpersonal' (6.9\%), `racial' (10.6\%),
-`gender' (10.9\%), `trust' (11.5\%), `disagree' (10.5\%), and
-`deference' (9.0\%). This isn't conclusive, but suggests that while
-\emph{Philosophical Studies} is more empirical, and more social, than it
-was in previous decades, other philosophy journals have been changing
-even more rapidly.
-
-And there are some parts of the social turn that are not particularly
-visible in \emph{Philosophical Studies} through 2019. Kristie Dotson's
-paper on epistemic violence (\citeproc{ref-WOS000289948200002}{Dotson
-2011}) is one of the most cited papers of the 2010s, but it doesn't get
-cited in \emph{Philosophical Studies} until 2019
-(\citeproc{ref-WOS000460037300009}{Matthes 2019}). It has been cited
-more often in \emph{Philosophical Studies} since 2019, but this adds to
-the evidence in the previous paragraph that \emph{Philosophical Studies}
-didn't move into social philosophy as rapidly as some of its peers.
-
-\section{Conclusions and Further
-Questions}\label{conclusions-and-further-questions}
-
-One theme of this essay has been the change in the status of
-\emph{Philosophical Studies}. In 1980, it primarily published papers
-that responded to ideas introduced in books or higher prestige journals
-some time earlier, often several years earlier. A few decades later, it
-is publishing papers that set the research agenda others to which other
-journals respond. There are two interestingly different stories for how
-this could have happened.
-
-Philosophy is notoriously hierarchical. If you're reading this journal
-you probably don't need much evidence for this. If you want such
-evidence, look back to Table~\ref{tbl-citation-rate}. If
-\emph{Philosophical Studies} is playing more of an agenda setting role,
-this could be because it has moved up in the hierarchy, or because the
-hierarchy is getting flatter. (Or both, these are not exclusive.) When
-\emph{Noûs} underwent a similar change a decade or two before
-\emph{Philosophical Studies}, this was not a sign of the hierarchy
-flattening; \emph{Noûs} just got more prestigious. In this case it's
-possible we are seeing a journal ecosystem that is getting more
-receptive to ideas from places it had traditionally treated as lower
-prestige. But it's also possible that all we're seeing is one journal
-move up while others move down. This can't be resolved by just looking
-at one journal, and it's an interesting question for future research.
-
-\emph{Philosophical Studies} is often referred to as a generalist
-journal. I've presented some reasons here for questioning that label. It
-doesn't publish much logic, or history of philosophy, or political
-philosophy, or philosophy of various academic subjects, e.g.,
-mathematics, biology, economics, history, or music. One question is
-whether that should matter. Must one publish articles on philosophy of
-history to be a generalist journal? If so, how many such articles must
-one publish? If this is a reason for not counting \emph{Philosophical
-Studies} as truly generalist, are there \emph{any} generalist journals
-in philosophy. If so, what are they, and how would we tell?
-
-But the biggest open questions are ones we cannot answer until we see
-how philosophy itself develops. The very short version of the story of
-\emph{Philosophical Studies} over these four decades is that it moved
-from being centered on core analytic questions about language, to first
-covering more epistemology, and then doing more empirical and social
-philosophy. These moves tracked broader changes in the discipline; if
-anything, the changes in \emph{Philosophical Studies} were less dramatic
-than the changes in peer journals. The biggest question, at least by my
-lights, is which of the trends of the 2010s will continue in the 2020s
-and beyond.
-
-We can make some of these questions more precise. Will metaphysics
-continue to be post-modal, or will we see a revival of modal
-metaphysics? Will philosophy of mind continue its trend to becoming more
-empirical, or will there be a return to armchair approaches? Will
-epistemology and ethics continue to move closer together? Will
-philosophy of language keep moving closer to linguistics? And, most of
-all, will the social turn across so many different parts of philosophy
-continue? If it does, will it turn more towards questions about society
-as a whole, or will it continue to be based in interpersonal, or
-second-personal, phenomena?
-
-One could use the evidence from these four decades of
-\emph{Philosophical Studies} to give two contradictory answers to these
-questions. On the one hand, the trends, especially since 2014, seem so
-dramatic it's hard to imagine them suddenly reversing. (And the
-preliminary data we have from the early 2020s backs up this intuition.)
-On the other hand, previous trends have ended rather abruptly, without
-much obvious warning, and perhaps these trends will as well.
-
-\subsection*{References}\label{references}
-\addcontentsline{toc}{subsection}{References}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
@@ -2163,7 +2023,7 @@ Beddor, Bob. 2015. {``Evidentialism, Circularity, and Grounding.''}
 
 \bibitem[\citeproctext]{ref-WOS000184542900004}
 Bennett, K. 2003. {``Why the Exclusion Problem Seems Intractable, and
-How, Just Maybe to Tract It.''} \emph{No{û}s} 37 (3): 471--97. doi:
+How, Just Maybe to Tract It.''} \emph{Noûs} 37 (3): 471--97. doi:
 \href{https://doi.org/10.1111/1468-0068.00447}{10.1111/1468-0068.00447}.
 
 \bibitem[\citeproctext]{ref-WOS000289572300004}
@@ -2217,7 +2077,7 @@ Philosophy.''} \emph{Philosophical Review} 71 (1): 67--93. doi:
 \href{https://doi.org/10.2307/2183682}{10.2307/2183682}.
 
 \bibitem[\citeproctext]{ref-Chalmers1996}
-Chalmers, David. 1996. \emph{The Conscious Mind}. Oxford: Oxford
+Chalmers, David J. 1996. \emph{The Conscious Mind}. Oxford: Oxford
 University Press.
 
 \bibitem[\citeproctext]{ref-WOS000174798400001}
@@ -2262,11 +2122,6 @@ DeVries, Willem A. 2005. \emph{Wilfrid Sellars}. Abingdon: Routledge.
 Donnellan, Keith S. 1966. {``Reference and Definite Descriptions.''}
 \emph{Philosophical Review} 75 (3): 281--304. doi:
 \href{https://doi.org/10.2307/2183143}{10.2307/2183143}.
-
-\bibitem[\citeproctext]{ref-WOS000289948200002}
-Dotson, Kristie. 2011. {``Tracking Epistemic Violence, Tracking
-Practices of Silencing.''} \emph{Hypatia} 26 (2): 236--57. doi:
-\href{https://doi.org/10.1111/j.1527-2001.2011.01177.x}{10.1111/j.1527-2001.2011.01177.x}.
 
 \bibitem[\citeproctext]{ref-WOSA1995QX94800001}
 Edgington, D. 1995. {``On Conditionals.''} \emph{Mind} 104 (414):
@@ -2368,7 +2223,7 @@ in Wang Yangming.''} \emph{Philosophical Review} 131 (2): 169--213. doi:
 
 \bibitem[\citeproctext]{ref-WOSA1979JB14500003}
 Lewis, David. 1979. {``Counterfactual Dependence and Time's Arrow.''}
-\emph{No{û}s} 13 (4): 455--76. doi:
+\emph{Noûs} 13 (4): 455--76. doi:
 \href{https://doi.org/10.2307/2215339}{10.2307/2215339}.
 
 \bibitem[\citeproctext]{ref-WOSA1984TQ70900001}
@@ -2430,11 +2285,6 @@ Topic-Modeling Perspective.''} \emph{Biology and Philosophy} 35 (5):
 1--25. doi:
 \href{https://doi.org/10.1007/s10539-019-9729-4}{10.1007/s10539-019-9729-4}.
 
-\bibitem[\citeproctext]{ref-WOS000460037300009}
-Matthes, Erich Hatala. 2019. {``Cultural Appropriation and
-Oppression.''} \emph{Philosophical Studies} 176 (4): 1003--13. doi:
-\href{https://doi.org/10.1007/s11098-018-1224-2}{10.1007/s11098-018-1224-2}.
-
 \bibitem[\citeproctext]{ref-WOS000341924300014}
 Nolan, Daniel. 2014. {``Hyperintensional Metaphysics.''}
 \emph{Philosophical Studies} 171 (1): 149--60. doi:
@@ -2450,8 +2300,8 @@ Petrovich, Eugenio. 2024. \emph{A Quantitative Portrait of Analytic
 Philosophy: Looking Through the Margins}. Cham: Springer.
 
 \bibitem[\citeproctext]{ref-WOS000165361800002}
-Pryor, James. 2000. {``The Skeptic and the Dogmatist.''} \emph{No{û}s}
-34 (4): 517--49. doi:
+Pryor, James. 2000. {``The Skeptic and the Dogmatist.''} \emph{Noûs} 34
+(4): 517--49. doi:
 \href{https://doi.org/10.1111/0029-4624.00277}{10.1111/0029-4624.00277}.
 
 \bibitem[\citeproctext]{ref-WOSA1980KH88100001}

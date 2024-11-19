@@ -79,15 +79,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -195,9 +197,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -271,7 +270,7 @@ is in a tree like Figure~\ref{fig-standard-newcomb}.\footnote{I'll
 
 \centering{
 
-\includegraphics{fourprob_files/figure-pdf/fig-standard-newcomb-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob_files/figure-pdf/fig-standard-newcomb-1.png}}
 
 }
 
@@ -366,7 +365,7 @@ the payouts shown in expected value.\footnote{I will drop the assumption
 
 \centering{
 
-\includegraphics{fourprob_files/figure-pdf/fig-coin-then-demon-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob_files/figure-pdf/fig-coin-then-demon-1.png}}
 
 }
 
@@ -421,7 +420,7 @@ Table~\ref{tbl-demon-then-coin}.
 
 \centering{
 
-\includegraphics{fourprob_files/figure-pdf/fig-demon-then-coin-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob_files/figure-pdf/fig-demon-then-coin-1.png}}
 
 }
 
@@ -503,7 +502,7 @@ Table~\ref{tbl-ultimatum}.
 
 \centering{
 
-\includegraphics{fourprob_files/figure-pdf/fig-ultimatum-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob_files/figure-pdf/fig-ultimatum-1.png}}
 
 }
 
@@ -591,7 +590,7 @@ Chooser is going to play the following game.
 
 \centering{
 
-\includegraphics{fourprob_files/figure-pdf/fig-sample-violation-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob_files/figure-pdf/fig-sample-violation-1.png}}
 
 }
 
@@ -945,7 +944,7 @@ Consider the dynamic game shown in Figure~\ref{fig-edt}.
 
 \centering{
 
-\includegraphics{fourprob_files/figure-pdf/fig-edt-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob_files/figure-pdf/fig-edt-1.png}}
 
 }
 
@@ -1553,7 +1552,7 @@ Newcomb's Problem.\footnote{It is similar to what's sometimes called an
 
 \centering{
 
-\includegraphics{fourprob_files/figure-pdf/fig-redt-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob_files/figure-pdf/fig-redt-1.png}}
 
 }
 
@@ -1826,7 +1825,7 @@ they get 5 if Nature moved Middle, and 0 otherwise.
 
 \centering{
 
-\includegraphics{fourprob_files/figure-pdf/fig-buchak-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob_files/figure-pdf/fig-buchak-1.png}}
 
 }
 

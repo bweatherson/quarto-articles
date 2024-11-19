@@ -79,15 +79,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -195,9 +197,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -253,7 +252,7 @@ angle between them. The result is Figure~\ref{fig-eugenio-matrix}.
 
 \centering{
 
-\includegraphics{cosine-screenshot.png}
+\pandocbounded{\includegraphics[keepaspectratio]{cosine-screenshot.png}}
 
 }
 
@@ -272,7 +271,7 @@ shows what he found.
 
 \centering{
 
-\includegraphics{cluster-screenshot.png}
+\pandocbounded{\includegraphics[keepaspectratio]{cluster-screenshot.png}}
 
 }
 
@@ -418,7 +417,7 @@ Figure~\ref{fig-matrix} shows the year by year similarity.
 
 \centering{
 
-\includegraphics{citation-break_files/figure-pdf/fig-matrix-1.png}
+\pandocbounded{\includegraphics[keepaspectratio]{citation-break_files/figure-pdf/fig-matrix-1.png}}
 
 }
 
@@ -441,7 +440,7 @@ first year whose citations get used is 1965
 
 \centering{
 
-\includegraphics{citation-break_files/figure-pdf/fig-rolling-average-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{citation-break_files/figure-pdf/fig-rolling-average-1.pdf}}
 
 }
 
@@ -467,7 +466,7 @@ expect.
 
 \centering{
 
-\includegraphics{citation-break_files/figure-pdf/fig-rolling-average-late-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{citation-break_files/figure-pdf/fig-rolling-average-late-1.pdf}}
 
 }
 
@@ -513,8 +512,8 @@ from the first half of the decade were shown in
 Table~\ref{tbl-early-2000s}.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9346}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0654}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.9346}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0654}}@{}}
 
 \caption{\label{tbl-early-2000s}Most cited 2000s articles by 2009.}
 
@@ -570,8 +569,8 @@ Table~\ref{tbl-late-2000s} are the most cited articles first published
 in 2000-2004.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9387}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0613}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.9387}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0613}}@{}}
 
 \caption{\label{tbl-late-2000s}Most cited 2000s articles since 2018.}
 
@@ -641,8 +640,8 @@ very little overlap. Table~\ref{tbl-early-1980s} lists the articles from
 1984-1988 that were most cited by 1993.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9301}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0699}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.9301}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0699}}@{}}
 
 \caption{\label{tbl-early-1980s}Most cited 1984-1988 articles by 1993.}
 
@@ -697,8 +696,8 @@ of articles from 1984 to 1988 that have been widely cited in the last 5
 years of the data set.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9324}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0676}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.9324}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0676}}@{}}
 
 \caption{\label{tbl-late-1980s}Most cited 1984-1988 articles since
 2018.}

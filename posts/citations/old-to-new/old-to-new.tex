@@ -79,15 +79,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -195,9 +197,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -297,7 +296,7 @@ Table~\ref{tbl-early-1990s} lists the twenty articles in question.
 
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 0\tabcolsep) * \real{1.0000}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 0\tabcolsep) * \real{1.0000}}@{}}
 
 \caption{\label{tbl-early-1990s}The twenty articles from 1990-1994 most
 widely cited at the time.}
@@ -395,9 +394,9 @@ from 2020 to mid 2022.
 
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0609}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0558}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.8832}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0609}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0558}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.8832}}@{}}
 
 \caption{\label{tbl-early-1990s-expanded}Early and late citations to
 twenty articles from 1990-1994.}
@@ -495,7 +494,7 @@ shown.)
 
 \centering{
 
-\includegraphics{old-to-new_files/figure-pdf/fig-still-standing-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{old-to-new_files/figure-pdf/fig-still-standing-1.pdf}}
 
 }
 
@@ -523,7 +522,7 @@ Figure~\ref{fig-median-cites}.
 
 \centering{
 
-\includegraphics{old-to-new_files/figure-pdf/fig-median-cites-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{old-to-new_files/figure-pdf/fig-median-cites-1.pdf}}
 
 }
 
@@ -541,9 +540,9 @@ Table~\ref{tbl-early-1970s-sample}.
 
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1071}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0982}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.7946}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1071}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0982}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7946}}@{}}
 
 \caption{\label{tbl-early-1970s-sample}Four very widely cited articles
 from the early 1970s}
@@ -563,13 +562,13 @@ Article
 \bottomrule\noalign{}
 \endlastfoot
 22 & 88 & David Lewis
-(\citeproc{ref-10.2307_2025310}{\textbf{10.2307\_2025310?}})
+(\citeproc{ref-10.2307_2025310}{1973})
 ``Causation'' \\
 23 & 72 & Harry G. Frankfurt
-(\citeproc{ref-10.2307_2024717}{\textbf{10.2307\_2024717?}})
+(\citeproc{ref-10.2307_2024717}{1971})
 ``Freedom of the Will and the Concept of a Person'' \\
 12 & 49 & Paul Benacerraf
-(\citeproc{ref-10.2307_2025075}{\textbf{10.2307\_2025075?}})
+(\citeproc{ref-10.2307_2025075}{1973})
 ``Mathematical Truth'' \\
 12 & 48 & JJ Thomson
 (\citeproc{ref-WOSA1971Y116900003}{1971})
@@ -617,7 +616,7 @@ Figure~\ref{fig-all-still-standing}.
 
 \centering{
 
-\includegraphics{old-to-new_files/figure-pdf/fig-all-still-standing-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{old-to-new_files/figure-pdf/fig-all-still-standing-1.pdf}}
 
 }
 
@@ -635,9 +634,9 @@ cited.
 
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1121}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1028}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.7850}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1121}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1028}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7850}}@{}}
 
 \caption{\label{tbl-top-1989}Widely cited articles from 1989}
 
@@ -678,9 +677,9 @@ cited recently are shown in Table~\ref{tbl-top-1991}.
 
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0686}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.0629}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.8686}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0686}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0629}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.8686}}@{}}
 
 \caption{\label{tbl-top-1991}Widely cited articles from 1991}
 
@@ -799,7 +798,7 @@ twenty articles. The results are shown in Figure~\ref{fig-all-median}.
 
 \centering{
 
-\includegraphics{old-to-new_files/figure-pdf/fig-all-median-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{old-to-new_files/figure-pdf/fig-all-median-1.pdf}}
 
 }
 
@@ -883,7 +882,7 @@ cited', between 2020 and 2022.
 
 \centering{
 
-\includegraphics{old-to-new_files/figure-pdf/fig-all-widely-cited-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{old-to-new_files/figure-pdf/fig-all-widely-cited-1.pdf}}
 
 }
 
@@ -906,7 +905,7 @@ five year period.)
 
 \centering{
 
-\includegraphics{old-to-new_files/figure-pdf/fig-all-median-unqualified-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{old-to-new_files/figure-pdf/fig-all-median-unqualified-1.pdf}}
 
 }
 
@@ -954,8 +953,8 @@ mid-2022.
 
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9167}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.9167}}@{}}
 
 \caption{\label{tbl-very-late-bloomers}Articles with the higher number
 of recent citations that are not in the top twenty for any five year
@@ -1047,7 +1046,7 @@ cites from 2020 to mid-2022.
 
 \centering{
 
-\includegraphics{old-to-new_files/figure-pdf/fig-four-five-recent-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{old-to-new_files/figure-pdf/fig-four-five-recent-1.pdf}}
 
 }
 
@@ -1072,8 +1071,8 @@ just one. Table~\ref{tbl-four-five-fade-away} goes lists these articles.
 
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0794}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9206}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0794}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.9206}}@{}}
 
 \caption{\label{tbl-four-five-fade-away}Highly cited articles with fewer
 than ten recent citations.}
@@ -1155,7 +1154,7 @@ mid-2022.
 
 \centering{
 
-\includegraphics{old-to-new_files/figure-pdf/fig-three-recent-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{old-to-new_files/figure-pdf/fig-three-recent-1.pdf}}
 
 }
 
@@ -1177,8 +1176,8 @@ papers, but which are not cited nearly as much in recent years.
 
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8889}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.8889}}@{}}
 
 \caption{\label{tbl-three-fade-away}Highly cited articles with fewer
 than ten recent citations.}
@@ -1352,259 +1351,323 @@ median downward).
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-10.2307_2025075}
+Benacerraf, Paul. 1973. {``Mathematical Truth.''} \emph{Journal Of
+Philosophy} 70 (19): 661--79.
+
 \bibitem[\citeproctext]{ref-WOSA1980JW85100004}
-Block, N. 1980. {``Are Absent Qualia Impossible.''} \emph{Philosophical
-Review} 89 (2): 257--74.
+Block, Ned. 1980. {``Are Absent Qualia Impossible.''}
+\emph{Philosophical Review} 89 (2): 257--74. doi:
+\href{https://doi.org/10.2307/2184650}{10.2307/2184650}.
 
 \bibitem[\citeproctext]{ref-WOSA1990CV26800001}
-Boghossian, PA. 1990. {``The Status of Content.''} \emph{Philosophical
-Review} 99 (2): 157--84.
+Boghossian, Paul A. 1990. {``The Status of Content.''}
+\emph{Philosophical Review} 99 (2): 157--84. doi:
+\href{https://doi.org/10.2307/2185488}{10.2307/2185488}.
 
 \bibitem[\citeproctext]{ref-WOSA1989T231400005}
-Boghossian, PA, and JD Velleman. 1989. {``Color as a Secondary
-Quality.''} \emph{Mind} 98 (389): 81--103.
+Boghossian, Paul A., and J. David Velleman. 1989. {``Color as a
+Secondary Quality.''} \emph{Mind} 98 (389): 81--103.
 
 \bibitem[\citeproctext]{ref-WOSA1993ML38000001}
-Burge, T. 1993. {``Content Preservation.''} \emph{Philosophical Review}
-102 (4): 457--88.
+Burge, Tyler. 1993. {``Content Preservation.''} \emph{Philosophical
+Review} 102 (4): 457--88. doi:
+\href{https://doi.org/10.2307/2185680}{10.2307/2185680}.
 
 \bibitem[\citeproctext]{ref-WOSA1992HC13100003}
-Burke, MB. 1992. {``Copper Statues and Pieces of Copper: A Challenge to
-the Standard Account.''} \emph{Analysis} 52 (1): 12--17.
+Burke, Michael B. 1992. {``Copper Statues and Pieces of Copper: A
+Challenge to the Standard Account.''} \emph{Analysis} 52 (1): 12--17.
+doi: \href{https://doi.org/10.2307/3328875}{10.2307/3328875}.
 
 \bibitem[\citeproctext]{ref-WOSA1994PD73500006}
----------. 1994. {``Preserving the Principle of 1 Object to a Place: A
+---------. 1994. {``Preserving the Principle of One Object to a Place: A
 Novel Account of the Relations Among Objects, Sorts, Sortals, and
 Persistance Conditions.''} \emph{Philosophy And Phenomenological
-Research} 54 (3): 591--624.
+Research} 54 (3): 591--624. doi:
+\href{https://doi.org/10.2307/2108583}{10.2307/2108583}.
 
 \bibitem[\citeproctext]{ref-WOSA1988Q411400001}
 Carroll, N. 1988. {``Art, Practice, and Narrative.''} \emph{Monist} 71
-(2): 140--56.
+(2): 140--56. doi:
+\href{https://doi.org/10.5840/monist198871212}{10.5840/monist198871212}.
 
 \bibitem[\citeproctext]{ref-WOSA1977DV15800002}
-Castaneda, HN. 1977. {``Perception, Belief, and Structure of Physical
-Objects and Consciousness.''} \emph{Synthese} 35 (3): 285--351.
+Castañeda, Hector-Neri. 1977. {``Perception, Belief, and Structure of
+Physical Objects and Consciousness.''} \emph{Synthese} 35 (3): 285--351.
+doi: \href{https://doi.org/10.1007/BF00485549}{10.1007/BF00485549}.
 
 \bibitem[\citeproctext]{ref-WOSA1985AAC6100002}
-Churchland, PM. 1985. {``Reduction, Qualia, and the Direct Introspection
-of Brain States.''} \emph{Journal Of Philosophy} 82 (1): 8--28.
+Churchland, Paul M. 1985. {``Reduction, Qualia, and the Direct
+Introspection of Brain States.''} \emph{Journal Of Philosophy} 82 (1):
+8--28. doi: \href{https://doi.org/10.2307/2026509}{10.2307/2026509}.
 
 \bibitem[\citeproctext]{ref-WOSA1989AE70300010}
-Cohen, GA. 1989. {``On the Currency of Egalitarian Justice.''}
-\emph{Ethics} 99 (4): 906--44.
+Cohen, G. A. 1989. {``On the Currency of Egalitarian Justice.''}
+\emph{Ethics} 99 (4): 906--44. doi:
+\href{https://doi.org/10.1086/293126}{10.1086/293126}.
 
 \bibitem[\citeproctext]{ref-WOSA1990DA14600002}
-Crane, T, and DH Mellor. 1990. {``There Is No Question of
+Crane, Tim, and D. H. Mellor. 1990. {``There Is No Question of
 Physicalism.''} \emph{Mind} 99 (394): 185--206.
 
 \bibitem[\citeproctext]{ref-WOS000087998300003}
-D'arms, J, and D Jacobson. 2000. {``The Moralistic Fallacy: On the
-'Appropriateness' of Emotions.''} \emph{Philosophy And Phenomenological
-Research} 61 (1): 65--90.
+D'Arms, Justin, and Dan Jacobson. 2000. {``The Moralistic Fallacy: On
+the 'Appropriateness' of Emotions (Ethics, Propriety, Correctness).''}
+\emph{Philosophy And Phenomenological Research} 61 (1): 65--90. doi:
+\href{https://doi.org/10.2307/2653403}{10.2307/2653403}.
 
 \bibitem[\citeproctext]{ref-WOSA1977EA35800003}
-Darwall, SL. 1977. {``Two Kinds of Respect.''} \emph{Ethics} 88 (1):
-36--49.
+Darwall, Stephen L. 1977. {``Two Kinds of Respect.''} \emph{Ethics} 88
+(1): 36--49. doi: \href{https://doi.org/10.1086/292054}{10.1086/292054}.
 
 \bibitem[\citeproctext]{ref-WOSA1990EQ84600001}
-Davidson, D. 1990. {``The Structure and Content of Truth.''}
-\emph{Journal Of Philosophy} 87 (6): 279--328.
+Davidson, Donald. 1990. {``The Structure and Content of Truth.''}
+\emph{Journal Of Philosophy} 87 (6): 279--328. doi:
+\href{https://doi.org/10.2307/2026863}{10.2307/2026863}.
 
 \bibitem[\citeproctext]{ref-WOSA1991EN62900002}
 Dennett, DC. 1991. {``Real Patterns.''} \emph{Journal Of Philosophy} 88
-(1): 27--51.
+(1): 27--51. doi:
+\href{https://doi.org/10.2307/2027085}{10.2307/2027085}.
 
 \bibitem[\citeproctext]{ref-WOSA1992KB29500008}
-Derose, K. 1992. {``Contextualism and Knowledge Attributions.''}
-\emph{Philosophy And Phenomenological Research} 52 (4): 913--29.
+DeRose, Keith. 1992. {``Contextualism and Knowledge Attributions.''}
+\emph{Philosophy And Phenomenological Research} 52 (4): 913--29. doi:
+\href{https://doi.org/10.2307/2107917}{10.2307/2107917}.
 
 \bibitem[\citeproctext]{ref-WOS000166575500001}
-Douglas, H. 2000. {``Inductive Risk and Values in Science.''}
-\emph{Philosophy Of Science} 67 (4): 559--79.
+Douglas, Heather. 2000. {``Inductive Risk and Values in Science.''}
+\emph{Philosophy Of Science} 67 (4): 559--79. doi:
+\href{https://doi.org/10.1086/392855}{10.1086/392855}.
 
 \bibitem[\citeproctext]{ref-WOSA1983QJ85300002}
-Eells, E, and E Sober. 1983. {``Probabilistic Causality and the Question
-of Transitivity.''} \emph{Philosophy Of Science} 50 (1): 35--57.
+Eells, Ellery, and Elliot Sober. 1983. {``Probabilistic Causality and
+the Question of Transitivity.''} \emph{Philosophy Of Science} 50 (1):
+35--57. doi: \href{https://doi.org/10.1086/289089}{10.1086/289089}.
 
 \bibitem[\citeproctext]{ref-WOSA1994NP02400004}
-Falvey, K, and J Owens. 1994. {``Externalism, Self-Knowledge, and
-Skepticism.''} \emph{Philosophical Review} 103 (1): 107--37.
+Falvey, Kevin, and Joseph Owens. 1994. {``Externalism, Self-Knowledge,
+and Skepticism.''} \emph{Philosophical Review} 103 (1): 107--37. doi:
+\href{https://doi.org/10.2307/2185874}{10.2307/2185874}.
 
 \bibitem[\citeproctext]{ref-WOS000183806600006}
-Fitelson, B. 2003. {``A Probabilistic Theory of Coherence.''}
-\emph{Analysis} 63 (3): 194--99.
+Fitelson, Brandon. 2003. {``A Probabilistic Theory of Coherence.''}
+\emph{Analysis} 63 (3): 194--99. doi:
+\href{https://doi.org/10.1111/1467-8284.00420}{10.1111/1467-8284.00420}.
 
 \bibitem[\citeproctext]{ref-WOSA1991EN62900001}
-Fodor, JA. 1991. {``A Modal Argument for Narrow Content.''}
-\emph{Journal Of Philosophy} 88 (1): 5--26.
+Fodor, Jerry A. 1991. {``A Modal Argument for Narrow Content.''}
+\emph{Journal Of Philosophy} 88 (1): 5--26. doi:
+\href{https://doi.org/10.2307/2027084}{10.2307/2027084}.
 
 \bibitem[\citeproctext]{ref-WOSA1990EB39300002}
-Forbes, G. 1990. {``The Indispensability of Sinn.''} \emph{Philosophical
-Review} 99 (4): 535--63.
+Forbes, Graeme. 1990. {``The Indispensability of Sinn.''}
+\emph{Philosophical Review} 99 (4): 535--63. doi:
+\href{https://doi.org/10.2307/2185616}{10.2307/2185616}.
 
 \bibitem[\citeproctext]{ref-WOSA1994NQ78600001}
-Forster, M, and E Sober. 1994. {``How to Tell When Simpler, More
-Unified, or Less \_Ad Hoc\_ Theories Will Provide More Accurate
+Forster, Malcom, and Elliot Sober. 1994. {``How to Tell When Simpler,
+More Unified, or Less \_Ad Hoc\_ Theories Will Provide More Accurate
 Predictions.''} \emph{British Journal For The Philosophy Of Science} 45
-(1): 1--35.
+(1): 1--35. doi:
+\href{https://doi.org/10.1093/bjps/45.1.1}{10.1093/bjps/45.1.1}.
+
+\bibitem[\citeproctext]{ref-10.2307_2024717}
+Frankfurt, Harry G. 1971. {``Freedom of the Will and the Concept of a
+Person.''} \emph{Journal Of Philosophy} 68 (1): 5--20.
 
 \bibitem[\citeproctext]{ref-WOS000170434600004}
-Goldman, AI. 2001. {``Experts: Which Ones Should You Trust?''}
-\emph{Philosophy And Phenomenological Research} 63 (1): 85--110.
+Goldman, Alvin I. 2001. {``Experts: Which Ones Should You Trust?
+(Epistemic Considerations).''} \emph{Philosophy And Phenomenological
+Research} 63 (1): 85--110. doi:
+\href{https://doi.org/10.2307/3071090}{10.2307/3071090}.
 
 \bibitem[\citeproctext]{ref-WOSA1994NP54800001}
-Griffiths, PE, and RD Gray. 1994. {``Developmental Systems and
+Griffiths, P. E., and R. D. Gray. 1994. {``Developmental Systems and
 Evolutionary Explanation.''} \emph{Journal Of Philosophy} 91 (6):
-277--304.
+277--304. doi: \href{https://doi.org/10.2307/2940982}{10.2307/2940982}.
 
 \bibitem[\citeproctext]{ref-WOS000085841900002}
-Haslanger, S. 2000. {``Gender and Race: (What) Are They? (What) Do We
-Want Them to Be?''} \emph{Noûs} 34 (1): 31--55.
+Haslanger, Sally. 2000. {``Gender and Race: (What) Are They? (What) Do
+We Want Them to Be?''} \emph{Noûs} 34 (1): 31--55. doi:
+\href{https://doi.org/10.1111/0029-4624.00201}{10.1111/0029-4624.00201}.
 
 \bibitem[\citeproctext]{ref-WOSA1982NC42600008}
-Haugeland, J. 1982. {``Weak Supervenience.''} \emph{American
+Haugeland, John. 1982. {``Weak Supervenience.''} \emph{American
 Philosophical Quarterly} 19 (1): 93--103.
 
 \bibitem[\citeproctext]{ref-WOS000234618400001}
-Hieronymi, P. 2005. {``The Wrong Kind of Reason.''} \emph{Journal Of
-Philosophy} 102 (9): 437--57.
+Hieronymi, Pamela. 2005. {``The Wrong Kind of Reason.''} \emph{Journal
+Of Philosophy} 102 (9): 437--57. doi:
+\href{https://doi.org/10.5840/jphil2005102933}{10.5840/jphil2005102933}.
 
 \bibitem[\citeproctext]{ref-WOSA1988P549200004}
-Jackson, F, and P Pettit. 1988. {``Functionalism and Broad Content.''}
-\emph{Mind} 97 (387): 381--400.
+Jackson, Frank, and Philip Pettit. 1988. {``Functionalism and Broad
+Content.''} \emph{Mind} 97 (387): 381--400.
 
 \bibitem[\citeproctext]{ref-WOSA1992KC39800002}
 Johnston, M. 1992. {``How to Speak of the Colors.''} \emph{Philosophical
-Studies} 68 (3): 221--63.
+Studies} 68 (3): 221--63. doi:
+\href{https://doi.org/10.1007/BF00694847}{10.1007/BF00694847}.
 
 \bibitem[\citeproctext]{ref-WOS000077956100002}
-Joyce, JM. 1998. {``A Nonpragmatic Vindication of Probabilism.''}
-\emph{Philosophy Of Science} 65 (4): 575--603.
+Joyce, James M. 1998. {``A Nonpragmatic Vindication of Probabilism.''}
+\emph{Philosophy Of Science} 65 (4): 575--603. doi:
+\href{https://doi.org/10.1086/392661}{10.1086/392661}.
 
 \bibitem[\citeproctext]{ref-WOSA1978EL93700009}
-Kim, J. 1978. {``Supervenience and Nomological Incommensurables.''}
-\emph{American Philosophical Quarterly} 15 (2): 149--56.
+Kim, Jaegwon. 1978. {``Supervenience and Nomological
+Incommensurables.''} \emph{American Philosophical Quarterly} 15 (2):
+149--56.
 
 \bibitem[\citeproctext]{ref-WOSA1982NC90700004}
 ---------. 1982. {``Psychophysical Supervenience.''} \emph{Philosophical
-Studies} 41 (1): 51--70.
+Studies} 41 (1): 51--70. doi:
+\href{https://doi.org/10.1007/BF00353523}{10.1007/BF00353523}.
 
 \bibitem[\citeproctext]{ref-WOSA1984TV24600001}
 ---------. 1984. {``Concepts of Supervenience.''} \emph{Philosophy And
-Phenomenological Research} 45 (2): 153--76.
+Phenomenological Research} 45 (2): 153--76. doi:
+\href{https://doi.org/10.2307/2107423}{10.2307/2107423}.
 
 \bibitem[\citeproctext]{ref-WOSA1990FU75100001}
-Kim, JW. 1990. {``Supervenience as a Philosophical Concept.''}
-\emph{Metaphilosophy} 21 (1-2): 1--27.
+---------. 1990. {``Supervenience as a Philosophical Concept.''}
+\emph{Metaphilosophy} 21 (1-2): 1--27. doi:
+\href{https://doi.org/10.1111/j.1467-9973.1990.tb00830.x}{10.1111/j.1467-9973.1990.tb00830.x}.
 
 \bibitem[\citeproctext]{ref-WOSA1990CH71200001}
-Kitcher, P. 1990. {``The Division of Cognitive Labor.''} \emph{Journal
-Of Philosophy} 87 (1): 5--22.
+Kitcher, Philip. 1990. {``The Division of Cognitive Labor.''}
+\emph{Journal Of Philosophy} 87 (1): 5--22. doi:
+\href{https://doi.org/10.2307/2026796}{10.2307/2026796}.
 
 \bibitem[\citeproctext]{ref-WOSA1992HF90300002}
 ---------. 1992. {``The Naturalists Return.''} \emph{Philosophical
-Review} 101 (1): 53--114.
+Review} 101 (1): 53--114. doi:
+\href{https://doi.org/10.2307/2185044}{10.2307/2185044}.
 
 \bibitem[\citeproctext]{ref-WOSA1982NV01500001}
 Lackey, DP. 1982. {``Missiles and Morals: A Utilitarian Look at Nuclear
 Deterrence.''} \emph{Philosophy \& Public Affairs} 11 (3): 189--231.
 
 \bibitem[\citeproctext]{ref-WOSA1987F902200002}
-Laudan, L. 1987. {``Progress or Rationality: The Prospects for Normative
-Naturalism.''} \emph{American Philosophical Quarterly} 24 (1): 19--31.
+Laudan, Larry. 1987. {``Progress or Rationality: The Prospects for
+Normative Naturalism.''} \emph{American Philosophical Quarterly} 24 (1):
+19--31.
 
 \bibitem[\citeproctext]{ref-WOSA1990CX46800004}
 ---------. 1990. {``Normative Naturalism.''} \emph{Philosophy Of
-Science} 57 (1): 44--59.
+Science} 57 (1): 44--59. doi:
+\href{https://doi.org/10.1086/289530}{10.1086/289530}.
+
+\bibitem[\citeproctext]{ref-10.2307_2025310}
+Lewis, David. 1973. {``Causation.''} \emph{Journal Of Philosophy} 70
+(17): 556--67.
 
 \bibitem[\citeproctext]{ref-WOSA1979HJ57600007}
-Lewis, D. 1979. {``Scorekeeping in a Language Game.''} \emph{Journal Of
+---------. 1979. {``Scorekeeping in a Language Game.''} \emph{Journal Of
 Philosophical Logic} 8 (3): 339--59.
 
 \bibitem[\citeproctext]{ref-WOSA1994PM10400005}
 ---------. 1994. {``Humean Supervenience Debugged.''} \emph{Mind} 103
-(412): 473--90.
+(412): 473--90. doi:
+\href{https://doi.org/10.1093/mind/103.412.473}{10.1093/mind/103.412.473}.
 
 \bibitem[\citeproctext]{ref-WOSA1991EW83300002}
-Mckinsey, M. 1991. {``Anti-Individualism and Privileged Access.''}
-\emph{Analysis} 51 (1): 9--16.
+McKinsey, Michael. 1991. {``Anti-Individualism and Privileged Access.''}
+\emph{Analysis} 51 (1): 9--16. doi:
+\href{https://doi.org/10.2307/3328625}{10.2307/3328625}.
 
 \bibitem[\citeproctext]{ref-WOSA1989U850300001}
-Millikan, RG. 1989a. {``Biosemantics.''} \emph{Journal Of Philosophy} 86
-(6): 281--97.
+Millikan, Ruth Garrett. 1989a. {``Biosemantics.''} \emph{Journal Of
+Philosophy} 86 (6): 281--97. doi:
+\href{https://doi.org/10.2307/2027123}{10.2307/2027123}.
 
 \bibitem[\citeproctext]{ref-WOSA1989AA09400006}
 ---------. 1989b. {``In Defense of Proper Functions.''} \emph{Philosophy
-Of Science} 56 (2): 288--302.
+Of Science} 56 (2): 288--302. doi:
+\href{https://doi.org/10.1086/289488}{10.1086/289488}.
 
 \bibitem[\citeproctext]{ref-WOSA1987J379200001}
-Nagel, T. 1987. {``Moral Conflict and Political Legitimacy.''}
+Nagel, Thomas. 1987. {``Moral Conflict and Political Legitimacy.''}
 \emph{Philosophy \& Public Affairs} 16 (3): 215--40.
 
 \bibitem[\citeproctext]{ref-WOSA1991FQ15000002}
-Neander, K. 1991a. {``Functions as Selected Effects: The Conceptual
-Analyst's Defense.''} \emph{Philosophy Of Science} 58 (2): 168--84.
+Neander, Karen. 1991a. {``Functions as Selected Effects: The Conceptual
+Analyst's Defense.''} \emph{Philosophy Of Science} 58 (2): 168--84. doi:
+\href{https://doi.org/10.1086/289610}{10.1086/289610}.
 
 \bibitem[\citeproctext]{ref-WOSA1991GR92500005}
 ---------. 1991b. {``The Teleological Notion of Function.''}
-\emph{Australasian Journal Of Philosophy} 69 (4): 454--68.
+\emph{Australasian Journal Of Philosophy} 69 (4): 454--68. doi:
+\href{https://doi.org/10.1080/00048409112344881}{10.1080/00048409112344881}.
 
 \bibitem[\citeproctext]{ref-WOSA1995RP14800001}
 ---------. 1995. {``Misrepresenting and Malfunctioning.''}
-\emph{Philosophical Studies} 79 (2): 109--41.
+\emph{Philosophical Studies} 79 (2): 109--41. doi:
+\href{https://doi.org/10.1007/BF00989706}{10.1007/BF00989706}.
 
 \bibitem[\citeproctext]{ref-WOSA1995QL53800004}
-Pietroski, P, and G Rey. 1995. {``When Other Things Aren't Equal: Saving
-Ceteris Paribus Laws from Vacuity.''} \emph{British Journal For The
-Philosophy Of Science} 46 (1): 81--110.
+Pietroski, Paul, and Georges Rey. 1995. {``When Other Things Aren't
+Equal: Saving Ceteris Paribus Laws from Vacuity.''} \emph{British
+Journal For The Philosophy Of Science} 46 (1): 81--110. doi:
+\href{https://doi.org/10.1093/bjps/46.1.81}{10.1093/bjps/46.1.81}.
 
 \bibitem[\citeproctext]{ref-WOSA1994PF23100001}
-Putnam, H. 1994. {``Sense, Nonsense, and the Senses: An Inquiry into the
-Powers of the Human Mind.''} \emph{Journal Of Philosophy} 91 (9):
-445--65.
+Putnam, Hilary. 1994. {``Sense, Nonsense and the Senses, an Inquiry into
+the Powers of the Human Mind + 1994 Dewey Lectures at
+Columbia-University, Lecture 1: The Antinomy of Reason.''} \emph{Journal
+Of Philosophy} 91 (9): 445--65. doi:
+\href{https://doi.org/10.2307/2940978}{10.2307/2940978}.
 
 \bibitem[\citeproctext]{ref-WOSA1985APA8500001}
-Rawls, J. 1985. {``Justice as Fairness: Political Not Metaphysical.''}
-\emph{Philosophy \& Public Affairs} 14 (3): 223--51.
+Rawls, John. 1985. {``Justice as Fairness: Political Not
+Metaphysical.''} \emph{Philosophy \& Public Affairs} 14 (3): 223--51.
 
 \bibitem[\citeproctext]{ref-WOSA1988Q394000001}
 ---------. 1988. {``The Priority of Right and Ideas of the Good.''}
 \emph{Philosophy \& Public Affairs} 17 (4): 251--76.
 
 \bibitem[\citeproctext]{ref-WOSA1990DR99100001}
-Rosen, G. 1990. {``Modal Fictionalism.''} \emph{Mind} 99 (395): 327--54.
+Rosen, Gideon. 1990. {``Modal Fictionalism.''} \emph{Mind} 99 (395):
+327--54.
 
 \bibitem[\citeproctext]{ref-WOSA1994NQ04900008}
-Salmon, WC. 1994. {``Causality Without Counterfactuals.''}
-\emph{Philosophy Of Science} 61 (2): 297--312.
+Salmon, Wesley C. 1994. {``Causality Without Counterfactuals.''}
+\emph{Philosophy Of Science} 61 (2): 297--312. doi:
+\href{https://doi.org/10.1086/289801}{10.1086/289801}.
 
 \bibitem[\citeproctext]{ref-WOSA1992JQ78400001}
-Schiffer, S. 1992. {``Belief Ascription.''} \emph{Journal Of Philosophy}
-89 (10): 499--521.
+Schiffer, Stephen. 1992. {``Belief Ascription.''} \emph{Journal Of
+Philosophy} 89 (10): 499--521. doi:
+\href{https://doi.org/10.2307/2941005}{10.2307/2941005}.
 
 \bibitem[\citeproctext]{ref-WOS000073301000002}
-Sider, T. 1997. {``Four Dimensionalism.''} \emph{Philosophical Review}
-106 (2): 197--231.
+Sider, Theodore. 1997. {``Four Dimensionalism (Persistence Through Time,
+Doctrine of Temporal Parts, Perdurance).''} \emph{Philosophical Review}
+106 (2): 197--231. doi:
+\href{https://doi.org/10.2307/2998357}{10.2307/2998357}.
 
 \bibitem[\citeproctext]{ref-WOS000227058600002}
-Smith, AM. 2005. {``Responsibility for Attitudes: Activity and Passivity
-in Mental Life.''} \emph{Ethics} 115 (2): 236--71.
+Smith, Angela M. 2005. {``Responsibility for Attitudes: Activity and
+Passivity in Mental Life.''} \emph{Ethics} 115 (2): 236--71. doi:
+\href{https://doi.org/10.1086/426957}{10.1086/426957}.
 
 \bibitem[\citeproctext]{ref-WOSA1971Y116900003}
-Thomson, JJ. 1971. {``A Defense of Abortion.''} \emph{Philosophy \&
-Public Affairs} 1 (1): 47--66.
+Thomson, Judith Jarvis. 1971. {``A Defense of Abortion.''}
+\emph{Philosophy \& Public Affairs} 1 (1): 47--66.
 
 \bibitem[\citeproctext]{ref-WOSA1990EG85000002}
-Tye, M. 1990. {``Vague Objects.''} \emph{Mind} 99 (396): 535--57.
+Tye, Michael. 1990. {``Vague Objects.''} \emph{Mind} 99 (396): 535--57.
 
 \bibitem[\citeproctext]{ref-WOSA1992JA62400001}
-Yablo, S. 1992. {``Mental Causation.''} \emph{Philosophical Review} 101
-(2): 245--80.
+Yablo, Stephen. 1992. {``Mental Causation.''} \emph{Philosophical
+Review} 101 (2): 245--80. doi:
+\href{https://doi.org/10.2307/2185535}{10.2307/2185535}.
 
 \bibitem[\citeproctext]{ref-WOSA1995RC31600002}
-Zimmerman, DW. 1995. {``Theories of Masses and Problems of
-Constitution.''} \emph{Philosophical Review} 104 (1): 53--110.
+Zimmerman, Dean W. 1995. {``Theories of Masses and Problems of
+Constitution.''} \emph{Philosophical Review} 104 (1): 53--110. doi:
+\href{https://doi.org/10.2307/2186012}{10.2307/2186012}.
 
 \end{CSLReferences}
 

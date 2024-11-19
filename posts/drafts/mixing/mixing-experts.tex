@@ -79,15 +79,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -209,9 +211,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -680,7 +679,7 @@ is easy.)
 
 \centering{
 
-\includegraphics{mixing-experts_files/figure-pdf/fig-conexp-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-conexp-1.pdf}}
 
 }
 
@@ -717,7 +716,7 @@ part of the graph to see this more vividly.
 
 \centering{
 
-\includegraphics{mixing-experts_files/figure-pdf/fig-cap-bottom-right-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-cap-bottom-right-1.pdf}}
 
 }
 
@@ -739,7 +738,7 @@ already shown.)
 
 \centering{
 
-\includegraphics{mixing-experts_files/figure-pdf/fig-cap-middle-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-cap-middle-1.pdf}}
 
 }
 
@@ -794,7 +793,7 @@ using this formula.
 
 \centering{
 
-\includegraphics{mixing-experts_files/figure-pdf/fig-twoprob-bottom-right-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-twoprob-bottom-right-1.pdf}}
 
 }
 
@@ -812,7 +811,7 @@ Figure~\ref{fig-twoprob-middle} shows the middle of the graph.
 
 \centering{
 
-\includegraphics{mixing-experts_files/figure-pdf/fig-twoprob-middle-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-twoprob-middle-1.pdf}}
 
 }
 
@@ -919,16 +918,16 @@ three decimal places. And the `NA' values are where it is impossible
 given the setup for those to be the announced values.)
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.1429}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 18\tabcolsep) * \real{0.0952}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}@{}}
 
 \caption{\label{tbl-diffk}The posterior probability after hearing two
 differentially informed experts.}

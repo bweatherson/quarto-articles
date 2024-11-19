@@ -79,15 +79,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -196,9 +198,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -323,7 +322,7 @@ The evaluation is that for Chooser, some moves are rational and some are
 not. This is true whether Chooser is playing the dynamic or the
 strategic form.
 
-To start I won't ask what moves are rational, but instead ask about the
+To start I won't ask which moves are rational, but instead ask about the
 connection between the two games. In particular, are the evaluations for
 the two games related in the following way.
 
@@ -367,7 +366,7 @@ going to be the key character in what follows.)
 
 \centering{
 
-\includegraphics{fourprob-late-2024_files/figure-pdf/fig-ultimatum-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob-late-2024_files/figure-pdf/fig-ultimatum-1.pdf}}
 
 }
 
@@ -380,7 +379,7 @@ responding to P1 with X and P2 with Y. So the strategy RA is the (odd)
 strategy of rejecting the offer of \$2 and accepting the offer of \$1.
 Using this terminology, this version of Ultimatum is given by
 Table~\ref{tbl-ultimatum}. (As usual, I'll write the payouts for row
-first, even though in this case they move second.) \newpage
+first, even though in this case they move second.)
 
 \begin{longtable}[]{@{}rcc@{}}
 \caption{Ultimatum game}\label{tbl-ultimatum}\tabularnewline
@@ -410,7 +409,7 @@ and so Proposer is best off playing P2.
 Let's bring this back to decision theory. Assume that Respondent is
 Chooser, our main subject. Assume also that Proposer is Demon, the
 familiar character from Newcomb's Problem. Demon, as I'll understand
-him, is arbitrarily good at predicting Chooser's \emph{strategy}, and
+them, is arbitrarily good at predicting Chooser's \emph{strategy}, and
 Chooser knows this.\footnote{If we wanted realistic cases, we would make
   Demon only somewhat good at predicting strategies. It would still be
   possible to get versions of most of the examples here working, but
@@ -419,7 +418,7 @@ Chooser knows this.\footnote{If we wanted realistic cases, we would make
 
 Some decisions theories say that this version of Ultimatum violates
 Dynamic-Strategic Equivalence (hereafter, just Equivalence). Causal
-decision theorists that say Chooser should pick the optimal equilibrium,
+decision theorists who say Chooser should pick the optimal equilibrium,
 e.g., Harper (\citeproc{ref-Harper1984}{1985}) say that Chooser should
 play AR in the strategic game, but AA in the dynamic game. Evidential
 decision theorists, e.g., Ahmed (\citeproc{ref-Ahmed2014}{2014}), say
@@ -513,7 +512,7 @@ this game is Figure~\ref{fig-ace-king}.
 
 \centering{
 
-\includegraphics{fourprob-late-2024_files/figure-pdf/fig-ace-king-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob-late-2024_files/figure-pdf/fig-ace-king-1.pdf}}
 
 }
 
@@ -558,7 +557,7 @@ same information set. All this is shown in Figure~\ref{fig-newcomb}.
 
 \centering{
 
-\includegraphics{fourprob-late-2024_files/figure-pdf/fig-newcomb-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob-late-2024_files/figure-pdf/fig-newcomb-1.pdf}}
 
 }
 
@@ -570,7 +569,6 @@ But while this is the standard vignette, it is not the way Newcomb's
 Problem is usually represented. Rather, Newcomb's Problem is usually
 represented in a table like Table~\ref{tbl-newcomb}, which is a correct
 representation of the strategic form of Figure~\ref{fig-newcomb}.
-\newpage
 
 \begin{longtable}[]{@{}rcc@{}}
 \caption{Strategic form of Newcomb's
@@ -623,7 +621,7 @@ Down.
 
 \centering{
 
-\includegraphics{fourprob-late-2024_files/figure-pdf/fig-main-example-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob-late-2024_files/figure-pdf/fig-main-example-1.pdf}}
 
 }
 
@@ -636,11 +634,11 @@ Figure~\ref{fig-main-example} is very simple. It is shown in
 Table~\ref{tbl-main-example}.
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2115}}
-  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1923}}
-  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2115}}
-  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1923}}
-  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1923}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2115}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1923}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2115}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1923}}
+  >{\centering\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1923}}@{}}
 \caption{Strategy table for
 Figure~\ref{fig-main-example}}\label{tbl-main-example}\tabularnewline
 \toprule\noalign{}
@@ -868,7 +866,7 @@ moved Middle, and 0 otherwise.
 
 \centering{
 
-\includegraphics{fourprob-late-2024_files/figure-pdf/fig-buchak-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob-late-2024_files/figure-pdf/fig-buchak-1.pdf}}
 
 }
 
@@ -981,12 +979,32 @@ that have been proposed to deal with Newcomb's Problem have consequences
 for the case where both Up and Down are strict equilibria. In those
 cases, they typically say things that violate SCP.
 
-To simplify matters, I'm going to make two further assumptions which are
-widely, but not universally, shared. First, I'll assume that the names
-of the options are irrelevant. In particular, I'll assume that if Up is
-rationally permissible in Table~\ref{tbl-generic-demon}, then Down is
-permissible in Table~\ref{tbl-inverted-generic}. Call this assumption
-\textbf{Label Neutrality}.
+To simplify matters, I'm going to make two further assumptions.
+
+First, in any instance of Table~\ref{tbl-generic-demon}, the four
+payouts, plus the conditional probabilities of a correct prediction
+given each choice by Chooser, settle which options are choice-worthy.
+This assumption isn't universally shared, but it is very widely shared.
+Indeed, it is common in philosophy papers to specify nothing but these
+values and then ask for intuitions about the case, which suggests many
+people do presuppose that only these values are necessary to determine
+what is choice-worthy. Call this assumption \textbf{Settling}, because
+the values (i.e., the payouts and the conditional probability of correct
+payouts) settle what is choice-worthy.
+
+\textbf{Settling} is rejected by theorists such as Skyrms
+(\citeproc{ref-Skyrms1982}{1982}) and Joyce
+(\citeproc{ref-Joyce2012}{2012}), who say that in problems like these,
+Chooser's starting view about what option they will eventually select
+also makes a difference to what they should do. Those views are not
+subject to the objections I'm about to make----provided Chooser's
+credences satisfy some rather tight constraints.
+
+The second assumption is that the names of the options are irrelevant.
+In particular, I'll assume that if Up is rationally permissible in
+Table~\ref{tbl-generic-demon}, then Down is permissible in
+Table~\ref{tbl-inverted-generic}. Call this assumption \textbf{Label
+Neutrality}.
 
 \begin{longtable}[]{@{}ccc@{}}
 \caption{Table~\ref{tbl-generic-demon} with labels
@@ -1004,26 +1022,6 @@ inverted.}\label{tbl-inverted-generic}\tabularnewline
 \textbf{Up} & \emph{d} & \emph{c} \\
 \textbf{Down} & \emph{b} & \emph{a} \\
 \end{longtable}
-
-The second assumption is that in any instance of
-Table~\ref{tbl-generic-demon}, the four payouts, plus the conditional
-probabilities of a correct prediction given each choice by Chooser,
-settle which options are choice-worthy. This assumption isn't
-universally shared, but it is very widely shared. Indeed, it is common
-in philosophy papers to specify nothing but these values and then ask
-for intuitions about the case, which suggests many people do presuppose
-that only these values are necessary to determine what is choice-worthy.
-Call this assumption \textbf{Settling}, because the values (i.e., the
-payouts and the conditional probability of correct payouts) settle what
-is choice-worthy.
-
-\textbf{Settling} is rejected by theorists such as Skyrms
-(\citeproc{ref-Skyrms1982}{1982}) and Joyce
-(\citeproc{ref-Joyce2012}{2012}), who say that in problems like these,
-Chooser's starting view about what option they will eventually select
-also makes a difference to what they should do. Those views are not
-subject to the objections I'm about to make----provided Chooser's
-credences satisfy some rather tight constraints.
 
 In this section I'm going to focus on versions of
 Table~\ref{tbl-generic-demon} where \emph{a} and \emph{d} are positive,
@@ -1272,7 +1270,7 @@ known to Chooser.)
 
 \centering{
 
-\includegraphics{fourprob-late-2024_files/figure-pdf/fig-two-good-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob-late-2024_files/figure-pdf/fig-two-good-1.pdf}}
 
 }
 
@@ -1690,7 +1688,7 @@ decision problem shown in Figure~\ref{fig-beta}.
 
 \centering{
 
-\includegraphics{fourprob-late-2024_files/figure-pdf/fig-beta-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob-late-2024_files/figure-pdf/fig-beta-1.pdf}}
 
 }
 
@@ -1779,7 +1777,7 @@ that problem is shown in Table~\ref{tbl-chooser-guy-two}.
 
 \centering{
 
-\includegraphics{fourprob-late-2024_files/figure-pdf/fig-chooser-guy-two-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{fourprob-late-2024_files/figure-pdf/fig-chooser-guy-two-1.pdf}}
 
 }
 
@@ -1833,9 +1831,9 @@ is consistent with purely forward looking considerations that bear on
 what's rational.
 
 But while the textbook notion of rationality is not purely forward
-looking, it is not purely strategic either. It is not rational to reject
-any offer in Figure~\ref{fig-ultimatum}, the simplified Ultimatum game,
-even though the strategy AR is part of an equilibrium.
+looking, it is not purely strategic either. It is never rational to an
+offer in Figure~\ref{fig-ultimatum}, the simplified Ultimatum game, even
+though the strategy AR is part of an equilibrium.
 
 The core idea, which goes back to Reinhard Selten
 (\citeproc{ref-Selten1965}{1965}, \citeproc{ref-Selten1975}{1975}), is
@@ -2190,9 +2188,6 @@ this paper is not one of those attempts to have the last word, by
 putting forward a universal theory of decision. It is, hopefully, a
 helpful first word, showing where such a theory is (and is not) most
 likely to be found.
-
-\subsection*{References}\label{references}
-\addcontentsline{toc}{subsection}{References}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}

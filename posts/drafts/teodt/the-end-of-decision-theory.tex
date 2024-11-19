@@ -79,15 +79,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -199,9 +201,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -379,7 +378,7 @@ shown on the map in Figure~\ref{fig-map}.
 
 \centering{
 
-\includegraphics{the-end-of-decision-theory_files/figure-pdf/fig-map-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{the-end-of-decision-theory_files/figure-pdf/fig-map-1.pdf}}
 
 }
 
@@ -426,7 +425,7 @@ algorithm.\footnote{The algorithm is silent on which city you start
 
 \centering{
 
-\includegraphics{the-end-of-decision-theory_files/figure-pdf/fig-farthest-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{the-end-of-decision-theory_files/figure-pdf/fig-farthest-1.pdf}}
 
 }
 
@@ -448,7 +447,7 @@ from applying this strategy to the path in Figure~\ref{fig-farthest}.
 
 \centering{
 
-\includegraphics{the-end-of-decision-theory_files/figure-pdf/fig-two-opt-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{the-end-of-decision-theory_files/figure-pdf/fig-two-opt-1.pdf}}
 
 }
 
@@ -480,7 +479,7 @@ as Figure~\ref{fig-best}.
 
 \centering{
 
-\includegraphics{the-end-of-decision-theory_files/figure-pdf/fig-best-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{the-end-of-decision-theory_files/figure-pdf/fig-best-1.pdf}}
 
 }
 

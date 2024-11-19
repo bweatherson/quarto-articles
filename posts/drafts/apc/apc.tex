@@ -119,15 +119,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 
@@ -206,9 +208,6 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -668,7 +667,7 @@ Loading required package: SnowballC
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-rawage-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-rawage-1.pdf}}
 
 }
 
@@ -687,7 +686,7 @@ dataset.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-articlesperyear-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-articlesperyear-1.pdf}}
 
 }
 
@@ -706,7 +705,7 @@ dataset published each year.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-citationsperyear-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-citationsperyear-1.pdf}}
 
 }
 
@@ -725,7 +724,7 @@ dataset made each year.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-citationrateperyear-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-citationrateperyear-1.pdf}}
 
 }
 
@@ -744,7 +743,7 @@ already published articles received that year.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-nevercites-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-nevercites-1.pdf}}
 
 }
 
@@ -763,7 +762,7 @@ year with no citations in the dataset.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-percentuncited-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-percentuncited-1.pdf}}
 
 }
 
@@ -782,7 +781,7 @@ each year with no citations in the dataset.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-countofcitations-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-countofcitations-1.pdf}}
 
 }
 
@@ -800,7 +799,7 @@ each year with no citations in the dataset.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-countofcitationsout-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-countofcitationsout-1.pdf}}
 
 }
 
@@ -816,8 +815,8 @@ each year with no citations in the dataset.}
 \end{Shaded}
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.9187}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.0813}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.9187}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.0813}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Article
@@ -858,8 +857,8 @@ AI Goldman (1976) ``Discrimination and Perceptual Knowledge,''
 \end{Shaded}
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.8993}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.1007}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.8993}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.1007}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Article
@@ -905,7 +904,7 @@ Credence,'' \emph{Philosophy Compass} 15 (6): & 72 \\
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-ageeffecttibble-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-ageeffecttibble-1.pdf}}
 
 }
 
@@ -923,7 +922,7 @@ Credence,'' \emph{Philosophy Compass} 15 (6): & 72 \\
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-ageeffectgrouped-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-ageeffectgrouped-1.pdf}}
 
 }
 
@@ -946,7 +945,7 @@ Warning: Removed 10 rows containing missing values or values outside the scale r
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-ageeffecteverything-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-ageeffecteverything-1.pdf}}
 
 }
 
@@ -965,7 +964,7 @@ graph, with 1973 and 1985 highlighted.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-cohortsummary-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-cohortsummary-1.pdf}}
 
 }
 
@@ -984,7 +983,7 @@ each year after adjusting for age and period effects.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-ytm1973-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-ytm1973-1.pdf}}
 
 }
 
@@ -1003,7 +1002,7 @@ at various ages, adjusted for period and compared to mean for that age.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-ytm1980-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-ytm1980-1.pdf}}
 
 }
 
@@ -1022,7 +1021,7 @@ at various ages, adjusted for period and compared to mean for that age.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-ytm1985-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-ytm1985-1.pdf}}
 
 }
 
@@ -1041,7 +1040,7 @@ at various ages, adjusted for period and compared to mean for that age.}
 
 \centering{
 
-\includegraphics{apc_files/figure-pdf/fig-ytm2007-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{apc_files/figure-pdf/fig-ytm2007-1.pdf}}
 
 }
 
