@@ -1,0 +1,1087 @@
+---
+title: "Four Problems in Decision Theory"
+abstract: |
+  In dynamic games where there is only one possible choice to make, the same choices are rational whether someone is playing the dynamic or strategic form of the game. Or, at least, that's what I argue in this paper. I then show this principle has four striking consequences for decision theory. It says we should use orthodox utility theory, not risk-adjusted utility theory. It says that the right theory of Newcomb-like problems is some kind of causal ratificationism. It says that preferences over options can be incomplete even when probabilities and values of outcomes are numerical. And it says that neither of the two main philosophical theories of dynamic choice, the sophisticated and resolute approaches, is entirely corect. In all four of these areas, the principle pushes decision theory to be more like game theory.
+date: today
+draft: false
+author:
+  - name: Anon 
+categories:
+  - games and decisions
+  - unpublished
+  - in progress
+format:
+    html:
+       css: ../trad_defn.css
+    pdf:
+      fig-format: pdf
+      geometry: "left=2in,
+                 right=2in,
+                 top=1.5in,
+                 bottom=1.5in,
+                 paperheight=11in,
+                 paperwidth=8.5in,
+                 includemp=TRUE,
+                 marginparwidth=0in,
+                 marginparsep=0in"
+      output-file: "Four Problems in Decision Theory - For Submission"
+      include-in-header:
+        - text: |
+            \setkomafont{descriptionlabel}{\normalfont\scshape\bfseries}
+            \cehead{
+                  Anon
+                  }
+      include-after-body: 
+        text: |
+          \noindent Submission version.
+    docx:
+      output-file: "Four Problems in Decision Theory"
+format-links: [html]
+---
+
+Decision theory has become too disjointed. Problems that should be discussed together have spawned separate literatures. This paper aims to put the parts back together.
+
+One principle, what I'll call the Single Choice Principle, tightly constrains the solutions to four separate kinds of problems in decision theory. These are: how to model rational risk aversion; how to incorporate evidential connections between options and states; whether probabilities, values, or options can be non-linear; and, how to relate synchronic and dynamic choice. In each case, once we accept the Single Choice Principle, only a narrow range of views are left as viable. By seeing the connections between these four questions, we also see how to answer them.
+
+Ultimately, I'll argue for these conclusions, all of them using little more than the principle I call Single Choice.
+
+- Risk-sensitive alternatives to orthodox expected utility theory, as defended by e.g., @BuchakRisk, are mistaken.
+- The right decision theory for problems involving Demons (e.g., Newcomb's Problem) is a form of causal ratificationism.^[It's a version of what @EellsHarper1991 call _basic ratificationism_.]
+- Even if probabilities are completely ordered, contra @Keynes1921, and values of outcomes are completely ordered, contra @Chang2002, preferences over options are not completely ordered. This undermines many of the arguments that have been made against Keynes and Chang.
+- The two main views about dynamic choice, the _sophisticated_ [@Hammond1976] and _resolute_ [@McClennen1990], are both half right. In cases where the agent's preferences do not change over the course of a decision problem^[Cases where they do change are set aside for purposes of this paper; see @Pettigrew2019 for a good discussion of the issues that they bring up.], a choice is rational only if both dynamic and resolute approaches would endorse it.
+
+In the next two sections I'll set out the Single Choice Principle. The following six sections will make good on the promises in these bullet points. (There are two sections each on the middle two bullet points.) I conclude by noting how the arguments here support a conclusion defended by William Harper [-@Harper1984; -@Harper1986; -@Harper1989]: decision theory should be more like game theory.
+
+```{r tikz-fonts}
+#| echo: FALSE
+#| output: FALSE
+
+if(knitr::is_html_output()) {
+  font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{Scala Sans Pro}",
+                                   "\\usetikzlibrary{calc}",
+                                   "\\usetikzlibrary{backgrounds}",
+                                   "\\definecolor{backgroundcolor}{RGB}{249,255,255}"),
+                                   fig.ext = "svg")
+
+} else {
+font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{EB Garamond}",
+                                   "\\usetikzlibrary{calc}",
+                                   "\\usetikzlibrary{backgrounds}",
+                                   "\\definecolor{backgroundcolor}{RGB}{255,255,255}"),
+                                   fig.ext = "pdf")
+}
+options(tinytex.engine = "xelatex")
+```
+
+# Introducing the Single Choice Principle {#sec-scp-intro}
+
+Think about two ways to play chess.
+
+First, we might sit down somewhere, possibly in a park, facing each other, with a board and some pieces in front of us. We take turns moving pieces, and eventually someone wins. Probably you; I'm not very good at chess.
+
+Second, we might sit down at our computers, probably not in a park, and write code to make our computers play chess against each other. We meet, exchange code, and run the programs against each other to see who wins. It's still probably you.
+
+In the first version we are playing the *dynamic* form of chess; in the second we are playing the *strategic* form. In game-theoretic language, a strategy for a game like chess is a set of instructions saying what to do in every possible state of the game.^[Standardly, this includes states that are ruled out by the earlier parts of the strategy.] An explicit strategy for chess, with a conditional saying _If in state S, make move M_ for every possible state _S_, would be unimaginably large. But code for chess computers can be quite compact; I have a few versions just on my phone.
+
+This is a philosophy paper, so I'm going to take these mundane examples, idealise them, and evaluate the idealisations. 
+
+The idealisation is that I'm going to not assume it's you and me playing, but two characters who have no computational limitations. I'll call one of these Chooser. 
+
+The evaluation is that for Chooser, some moves are rational and some are not. This is true whether Chooser is playing the dynamic or the strategic form. 
+
+To start I won't ask which moves are rational, but instead ask about the connection between the two games. In particular, are the evaluations for the two games related in the following way.
+
+Dynamic-Strategic Equivalence (for chess)
+:    In chess, move _M_ at game state _S_ in the dynamic game is rational iff some strategy which includes _If S, do M_ is rational in the strategic game.
+
+This is not an implausible view, in part because of some special features of chess. Chess includes no random moves by Nature, no information that is revealed to some players and not others, and it is zero-sum. By 'zero-sum', I mean that there is no pair of players and pair of game states such that both players are better off in one of the states than the other. Dynamic-Strategic Equivalence is fairly plausible for games with all three features.
+
+In general, however, games need not have any of these three features. _Settlers of Catan_, for example, has none of them. There are random dice rolls and card draws; while the dice are public, the cards are private; and there are mutually beneficial trades between players. Some plausible theories say that in games with these features, especially the last, Dynamic-Strategic Equivalence can fail.
+
+Consider a very simplified version of the Ultimatum game. In this version, the players have \$3 to distribute. As in the standard version, Proposer will suggest a split of the money, and Respondent will accept or reject the split. If they reject it, neither player will get any money. I'll add two more simplifications. First, only proper splits are allowed; Proposer can't suggest that one or other party gets all the money. Second, the dollars cannot be split. So the only proposals are that Proposer gets \$1 and Respondent gets \$2, or that Proposer gets \$2 and Respondent gets \$1. Call these Proposals P1 and P2. The game tree for this game is @fig-ultimatum. (Note that *Respondent's* payouts are shown first; this is because they are going to be the key character in what follows.)
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-ultimatum
+#| fig.cap: "Simplified Ultimatum."
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 4
+
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=10mm,sibling distance=20mm]
+  \tikzstyle{level 2}=[level distance=10mm,sibling distance=12mm]
+  \tikzstyle{level 3}=[level distance=15mm,sibling distance=15mm]
+      
+      \node[hollow node,label=above:{Proposer}]{}
+          child {
+            node (1)[solid node, label=left:{Respondent}] {}
+              child { 
+                 node {\$2, \$1}
+                 edge from parent
+                 node[left] {Accept}}
+              child { 
+                 node {\$0, \$0}
+                 edge from parent
+                 node[right] {Reject}}
+              edge from parent
+                 node[xshift=-10] {P1}
+          }
+          child {
+            node (2)[solid node] {}
+              child { 
+                 node {\$1, \$2}
+                 edge from parent
+                 node[left] {Accept}}
+              child { 
+                 node {\$0, \$0}
+                 edge from parent
+                 node[right] {Reject}}
+              edge from parent
+                 node[xshift=10] {P2}
+          };
+% information set
+%\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+%\node at ($(1)!.5!(2)$) {Respondent};
+\end{tikzpicture}
+```
+
+In this game, Respondent has four possible strategies. I'll write XY for responding to P1 with X and P2 with Y. So the strategy RA is the (odd) strategy of rejecting the offer of \$2 and accepting the offer of \$1. Using this terminology, this version of Ultimatum is given by @tbl-ultimatum. (As usual, I'll write the payouts for row first, even though in this case they move second.) 
+
+|           |   **P1**   |   **P2**    |
+|----------:|:----------:|:-----------:|
+|  **AA**   |  \$2, \$1  |  \$1, \$2   |
+|  **AR**   |  \$2, \$1  |  \$0, \$0   |
+|  **RA**   |  \$0, \$0  |  \$1, \$2   |
+|  **RR**   |  \$0, \$0  |  \$0, \$0   |
+
+:  Ultimatum game {#tbl-ultimatum}
+
+Assuming both players prefer more money to less, there are three Nash equilibria of this game: (AA, P2), (AR, P1), and (RA, P2). But there is only one dynamic equilibrium of the game: (AA, P2). In a one-shot version of the dynamic game, there is no payoff to ever playing R; it's always a choice between more money and less. So Respondent must play AA, and so Proposer is best off playing P2.
+
+Let's bring this back to decision theory. Assume that Respondent is Chooser, our main subject. Assume also that Proposer is Demon, the familiar character from Newcomb's Problem. Demon, as I'll understand them, is arbitrarily good at predicting Chooser's _strategy_, and Chooser knows this.^[If we wanted realistic cases, we would make Demon only somewhat good at predicting strategies. It would still be possible to get versions of most of the examples here working, but they would be more complicated and harder to follow. Making Demon arbitrarily good loses some realism, but gains some simplicity.]
+
+Some decision theories say that this version of Ultimatum violates Dynamic-Strategic Equivalence (hereafter, just Equivalence). Causal decision theorists who say Chooser should pick the optimal equilibrium, e.g., @Harper1984 say that Chooser should play AR in the strategic game, but AA in the dynamic game. Evidential decision theorists, e.g., @Ahmed2014, say the same thing.
+
+I'm going to ultimately reject these theories, but not because of what they say about this case. It is not obvious whether Dynamic-Strategic Equivalence should hold here. As I just noted, some approaches to game theory say that it should not.^[I think Equivalence does hold here because in the strategic game AA is the only option that is not weakly dominated. But I'm not going to argue for weak dominance in this paper, or work out just how it relates to Equivalence in the general case. Here, as often in this paper, I'm indebted to @Stalnaker1999.]
+
+There is a narrower class of decision problems where Equivalence does seem intuitively compelling. A strategy in @tbl-ultimatum is a pair of conditionals. The strategy says what to do if Demon plays P1, and what to do if Demon plays P2. Consider the class of decision problems where a strategy is a single conditional. A strategy in such a problem says _If we get to this point, do X_, and that's all the strategy has to say because that's the only point Chooser moves at. I call these Single Choice problems. Here's the first statement of the core premise of this paper.
+
+Single Choice Principle (SCP)
+:    In all Single Choice problems, Dynamic-Strategic Equivalence holds.
+
+The intuition behind SCP is simple. In a dynamic Single Choice game, the only option is what to do at the point choice is called for. Assume X is a rational move to make at that point. Now think about whether the strategy _If I reach that point, do X_ is rational. Following @RamseyGeneralProp, the way to answer that question is to imagine reaching the point, then asking whether it is rational to do X. And we just said that it is. So the strategy is rational. Conversely, if doing X at that point is not rational in the dynamic game, the same argument will show that the strategy _If I reach that point, do X_ is not rational.
+
+# Clarifying the Single Choice Principle {#sec-scp-clarify}
+
+Think back to games involving cards. Imagine our hero, Chooser, is playing a game in which someone else has just drawn a card. In one important sense, the game state is different if the card is an Ace than if it is a King. That might affect who wins the game. But Chooser's strategy cannot depend on what the card is. Chooser can only react to what they know. So Chooser's strategy cannot be a list of things about what to do at every game state where they have to choose, if Chooser doesn't always know what the game state is.
+
+The standard way game theorists handle this involves the notion of _information sets_. Say that the different _nodes_ of the game are individuated finely enough that they encode everything that has happened to that point which could make a difference to the outcome. So if the other person drew an Ace, that will move the game to a different node than if they drew a King. Say that some nodes are in the same information set if (a) the same person must choose at every node in the set, and (b) at any node in the set, every other node in the set is compatible with that chooser's information at the time of choice.^[There is an implicit assumption here that epistemic possibility is an equivalence relation. That's too strong and for some purposes should be relaxed. It is, however, a harmless enough idealisation for the purposes of this paper.] To continue our card game, if the other player draws a King rather than an Ace, then Chooser has to move, those moves will take place at different nodes in the same information set.
+
+This terminology allows for a more perspicuous formulation of SCP.
+
+Single Choice Principle
+:    Any decision problem where all the nodes where Chooser must choose are in a single information set, Dynamic-Strategic Equivalence holds.
+
+I'll work through some examples where SCP applies, and then note an example where it does not.
+
+Here is a rather boring game. A card will be drawn, and not shown to Chooser. If it is neither an Ace nor a King, the game ends, as a draw. (When a game ends, I always assume this is announced to all players.) Otherwise, Chooser is asked to guess whether it is an Ace or a King. If they guess correctly, they win, otherwise, they lose. The game tree for this game is @fig-ace-king.
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-ace-king
+#| fig.cap: "The Ace-King game."
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 5
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=10mm,sibling distance=20mm]
+  \tikzstyle{level 2}=[level distance=10mm,sibling distance=15mm]
+  \tikzstyle{level 3}=[level distance=15mm,sibling distance=15mm]
+      
+      \node[hollow node,label=above:{Nature}]{}
+          child { 
+            node {0}
+            edge from parent
+              node[xshift=-30] {Other}}
+          child {
+            node (1)[solid node] {}
+              child { 
+                 node {1}
+                 edge from parent
+                 node[left] {Ace}}
+              child { 
+                 node {-1}
+                 edge from parent
+                 node[right] {King}}
+              edge from parent
+                 node[xshift=-10] {Ace}
+          }
+          child {
+            node (2)[solid node] {}
+              child { 
+                 node {-1}
+                 edge from parent
+                 node[left] {Ace}}
+              child { 
+                 node {1}
+                 edge from parent
+                 node[right] {King}}
+              edge from parent
+                 node[xshift=30] {King}
+          };
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+The dashed lines around the two nodes on the right indicates that they are in the same information set. There are two nodes where Chooser must choose, but they are in the same information set, so SCP applies. In this case, SCP is hardly controversial. Either guess is equally rational in the tree in @fig-ace-king, and either guess is equally rational in the strategic form of the game shown in @tbl-ace-king.
+
+
+|             |   **Other**  |     **Ace**  |    **King**  |
+|------------:|:------------:|:------------:|:------------:|
+| **Guess Ace**   |   0      |   1          |         -1   |
+| **Guess King**  |     0     |         -1   |          1   |
+
+: Strategic form of Ace-King game {#tbl-ace-king}
+
+Another kind of game where SCP applies is exemplified by Newcomb's Problem. The standard vignette that goes with Newcomb's Problem suggests it is a dynamic choice problem. Demon _predicts_ what Chooser will do, and Chooser _then_ selects one box or two. The fact that Demon's predictions changes the content of an _opaque_ box means that the different moves Demon could make lead to different nodes in the same information set. All this is shown in @fig-newcomb.
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-newcomb
+#| fig.cap: "Newcomb's Problem."
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=10mm,sibling distance=20mm]
+  \tikzstyle{level 2}=[level distance=10mm,sibling distance=10mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node (1)[solid node] {}
+          child { 
+            node {1000}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {1001}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[left] {P1}}
+        child { node (2)[solid node] {}
+          child { 
+            node {0}
+            edge from parent
+              node[left] {1}}
+          child { 
+            node {1}
+            edge from parent
+              node[right] {2}}
+          edge from parent
+            node[right] {P2}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+
+\end{tikzpicture}
+```
+
+But while this is the standard vignette, it is not the way Newcomb's Problem is usually represented. Rather, Newcomb's Problem is usually represented in a table like @tbl-newcomb, which is a correct representation of the strategic form of @fig-newcomb.\newpage
+
+|           |    **P1**    |    **P2**     |
+|----------:|:--------:|:---------:|
+| **Choose 1**  |    1000  |    0      |
+| **Choose 2**  |    1001  |    1      |
+
+: Strategic form of Newcomb's Problem {#tbl-newcomb}
+
+In tables like @tbl-newcomb, I'll typically have Demon select the column, and I'll write PX to mean that the Demon predicted X. So here, 'P1' means Demon predicted Chooser would take 1 box.
+
+There is rather a lot of dispute about Newcomb's Problem. To the best of my knowledge, no party to that dispute says that the difference between @fig-newcomb and @tbl-newcomb makes a difference to what one should say about the problem. Every theorist moves freely between the dynamic and strategic form of Newcomb's Problem. This is evidence that everyone accepts SCP restricted to Newcomb's Problem. If such a restricted form of SCP holds, then it probably holds somewhat more broadly. (At the very least, it should still hold if we change the payoffs.)
+
+So far I've shown how SCP can apply to cases involving gambles, and to cases involving Demons. The most important applications will involve mixing those things. In particular, we'll be interested in cases like @fig-main-example.
+
+@fig-main-example is a three stage decision problem. At stage 3, if we get that far, Chooser will select Up or Down. At stage 1, Demon will predict what Chooser will do at stage 3, again if we get that far. At stage 2, if Demon predicts Down, nothing happens and we move to stage 3. But if Demon predicts Up, a fair coin will be flipped. If it lands Heads, the game ends, and Chooser gets 0. If it lands Tails, we move to stage 3. Then after Chooser makes their choice, the payouts are delivered. Chooser gets nothing if Demon predicted incorrectly; gets 6 if Demon correctly predicted Up, and 4 if Demon correctly predicted Down.
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-main-example
+#| fig.cap: "The main example of this paper."
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 5
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=10mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=10mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=10mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node [solid node,label=right:{Nature}] {}
+          child { 
+            node {0}
+            edge from parent
+              node[left] {H (½)}
+              }
+          child { 
+            node (1)[solid node]{}
+              child{
+                node{6}
+                edge from parent
+                  node[left]{U}
+              }
+              child{
+                node{0}
+                edge from parent
+                  node[right]{D}
+              }
+            edge from parent
+              node[right] {T (½)}}
+          edge from parent
+            node[left] {PU}}
+        child [level distance=20mm,sibling distance=25mm]{ node (2)[solid node] {}
+          child { 
+            node{0}
+            edge from parent
+              node[left] {U}}
+          child { 
+            node{4}
+            edge from parent
+              node[right] {D}}
+          edge from parent
+            node[right] {PD}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+There is only 1 choice point for Chooser, so the strategy table for @fig-main-example is very simple. It is shown in @tbl-main-example.
+
+|           |  **H** ∧ **PU**  |  **H** ∧ **PD**   |  **T** ∧ **PU**  |  **T** ∧ **PD**  |
+|----------:|:--------:|:---------:|:--------:|:--------:|
+| **Up**        |    0     |    0      |     6    |    0     |
+| **Down**      |    0     |    4      |     0    |    4     |
+
+: Strategy table for @fig-main-example {#tbl-main-example}
+
+The SCP says that the rationally acceptable moves in @fig-main-example and @tbl-main-example are the same. If this wasn't true, we'd get a very weird result. If some strategy is rational in @tbl-main-example but not @fig-main-example, then it would be rational for Chooser to think _If I have to choose, I'm doing X_, and then, after learning that they have to choose and nothing else, it would be irrational to do X. Alternatively, if some move X is rational in @fig-main-example but not in @tbl-main-example, it would be irrational to think _If I have to choose, I'll do X_, even though, after learning that they had to choose and nothing else, it would be rational to do X. Either way, this seems to violate some fundamental rules about how conditionals work.
+
+So, I conclude, SCP is correct. It follows from simple principles about conditionals, and it explains why, although everything else about Newcomb's Problem has been contested, no one has argued that the difference in representation between @fig-newcomb and @tbl-newcomb matters.
+
+Further, SCP is consistent with every decision rule in most game theory textbooks. Introductory game theory textbooks describe many 'solution concepts' for games, from avoiding dominated strategies to refinements of Bayesian Perfect Equilibrium. All of them are consistent with SCP.^[In my experience game theory texts don't get as far as equilibrium selection theories a la @HarsanyiSelten1988. If they do, that would be the first point where a solution concept violating SCP is introduced.]
+
+If we try strengthening SCP in natural ways, we get something inconsistent with these game theory textbooks. Consider, for instance, the Single Turn Principle (hereafter, STP).
+
+Single Turn Principle
+:    In any decision problem where Chooser is guaranteed to have at most one turn, i.e., to make at most one choice between the start and the end of the problem, Dynamic-Strategic Equivalence holds.
+
+STP is strictly stronger than SCP. STP clearly entails SCP, but it rules out choosing strategy AR in @tbl-ultimatum. In the dynamic version of that problem, @fig-ultimatum, strategy AA is best. So even though in this game Chooser only has one turn, theories which say AR is acceptable violate the STP. This includes the rule that says any strategy which is part of a Nash equilibrium is choice-worthy. So STP is inconsistent with some familiar game theoretic approaches.^[As noted earlier, it's also inconsistent with several decision theories, but that's a feature it shares with SCP.]
+
+I'm making an assumption here that I will make throughout, namely that moves in a dynamic game must be justifiable using solely forward-looking considerations. That is, a move at a node in a problem must make sense given Chooser's decision theory, and given just the facts about Chooser's beliefs about the state of the game, and the likely outcomes given each move. This isn't a trivial assumption, it rules out views like Functional Decision Theory [@LevinsteinSoares2020], but I have two reasons for making the assumption.
+
+One is simply space concerns; arguing against views like Functional Decision Theory would take some time, and brings in wholly different considerations.^[In a longer version of this paper, I argue that Functional Decision Theory has very unintuitive results in cases where Demon is a bit less than 100% reliable.] The other is that it is very intuitive that in a one-shot version of @fig-ultimatum, where Chooser/Respondent has to choose between getting more money or less money, they should choose getting more money.
+
+This is not to assume that decision making in dynamic settings should be entirely forward-looking. Indeed, in @sec-dynamic I'll argue against that assumption. It is to assume that if forward-looking considerations imply that only one choice is rational, e.g., that Chooser knows they'll get \$1 with one choice and \$0 with the other and they prefer more money to less, the one choice consistent with forward-looking considerations must be made.
+
+So I'm not assuming STP; it would rule out too much in game theory.^[I tentatively think that STP fails in some versions of the beer-quiche game [@ChoKreps1987], but I'm not relying on that here. Everything I say should be consistent with both STP and its negation.] I am, however, going to take SCP as given in what follows. It turns out to rule out quite a bit in decision theory.
+
+# Problem 1: Risk-Sensitivity {#sec-buchak}
+
+Think about what value of *x* would make Chooser indifferent between these two options, and why that would be the right value:
+
+1. \$1,000,000
+2. A gamble that returns \$2,000,000 with probability *x*, and \$0 with probability 1-*x*.
+ 
+What factors are relevant to solving for *x*? One factor is the declining marginal utility of money. Money primarily has exchange value, and if Chooser won $2,000,000, Chooser would exchange the second million for things they chose not to exchange the first million for, so the second million has less value. That's one reason that *x* is well above ½.
+
+But is it the only reason? The orthodox answer is that it is. Lara @BuchakRisk has argued that it is not. She argued that we also need to know how much Chooser values, or more likely disvalues, risk. That is, we need to know how risk-seeking, or risk-averse, Chooser is.^[Buchak's theory is based on the theory of _anticipated utility_ developed by John @Quiggin1982. Anticipated utility was originally described as a theory of slightly bounded rationality, and it's proven to be a very useful way to model how people actually make decisions. The question in this section is whether it, or any of its successors, can be the theory of ideal rationality.]
+
+The orthodox view is that all we need to know are three numbers. In what follows, let *b* be Chooser's current wealth in millions, and V the function from wealth (in millions), to utility. Since V is only determined up to positive affine transformations, we can stipulate two of these values for V.
+
+- V(*b*), stipulated to be 0.
+- V(*b* + 1), stipulated to be 1.
+- V(*b* + 2), which we'll label *c*.
+
+On the standard view, the gamble's value is *cx*, so Chooser is indifferent between the gamble and the money iff *x* = 1/*c*. On Buchak's view, rational Chooser has a risk function *f*, that measures their sensitivity to risk. The function must be monotonic increasing, with *f*(0) = 0, and *f*(1) = 1. If Chooser is risk-averse, then typically *f*(*x*) < *x*. Buchak's view reduces to the orthodox view if *f*(*x*) = *x*. I'm going to argue that given SCP, *f*(*x*) does equal *x*. I'm far from the first to argue for *f*(*x*) = *x*.^[See @Briggs2015 and @Thoma2019 for different arguments to the same conclusion.] What's novel here is drawing this conclusion from just SCP.
+
+The core of Buchak's theory is a non-standard way of valuing a gamble. For simplicity, we'll focus on gambles with finitely many outcomes. Associate a gamble with a random variable *O*, which takes values *o*~1~, …, *o~n~*, where *o~j~* > *o~i~* iff *j* > *i*. Buchak says that the risk-weighted expected utility of *O* is given by this formula, where *f* is the agent's risk-weighting function.
+
+> REU(*O*) = *o*~1~ + $\sum_{i = 2}^n$ *f*(Pr(*O* ⩾ *o~i~*))(*o~i~* - *o*~*i*-1~)
+
+The decision rule then is simple: choose the gamble with the highest REU. The key notion here is the risk function *f*, which we introduced earlier. I'm going to show that if *f*(*x*) = *x*^2^, then we get a violation of SCP. I won't go through the details of how this generalises to all other values of *f* other than identity, but it should be easy enough to see how to use the recipe here to find a problem for any other value of *f*.
+
+As is standard, I'll assume that random moves in a game are made by a player called Nature. Chooser is always assumed to know the moves available to Nature at a node, and the probability that it will make any given move having arrived at that node.
+
+In @fig-buchak at stage 1 a fair die will be rolled. If it lands 1 or 2, Nature moves Left; if it lands 3 or 4, Nature moves Middle; otherwise, Nature moves Right. If Nature moves Left, the game ends, and Chooser gets 1. Otherwise Chooser is told that Nature did not move Left, but not whether they moved Middle or Right. If Chooser selects Down, they get 1. If Chooser selects Up, they get 5 if Nature moved Middle, and 0 otherwise.
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-buchak
+#| fig.cap: "Tree Diagram of the counterexample to REU."
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 5
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=10mm,sibling distance=18mm]
+  \tikzstyle{level 2}=[level distance=10mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=10mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Nature}]{}
+        child{node {1}
+          edge from parent
+            node[xshift=-10]{L}}
+        child{node(1)[solid node]{}
+          child{node{5}
+              edge from parent
+              node[left]{U}
+          }
+          child{node{1}
+              edge from parent
+                node[right]{D}
+          }
+          edge from parent
+            node[left]{M}}
+        child{node(2)[solid node]{}
+          child{node {0}
+              edge from parent
+              node[left]{U}
+          }
+          child{node {1}
+              edge from parent
+                node[right]{D}
+          }
+          edge from parent
+            node[xshift=10]{R}}
+        ;
+        
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+@tbl-buchak-early shows the strategic table of @fig-buchak, and @tbl-buchak-late shows the decision table Chooser faces at the time they have to choose.
+
+::: {#tbl-panel layout-ncol=2}
+|          | **Left**     | **Middle**     |   **Right**  |
+|:--------:|:------------:|:--------------:|:------------:|
+| **Up**   |      1       |       5        |     0        |
+| **Down** |      1       |       1        |     1        |
+
+: The strategy table at game start. {#tbl-buchak-early}
+
+|          | **Middle**   | **Right**      |
+|:--------:|:------------:|:--------------:|
+| **Up**   |      5       |       0        |
+| **Down** |      1       |       1        |
+
+: The strategy table at choice time. {#tbl-buchak-late}
+
+Two strategy tables for @fig-buchak.
+:::
+
+In @tbl-buchak-early, the REU of Down is 1 (since that's the only possible outcome), and the REU of Up is 8/9. There is a 2/3 chance of getting at least 1, so that's worth 4/9, and there's a 1/3 chance of getting another 4, so that's also worth 4/9, and adding those gives 8/9. So the optimal strategy, according to REU theory, is Down. That is, REU says to prefer the strategy _Choose Down if you have to choose_ to the strategy _Choose Up if you have to choose_. But if we get to the choice point, we're at @tbl-buchak-late. And in that table the REU of Up is 5 times 1/4, i.e., 5/4. So at that point, REU says to choose Up. What REU says to do if you have to choose is different to which strategy it chooses for the one and only point you have to choose at. That is, Buchak's theory violates the SCP, and so should be rejected.
+
+# Problem 2: Demons and Multiple Equilibria {#sec-multiple}
+
+This section is about problems like Newcomb's Problem [@Nozick1969]. I'm not going to start with Newcomb's Problem itself; I would end up replaying familiar lines if I started there. Instead I'll start with with a much broader class of problems, of which Newcomb's Problem is a special case.
+
+@tbl-generic-demon is (the strategic form of) a completely generic form of a 2-by-2 decision problem involving Chooser and Demon. At stage 2, Chooser will pick Up or Down. At stage 1, Demon will predict what Chooser will do. I'll only discuss cases where Demon is (believed to be) arbitrarily close to perfect in their predictions. 
+
+|           |   **PU**     | **PD**       |
+|:---------:|:------------:|:------------:|
+|  **Up**   |     *a*      |     *b*      |
+|  **Down** |     *c*      |     *d*      |
+
+: A generic demon problem. {#tbl-generic-demon}
+
+Say that an option is a strict equilibrium if, assuming Demon predicts correctly, Chooser's payout for choosing it is (strictly) greater than their payout for choosing any other option. So Up is a strict equilibrium if *a* > *c*. The focus in this section is going to be on problems where both Up and Down are strict equilibria, so *a* > *c*, and *d* > *b*. While Newcomb's Problem itself is not such a case, most of the views that have been proposed to deal with Newcomb's Problem have consequences for the case where both Up and Down are strict equilibria. In those cases, they typically say things that violate SCP.
+
+To simplify matters, I'm going to make two further assumptions.
+
+First, in any instance of @tbl-generic-demon, the four payouts, plus the conditional probabilities of a correct prediction given each choice by Chooser, settle which options are choice-worthy. This assumption isn't universally shared, but it is very widely shared. Indeed, it is common in philosophy papers to specify nothing but these values and then ask for intuitions about the case, which suggests many people do presuppose that only these values are necessary to determine what is choice-worthy. Call this assumption **Settling**, because the values (i.e., the payouts and the conditional probability of correct payouts) settle what is choice-worthy.
+
+**Settling** is rejected by theorists such as @Skyrms1982 and @Joyce2012, who say that in problems like these, Chooser's starting view about what option they will eventually select also makes a difference to what they should do. Those views are not subject to the objections I'm about to make––provided Chooser's credences satisfy some rather tight constraints.
+
+The second assumption is that the names of the options are irrelevant. In particular, I'll assume that if Up is rationally permissible in @tbl-generic-demon, then Down is permissible in @tbl-inverted-generic. Call this assumption **Label Neutrality**.
+
+|           |   **PU**     |   **PD**     |
+|:---------:|:------------:|:------------:|
+|  **Up**   |     *d*      |     *c*      |
+|  **Down** |     *b*      |     *a*      |
+
+: @tbl-generic-demon with labels inverted. {#tbl-inverted-generic}
+
+In this section I'm going to focus on versions of @tbl-generic-demon where *a* and *d* are positive, and *b* = *c* = 0. This kind of problem is called Nice Demon by @Skyrms1982 and @Weirich1988, and is shown in @tbl-nice-demon. I'm going to mostly discuss the case, discussed by Weirich but not Skyrms, where *a* ≠ *d*. The main conclusion is that given the three assumptions just introduced - SCP, **Label Neutrality** and **Settling** - both Up and Down are choice-worthy.\newpage
+
+|           |     **PU** | **PD**  |
+|:---------:|:----------:|:-------:|
+|  **Up**   |     *a*    |   0     |
+|  **Down** |     0      |  *d*    |
+
+: Nice demon. {#tbl-nice-demon}
+
+There is a quick argument, independent of SCP, for the same conclusion. Whatever values *a* and *d* are, it's permissible for Chooser to be arbitrarily confident that they will play Up. Given that confidence, Chooser should think that Up maximises expected utility. It's permissible to choose an option that maximises expected utility given permissible credences. Therefore Up is rationally permissible. Since Up was arbitrary in this argument, it is also permissible to choose Down, so both are permissible.
+
+Weirich [-@Weirich1988 563] makes a version of this argument, and then says that since the conclusion is obviously false, something must be wrong with it. He thinks that Chooser should not be allowed to use credences about their own future actions in the way the argument presupposes. This allows him to say, along with many others, that if *d* > *a*, then only Down is rationally permissible. I'm not going to rely on this argument, but simply note that it doesn't seem like a bad argument to me, and in any case I will be endorsing its conclusion.^[@Spencer2023 makes a related argument in the course of defending the permissibility of both options.]
+
+There are three interesting families of views which differ markedly with each other in general, but which agree that in @tbl-nice-demon, whichever of *a* and *d* is larger determines which option is uniquely choiceworthy.
+
+The first family of views is just a single, famous, view: Evidential Decision Theory. It says that in any version of @tbl-generic-demon, if *a* ≠ *d*, then whichever is larger should be chosen. Hence it says that in @tbl-nice-demon, the larger value should be chosen.
+
+The second family of views are what @EellsHarper1991 call Maximum Ratifiability views. They say that when there are multiple ratifiable options, the value with the highest expected utility should be chosen. Such views differ on what to do when there are no ratifiable options, which is why I'm calling this a family of views. But they all agree on @tbl-nice-demon. Maximum Ratifiability is defended by @Jeffrey1983, @Sobel1983, @Harper1984, @Weirich1988, @Arntzenius2008, and @Gustafsson2011.
+
+The third family of views say that in any version of @tbl-generic-demon, one should minimise possible regret. That is, one should choose Up if the possible Regret from choosing Up, *d* - *b*, is less than the possible regret from choosing Down, *a* - *c*. @Wedgwood2013a, @Gallow2020, @Podgorski2022, and @Barnett2022 endorse such a view, though the four of them say very different things about cases with three or more options. Like the Maximum Ratifiability views, these views say that in @tbl-nice-demon, whichever of *a* and *d* is larger is uniquely choiceworthy.
+
+All of these views violate SCP. The argument turns on the problem depicted in @fig-main-example, back in @sec-scp-clarify. Recall that it's a three stage decision problem.
+
+- First, Demon predicts what Chooser will do at stage three (if it gets that far).
+- Second, if Demon predicts Up, a coin will be flipped. If it lands Heads, the problem ends, and Chooser gets 0. Otherwise we continue to stage three.
+- Third, Chooser chooses Up or Down. If Demon's prediction is incorrect, Chooser gets 0. But that's unlikely; Demon is arbitrarily good at predictions. If Demon correctly predicted Up, Chooser gets 6; if Demon correctly predicted Down, Chooser gets 4.
+
+All of the views just described say that, if it reaches stage three, Chooser should take Up. At that time, Up maximises conditional expected utility, it has the highest return of any ratifiable option, and it minimises possible regret.
+
+The strategic form of the problem is given in @tbl-main-example-simple. I'd previously given the strategic form of the problem as @tbl-main-example, but now it can be simplified. That's because we've shown (in @sec-buchak) that Chooser should maximise expected utility, not risk-adjusted expected utility.
+
+|      |  **PU**    | **PD**    |
+|-----:|:------:|:-----:|
+| **Up**   |   3    |   0   |
+| **Down** |   0    |   4   |
+
+: Simplified strategic form of @fig-main-example. {#tbl-main-example-simple}
+
+In this example, Down is uniquely choice-worthy on all three of the theories. It maximises conditional expected utility, it is the ratifiable choice with maximum return, and it minimises possible regret.
+
+So all of these views violate the SCP. In the strategic form of @fig-main-example, they prefer Down to Up, but at the only point Chooser can possibly move in @fig-main-example, they prefer Up to Down.
+
+The point is not that this leads to any kind of Dutch Book, or money pump, or sure loss. Any attempt to turn the SCP into a pragmatic argument like this would fail. Rather, it is that these views answer the same question two different ways, depending on how it is asked. As David @Christensen1996 argued, this is really what's significant in Dutch Book arguments.
+
+The two questions that they are answering differently are:
+
+1. Do you prefer that, if Chooser reaches stage 3, they play Up or Down?
+2. On the assumption that Chooser reaches stage 3, do you prefer they play Up or Down?
+
+The answer they give to Q1 is _Down_. That follows from the fact that they prefer Down to Up in @tbl-main-example-simple. The answer they give to Q2 is _Up_. That follows from the fact that they prefer Up to Down if we replace the 3 in @tbl-main-example-simple with the actual payout for a correct prediction of Up, namely 6.
+
+Now one could try to develop a theory of conditionals on which it makes sense to answer these questions differently. Or one could try to develop a metaphysics of strategies that undermined a background assumption of this paper, namely that we should express strategies as conditionals. I suspect the prospects for either approach are dim, and so I think this is an argument that all of these views are incoherent; they give inconsistent answers to two formulations of the very same question.
+
+# General Ratifiability {#sec-general-ratify}
+
+In the previous section I argued that in any instance of Nice Demon, where Chooser gets a reward iff Demon's prediction is correct, both options are choice-worthy. In this section I generalise that result. In any instance of @tbl-generic-demon where both choices are strict equilibria, both options are choiceworthy.^[I'm grateful to Dmitri Gallow for suggestions which greatly strengthened and simplified the proof that follows.]
+
+The proof relies on five assumptions, three of which were used in the last section: SCP, **Label Neutrality** and **Settling**.
+
+The fourth assumption is that the values in the table are utilities, and hence are only unique up to positive affine transformation. So whatever choices are rational in a table, the same choices are rational if each payout is multiplied by a positive constant, and/or some (other constant) is added. Call this assumption **Affine Transformation**.
+
+The fifth and final assumption is that in two option decision problems with two strict equilibria, at least one (pure) option is choice-worthy. That is, these problems are not dilemmas (even if Chooser only plays pure strategies).
+
+Given those assumptions, we'll show that both options are choice-worthy in two option problems where both options are strict equilibria. It simplifies the proof a little to work not with @tbl-generic-demon, but with a slightly relabeled version, as shown in @tbl-two-good.
+
+|           |     **PU**   |   **PD**     |
+|:---------:|:------------:|:------------:|
+|  **Up**   |     *a*      |     *d*-*c*  |
+|  **Down** |     *a*-*b*  |     *d*      |
+
+: A problem with two strict equilibria. {#tbl-two-good}
+
+Since the game has two strict equilibria, both *b* and *c* are positive. Assume without loss of generality that *a* and *d* are also positive. (If not use **Affine Transformation** to make them both positive.) Assume, also without loss of generality, that *b* > *c*. (If not, use **Label Neutrality** to flip the labels.)
+
+Consider the dynamic decision problem shown in @fig-two-good. In this tree, we'll leave both the probability of tails, *p*, and the exit payout, *e*/(1-*p*), as unknows to be solved for. (This problem differs from @fig-main-example in that we don't assume the coin in stage two is fair, but we do assume the probability of Heads is known to Chooser.)
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-two-good
+#| fig.cap: "A problem where if Chooser moves, they are in @tbl-two-good."
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 5
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=10mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=10mm,sibling distance=13mm]
+  \tikzstyle{level 3}=[level distance=10mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Demon}]{}
+        child { node [solid node,label=right:{Nature}] {}
+          child { 
+            node {\emph{e}/(1-\emph{p})}
+            edge from parent
+              node[left] {H (1-\emph{p})}
+              }
+          child { 
+            node (1)[solid node]{}
+              child{
+                node{\emph{a}}
+                edge from parent
+                  node[left]{U}
+              }
+              child{
+                node{\emph{a}-\emph{b}}
+                edge from parent
+                  node[right]{D}
+              }
+            edge from parent
+              node[right] {T (\emph{p})}}
+          edge from parent
+            node[left] {PU}}
+        child [level distance=20mm,sibling distance=25mm]{ node (2)[solid node] {}
+          child { 
+            node{\emph{d}-\emph{c}}
+            edge from parent
+              node[left] {U}}
+          child { 
+            node{\emph{d}}
+            edge from parent
+              node[right] {D}}
+          edge from parent
+            node[right] {PD}};
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+The strategic form of @fig-two-good is given by @tbl-two-good-strategic.
+
+|           |           **PU**   |   **PD**     |
+|:---------:|:------------------:|:------------:|
+|  **Up**   | *pa* + *e*         |     *d*-*c*  |
+|  **Down** | *p*(*a*-*b*) + *e* |     *d*      |
+
+: The strategic form of @fig-two-good. {#tbl-two-good-strategic}
+
+By SCP, Up is choice-worthy in @tbl-two-good iff Up is choice-worthy in @tbl-two-good-strategic. By **Label Neutrality** and **Affine Transformation**, Up is choice-worthy in @tbl-two-good iff Down is choice-worthy in @tbl-two-good-inverted. (This is because we get from @tbl-two-good to @tbl-two-good-inverted by first flipping the labels, then multiplying the payouts by *m* and adding *x* to every payout.)
+
+|           | **PU**             |   **PD**           |
+|:---------:|:------------------:|:------------------:|
+|  **Up**   | *md* + *x*         | *m*(*a*-*b*) + *x* |
+|  **Down** | *m*(*d*-*c*) + *x* | *ma* + *x*         |
+
+: Inverted and transformed version of @tbl-two-good. {#tbl-two-good-inverted}
+
+If we can find values of *p*, *e*, *m* and *x* such that @tbl-two-good-strategic and @tbl-two-good-inverted are identical, it will follow that Up is choice-worthy in @tbl-two-good iff Down is choice-worthy. (Note we must also check that *m* is positive, and *p* is a probability, i.e., in [0, 1].) From that plus the no dilemmas assumption, it follows that Up and Down are both choice-worthy in @tbl-two-good, as required.
+
+Now it's just a bit of algebra to figure out the four unknowns *p*, *e*, *m* and *x* given the four equations, i.e., the equality of matching cells in @tbl-two-good-strategic and @tbl-two-good-inverted.
+
+\begin{align*}
+(1) && pa + e &= md + x && \text{(Top left)} \\
+(2) && d - c &= m(a - b) + x && \text{(Top right)} \\
+(3) && p(a - b) + e &= m(d - c) + x && \text{(Bottom left)} \\
+(4) && d &= ma + x && \text{(Bottom right)} \\
+(5) && c &= mb && \text{(4) - (2)} \\
+(6) && m &= \frac{c}{b} && \text{(5)} \\
+(7) && pb &= mc && \text{(1) - (3)} \\
+(8) && pb &= \frac{c^2}{b} && \text{(6), (7)} \\
+(9) && p &= \frac{c^2}{b^2} && \text{(8)} \\
+(10) && x &= d - c - m(a - b) && \text{(2)} \\
+(11) && x &= d - c - \frac{c(a - b)}{b} && \text{(6), (10)} \\
+(12) && x &= d - c - \frac{ca}{b} + c && \text{(11)} \\
+(13) && x &= d - \frac{ca}{b} && \text{(12)} \\
+(14) && \frac{ac^2}{b^2} + e &= \frac{dc}{b} + d - \frac{ca}{b} && \text{(1), (6), (9), (13)} \\
+(15) && e &= \frac{bcd + db^2 - abc - ac^2}{b^2} && \text{(14)}
+\end{align*}
+
+Lines 6, 9, 13 and 15 give the values for the four variables. Since *b* and *c* are positive, *m* and *p* are also positive.^[Note that all we need here is that *b* and *c* have the same sign. So this argument has consequences for the case where there is no pure equilibrium. But I'm setting aside those cases, which raise issues about mixed strategies, for most of this paper.] Since *b* > *c*, *p* < 1, so *p* is a probability.
+
+I won't go through all the algebra, but substituting these values for the four variables back into either @tbl-two-good-strategic or @tbl-two-good-inverted gives @tbl-two-good-final.
+
+|           |                          **PU**   |   **PD**  |
+|:---------:|:---------------------------------:|:---------:|
+|  **Up**   | (*bd* + *cd* - *ac*)/*b*          | *d* - *c* |
+|  **Down** | (*bd* + *cd* - *ac* - *c*^2^)/*b* | *d*       |
+
+: Final version of @tbl-two-good. {#tbl-two-good-final}
+
+That's enough to show, given the assumptions we started with that Up and Down are both choice-worthy in @tbl-two-good.
+
+This doesn't yet show that any ratifiable choice is choice-worthy; it doesn't even show anything for cases where Chooser has three options. But it does show that SCP is inconsistent with any view that accepts the other four assumptions, and which says that only one option is choice-worthy in @tbl-two-good. That, as I discussed in the previous section, includes a large number of decision theories philosophers have defended.
+
+
+# Question 3: Incompleteness {#sec-incompleteness}
+
+Standard, textbook, approaches to decision theory assume that agents have numerical probabilities for each possible state, and numerical values for each possible outcome. The use of numbers here is not a trivial assumption; the real numbers have many distinct characteristics. Among other things, they are linearly ordered. In other words, the comparative relation between them is *complete*. If *x* and *y* are numbers, then either *x* is larger, or *y* is larger, or they are equal. Probabilities and values are only numerically representatable if for any two of them, either they are equal, or one is larger.
+
+For both probabilities and values, this completeness assumption has been questioned. @Keynes1921 argued at length against probabilities being complete. He argued probabilities must be non-numerical because sometimes there are distinct probabilities where neither is greater than the other. Ruth @Chang2002 argued that some options are 'on a par' in terms of value, and this is a state distinct from equality (or either being better).
+
+In this section I'll discuss a kind of non-linearity that hasn't received as much philosophical attention. Even if probabilities and values (of outcomes) are complete, preferences over options need not be complete. Indeed, SCP implies that there will be some incompleteness, at least if Demon is possible.
+
+This is not a completely novel result. @EellsHarper1991 prove something similar given the assumption that the choice-worthy options are the ratifiable ones. But I think this result is just different enough to be worth showing.
+
+One immediate question is just how to state incompleteness. If what it means for two options to be equally good just is that neither is strictly preferred to the other, then completeness follows immediately from the asymmetry of strict preference. We need some other way to understand what it is for options to be equally preferred.
+
+One suggestion comes from Chang. She notes that if two options are equally good, then adding a small 'sweetener' to one of them should make the sweetened option better. If there are two options such that neither is strictly preferred to the other, and even after sweetening one, neither is strictly preferred to the other, then completeness fails.
+
+Another suggestion comes from an approach to decision theory that traces back to @Samuelson1938. Some theorists have been sceptical of the very notion of preferences over options.  Originally the motivation for this scepticism was somewhat behaviourist. If I have fifteen options, there is no behavioural difference between having *x* as my tenth best option and *y* as my eleventh, or vice versa. I won't choose either option either way. What does makes a behavioural difference is which options I take to be choice-worthy out of a set of options. We represent this by saying that when X is a set of options, c(X) is the set of choice-worthy options; they are the ones that I might (assuming I'm rational) pick.
+
+These days behaviourist motivations are not given much weight, and rightly so. But there are other reasons to centre decision theory around choice functions rather than preference relations. As @Sen1971 shows, this formulation allows us to easily represent various options that are a bit more awkward to represent if we take preference as the central bit of ideology in our theory.
+
+Now one might think that moving from preference to choice-theory won't help characterise incompleteness. In fact, it may make things worse. It's natural to think that if c({*x*, *y*}) = {*x*}, then *x* is preferred to *y*, if c({*x*, *y*}) = {*y*}, then *y* is preferred to *x*, and if c({*x*, *y*}) = {*x*, *y*}, then each option is equally good. We'll set aside whether the first two claims are right, and note one reason to be suspicious of the third.
+
+If *x* and *y* are equally preferred, then in any larger set of options that contains them both, either both should be choice-worthy or neither one should be. Saying one is choice-worthy but not the other violates the idea that they are equally good. Sen's Principle β is a generalisation of this idea; we'll work with the following simplified version of β.
+
+Simplified β
+:    If c({*x*, *y*}) = {*x*, *y*}, then for any *z*: *x* ∈ c({*x*, *y*, *z*}) iff *y* ∈ c({*x*, *y*, *z*}).
+
+Given **Simplified β**, it is plausible to equate c({*x*, *y*}) = {*x*, *y*} with *x* and *y* are equally good. But if **Simplified β** fails, then it is more plausible that preferences at this point are incomplete. Indeed, given some weak (but not quite trivial) assumptions about c, we can prove that completeness is equivalent to **Simplified β**.^[For a careful statement of what those assumptions are, see @Sen1971 or @Kreps1988.]
+
+I just gave two ways of testing for incompleteness, but they end up being very closely related. Assume c({*x*, *y*}) = {*x*, *y*}, and let *z* be a small sweetening of *y*. Perhaps it is *y* plus a dollar. Then if sweetening does not destroy the parity between *x* and *y*, we'll have c({*x*, *y*, *z*}) = {*x*, *z*}, violating **Simplified β**.
+
+It's easy to show that SCP leads to cases where sweetening does not break 'ties', and where **Simplified β** fails. For both cases, start with @tbl-nice-demon-linear.
+
+|           | **PU** | **PD** |
+|:---------:|:------:|:------:|
+|  **Up**   | 6      | 0      |
+|  **Down** | 0      | 4      |
+
+: A version of Nice Demon. {#tbl-nice-demon-linear}
+
+According to SCP, both Up and Down are choice-worthy in @tbl-nice-demon-linear. If we sweeten Up by adding 1 to it, i.e., adding 1 to each payout, we get @tbl-nice-demon-plus.
+
+|           | **PU** | **PD** |
+|:---------:|:------:|:------:|
+|  **Up**   | 7      | 1      |
+|  **Down** | 0      | 4      |
+
+: @tbl-nice-demon-linear with Up sweetened. {#tbl-nice-demon-plus}
+
+As we showed in @sec-general-ratify, both Up and Down are still choice-worthy in problems like @tbl-nice-demon-plus, where both options are strict equilibria.
+
+To get a violation of **Simplified β**, add a 'safe' option to @tbl-nice-demon-linear, as in @tbl-nice-demon-safe.^[For completeness, assume in @tbl-nice-demon-safe that if Demon predicts Safe, Demon will flip a coin to decide whether to play PU or PD.]
+
+|           | **PU** | **PD** |
+|:---------:|:------:|:------:|
+|  **Up**   | 6      | 0      |
+|  **Down** | 0      | 4      |
+|  **Safe** | 5      | 5      |
+
+: @tbl-nice-demon-linear with a safe option. {#tbl-nice-demon-safe}
+
+In @tbl-nice-demon-safe, Up is still choice-worthy, but Down is not, since it is strictly dominated. So **Simplified β** fails.
+
+So given SCP (and the other assumptions in @sec-general-ratify), there are cases where both options are choice-worthy and (a) sweetening one of them still leaves both choice-worthy, and (b) adding a third option makes one but not the other choice-worthy. That strongly suggests this is a theory where preferences over options are incomplete.
+
+In @tbl-nice-demon-linear, Chooser should not strictly prefer Up to Down or vice versa, else they would not both be choice-worthy, but nor should they think they are equally good, else we would not have these results. So this is a case where, even though probabilities and outcome values are complete, preferences are incomplete.
+
+# Consequences of Incompleteness
+
+This conclusion of @sec-incompleteness is relevant to the arguments that Keynes, Chang, and others have made. Keynes, especially in the _General Theory_ [@Keynes1936], was interested in situations where intuitively all of the following are true.
+
+1. The farm is not worth more than £1,000,000.
+2. The farm is not worth less than £1,000,000.
+3. The farm is not worth exactly £1,000,000.
+
+One way to argue for 3 is the small improvements argument; if the farm is worth exactly £1,000,000, then an afternoon of slightly better than expected weather should break the tie. But that's not how we value farms.
+
+One way to argue for 1 and 2 is that decisions to trade, i.e., to buy or sell the farm for £1,000,000, seem to rely on 'animal spirits'; it isn't like anyone thinks that selling the farm for £1,000,000 is a great deal, or that buying it for £1,000,000 is a bargain. This is a very simplified summary of Keynes's reasoning, but let's stick with it for now.
+
+As @DorrEtAl2023 [sec. 5] point out, this is a pretty weak argument. At most, what this shows is that the farm is not _definitely_ worth more or _definitely_ worth less than £1,000,000. But it could be that the value of the farm is vague, where this still means it is more than, less than, or equal to £1,000,000. They suggest that all the cases where completeness intuitively fails are like this; none of the comparative claims is definitely true, but one is actually true.^[They also have a direct argument for comparability turning on some intuitions about negated comparison claims. It would take us very far afield to go over that carefully, but the argument from SCP for incomparability is relevant here too. The cost of giving up the semantic intuitions they rely on seems, to me at least, much less than the cost of giving up the Ramsey test for conditionals. And the Ramsey test is enough to motivate SCP. This may be a case where the different semantic intuitions are inconsistent, in which case we have to see which intuition is least costly to abandon. Working that out in full is a task for another paper, but I doubt the answer is that it's best to abandon the Ramsey test.]
+
+Whether that diagnosis of the intuitions that Keynes, Chang, and others put forward is right, it won't help explain what's going on in the case here. In @tbl-nice-demon-linear, all of the following are true.
+
+1. Up is not better (for Chooser) than Down. If it were, Down would not be choice-worthy.
+2. Down is not better (for Chooser) than Up. If it were, Up would not be choice-worthy.
+3. Up and Down are not equally good (for Chooser). If they were, they would still be equally good when a third option was added, which is inconsistent with the fact that Up but not Down is choice-worthy in @tbl-nice-demon-safe.
+
+The arguments from SCP don't just show 1-3 are true; they show that 1-3 are definitely true. So this attempt to explain away intuitions opposing completeness doesn't fully generalise.
+
+Another set of worries about completeness failures comes from thinking about dynamic choice. Adam @Elga2010 and Johan @Gustafsson2022 have developed versions of this worry. In both cases their arguments are a bit more subtle than the one I'll present here, but the extra subtleties don't affect the reply I'll offer, so I'll stick to a simple argument.
+
+Assume that **Simplified β** fails for some options *x*, *y*, and *z*. And assume that Chooser will be offered the decision problem shown in @fig-beta.
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-beta
+#| fig.cap: "A puzzle for incompleteness."
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 3
+
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=10mm,sibling distance=15mm]
+  \tikzstyle{level 2}=[level distance=10mm,sibling distance=10mm]
+  \tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+      
+      \node[hollow node,label=above:{Chooser}]{}
+        child { node {\emph{z}}}
+        child { node [solid node, label=right:{Chooser}]{}
+            child {
+                node {\emph{x}}
+            }
+            child {
+                node {\emph{y}}
+            }
+            };
+\end{tikzpicture}
+```
+
+Here's an argument that if **Simplified β** ever fails, and we have c(\{*x*, *y*\}) = \{*x*, *y*\}, *x* ∈ c(\{*x*, *y*, *z*\}), and *y* ∉ c(\{*x*, *y*, *z*\}), Chooser can rationally do something that's clearly irrational.
+
+1. It's rational for Chooser to go right at the top node, since *x* ∈ c(\{*x*, *y*, *z*\}).
+2. If Chooser goes right, it's then rational for Chooser to again go right, since *y* ∈ c(\{*x*, *y*\}).
+3. If it's rational to go right at the top node, and rational having done that to go right at the middle node, it's rational to go right at each node.
+4. So it's rational for Chooser to go right at each node, choosing *y* from \{*x*, *y*, *z*\}, contradicting *y* ∉ c(\{*x*, *y*, *z*\}).
+
+I'm going to reject premise 2 of this argument. What *y* ∈ c(\{*x*, *y*\}) shows is that choosing *y* at the middle node would be rational if only forward-looking considerations were relevant to rational choice. What we should reject is that only forward-looking considerations are relevant to rational choice. 
+
+The right way to think about @fig-beta is that Chooser should adopt a strategy, then carry it out, provided they do not have a reason to abandon the strategy. The only strategy that could lead them to go right at the top node is a strategy of choosing *x*, and they never get a reason to abandon that strategy, and it would be irrational to abandon a strategy they have no reason to abandon, so they cannot rationally choose *y*.
+
+In the next section I'll defend this view of dynamic choice at more length.
+
+# Problem 4: Dynamics {#sec-dynamic}
+
+Start with a detour into introductory game theory. Chooser is playing a game with Guy; Chooser will select the row, and Guy will (simultaneously) select the column. The payouts from their choices are shown in @tbl-chooser-guy, with Chooser's payout first in each cell.
+
+|           | **Left**  |  **Right**  |
+|----------:|:---------:|:-----------:|
+| **Up**    |   6,1     |    0,0      |
+| **Down**  |   0,0     |    4,1      |
+
+: A simple coordination game. {#tbl-chooser-guy}
+
+Textbook approaches to this game say that it has two 'solutions': (Up, Left) and (Down, Right). A natural way to understand these 'solutions' is that they imply that either Up or Down could be rational for Chooser.
+
+Now imagine that Chooser has a prior choice. They can either accept a payout of 5 (and Guy will get nothing), or gamble and play @tbl-chooser-guy. The dynamic problem Chooser now faces is shown in @fig-chooser-guy-two, and the strategy table for that problem is shown in @tbl-chooser-guy-two.
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-chooser-guy-two
+#| fig.cap: "A coordination game with an exit option."
+#| cache: TRUE
+#| echo: FALSE
+#| fig.width: 5
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.8, background rectangle/.style={fill=backgroundcolor}, show background rectangle]
+  \tikzset{
+    % Three node styles for game trees: solid and hollow and square
+      solid node/.style={circle,draw,inner sep=1.5,fill=black},
+      hollow node/.style={circle,draw,inner sep=1.5},
+      square node/.style={rectangle,draw, inner sep = 1, fill = black}
+      }
+
+  % Specify spacing for each level of the tree
+  \tikzstyle{level 1}=[level distance=10mm,sibling distance=25mm]
+  \tikzstyle{level 2}=[level distance=10mm,sibling distance=25mm]
+  \tikzstyle{level 3}=[level distance=10mm,sibling distance=13mm]
+      
+      \node[hollow node,label=above:{Chooser}]{}
+        child {node {5,0}
+              edge from parent
+              node[left, xshift=-5] {Exit}}
+        child { node [solid node, label=right:{Guy}]{}
+        child { node (1)[solid node] {}
+          child { 
+            node {6,1}
+            edge from parent
+              node[left] {Up}}
+          child { 
+            node {0,0}
+            edge from parent
+              node[right] {Down}}
+          edge from parent
+            node[left] {Left}}
+        child { node (2)[solid node] {}
+          child { 
+            node {0,0}
+            edge from parent
+              node[left] {Up}}
+          child { 
+            node {4,1}
+            edge from parent
+              node[right] {Down}}
+          edge from parent
+            node[right] {Right}}
+        edge from parent
+          node[right, xshift=5] {Gamble}            };
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.2,.2)$)rectangle($(2) +(.2,-.2)$);
+\node at ($(1)!.5!(2)$) {Chooser};
+\end{tikzpicture}
+```
+
+|                 | **Left**  | **Right**   |
+|----------------:|:---------:|:-----------:|
+| **Exit-Up    ** |    5,0    |    5,0      |
+| **Exit-Down  ** |    5,0    |    5,0      |
+| **Gamble-Up  ** |   6,1     |    0,0      |
+| **Gamble-Down** |   0,0     |    4,1      |
+
+: The strategic form of @fig-chooser-guy-two. {#tbl-chooser-guy-two}
+
+The textbook approaches to this game are that the top three strategies are choice-worthy, they are all part of both strategic and dynamic equilibria, and the bottom strategy is not choice-worthy.
+
+This might already seem surprising. The textbook approach says that:
+
+1. It is rational for Chooser to play Gamble.
+2. If Chooser was playing @tbl-chooser-guy without any prior moves, it would be rational to play Down.
+3. But, in @fig-chooser-guy-two, it is not rational to play Gamble followed by Down.
+
+The notion of choice-worthiness here is not purely forward-looking. It is not rational to play Down after playing Gamble because that combination is irrational, in fact strictly dominated, even though Down is consistent with purely forward looking considerations that bear on what's rational.
+
+But while the textbook notion of rationality is not purely forward looking, it is not purely strategic either. It is never rational to an offer in @fig-ultimatum, the simplified Ultimatum game, even though the strategy AR is part of an equilibrium.
+
+The core idea, which goes back to Reinhard Selten [-@Selten1965; -@Selten1975], is that rational play in games must be both dynamically and strategically rational. For a strategy in a dynamic game to be part of an equilibrium, it must be rationally permissible to choose that strategy in the strategic form of the game, and every move must be rational when it is made given purely forward looking considerations. The first conjunct rules out Gamble-Down in @fig-chooser-guy-two; the second conjunct rules out AR in @fig-ultimatum.
+
+I propose that we take the same approach to dynamic choice in single player decision problems. Replace Guy in the above examples with Demon, and say that Demon will play Left if they predict Up, Right if they predict Down, and we get an interesting problem for SCP. According to SCP, in the version of @fig-chooser-guy-two where Demon is involved, 1-3 above are still all true.
+
+This looks like a problem. Indeed, it is basically a version of the problem that Elga raises for incomplete probabilities, and Gustafsson raises for incomplete values. The solution is simply to say that rational players are not purely forward-looking; they adopt rational strategies, and they do things that are rational independent of what they have previously done.
+
+I call this view of dynamic choice the **Dual Mandate** theory, since it requires Chooser to be rational according to both forward-looking and strategic considerations. The idea behind it isn't new; @Selten1975 was outlining a similar view in game theory half a century ago. But it hasn't been discussed much in the philosophy literature. @Gustafsson2022 [73] calls a similar view the _Conservative Approach_.^[Gustafsson notes that something similar is discussed by @Rabinowicz1995, and indeed Rabinowicz's "wise choice" view is probably the closest precursor to the Dual Mandate theory in the philosophy literature. Like the Dual Mandate view, Rabinowicz's theory aims to reconcile resolute and sophisticated choice. But the Dual Mandate accepts premises that Rabinowicz rejects, namely the separability of preference, and the reduction to normal form. See @Steele2010 for more careful discussion of Rabinowicz's view.]
+
+The Dual Mandate theory isn't entailed by SCP, but it is closely related to it. 
+
+Without Dual Mandate, the kinds of ratificationism consistent with SCP would say something implausible. If we said only forward-looking considerations were relevant, we'd implausibly say that Gamble-Down was rational in @fig-chooser-guy-two. If we said that only strategic considerations were relevant, we'd implausibly say that rejecting offers could be rational in @fig-ultimatum. (Or we'd have to hope that weak dominance considerations would take care of all cases like @fig-ultimatum.) With Dual Mandate, the ratificationist can say sensible things about both cases.
+
+In the other direction, without SCP, Dual Mandate would be fairly implausible. If preferences were complete whenever probabilities and values were complete, as most theories that reject SCP say, then there would be too many dilemmas. For instance, if you combine Dual Mandate with Evidential Decision Theory, or with Maximum Ratificationism, then @fig-ultimatum is a dilemma. One must play AR on strategic grounds, and AA on dynamic grounds, so one cannot do everything one must do. I don't think we should think there are never dilemmas, but it would be surprising if they were so frequent.
+
+Dual Mandate says that Chooser can adopt the plan Gamble-Up in @fig-chooser-guy-two, but once they adopt that plan, they have to stick to it. And they have to stick to it even though, once they reach the second stage, it would be consistent with forward looking considerations to switch. Gustafsson objects (to a very similar view) on the following grounds.
+
+> But, if you don't prefer following the plan to deviating from it, then it's hard to see what would be irrational about choosing to deviate. [@Gustafsson2022 73]
+
+This is a good challenge, but there are (at least) two interesting replies to it.^[There is a connection between this challenge and the debate about whether intentions, as Michael @Bratman1987 understands them, can provide reasons. It would take us way too far afield to chase these down, but see @sep-intention [§4] for a good summary of the debate.]
+
+The first reply, following @Stalnaker1999, says that rational agents know what they are doing. When Chooser adopts the strategy Gamble-Up, they must, if they are rational, know that's what they will do. If they play Down at stage 2, then since their belief they would play Gamble-Down is false, it can't be knowledge. Hence they were not rational at the first step. So it isn't consistent with rationality throughout the game that they play Gamble-Down.
+
+I think that reply is good, but in case not everyone does, I'll offer a second. This reply is based on arguments by Richard Holton [-@Holton1999; -@Holton2009], but I'm going to, somewhat anachronistically, spell it out using the inquiry-centric language popularised by Jane Friedman [-@Friedman2019a; -@Friedman2020]. Start with the very familiar idea that being rational is about being reasons-responsive. Then make a key distinction, between reasons to open an inquiry, and reasons to close that inquiry in a particular way.
+
+With that distinction in mind, here's a picture of dynamic choice. At the start of any dynamic decision problem, Chooser should adopt a strategy. It should be a strategy that makes strategic sense, i.e., the choice of strategy should be at least ratifiable, and it should be a strategy Chooser can carry out. From that point, Chooser should simply carry out the strategy unless they have reason to reconsider their choices.^[As @Bratman2014 says, sometimes non-reconsideration can be the rational act.] If the strategy is about to say _Do an irrational thing_, like recommending leaving money on the table, Chooser has a reason to reconsider the strategy. But unless the strategy recommends an irrational act, Chooser has no reason to reconsider it. It's irrational to do what one has no reason to do, so Chooser would be irrational to even open inquiry into the question _Should I keep following the strategy?_.
+
+That's what would be irrational about 'choosing to deviate'. It's not the _deviate_ part that's irrational; it's the _choosing_. Chooser can only choose what to do at stage two of the decision problem by opening inquiry into the question _What should I do now?_. And that's precisely what they should not do, unless the strategy is leading them to an irrational act. Since Up is not irrational, they have no reason to even ask whether to keep following their strategy.
+
+This approach (like the Stalnakerian approach) has the nice advantage that it does not recommend anything like AR in the Ultimatum game. Had Chooser adopted strategy AR, then Demon only offered \$1, they would have had a reason to reopen inquiry into whether to keep following their strategy. And they would have had a reason to conclude that they should not. That's very different to @fig-chooser-guy-two, where they have no reason to second guess Gamble-Up as a strategy.
+
+The fact that Down is rational in @tbl-chooser-guy means that, if at stage two Chooser opened inquiry into the question of what they should do, it would be rational to conclude they should play Down. There would be nothing irrational in closing inquiry with the decision to play Down. But there would be something irrational in opening the inquiry; they had a plan, it was working well, they have no reason to even ask whether they should do anything different.
+
+This picture, that people should make plans they won't regret, and stick to them unless they are going awry (which they won't if they were well chosen), fits well with the Dual Mandate. If one does not take reasons to (re)open inquiry as a distinctive kind of reason, and especially if one thinks opening inquiry into what to do does not require reasons, then it is harder to answer Gustafsson's challenge. But inquiry is an action, and requires reasons, and one natural view about what those reasons should be suffices to defend Dual Mandate.
+
+# Future Directions {#sec-conclusion}
+
+The Single Choice Principle pushes decision theory to be more like game theory. In this conclusion I'll go over five ways in which decision theory and game theory could be brought into closer harmony, and suggest some ways to make progress on questions I've left open in earlier sections.
+
+The first and most obvious way in which decision theory could more closely resemble game theory is that it could use more equilibrium, or equilibrium-like, concepts, rather than using maximising concepts. I say 'equilibrium-like' because it might be that the most important notion to use is _rationalizability_, as developed by @Bernheim1984 and @Pearce1984.^[This paper started out as a commentary on two arguments by David Pearce: his dynamic objection to 'single-valued' solution concepts [-@Pearce1983] and his argument that all and only undominated strategies are potentially utility maximising [-@Pearce1984], so it's perhaps not surprising it ends by advancing his approach to games and decisions.] This direction would push the theory closer to the approach of Robert @Stalnaker1998. But SCP doesn't require going this way; it is consistent with much stronger solution concepts.
+
+The second way the theories could be in common follows from the failures of **Simplified β**. Solution concepts in game theory do not normally provide values for the possible options, or preference orderings over the unchosen options. They just say that some options are choice-worthy, and some are not. It is often presupposed in philosophical decision theory that the aim of the theory is to provide an (ideal) preference ordering over Chooser's options. I suspect we're best off rejecting that presupposition, and instead holding that the aim of decision theory is to describe the ideal choice-function.
+
+My third suggestion for future directions of decision theory might sound somewhat defeatist. I think we should be sceptical of the prospects of developing a full theory of rational choice, and instead the aim of the theory should be to articulate substantive constraints, like SCP, on rational choice. 
+
+One way to think about this is that it parallels the move in epistemology of moving away from analyses of knowledge, and towards other kinds of questions about the nature of knowledge. We can ask whether knowledge must be safe, without thinking that a positive answer suggests we endorse a safety-theoretic analysis of knowledge.
+
+A closer analogy is the history over the 'refinements' literature in game theory.^[See @Govindan2008 for a helpful survey of this literatre.] The attempts to add conditions to Nash equilibrium to find a single complete theory of rational choice does not seem to have been a striking success. But if you look at that literature as an attempt to learn more about the nature of rational choice, it does have at least some incremental successes.
+
+The aim of this paper is this latter kind of success. I'm not putting forward a full theory of rational choice, and I'm not close to having one. It might well be that rational choice is no more suspectible of analysis than knowledge is. But in both cases we can say substantive things, like that SCP is true.
+
+The fourth way decision theory can learn from game theory, then, is by looking at the kinds of examples that have led to progress in game theory, and seeing what decision theorists can learn from them. There are many different approaches to signaling games^[Like the 'beer-quiche' game in @ChoKreps1987] which are compatible with SCP, and thinking through those games^[Or their decision theoretic equivalents, taking one of the players, probably Receiver, to be Demon.] could help discover more constraints on a theory of rational choice.
+
+But you might wonder why we need to look at anything so fancy as signaling games to make progress. Couldn't we just look at Matching Pennies? Or, as decision theorists know it, Death in Damascus [@GibbardHarper1978]? What should Chooser do in @tbl-mean-demon?
+
+|          | **PU** | **PD** |
+|---------:|:------:|:------:|
+| **Up**   |   1    |   11   |
+| **Down** |   10   |   0    |
+
+: An asymmetric version of Death in Damascus. {#tbl-mean-demon}
+
+There are four natural options here.
+
+One option is to say that Up is clearly better than Down. A number of theorists who disagree about many other things have endorsed this conclusion, e.g., @Richter1984, @Gallow2020, and @Spencer2021b. I can't take this approach because a simple variant of the argument in @sec-general-ratify shows this is incompatible with SCP.
+
+A second option is to say that both options are choice-worthy. I don't know any compelling arguments against this option, but I also don't know anyone who endorses it, and it's probably not promising.^[Though note that both options are rationalizable, so the view that both are choice-worthy should not be dismissed.]
+
+A third option is to say the case is a dilemma. Whatever Chooser does, they will immediately regret, and Chooser cannot rationally choose something they will immediately regret. We know that there are decision-theoretic dilemmas when Chooser has infinitely many choices^[E.g., Chooser can select any positive integer *n*, and gets a payout worth *n*.]; why shouldn't there be finite dilemmas? This view is also not popular with decision theorists, though again I've never seen a compelling argument against it. In particular, I've never seen a compelling case that allowing dilemmas in finite cases is more philosophically problematic than allowing them in infinite cases.
+
+But the fourth option is the one that decision theorists who have endorsed SCP-friendly theories have typically taken. Chooser should play a mixed strategy. In particular, when ratificationist decision theories were more popular in the 1980s^[See @Skyrms1990b [sec. 7] for a helpful bibliography of 1980s work on ratificationism], this was the way most of them analysed @tbl-mean-demon.
+
+There is a familiar response to this, most clearly expressed by @Arntzenius2008.^[@Icard2021 traces this kind of objection back to @Reichenbach1949.] He is considering the view that in cases like @tbl-mean-demon, one should hand over one's decision to a chance device.
+
+> \[W]e are hardly ever in a situation in which we can perform such actions [i.e., use a chance device]. (It is not as if one has such a chance device stored away in some convenient part of one's brain.) [@Arntzenius2008 292]
+
+As @Wallace2010 points out, the parenthetical is beside the point. It doesn't matter what we have stored away, but what the ideal chooser has stored away. We don't have a zero-cost matrix-inverter stored away either, but the ideal version of Chooser does.
+
+So I'm inclined to agree with Wallace's conclusion, and this is the fifth way decision theory could be more like game theory.
+
+> - _Ideal_ rational agents must be able to perform mixed acts with
+any probability, because ideal rational agents must be diachronically consistent, and this requires access to mixed acts.  
+> - Real agents, who actually can decide to pick an option at random, can approximate ideal rational agents at least reasonably well. [@Wallace2010 265-6, emphasis in original]
+
+Defending these claims would require a paper probably as long as this one, and I'll leave it for another day. I'll simply note that, as often in philosophy, a big part of defending these claims will be clarifying what they mean. Here there are two big ambiguities that need resolving.
+
+One is 'mixed strategy'. There are as many interpretations of that as there are interpretations of probability [@sep-probability-interpret]. The dispute I just cited between Arntzenius and Wallace actually turns out not to be about whether mixed strategies are available, but under what interpretation they are available.
+
+The other ambiguous term here is 'ideal'. Getting clear on this might be more pressing. Is the ideal Chooser a standard for evaluation, as in ideal observer theory, or a tool for simplifying explanations, as in ideal gas theory? Wallace's second bullet point suggests he is thinking of the second kind of ideal, and if he is I'm inclined to agree that's what we should be focusing on. Sorting out this question requires a very deep dive into what the purpose of doing decision theory is, and might be necessary before saying what the ideal Chooser can and can't do.
+
+So while the Single Choice Principle resolves several questions in decision theory, as we saw from sections [-@sec-buchak] to [-@sec-dynamic], it leaves many open. Indeed, it raises (or re-raises) some hard questions about the nature of decision theoretic ideals. So this paper is not one of those attempts to have the last word, by putting forward a universal theory of decision. It is, hopefully, a helpful first word, showing where such a theory is (and is not) most likely to be found.
+
+::: {.content-visible unless-format="html"}
+## References {-}
+:::
