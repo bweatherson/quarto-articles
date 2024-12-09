@@ -1,0 +1,123 @@
+---
+title: "Data for Age Effects in Philosophy Citations"
+abstract: |
+  Some supporting tables
+date: today
+execute:
+  echo: false
+  warning: false
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - unpublished
+format:
+    html:
+      css: ../trad_defn.css
+    pdf:
+        output-file: "Data for Age Effects in Philosophy Citations"
+        include-after-body: 
+          text: |
+            \noindent Unpublished. Posted online in 2024.
+---
+
+```{r}
+#| label: loader
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+require(lsa)
+
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Sans Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             axis.title = element_text(family = "Scala Sans Pro", size = 16),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.title = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text.x = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+            legend.title = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+```
+
+```{r}
+#| label: buildgraphs
+#| cache: false
+
+source("/Users/weath/Documents/citations-2025/apc-scripts.R", local = knitr::knit_global())
+```
+
+```{r}
+#| label: tbl-list-of-journals
+#| tbl-cap: "The journals included in this study."
+
+require(knitr)
+temp <- active_philo_bib |>
+  filter(year >= start_year, year <= end_year) |>
+  filter(id != "gettier1963") |>
+  group_by(journal) |> 
+  summarise(Articles = n(), `First Year` = min(year), `Most Recent Year` = max(year)) |>
+  rename(Journal = journal)
+kable(temp)
+```
+
+```{r}
+#| label: tbl-citation-count
+#| tbl-cap: "How often each year is cited in subsequent years."
+
+require(knitr)
+
+kable(
+  ct_sum |>
+    left_join(
+      select(
+        articles_per_year,
+        old_year,
+        articles
+      ),
+      by = "old_year"
+    ) |>
+    filter(old_year >= 1970,
+           new_year >= old_year) |>
+    arrange(old_year, new_year) |>
+    rename(
+      `Cited Year` = old_year,
+      `Citing Year` = new_year,
+      `Citations` = citations,
+      `Articles in Cited Year` = articles
+    ) 
+)
+```
