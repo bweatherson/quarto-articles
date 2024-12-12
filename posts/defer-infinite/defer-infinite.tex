@@ -24,9 +24,9 @@
 \usepackage{lmodern}
 \ifPDFTeX\else  
     % xetex/luatex font selection
-  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
 Bold]{EB Garamond Math}
-  \setsansfont[]{Europa-Bold}
+    \setsansfont[]{Europa-Bold}
   \setmathfont[]{Garamond-Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -42,14 +42,28 @@ marginparsep=0in]{geometry}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \setcounter{secnumdepth}{3}
 % Make \paragraph and \subparagraph free-standing
+\makeatletter
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
   \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
+\makeatother
 
 
 \providecommand{\tightlist}{%
@@ -65,15 +79,17 @@ marginparsep=0in]{geometry}
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 % definitions for citeproc citations
@@ -181,9 +197,7 @@ marginparsep=0in]{geometry}
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
+
 \usepackage{bookmark}
 
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -193,6 +207,7 @@ marginparsep=0in]{geometry}
   pdfauthor={Brian Weatherson},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
+
 
 \title{Deference and Infinite Frames}
 \author{Brian Weatherson}
@@ -210,6 +225,7 @@ significance of the results, but those questions are set aside here. The
 priority in this paper is simply showing that the results fail when we
 allow frames to be infinite.
 \end{abstract}
+
 
 \setstretch{1.1}
 This paper concerns three recent results concerning probabilistic
@@ -412,7 +428,7 @@ different values of \emph{b} holding fixed \emph{a}~=~0.75.
 
 \centering{
 
-\includegraphics{defer-infinite_files/figure-pdf/fig-two-experts-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{defer-infinite_files/figure-pdf/fig-two-experts-1.pdf}}
 
 }
 
@@ -434,7 +450,7 @@ Figure~\ref{fig-two-experts-heads}.
 
 \centering{
 
-\includegraphics{defer-infinite_files/figure-pdf/fig-two-experts-heads-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{defer-infinite_files/figure-pdf/fig-two-experts-heads-1.pdf}}
 
 }
 
@@ -458,12 +474,11 @@ The previous section assumed that C strongly deferred to A and B. We now
 turn to the question of when C should do that. A natural thought, one we
 relied on in that discussion, was that C should defer when they regard A
 and B as better informed than they are. This can be motivated with a
-famous result from David Blackwell Blackwell
-(\citeproc{ref-Blackwell1953}{1953}). Let E\textsubscript{1} and
-E\textsubscript{2} be functions from W to subsets of W. Intuitively,
-these are \emph{experiments}; The Experimenter will perform
-E\textsubscript{\emph{i}} and learn they are in
-E\emph{\textsubscript{i}}(\emph{w}), where \emph{w} is the world they
+famous result from David Blackwell (\citeproc{ref-Blackwell1953}{1953}).
+Let E\textsubscript{1} and E\textsubscript{2} be functions from W to
+subsets of W. Intuitively, these are \emph{experiments}; The
+Experimenter will perform E\textsubscript{\emph{i}} and learn they are
+in E\emph{\textsubscript{i}}(\emph{w}), where \emph{w} is the world they
 are in. Blackwell assumes that the range of each
 E\textsubscript{\emph{i}} is a partition of W; The Experimenter always
 learns what cell of the partition they are in.
@@ -989,5 +1004,6 @@ Skipper and Asbjørn Steglich-Petersen, 265--97. Oxford: {O}xford
 
 
 \noindent \vspace{1in} In progress
+
 
 \end{document}
