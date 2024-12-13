@@ -2,7 +2,7 @@
 title: "Some Data about Citation Trends"
 abstract: |
   In the future I plan to write something substantive about trends in citations in philosophy journals. This is a presentation of some of the underlying data, with some small remarks about the big picture trends. (I earlier published a version of this that used data starting in 1976. I've now added 20 years more data.)
-date: July 10 2024
+date: today
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -109,7 +109,7 @@ year_cites |>
   add_column(late_rank = min_rank(-year_cites$late)) |>
   filter(old %in% main_bib$old) |>
   left_join(main_bib, by = "old") |>
-  select(Article = short_auth, `Citations` = all, `Citation Rank` = all_rank, `Early Citations` = early, `Early Rank` = early_rank, `Late Citations` = late, `Late Rank` =late_rank) |>
+  select(Article = displayauth, `Citations` = all, `Citation Rank` = all_rank, `Early Citations` = early, `Early Rank` = early_rank, `Late Citations` = late, `Late Rank` =late_rank) |>
   arrange(-Citations)
 }
 ```
@@ -118,10 +118,26 @@ year_cites |>
 #| label: setup
 #| cache: true
 
-load("/Users/weath/Documents/citations-2024/philo_bib_fix.RData")
-load("/Users/weath/Documents/citations-2024/philo_cite_with_jp.RData")
+load("/Users/weath/Documents/citations-2025/philo_bib.RData")
+load("/Users/weath/Documents/citations-2025/philo_cite.RData")
 
-
+philo_bib <- philo_bib |>
+  mutate(full_cite = paste0(displayauth, 
+                            " (",
+                            year,
+                            ") \"",
+                            title,
+                            ",\" _",
+                            journal,
+                            "_ ",
+                            bib,
+                            ".")) |>
+  mutate(graph_cite = paste0(
+    displayauth,
+    ", \"",
+    title,
+    ",\""
+  ))
 
 authadjust <- function(x){
   paste0(str_extract(x, '\\b[^,]+$'), " ", str_to_title(str_extract(x,".+(?=,)")))
@@ -130,15 +146,15 @@ authadjust <- function(x){
 
 
 
-article_years <- philo_bib_fix |>
+article_years <- philo_bib |>
   as_tibble() |>
   select(id, year)
 
-article_title <- philo_bib_fix |>
+article_title <- philo_bib |>
   as_tibble() |>
-  select(id, art_title, journal) 
+  select(id, title, journal) 
 
-citation_tibble <- philo_cite_with_jp |>
+citation_tibble <- philo_cite |>
   as_tibble() |>
   rename(new = id, old = refs) |>
   left_join(article_years, by = c("old" = "id")) |>
@@ -199,7 +215,7 @@ main_article_ids <- main_article_ids |>
   ungroup() 
 
 main_bib <- main_article_ids |>
-  left_join(philo_bib_fix, by = c("old" = "id")) |>
+  left_join(philo_bib, by = c("old" = "id")) |>
   filter(n >= 34)
 
 article_number <- nrow(main_bib)
@@ -216,7 +232,7 @@ rolling_averages <- citation_tibble |>
   arrange(old, new_year) |>
   mutate(rolling = slider::slide_dbl(cites, mean, .before = 4)) |>
   left_join(main_bib, by = "old") |>
-  select(old, old_year, new_year, cites, rolling, graph_cite, short_auth)
+  select(old, old_year, new_year, cites, rolling, graph_cite, displayauth)
 
 ```
 
@@ -228,7 +244,7 @@ rolling_spaghetti_graph <- function(x){
   ggplot(filter(rolling_averages, old %in% filter(
     main_bib, old_year == x
     )$old,
-    new_year >= x), aes(x = new_year, y = rolling, color = short_auth)) +
+    new_year >= x), aes(x = new_year, y = rolling, color = displayauth)) +
     geom_line() +
     theme(legend.position="bottom",
           legend.title = element_blank()) +
@@ -249,15 +265,15 @@ rolling_spaghetti_graph <- function(x){
 rolling_facet_graph <- function(x){
   temp <- filter(rolling_averages, old_year == x, new_year >= x) |> ungroup() |> arrange(graph_cite)
 #  temp$graph_cite <- factor(temp$graph_cite, levels = temp$graph_cite, labels = temp$short_auth)
-  background <- temp |> rename(backer = short_auth)
-  ggplot(temp, aes(x = new_year, y = rolling, color = short_auth)) +
+  background <- temp |> rename(backer = displayauth)
+  ggplot(temp, aes(x = new_year, y = rolling, color = displayauth)) +
     geom_line(data = background, aes(x = new_year, y = rolling, group = backer), color = "grey85", alpha = 0.6) +
     geom_line(size = 1, alpha = 1) +
     theme(legend.position="none") +
     labs(x = element_blank(),
          y = element_blank()) +
     scale_x_continuous(breaks = 98:101 * 20, minor_breaks = 390:404*5) +
-    facet_wrap(vars(short_auth)) +
+    facet_wrap(vars(displayauth)) +
     ylim(0, max(20, max(
       filter(rolling_averages, old %in% filter(
         main_bib, old_year == x
@@ -280,7 +296,7 @@ Via the University of Michigan, I got the latest available database for Web of S
 #| tbl-cap: "The journals included in this study."
 
 require(knitr)
-temp <- philo_bib_fix |>
+temp <- philo_bib |>
   filter(year >= 1956, year <= 2022) |>
   filter(id != "gettier1963") |>
   group_by(journal) |> 
@@ -295,7 +311,7 @@ One big exception to this is that it's never really understood how to handle the
 
 I've also manually added citations to articles published in _Journal of Philosophy_ between 1971 and 1974. I don't have good data for what was cited in those articles. I don't know why Web of Science indexes the Journal before and after that period, but it's an important gap. Several of the most important articles of the journals era are published in the Journal in those years, so I felt it was important to include them. I hope that the manual adding I did led to values on the same scale as what I got from everything else, but this is a possible source of noise in the data.
 
-I also manually added one other article: Edmund Gettier's "Is Knowledge Justified True Belief?" (_Analysis_ 1963). Web of Science only adds _Analysis_ to the index in 1975, so Gettier's article, and much of the initial discussion of it, is excluded. Without that discussion we don't get the full sense of what impact it had, but we can still see something about how it has been received. It isn't great to make ad hoc decisions to add individual articles like this, but I thought it was worse to try to tell the story of journals in recent times without measuring the impact of Gettier's article. (In @tbl-list-of-journals I've left the 'first year' as 1975 so as to not leave the misleading implication that I've included all articles between 1963 and 1975, but the dataset does include this one article from 1963.)
+<!--I also manually added one other article: Edmund Gettier's "Is Knowledge Justified True Belief?" (_Analysis_ 1963). Web of Science only adds _Analysis_ to the index in 1975, so Gettier's article, and much of the initial discussion of it, is excluded. Without that discussion we don't get the full sense of what impact it had, but we can still see something about how it has been received. It isn't great to make ad hoc decisions to add individual articles like this, but I thought it was worse to try to tell the story of journals in recent times without measuring the impact of Gettier's article. (In @tbl-list-of-journals I've left the 'first year' as 1975 so as to not leave the misleading implication that I've included all articles between 1963 and 1975, but the dataset does include this one article from 1963.)-->
 
 Because Web of Science keeps adding journals, and journals keep getting larger, the number of articles in this study keeps going up. The only downward pressure comes from the fact that some journals haven't been indexed for 2022 or even, in some cases, 2021. @fig-number-of-articles-by-year shows how many articles each year are in the study.
 
@@ -303,7 +319,7 @@ Because Web of Science keeps adding journals, and journals keep getting larger, 
 #| label: fig-number-of-articles-by-year
 #| fig-cap: "Number of articles in the study each year" 
 
-philo_bib_fix |>
+philo_bib |>
   group_by(year) |>
   filter(year >= 1956, year <= 2022) |>
   tally() |>
@@ -378,7 +394,7 @@ For each year up to 2020, I made three lists. (After 2020 the citation data is a
 
 After making those three lists, I found the largest _n_ such that taking the top _n_ from those three lists gave me nine total articles per year. (If forced to choose, I chose the articles with the most total citations.) So we got a mix largely of highly cited articles, and articles that were highly cited soon after publication. With nine articles each year, and sixty-five years between 1956 and 2020, we should end up with `{r} 65*9` articles. 
 
-Having built that list, I decided that articles with fewer than thirty-four citations (in these 100 journals) were not cited often enough that it made much sense to talk about trends in their citation pattern. So I filtered the list down to only include articles with twenty or more citations. The result is that we have a nice round `{r} article_number` articles in total.
+Having built that list, I decided that articles with fewer than thirty-four citations (in these 100 journals) were not cited often enough that it made much sense to talk about trends in their citation pattern. So I filtered the list down to only include articles with thirty-four or more citations. The result is that we have `{r} article_number` articles in total.
 
 The `{r} article_number` articles are, for better and for worse, a pretty representative sample of what was happening in those journals, and in particular what was being widely talked about in those journals. They wouldn't match up with my list of the best `{r} article_number` articles from those forty years, or I suspect anyone else's list of the best `{r} article_number` articles. But I do think they are an interesting model of the field as it was across those years.
 
@@ -408,7 +424,9 @@ top_five_in_main_bib <- main_bib |>
 recent_top_five_in_main_bib <- top_five_in_main_bib |> filter(old_year >= 2006)
 ```
   
-Around half the articles (`{r} nrow(top_five_in_main_bib)` out of `{r} article_number`) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research. @tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last fifteens years, and look at which articles from 2006 to 2020 are widely cited in this sense. The percentage that are in these five journals falls slightly: it is now `{r} nrow(recent_top_five_in_main_bib)` out of `{r} nrow(filter(main_bib, year >= 2006))`. And the order at the top has changed a bit, as @tbl-recent-journals-in-main-bib shows.
+Around half the articles (`{r} nrow(top_five_in_main_bib)` out of `{r} article_number`) are in the journals widely taken to be the big five: Journal of Philosophy, Philosophical Review, Mind, Noûs, and Philosophy and Phenomenological Research.
+
+@tbl-recent-journals-in-main-bib shows what happens if we restrict attention to just the last fifteen years, and look at which articles from 2006 to 2020 are widely cited in this sense. The percentage that are in these five journals falls slightly: it is now `{r} nrow(recent_top_five_in_main_bib)` out of `{r} nrow(filter(main_bib, year >= 2006))`. And the order at the top has changed a bit, as @tbl-recent-journals-in-main-bib shows.
 
 ```{r}
 #| label: tbl-recent-journals-in-main-bib

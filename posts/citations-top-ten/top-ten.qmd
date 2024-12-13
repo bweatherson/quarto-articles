@@ -15,8 +15,8 @@ categories:
   - in progress
 csl: ../../chicago-with-note.csl
 bibliography: 
-  - /Users/weath/Documents/citations-2024/autobib.bib
-  - /Users/weath/Documents/citations-2024/supplement.bib
+  - /Users/weath/Documents/citations-2025/autobib.bib
+  - /Users/weath/Documents/quarto-articles/brian-quarto.bib
 execute:
   echo: false
   warning: false
@@ -37,8 +37,6 @@ Imagine people at different times over the past half-century asking the followin
 I'm using the data I described in [this note](https://brian.weatherson.org/quarto/posts/citations/raw-data/citations.html), and I won't repeat it here. The short version is that I'm using Web of Science data, restricted to one hundred philosophy journals, and with one notable exception looking at entries in their database where there is an index reference for both the article being cited, and the article doing the citing. The exception is that I used other data from Web of Science to make up for one important missing slice of their data: _Journal of Philosophy_ articles from 1971 to 1974. Hopefully I'll do more such back-filling in the future.^[If anyone wants to help, the top of my agenda is filling in citations to _Analysis_ articles pre-1975. That I think is the most important miss right now. I also don't have PDF or Word versions of this post, because I can't figure out how to get citations inside tables in either format. I would like to know how to get that to work, if, dear reader, you have suggestions.]
 
 All that said, the answer to the italicised question is in @tbl-toppers.
-
-
 
 ```{r}
 #| label: tbl-toppers
@@ -87,21 +85,21 @@ theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
 
 }
 
-load("/Users/weath/Documents/citations-2024/philo_bib_fix.RData")
-load("/Users/weath/Documents/citations-2024/philo_cite_with_jp.RData")
+load("/Users/weath/Documents/citations-2025/philo_bib.RData")
+load("/Users/weath/Documents/citations-2025/philo_cite.RData")
 
 start_year <- 1965
 end_year <- 2022
 
-active_philo_bib <- philo_bib_fix |>
+active_philo_bib <- philo_bib |>
   filter(year >= start_year, year <= end_year) |>
-  mutate(tbl_cite = paste0(display_author, " [-@",str_replace(id,":",""),"] \"", art_title, "\""))
+  mutate(tbl_cite = paste0(displayauth, " [-@",str_replace(id,":",""),"] \"", title, "\""))
 
 article_years <- active_philo_bib |>
   as_tibble() |>
   select(id, year)
 
-citation_tibble <- philo_cite_with_jp |>
+citation_tibble <- philo_cite |>
   as_tibble() |>
   rename(new = id, old = refs) |>
   left_join(article_years, by = c("old" = "id")) |>
@@ -124,7 +122,7 @@ for (y in 1965:2013){
     slice(1:100) |>
     mutate(range_year = y) |>
     left_join(active_philo_bib, by = c("old" = "id")) |>
-    select(e_cites, display_author, year, range_year, art_title, journal, everything()) |>
+    select(e_cites, displayauth, year, range_year, title, journal, everything()) |>
     arrange(-e_cites) |>
     ungroup() |>
     mutate(rank = min_rank(-e_cites))
