@@ -1,0 +1,304 @@
+---
+title: "Changes in Citation Patters"
+abstract: |
+    Which journal articles are cited surprisingly often in recent times, given how often they were cited soon after publication? Conversely, which articles have a lot more citations soon after publication than you'd expect from their current prominence. This note goes over some data on these questions.
+date: today
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+  - unpublished
+  - in progress
+bibliography: 
+  - /Users/weath/Documents/citations-2025/cslbib.yaml
+  - /Users/weath/Documents/quarto-articles/brian-quarto.bib
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+format-links: [html]
+image: "mind_ogimage.png"
+---
+
+```{r}
+#| label: loader
+#| cache: true
+
+# Find Rise and Fall
+require(tidyverse)
+
+load("/Users/weath/Documents/citations-2025/philo_bib.RData")
+load("/Users/weath/Documents/citations-2025/philo_cite.RData")
+
+philo_bib <- philo_bib %>%
+  select(-rowid) %>%
+  group_by(year) %>%
+  mutate(unique_id = paste0(year, sprintf("%05d", row_number()))) %>%
+  ungroup() %>%
+  select(unique_id, everything()) |>
+  rename(wos_id = id,
+         id = unique_id)
+
+philo_cite <- philo_cite %>%
+  left_join(philo_bib %>% select(old = id, wos_id), by = c("refs" = "wos_id")) %>%
+  left_join(philo_bib %>% select(new = id, wos_id), by = c("id" = "wos_id")) %>%
+  select(old, new) %>%
+  mutate(old_year = as.numeric(
+    str_sub(
+      old,
+      start = 1,
+      end = 4
+    )
+  )
+  ) %>%
+  mutate(new_year = as.numeric(
+    str_sub(
+      new,
+      start = 1,
+      end = 4
+    )
+  )
+  )
+
+citation_count <- philo_cite |>
+  group_by(old) |>
+  tally(name = "citations")
+
+philo_bib <- philo_bib |>
+  left_join(
+    select(
+      citation_count,
+      id = old,
+      citations),
+    by = "id"
+  ) |>
+  replace_na(list(citations = 0))
+
+how_many_cites <- philo_bib |>
+  group_by(citations) |>
+  tally(name = "article_count") |>
+  arrange(-citations) |>
+  mutate(running_articles = cumsum(article_count))
+
+
+
+crossyear_table <- philo_cite |>
+  group_by(old_year, new_year) |>
+  tally(name = "citations")
+
+crossyear_cites <- function(x, y){
+  filter(crossyear_table,
+         old_year == x,
+         new_year == y)$citations
+}
+
+before_and_after <- function(x, y){
+  before <- (
+    filter(
+      crossyear_table,
+      old_year == x,
+      new_year <= y
+    ) |>
+      summarise(c = sum(citations))
+  )$c
+  after <- (
+    filter(
+      crossyear_table,
+      old_year == x,
+      new_year > y
+    ) |>
+      summarise(c = sum(citations))
+  )$c
+  before / (before + after)
+}
+
+before_cites  <- function(x, y){
+  (
+    filter(
+      crossyear_table,
+      old_year == x,
+      new_year <= y
+    ) |>
+      summarise(c = sum(citations))
+  )$c
+}
+
+after_cites  <- function(x, y){
+  (
+    filter(
+      crossyear_table,
+      old_year == x,
+      new_year > y
+    ) |>
+      summarise(c = sum(citations))
+  )$c
+}
+
+high_cite_cutoff <- 50
+
+highly_cited <- philo_bib |>
+  filter(citations >= high_cite_cutoff) |>
+  expand(id, crossing = 1975:2018) |>
+  left_join(philo_bib, by = "id") |>
+  filter(crossing >= year + 5,
+         year >= 1970)
+
+year_probs <- tibble(
+  old_year = 1970:2022,
+  cutoff = 1970:2022) |> 
+  expand(old_year, cutoff) |>
+  filter(cutoff >= old_year + 5)|>
+  filter(cutoff <= 2018)|>
+  rowwise() |>
+  mutate(before = before_cites(old_year, cutoff),
+         after = after_cites(old_year, cutoff))
+
+highly_cited_analysis <- highly_cited |>
+  left_join(year_probs,
+            by = c(
+              "year" = "old_year",
+              "crossing" = "cutoff"
+            )) |>
+  rename(year_before = before,
+         year_after = after) |>
+  ungroup() |>
+  rowwise() |>
+  mutate(cites_before = nrow(
+    filter(
+      philo_cite,
+      old == id,
+      new_year <= crossing
+  ))) |>
+  mutate(cites_after = citations - cites_before)
+
+highly_cited_analysis <- highly_cited_analysis |>
+  mutate(bib = paste0("@",
+                      sub(":","",wos_id)))
+
+highly_cited_analysis <- highly_cited_analysis |>
+  mutate(early_prob = pbinom(
+    q = cites_before,
+    size = citations,
+    prob = year_before/(year_before + year_after),
+    log.p = TRUE))
+
+late_bloomers <- highly_cited_analysis |>
+  filter(early_prob < -10) |>
+  ungroup() |>
+  group_by(id) |>
+  slice_min(order_by = early_prob,
+            n = 1) |>
+  ungroup() |>
+  arrange(early_prob) |>
+  mutate(early_prob = early_prob/log(10))
+
+bloom_year <- late_bloomers |>
+  ungroup() |>
+  group_by(crossing) |>
+  tally()
+
+highly_cited_analysis <- highly_cited_analysis |>
+  mutate(late_prob = pbinom(
+    q = citations - cites_before,
+    size = citations,
+    prob = year_after/(year_before + year_after),
+    lower.tail = TRUE,
+    log.p = TRUE))
+
+early_bloomers <- highly_cited_analysis |>
+  filter(late_prob < -5) |>
+  ungroup() |>
+  group_by(id) |>
+  slice_min(order_by = late_prob,
+            n = 1) |>
+  ungroup() |>
+  arrange(late_prob) |>
+  mutate(late_prob = late_prob/log(10))
+```
+
+```{r}
+#| label: examples
+#| cache: false
+first_ex <- 2
+second_ex <- 4
+
+ex1_title <- late_bloomers$title[first_ex]
+ex1_bib <- late_bloomers$bib[first_ex]
+ex1_crossing <- late_bloomers$crossing[first_ex]
+ex1_year <- late_bloomers$year[first_ex]
+ex1_latecite <- late_bloomers$cites_after[first_ex]
+ex1_earlycite <- late_bloomers$cites_before[first_ex]
+ex1_allcite <- late_bloomers$citations[first_ex]
+ex1_percentafter <- scales::percent(ex1_latecite / late_bloomers$citations[first_ex])
+ex1_yearbefore <- late_bloomers$year_before[first_ex]
+ex1_yearafter <- late_bloomers$year_after[first_ex]
+ex1_exppercent <- scales::percent(ex1_yearbefore / (ex1_yearbefore + ex1_yearafter), accuracy = 1)
+ex1_earlyprob <- late_bloomers$early_prob[first_ex]
+
+ex2_title <- late_bloomers$title[second_ex]
+ex2_bib <- late_bloomers$bib[second_ex]
+ex2_crossing <- late_bloomers$crossing[second_ex]
+ex2_year <- late_bloomers$year[second_ex]
+ex2_latecite <- late_bloomers$cites_after[second_ex]
+ex2_earlycite <- late_bloomers$cites_before[second_ex]
+ex2_allcite <- late_bloomers$citations[second_ex]
+ex2_percentafter <- scales::percent(ex2_latecite / late_bloomers$citations[second_ex])
+ex2_yearbefore <- late_bloomers$year_before[second_ex]
+ex2_yearafter <- late_bloomers$year_after[second_ex]
+ex2_exppercent <- scales::percent(ex2_yearbefore / (ex2_yearbefore + ex2_yearafter), accuracy = 1)
+ex2_earlyprob <- late_bloomers$early_prob[second_ex]
+```
+
+"`r ex1_title`" [`r ex1_bib`] gets talked about a lot in philosophy journals. In a study I did of one hundred prominent philosophy journals, it has been cited `r ex1_latecite` times after `r ex1_crossing`. That's a lot, and it's a lot more than you might have expected in `r ex1_crossing`, at which time it had been cited `r ex1_earlycite` times. Here's one way to get a sense of how much more.
+
+"`r ex1_title`" was published in `r ex1_year`. Papers published in those 100 journals in `r ex1_year` were cited (in the journals I'm studying) `r ex1_yearbefore` times through `r ex1_crossing`. They have been cited `r ex1_yearafter` times since then. So about `r ex1_exppercent` of citations of articles published in `r ex1_year` were in or before `r ex1_crossing`.
+
+Imagine a binomial process, with two options, 'early' and 'late'. We'll run the process `r ex1_allcite` times, one for each citation to "`r ex1_title`". The probability of the process saying 'early' will be `r ex1_exppercent`, since for articles in general published in `r ex1_year`, that's how often their citations are in or before `r ex1_crossing`. How likely is it that we'll end up with `r ex1_earlycite` or fewer of the results being 'early', as actually happened with cites to "`r ex1_title`"?
+
+The answer is not very likely at all. The probability of getting a result this extreme is about 10^-`r round(ex1_earlyprob)`^. I think that meets most tests for statistical significance!
+
+We see a similar pattern with "`r ex2_title`" [`r ex2_bib`]. Through `r ex2_crossing`, it had been cited `r ex2_earlycite` times; since then it has been cited `r ex2_latecite`. In general, articles published in `r ex2_year`, as it was, have about `r ex2_exppercent` of their citations in or before `r ex2_crossing`. The probability of a binominal process with `r ex2_earlycite` + `r ex2_latecite` = `r ex2_allcite` trials, and a probability of saying 'early' of `r ex2_exppercent`, having `r ex2_earlycite` or fewer outcomes of 'early' is about 10^-`r round(ex2_earlyprob)`^. This paper too has many more recent citations than you'd expect, though in this case we're taking 'recent' to mean after `r ex2_crossing`, not `r ex1_crossing`.
+
+I ran this same calculation for every paper in the study with 50 or more citations in philosophy journals, and for every possible division of time into 'early' and 'late' such that the late year was no later than 2018, and there were at least five years after publication which were early.^[My citation data only runs through 2022, so when the cutoff is 2018, that did only leave four years of 'late' data. Less than that really felt like it could be noise.] @tbl-late-bloomers shows the most extreme results.
+
+```{r}
+#| label: tbl-late-bloomers
+#| tbl-cap: "Papers with more recent citations than is typical."
+#| column: page-right
+
+require(knitr)
+require(tidyverse)
+
+kable(
+  late_bloomers |>
+    mutate(
+      Article = paste0(
+        displayauth,
+        " -",
+        bib,
+        " \"",
+        title,
+        "\""
+      ),
+      Typical = scales::percent(year_before/(year_before + year_after), accuracy = 1),
+    ) |>
+    select(Article,
+           Cutoff = crossing,
+           Early = cites_before,
+           Late = cites_after,
+           Typical,
+           Prob = early_prob) |>
+    slice(1:100)
+)
+```
