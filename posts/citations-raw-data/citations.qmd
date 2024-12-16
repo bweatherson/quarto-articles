@@ -15,7 +15,9 @@ categories:
   - unpublished
 pdf-engine: xelatex
 csl: ../../chicago-with-note.csl
-bibliography: ../../brian-quarto.bib
+bibliography: 
+  - /Users/weath/Documents/citations-2025/cslbib.yaml
+  - /Users/weath/Documents/quarto-articles/brian-quarto.bib
 execute:
   echo: false
   warning: false
@@ -44,6 +46,7 @@ require(tidyverse)
 require(slider)
 require(stringr)
 require(knitr)
+require(scico)
 
 if(knitr::is_latex_output()) {
   knitr::opts_chunk$set(dev = 'cairo_pdf')
@@ -60,7 +63,7 @@ theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "
              legend.background = element_rect(fill = "#F9FFFF"),
              panel.grid = element_line(color = "grey92"),
              legend.text = element_text(family = "Scala Sans Pro", size = 20),
-             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 15),
              legend.key.spacing.y = unit(0.5, 'lines'),
              legend.key.spacing.x = unit(1, 'cm')
   )
@@ -109,14 +112,14 @@ year_cites |>
   add_column(late_rank = min_rank(-year_cites$late)) |>
   filter(old %in% main_bib$old) |>
   left_join(main_bib, by = "old") |>
-  select(Article = displayauth, `Citations` = all, `Citation Rank` = all_rank, `Early Citations` = early, `Early Rank` = early_rank, `Late Citations` = late, `Late Rank` =late_rank) |>
+  select(Article = short_cite, `Citations` = all, `Citation Rank` = all_rank, `Early Citations` = early, `Early Rank` = early_rank, `Late Citations` = late, `Late Rank` =late_rank) |>
   arrange(-Citations)
 }
 ```
 
 ```{r}
 #| label: setup
-#| cache: true
+#| cache: false
 
 load("/Users/weath/Documents/citations-2025/philo_bib.RData")
 load("/Users/weath/Documents/citations-2025/philo_cite.RData")
@@ -132,6 +135,8 @@ philo_bib <- philo_bib |>
                             "_ ",
                             bib,
                             ".")) |>
+  mutate(tbl_cite = paste0(displayauth, " [-@",str_replace(id,":",""),"] \"", title, "\"")) |>
+  mutate(short_cite = paste0("@",str_replace(id,":",""))) |>
   mutate(graph_cite = paste0(
     displayauth,
     ", \"",
@@ -216,7 +221,7 @@ main_article_ids <- main_article_ids |>
 
 main_bib <- main_article_ids |>
   left_join(philo_bib, by = c("old" = "id")) |>
-  filter(n >= 34)
+  filter(n >= 34) 
 
 article_number <- nrow(main_bib)
 
@@ -232,7 +237,7 @@ rolling_averages <- citation_tibble |>
   arrange(old, new_year) |>
   mutate(rolling = slider::slide_dbl(cites, mean, .before = 4)) |>
   left_join(main_bib, by = "old") |>
-  select(old, old_year, new_year, cites, rolling, graph_cite, displayauth)
+  select(old, old_year, new_year, cites, rolling, graph_cite, title)
 
 ```
 
@@ -241,10 +246,15 @@ rolling_averages <- citation_tibble |>
 #| cache: false
 
 rolling_spaghetti_graph <- function(x){
-  ggplot(filter(rolling_averages, old %in% filter(
-    main_bib, old_year == x
-    )$old,
-    new_year >= x), aes(x = new_year, y = rolling, color = displayauth)) +
+  temp <- filter(rolling_averages, old_year == x, new_year >= x) |> 
+    ungroup() |> 
+    arrange(graph_cite) |>
+    mutate(spaces = str_count(title," ")) |>
+    mutate(graph_title = case_when(
+      spaces <= 6 ~ title,
+      TRUE ~ paste0(word(string = title, start = 1, end = 6, sep = fixed(" ")), "...")
+    ))
+  ggplot(temp, aes(x = new_year, y = rolling, color = graph_title)) +
     geom_line() +
     theme(legend.position="bottom",
           legend.title = element_blank()) +
@@ -254,6 +264,7 @@ rolling_spaghetti_graph <- function(x){
          title =  paste0("Widely cited articles from ", x),
          subtitle = "Rolling five year average of citations in 100 philosophy journals") +
     scale_x_continuous(breaks = 196:202 * 10, minor_breaks = 390:404*5) +
+    scale_colour_scico_d(palette = "berlin", labels = ~ stringr::str_wrap(.x, width = 25)) + 
     ylim(0, max(20, max(
       filter(rolling_averages, old %in% filter(
         main_bib, old_year == x
@@ -263,17 +274,25 @@ rolling_spaghetti_graph <- function(x){
 }
 
 rolling_facet_graph <- function(x){
-  temp <- filter(rolling_averages, old_year == x, new_year >= x) |> ungroup() |> arrange(graph_cite)
+  temp <- filter(rolling_averages, old_year == x, new_year >= x) |> 
+    ungroup() |> 
+    arrange(graph_cite) |>
+    mutate(spaces = str_count(title," ")) |>
+    mutate(graph_title = case_when(
+      spaces <= 6 ~ title,
+      TRUE ~ paste0(word(string = title, start = 1, end = 6, sep = fixed(" ")), "...")
+    ))
 #  temp$graph_cite <- factor(temp$graph_cite, levels = temp$graph_cite, labels = temp$short_auth)
-  background <- temp |> rename(backer = displayauth)
-  ggplot(temp, aes(x = new_year, y = rolling, color = displayauth)) +
+  background <- temp |> rename(backer = graph_title)
+  ggplot(temp, aes(x = new_year, y = rolling, color = graph_title)) +
     geom_line(data = background, aes(x = new_year, y = rolling, group = backer), color = "grey85", alpha = 0.6) +
-    geom_line(size = 1, alpha = 1) +
+    geom_line(linewidth = 1, alpha = 1) +
     theme(legend.position="none") +
     labs(x = element_blank(),
          y = element_blank()) +
     scale_x_continuous(breaks = 98:101 * 20, minor_breaks = 390:404*5) +
-    facet_wrap(vars(displayauth)) +
+    facet_wrap(~graph_title, labeller = label_wrap_gen(width=40)) +
+    scale_colour_scico_d(palette = "berlin") +
     ylim(0, max(20, max(
       filter(rolling_averages, old %in% filter(
         main_bib, old_year == x
@@ -283,13 +302,13 @@ rolling_facet_graph <- function(x){
 }
 ```
 
-I recently downloaded citation data for 100 philosophy journals from Web of Science. This note presents some of the data about trends in citation patterns since 1956. My main interest here is in seeing which changes there have been in what was cited over time, but there are lots of interesting nuggets. Later I'll write a real paper actually going into what some of the data mean, but for now I'm just presenting it for public consumption.
+I recently downloaded citation data for 100 philosophy journals from Web of Science. This note presents some of the data about trends in citation patterns since 1956. My main interest here is in seeing which changes there have been in what was cited over time, but there are lots of interesting nuggets. In the future I'll write more actually going into what some of the data mean, but for now I'm just presenting it for public consumption.
 
 # Methodology {#sec-methodology}
 
 ## The Articles Being Studied {#sec-articles-studied}
 
-Via the University of Michigan, I got the latest available database for Web of Science circa January 2024. I created a file of every citation where both the citing article and the cited article were from one of the 100 journals in @tbl-list-of-journals, in the years that they were indexed by Web of Science.
+Via the University of Michigan, I got the latest available database for Web of Science circa January 2024. I created a file of every citation where both the citing article and the cited article were from one of the 100 journals in @tbl-list-of-journals, in the years that they were indexed by Web of Science. (I selected these journals as the most relevant to English language, analytic philosophy. I could be wrong about this list, and would be interested in suggestions about which should be included. The biggest omission is the Aristotelian Society, but Web of Science doesn't index it.)
 
 ```{r}
 #| label: tbl-list-of-journals
@@ -396,7 +415,7 @@ After making those three lists, I found the largest _n_ such that taking the top
 
 Having built that list, I decided that articles with fewer than thirty-four citations (in these 100 journals) were not cited often enough that it made much sense to talk about trends in their citation pattern. So I filtered the list down to only include articles with thirty-four or more citations. The result is that we have `{r} article_number` articles in total.
 
-The `{r} article_number` articles are, for better and for worse, a pretty representative sample of what was happening in those journals, and in particular what was being widely talked about in those journals. They wouldn't match up with my list of the best `{r} article_number` articles from those forty years, or I suspect anyone else's list of the best `{r} article_number` articles. But I do think they are an interesting model of the field as it was across those years.
+The `{r} article_number` articles are, for better and for worse, a pretty representative sample of what was happening in those journals, and in particular what was being widely talked about in those journals. They wouldn't match up with my list of the best `{r} article_number` articles from those sixty-five years, or I suspect anyone else's list of the best `{r} article_number` articles. But I do think they are an interesting model of the field as it was across those years.
 
 It was not a surprise that the famously high prestige journals have the bulk of these articles. But there was more variation within the list than some may have expected, as we see in @tbl-journals-in-main-bib.
 
@@ -464,35 +483,25 @@ There are two categories of articles that stand out immediately among the papers
 
 The biggest of these is **social philosophy**. In this I'm including Rae Langton's 1993 article on silencing, Sally Haslanger's 2000 _Noûs_ article on race and gender, and Kristie Dotson's 2011 article on epistemic violence. But I'm also including things like Michael Bratman's 1992 and 1993 articles on collective action. It's a bit of a stretch, but one might also see the various articles on trust that show up below (by Annette Baier, Richard Holton, and Karen Jones), as being of the move towards more social philosophy. Philosophy in the twentieth century was very focussed on individuals; there is much more attention now to groups and societies.
 
-The other category is papers on **probability**. Some papers from the 1990s, such as Richard Foley's 1992 paper that set out the Lockean theory of belief, and Jim Joyce's 1998 paper setting up the accuracy-dominance approoach, are much more widely discussed now than they were immediately after they came out.
-
-One of my aims with this is to use the co-citation relations between these 360 papers to find more categories, and especially categories that are linked by more than my gut feeling that they fit together. But that's a project for a much longer piece.
+The other category is papers on **probability**. Some papers from the 1990s, such as Richard Foley's 1992 paper that set out the Lockean theory of belief, and Jim Joyce's 1998 paper setting up the accuracy-dominance approach, are much more widely discussed now than they were immediately after they came out.
 
 ## Future Goals {#sec-future-goals}
 
 I'm very interested to hear ideas other people have for what might be done with this data, and surrounding data. Here are some of the ideas I have for future research.
 
-The biggest project I've started involves cluster-detection. I've created a table of how many times each pair of these 360 articles was co-cited with every other one (among the hundred journals I'm studying). I've tried running that through various cluster-detecting algorithms to see if there are naturally occurring clusters of articles. The results are a bit messy right now, but maybe with some tidying they could be usefully used to see what trends there are in topics, or in classifying journals by which kinds of articles they publish.
-
-Otherwise I've got the following tentative ideas.
-
-- Graphing the gender balance among authors over time among these 360 articles.
-- Comparing how widely cited David Lewis's 1980s AJP articles are to how widely cited all other articles from the AJP in those years were.
-- Looking at how "Epiphenomenal Qualia" came to be cited so much more than "What Mary Didn't Know".
+- Creating a table of when the frequently cited articles were cited together, and looking for clusters in that data.
 - Separating out age, cohort, and period effects among the various trends shown here.
-- In particular, looking at the 1986-1990 cohort, and seeing whether the relatively low citation numbers shown here are because citations to that cohort tended to be more spread out (and so just looking at the peaks, like I'm doing here, will miss a lot), or because in general later philosophers paid less attention to articles from the late 1980s than other eras. And if it's the latter, is that something broader about the era, or about the relative importance of journals to other publications in that time?
-- Looking at the transitions from supervenience, to truthmaking, to grounding, in metaphysics over the time of the study, with special attention to the connection between that story and the debates about physicalism.
-- Making a bibtex file for these 460 articles.
+- Looking at whether, at it appears by eyeballing the data, that from 1980-1995 journal articles (not written by David Lewis) tended to be cited less often than articles from either side of that range.
 - Seeing what connections there are between paper length and number of citations.
-- Looking at how central papers on equality and egalitarianism are to political philosophy over the years.
-- Looking at the way the literature on trust developed.
+- Using the citation data to get a better sense of the rise and fall of the 'modal era' in philosophy, where tools involving possible worlds were central to so many discussions.
+- Looking at the rise of social philosophy post-2010, and how that relates to the fall off in interest in modality.
 
 But there are lots of other stories here to be investigated, and I'd love to hear what other ideas people have for what could be done with it.
 
 # The Articles
 
 ```{r}
-kable(main_bib |> select(Articles = full_cite) |> rowid_to_column(var="n"))
+kable(main_bib |> select(Articles = tbl_cite))
 ```
 
 ```{r}
@@ -502,7 +511,7 @@ kable(main_bib |> select(Articles = full_cite) |> rowid_to_column(var="n"))
 setwd("~/Documents/quarto-articles/posts/citations-raw-data")
 the_code <- c()
 
-for (the_year in c(1956:1962, 1964:2015)){
+for (the_year in c(1956:1962, 1964:2019)){
 # Widely Cited Articles subsection
     the_code <- c(the_code,
                 "\n## ",
@@ -510,7 +519,7 @@ for (the_year in c(1956:1962, 1964:2015)){
                 " {#sec-s",
                 the_year,
                 "}\n\n### Widely Cited Articles {-}\n\n")
-  temp <- filter(main_bib, old_year == the_year) |> rename(Articles = full_cite) |> select(Articles)
+  temp <- filter(main_bib, old_year == the_year) |> rename(Articles = tbl_cite) |> select(Articles)
   for (i in 1:nrow(temp)){
     the_code <- c(the_code, i, ". ", temp$Articles[i], "\n")
   }
@@ -563,7 +572,7 @@ for (the_year in c(1956:1962, 1964:2015)){
                 the_year,
                 ".",
                 "\n",
-                "#| cache: TRUE",
+                "#| cache: FALSE",
                 "\n\n",
                 "rolling_spaghetti_graph(",
                 the_year,
@@ -582,7 +591,7 @@ for (the_year in c(1956:1962, 1964:2015)){
                 the_year,
                 ".",
                 "\n",
-                "#| cache: TRUE",
+                "#| cache: FALSE",
                 "\n\n",
                 "rolling_facet_graph(",
                 the_year,

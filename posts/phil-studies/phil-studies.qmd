@@ -32,7 +32,7 @@ format:
           \noindent Published online in November 2024.
 format-links: [html]
 bibliography: 
-  - /Users/weath/Documents/citations-2025/autobib.bib
+  - /Users/weath/Documents/citations-2025/cslbib.yaml
   - /Users/weath/Documents/quarto-articles/brian-quarto.bib
 ---
 
@@ -46,7 +46,9 @@ for (ipkg in c("tidyverse",
                "topicmodels", 
                "lsa",
                "slider",
-               "knitr")) {
+               "knitr",
+               "scico",
+               "wesanderson")) {
   if (!require(ipkg, character.only = TRUE)) {
     install.packages(ipkg)
     library(ipkg, character.only = TRUE)
@@ -731,7 +733,8 @@ ggplot(word_quartile_by_year,
   scale_x_continuous(breaks = c(1990, 2000, 2010)) +
   scale_y_continuous(limits = c(0, 12500),
                      labels = scales::label_comma()) +
-  geom_line(aes(x = year, y = rolling, color = statistic))
+  geom_line(aes(x = year, y = rolling, color = statistic)) +
+  scale_color_manual(values=wes_palette(n=3, name="AsteroidCity1"))
 ```
 
 Some of these changes reflect wider disciplinary changes, but others do not. Most journals have a much more stable publication rate. Journals that are commercially published, like _Philosophical Studies_, have tended to increase their production in recent years, but this growth is still unusual.
@@ -1046,7 +1049,7 @@ I've included _Philosophy and Phenomenological Research_ there because, like _Ph
 
 There is a striking step-change in citations to _Philosophical Studies_ that occurred in the mid-2000s. To bring this out, I'll compare _Philosophical Studies_ to nineteen other prominent philosophy journals. From the one hundred journals that I'm primarily looking at, I selected the twenty (including _Philosophical Studies_) that have the highest rate of citations per published article, and which Web of Science has indexed every year since 1980.^[The last constraint notably rules out _Philosophers' Imprint_ and _Mind and Language_.]
 
-@fig-compare-cites-dots shows, for each year from 1980 to 2019, the average number of citations for articles published in _Philosophical Studies_ (in blue), and in the other nineteen (in red). The figure is fairly noisy, but some trends are clear. Before 2000, the red dots, for the other journals, are mostly above the blue dots, for _Philosophical Studies_. After 2000, and especially from 2003 onwards, that is mostly reversed.
+@fig-compare-cites-dots shows, for each year from 1980 to 2019, the average number of citations for articles published in _Philosophical Studies_ (in green), and in the other nineteen (in red). The figure is fairly noisy, but some trends are clear. Before 2000, the red dots, for the other journals, are mostly above the green dots, for _Philosophical Studies_. After 2000, and especially from 2003 onwards, that is mostly reversed.
 
 ```{r}
 #| label: fig-compare-cites-dots
@@ -1067,10 +1070,11 @@ ggplot(ps_comp_rate |>
             y = "Citations per article",
             color = element_blank()) +
        theme(legend.position = "right") +
-       scale_x_continuous(breaks = c(1990, 2000, 2010))
+       scale_x_continuous(breaks = c(1990, 2000, 2010)) +
+  scale_color_manual(values=wes_palette(n=2, name="Darjeeling1"))
 ```
 
-@fig-compare-cites-rolling smooths out some of the noise in @fig-compare-cites-dots in two ways. First, instead of measuring average citations per year, I measure average citations over a five-year rolling window. Second, instead of showing the red and blue dots separately, I've just displayed the ratio between them.
+@fig-compare-cites-rolling smooths out some of the noise in @fig-compare-cites-dots in two ways. First, instead of measuring average citations per year, I measure average citations over a five-year rolling window. Second, instead of showing the red and green dots separately, I've just displayed the ratio between them.
 
 ```{r}
 #| label: fig-compare-cites-rolling
@@ -1448,7 +1452,8 @@ ps_uni_grouped |>
   geom_point(size = 0.75) +
   labs(x = element_blank(),
          y = element_blank(),
-       color = element_blank())
+       color = element_blank()) +
+  scale_color_manual(values=wes_palette(n=2, name="Darjeeling1"))
 ```
 
 I'll leave it for someone else to figure out what proportion of the change in @fig-gender-words is due to there being more references to particular women, and what proportion is due to philosophers using female pronouns for arbitrary or fictional characters.
