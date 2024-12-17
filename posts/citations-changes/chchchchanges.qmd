@@ -292,13 +292,25 @@ kable(
         "\""
       ),
       Typical = scales::percent(year_before/(year_before + year_after), accuracy = 1),
+      Prob = round(early_prob, 1)
     ) |>
     select(Article,
            Cutoff = crossing,
            Early = cites_before,
            Late = cites_after,
            Typical,
-           Prob = early_prob) |>
-    slice(1:100)
+           Prob) |>
+    slice(1:100),
+    align = c('l', 'r', 'r', 'r', 'r', 'r')
 )
 ```
+
+In @tbl-late-bloomers, 'Cutoff' is the boundary between early and late that's being used in that row. 'Early' is the number of times the paper was cited (in philosophy journals) through that cutoff year, and 'Late' is the number of times it has been cited after that. 'Typical' is the proportion of citations articles published in the year the article was cited through the cutoff year. And Prob is log~10~ of the probability of a binomial process with that probability getting a result that extreme.
+
+I calculated this Prob value for every article with 50 or more citation, and every cutoff from five years after publication to 2018. For each article, I selected the smallest value of Prob. I then selected the 100 articles for which Prob is lowest. Note that I didn't select the 100 pairs of articles-cutoffs for which Prob is lowest. If I'd done that, I would have a list where "Famine, Affluence, and Morality" was repeated ten times at the top.^[The Prob value isn't much changed for any cutoff between 1997 and 2006.] Just including each paper once is a bit more informative.
+
+There are a few reasons why articles might turn up on a list like this.
+
+- Some papers are in topics that are much more central to philosophy now than they were at the time of publication. This is especially true for papers concerned with social and interpersonal topics, such as @WOS000085841900002, @WOSA1977EA35800003, @WOSA1993MJ74900002, and @WOS000170434600004.
+- Some papers are important instances of approaches that were not as prominent at the time they were published. This starts at the top of the list; utilitarianism wasn't nearly as prominent in the late twentieth century as in the twenty-first century.
+- And, as Eric Schwitzgebel pointed out on an earlier post, in some cases what we're seeing is just the normal pattern of highly cited papers. This is, I think, what's happening with @WOS000234431300006 and @WOS000165361800002. Note that I'm comparing the trends in citations of papers like these to the citations of all papers published the same year. If it takes a while for the literature to settle on what the most important papers are, and after that time the other papers drop away, then papers like these could appear on the list as much by not having their citation rates decay as by becoming particularly more prominent.
