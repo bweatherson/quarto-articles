@@ -1,0 +1,329 @@
+---
+title: "The End of Decision Theory"
+abstract: |
+  What question are decision theorists trying to answer, and why is it worth trying to answer it? A lot of philosophers talk as if the aim of decision theory is to describe how we should make decisions, and the reason to do this is to help us make better decisions. I disagree on both fronts. The aim of the decision theory is to describe how a certain kind of idealised decider does in fact decide. And the reason to do this is that this idealisation, like many other idealisations, helps generate explanations of real-world behaviour. We shouldn't do what these ideal deciders do, or try to be more like them, because a lot of what they do only makes sense because of the differences between us and them. Still, sometimes those differences are small enough that they can be ignored in explanations, and that's when decision theory is useful.
+date: today
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+citation: false
+categories:
+  - games and decisions
+  - unpublished
+  - in progress
+bibliography: ../../../brian-quarto.bib
+csl: ../../../chicago-with-note.csl
+format:
+  html: default
+  docx:
+      reference-doc: ../../../quarto-articles-template.docx
+  pdf:
+      output-file: "The End of Decision Theory"
+      include-after-body: 
+        text: |
+           \noindent Unpublished. Posted online in 2024.
+---
+
+What are philosophical decision theorists trying to do? A simple answer is that they are trying to find the correct decision theory. This invites two more questions. What does it mean to say some decision theory is correct? And why should we care about knowing which one is correct?
+
+I think most decision theorists would endorse some kind of normative answer to these questions. The correct decision theory is the one that agents, or at least a certain kind of agent, should follow. We should figure out what it is so we can advise agents on how to make better decisions.
+
+This paper argues against this normative answer, and in favor of a descriptive answer. The correct decision theory is one that accurately describes what a certain kind of agent will do. Finding the correct answer is useful because it helps us explain certain patterns of behavior, especially in highly social settings.
+
+The descriptive answer might seem obviously false in light of the fact that decision theory is quite clearly about idealised agents. The important point to note here that we use 'idealised' in philosophy (and academia more generally) in two rather distinct ways.^[This ambiguity in the term 'idealised' is also noted in Carr, Greco, and Roussos.] In political philosophy, when people talk about ideal theory, they are talking about some kind of optimum. This sense is clearly normative. But in much of philosophy of science, we talk about ideals in a purely descriptive way. An idealised model need not be better than reality. The ideal gases in the ideal gas model are not better in virtue of having point sized molecules. Size is not a failure that we imagine gases sloughing off. I'm going to argue that the ideal agents in ideal decision theory are more like ideal gases than they are like ideal states.
+
+While this is an ambiguity, you might think that the meanings are not incompatible. The ideal agents in decision theory might be both optima and simplifications. Indeed, I think that in a good sense they are. Still, I'll argue, we should take the simplification sense to be more central. What's important about these idealised agents is that they can play a role in what I'll call strongly reflexive explanations of social phenomena. These are explanations where the agents involved not just realise that the explanation in question correctly describes their situation, but do what they do in part because of this realisation. Such explanations work most smoothly when the explanatory models are not just simplifications of real life, but also involve some kind of optimal behavior.
+
+# Two Cases
+
+I'm interested in philosophical decision theory^[I'll treat the modifier 'philosophical' as understood from here on.] as it's currently practiced. So I'll start with two cases that every theory on the market agrees about.^[In recent years decision theorists have focussed on two big questions. One is whether the ideal agent could be risk-sensitive. Lara @BuchakRisk argues for yes, and her position has been criticised by, inter alia, Ray @Briggs2015 and Joanna @Thoma2019. The other is how the ideal agent handles Newcomb-like problems, broadly construed. A traditional version of the one-box answer is defended by Arif @Ahmed2014; a more radical kind of one-boxing by Ben Levinstein and Nate Soares [-@LevinsteinSoares2020]. There are a flood of variants of two-boxing, each pair of which disagree on some case or other. Such theories have been put forward by William @Harper1986, James @Joyce1999, Frank @Arntzenius2008, Johan @Gustafsson2011, Ralph @Wedgwood2013a, Dmitri @Gallow2020, Abelard @Podgorski2022, David @Barnett2022, Jack @Spencer2023 and Melissa @Fuscond. The arguments I'll make here are strictly speaking between these views, but they fit most smoothly with Harper and Fusco's views.] These provide an important pair of constraints. Whatever the correct decision theory is, it must be one that agrees on these cases.
+
+## Betting
+
+Chooser has \$110, and is in a sports betting shop. There is a basketball game about to start, between two teams they know to be equally matched. Chooser has three options: bet the \$110 on Home, bet it on Away, keep money. If they bet and are right, they win \$100 (plus get the money back they bet), if they are wrong, they lose the money. Given standard assumptions about how much Chooser likes money, all the decision theories I'm discussing say Chooser should not bet.
+
+From this it follows that decision theory is not in the business of answering this question: *What action will produce the best outcome?*. We know, and so does Chooser, that the action that produces the best outcome is to bet on the winning team. Keeping their money in their pocket is the only action they know will be sub-optimal. And it's what decision theory says to do.
+
+This is to say, decision theory is not axiology. It's not a theory of evaluating outcomes, and saying which is best. Axiology is a very important part of philosophy, but it's not what decision theorists are up to.
+
+So far this will probably strike you, dear reader, as obvious. But there's another step, that I think will strike some people as nearly as obvious, that I'm at pains to resist. Some might say that decision theorists don't tell Chooser to bet on the winner because this is lousy advice. Chooser can't bet on the winner, at least not as such. That, I'll argue, would be a misstep. Decision theorists do not restrict themselves to answers that can be practically carried out.
+
+## Salesman
+
+We'll focus on a version of what Julia @Robinson1949 called the travelling salesman problem.^[For a thorough history of the problem, see @Schrijver2005. For an accessible history of the problem, which includes these references, see @wiki-salesman.] Given some points on a map, find the shortest path through them. We'll focus on the 257 cities shown on the map in @fig-map.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false 
+#| cache: true
+#| label: fig-map
+#| fig-cap: "257 American cites; our task is to find the shortest path that goes through all of them."
+#| 
+require(tidyverse)
+require(TSP)
+require(maps)
+
+theme_map <- function(base_size=9, base_family="") {
+  require(grid)
+  theme_bw(base_size = base_size, base_family = base_family) %+replace%
+    theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title = element_blank(),
+          panel.background = element_blank(),
+          panel.border = element_blank(),
+          panel.grid = element_blank(),
+          panel.spacing = unit(0, "lines"),
+          plot.background = element_blank(),
+          legend.justification = c(0,0),
+          legend.position = c(0,0)
+    )
+}
+
+theme_set(theme_map())
+
+all_states <- map_data("state") %>% 
+  group_by(region) %>% 
+  tally() %>% 
+  select(state = region)
+
+all_states$code <- c("AL", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA",
+                     "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", 
+                     "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", 
+                     "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", 
+                     "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
+
+used_states <- 1:49
+
+long_states <- all_states$state[used_states]
+short_states <- all_states$code[used_states]
+
+data("USCA312")
+data("USCA312_GPS")
+
+cities <- as_tibble(as.matrix(USCA312))
+
+city_numbers <- tibble(
+  id = 1:312,
+  thecities = colnames(cities)
+) %>% 
+  mutate(used_city = case_when(str_sub(thecities, -2) %in% short_states  ~ 1,
+                               TRUE ~ 0))
+
+the_city_numbers <- filter(city_numbers, used_city == 1)$id
+
+
+our_cities <- cities %>% 
+  select(all_of(the_city_numbers)) %>% 
+  slice(the_city_numbers)
+
+our_gps <- USCA312_GPS %>% 
+  slice(the_city_numbers) %>% 
+  rowid_to_column()
+
+city_matrix <- as.matrix(our_cities)
+
+rownames(city_matrix) <- filter(city_numbers, used_city == 1)$thecities
+
+## Fine tour
+#tour_line <- solve_TSP(as.TSP(city_matrix), method="farthest_insertion")
+#tour_line <- solve_TSP(as.TSP(city_matrix), method="two_opt", tour = tour_line)
+
+## Not good tour
+#tour_line <- solve_TSP(as.TSP(city_matrix), method="cheapest_insertion", start = 17) # - Very messy
+
+## Generate tour by longitude - really bad
+#tour_line <- TOUR(arrange(our_gps, long)$rowid, tsp = as.TSP(city_matrix))
+
+## Best tour
+load("tour_line.RData")
+
+#tour_line <- TOUR(bad_path, tsp = as.TSP(city_matrix))
+#tour_line <- solve_TSP(as.TSP(city_matrix), method="two_opt", tour = tour_line)
+#tour_length(tour_line)
+
+# Turn tour to map path
+paths <- tribble(
+  ~step, ~property, ~rowid, ~long, ~lat
+)
+
+for (i in 1:nrow(our_gps)){
+  x <- tour_line[i]
+  first_city <- our_gps %>% slice(x)
+  next_city <- our_gps %>% slice(x %% 31)
+  paths <- paths %>%
+    add_row(step = i, property = "from", rowid = first_city$rowid[1], long = first_city$long[1], lat = first_city$lat[1])# %>%
+  #    add_row(step = i, property = "to", rowid = next_city$rowid[1], long = next_city$long[1], lat = next_city$lat[1])
+}
+
+x <- tour_line[1]
+
+paths <- paths %>% add_row(step = 24, property = "from", rowid = our_gps$rowid[x], long = our_gps$long[x], lat = our_gps$lat[x])
+
+
+state_map_data <- map_data("state") %>%
+  #  filter(subregion != "north" | is.na(subregion)) %>%
+  filter(region %in% long_states) 
+
+tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "grey90") + 
+  geom_point(data = our_gps %>% select(long, lat), aes(x = long, y = lat), size = 0.25, inherit.aes = FALSE) +
+#  geom_path(data = paths %>% select(long, lat), aes(x = long, y = lat), inherit.aes = FALSE, colour = "grey30", alpha = 0.5 ) + 
+  coord_quickmap() +
+#  labs(x = paste0("Tour length: ", tour_length(tour_line), " miles.")) +
+  labs(x = "") +
+  theme(axis.title.x = element_text())
+#tour_length(tour_line)
+tour_map
+
+#str_c(our_gps$name, sep = "; ", collapse = "; ")
+```
+
+The task is to find the shortest path through those 257 cities.^[The 257 cities are the cities in the lower 48 states from the 312 cities in North America that John @Burkhart2011 mapped in his dataset USCA312.]
+
+All decision theories on the market say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. And least, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandelkernEtAl2017].
+
+If one wanted to give advice about puzzles like this, there is a lot to say. For people with access to typical amounts of computing power, e.g., the amount of power the computer I'm writing this on has, and who don't lose a lot by choosing a path a little longer than optimal, it's helpful to advise them to use a Farthest Insertion Algorithm.^[The algorithm is described in the documentation of the TSP package by Michael Hashler and Kurt Hornik [-@HashlerHornik2007]. I used that package to implement the algorithm and also to find the two shorter maps that follow.] @fig-farthest shows the result of one output of this algorithm.^[The algorithm is silent on which city you start with, and usually chooses this randomly.]
+
+```{r}
+#| echo: false
+#| cache: true
+#| warning: false
+#| message: false 
+#| label: fig-farthest
+#| fig-cap: "An output of the Farthest Insertion Algorithm, with a length of 21075 miles."
+theme_set(theme_map())
+tour_line <- solve_TSP(as.TSP(city_matrix), method = "farthest_insertion", start = 1)
+
+paths <- tribble(
+  ~step, ~property, ~rowid, ~long, ~lat
+)
+
+
+for (i in 1:nrow(our_gps)){
+  x <- tour_line[i]
+  first_city <- our_gps %>% slice(x)
+  next_city <- our_gps %>% slice(x %% 31)
+  paths <- paths %>%
+    add_row(step = i, property = "from", rowid = first_city$rowid[1], long = first_city$long[1], lat = first_city$lat[1])# %>%
+  #    add_row(step = i, property = "to", rowid = next_city$rowid[1], long = next_city$long[1], lat = next_city$lat[1])
+}
+
+x <- tour_line[1]
+
+
+paths <- paths %>% add_row(step = 1 + nrow(our_gps), property = "from", rowid = our_gps$rowid[x], long = our_gps$long[x], lat = our_gps$lat[x])
+
+tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "grey90") + 
+  geom_point(data = our_gps %>% select(long, lat), aes(x = long, y = lat), size = 0.25, inherit.aes = FALSE) +
+  geom_path(data = paths %>% select(long, lat), aes(x = long, y = lat), inherit.aes = FALSE, colour = "grey30", alpha = 0.5 ) + 
+  coord_quickmap() +
+#  labs(x = paste0("Tour length: ", tour_length(tour_line), " miles.")) +
+  labs(x = "") +
+  theme(axis.title.x = element_text())
+tour_map
+```
+
+If the advisee has a bit more power at hand, and cares a bit about fine improvements, there are further algorithms you could suggest to them. Some of these don't start with just the cities, but take an existing path and find small improvements to it. One simple enough improvement algorithm turns @fig-farthest into @fig-two-opt.
+
+```{r}
+#| echo: false
+#| cache: true
+#| label: fig-two-opt
+#| fig-cap: "The output of an optimisation process, which reduced the path length to 20891 miles."
+#| warning: false
+#| message: false 
+theme_set(theme_map())
+tour_line <- solve_TSP(as.TSP(city_matrix), method = "farthest_insertion", start = 1)
+tour_line <- solve_TSP(as.TSP(city_matrix), method = "two_opt", tour = tour_line)
+
+paths <- tribble(
+  ~step, ~property, ~rowid, ~long, ~lat
+)
+
+for (i in 1:nrow(our_gps)){
+  x <- tour_line[i]
+  first_city <- our_gps %>% slice(x)
+  next_city <- our_gps %>% slice(x %% 31)
+  paths <- paths %>%
+    add_row(step = i, property = "from", rowid = first_city$rowid[1], long = first_city$long[1], lat = first_city$lat[1])# %>%
+  #    add_row(step = i, property = "to", rowid = next_city$rowid[1], long = next_city$long[1], lat = next_city$lat[1])
+}
+
+x <- tour_line[1]
+
+paths <- paths %>% add_row(step = 1 + nrow(our_gps), property = "from", rowid = our_gps$rowid[x], long = our_gps$long[x], lat = our_gps$lat[x])
+
+
+tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "grey90") + 
+  geom_point(data = our_gps %>% select(long, lat), aes(x = long, y = lat), size = 0.25, inherit.aes = FALSE) +
+  geom_path(data = paths %>% select(long, lat), aes(x = long, y = lat), inherit.aes = FALSE, colour = "grey30", alpha = 0.5 ) + 
+  coord_quickmap() +
+#  labs(x = paste0("Tour length: ", tour_length(tour_line), " miles.")) +
+  labs(x = "") +
+  theme(axis.title.x = element_text())
+tour_map
+```
+
+Beyond this, you have to either really care about the path length, or have quite a bit of time or computing power to spare. By a bit of brute force, I found the path in @fig-best. I'm not sure it is optimal, and the methods that got there aren't entirely scalable. It is, however, about 3% shorter than @fig-farthest and 2% shorter than @fig-two-opt.
+
+```{r}
+#| echo: false
+#| cache: true
+#| label: fig-best
+#| warning: false
+#| message: false
+#| fig-cap: "The shortest path I could find, with a distance of 20301 miles."
+my_list <- as.integer(unlist(strsplit("0,84,59,240,13,198,121,58,102,89,170,20,212,135,231,127,136,107,147,17,151,97,24,142,162,228,87,229,194,206,116,138,244,158,61,108,207,44,54,11,132,9,55,143,26,86,103,47,117,7,96,216,46,251,95,184,69,179,250,174,153,183,242,15,99,119,110,181,248,4,249,164,10,234,71,148,109,152,161,246,222,42,33,150,137,149,100,219,252,175,78,34,30,38,123,130,134,57,173,171,12,16,144,36,32,168,235,2,208,239,25,226,186,35,74,254,167,223,245,39,1,51,256,45,8,56,221,60,98,50,124,129,31,146,159,77,230,118,104,145,83,125,232,6,65,81,19,189,120,106,18,92,112,215,90,49,115,178,139,210,94,133,187,163,28,43,238,62,218,192,53,220,111,82,237,156,73,247,196,233,113,114,191,126,157,213,214,64,243,41,105,67,185,70,225,68,193,140,190,79,141,27,166,180,211,23,93,101,37,169,155,197,176,29,217,241,253,21,209,227,172,195,75,76,22,154,201,204,202,224,188,182,40,85,14,203,128,160,199,200,255,122,80,165,236,72,205,3,88,91,48,63,52,177,66,5,131",",")))
+my_list_adj <- my_list + 1
+tour_line <- TOUR(my_list_adj, tsp = as.TSP(city_matrix))
+
+theme_set(theme_map())
+
+paths <- tribble(
+  ~step, ~property, ~rowid, ~long, ~lat
+)
+
+for (i in 1:nrow(our_gps)){
+  x <- tour_line[i]
+  first_city <- our_gps %>% slice(x)
+  next_city <- our_gps %>% slice(x %% 31)
+  paths <- paths %>%
+    add_row(step = i, property = "from", rowid = first_city$rowid[1], long = first_city$long[1], lat = first_city$lat[1])# %>%
+  #    add_row(step = i, property = "to", rowid = next_city$rowid[1], long = next_city$long[1], lat = next_city$lat[1])
+}
+
+x <- tour_line[1]
+
+paths <- paths %>% add_row(step = 1 + nrow(our_gps), property = "from", rowid = our_gps$rowid[x], long = our_gps$long[x], lat = our_gps$lat[x])
+
+tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "grey90") + 
+  geom_point(data = our_gps %>% select(long, lat), aes(x = long, y = lat), size = 0.25, inherit.aes = FALSE) +
+  geom_path(data = paths %>% select(long, lat), aes(x = long, y = lat), inherit.aes = FALSE, colour = "grey30", alpha = 0.5 ) + 
+  coord_quickmap() +
+#  labs(x = paste0("Tour length: ", tour_length(tour_line), " miles.")) +
+  labs(x = "") +
+  theme(axis.title.x = element_text())
+tour_map
+```
+
+## The Two Cases
+
+@tbl-examples summarises the examples from the last two subsections.
+
+|                 |    Betting    |     Salesman     |
+|-----------------|:-------------:|:----------------:|
+| Best outcome    | Bet on winner |  Shortest path   |
+| Decision theory |     Pass      |  Shortest path   |
+| Best advice     |     Pass      | Learn algorithms |
+
+: How three approaches to decision theory handle the two cases {#tbl-examples}
+
+The first row says which action would produce the best outcome in the two cases. The third row says what advice one ought give someone who had to choose in the two cases. And the middle row says what all the decision theories say about the two cases. Notably, it agrees with neither the first nor third row. Decision theory is neither in the business of saying what will produce the best result, nor with giving the most useful advice. So what is it doing?
