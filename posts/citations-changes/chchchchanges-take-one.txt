@@ -32,27 +32,15 @@ image: "mind_ogimage.png"
 ---
 
 ```{r}
-#| label: packages
-#| cache: false
-
-require(tidyverse)
-require(knitr)
-require(slider)
-```
-
-```{r}
 #| label: loader
 #| cache: true
 
+# Find Rise and Fall
+require(tidyverse)
+
 load("/Users/weath/Documents/citations-2025/philo_bib.RData")
 load("/Users/weath/Documents/citations-2025/philo_cite.RData")
-```
 
-```{r}
-#| label: basic-setup
-#| cache: true
-
- year reference
 philo_bib <- philo_bib %>%
   select(-rowid) %>%
   group_by(year) %>%
@@ -62,7 +50,6 @@ philo_bib <- philo_bib %>%
   rename(wos_id = id,
          id = unique_id)
 
-# Add this id to citation tibble, and add years to that tibble
 philo_cite <- philo_cite %>%
   left_join(philo_bib %>% select(old = id, wos_id), by = c("refs" = "wos_id")) %>%
   left_join(philo_bib %>% select(new = id, wos_id), by = c("id" = "wos_id")) %>%
@@ -84,18 +71,10 @@ philo_cite <- philo_cite %>%
   )
   )
 
-# Count citations by year
-year_citations <- philo_cite |>
-  group_by(new_year) |>
-  tally(name = "all_citations")
-
-# Count citations by article
 citation_count <- philo_cite |>
   group_by(old) |>
   tally(name = "citations")
 
-# Add number of citations back to philo_bib
-# Remember to add extra line for 0s; they are NA after the join
 philo_bib <- philo_bib |>
   left_join(
     select(
@@ -106,128 +85,121 @@ philo_bib <- philo_bib |>
   ) |>
   replace_na(list(citations = 0))
 
-# This tibble does two things
-# First, it counts how many articles have N cites, for each N
-# Second, it counts how many articles have at least N cites
 how_many_cites <- philo_bib |>
   group_by(citations) |>
   tally(name = "article_count") |>
   arrange(-citations) |>
   mutate(running_articles = cumsum(article_count))
-```
 
-```{r}
-#| label: high-cites
-#| cache: false
 
-# What we'll count as a widely cited article for this study
+
+crossyear_table <- philo_cite |>
+  group_by(old_year, new_year) |>
+  tally(name = "citations")
+
+crossyear_cites <- function(x, y){
+  filter(crossyear_table,
+         old_year == x,
+         new_year == y)$citations
+}
+
+before_and_after <- function(x, y){
+  before <- (
+    filter(
+      crossyear_table,
+      old_year == x,
+      new_year <= y
+    ) |>
+      summarise(c = sum(citations))
+  )$c
+  after <- (
+    filter(
+      crossyear_table,
+      old_year == x,
+      new_year > y
+    ) |>
+      summarise(c = sum(citations))
+  )$c
+  before / (before + after)
+}
+
+before_cites  <- function(x, y){
+  (
+    filter(
+      crossyear_table,
+      old_year == x,
+      new_year <= y
+    ) |>
+      summarise(c = sum(citations))
+  )$c
+}
+
+after_cites  <- function(x, y){
+  (
+    filter(
+      crossyear_table,
+      old_year == x,
+      new_year > y
+    ) |>
+      summarise(c = sum(citations))
+  )$c
+}
+
 high_cite_cutoff <- 50
 
-# Filter philo_bib down to the widely cited
 highly_cited <- philo_bib |>
-  filter(citations >= high_cite_cutoff) 
-
-# For each article in highly_cited, work out how often it is cited each year
-# The complete line is to allow for 0s
-# Then comapre that to how many cites there are in general that year
-cites_high_with_age <- philo_cite |>
-  filter(old %in% highly_cited$id) |>
-  group_by(old, old_year, new_year) |>
-  tally(name = "article_citations") |>
-  ungroup() |>
-  complete(nesting(old, old_year), new_year, fill = list(article_citations = 0)) |> # Nesting because old_year goes with old
-  filter(new_year >= old_year) |>
-  mutate(age = new_year - old_year) |>
-  left_join(year_citations, by = "new_year" ) |>
-  mutate (cite_per_k = 1000 * article_citations/all_citations) |>
-  group_by(old) |>
-  arrange(new_year) |>
-  mutate(cites_through_year = cumsum(article_citations))
-
-# For every cutoff between 5 years after publication and 2018, add a row for that cutoff
-highly_cited <- highly_cited |>
+  filter(citations >= high_cite_cutoff) |>
   expand(id, crossing = 1975:2018) |>
   left_join(philo_bib, by = "id") |>
-  filter(crossing >= year + 7,
+  filter(crossing >= year + 5,
          year >= 1970)
 
-rev_cum_citations <- year_citations |>
-  filter(new_year <= 2022) |>
-  rename(this_year = all_citations) |>
-  arrange(
-    desc(
-      new_year
-    )) |>
-  mutate(this_and_next_year = slide_int(this_year, sum, .before = 1)) |>
-  mutate(citations_onward = cumsum(this_year))
+year_probs <- tibble(
+  old_year = 1970:2022,
+  cutoff = 1970:2022) |> 
+  expand(old_year, cutoff) |>
+  filter(cutoff >= old_year + 5)|>
+  filter(cutoff <= 2018)|>
+  rowwise() |>
+  mutate(before = before_cites(old_year, cutoff),
+         after = after_cites(old_year, cutoff))
 
-prop_finder <- tibble(
-  pub_year = 1970:2022,
-  cite_year = 1970:2022
-) |>
-  expand(pub_year, cite_year) |>
-  filter(cite_year >= pub_year + 7,
-         cite_year <= 2018) |>
-  left_join(
-    select(rev_cum_citations,
-           pub_year = new_year,
-           avail_citations = citations_onward),
-    by = "pub_year"
-  ) |>
-  left_join(
-    select(rev_cum_citations,
-           cite_year = new_year,
-           cite_year_onwards = citations_onward),
-    by = "cite_year"
-  ) |>
-  left_join(
-    select(rev_cum_citations,
-           cite_year = new_year,
-           cite_year_itself = this_year),
-    by = "cite_year"
-  ) |>
-  left_join(
-    select(rev_cum_citations,
-           pub_year = new_year,
-           early_window = this_and_next_year),
-    by = "pub_year"
-  ) |>
-  mutate(late = cite_year_onwards - cite_year_itself,
-         early = avail_citations - late - early_window,
-         prop_early = early/(early + late)) 
-```
-
-
-
-```{r}
-#| label: bloomers
-#| cache: false
 highly_cited_analysis <- highly_cited |>
-  left_join(
-    select(prop_finder,
-           year = pub_year,
-           crossing = cite_year,
-           prop_early),
-            by = c("year", "crossing")) |>
-  left_join(
-    select(
-      cites_high_with_age,
-      id = old,
-      crossing = new_year,
-      early = cites_through_year
-    ), by = c("id", "crossing")) |>
-    mutate(early_prob = pbinom(
-      q = early,
-      size = citations,
-      prob = prop_early,
-      log.p = TRUE))
+  left_join(year_probs,
+            by = c(
+              "year" = "old_year",
+              "crossing" = "cutoff"
+            )) |>
+  rename(year_before = before,
+         year_after = after) |>
+  ungroup() |>
+  rowwise() |>
+  mutate(cites_before = nrow(
+    filter(
+      philo_cite,
+      old == id,
+      new_year <= crossing
+  ))) |>
+  mutate(cites_after = citations - cites_before)
+
+highly_cited_analysis <- highly_cited_analysis |>
+  mutate(bib = paste0("@",
+                      sub(":","",wos_id)))
+
+highly_cited_analysis <- highly_cited_analysis |>
+  mutate(early_prob = pbinom(
+    q = cites_before,
+    size = citations,
+    prob = year_before/(year_before + year_after),
+    log.p = TRUE))
 
 late_bloomers <- highly_cited_analysis |>
-  filter(early_prob < -4) |>
+  filter(early_prob < -10) |>
   ungroup() |>
   group_by(id) |>
   slice_min(order_by = early_prob,
             n = 1) |>
+  ungroup() |>
   arrange(early_prob) |>
   mutate(early_prob = early_prob/log(10))
 
@@ -236,54 +208,57 @@ bloom_year <- late_bloomers |>
   group_by(crossing) |>
   tally()
 
-
-early_bloomers <- highly_cited |>
-  left_join(
-    select(prop_finder,
-           year = pub_year,
-           crossing = cite_year,
-           prop_early),
-    by = c("year", "crossing")) |>
-  left_join(
-    select(
-      cites_high_with_age,
-      id = old,
-      crossing = new_year,
-      early = cites_through_year
-    ), by = c("id", "crossing")) |>
+highly_cited_analysis <- highly_cited_analysis |>
   mutate(late_prob = pbinom(
-    q = citations - early,
+    q = citations - cites_before,
     size = citations,
-    prob = 1 - prop_early,
-    log.p = TRUE))|>
-  filter(late_prob < -4) |>
+    prob = year_after/(year_before + year_after),
+    lower.tail = TRUE,
+    log.p = TRUE))
+
+early_bloomers <- highly_cited_analysis |>
+  filter(late_prob < -5) |>
   ungroup() |>
   group_by(id) |>
   slice_min(order_by = late_prob,
             n = 1) |>
+  ungroup() |>
   arrange(late_prob) |>
   mutate(late_prob = late_prob/log(10))
 ```
 
-The citation history of the typical philosophy paper is nasty, brutish, and short. If the paper gets cited at all, it gets most of those citations within a few years of publication, then exits, gracefully or not, into history. But a few papers buck this trend. Despite not getting a particularly large amount of attention when they are first published, they become widely discussed some time later. I'll call these papers _late bloomers_. This paper identifies some of these, and looks at what they can tell us about the history of very recent philosophy.
+```{r}
+#| label: examples
+#| cache: false
+first_ex <- 2
+second_ex <- 4
 
-The opposite of a late bloomer is an early bloomer, a paper that gets most of its citations out of the way quickly. Most papers are early bloomers, but some are more extreme than others. This could be for several reasons. Historically, when academics often had better access to books than journals, a paper could cease to be cited simply because it was reprinted in an anthology. But like with the late bloomers, looking at the early bloomers collectively can tell us something about the history of philosophy.
+ex1_title <- late_bloomers$title[first_ex]
+ex1_bib <- late_bloomers$bib[first_ex]
+ex1_crossing <- late_bloomers$crossing[first_ex]
+ex1_year <- late_bloomers$year[first_ex]
+ex1_latecite <- late_bloomers$cites_after[first_ex]
+ex1_earlycite <- late_bloomers$cites_before[first_ex]
+ex1_allcite <- late_bloomers$citations[first_ex]
+ex1_percentafter <- scales::percent(ex1_latecite / late_bloomers$citations[first_ex])
+ex1_yearbefore <- late_bloomers$year_before[first_ex]
+ex1_yearafter <- late_bloomers$year_after[first_ex]
+ex1_exppercent <- scales::percent(ex1_yearbefore / (ex1_yearbefore + ex1_yearafter), accuracy = 1)
+ex1_earlyprob <- late_bloomers$early_prob[first_ex]
 
-Many of the late bloomers concern social, or at least interpersonal, issues. This reflects the rise in importance in social philosophy (which I'll hereafter understand to include interpersonal), especially since 2018. The early bloomers cover a wider range of topics, but one frequent pattern is that they reflect the presuppositions of the modal era in analytic philosophy.
-
-_Modal era_ is Ted Sider's term for a particular era in metaphysics [@Sider2020 x]. I'm using it slightly more broadly, to pick out a trend across philosophy as a whole. But I'm mostly following Sider in taking it to pick out a period, very roughly 1970 to 2010, where issues about modality became central to philosophy.
-
-There are two particularly striking things about the modal era. 
-
-The slightly less striking is that it became more or less universally accepted that it was at least legimate to use modal and nomic notions to set out philosophical theories. The modal and nomic notions most commonly used were necessity, causation, and counterfactuals. The phenomena I want to stress here can be brought out by thinking about the reception to the counterfactual based theories of knowledge and mental content defended by Robert @Nozick1979 and Jerry @Fodor1987 respectively.
-
-There are several reasons you might object to using counterfactuals here. You might say, with some positivists, that counterfactual claims are unverifiable and hence meaningless. You might say, with some post-positivists, that counterfactuals are so confused and confusing that the resulting philosophical theories will not be at all enlightening. You might say, and this is a more common complaint since the modal era, that counterfactuals are so context-sensitive, and subject to human interests, that they are too subjective to use in an account of objective things like knowledge and content. Although Nozick's and Fodor's theories were very widely discussed at the time, and very widely rejected, they were not largely rejected for any of these reasons. Even the critics, and there were many critics, typically accepted that these were reasonable tools for Nozick and Fodor to use. They just thought the theories were wrong. It's that concession that I want to highlight; it tells us something about the acceptance of modality in philosophy.
-
-The more striking thing is how many theories were understood to simply be modal claims. Origin essentialism, as in @Kripke1972, was simply identified with a necessity of origins claim. Whether mental content was 'in the head' was simply identified with the truth or falsity of a modal supervenience claim. And, this will be the one we talk about the most, whether the world is entirely physical was also identified with some kind of supervenience claim. This last one is fascinating because there was such widespread agreement that if physicalism was anything, it was some kind of supervenience claim. This agreement persisted in the face of disagreement about (a) which supervenience claim it was, (b) whether physicalism was even true, and (c) whether physicalism was even an intelligible claim.
-
-What we see between these two 'striking things' is that philosophers thought it was almost always permissible to give a modal answer to a philosophical question, and often enough, it was obligatory. Very few philosophers endorsed the ontology of modality Lewis put forward in _Plurality_, but they by and large agreed with him that modal space was "A Philosopher's Paradise" [@Lewis1986].
-
-Over the last two decades, all that has changed. We'll see this in the early bloomers data, espeically with the citation history of papers particularly on physicalism and on content. In metaphysics, it has become somewhat common to use grounding notions to do the work that used to be done by modality. But this does not mean we're in a grounding era in philosophy, or even, as Sider puts it, a 'post-modal' era. Rather
+ex2_title <- late_bloomers$title[second_ex]
+ex2_bib <- late_bloomers$bib[second_ex]
+ex2_crossing <- late_bloomers$crossing[second_ex]
+ex2_year <- late_bloomers$year[second_ex]
+ex2_latecite <- late_bloomers$cites_after[second_ex]
+ex2_earlycite <- late_bloomers$cites_before[second_ex]
+ex2_allcite <- late_bloomers$citations[second_ex]
+ex2_percentafter <- scales::percent(ex2_latecite / late_bloomers$citations[second_ex])
+ex2_yearbefore <- late_bloomers$year_before[second_ex]
+ex2_yearafter <- late_bloomers$year_after[second_ex]
+ex2_exppercent <- scales::percent(ex2_yearbefore / (ex2_yearbefore + ex2_yearafter), accuracy = 1)
+ex2_earlyprob <- late_bloomers$early_prob[second_ex]
+```
 
 "`r ex1_title`" [`r ex1_bib`] gets talked about a lot in philosophy journals. In a study I did of one hundred prominent philosophy journals, it has been cited `r ex1_latecite` times after `r ex1_crossing`. That's a lot, and it's a lot more than you might have expected in `r ex1_crossing`, at which time it had been cited `r ex1_earlycite` times. Here's one way to get a sense of how much more.
 
