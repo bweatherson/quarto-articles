@@ -1,0 +1,3397 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  10pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+    \setsansfont[]{Europa-Bold}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=6.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Changes in Citation Patters
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\rule{\linewidth}{.5pt}\par\smallskip
+ \noindent }
+ {\par\noindent\rule{\linewidth}{.5pt}\endquotation}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{sidenotes}{}{\usepackage{sidenotes}}
+\@ifpackageloaded{marginnote}{}{\usepackage{marginnote}}
+\makeatother
+
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Changes in Citation Patters},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Changes in Citation Patters}
+\author{Brian Weatherson}
+\date{2024}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Which journal articles are cited surprisingly often in recent times,
+given how often they were cited soon after publication? Conversely,
+which articles have a lot more citations soon after publication than
+you'd expect from their current prominence. This note goes over some
+data on these questions.
+\end{abstract}
+
+
+\setstretch{1.1}
+This note goes over some changes in who and what have been cited over
+time in philosophy journals. As noted in
+\href{https://brian.weatherson.org/quarto/posts/citations-raw-data/citations.html}{a
+previous post}, I'm looking at citations between one hundred philosophy
+journals. That post has lists of which journals I'm looking at, when
+they started being indexed, and some notes on the methodology.
+
+The focus here is on who and what were most cited in every decade, and
+from every decade. So for every decade from the 1970s to 2020s, I look
+at all the papers and all the authors from that decade, and then looking
+at every decade from that time to the present (excluding 1970s to
+itself, where the data is sparse), I look at (a) which were the 20 most
+cited papers, and (b) which were the 20 most cited authors. Without
+further ado\ldots{}
+
+\section{1970s}\label{s}
+
+\begin{table}
+
+\caption{\label{tbl-articles-1970s}Most cited articles from the 1970s in
+various decades.}
+
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1970s-1}1980s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Article\\
+\midrule
+1 & Frankfurt (\citeproc{ref-10.2307_2024717}{1971})\\
+2 & Perry (\citeproc{ref-WOSA1979HE39600001}{1979})\\
+3 & Kripke (\citeproc{ref-WOSA1975BF60000005}{1975})\\
+4 & Goldman (\citeproc{ref-WOSA1976CP00100001}{1976})\\
+5 & Lewis (\citeproc{ref-10.2307_2025310}{1973})\\
+5 & Daniels (\citeproc{ref-WOSA1979GW47300003}{1979})\\
+7 & Nagel (\citeproc{ref-WOSA1974U469700001}{1974})\\
+7 & Lewis (\citeproc{ref-WOSA1979JB14500003}{1979b})\\
+9 & Field (\citeproc{ref-10.2307_2024879}{1972})\\
+9 & Kim (\citeproc{ref-WOSA1978EL93700009}{1978})\\
+11 & Lewis (\citeproc{ref-WOSA1976BZ95100001}{1976b})\\
+12 & Lewis (\citeproc{ref-WOSA1979JC64200001}{1979a})\\
+13 & Benacerraf (\citeproc{ref-10.2307_2025075}{1973})\\
+13 & D. C. Dennett (\citeproc{ref-10.2307_2025382}{1971})\\
+15 & Perry (\citeproc{ref-WOSA1977EA01800002}{1977})\\
+16 & Thomson (\citeproc{ref-WOSA1971Y116900003}{1971})\\
+16 & Cartwright (\citeproc{ref-WOSA1979JB14500001}{1979})\\
+18 & van Fraassen (\citeproc{ref-10.2307_2024762}{1973})\\
+18 & Putnam (\citeproc{ref-10.2307_2025079}{1973})\\
+18 & Kim (\citeproc{ref-10.2307_2025096}{1973})\\
+18 & Burge (\citeproc{ref-WOSA1977DH28800002}{1977})\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1970s-2}1990s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Frankfurt (\citeproc{ref-10.2307_2024717}{1971}) & =\\
+2 & Nagel
+(\citeproc{ref-WOSA1974U469700001}{1974}) & \textcolor[RGB]{34,178,34}{▲5}\\
+3 & Perry
+(\citeproc{ref-WOSA1979HE39600001}{1979}) & \textcolor[RGB]{178,34,34}{▼1}\\
+4 & Cummins
+(\citeproc{ref-WOSA1975BF60100001}{1975}) & \textcolor[RGB]{34,178,34}{New}\\
+5 & Lewis (\citeproc{ref-10.2307_2025310}{1973}) & =\\
+5 & Kripke
+(\citeproc{ref-WOSA1975BF60000005}{1975}) & \textcolor[RGB]{178,34,34}{▼2}\\
+7 & Goldman
+(\citeproc{ref-WOSA1976CP00100001}{1976}) & \textcolor[RGB]{178,34,34}{▼3}\\
+8 & Lewis
+(\citeproc{ref-WOSA1979HJ57600007}{1979c}) & \textcolor[RGB]{34,178,34}{New}\\
+9 & Perry
+(\citeproc{ref-WOSA1977EA01800002}{1977}) & \textcolor[RGB]{34,178,34}{▲6}\\
+10 & M. Friedman
+(\citeproc{ref-10.2307_2024924}{1974}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & McDowell
+(\citeproc{ref-WOSA1979JT33600005}{1979}) & \textcolor[RGB]{34,178,34}{New}\\
+12 & Dretske
+(\citeproc{ref-WOSA1977DN52600007}{1977}) & \textcolor[RGB]{34,178,34}{New}\\
+13 & Benacerraf (\citeproc{ref-10.2307_2025075}{1973}) & =\\
+13 & Wright
+(\citeproc{ref-WOSA1973P242100001}{1973}) & \textcolor[RGB]{34,178,34}{New}\\
+15 & Hull
+(\citeproc{ref-WOSA1978FR68900001}{1978}) & \textcolor[RGB]{34,178,34}{New}\\
+15 & Lewis
+(\citeproc{ref-WOSA1979JB14500003}{1979b}) & \textcolor[RGB]{178,34,34}{▼8}\\
+17 & Lewis
+(\citeproc{ref-WOSA1979JC64200001}{1979a}) & \textcolor[RGB]{178,34,34}{▼5}\\
+18 & Lewis
+(\citeproc{ref-WOSA1976BZ95100001}{1976b}) & \textcolor[RGB]{178,34,34}{▼7}\\
+19 & Grandy
+(\citeproc{ref-10.2307_2025108}{1973}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & Stocker
+(\citeproc{ref-WOSA1976CB49000002}{1976}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & Kim
+(\citeproc{ref-WOSA1978EL93700009}{1978}) & \textcolor[RGB]{178,34,34}{▼10}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1970s-3}2000s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Nagel
+(\citeproc{ref-WOSA1974U469700001}{1974}) & \textcolor[RGB]{34,178,34}{▲1}\\
+2 & Frankfurt
+(\citeproc{ref-10.2307_2024717}{1971}) & \textcolor[RGB]{178,34,34}{▼1}\\
+3 & Kripke
+(\citeproc{ref-WOSA1975BF60000005}{1975}) & \textcolor[RGB]{34,178,34}{▲2}\\
+3 & Lewis
+(\citeproc{ref-WOSA1979HJ57600007}{1979c}) & \textcolor[RGB]{34,178,34}{▲5}\\
+5 & Dretske
+(\citeproc{ref-WOSA1970ZE33800001}{1970}) & \textcolor[RGB]{34,178,34}{New}\\
+5 & Cummins
+(\citeproc{ref-WOSA1975BF60100001}{1975}) & \textcolor[RGB]{178,34,34}{▼1}\\
+7 & Lewis
+(\citeproc{ref-WOSA1979JB14500003}{1979b}) & \textcolor[RGB]{34,178,34}{▲8}\\
+8 & Perry
+(\citeproc{ref-WOSA1979HE39600001}{1979}) & \textcolor[RGB]{178,34,34}{▼5}\\
+9 & Goldman
+(\citeproc{ref-WOSA1976CP00100001}{1976}) & \textcolor[RGB]{178,34,34}{▼2}\\
+10 & Lewis
+(\citeproc{ref-10.2307_2025310}{1973}) & \textcolor[RGB]{178,34,34}{▼5}\\
+11 & Lewis
+(\citeproc{ref-WOSA1979JC64200001}{1979a}) & \textcolor[RGB]{34,178,34}{▲6}\\
+12 & McDowell
+(\citeproc{ref-WOSA1979JT33600005}{1979}) & \textcolor[RGB]{178,34,34}{▼1}\\
+13 & Lewis
+(\citeproc{ref-WOSA1970ZE32700001}{1970}) & \textcolor[RGB]{34,178,34}{New}\\
+13 & Singer
+(\citeproc{ref-WOSA1972Z066400001}{1972}) & \textcolor[RGB]{34,178,34}{New}\\
+15 & M. Friedman
+(\citeproc{ref-10.2307_2024924}{1974}) & \textcolor[RGB]{178,34,34}{▼5}\\
+16 & Watson
+(\citeproc{ref-WOSA1975W282300001}{1975}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Lewis
+(\citeproc{ref-WOSA1976BZ95100001}{1976b}) & \textcolor[RGB]{34,178,34}{▲1}\\
+18 & Benacerraf
+(\citeproc{ref-10.2307_2025075}{1973}) & \textcolor[RGB]{178,34,34}{▼5}\\
+19 & Thomson
+(\citeproc{ref-WOSA1971Y116900003}{1971}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & Gibbard
+(\citeproc{ref-WOSA1975AU08300005}{1975}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & Dretske
+(\citeproc{ref-WOSA1977DN52600007}{1977}) & \textcolor[RGB]{178,34,34}{▼7}\\
+19 & Tooley
+(\citeproc{ref-WOSA1977EQ83600001}{1977}) & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1970s-4}2010s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Nagel (\citeproc{ref-WOSA1974U469700001}{1974}) & =\\
+2 & Frankfurt (\citeproc{ref-10.2307_2024717}{1971}) & =\\
+2 & Singer
+(\citeproc{ref-WOSA1972Z066400001}{1972}) & \textcolor[RGB]{34,178,34}{▲11}\\
+4 & Lewis
+(\citeproc{ref-10.2307_2025310}{1973}) & \textcolor[RGB]{34,178,34}{▲6}\\
+5 & Lewis
+(\citeproc{ref-WOSA1979JC64200001}{1979a}) & \textcolor[RGB]{34,178,34}{▲6}\\
+6 & Perry
+(\citeproc{ref-WOSA1979HE39600001}{1979}) & \textcolor[RGB]{34,178,34}{▲2}\\
+7 & Kripke
+(\citeproc{ref-WOSA1975BF60000005}{1975}) & \textcolor[RGB]{178,34,34}{▼4}\\
+8 & Goldman
+(\citeproc{ref-WOSA1976CP00100001}{1976}) & \textcolor[RGB]{34,178,34}{▲1}\\
+9 & Lewis
+(\citeproc{ref-WOSA1979HJ57600007}{1979c}) & \textcolor[RGB]{178,34,34}{▼6}\\
+9 & Lewis
+(\citeproc{ref-WOSA1979JB14500003}{1979b}) & \textcolor[RGB]{178,34,34}{▼2}\\
+11 & Dretske
+(\citeproc{ref-WOSA1970ZE33800001}{1970}) & \textcolor[RGB]{178,34,34}{▼6}\\
+12 & Cummins
+(\citeproc{ref-WOSA1975BF60100001}{1975}) & \textcolor[RGB]{178,34,34}{▼7}\\
+13 & Benacerraf
+(\citeproc{ref-10.2307_2025075}{1973}) & \textcolor[RGB]{34,178,34}{▲5}\\
+14 & M. Friedman
+(\citeproc{ref-10.2307_2024924}{1974}) & \textcolor[RGB]{34,178,34}{▲1}\\
+15 & Darwall
+(\citeproc{ref-WOSA1977EA35800003}{1977}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Watson (\citeproc{ref-WOSA1975W282300001}{1975}) & =\\
+17 & Lewis
+(\citeproc{ref-WOSA1970ZE32700001}{1970}) & \textcolor[RGB]{178,34,34}{▼4}\\
+17 & Thomson
+(\citeproc{ref-WOSA1971Y116900003}{1971}) & \textcolor[RGB]{34,178,34}{▲2}\\
+19 & Priest
+(\citeproc{ref-WOSA1979GW33200004}{1979}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & McDowell
+(\citeproc{ref-WOSA1979JT33600005}{1979}) & \textcolor[RGB]{178,34,34}{▼8}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1970s-5}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Nagel (\citeproc{ref-WOSA1974U469700001}{1974}) & =\\
+2 & Lewis
+(\citeproc{ref-WOSA1979HJ57600007}{1979c}) & \textcolor[RGB]{34,178,34}{▲7}\\
+3 & Singer
+(\citeproc{ref-WOSA1972Z066400001}{1972}) & \textcolor[RGB]{178,34,34}{▼1}\\
+4 & Lewis
+(\citeproc{ref-WOSA1979JC64200001}{1979a}) & \textcolor[RGB]{34,178,34}{▲1}\\
+5 & Kripke
+(\citeproc{ref-WOSA1975BF60000005}{1975}) & \textcolor[RGB]{34,178,34}{▲2}\\
+6 & Lewis
+(\citeproc{ref-10.2307_2025310}{1973}) & \textcolor[RGB]{178,34,34}{▼2}\\
+7 & Goldman
+(\citeproc{ref-WOSA1976CP00100001}{1976}) & \textcolor[RGB]{34,178,34}{▲1}\\
+8 & Lewis
+(\citeproc{ref-WOSA1979JB14500003}{1979b}) & \textcolor[RGB]{34,178,34}{▲1}\\
+9 & Frankfurt
+(\citeproc{ref-10.2307_2024717}{1971}) & \textcolor[RGB]{178,34,34}{▼7}\\
+10 & Priest
+(\citeproc{ref-WOSA1979GW33200004}{1979}) & \textcolor[RGB]{34,178,34}{▲9}\\
+11 & Darwall
+(\citeproc{ref-WOSA1977EA35800003}{1977}) & \textcolor[RGB]{34,178,34}{▲4}\\
+12 & Lewis
+(\citeproc{ref-WOSA1976BZ95100001}{1976b}) & \textcolor[RGB]{34,178,34}{New}\\
+12 & Perry
+(\citeproc{ref-WOSA1979HE39600001}{1979}) & \textcolor[RGB]{178,34,34}{▼6}\\
+14 & Cummins
+(\citeproc{ref-WOSA1975BF60100001}{1975}) & \textcolor[RGB]{178,34,34}{▼2}\\
+15 & Dretske
+(\citeproc{ref-WOSA1970ZE33800001}{1970}) & \textcolor[RGB]{178,34,34}{▼4}\\
+16 & Lewis
+(\citeproc{ref-WOSA1976BF01500006}{1976a}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Lewis (\citeproc{ref-WOSA1970ZE32700001}{1970}) & =\\
+18 & Thomson
+(\citeproc{ref-WOSA1971Y116900003}{1971}) & \textcolor[RGB]{178,34,34}{▼1}\\
+19 & Benacerraf
+(\citeproc{ref-10.2307_2025075}{1973}) & \textcolor[RGB]{178,34,34}{▼6}\\
+20 & M. Friedman
+(\citeproc{ref-10.2307_2024924}{1974}) & \textcolor[RGB]{178,34,34}{▼6}\\
+20 & Lewis
+(\citeproc{ref-WOSA1978ER30500004}{1978}) & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+\begin{table}
+
+\caption{\label{tbl-authors-1970s}Most cited authors from the 1970s in
+various decades.}
+
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1970s-1}1980s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Author\\
+\midrule
+1 & David Lewis\\
+2 & Tyler Burge\\
+3 & John Perry\\
+4 & Hartry Field\\
+5 & Jaegwon Kim\\
+6 & Alvin I. Goldman\\
+7 & Harry G. Frankfurt\\
+8 & Kendall L. Walton\\
+9 & Saul Kripke\\
+10 & Fred Dretske\\
+11 & Thomas Nagel\\
+12 & Hector-Neri Castañeda\\
+12 & Norman Daniels\\
+14 & Richard Rorty\\
+15 & Judith Jarvis Thomson\\
+16 & Robert Merrihew Adams\\
+17 & Bas C. van Fraassen\\
+18 & Gilbert Harman\\
+18 & Philip Kitcher\\
+20 & Gary Watson\\
+20 & William P. Alston\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1970s-2}1990s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & John Perry & \textcolor[RGB]{34,178,34}{▲1}\\
+3 & Harry G. Frankfurt & \textcolor[RGB]{34,178,34}{▲4}\\
+3 & Hartry Field & \textcolor[RGB]{34,178,34}{▲1}\\
+5 & Thomas Nagel & \textcolor[RGB]{34,178,34}{▲6}\\
+5 & Tyler Burge & \textcolor[RGB]{178,34,34}{▼3}\\
+7 & Fred Dretske & \textcolor[RGB]{34,178,34}{▲3}\\
+8 & Robert Cummins & \textcolor[RGB]{34,178,34}{New}\\
+9 & Alvin I. Goldman & \textcolor[RGB]{178,34,34}{▼3}\\
+10 & Michael Stocker & \textcolor[RGB]{34,178,34}{New}\\
+11 & Saul Kripke & \textcolor[RGB]{178,34,34}{▼2}\\
+12 & Jaegwon Kim & \textcolor[RGB]{178,34,34}{▼7}\\
+13 & John McDowell & \textcolor[RGB]{34,178,34}{New}\\
+14 & Kendall L. Walton & \textcolor[RGB]{178,34,34}{▼6}\\
+15 & Frank Wilson Thompson & \textcolor[RGB]{34,178,34}{New}\\
+16 & Judith Jarvis Thomson & \textcolor[RGB]{178,34,34}{▼1}\\
+16 & Robert Merrihew Adams & =\\
+18 & Gary Watson & \textcolor[RGB]{34,178,34}{▲2}\\
+18 & Larry Wright & \textcolor[RGB]{34,178,34}{New}\\
+18 & Michael Friedman & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1970s-3}2000s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Thomas Nagel & \textcolor[RGB]{34,178,34}{▲3}\\
+3 & Fred Dretske & \textcolor[RGB]{34,178,34}{▲4}\\
+4 & John Perry & \textcolor[RGB]{178,34,34}{▼2}\\
+5 & Harry G. Frankfurt & \textcolor[RGB]{178,34,34}{▼2}\\
+6 & Hartry Field & \textcolor[RGB]{178,34,34}{▼3}\\
+7 & Tyler Burge & \textcolor[RGB]{178,34,34}{▼2}\\
+8 & Alvin I. Goldman & \textcolor[RGB]{34,178,34}{▲1}\\
+9 & Saul Kripke & \textcolor[RGB]{34,178,34}{▲2}\\
+10 & Robert Cummins & \textcolor[RGB]{178,34,34}{▼2}\\
+11 & John McDowell & \textcolor[RGB]{34,178,34}{▲2}\\
+12 & Judith Jarvis Thomson & \textcolor[RGB]{34,178,34}{▲4}\\
+13 & Peter Singer & \textcolor[RGB]{34,178,34}{New}\\
+14 & Kendall L. Walton & =\\
+15 & Gary Watson & \textcolor[RGB]{34,178,34}{▲3}\\
+16 & Michael Stocker & \textcolor[RGB]{178,34,34}{▼6}\\
+17 & Gareth Evans & \textcolor[RGB]{34,178,34}{New}\\
+18 & Robert Merrihew Adams & \textcolor[RGB]{178,34,34}{▼2}\\
+19 & Jaegwon Kim & \textcolor[RGB]{178,34,34}{▼7}\\
+20 & Michael Friedman & \textcolor[RGB]{178,34,34}{▼2}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1970s-4}2010s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Thomas Nagel & =\\
+3 & Harry G. Frankfurt & \textcolor[RGB]{34,178,34}{▲2}\\
+4 & Peter Singer & \textcolor[RGB]{34,178,34}{▲9}\\
+5 & John Perry & \textcolor[RGB]{178,34,34}{▼1}\\
+6 & Fred Dretske & \textcolor[RGB]{178,34,34}{▼3}\\
+7 & Alvin I. Goldman & \textcolor[RGB]{34,178,34}{▲1}\\
+8 & Judith Jarvis Thomson & \textcolor[RGB]{34,178,34}{▲4}\\
+9 & Robert C. Stalnaker & \textcolor[RGB]{34,178,34}{New}\\
+10 & Saul Kripke & \textcolor[RGB]{178,34,34}{▼1}\\
+11 & Tyler Burge & \textcolor[RGB]{178,34,34}{▼4}\\
+12 & Kendall L. Walton & \textcolor[RGB]{34,178,34}{▲2}\\
+13 & Robert Cummins & \textcolor[RGB]{178,34,34}{▼3}\\
+14 & Paul Benacerraf & \textcolor[RGB]{34,178,34}{New}\\
+15 & Gary Watson & =\\
+15 & Gilbert Harman & \textcolor[RGB]{34,178,34}{New}\\
+17 & John McDowell & \textcolor[RGB]{178,34,34}{▼6}\\
+17 & Robert Merrihew Adams & \textcolor[RGB]{34,178,34}{▲1}\\
+19 & Michael Stocker & \textcolor[RGB]{178,34,34}{▼3}\\
+20 & Hartry Field & \textcolor[RGB]{178,34,34}{▼14}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1970s-5}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Thomas Nagel & =\\
+3 & Peter Singer & \textcolor[RGB]{34,178,34}{▲1}\\
+4 & Harry G. Frankfurt & \textcolor[RGB]{178,34,34}{▼1}\\
+5 & Alvin I. Goldman & \textcolor[RGB]{34,178,34}{▲2}\\
+6 & John Perry & \textcolor[RGB]{178,34,34}{▼1}\\
+7 & Fred Dretske & \textcolor[RGB]{178,34,34}{▼1}\\
+8 & Saul Kripke & \textcolor[RGB]{34,178,34}{▲2}\\
+9 & Judith Jarvis Thomson & \textcolor[RGB]{178,34,34}{▼1}\\
+10 & Robert C. Stalnaker & \textcolor[RGB]{178,34,34}{▼1}\\
+11 & Graham Priest & \textcolor[RGB]{34,178,34}{New}\\
+12 & Robert Cummins & \textcolor[RGB]{34,178,34}{▲1}\\
+12 & Stephen L. Darwall & \textcolor[RGB]{34,178,34}{New}\\
+14 & Gilbert Harman & \textcolor[RGB]{34,178,34}{▲1}\\
+15 & Tyler Burge & \textcolor[RGB]{178,34,34}{▼4}\\
+16 & Kendall L. Walton & \textcolor[RGB]{178,34,34}{▼4}\\
+17 & Michael Stocker & \textcolor[RGB]{34,178,34}{▲2}\\
+18 & Paul Benacerraf & \textcolor[RGB]{178,34,34}{▼4}\\
+19 & Hartry Field & \textcolor[RGB]{34,178,34}{▲1}\\
+19 & Michael Friedman & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+The general picture here is largely stability. The biggest change is in
+which Lewis articles get cited at different times. There are fewer
+citations to Frankfurt (\citeproc{ref-10.2307_2024717}{1971}) over time.
+But if I decided that the 1970s started in 1969, so Frankfurt
+(\citeproc{ref-WOSA1969Y444700002}{1969}) was there, we'd see a similar
+pattern to Lewis; the citations to the philosopher stay stable while the
+citations to individual articles vary.
+
+\section{1980s}\label{s-1}
+
+\begin{table}
+
+\caption{\label{tbl-articles-1980s}Most cited articles from the 1980s in
+various decades.}
+
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1980s-1}1980s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Article\\
+\midrule
+1 & Rawls (\citeproc{ref-WOSA1980KH88100001}{1980})\\
+2 & P. M. Churchland (\citeproc{ref-WOSA1981LD54600001}{1981})\\
+3 & Barwise and Cooper (\citeproc{ref-WOSA1981LH67300001}{1981})\\
+4 & Lewis (\citeproc{ref-WOSA1981LW58400001}{1981})\\
+5 & Laudan (\citeproc{ref-WOSA1981LY92900002}{1981})\\
+6 & Marcus (\citeproc{ref-WOSA1980JJ63300001}{1980})\\
+6 & Lewis (\citeproc{ref-WOSA1983RR51600001}{1983})\\
+8 & Daniels (\citeproc{ref-WOSA1980JZ97600005}{1980})\\
+9 & P. S. Churchland (\citeproc{ref-WOSA1980JM77300001}{1980})\\
+9 & Putnam (\citeproc{ref-WOSA1980KJ75900004}{1980})\\
+11 & Block (\citeproc{ref-WOSA1980JW85100004}{1980})\\
+11 & Boër and Lycan (\citeproc{ref-WOSA1980KC84100005}{1980})\\
+11 & Dworkin (\citeproc{ref-WOSA1981MH21100001}{1981b})\\
+11 & Jackson (\citeproc{ref-WOSA1982NH65300003}{1982})\\
+11 & Gupta (\citeproc{ref-WOSA1982NW89300001}{1982})\\
+11 & Rawls (\citeproc{ref-WOSA1985APA8500001}{1985})\\
+17 & Haugeland (\citeproc{ref-WOSA1982NC42600008}{1982})\\
+17 & D. Lackey (\citeproc{ref-WOSA1982NV01500001}{1982})\\
+19 & Maddy (\citeproc{ref-WOSA1980JW85100001}{1980})\\
+19 & Lycan (\citeproc{ref-WOSA1981KZ61400002}{1981})\\
+19 & Dworkin (\citeproc{ref-WOSA1981LU74200001}{1981a})\\
+19 & Sen (\citeproc{ref-WOSA1982MW01200001}{1982})\\
+19 & Kim (\citeproc{ref-WOSA1982NC90700004}{1982})\\
+19 & Kornblith (\citeproc{ref-WOSA1983PZ01000002}{1983})\\
+19 & Eells and Sober (\citeproc{ref-WOSA1983QJ85300002}{1983})\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1980s-2}1990s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Kim
+(\citeproc{ref-WOSA1984TV24600001}{1984}) & \textcolor[RGB]{34,178,34}{New}\\
+2 & Burge
+(\citeproc{ref-WOSA1986AYX3200001}{1986}) & \textcolor[RGB]{34,178,34}{New}\\
+3 & Lewis
+(\citeproc{ref-WOSA1983RR51600001}{1983}) & \textcolor[RGB]{34,178,34}{▲3}\\
+4 & Jackson
+(\citeproc{ref-WOSA1982NH65300003}{1982}) & \textcolor[RGB]{34,178,34}{▲7}\\
+5 & P. M. Churchland
+(\citeproc{ref-WOSA1981LD54600001}{1981}) & \textcolor[RGB]{178,34,34}{▼3}\\
+6 & Railton
+(\citeproc{ref-WOSA1986C044900001}{1986}) & \textcolor[RGB]{34,178,34}{New}\\
+7 & Barwise and Cooper
+(\citeproc{ref-WOSA1981LH67300001}{1981}) & \textcolor[RGB]{178,34,34}{▼4}\\
+8 & Dworkin
+(\citeproc{ref-WOSA1981MH21100001}{1981b}) & \textcolor[RGB]{34,178,34}{▲3}\\
+8 & Rawls
+(\citeproc{ref-WOSA1985APA8500001}{1985}) & \textcolor[RGB]{34,178,34}{▲3}\\
+10 & Millikan
+(\citeproc{ref-WOSA1989AA09400006}{1989b}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & Millikan
+(\citeproc{ref-WOSA1989U850300001}{1989a}) & \textcolor[RGB]{34,178,34}{New}\\
+12 & Jackson and Pettit
+(\citeproc{ref-WOSA1988P549200004}{1988}) & \textcolor[RGB]{34,178,34}{New}\\
+12 & Burge
+(\citeproc{ref-WOSA1988R020000007}{1988}) & \textcolor[RGB]{34,178,34}{New}\\
+14 & Rawls
+(\citeproc{ref-WOSA1980KH88100001}{1980}) & \textcolor[RGB]{178,34,34}{▼13}\\
+15 & Crimmins and Perry
+(\citeproc{ref-WOSA1989CF70700001}{1989}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & van Fraassen
+(\citeproc{ref-WOSA1984SS95000001}{1984}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Kitcher
+(\citeproc{ref-WOSA1981NA08400001}{1981}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Wolf
+(\citeproc{ref-WOSA1982PB73200001}{1982}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & G. A. Cohen
+(\citeproc{ref-WOSA1989AE70300010}{1989}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & Laudan
+(\citeproc{ref-WOSA1981LY92900002}{1981}) & \textcolor[RGB]{178,34,34}{▼15}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1980s-3}2000s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Jackson
+(\citeproc{ref-WOSA1982NH65300003}{1982}) & \textcolor[RGB]{34,178,34}{▲3}\\
+2 & Lewis
+(\citeproc{ref-WOSA1983RR51600001}{1983}) & \textcolor[RGB]{34,178,34}{▲1}\\
+3 & G. A. Cohen
+(\citeproc{ref-WOSA1989AE70300010}{1989}) & \textcolor[RGB]{34,178,34}{▲14}\\
+4 & Burge
+(\citeproc{ref-WOSA1988R020000007}{1988}) & \textcolor[RGB]{34,178,34}{▲8}\\
+5 & Alchourrón, Gärdenfors, and Makinson
+(\citeproc{ref-WOSA1985AKA2200025}{1985}) & \textcolor[RGB]{34,178,34}{New}\\
+6 & Levine
+(\citeproc{ref-WOSA1983SU49200007}{1983}) & \textcolor[RGB]{34,178,34}{New}\\
+7 & P. M. Churchland
+(\citeproc{ref-WOSA1981LD54600001}{1981}) & \textcolor[RGB]{178,34,34}{▼2}\\
+8 & Railton
+(\citeproc{ref-WOSA1986C044900001}{1986}) & \textcolor[RGB]{178,34,34}{▼2}\\
+9 & Laudan
+(\citeproc{ref-WOSA1981LY92900002}{1981}) & \textcolor[RGB]{34,178,34}{▲11}\\
+9 & Boolos
+(\citeproc{ref-WOSA1984TE24500002}{1984}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & Dworkin
+(\citeproc{ref-WOSA1981MH21100001}{1981b}) & \textcolor[RGB]{178,34,34}{▼3}\\
+12 & Kitcher
+(\citeproc{ref-WOSA1981NA08400001}{1981}) & \textcolor[RGB]{34,178,34}{▲5}\\
+13 & Arneson
+(\citeproc{ref-WOSA1989U808000004}{1989}) & \textcolor[RGB]{34,178,34}{New}\\
+14 & Burge
+(\citeproc{ref-WOSA1986AYX3200001}{1986}) & \textcolor[RGB]{178,34,34}{▼12}\\
+15 & Barwise and Cooper
+(\citeproc{ref-WOSA1981LH67300001}{1981}) & \textcolor[RGB]{178,34,34}{▼8}\\
+15 & P. A. Boghossian and Velleman
+(\citeproc{ref-WOSA1989T231400005}{1989}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Rawls
+(\citeproc{ref-WOSA1980KH88100001}{1980}) & \textcolor[RGB]{178,34,34}{▼3}\\
+17 & van Fraassen
+(\citeproc{ref-WOSA1984SS95000001}{1984}) & \textcolor[RGB]{178,34,34}{▼1}\\
+19 & Lewis
+(\citeproc{ref-WOSA1984TQ70900001}{1984}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & Rosenthal
+(\citeproc{ref-WOSA1986C316000003}{1986}) & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1980s-4}2010s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Lewis
+(\citeproc{ref-WOSA1983RR51600001}{1983}) & \textcolor[RGB]{34,178,34}{▲1}\\
+2 & Jackson
+(\citeproc{ref-WOSA1982NH65300003}{1982}) & \textcolor[RGB]{178,34,34}{▼1}\\
+3 & Alchourrón, Gärdenfors, and Makinson
+(\citeproc{ref-WOSA1985AKA2200025}{1985}) & \textcolor[RGB]{34,178,34}{▲2}\\
+4 & Laudan
+(\citeproc{ref-WOSA1981LY92900002}{1981}) & \textcolor[RGB]{34,178,34}{▲5}\\
+5 & G. A. Cohen
+(\citeproc{ref-WOSA1989AE70300010}{1989}) & \textcolor[RGB]{178,34,34}{▼2}\\
+6 & Kitcher
+(\citeproc{ref-WOSA1981NA08400001}{1981}) & \textcolor[RGB]{34,178,34}{▲6}\\
+7 & Levine
+(\citeproc{ref-WOSA1983SU49200007}{1983}) & \textcolor[RGB]{178,34,34}{▼1}\\
+8 & Lewis
+(\citeproc{ref-WOSA1984TQ70900001}{1984}) & \textcolor[RGB]{34,178,34}{▲11}\\
+9 & Railton
+(\citeproc{ref-WOSA1986C044900001}{1986}) & \textcolor[RGB]{178,34,34}{▼1}\\
+10 & Feldman and Conee
+(\citeproc{ref-WOSA1985ANT6600002}{1985}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & van Fraassen
+(\citeproc{ref-WOSA1984SS95000001}{1984}) & \textcolor[RGB]{34,178,34}{▲6}\\
+12 & P. M. Churchland
+(\citeproc{ref-WOSA1981LD54600001}{1981}) & \textcolor[RGB]{178,34,34}{▼5}\\
+13 & S. Cohen
+(\citeproc{ref-WOSA1984TN86300001}{1984}) & \textcolor[RGB]{34,178,34}{New}\\
+14 & Railton
+(\citeproc{ref-WOSA1984SH40600002}{1984}) & \textcolor[RGB]{34,178,34}{New}\\
+14 & Korsgaard
+(\citeproc{ref-WOSA1986AYQ1300001}{1986}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Kavka
+(\citeproc{ref-WOSA1983PX89100011}{1983}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Boolos
+(\citeproc{ref-WOSA1984TE24500002}{1984}) & \textcolor[RGB]{178,34,34}{▼7}\\
+18 & McMullin
+(\citeproc{ref-WOSA1985ARQ5600003}{1985}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & Millikan
+(\citeproc{ref-WOSA1989AA09400006}{1989b}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & Barwise and Cooper
+(\citeproc{ref-WOSA1981LH67300001}{1981}) & \textcolor[RGB]{178,34,34}{▼5}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-articles-1980s-5}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Lewis (\citeproc{ref-WOSA1983RR51600001}{1983}) & =\\
+2 & Jackson (\citeproc{ref-WOSA1982NH65300003}{1982}) & =\\
+3 & Baier
+(\citeproc{ref-WOSA1986AYY3900001}{1986}) & \textcolor[RGB]{34,178,34}{New}\\
+4 & Lewis
+(\citeproc{ref-WOSA1984TQ70900001}{1984}) & \textcolor[RGB]{34,178,34}{▲4}\\
+5 & Railton
+(\citeproc{ref-WOSA1984SH40600002}{1984}) & \textcolor[RGB]{34,178,34}{▲9}\\
+6 & Kitcher (\citeproc{ref-WOSA1981NA08400001}{1981}) & =\\
+7 & Laudan
+(\citeproc{ref-WOSA1981LY92900002}{1981}) & \textcolor[RGB]{178,34,34}{▼3}\\
+8 & Millikan
+(\citeproc{ref-WOSA1989U850300001}{1989a}) & \textcolor[RGB]{34,178,34}{New}\\
+9 & Lewis
+(\citeproc{ref-WOSA1981LW58400001}{1981}) & \textcolor[RGB]{34,178,34}{New}\\
+10 & Alchourrón, Gärdenfors, and Makinson
+(\citeproc{ref-WOSA1985AKA2200025}{1985}) & \textcolor[RGB]{178,34,34}{▼7}\\
+10 & Hardwig
+(\citeproc{ref-WOSA1985ALK4200001}{1985}) & \textcolor[RGB]{34,178,34}{New}\\
+10 & Feldman and Conee (\citeproc{ref-WOSA1985ANT6600002}{1985}) & =\\
+13 & Boolos
+(\citeproc{ref-WOSA1984TE24500002}{1984}) & \textcolor[RGB]{34,178,34}{▲3}\\
+14 & P. M. Churchland
+(\citeproc{ref-WOSA1981LD54600001}{1981}) & \textcolor[RGB]{178,34,34}{▼2}\\
+14 & McGee
+(\citeproc{ref-WOSA1985AQZ7400002}{1985}) & \textcolor[RGB]{34,178,34}{New}\\
+14 & Bogen and Woodward
+(\citeproc{ref-WOSA1988N938600001}{1988}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & G. A. Cohen
+(\citeproc{ref-WOSA1989AE70300010}{1989}) & \textcolor[RGB]{178,34,34}{▼12}\\
+18 & van Fraassen
+(\citeproc{ref-WOSA1984SS95000001}{1984}) & \textcolor[RGB]{178,34,34}{▼7}\\
+18 & Railton
+(\citeproc{ref-WOSA1986C044900001}{1986}) & \textcolor[RGB]{178,34,34}{▼9}\\
+20 & Millikan
+(\citeproc{ref-WOSA1989AA09400006}{1989b}) & \textcolor[RGB]{178,34,34}{▼1}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+\begin{table}
+
+\caption{\label{tbl-authors-1980s}Most cited authors from the 1980s in
+various decades.}
+
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1980s-1}1980s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Author\\
+\midrule
+1 & David Lewis\\
+2 & Paul M. Churchland\\
+3 & Elliot Sober\\
+4 & John Rawls\\
+5 & Patricia S. Churchland\\
+6 & Philip Kitcher\\
+7 & Jon Barwise\\
+8 & Frank Jackson\\
+9 & Terrence Horgan\\
+10 & Jaegwon Kim\\
+11 & Larry Laudan\\
+11 & Peter Gärdenfors\\
+13 & William G. Lycan\\
+14 & Ellery Eells\\
+15 & Robin Cooper\\
+16 & Amartya Sen\\
+16 & Bas C. van Fraassen\\
+16 & Hilary Putnam\\
+19 & Ronald Dworkin\\
+20 & Norman Daniels\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1980s-2}1990s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Philip Kitcher & \textcolor[RGB]{34,178,34}{▲4}\\
+3 & Frank Jackson & \textcolor[RGB]{34,178,34}{▲5}\\
+4 & Tyler Burge & \textcolor[RGB]{34,178,34}{New}\\
+5 & Jaegwon Kim & \textcolor[RGB]{34,178,34}{▲5}\\
+6 & Paul M. Churchland & \textcolor[RGB]{178,34,34}{▼4}\\
+7 & Ruth Garrett Millikan & \textcolor[RGB]{34,178,34}{New}\\
+8 & John Rawls & \textcolor[RGB]{178,34,34}{▼4}\\
+9 & Peter Railton & \textcolor[RGB]{34,178,34}{New}\\
+10 & Elliot Sober & \textcolor[RGB]{178,34,34}{▼7}\\
+11 & Larry Laudan & =\\
+12 & Philip Pettit & \textcolor[RGB]{34,178,34}{New}\\
+13 & Terrence Horgan & \textcolor[RGB]{178,34,34}{▼4}\\
+14 & Robert Pargetter & \textcolor[RGB]{34,178,34}{New}\\
+15 & Bas C. van Fraassen & \textcolor[RGB]{34,178,34}{▲1}\\
+15 & Christine M. Korsgaard & \textcolor[RGB]{34,178,34}{New}\\
+17 & Ronald Dworkin & \textcolor[RGB]{34,178,34}{▲2}\\
+18 & Jerry A. Fodor & \textcolor[RGB]{34,178,34}{New}\\
+19 & Quentin Smith & \textcolor[RGB]{34,178,34}{New}\\
+20 & Susan Wolf & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1980s-3}2000s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Frank Jackson & \textcolor[RGB]{34,178,34}{▲1}\\
+3 & Philip Kitcher & \textcolor[RGB]{178,34,34}{▼1}\\
+4 & Tyler Burge & =\\
+5 & Peter Railton & \textcolor[RGB]{34,178,34}{▲4}\\
+6 & Paul M. Churchland & =\\
+7 & George Boolos & \textcolor[RGB]{34,178,34}{New}\\
+8 & Robert Pargetter & \textcolor[RGB]{34,178,34}{▲6}\\
+9 & Elliot Sober & \textcolor[RGB]{34,178,34}{▲1}\\
+10 & G. A. Cohen & \textcolor[RGB]{34,178,34}{New}\\
+10 & Peter Gärdenfors & \textcolor[RGB]{34,178,34}{New}\\
+12 & Christine M. Korsgaard & \textcolor[RGB]{34,178,34}{▲3}\\
+13 & Larry Laudan & \textcolor[RGB]{178,34,34}{▼2}\\
+13 & Ronald Dworkin & \textcolor[RGB]{34,178,34}{▲4}\\
+13 & Ruth Garrett Millikan & \textcolor[RGB]{178,34,34}{▼6}\\
+16 & David Makinson & \textcolor[RGB]{34,178,34}{New}\\
+16 & Paul A. Boghossian & \textcolor[RGB]{34,178,34}{New}\\
+18 & Jaegwon Kim & \textcolor[RGB]{178,34,34}{▼13}\\
+19 & Martin Davies & \textcolor[RGB]{34,178,34}{New}\\
+20 & William P. Alston & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1980s-4}2010s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Frank Jackson & =\\
+3 & Peter Railton & \textcolor[RGB]{34,178,34}{▲2}\\
+3 & Philip Kitcher & =\\
+5 & Christine M. Korsgaard & \textcolor[RGB]{34,178,34}{▲7}\\
+6 & Peter Gärdenfors & \textcolor[RGB]{34,178,34}{▲4}\\
+7 & Robert Pargetter & \textcolor[RGB]{34,178,34}{▲1}\\
+8 & Stewart Cohen & \textcolor[RGB]{34,178,34}{New}\\
+9 & Larry Laudan & \textcolor[RGB]{34,178,34}{▲4}\\
+10 & Ruth Garrett Millikan & \textcolor[RGB]{34,178,34}{▲3}\\
+11 & Paul M. Churchland & \textcolor[RGB]{178,34,34}{▼5}\\
+12 & Elliot Sober & \textcolor[RGB]{178,34,34}{▼3}\\
+13 & Richard Feldman & \textcolor[RGB]{34,178,34}{New}\\
+14 & Tyler Burge & \textcolor[RGB]{178,34,34}{▼10}\\
+15 & David Makinson & \textcolor[RGB]{34,178,34}{▲1}\\
+16 & James Woodward & \textcolor[RGB]{34,178,34}{New}\\
+17 & Carlos E. Alchourrón & \textcolor[RGB]{34,178,34}{New}\\
+18 & George Boolos & \textcolor[RGB]{178,34,34}{▼11}\\
+19 & G. A. Cohen & \textcolor[RGB]{178,34,34}{▼9}\\
+19 & William P. Alston & \textcolor[RGB]{34,178,34}{▲1}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.20\linewidth}
+
+\subcaption{\label{tbl-authors-1980s-5}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Frank Jackson & =\\
+3 & Peter Railton & =\\
+4 & Philip Kitcher & \textcolor[RGB]{178,34,34}{▼1}\\
+5 & Ruth Garrett Millikan & \textcolor[RGB]{34,178,34}{▲5}\\
+6 & Peter Gärdenfors & =\\
+7 & Vann McGee & \textcolor[RGB]{34,178,34}{New}\\
+8 & Larry Laudan & \textcolor[RGB]{34,178,34}{▲1}\\
+9 & Annette Baier & \textcolor[RGB]{34,178,34}{New}\\
+10 & Christine M. Korsgaard & \textcolor[RGB]{178,34,34}{▼5}\\
+11 & George Boolos & \textcolor[RGB]{34,178,34}{▲7}\\
+12 & Robert Pargetter & \textcolor[RGB]{178,34,34}{▼5}\\
+13 & Richard Feldman & =\\
+14 & Stewart Cohen & \textcolor[RGB]{178,34,34}{▼6}\\
+15 & Tyler Burge & \textcolor[RGB]{178,34,34}{▼1}\\
+16 & Harry G. Frankfurt & \textcolor[RGB]{34,178,34}{New}\\
+17 & James Woodward & \textcolor[RGB]{178,34,34}{▼1}\\
+17 & Paul M. Churchland & \textcolor[RGB]{178,34,34}{▼6}\\
+19 & Earl Conee & \textcolor[RGB]{34,178,34}{New}\\
+19 & Jon Barwise & \textcolor[RGB]{34,178,34}{New}\\
+19 & William P. Alston & =\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+Here there is a massive amount of change over time, and the contrast to
+the 1970s is striking. It's unsurprising that there are changes between
+the first and second columns here. Articles published in the second half
+of the 1980s are not going to have a huge number of citations in the
+1980s. But the changes keep happening, and are rather dramatic.
+
+It's interesting too to note that there are more citations to women in
+the 2020s, even holding fixed the library of articles that are available
+to be cited. I think the drop for Korsgaard citations is just because
+she has more recent work that people are more likely to cite.
+
+\section{1990s}\label{s-2}
+
+\begin{table}
+
+\caption{\label{tbl-articles-1990s}Most cited articles from the 1990s in
+various decades.}
+
+\begin{minipage}{0.25\linewidth}
+
+\subcaption{\label{tbl-articles-1990s-1}1990s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Article\\
+\midrule
+1 & Davidson (\citeproc{ref-WOSA1990EQ84600001}{1990})\\
+2 & Neander (\citeproc{ref-WOSA1991FQ15000002}{1991a})\\
+3 & Crane and Mellor (\citeproc{ref-WOSA1990DA14600002}{1990})\\
+3 & Yablo (\citeproc{ref-WOSA1992JA62400001}{1992})\\
+5 & Daniel C. Dennett (\citeproc{ref-WOSA1991EN62900002}{1991})\\
+6 & Kim (\citeproc{ref-WOSA1990FU75100001}{1990})\\
+6 & Fodor (\citeproc{ref-WOSA1991EN62900001}{1991})\\
+8 & Neander (\citeproc{ref-WOSA1991GR92500005}{1991b})\\
+8 & Kitcher (\citeproc{ref-WOSA1992HF90300002}{1992})\\
+10 & Kitcher (\citeproc{ref-WOSA1990CH71200001}{1990})\\
+10 & Forbes (\citeproc{ref-WOSA1990EB39300002}{1990})\\
+10 & Schiffer (\citeproc{ref-WOSA1992JQ78400001}{1992})\\
+13 & Rosen (\citeproc{ref-WOSA1990DR99100001}{1990})\\
+13 & Groenendijk and Stokhof (\citeproc{ref-WOSA1991EV09800002}{1991})\\
+13 & Burke (\citeproc{ref-WOSA1992HC13100003}{1992})\\
+16 & P. A. Boghossian (\citeproc{ref-WOSA1990CV26800001}{1990})\\
+16 & Tye (\citeproc{ref-WOSA1990EG85000002}{1990})\\
+16 & Egan (\citeproc{ref-WOSA1991FF02900001}{1991})\\
+19 & Jackson and Pettit (\citeproc{ref-WOSA1990CR32400008}{1990})\\
+19 & Laudan (\citeproc{ref-WOSA1990CX46800004}{1990})\\
+19 & Fischer and Ravizza (\citeproc{ref-WOSA1991EV81000003}{1991})\\
+19 & McKinsey (\citeproc{ref-WOSA1991EW83300002}{1991})\\
+19 & Schiffer (\citeproc{ref-WOSA1991EW92800001}{1991})\\
+19 & Falvey and Owens (\citeproc{ref-WOSA1994NP02400004}{1994})\\
+19 & Burke (\citeproc{ref-WOSA1994PD73500006}{1994})\\
+19 & Putnam (\citeproc{ref-WOSA1994PF23100001}{1994})\\
+19 & Chomsky (\citeproc{ref-WOSA1995QH55500001}{1995})\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.25\linewidth}
+
+\subcaption{\label{tbl-articles-1990s-2}2000s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Lewis
+(\citeproc{ref-WOSA1996VY21200001}{1996}) & \textcolor[RGB]{34,178,34}{New}\\
+2 & DeRose
+(\citeproc{ref-WOSA1995RC31600001}{1995}) & \textcolor[RGB]{34,178,34}{New}\\
+3 & Burge
+(\citeproc{ref-WOSA1993ML38000001}{1993}) & \textcolor[RGB]{34,178,34}{New}\\
+4 & Yablo
+(\citeproc{ref-WOSA1992JA62400001}{1992}) & \textcolor[RGB]{178,34,34}{▼1}\\
+5 & Anderson
+(\citeproc{ref-WOS000078432400003}{1999}) & \textcolor[RGB]{34,178,34}{New}\\
+6 & Johnston
+(\citeproc{ref-WOSA1992KC39800002}{1992}) & \textcolor[RGB]{34,178,34}{New}\\
+7 & Clark and Chalmers
+(\citeproc{ref-WOS000073222300002}{1998}) & \textcolor[RGB]{34,178,34}{New}\\
+7 & DeRose
+(\citeproc{ref-WOSA1992KB29500008}{1992}) & \textcolor[RGB]{34,178,34}{New}\\
+7 & C. B. Martin
+(\citeproc{ref-WOSA1994MT56900001}{1994}) & \textcolor[RGB]{34,178,34}{New}\\
+7 & Lewis
+(\citeproc{ref-WOSA1994PM10400005}{1994}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & Block and Stalnaker
+(\citeproc{ref-WOS000084347100001}{1999}) & \textcolor[RGB]{34,178,34}{New}\\
+12 & Lewis
+(\citeproc{ref-WOSA1997WP33800001}{1997}) & \textcolor[RGB]{34,178,34}{New}\\
+13 & Davidson
+(\citeproc{ref-WOSA1990EQ84600001}{1990}) & \textcolor[RGB]{178,34,34}{▼12}\\
+14 & Neander
+(\citeproc{ref-WOSA1991FQ15000002}{1991a}) & \textcolor[RGB]{178,34,34}{▼12}\\
+15 & Field
+(\citeproc{ref-WOSA1994NY27600001}{1994}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Langton and Lewis
+(\citeproc{ref-WOS000073836400005}{1998}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Kim
+(\citeproc{ref-WOS000082592000002}{1999}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Kim
+(\citeproc{ref-WOSA1992HF90400001}{1992}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & Edgington
+(\citeproc{ref-WOSA1995QX94800001}{1995}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & Daniel C. Dennett
+(\citeproc{ref-WOSA1991EN62900002}{1991}) & \textcolor[RGB]{178,34,34}{▼15}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.25\linewidth}
+
+\subcaption{\label{tbl-articles-1990s-3}2010s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Clark and Chalmers
+(\citeproc{ref-WOS000073222300002}{1998}) & \textcolor[RGB]{34,178,34}{▲6}\\
+2 & Lewis
+(\citeproc{ref-WOSA1996VY21200001}{1996}) & \textcolor[RGB]{178,34,34}{▼1}\\
+3 & Anderson
+(\citeproc{ref-WOS000078432400003}{1999}) & \textcolor[RGB]{34,178,34}{▲2}\\
+4 & Lewis
+(\citeproc{ref-WOSA1994PM10400005}{1994}) & \textcolor[RGB]{34,178,34}{▲3}\\
+5 & Joyce
+(\citeproc{ref-WOS000077956100002}{1998}) & \textcolor[RGB]{34,178,34}{New}\\
+5 & Johnston
+(\citeproc{ref-WOSA1992KC39800002}{1992}) & \textcolor[RGB]{34,178,34}{▲1}\\
+5 & DeRose
+(\citeproc{ref-WOSA1995RC31600001}{1995}) & \textcolor[RGB]{178,34,34}{▼3}\\
+8 & Burge
+(\citeproc{ref-WOSA1993ML38000001}{1993}) & \textcolor[RGB]{178,34,34}{▼5}\\
+9 & Yablo
+(\citeproc{ref-WOSA1992JA62400001}{1992}) & \textcolor[RGB]{178,34,34}{▼5}\\
+10 & DeRose
+(\citeproc{ref-WOSA1992KB29500008}{1992}) & \textcolor[RGB]{178,34,34}{▼3}\\
+11 & Lewis
+(\citeproc{ref-WOSA1997WP33800001}{1997}) & \textcolor[RGB]{34,178,34}{▲1}\\
+12 & Broome
+(\citeproc{ref-WOS000084073700005}{1999}) & \textcolor[RGB]{34,178,34}{New}\\
+13 & Edgington
+(\citeproc{ref-WOSA1995QX94800001}{1995}) & \textcolor[RGB]{34,178,34}{▲6}\\
+14 & C. B. Martin
+(\citeproc{ref-WOSA1994MT56900001}{1994}) & \textcolor[RGB]{178,34,34}{▼7}\\
+15 & Jackson
+(\citeproc{ref-WOSA1991FK52800001}{1991}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Ladyman
+(\citeproc{ref-WOS000076086400005}{1998}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Kitcher
+(\citeproc{ref-WOSA1990CH71200001}{1990}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Veltman
+(\citeproc{ref-WOSA1996UV93000001}{1996}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & Neander
+(\citeproc{ref-WOSA1991FQ15000002}{1991a}) & \textcolor[RGB]{178,34,34}{▼5}\\
+20 & Block and Stalnaker
+(\citeproc{ref-WOS000084347100001}{1999}) & \textcolor[RGB]{178,34,34}{▼9}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.25\linewidth}
+
+\subcaption{\label{tbl-articles-1990s-4}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Clark and Chalmers (\citeproc{ref-WOS000073222300002}{1998}) & =\\
+2 & Lewis (\citeproc{ref-WOSA1996VY21200001}{1996}) & =\\
+3 & Anderson (\citeproc{ref-WOS000078432400003}{1999}) & =\\
+4 & Joyce
+(\citeproc{ref-WOS000077956100002}{1998}) & \textcolor[RGB]{34,178,34}{▲1}\\
+5 & Lewis
+(\citeproc{ref-WOSA1994PM10400005}{1994}) & \textcolor[RGB]{178,34,34}{▼1}\\
+6 & Yablo
+(\citeproc{ref-WOSA1992JA62400001}{1992}) & \textcolor[RGB]{34,178,34}{▲3}\\
+7 & DeRose
+(\citeproc{ref-WOSA1992KB29500008}{1992}) & \textcolor[RGB]{34,178,34}{▲3}\\
+8 & Daniel C. Dennett
+(\citeproc{ref-WOSA1991EN62900002}{1991}) & \textcolor[RGB]{34,178,34}{New}\\
+9 & Kitcher
+(\citeproc{ref-WOSA1990CH71200001}{1990}) & \textcolor[RGB]{34,178,34}{▲8}\\
+10 & Williamson
+(\citeproc{ref-WOSA1996XR76100003}{1996}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & Boyd
+(\citeproc{ref-WOSA1991FC38500010}{1991}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & Edgington
+(\citeproc{ref-WOSA1995QX94800001}{1995}) & \textcolor[RGB]{34,178,34}{▲2}\\
+13 & Langton
+(\citeproc{ref-WOSA1993MJ74900002}{1993}) & \textcolor[RGB]{34,178,34}{New}\\
+13 & Burge
+(\citeproc{ref-WOSA1993ML38000001}{1993}) & \textcolor[RGB]{178,34,34}{▼5}\\
+15 & Yablo
+(\citeproc{ref-WOSA1993KQ63200001}{1993}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Veltman
+(\citeproc{ref-WOSA1996UV93000001}{1996}) & \textcolor[RGB]{34,178,34}{▲1}\\
+17 & Johnston
+(\citeproc{ref-WOSA1992KC39800002}{1992}) & \textcolor[RGB]{178,34,34}{▼12}\\
+17 & Jones
+(\citeproc{ref-WOSA1996VL52500002}{1996}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & DeRose
+(\citeproc{ref-WOSA1995RC31600001}{1995}) & \textcolor[RGB]{178,34,34}{▼14}\\
+19 & Lewis
+(\citeproc{ref-WOSA1997WP33800001}{1997}) & \textcolor[RGB]{178,34,34}{▼8}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+\begin{table}
+
+\caption{\label{tbl-authors-1990s}Most cited authors from the 1990s in
+various decades.}
+
+\begin{minipage}{0.25\linewidth}
+
+\subcaption{\label{tbl-authors-1990s-1}1990s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Author\\
+\midrule
+1 & Philip Pettit\\
+2 & Karen Neander\\
+3 & Elliot Sober\\
+4 & Frank Jackson\\
+4 & Michael Smith\\
+6 & Philip Kitcher\\
+6 & Stephen Schiffer\\
+8 & Michael B. Burke\\
+9 & Stephen Yablo\\
+10 & Alfred R. Mele\\
+11 & Timothy Williamson\\
+12 & E. J. Lowe\\
+13 & Francis Egan\\
+13 & Graeme Forbes\\
+13 & Sydney Shoemaker\\
+16 & David Lewis\\
+16 & Donald Davidson\\
+16 & Quentin Smith\\
+19 & Paul E. Griffiths\\
+20 & Jerry A. Fodor\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.25\linewidth}
+
+\subcaption{\label{tbl-authors-1990s-2}2000s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & \textcolor[RGB]{34,178,34}{▲15}\\
+2 & Keith DeRose & \textcolor[RGB]{34,178,34}{New}\\
+3 & Philip Pettit & \textcolor[RGB]{178,34,34}{▼2}\\
+4 & Stephen Yablo & \textcolor[RGB]{34,178,34}{▲5}\\
+5 & Michael Smith & \textcolor[RGB]{178,34,34}{▼1}\\
+6 & Tyler Burge & \textcolor[RGB]{34,178,34}{New}\\
+7 & Frank Jackson & \textcolor[RGB]{178,34,34}{▼3}\\
+7 & Mark Johnston & \textcolor[RGB]{34,178,34}{New}\\
+9 & Sydney Shoemaker & \textcolor[RGB]{34,178,34}{▲4}\\
+10 & Timothy Williamson & \textcolor[RGB]{34,178,34}{▲1}\\
+11 & Elliot Sober & \textcolor[RGB]{178,34,34}{▼8}\\
+12 & J. David Velleman & \textcolor[RGB]{34,178,34}{New}\\
+13 & Theodore Sider & \textcolor[RGB]{34,178,34}{New}\\
+14 & Hartry Field & \textcolor[RGB]{34,178,34}{New}\\
+15 & Alfred R. Mele & \textcolor[RGB]{178,34,34}{▼5}\\
+16 & David J. Chalmers & \textcolor[RGB]{34,178,34}{New}\\
+17 & Jaegwon Kim & \textcolor[RGB]{34,178,34}{New}\\
+17 & Paul E. Griffiths & \textcolor[RGB]{34,178,34}{▲2}\\
+19 & Karen Neander & \textcolor[RGB]{178,34,34}{▼17}\\
+20 & Judith Jarvis Thomson & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.25\linewidth}
+
+\subcaption{\label{tbl-authors-1990s-3}2010s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Keith DeRose & =\\
+3 & Andy Clark & \textcolor[RGB]{34,178,34}{New}\\
+4 & David J. Chalmers & \textcolor[RGB]{34,178,34}{▲12}\\
+5 & Philip Pettit & \textcolor[RGB]{178,34,34}{▼2}\\
+6 & J. David Velleman & \textcolor[RGB]{34,178,34}{▲6}\\
+7 & Stephen Yablo & \textcolor[RGB]{178,34,34}{▼3}\\
+8 & Frank Jackson & \textcolor[RGB]{178,34,34}{▼1}\\
+9 & Elizabeth S. Anderson & \textcolor[RGB]{34,178,34}{New}\\
+10 & Timothy Williamson & =\\
+11 & Elliot Sober & =\\
+12 & Tyler Burge & \textcolor[RGB]{178,34,34}{▼6}\\
+13 & Mark Johnston & \textcolor[RGB]{178,34,34}{▼6}\\
+14 & Sydney Shoemaker & \textcolor[RGB]{178,34,34}{▼5}\\
+15 & Theodore Sider & \textcolor[RGB]{178,34,34}{▼2}\\
+16 & Karen Neander & \textcolor[RGB]{34,178,34}{▲3}\\
+17 & Alfred R. Mele & \textcolor[RGB]{178,34,34}{▼2}\\
+18 & Michael E. Bratman & \textcolor[RGB]{34,178,34}{New}\\
+19 & Judith Jarvis Thomson & \textcolor[RGB]{34,178,34}{▲1}\\
+20 & John Broome & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.25\linewidth}
+
+\subcaption{\label{tbl-authors-1990s-4}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & David Lewis & =\\
+2 & Andy Clark & \textcolor[RGB]{34,178,34}{▲1}\\
+3 & Keith DeRose & \textcolor[RGB]{178,34,34}{▼1}\\
+4 & David J. Chalmers & =\\
+5 & Stephen Yablo & \textcolor[RGB]{34,178,34}{▲2}\\
+6 & Philip Pettit & \textcolor[RGB]{178,34,34}{▼1}\\
+7 & Timothy Williamson & \textcolor[RGB]{34,178,34}{▲3}\\
+8 & J. David Velleman & \textcolor[RGB]{178,34,34}{▼2}\\
+9 & Elizabeth S. Anderson & =\\
+10 & Frank Jackson & \textcolor[RGB]{178,34,34}{▼2}\\
+11 & Rae Langton & \textcolor[RGB]{34,178,34}{New}\\
+12 & James M. Joyce & \textcolor[RGB]{34,178,34}{New}\\
+13 & Karen Neander & \textcolor[RGB]{34,178,34}{▲3}\\
+13 & Tyler Burge & \textcolor[RGB]{178,34,34}{▼1}\\
+15 & Philip Kitcher & \textcolor[RGB]{34,178,34}{New}\\
+16 & Judith Jarvis Thomson & \textcolor[RGB]{34,178,34}{▲3}\\
+17 & Karen Jones & \textcolor[RGB]{34,178,34}{New}\\
+18 & Daniel C. Dennett & \textcolor[RGB]{34,178,34}{New}\\
+19 & Michael E. Bratman & \textcolor[RGB]{178,34,34}{▼1}\\
+19 & Robert Audi & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+The difference between the left two columns here is more striking,
+because the articles from the early 1990s faded from view so quickly. On
+the left of Table~\ref{tbl-authors-1990s} we see a table that doesn't
+have David Lewis at the top of it. This is only a survey of articles, so
+\emph{Parts of Classes} isn't included. Lewis's articles from the early
+1990s didn't get cited very much, by Lewis's standards. By the time
+normal service was resumed with ``Elusive Knowledge'', there wasn't
+enough left in the decade to make up.
+
+Because so many of Williamson's articles were (more-or-less) included in
+\emph{Knowledge and Its Limits}, Williamson's 1990s articles don't show
+up here as being quite as influential as they really were. A fun
+research project would be go through the citations to \emph{Knowledge
+and Its Limits}, and work out which citations are to which article, and
+see how tables like these look after having done that.
+
+\section{2000s}\label{s-3}
+
+\begin{table}
+
+\caption{\label{tbl-articles-2000s}Most cited articles from the 2000s in
+various decades.}
+
+\begin{minipage}{0.33\linewidth}
+
+\subcaption{\label{tbl-articles-2000s-1}2000s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Article\\
+\midrule
+1 & Machamer, Darden, and Craver
+(\citeproc{ref-WOS000087305900001}{2000})\\
+2 & Stanley and Szabó (\citeproc{ref-WOS000088616400001}{2000})\\
+3 & Lewis (\citeproc{ref-WOS000089124200002}{2000})\\
+4 & Stanley (\citeproc{ref-WOS000088534100002}{2000})\\
+5 & Chalmers and Jackson (\citeproc{ref-WOS000174798400001}{2001})\\
+6 & Byrne (\citeproc{ref-WOS000171488600002}{2001})\\
+7 & Pryor (\citeproc{ref-WOS000165361800002}{2000})\\
+8 & Stanley and Williamson (\citeproc{ref-WOS000170277300002}{2001})\\
+9 & DeRose (\citeproc{ref-WOS000184740400001}{2003})\\
+10 & Peacocke (\citeproc{ref-WOS000168307800002}{2001})\\
+11 & Matthen and Ariew (\citeproc{ref-WOS000173660000001}{2002})\\
+12 & Elga (\citeproc{ref-WOS000086383700001}{2000})\\
+12 & Glennan (\citeproc{ref-WOS000178763700030}{2002})\\
+14 & Heck (\citeproc{ref-WOS000169238500001}{2000})\\
+15 & Craver (\citeproc{ref-WOS000167722000004}{2001})\\
+15 & Rysiew (\citeproc{ref-WOS000172282100001}{2001})\\
+15 & M. G. F. Martin (\citeproc{ref-WOS000177781700002}{2002})\\
+15 & Knobe (\citeproc{ref-WOS000183806600005}{2003})\\
+19 & List and Pettit (\citeproc{ref-WOS000175194800009}{2002})\\
+20 & Bach (\citeproc{ref-WOS000088616400002}{2000})\\
+20 & Rabinowicz and Rønnow‐Rasmussen
+(\citeproc{ref-WOS000222134800001}{2004})\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.33\linewidth}
+
+\subcaption{\label{tbl-articles-2000s-2}2010s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Machamer, Darden, and Craver
+(\citeproc{ref-WOS000087305900001}{2000}) & =\\
+2 & Pryor
+(\citeproc{ref-WOS000165361800002}{2000}) & \textcolor[RGB]{34,178,34}{▲5}\\
+3 & Street
+(\citeproc{ref-WOS000234431300006}{2006}) & \textcolor[RGB]{34,178,34}{New}\\
+4 & Elga
+(\citeproc{ref-WOS000249103800005}{2007}) & \textcolor[RGB]{34,178,34}{New}\\
+5 & Christensen
+(\citeproc{ref-WOS000207419300002}{2007}) & \textcolor[RGB]{34,178,34}{New}\\
+6 & Hawthorne and Stanley
+(\citeproc{ref-WOS000262624000001}{2008}) & \textcolor[RGB]{34,178,34}{New}\\
+7 & Kolodny
+(\citeproc{ref-WOS000231037900002}{2005}) & \textcolor[RGB]{34,178,34}{New}\\
+8 & Stanley and Williamson
+(\citeproc{ref-WOS000170277300002}{2001}) & =\\
+9 & Gendler
+(\citeproc{ref-WOS000262624000004}{2008}) & \textcolor[RGB]{34,178,34}{New}\\
+10 & Shah and Velleman
+(\citeproc{ref-WOS000240571800003}{2005}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & Fantl and McGrath
+(\citeproc{ref-WOS000181094500003}{2002}) & \textcolor[RGB]{34,178,34}{New}\\
+12 & DeRose
+(\citeproc{ref-WOS000184740400001}{2003}) & \textcolor[RGB]{178,34,34}{▼3}\\
+13 & M. G. F. Martin
+(\citeproc{ref-WOS000177781700002}{2002}) & \textcolor[RGB]{34,178,34}{▲2}\\
+14 & J. Lackey
+(\citeproc{ref-WOS000250773100002}{2007}) & \textcolor[RGB]{34,178,34}{New}\\
+15 & Yalcin
+(\citeproc{ref-WOS000251545300007}{2007}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & S. Cohen
+(\citeproc{ref-WOS000178597300004}{2002}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Smith
+(\citeproc{ref-WOS000227058600002}{2005}) & \textcolor[RGB]{34,178,34}{New}\\
+18 & Travis
+(\citeproc{ref-WOS000188660700003}{2004}) & \textcolor[RGB]{34,178,34}{New}\\
+18 & Shah
+(\citeproc{ref-WOS000224335200001}{2003}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & Lewis
+(\citeproc{ref-WOS000089124200002}{2000}) & \textcolor[RGB]{178,34,34}{▼17}\\
+20 & Rabinowicz and Rønnow‐Rasmussen
+(\citeproc{ref-WOS000222134800001}{2004}) & =\\
+20 & Lasersohn
+(\citeproc{ref-WOS000236414800001}{2005}) & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.33\linewidth}
+
+\subcaption{\label{tbl-articles-2000s-3}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Haslanger
+(\citeproc{ref-WOS000085841900002}{2000}) & \textcolor[RGB]{34,178,34}{New}\\
+2 & Machamer, Darden, and Craver
+(\citeproc{ref-WOS000087305900001}{2000}) & \textcolor[RGB]{178,34,34}{▼1}\\
+3 & Pryor
+(\citeproc{ref-WOS000165361800002}{2000}) & \textcolor[RGB]{178,34,34}{▼1}\\
+3 & Hawthorne and Stanley
+(\citeproc{ref-WOS000262624000001}{2008}) & \textcolor[RGB]{34,178,34}{▲3}\\
+5 & Elga
+(\citeproc{ref-WOS000249103800005}{2007}) & \textcolor[RGB]{178,34,34}{▼1}\\
+6 & Christensen
+(\citeproc{ref-WOS000207419300002}{2007}) & \textcolor[RGB]{178,34,34}{▼1}\\
+7 & Street
+(\citeproc{ref-WOS000234431300006}{2006}) & \textcolor[RGB]{178,34,34}{▼4}\\
+8 & D'Arms and Jacobson
+(\citeproc{ref-WOS000087998300003}{2000}) & \textcolor[RGB]{34,178,34}{New}\\
+9 & Shah and Velleman
+(\citeproc{ref-WOS000240571800003}{2005}) & \textcolor[RGB]{34,178,34}{▲1}\\
+10 & Goldman
+(\citeproc{ref-WOS000170434600004}{2001}) & \textcolor[RGB]{34,178,34}{New}\\
+10 & Kolodny
+(\citeproc{ref-WOS000231037900002}{2005}) & \textcolor[RGB]{178,34,34}{▼3}\\
+12 & Stanley and Williamson
+(\citeproc{ref-WOS000170277300002}{2001}) & \textcolor[RGB]{178,34,34}{▼4}\\
+13 & Douglas
+(\citeproc{ref-WOS000166575500001}{2000}) & \textcolor[RGB]{34,178,34}{New}\\
+14 & M. G. F. Martin
+(\citeproc{ref-WOS000177781700002}{2002}) & \textcolor[RGB]{178,34,34}{▼1}\\
+15 & Stalnaker
+(\citeproc{ref-WOS000179607800011}{2002}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Fantl and McGrath
+(\citeproc{ref-WOS000181094500003}{2002}) & \textcolor[RGB]{178,34,34}{▼5}\\
+16 & Yalcin
+(\citeproc{ref-WOS000251545300007}{2007}) & \textcolor[RGB]{178,34,34}{▼1}\\
+18 & Hills
+(\citeproc{ref-WOS000273182700004}{2009}) & \textcolor[RGB]{34,178,34}{New}\\
+19 & Greaves and Wallace
+(\citeproc{ref-WOS000239761400003}{2006}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & M. G. F. Martin
+(\citeproc{ref-WOS000223334900003}{2004}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & Gendler
+(\citeproc{ref-WOS000262624000004}{2008}) & \textcolor[RGB]{178,34,34}{▼11}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+\begin{table}
+
+\caption{\label{tbl-authors-2000s}Most cited authors from the 2000s in
+various decades.}
+
+\begin{minipage}{0.33\linewidth}
+
+\subcaption{\label{tbl-authors-2000s-1}2000s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Author\\
+\midrule
+1 & Jason Stanley\\
+2 & Jonathan Schaffer\\
+3 & Carl F. Craver\\
+4 & David Lewis\\
+5 & Theodore Sider\\
+6 & Keith DeRose\\
+7 & Lindley Darden\\
+8 & Christopher Hitchcock\\
+8 & Joshua Knobe\\
+10 & Peter Machamer\\
+11 & Zoltán Gendler Szabó\\
+12 & Timothy Williamson\\
+13 & James Woodward\\
+14 & Alex Byrne\\
+14 & Uriah Kriegel\\
+16 & Alva Noë\\
+17 & Christian List\\
+18 & Brandon Fitelson\\
+18 & Philip Pettit\\
+20 & J. C. Beall\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.33\linewidth}
+
+\subcaption{\label{tbl-authors-2000s-2}2010s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & Jonathan Schaffer & \textcolor[RGB]{34,178,34}{▲1}\\
+2 & Jason Stanley & \textcolor[RGB]{178,34,34}{▼1}\\
+3 & Carl F. Craver & =\\
+4 & Adam Elga & \textcolor[RGB]{34,178,34}{New}\\
+5 & Joshua Knobe & \textcolor[RGB]{34,178,34}{▲3}\\
+6 & Christopher Hitchcock & \textcolor[RGB]{34,178,34}{▲2}\\
+7 & Timothy Williamson & \textcolor[RGB]{34,178,34}{▲5}\\
+8 & Michael Weisberg & \textcolor[RGB]{34,178,34}{New}\\
+9 & Lindley Darden & \textcolor[RGB]{178,34,34}{▼2}\\
+10 & Nishi Shah & \textcolor[RGB]{34,178,34}{New}\\
+11 & Niko Kolodny & \textcolor[RGB]{34,178,34}{New}\\
+11 & Pamela Hieronymi & \textcolor[RGB]{34,178,34}{New}\\
+13 & Peter Machamer & \textcolor[RGB]{178,34,34}{▼3}\\
+14 & Theodore Sider & \textcolor[RGB]{178,34,34}{▼9}\\
+15 & David Lewis & \textcolor[RGB]{178,34,34}{▼11}\\
+16 & James Pryor & \textcolor[RGB]{34,178,34}{New}\\
+17 & James Woodward & \textcolor[RGB]{178,34,34}{▼4}\\
+18 & Jennifer Lackey & \textcolor[RGB]{34,178,34}{New}\\
+19 & John MacFarlane & \textcolor[RGB]{34,178,34}{New}\\
+20 & Alex Byrne & \textcolor[RGB]{178,34,34}{▼6}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.33\linewidth}
+
+\subcaption{\label{tbl-authors-2000s-3}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & Jason Stanley & \textcolor[RGB]{34,178,34}{▲1}\\
+2 & Jonathan Schaffer & \textcolor[RGB]{178,34,34}{▼1}\\
+3 & Carl F. Craver & =\\
+4 & Pamela Hieronymi & \textcolor[RGB]{34,178,34}{▲7}\\
+5 & Nishi Shah & \textcolor[RGB]{34,178,34}{▲5}\\
+6 & Michael Weisberg & \textcolor[RGB]{34,178,34}{▲2}\\
+7 & Adam Elga & \textcolor[RGB]{178,34,34}{▼3}\\
+8 & Sally Haslanger & \textcolor[RGB]{34,178,34}{New}\\
+9 & Timothy Williamson & \textcolor[RGB]{178,34,34}{▼2}\\
+10 & Niko Kolodny & \textcolor[RGB]{34,178,34}{▲1}\\
+11 & Christopher Hitchcock & \textcolor[RGB]{178,34,34}{▼5}\\
+12 & Theodore Sider & \textcolor[RGB]{34,178,34}{▲2}\\
+13 & Lindley Darden & \textcolor[RGB]{178,34,34}{▼4}\\
+14 & Michael G. F. Martin & \textcolor[RGB]{34,178,34}{New}\\
+15 & Alvin I. Goldman & \textcolor[RGB]{34,178,34}{New}\\
+16 & Peter Machamer & \textcolor[RGB]{178,34,34}{▼3}\\
+17 & Dan Jacobson & \textcolor[RGB]{34,178,34}{New}\\
+17 & Jennifer Lackey & \textcolor[RGB]{34,178,34}{▲1}\\
+19 & J. David Velleman & \textcolor[RGB]{34,178,34}{New}\\
+20 & Joshua Knobe & \textcolor[RGB]{178,34,34}{▼15}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+I'm surprised, and a little disappointed, that the lists are still so
+male. I thought this stage of the story things would be changing.
+
+I'm also surprised, though not disappointed, to see the citation trend
+for Pryor (\citeproc{ref-WOS000165361800002}{2000}). I thought this was
+something that was a big deal as soon as it came out, not a slow-burn
+paper. But it's been moving up in relative citations over time.
+
+I'm neither surprised nor disappointed that I'm not on these lists. If
+the lists continued into top 60s, I'd be on all three, with a high rank
+of 37 in the 2010s.
+
+Finally, the biggest change we see in the data is the change between the
+2010s and 2020s for Haslanger (\citeproc{ref-WOS000085841900002}{2000}).
+I think this starts happening around 2018, so still in the 2010s, but
+I'd have to look more closely at the data to be sure. If you wanted one
+piece of data to tell you how different philosophy is now to what it was
+not so long ago, it would be the top right corner of
+Table~\ref{tbl-articles-2000s}.
+
+\section{2010s}\label{s-4}
+
+\begin{table}
+
+\caption{\label{tbl-articles-2010s}Most cited articles from the 2010s in
+various decades.}
+
+\begin{minipage}{0.50\linewidth}
+
+\subcaption{\label{tbl-articles-2010s-1}2010s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Article\\
+\midrule
+1 & Schaffer (\citeproc{ref-WOS000272855000002}{2010a})\\
+2 & Pritchard (\citeproc{ref-WOS000311002900002}{2012})\\
+3 & Kolodny and MacFarlane (\citeproc{ref-WOS000280778100001}{2010})\\
+4 & Wilson (\citeproc{ref-WOS000344393500001}{2014})\\
+5 & Audi (\citeproc{ref-WOS000318890500001}{2012})\\
+6 & Christensen (\citeproc{ref-WOS000208774400001}{2011})\\
+6 & Christensen (\citeproc{ref-WOS000279407600010}{2010})\\
+6 & Schwitzgebel (\citeproc{ref-WOS000284854700005}{2010})\\
+9 & Woodward (\citeproc{ref-WOS000278111100001}{2010})\\
+10 & Schaffer (\citeproc{ref-WOS000275147000005}{2010b})\\
+10 & Bennett (\citeproc{ref-WOS000298592300002}{2011})\\
+12 & Plunkett and Sundell (\citeproc{ref-WOS000332023600001}{2013})\\
+13 & Simmons (\citeproc{ref-WOS000273550900001}{2010})\\
+13 & Turri (\citeproc{ref-WOS000275646800002}{2010})\\
+15 & Enoch (\citeproc{ref-WOS000275530000006}{2010})\\
+15 & Chalmers (\citeproc{ref-WOS000295159700002}{2011})\\
+15 & Kaplan and Craver (\citeproc{ref-WOS000295735100004}{2011})\\
+15 & Piccinini and Craver (\citeproc{ref-WOS000298031500001}{2011})\\
+19 & Jenkins (\citeproc{ref-WOS000209153800006}{2011})\\
+19 & Kahane (\citeproc{ref-WOS000287526900005}{2011})\\
+19 & Macpherson (\citeproc{ref-WOS000298593200002}{2012})\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\subcaption{\label{tbl-articles-2010s-2}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Article & Chg\\
+\midrule
+1 & Schaffer (\citeproc{ref-WOS000272855000002}{2010a}) & =\\
+2 & Schaffer
+(\citeproc{ref-WOS000368189400004}{2016}) & \textcolor[RGB]{34,178,34}{New}\\
+3 & Dotson
+(\citeproc{ref-WOS000289948200002}{2011}) & \textcolor[RGB]{34,178,34}{New}\\
+4 & Plunkett and Sundell
+(\citeproc{ref-WOS000332023600001}{2013}) & \textcolor[RGB]{34,178,34}{▲8}\\
+4 & Wilson (\citeproc{ref-WOS000344393500001}{2014}) & =\\
+6 & Audi
+(\citeproc{ref-WOS000318890500001}{2012}) & \textcolor[RGB]{178,34,34}{▼1}\\
+7 & Pritchard
+(\citeproc{ref-WOS000311002900002}{2012}) & \textcolor[RGB]{178,34,34}{▼5}\\
+8 & Skiles
+(\citeproc{ref-WOS000360509700002}{2015}) & \textcolor[RGB]{34,178,34}{New}\\
+9 & Christensen
+(\citeproc{ref-WOS000279407600010}{2010}) & \textcolor[RGB]{178,34,34}{▼3}\\
+9 & Dasgupta
+(\citeproc{ref-WOS000354150500006}{2014}) & \textcolor[RGB]{34,178,34}{New}\\
+11 & Ross and Schroeder
+(\citeproc{ref-WOS000333404400001}{2014}) & \textcolor[RGB]{34,178,34}{New}\\
+12 & Pohlhaus
+(\citeproc{ref-WOS000309450000003}{2012}) & \textcolor[RGB]{34,178,34}{New}\\
+13 & Schoenfield
+(\citeproc{ref-WOS000334424500001}{2014}) & \textcolor[RGB]{34,178,34}{New}\\
+14 & P. Boghossian
+(\citeproc{ref-WOS000335566200001}{2014}) & \textcolor[RGB]{34,178,34}{New}\\
+14 & Dorr
+(\citeproc{ref-WOS000397575900003}{2016}) & \textcolor[RGB]{34,178,34}{New}\\
+16 & Hills
+(\citeproc{ref-WOS000387458900001}{2016}) & \textcolor[RGB]{34,178,34}{New}\\
+17 & Buchak
+(\citeproc{ref-WOS000336029900007}{2014}) & \textcolor[RGB]{34,178,34}{New}\\
+18 & J. Friedman
+(\citeproc{ref-WOS000312934500003}{2013}) & \textcolor[RGB]{34,178,34}{New}\\
+18 & Horowitz
+(\citeproc{ref-WOS000344362900006}{2014}) & \textcolor[RGB]{34,178,34}{New}\\
+20 & Aarnio
+(\citeproc{ref-WOS000286680600001}{2010}) & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+\begin{table}
+
+\caption{\label{tbl-authors-2010s}Most cited authors from the 2010s in
+various decades.}
+
+\begin{minipage}{0.50\linewidth}
+
+\subcaption{\label{tbl-authors-2010s-1}2010s}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Author\\
+\midrule
+1 & Jonathan Schaffer\\
+2 & John Turri\\
+3 & Duncan Pritchard\\
+4 & Kit Fine\\
+5 & David J. Chalmers\\
+6 & Bence Nanay\\
+7 & Richard Pettigrew\\
+8 & Hannes Leitgeb\\
+9 & Eric Schwitzgebel\\
+10 & Mark Schroeder\\
+11 & David Christensen\\
+11 & David Ripley\\
+13 & David Enoch\\
+14 & Edouard Machery\\
+14 & Timothy Williamson\\
+16 & William Bechtel\\
+17 & Gualtiero Piccinini\\
+18 & Wesley Buckwalter\\
+19 & Shamik Dasgupta\\
+20 & Marc Lange\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\subcaption{\label{tbl-authors-2010s-2}2020s}
+
+\centering{
+
+\begin{tabular}{rll}
+\toprule
+Rank & Author & Chg\\
+\midrule
+1 & Jonathan Schaffer & =\\
+2 & Kit Fine & \textcolor[RGB]{34,178,34}{▲2}\\
+3 & David Ripley & \textcolor[RGB]{34,178,34}{▲8}\\
+4 & Duncan Pritchard & \textcolor[RGB]{178,34,34}{▼1}\\
+5 & John Turri & \textcolor[RGB]{178,34,34}{▼3}\\
+6 & Jane Friedman & \textcolor[RGB]{34,178,34}{New}\\
+6 & Shamik Dasgupta & \textcolor[RGB]{34,178,34}{▲13}\\
+8 & David J. Chalmers & \textcolor[RGB]{178,34,34}{▼3}\\
+9 & Bence Nanay & \textcolor[RGB]{178,34,34}{▼3}\\
+10 & Mark Schroeder & =\\
+11 & Timothy Williamson & \textcolor[RGB]{34,178,34}{▲3}\\
+12 & Miriam Schoenfield & \textcolor[RGB]{34,178,34}{New}\\
+13 & Conor McHugh & \textcolor[RGB]{34,178,34}{New}\\
+14 & Richard Pettigrew & \textcolor[RGB]{178,34,34}{▼7}\\
+15 & David Plunkett & \textcolor[RGB]{34,178,34}{New}\\
+16 & Jonathan Way & \textcolor[RGB]{34,178,34}{New}\\
+17 & John Hawthorne & \textcolor[RGB]{34,178,34}{New}\\
+18 & Hannes Leitgeb & \textcolor[RGB]{178,34,34}{▼10}\\
+19 & David Enoch & \textcolor[RGB]{178,34,34}{▼6}\\
+19 & Kristie Dotson & \textcolor[RGB]{34,178,34}{New}\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+It's still very male, isn't it? And in contrast to earlier decades, it's
+notable that we're back in an environment where the citations to
+articles bounce around a bit, but the citations to philosophers stay
+stable. Last pair of tables, these two without comment.
+
+\begin{table}
+
+\caption{\label{tbl-articles-and-authors-2020s}Most cited articles and
+authors from the 2020s so far.}
+
+\begin{minipage}{0.50\linewidth}
+
+\subcaption{\label{tbl-articles-and-authors-2020s-1}Articles}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Article\\
+\midrule
+1 & Nguyen (\citeproc{ref-WOS000539283800001}{2020})\\
+2 & Bolinger (\citeproc{ref-WOS000540033200009}{2020})\\
+3 & Lasonen-Aarnio (\citeproc{ref-WOS000511728500002}{2020})\\
+3 & Nado (\citeproc{ref-WOS000644649500003}{2021})\\
+3 & Pinder (\citeproc{ref-WOS000671046400006}{2021})\\
+6 & Barrio, Pailos, and Szmuc
+(\citeproc{ref-WOS000520135800004}{2020})\\
+7 & Brown (\citeproc{ref-WOS000534187300005}{2020})\\
+7 & Beddor and Pavese (\citeproc{ref-WOS000547271200003}{2020})\\
+9 & Novaes (\citeproc{ref-WOS000519902900005}{2020})\\
+9 & Deutsch (\citeproc{ref-WOS000575859000019}{2020})\\
+9 & Simion and Kelp (\citeproc{ref-WOS000587857000011}{2020})\\
+12 & Koch (\citeproc{ref-WOS000610097900014}{2021})\\
+13 & Isaac (\citeproc{ref-WOS000511796600001}{2020})\\
+13 & Ritchie (\citeproc{ref-WOS000519571300008}{2020})\\
+13 & Chalmers (\citeproc{ref-WOS000570131300001}{2020})\\
+16 & Russell (\citeproc{ref-WOS000518880300008}{2020})\\
+16 & Parker (\citeproc{ref-WOS000543777100004}{2020})\\
+16 & Ismael and Schaffer (\citeproc{ref-WOS000569093600001}{2020})\\
+16 & Maguire and Woods (\citeproc{ref-WOS000575210100002}{2020})\\
+16 & Littlejohn (\citeproc{ref-WOS000595368200011}{2020})\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\subcaption{\label{tbl-articles-and-authors-2020s-2}Authors}
+
+\centering{
+
+\begin{tabular}{rl}
+\toprule
+Rank & Author\\
+\midrule
+1 & Kristie Miller\\
+2 & C. Thi Nguyen\\
+3 & Steffen Koch\\
+4 & James Norton\\
+5 & Andrew J. Latham\\
+6 & Jake Quilty-Dunn\\
+6 & Renee Jorgensen Bolinger\\
+8 & Bob Beddor\\
+9 & Carlotta Pavese\\
+9 & Federico Pailos\\
+11 & Christoph Kelp\\
+12 & Elizabeth Jackson\\
+13 & Mark Pinder\\
+14 & Eduardo Alejandro Barrio\\
+14 & Jennifer Nado\\
+14 & Mona Simion\\
+17 & Damian Szmuc\\
+17 & Sam Baron\\
+19 & David Plunkett\\
+20 & Daniel Williams\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-WOS000286680600001}
+Aarnio, Maria Lasonen. 2010. {``Unreasonable Knowledge.''}
+\emph{Philosophical Perspectives} 24 (1): 1--21. doi:
+\href{https://doi.org/10.1111/j.1520-8583.2010.00183.x}{10.1111/j.1520-8583.2010.00183.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1985AKA2200025}
+Alchourrón, Carlos E., Peter Gärdenfors, and David Makinson. 1985. {``On
+the Logic of Theory Change: Partial Meet Contraction and Revision
+Functions.''} \emph{Journal Of Symbolic Logic} 50 (2): 510--30. doi:
+\href{https://doi.org/10.2307/2274239}{10.2307/2274239}.
+
+\bibitem[\citeproctext]{ref-WOS000078432400003}
+Anderson, Elizabeth S. 1999. {``What Is the Point of Equality?''}
+\emph{Ethics} 109 (2): 287--337. doi:
+\href{https://doi.org/10.1086/233897}{10.1086/233897}.
+
+\bibitem[\citeproctext]{ref-WOSA1989U808000004}
+Arneson, Richard J. 1989. {``Equality and Equal Opportunity for
+Welfare.''} \emph{Philosophical Studies} 56 (1): 77--93. doi:
+\href{https://doi.org/10.1007/BF00646210}{10.1007/BF00646210}.
+
+\bibitem[\citeproctext]{ref-WOS000318890500001}
+Audi, Paul. 2012. {``Grounding: Toward a Theory of the In-Virtue-Of
+Relation.''} \emph{Journal Of Philosophy} 109 (12): 685--711. doi:
+\href{https://doi.org/10.5840/jphil20121091232}{10.5840/jphil20121091232}.
+
+\bibitem[\citeproctext]{ref-WOS000088616400002}
+Bach, Kent. 2000. {``Quantification, Qualification and Context: A Reply
+To Stanley and Szabo.''} \emph{Mind \& Language} 15 (2-3): 262--83. doi:
+\href{https://doi.org/10.1111/1468-0017.00131}{10.1111/1468-0017.00131}.
+
+\bibitem[\citeproctext]{ref-WOSA1986AYY3900001}
+Baier, Annette. 1986. {``Trust and Antitrust.''} \emph{Ethics} 96 (2):
+231--60. doi: \href{https://doi.org/10.1086/292745}{10.1086/292745}.
+
+\bibitem[\citeproctext]{ref-WOS000520135800004}
+Barrio, Eduardo Alejandro, Federico Pailos, and Damian Szmuc. 2020. {``A
+Hierarchy of Classical and Paraconsistent Logics.''} \emph{Journal Of
+Philosophical Logic} 49 (1): 93--120. doi:
+\href{https://doi.org/10.1007/s10992-019-09513-z}{10.1007/s10992-019-09513-z}.
+
+\bibitem[\citeproctext]{ref-WOSA1981LH67300001}
+Barwise, Jon, and Robin Cooper. 1981. {``Generalized Quantifiers and
+Natural-Language.''} \emph{Linguistics And Philosophy} 4 (2): 159--219.
+doi: \href{https://doi.org/10.1007/BF00350139}{10.1007/BF00350139}.
+
+\bibitem[\citeproctext]{ref-WOS000547271200003}
+Beddor, Bob, and Carlotta Pavese. 2020. {``Modal Virtue Epistemology.''}
+\emph{Philosophy And Phenomenological Research} 101 (1): 61--79. doi:
+\href{https://doi.org/10.1111/phpr.12562}{10.1111/phpr.12562}.
+
+\bibitem[\citeproctext]{ref-10.2307_2025075}
+Benacerraf, Paul. 1973. {``Mathematical Truth.''} \emph{Journal Of
+Philosophy} 70 (19): 661--79.
+
+\bibitem[\citeproctext]{ref-WOS000298592300002}
+Bennett, Karen. 2011. {``By Our Bootstraps.''} \emph{Philosophical
+Perspectives} 25 (1): 27--41. doi:
+\href{https://doi.org/10.1111/j.1520-8583.2011.00207.x}{10.1111/j.1520-8583.2011.00207.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1980JW85100004}
+Block, Ned. 1980. {``Are Absent Qualia Impossible.''}
+\emph{Philosophical Review} 89 (2): 257--74. doi:
+\href{https://doi.org/10.2307/2184650}{10.2307/2184650}.
+
+\bibitem[\citeproctext]{ref-WOS000084347100001}
+Block, Ned, and Robert C. Stalnaker. 1999. {``Conceptual Analysis,
+Dualism, and the Explanatory Gap.''} \emph{Philosophical Review} 108
+(1): 1--46. doi:
+\href{https://doi.org/10.2307/2998259}{10.2307/2998259}.
+
+\bibitem[\citeproctext]{ref-WOSA1980KC84100005}
+Boër, Stephen E., and William G. Lycan. 1980. {``Who, Me?''}
+\emph{Philosophical Review} 89 (3): 427--66. doi:
+\href{https://doi.org/10.2307/2184397}{10.2307/2184397}.
+
+\bibitem[\citeproctext]{ref-WOSA1988N938600001}
+Bogen, James, and James Woodward. 1988. {``Saving the Phenomena.''}
+\emph{Philosophical Review} 97 (3): 303--52. doi:
+\href{https://doi.org/10.2307/2185445}{10.2307/2185445}.
+
+\bibitem[\citeproctext]{ref-WOS000335566200001}
+Boghossian, Paul. 2014. {``What Is Inference?''} \emph{Philosophical
+Studies} 169 (1): 1--18. doi:
+\href{https://doi.org/10.1007/s11098-012-9903-x}{10.1007/s11098-012-9903-x}.
+
+\bibitem[\citeproctext]{ref-WOSA1990CV26800001}
+Boghossian, Paul A. 1990. {``The Status of Content.''}
+\emph{Philosophical Review} 99 (2): 157--84. doi:
+\href{https://doi.org/10.2307/2185488}{10.2307/2185488}.
+
+\bibitem[\citeproctext]{ref-WOSA1989T231400005}
+Boghossian, Paul A., and J. David Velleman. 1989. {``Color as a
+Secondary Quality.''} \emph{Mind} 98 (389): 81--103.
+
+\bibitem[\citeproctext]{ref-WOS000540033200009}
+Bolinger, Renee Jorgensen. 2020. {``The Rational Impermissibility of
+Accepting (Some) Racial Generalizations.''} \emph{Synthese} 197 (6):
+2415--31. doi:
+\href{https://doi.org/10.1007/s11229-018-1809-5}{10.1007/s11229-018-1809-5}.
+
+\bibitem[\citeproctext]{ref-WOSA1984TE24500002}
+Boolos, George. 1984. {``To Be Is To Be a Value of a Variable (Or To Be
+Some Values of Some Variables).''} \emph{Journal Of Philosophy} 81 (8):
+430--49. doi: \href{https://doi.org/10.2307/2026308}{10.2307/2026308}.
+
+\bibitem[\citeproctext]{ref-WOSA1991FC38500010}
+Boyd, Richard. 1991. {``Realism, Anti-Foundationalism and the Enthusiasm
+for Natural Kinds.''} \emph{Philosophical Studies} 61 (1-2): 127--48.
+doi: \href{https://doi.org/10.1007/BF00385837}{10.1007/BF00385837}.
+
+\bibitem[\citeproctext]{ref-WOS000084073700005}
+Broome, John. 1999. {``Normative Requirements.''} \emph{Ratio} 12 (4):
+398--419. doi:
+\href{https://doi.org/10.1111/1467-9329.00101}{10.1111/1467-9329.00101}.
+
+\bibitem[\citeproctext]{ref-WOS000534187300005}
+Brown, Jessica. 2020. {``What Is Epistemic Blame?''} \emph{Noûs} 54 (2):
+389--407. doi:
+\href{https://doi.org/10.1111/nous.12270}{10.1111/nous.12270}.
+
+\bibitem[\citeproctext]{ref-WOS000336029900007}
+Buchak, Lara. 2014. {``Belief, Credence, and Norms.''}
+\emph{Philosophical Studies} 169 (2): 285--311. doi:
+\href{https://doi.org/10.1007/s11098-013-0182-y}{10.1007/s11098-013-0182-y}.
+
+\bibitem[\citeproctext]{ref-WOSA1977DH28800002}
+Burge, Tyler. 1977. {``Belief De Re.''} \emph{Journal Of Philosophy} 74
+(6): 338--62. doi:
+\href{https://doi.org/10.2307/2025871}{10.2307/2025871}.
+
+\bibitem[\citeproctext]{ref-WOSA1986AYX3200001}
+---------. 1986. {``Individualism and Psychology.''} \emph{Philosophical
+Review} 95 (1): 3--45. doi:
+\href{https://doi.org/10.2307/2185131}{10.2307/2185131}.
+
+\bibitem[\citeproctext]{ref-WOSA1988R020000007}
+---------. 1988. {``Individualism and Self-Knowledge.''} \emph{Journal
+Of Philosophy} 85 (11): 649--63. doi:
+\href{https://doi.org/10.5840/jphil1988851112}{10.5840/jphil1988851112}.
+
+\bibitem[\citeproctext]{ref-WOSA1993ML38000001}
+---------. 1993. {``Content Preservation.''} \emph{Philosophical Review}
+102 (4): 457--88. doi:
+\href{https://doi.org/10.2307/2185680}{10.2307/2185680}.
+
+\bibitem[\citeproctext]{ref-WOSA1992HC13100003}
+Burke, Michael B. 1992. {``Copper Statues and Pieces of Copper: A
+Challenge To the Standard Account.''} \emph{Analysis} 52 (1): 12--17.
+doi: \href{https://doi.org/10.2307/3328875}{10.2307/3328875}.
+
+\bibitem[\citeproctext]{ref-WOSA1994PD73500006}
+---------. 1994. {``Preserving the Principle of One Object To a Place: A
+Novel Account of the Relations Among Objects, Sorts, Sortals, and
+Persistance Conditions.''} \emph{Philosophy And Phenomenological
+Research} 54 (3): 591--624. doi:
+\href{https://doi.org/10.2307/2108583}{10.2307/2108583}.
+
+\bibitem[\citeproctext]{ref-WOS000171488600002}
+Byrne, Alex. 2001. {``Intentionalism Defended.''} \emph{Philosophical
+Review} 110 (2): 199--240. doi:
+\href{https://doi.org/10.1215/00318108-110-2-199}{10.1215/00318108-110-2-199}.
+
+\bibitem[\citeproctext]{ref-WOSA1979JB14500001}
+Cartwright, Nancy. 1979. {``Causal Laws and Effective Strategies.''}
+\emph{Noûs} 13 (4): 419--37. doi:
+\href{https://doi.org/10.2307/2215337}{10.2307/2215337}.
+
+\bibitem[\citeproctext]{ref-WOS000295159700002}
+Chalmers, David J. 2011. {``Verbal Disputes.''} \emph{Philosophical
+Review} 120 (4): 515--66. doi:
+\href{https://doi.org/10.1215/00318108-1334478}{10.1215/00318108-1334478}.
+
+\bibitem[\citeproctext]{ref-WOS000570131300001}
+---------. 2020. {``What Is Conceptual Engineering and What Should It
+Be?''} \emph{Inquiry} NA (NA): NA--. doi:
+\href{https://doi.org/10.1080/0020174X.2020.1817141}{10.1080/0020174X.2020.1817141}.
+
+\bibitem[\citeproctext]{ref-WOS000174798400001}
+Chalmers, David J., and Frank Jackson. 2001. {``Conceptual Analysis and
+Reductive Explanation.''} \emph{Philosophical Review} 110 (3): 315--60.
+doi: \href{https://doi.org/10.2307/2693648}{10.2307/2693648}.
+
+\bibitem[\citeproctext]{ref-WOSA1995QH55500001}
+Chomsky, Noam. 1995. {``Language and Nature.''} \emph{Mind} 104 (413):
+1--61. doi:
+\href{https://doi.org/10.1093/mind/104.413.1}{10.1093/mind/104.413.1}.
+
+\bibitem[\citeproctext]{ref-WOS000207419300002}
+Christensen, David. 2007. {``Epistemology of Disagreement: The Good
+News.''} \emph{Philosophical Review} 116 (2): 187--217. doi:
+\href{https://doi.org/10.1215/00318108-2006-035}{10.1215/00318108-2006-035}.
+
+\bibitem[\citeproctext]{ref-WOS000279407600010}
+---------. 2010. {``Higher-Order Evidence.''} \emph{Philosophy And
+Phenomenological Research} 81 (1): 185--215. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2010.00366.x}{10.1111/j.1933-1592.2010.00366.x}.
+
+\bibitem[\citeproctext]{ref-WOS000208774400001}
+---------. 2011. {``Disagreement, Question-Begging and Epistemic
+Self-Criticism.''} \emph{Philosophers Imprint} 11 (6): 1--22.
+
+\bibitem[\citeproctext]{ref-WOSA1980JM77300001}
+Churchland, Patricia S. 1980. {``A Perspective on Mind-Brain
+Research.''} \emph{Journal Of Philosophy} 77 (4): 185--207. doi:
+\href{https://doi.org/10.2307/2025588}{10.2307/2025588}.
+
+\bibitem[\citeproctext]{ref-WOSA1981LD54600001}
+Churchland, Paul M. 1981. {``Eliminative Materialism and the
+Propositional Attitudes.''} \emph{Journal Of Philosophy} 78 (2): 67--90.
+doi: \href{https://doi.org/10.2307/2025900}{10.2307/2025900}.
+
+\bibitem[\citeproctext]{ref-WOS000073222300002}
+Clark, Andy, and David J. Chalmers. 1998. {``The Extended Mind.''}
+\emph{Analysis} 58 (1): 7--19. doi:
+\href{https://doi.org/10.1111/1467-8284.00096}{10.1111/1467-8284.00096}.
+
+\bibitem[\citeproctext]{ref-WOSA1989AE70300010}
+Cohen, G. A. 1989. {``On the Currency of Egalitarian Justice.''}
+\emph{Ethics} 99 (4): 906--44. doi:
+\href{https://doi.org/10.1086/293126}{10.1086/293126}.
+
+\bibitem[\citeproctext]{ref-WOSA1984TN86300001}
+Cohen, Stewart. 1984. {``Justification and Truth.''} \emph{Philosophical
+Studies} 46 (3): 279--95. doi:
+\href{https://doi.org/10.1007/BF00372907}{10.1007/BF00372907}.
+
+\bibitem[\citeproctext]{ref-WOS000178597300004}
+---------. 2002. {``Basic Knowledge and the Problem of Easy
+Knowledge.''} \emph{Philosophy And Phenomenological Research} 65 (2):
+309--29. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2002.tb00204.x}{10.1111/j.1933-1592.2002.tb00204.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1990DA14600002}
+Crane, Tim, and D. H. Mellor. 1990. {``There Is No Question of
+Physicalism.''} \emph{Mind} 99 (394): 185--206.
+
+\bibitem[\citeproctext]{ref-WOS000167722000004}
+Craver, Carl F. 2001. {``Role Functions, Mechanisms, and Hierarchy.''}
+\emph{Philosophy Of Science} 68 (1): 53--74. doi:
+\href{https://doi.org/10.1086/392866}{10.1086/392866}.
+
+\bibitem[\citeproctext]{ref-WOSA1989CF70700001}
+Crimmins, Mark, and John Perry. 1989. {``The Prince and the Phone Booth:
+Reporting Puzzling Beliefs.''} \emph{Journal Of Philosophy} 86 (12):
+685--711. doi: \href{https://doi.org/10.2307/2027014}{10.2307/2027014}.
+
+\bibitem[\citeproctext]{ref-WOSA1975BF60100001}
+Cummins, Robert. 1975. {``Functional Analysis.''} \emph{Journal Of
+Philosophy} 72 (20): 741--65. doi:
+\href{https://doi.org/10.2307/2024640}{10.2307/2024640}.
+
+\bibitem[\citeproctext]{ref-WOS000087998300003}
+D'Arms, Justin, and Dan Jacobson. 2000. {``The Moralistic Fallacy: On
+the {`Appropriateness'} of Emotions.''} \emph{Philosophy And
+Phenomenological Research} 61 (1): 65--90. doi:
+\href{https://doi.org/10.2307/2653403}{10.2307/2653403}.
+
+\bibitem[\citeproctext]{ref-WOSA1979GW47300003}
+Daniels, Norman. 1979. {``Wide Reflective Equilibrium and Theory
+Acceptance in Ethics.''} \emph{Journal Of Philosophy} 76 (5): 256--82.
+doi: \href{https://doi.org/10.2307/2025881}{10.2307/2025881}.
+
+\bibitem[\citeproctext]{ref-WOSA1980JZ97600005}
+---------. 1980. {``Reflective Equilibrium and Archimedean Points.''}
+\emph{Canadian Journal Of Philosophy} 10 (1): 83--103.
+
+\bibitem[\citeproctext]{ref-WOSA1977EA35800003}
+Darwall, Stephen L. 1977. {``Two Kinds of Respect.''} \emph{Ethics} 88
+(1): 36--49. doi: \href{https://doi.org/10.1086/292054}{10.1086/292054}.
+
+\bibitem[\citeproctext]{ref-WOS000354150500006}
+Dasgupta, Shamik. 2014. {``The Possibility of Physicalism.''}
+\emph{Journal Of Philosophy} 111 (9-10): 557--92. doi:
+\href{https://doi.org/10.5840/jphil20141119/1037}{10.5840/jphil20141119/1037}.
+
+\bibitem[\citeproctext]{ref-WOSA1990EQ84600001}
+Davidson, Donald. 1990. {``The Structure and Content of Truth.''}
+\emph{Journal Of Philosophy} 87 (6): 279--328. doi:
+\href{https://doi.org/10.2307/2026863}{10.2307/2026863}.
+
+\bibitem[\citeproctext]{ref-10.2307_2025382}
+Dennett, D. C. 1971. {``Intentional Systems.''} \emph{Journal Of
+Philosophy} 68 (4): 87--106.
+
+\bibitem[\citeproctext]{ref-WOSA1991EN62900002}
+Dennett, Daniel C. 1991. {``Real Patterns.''} \emph{Journal Of
+Philosophy} 88 (1): 27--51. doi:
+\href{https://doi.org/10.2307/2027085}{10.2307/2027085}.
+
+\bibitem[\citeproctext]{ref-WOSA1992KB29500008}
+DeRose, Keith. 1992. {``Contextualism and Knowledge Attributions.''}
+\emph{Philosophy And Phenomenological Research} 52 (4): 913--29. doi:
+\href{https://doi.org/10.2307/2107917}{10.2307/2107917}.
+
+\bibitem[\citeproctext]{ref-WOSA1995RC31600001}
+---------. 1995. {``Solving the Skeptical Problem.''}
+\emph{Philosophical Review} 104 (1): 1--52. doi:
+\href{https://doi.org/10.2307/2186011}{10.2307/2186011}.
+
+\bibitem[\citeproctext]{ref-WOS000184740400001}
+---------. 2003. {``Assertion, Knowledge, and Context.''}
+\emph{Philosophical Review} 111 (2): 167--203.
+
+\bibitem[\citeproctext]{ref-WOS000575859000019}
+Deutsch, Max. 2020. {``Speaker's Reference, Stipulation, and a Dilemma
+for Conceptual Engineers.''} \emph{Philosophical Studies} 177 (12):
+3935--57. doi:
+\href{https://doi.org/10.1007/s11098-020-01416-z}{10.1007/s11098-020-01416-z}.
+
+\bibitem[\citeproctext]{ref-WOS000397575900003}
+Dorr, Cian. 2016. {``To Be F Is To Be G.''} \emph{Philosophical
+Perspectives} 30 (1): 39--134. doi:
+\href{https://doi.org/10.1111/phpe.12079}{10.1111/phpe.12079}.
+
+\bibitem[\citeproctext]{ref-WOS000289948200002}
+Dotson, Kristie. 2011. {``Tracking Epistemic Violence, Tracking
+Practices of Silencing.''} \emph{Hypatia} 26 (2): 236--57. doi:
+\href{https://doi.org/10.1111/j.1527-2001.2011.01177.x}{10.1111/j.1527-2001.2011.01177.x}.
+
+\bibitem[\citeproctext]{ref-WOS000166575500001}
+Douglas, Heather. 2000. {``Inductive Risk and Values in Science.''}
+\emph{Philosophy Of Science} 67 (4): 559--79. doi:
+\href{https://doi.org/10.1086/392855}{10.1086/392855}.
+
+\bibitem[\citeproctext]{ref-WOSA1970ZE33800001}
+Dretske, Fred. 1970. {``Epistemic Operators.''} \emph{Journal Of
+Philosophy} 67 (24): 1007--23. doi:
+\href{https://doi.org/10.2307/2024710}{10.2307/2024710}.
+
+\bibitem[\citeproctext]{ref-WOSA1977DN52600007}
+---------. 1977. {``Laws of Nature.''} \emph{Philosophy Of Science} 44
+(2): 248--68. doi:
+\href{https://doi.org/10.1086/288741}{10.1086/288741}.
+
+\bibitem[\citeproctext]{ref-WOSA1981LU74200001}
+Dworkin, Ronald. 1981a. {``What Is Equality (I) Equality of Welfare.''}
+\emph{Philosophy \& Public Affairs} 10 (3): 185--246.
+
+\bibitem[\citeproctext]{ref-WOSA1981MH21100001}
+---------. 1981b. {``What Is Equality? Part 2: Equality of Resources.''}
+\emph{Philosophy \& Public Affairs} 10 (4): 283--345.
+
+\bibitem[\citeproctext]{ref-WOSA1995QX94800001}
+Edgington, Dorothy. 1995. {``On Conditionals.''} \emph{Mind} 104 (414):
+235--329. doi:
+\href{https://doi.org/10.1093/mind/104.414.235}{10.1093/mind/104.414.235}.
+
+\bibitem[\citeproctext]{ref-WOSA1983QJ85300002}
+Eells, Ellery, and Elliot Sober. 1983. {``Probabilistic Causality and
+the Question of Transitivity.''} \emph{Philosophy Of Science} 50 (1):
+35--57. doi: \href{https://doi.org/10.1086/289089}{10.1086/289089}.
+
+\bibitem[\citeproctext]{ref-WOSA1991FF02900001}
+Egan, Francis. 1991. {``Must Psychology Be Individualistic.''}
+\emph{Philosophical Review} 100 (2): 179--203. doi:
+\href{https://doi.org/10.2307/2185299}{10.2307/2185299}.
+
+\bibitem[\citeproctext]{ref-WOS000086383700001}
+Elga, Adam. 2000. {``Self-Locating Belief and the {`Sleeping Beauty'}
+Problem.''} \emph{Analysis} 60 (2): 143--47. doi:
+\href{https://doi.org/10.1111/1467-8284.00215}{10.1111/1467-8284.00215}.
+
+\bibitem[\citeproctext]{ref-WOS000249103800005}
+---------. 2007. {``Reflection and Disagreement.''} \emph{Noûs} 41 (3):
+478--502. doi:
+\href{https://doi.org/10.1111/j.1468-0068.2007.00656.x}{10.1111/j.1468-0068.2007.00656.x}.
+
+\bibitem[\citeproctext]{ref-WOS000275530000006}
+Enoch, David. 2010. {``The Epistemological Challenge To Metanormative
+Realism: How Best To Understand It, and How To Cope With It.''}
+\emph{Philosophical Studies} 148 (3): 413--38. doi:
+\href{https://doi.org/10.1007/s11098-009-9333-6}{10.1007/s11098-009-9333-6}.
+
+\bibitem[\citeproctext]{ref-WOSA1994NP02400004}
+Falvey, Kevin, and Joseph Owens. 1994. {``Externalism, Self-Knowledge,
+and Skepticism.''} \emph{Philosophical Review} 103 (1): 107--37. doi:
+\href{https://doi.org/10.2307/2185874}{10.2307/2185874}.
+
+\bibitem[\citeproctext]{ref-WOS000181094500003}
+Fantl, Jeremy, and Matthew McGrath. 2002. {``Evidence, Pragmatics, and
+Justification.''} \emph{Philosophical Review} 111 (1): 67--94. doi:
+\href{https://doi.org/10.1215/00318108-111-1-67}{10.1215/00318108-111-1-67}.
+
+\bibitem[\citeproctext]{ref-WOSA1985ANT6600002}
+Feldman, Richard, and Earl Conee. 1985. {``Evidentialism.''}
+\emph{Philosophical Studies} 48 (1): 15--34. doi:
+\href{https://doi.org/10.1007/BF00372404}{10.1007/BF00372404}.
+
+\bibitem[\citeproctext]{ref-10.2307_2024879}
+Field, Hartry. 1972. {``Tarski's Theory of Truth.''} \emph{Journal Of
+Philosophy} 69 (13): 347--75.
+
+\bibitem[\citeproctext]{ref-WOSA1994NY27600001}
+---------. 1994. {``Deflationist Views of Meaning and Content.''}
+\emph{Mind} 103 (411): 249--85. doi:
+\href{https://doi.org/10.1093/mind/103.411.249}{10.1093/mind/103.411.249}.
+
+\bibitem[\citeproctext]{ref-WOSA1991EV81000003}
+Fischer, John Martin, and M Ravizza. 1991. {``Responsibility and
+Inevitability.''} \emph{Ethics} 101 (2): 258--78. doi:
+\href{https://doi.org/10.1086/293288}{10.1086/293288}.
+
+\bibitem[\citeproctext]{ref-WOSA1991EN62900001}
+Fodor, Jerry A. 1991. {``A Modal Argument for Narrow Content.''}
+\emph{Journal Of Philosophy} 88 (1): 5--26. doi:
+\href{https://doi.org/10.2307/2027084}{10.2307/2027084}.
+
+\bibitem[\citeproctext]{ref-WOSA1990EB39300002}
+Forbes, Graeme. 1990. {``The Indispensability of Sinn.''}
+\emph{Philosophical Review} 99 (4): 535--63. doi:
+\href{https://doi.org/10.2307/2185616}{10.2307/2185616}.
+
+\bibitem[\citeproctext]{ref-10.2307_2024762}
+van Fraassen, Bas C. 1973. {``Values and the Heart's Command.''}
+\emph{Journal Of Philosophy} 70 (1): 5--19.
+
+\bibitem[\citeproctext]{ref-WOSA1984SS95000001}
+---------. 1984. {``Belief and the Will.''} \emph{Journal Of Philosophy}
+81 (5): 235--56.
+
+\bibitem[\citeproctext]{ref-WOSA1969Y444700002}
+Frankfurt, Harry G. 1969. {``Alternate Possibilities and Moral
+Responsibility.''} \emph{Journal Of Philosophy} 66 (23): 829--39. doi:
+\href{https://doi.org/10.2307/2023833}{10.2307/2023833}.
+
+\bibitem[\citeproctext]{ref-10.2307_2024717}
+---------. 1971. {``Freedom of the Will and the Concept of a Person.''}
+\emph{Journal Of Philosophy} 68 (1): 5--20.
+
+\bibitem[\citeproctext]{ref-WOS000312934500003}
+Friedman, Jane. 2013. {``Suspended Judgment.''} \emph{Philosophical
+Studies} 162 (2): 165--81. doi:
+\href{https://doi.org/10.1007/s11098-011-9753-y}{10.1007/s11098-011-9753-y}.
+
+\bibitem[\citeproctext]{ref-10.2307_2024924}
+Friedman, Michael. 1974. {``Explanation and Scientific Understanding.''}
+\emph{Journal Of Philosophy} 71 (1): 5--19.
+
+\bibitem[\citeproctext]{ref-WOS000262624000004}
+Gendler, Tamar Szabò. 2008. {``Alief and Belief.''} \emph{Journal Of
+Philosophy} 105 (10): 634--63. doi:
+\href{https://doi.org/10.5840/jphil20081051025}{10.5840/jphil20081051025}.
+
+\bibitem[\citeproctext]{ref-WOSA1975AU08300005}
+Gibbard, Allan. 1975. {``Contingent Identity.''} \emph{Journal Of
+Philosophical Logic} 4 (2): 187--221. doi:
+\href{https://doi.org/10.1007/BF00693273}{10.1007/BF00693273}.
+
+\bibitem[\citeproctext]{ref-WOS000178763700030}
+Glennan, Stuart. 2002. {``Rethinking Mechanistic Explanation.''}
+\emph{Philosophy Of Science} 69 (3): S342--53. doi:
+\href{https://doi.org/10.1086/341857}{10.1086/341857}.
+
+\bibitem[\citeproctext]{ref-WOSA1976CP00100001}
+Goldman, Alvin I. 1976. {``Discrimination and Perceptual Knowledge.''}
+\emph{Journal Of Philosophy} 73 (20): 771--91. doi:
+\href{https://doi.org/10.2307/2025679}{10.2307/2025679}.
+
+\bibitem[\citeproctext]{ref-WOS000170434600004}
+---------. 2001. {``Experts: Which Ones Should You Trust?''}
+\emph{Philosophy And Phenomenological Research} 63 (1): 85--110. doi:
+\href{https://doi.org/10.2307/3071090}{10.2307/3071090}.
+
+\bibitem[\citeproctext]{ref-10.2307_2025108}
+Grandy, Richard. 1973. {``Reference, Meaning, and Belief.''}
+\emph{Journal Of Philosophy} 70 (14): 439--52.
+
+\bibitem[\citeproctext]{ref-WOS000239761400003}
+Greaves, Hilary, and David Wallace. 2006. {``Justifying
+Conditionalization: Conditionalization Maximizes Expected Epistemic
+Utility.''} \emph{Mind} 115 (459): 607--32. doi:
+\href{https://doi.org/10.1093/mind/fzl607}{10.1093/mind/fzl607}.
+
+\bibitem[\citeproctext]{ref-WOSA1991EV09800002}
+Groenendijk, Jeroen, and Martin Stokhof. 1991. {``Dynamic Predicate
+Logic.''} \emph{Linguistics And Philosophy} 14 (1): 39--100. doi:
+\href{https://doi.org/10.1007/BF00628304}{10.1007/BF00628304}.
+
+\bibitem[\citeproctext]{ref-WOSA1982NW89300001}
+Gupta, Anil. 1982. {``Truth and Paradox.''} \emph{Journal Of
+Philosophical Logic} 11 (1): 1--60. doi:
+\href{https://doi.org/10.1007/BF00302338}{10.1007/BF00302338}.
+
+\bibitem[\citeproctext]{ref-WOSA1985ALK4200001}
+Hardwig, John. 1985. {``Epistemic Dependence.''} \emph{Journal Of
+Philosophy} 82 (7): 335--49. doi:
+\href{https://doi.org/10.2307/2026523}{10.2307/2026523}.
+
+\bibitem[\citeproctext]{ref-WOS000085841900002}
+Haslanger, Sally. 2000. {``Gender and Race: (What) Are They? (What) Do
+We Want Them To Be?''} \emph{Noûs} 34 (1): 31--55. doi:
+\href{https://doi.org/10.1111/0029-4624.00201}{10.1111/0029-4624.00201}.
+
+\bibitem[\citeproctext]{ref-WOSA1982NC42600008}
+Haugeland, John. 1982. {``Weak Supervenience.''} \emph{American
+Philosophical Quarterly} 19 (1): 93--103.
+
+\bibitem[\citeproctext]{ref-WOS000262624000001}
+Hawthorne, John, and Jason Stanley. 2008. {``Knowledge and Action.''}
+\emph{Journal Of Philosophy} 105 (10): 571--90. doi:
+\href{https://doi.org/10.5840/jphil20081051022}{10.5840/jphil20081051022}.
+
+\bibitem[\citeproctext]{ref-WOS000169238500001}
+Heck, Richard Kimberly. 2000. {``Nonconceptual Content and the {`Space
+of Reasons'}.''} \emph{Philosophical Review} 109 (4): 483--523. doi:
+\href{https://doi.org/10.1215/00318108-109-4-483}{10.1215/00318108-109-4-483}.
+
+\bibitem[\citeproctext]{ref-WOS000273182700004}
+Hills, Alison. 2009. {``Moral Testimony and Moral Epistemology.''}
+\emph{Ethics} 120 (1): 94--127. doi:
+\href{https://doi.org/10.1086/648610}{10.1086/648610}.
+
+\bibitem[\citeproctext]{ref-WOS000387458900001}
+---------. 2016. {``Understanding Why.''} \emph{Noûs} 50 (4): 661--88.
+doi: \href{https://doi.org/10.1111/nous.12092}{10.1111/nous.12092}.
+
+\bibitem[\citeproctext]{ref-WOS000344362900006}
+Horowitz, Sophie. 2014. {``Epistemic Akrasia.''} \emph{Noûs} 48 (4):
+718--44. doi:
+\href{https://doi.org/10.1111/nous.12026}{10.1111/nous.12026}.
+
+\bibitem[\citeproctext]{ref-WOSA1978FR68900001}
+Hull, David L. 1978. {``A Matter of Individuality.''} \emph{Philosophy
+Of Science} 45 (3): 335--60. doi:
+\href{https://doi.org/10.1086/288811}{10.1086/288811}.
+
+\bibitem[\citeproctext]{ref-WOS000511796600001}
+Isaac, Manuel Gustavo. 2020. {``How To Conceptually Engineer Conceptual
+Engineering?''} \emph{Inquiry} NA (NA): NA--. doi:
+\href{https://doi.org/10.1080/0020174X.2020.1719881}{10.1080/0020174X.2020.1719881}.
+
+\bibitem[\citeproctext]{ref-WOS000569093600001}
+Ismael, Jenann, and Jonathan Schaffer. 2020. {``Quantum Holism:
+Nonseparability as Common Ground.''} \emph{Synthese} 197 (10): 4131--60.
+doi:
+\href{https://doi.org/10.1007/s11229-016-1201-2}{10.1007/s11229-016-1201-2}.
+
+\bibitem[\citeproctext]{ref-WOSA1982NH65300003}
+Jackson, Frank. 1982. {``Epiphenomenal Qualia.''} \emph{Philosophical
+Quarterly} 32 (127): 127--36. doi:
+\href{https://doi.org/10.2307/2960077}{10.2307/2960077}.
+
+\bibitem[\citeproctext]{ref-WOSA1991FK52800001}
+---------. 1991. {``Decision-Theoretic Consequentialism and the Nearest
+and Dearest Objection.''} \emph{Ethics} 101 (3): 461--82. doi:
+\href{https://doi.org/10.1086/293312}{10.1086/293312}.
+
+\bibitem[\citeproctext]{ref-WOSA1988P549200004}
+Jackson, Frank, and Philip Pettit. 1988. {``Functionalism and Broad
+Content.''} \emph{Mind} 97 (387): 381--400.
+
+\bibitem[\citeproctext]{ref-WOSA1990CR32400008}
+---------. 1990. {``Program Explanation: A General Perspective.''}
+\emph{Analysis} 50 (2): 107--17. doi:
+\href{https://doi.org/10.2307/3328853}{10.2307/3328853}.
+
+\bibitem[\citeproctext]{ref-WOS000209153800006}
+Jenkins, C. S. 2011. {``Is Metaphysical Dependence Irreflexive?''}
+\emph{Monist} 94 (2): 267--76. doi:
+\href{https://doi.org/10.5840/monist201194213}{10.5840/monist201194213}.
+
+\bibitem[\citeproctext]{ref-WOSA1992KC39800002}
+Johnston, Mark. 1992. {``How To Speak of the Colors.''}
+\emph{Philosophical Studies} 68 (3): 221--63. doi:
+\href{https://doi.org/10.1007/BF00694847}{10.1007/BF00694847}.
+
+\bibitem[\citeproctext]{ref-WOSA1996VL52500002}
+Jones, Karen. 1996. {``Trust as An Affective Attitude.''} \emph{Ethics}
+107 (1): 4--25. doi:
+\href{https://doi.org/10.1086/233694}{10.1086/233694}.
+
+\bibitem[\citeproctext]{ref-WOS000077956100002}
+Joyce, James M. 1998. {``A Nonpragmatic Vindication of Probabilism.''}
+\emph{Philosophy Of Science} 65 (4): 575--603. doi:
+\href{https://doi.org/10.1086/392661}{10.1086/392661}.
+
+\bibitem[\citeproctext]{ref-WOS000287526900005}
+Kahane, Guy. 2011. {``Evolutionary Debunking Arguments.''} \emph{Noûs}
+45 (1): 103--25. doi:
+\href{https://doi.org/10.1111/j.1468-0068.2010.00770.x}{10.1111/j.1468-0068.2010.00770.x}.
+
+\bibitem[\citeproctext]{ref-WOS000295735100004}
+Kaplan, David Michael, and Carl F. Craver. 2011. {``The Explanatory
+Force of Dynamical and Mathematical Models in Neuroscience: A
+Mechanistic Perspective.''} \emph{Philosophy Of Science} 78 (4):
+601--27. doi: \href{https://doi.org/10.1086/661755}{10.1086/661755}.
+
+\bibitem[\citeproctext]{ref-WOSA1983PX89100011}
+Kavka, Gregory S. 1983. {``The Toxin Puzzle.''} \emph{Analysis} 43 (1):
+33--36. doi: \href{https://doi.org/10.2307/3327802}{10.2307/3327802}.
+
+\bibitem[\citeproctext]{ref-10.2307_2025096}
+Kim, Jaegwon. 1973. {``Causation, Nomic Subsumption, and the Concept of
+Event.''} \emph{Journal Of Philosophy} 70 (8): 217--36.
+
+\bibitem[\citeproctext]{ref-WOSA1978EL93700009}
+---------. 1978. {``Supervenience and Nomological Incommensurables.''}
+\emph{American Philosophical Quarterly} 15 (2): 149--56.
+
+\bibitem[\citeproctext]{ref-WOSA1982NC90700004}
+---------. 1982. {``Psychophysical Supervenience.''} \emph{Philosophical
+Studies} 41 (1): 51--70. doi:
+\href{https://doi.org/10.1007/BF00353523}{10.1007/BF00353523}.
+
+\bibitem[\citeproctext]{ref-WOSA1984TV24600001}
+---------. 1984. {``Concepts of Supervenience.''} \emph{Philosophy And
+Phenomenological Research} 45 (2): 153--76. doi:
+\href{https://doi.org/10.2307/2107423}{10.2307/2107423}.
+
+\bibitem[\citeproctext]{ref-WOSA1990FU75100001}
+---------. 1990. {``Supervenience as a Philosophical Concept.''}
+\emph{Metaphilosophy} 21 (1-2): 1--27. doi:
+\href{https://doi.org/10.1111/j.1467-9973.1990.tb00830.x}{10.1111/j.1467-9973.1990.tb00830.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1992HF90400001}
+---------. 1992. {``Multiple Realization and the Metaphysics of
+Reduction.''} \emph{Philosophy And Phenomenological Research} 52 (1):
+1--26. doi: \href{https://doi.org/10.2307/2107741}{10.2307/2107741}.
+
+\bibitem[\citeproctext]{ref-WOS000082592000002}
+---------. 1999. {``Making Sense of Emergence.''} \emph{Philosophical
+Studies} 95 (1-2): 3--36. doi:
+\href{https://doi.org/10.1023/A:1004563122154}{10.1023/A:1004563122154}.
+
+\bibitem[\citeproctext]{ref-WOSA1981NA08400001}
+Kitcher, Philip. 1981. {``Explanatory Unification.''} \emph{Philosophy
+Of Science} 48 (4): 507--31. doi:
+\href{https://doi.org/10.1086/289019}{10.1086/289019}.
+
+\bibitem[\citeproctext]{ref-WOSA1990CH71200001}
+---------. 1990. {``The Division of Cognitive Labor.''} \emph{Journal Of
+Philosophy} 87 (1): 5--22. doi:
+\href{https://doi.org/10.2307/2026796}{10.2307/2026796}.
+
+\bibitem[\citeproctext]{ref-WOSA1992HF90300002}
+---------. 1992. {``The Naturalists Return.''} \emph{Philosophical
+Review} 101 (1): 53--114. doi:
+\href{https://doi.org/10.2307/2185044}{10.2307/2185044}.
+
+\bibitem[\citeproctext]{ref-WOS000183806600005}
+Knobe, Joshua. 2003. {``Intentional Action and Side Effects in Ordinary
+Language.''} \emph{Analysis} 63 (3): 190--94. doi:
+\href{https://doi.org/10.1111/1467-8284.00419}{10.1111/1467-8284.00419}.
+
+\bibitem[\citeproctext]{ref-WOS000610097900014}
+Koch, Steffen. 2021. {``The Externalist Challenge To Conceptual
+Engineering.''} \emph{Synthese} 198 (1): 327--48. doi:
+\href{https://doi.org/10.1007/s11229-018-02007-6}{10.1007/s11229-018-02007-6}.
+
+\bibitem[\citeproctext]{ref-WOS000231037900002}
+Kolodny, Niko. 2005. {``Why Be Rational?''} \emph{Mind} 114 (455):
+509--63. doi:
+\href{https://doi.org/10.1093/mind/fzi509}{10.1093/mind/fzi509}.
+
+\bibitem[\citeproctext]{ref-WOS000280778100001}
+Kolodny, Niko, and John MacFarlane. 2010. {``Ifs and Oughts.''}
+\emph{Journal Of Philosophy} 107 (3): 115--43. doi:
+\href{https://doi.org/10.5840/jphil2010107310}{10.5840/jphil2010107310}.
+
+\bibitem[\citeproctext]{ref-WOSA1983PZ01000002}
+Kornblith, Hilary. 1983. {``Justified Belief and Epistemically
+Responsible Action.''} \emph{Philosophical Review} 92 (1): 33--48. doi:
+\href{https://doi.org/10.2307/2184520}{10.2307/2184520}.
+
+\bibitem[\citeproctext]{ref-WOSA1986AYQ1300001}
+Korsgaard, Christine M. 1986. {``Skepticism About Practical Reason.''}
+\emph{Journal Of Philosophy} 83 (1): 5--25. doi:
+\href{https://doi.org/10.2307/2026464}{10.2307/2026464}.
+
+\bibitem[\citeproctext]{ref-WOSA1975BF60000005}
+Kripke, Saul. 1975. {``Outline of a Theory of Truth.''} \emph{Journal Of
+Philosophy} 72 (19): 690--716. doi:
+\href{https://doi.org/10.2307/2024634}{10.2307/2024634}.
+
+\bibitem[\citeproctext]{ref-WOSA1982NV01500001}
+Lackey, DP. 1982. {``Missiles and Morals: A Utilitarian Look At Nuclear
+Deterrence.''} \emph{Philosophy \& Public Affairs} 11 (3): 189--231.
+
+\bibitem[\citeproctext]{ref-WOS000250773100002}
+Lackey, Jennifer. 2007. {``Norms of Assertion.''} \emph{Noûs} 41 (4):
+594--626. doi:
+\href{https://doi.org/10.1111/j.1468-0068.2007.00664.x}{10.1111/j.1468-0068.2007.00664.x}.
+
+\bibitem[\citeproctext]{ref-WOS000076086400005}
+Ladyman, James. 1998. {``What Is Structural Realism?''} \emph{Studies In
+History And Philosophy Of Science} 29A (3): 409--24. doi:
+\href{https://doi.org/10.1016/S0039-3681(98)80129-5}{10.1016/S0039-3681(98)80129-5}.
+
+\bibitem[\citeproctext]{ref-WOSA1993MJ74900002}
+Langton, Rae. 1993. {``Speech Acts and Unspeakable Acts.''}
+\emph{Philosophy \& Public Affairs} 22 (4): 293--330.
+
+\bibitem[\citeproctext]{ref-WOS000073836400005}
+Langton, Rae, and David Lewis. 1998. {``Defining {`Intrinsic'}.''}
+\emph{Philosophy And Phenomenological Research} 58 (2): 333--45. doi:
+\href{https://doi.org/10.2307/2653512}{10.2307/2653512}.
+
+\bibitem[\citeproctext]{ref-WOS000236414800001}
+Lasersohn, Peter. 2005. {``Context Dependence, Disagreement, and
+Predicates of Personal Taste.''} \emph{Linguistics And Philosophy} 28
+(6): 643--86. doi:
+\href{https://doi.org/10.1007/s10988-005-0596-x}{10.1007/s10988-005-0596-x}.
+
+\bibitem[\citeproctext]{ref-WOS000511728500002}
+Lasonen-Aarnio, Maria. 2020. {``Enkrasia or Evidentialism? Learning To
+Love Mismatch.''} \emph{Philosophical Studies} 177 (3): 597--632. doi:
+\href{https://doi.org/10.1007/s11098-018-1196-2}{10.1007/s11098-018-1196-2}.
+
+\bibitem[\citeproctext]{ref-WOSA1981LY92900002}
+Laudan, Larry. 1981. {``A Confutation of Convergent Realism.''}
+\emph{Philosophy Of Science} 48 (1): 19--49. doi:
+\href{https://doi.org/10.1086/288975}{10.1086/288975}.
+
+\bibitem[\citeproctext]{ref-WOSA1990CX46800004}
+---------. 1990. {``Normative Naturalism.''} \emph{Philosophy Of
+Science} 57 (1): 44--59. doi:
+\href{https://doi.org/10.1086/289530}{10.1086/289530}.
+
+\bibitem[\citeproctext]{ref-WOSA1983SU49200007}
+Levine, Joseph. 1983. {``Materialism and Qualia: The Explanatory Gap.''}
+\emph{Pacific Philosophical Quarterly} 64 (4): 354--61.
+
+\bibitem[\citeproctext]{ref-WOSA1970ZE32700001}
+Lewis, David. 1970. {``How To Define Theoretical Terms.''} \emph{Journal
+Of Philosophy} 67 (13): 427--46. doi:
+\href{https://doi.org/10.2307/2023861}{10.2307/2023861}.
+
+\bibitem[\citeproctext]{ref-10.2307_2025310}
+---------. 1973. {``Causation.''} \emph{Journal Of Philosophy} 70 (17):
+556--67.
+
+\bibitem[\citeproctext]{ref-WOSA1976BF01500006}
+---------. 1976a. {``Paradoxes of Time Travel.''} \emph{American
+Philosophical Quarterly} 13 (2): 145--52.
+
+\bibitem[\citeproctext]{ref-WOSA1976BZ95100001}
+---------. 1976b. {``Probabilities of Conditionals and Conditional
+Probabilities.''} \emph{Philosophical Review} 85 (3): 297--315. doi:
+\href{https://doi.org/10.2307/2184045}{10.2307/2184045}.
+
+\bibitem[\citeproctext]{ref-WOSA1978ER30500004}
+---------. 1978. {``Truth in Fiction.''} \emph{American Philosophical
+Quarterly} 15 (1): 37--46.
+
+\bibitem[\citeproctext]{ref-WOSA1979JC64200001}
+---------. 1979a. {``Attitudes De Dicto and De Se.''}
+\emph{Philosophical Review} 88 (4): 513--43. doi:
+\href{https://doi.org/10.2307/2184843}{10.2307/2184843}.
+
+\bibitem[\citeproctext]{ref-WOSA1979JB14500003}
+---------. 1979b. {``Counterfactual Dependence and Time's Arrow.''}
+\emph{Noûs} 13 (4): 455--76. doi:
+\href{https://doi.org/10.2307/2215339}{10.2307/2215339}.
+
+\bibitem[\citeproctext]{ref-WOSA1979HJ57600007}
+---------. 1979c. {``Scorekeeping in a Language Game.''} \emph{Journal
+Of Philosophical Logic} 8 (3): 339--59.
+
+\bibitem[\citeproctext]{ref-WOSA1981LW58400001}
+---------. 1981. {``Causal Decision Theory.''} \emph{Australasian
+Journal Of Philosophy} 59 (1): 5--30. doi:
+\href{https://doi.org/10.1080/00048408112340011}{10.1080/00048408112340011}.
+
+\bibitem[\citeproctext]{ref-WOSA1983RR51600001}
+---------. 1983. {``New Work for a Theory of Universals.''}
+\emph{Australasian Journal Of Philosophy} 61 (4): 343--77. doi:
+\href{https://doi.org/10.1080/00048408312341131}{10.1080/00048408312341131}.
+
+\bibitem[\citeproctext]{ref-WOSA1984TQ70900001}
+---------. 1984. {``Putnam's Paradox.''} \emph{Australasian Journal Of
+Philosophy} 62 (3): 221--36. doi:
+\href{https://doi.org/10.1080/00048408412340013}{10.1080/00048408412340013}.
+
+\bibitem[\citeproctext]{ref-WOSA1994PM10400005}
+---------. 1994. {``Humean Supervenience Debugged.''} \emph{Mind} 103
+(412): 473--90. doi:
+\href{https://doi.org/10.1093/mind/103.412.473}{10.1093/mind/103.412.473}.
+
+\bibitem[\citeproctext]{ref-WOSA1996VY21200001}
+---------. 1996. {``Elusive Knowledge.''} \emph{Australasian Journal Of
+Philosophy} 74 (4): 549--67. doi:
+\href{https://doi.org/10.1080/00048409612347521}{10.1080/00048409612347521}.
+
+\bibitem[\citeproctext]{ref-WOSA1997WP33800001}
+---------. 1997. {``Finkish Dispositions.''} \emph{Philosophical
+Quarterly} 47 (187): 143--58. doi:
+\href{https://doi.org/10.1111/1467-9213.00052}{10.1111/1467-9213.00052}.
+
+\bibitem[\citeproctext]{ref-WOS000089124200002}
+---------. 2000. {``Causation as Influence.''} \emph{Journal Of
+Philosophy} 97 (4): 182--97. doi:
+\href{https://doi.org/10.2307/2678389}{10.2307/2678389}.
+
+\bibitem[\citeproctext]{ref-WOS000175194800009}
+List, Christian, and Philip Pettit. 2002. {``Aggregating Sets of
+Judgments: An Impossibility Result.''} \emph{Economics And Philosophy}
+18 (1): 89--110. doi:
+\href{https://doi.org/10.1017/S0266267102001098}{10.1017/S0266267102001098}.
+
+\bibitem[\citeproctext]{ref-WOS000595368200011}
+Littlejohn, Clayton. 2020. {``Truth, Knowledge, and the Standard of
+Proof in Criminal Law.''} \emph{Synthese} 197 (12): 5253--86. doi:
+\href{https://doi.org/10.1007/s11229-017-1608-4}{10.1007/s11229-017-1608-4}.
+
+\bibitem[\citeproctext]{ref-WOSA1981KZ61400002}
+Lycan, William G. 1981. {``Form, Function, and Feel.''} \emph{Journal Of
+Philosophy} 78 (1): 24--50. doi:
+\href{https://doi.org/10.2307/2025395}{10.2307/2025395}.
+
+\bibitem[\citeproctext]{ref-WOS000087305900001}
+Machamer, Peter, Lindley Darden, and Carl F. Craver. 2000. {``Thinking
+About Mechanisms.''} \emph{Philosophy Of Science} 67 (1): 1--25. doi:
+\href{https://doi.org/10.1086/392759}{10.1086/392759}.
+
+\bibitem[\citeproctext]{ref-WOS000298593200002}
+Macpherson, Fiona. 2012. {``Cognitive Penetration of Colour Experience:
+Rethinking the Issue in Light of An Indirect Mechanism.''}
+\emph{Philosophy And Phenomenological Research} 84 (1): 24--62. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2010.00481.x}{10.1111/j.1933-1592.2010.00481.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1980JW85100001}
+Maddy, Penelope. 1980. {``Perception and Mathematical Intuition.''}
+\emph{Philosophical Review} 89 (2): 163--96. doi:
+\href{https://doi.org/10.2307/2184647}{10.2307/2184647}.
+
+\bibitem[\citeproctext]{ref-WOS000575210100002}
+Maguire, Barry, and Jack Woods. 2020. {``The Game of Belief.''}
+\emph{Philosophical Review} 129 (2): 211--49. doi:
+\href{https://doi.org/10.1215/00318108-8012843}{10.1215/00318108-8012843}.
+
+\bibitem[\citeproctext]{ref-WOSA1980JJ63300001}
+Marcus, Ruth Barcan. 1980. {``Moral Dilemmas and Consistency.''}
+\emph{Journal Of Philosophy} 77 (3): 121--36. doi:
+\href{https://doi.org/10.2307/2025665}{10.2307/2025665}.
+
+\bibitem[\citeproctext]{ref-WOSA1994MT56900001}
+Martin, C. B. 1994. {``Dispositions and Conditionals.''}
+\emph{Philosophical Quarterly} 44 (174): 1--8. doi:
+\href{https://doi.org/10.2307/2220143}{10.2307/2220143}.
+
+\bibitem[\citeproctext]{ref-WOS000177781700002}
+Martin, Michael G. F. 2002. {``The Transparency of Experience.''}
+\emph{Mind \& Language} 17 (4): 376--425. doi:
+\href{https://doi.org/10.1111/1468-0017.00205}{10.1111/1468-0017.00205}.
+
+\bibitem[\citeproctext]{ref-WOS000223334900003}
+---------. 2004. {``The Limits of Self-Awareness.''} \emph{Philosophical
+Studies} 120 (1-3): 37--89. doi:
+\href{https://doi.org/10.1023/B:PHIL.0000033751.66949.97}{10.1023/B:PHIL.0000033751.66949.97}.
+
+\bibitem[\citeproctext]{ref-WOS000173660000001}
+Matthen, Mohan, and André Ariew. 2002. {``Two Ways of Thinking About
+Fitness and Natural Selection.''} \emph{Journal Of Philosophy} 99 (2):
+55--83. doi: \href{https://doi.org/10.2307/3655552}{10.2307/3655552}.
+
+\bibitem[\citeproctext]{ref-WOSA1979JT33600005}
+McDowell, John. 1979. {``Virtue and Reason.''} \emph{Monist} 62 (3):
+331--50. doi:
+\href{https://doi.org/10.5840/monist197962319}{10.5840/monist197962319}.
+
+\bibitem[\citeproctext]{ref-WOSA1985AQZ7400002}
+McGee, Vann. 1985. {``A Counterexample To Modus Ponens.''} \emph{Journal
+Of Philosophy} 82 (9): 462--71. doi:
+\href{https://doi.org/10.2307/2026276}{10.2307/2026276}.
+
+\bibitem[\citeproctext]{ref-WOSA1991EW83300002}
+McKinsey, Michael. 1991. {``Anti-Individualism and Privileged Access.''}
+\emph{Analysis} 51 (1): 9--16. doi:
+\href{https://doi.org/10.2307/3328625}{10.2307/3328625}.
+
+\bibitem[\citeproctext]{ref-WOSA1985ARQ5600003}
+McMullin, Ernan. 1985. {``Galilean Idealization.''} \emph{Studies In
+History And Philosophy Of Science} 16 (3): 247--73. doi:
+\href{https://doi.org/10.1016/0039-3681(85)90003-2}{10.1016/0039-3681(85)90003-2}.
+
+\bibitem[\citeproctext]{ref-WOSA1989U850300001}
+Millikan, Ruth Garrett. 1989a. {``Biosemantics.''} \emph{Journal Of
+Philosophy} 86 (6): 281--97. doi:
+\href{https://doi.org/10.2307/2027123}{10.2307/2027123}.
+
+\bibitem[\citeproctext]{ref-WOSA1989AA09400006}
+---------. 1989b. {``In Defense of Proper Functions.''} \emph{Philosophy
+Of Science} 56 (2): 288--302. doi:
+\href{https://doi.org/10.1086/289488}{10.1086/289488}.
+
+\bibitem[\citeproctext]{ref-WOS000644649500003}
+Nado, Jennifer. 2021. {``Conceptual Engineering, Truth, and Efficacy.''}
+\emph{Synthese} 198 (SUPPL 7): 1507--27. doi:
+\href{https://doi.org/10.1007/s11229-019-02096-x}{10.1007/s11229-019-02096-x}.
+
+\bibitem[\citeproctext]{ref-WOSA1974U469700001}
+Nagel, Thomas. 1974. {``What Is It Like To Be a Bat.''}
+\emph{Philosophical Review} 83 (4): 435--50. doi:
+\href{https://doi.org/10.2307/2183914}{10.2307/2183914}.
+
+\bibitem[\citeproctext]{ref-WOSA1991FQ15000002}
+Neander, Karen. 1991a. {``Functions as Selected Effects: The Conceptual
+Analyst's Defense.''} \emph{Philosophy Of Science} 58 (2): 168--84. doi:
+\href{https://doi.org/10.1086/289610}{10.1086/289610}.
+
+\bibitem[\citeproctext]{ref-WOSA1991GR92500005}
+---------. 1991b. {``The Teleological Notion of Function.''}
+\emph{Australasian Journal Of Philosophy} 69 (4): 454--68. doi:
+\href{https://doi.org/10.1080/00048409112344881}{10.1080/00048409112344881}.
+
+\bibitem[\citeproctext]{ref-WOS000539283800001}
+Nguyen, C. Thi. 2020. {``Echo Chambers and Epistemic Bubbles.''}
+\emph{Episteme} 17 (2): 141--61. doi:
+\href{https://doi.org/10.1017/epi.2018.32}{10.1017/epi.2018.32}.
+
+\bibitem[\citeproctext]{ref-WOS000519902900005}
+Novaes, Catarina Dutilh. 2020. {``Carnapian Explication and Ameliorative
+Analysis: A Systematic Comparison.''} \emph{Synthese} 197 (3): 1011--34.
+doi:
+\href{https://doi.org/10.1007/s11229-018-1732-9}{10.1007/s11229-018-1732-9}.
+
+\bibitem[\citeproctext]{ref-WOS000543777100004}
+Parker, Wendy S. 2020. {``Model Evaluation: An Adequacy-For-Purpose
+View.''} \emph{Philosophy Of Science} 87 (3): 457--77. doi:
+\href{https://doi.org/10.1086/708691}{10.1086/708691}.
+
+\bibitem[\citeproctext]{ref-WOS000168307800002}
+Peacocke, Christopher. 2001. {``Does Perception Have a Nonconceptual
+Content?''} \emph{Journal Of Philosophy} 98 (5): 239--64. doi:
+\href{https://doi.org/10.2307/2678383}{10.2307/2678383}.
+
+\bibitem[\citeproctext]{ref-WOSA1977EA01800002}
+Perry, John. 1977. {``Frege on Demonstratives.''} \emph{Philosophical
+Review} 86 (4): 474--97. doi:
+\href{https://doi.org/10.2307/2184564}{10.2307/2184564}.
+
+\bibitem[\citeproctext]{ref-WOSA1979HE39600001}
+---------. 1979. {``The Problem of the Essential Indexical.''}
+\emph{Noûs} 13 (1): 3--21. doi:
+\href{https://doi.org/10.2307/2214792}{10.2307/2214792}.
+
+\bibitem[\citeproctext]{ref-WOS000298031500001}
+Piccinini, Gualtiero, and Carl Craver. 2011. {``Integrating Psychology
+and Neuroscience: Functional Analyses as Mechanism Sketches.''}
+\emph{Synthese} 183 (3): 283--311. doi:
+\href{https://doi.org/10.1007/s11229-011-9898-4}{10.1007/s11229-011-9898-4}.
+
+\bibitem[\citeproctext]{ref-WOS000671046400006}
+Pinder, Mark. 2021. {``Conceptual Engineering, Metasemantic Externalism
+and Speaker-Meaning.''} \emph{Mind} 130 (517): 141--63. doi:
+\href{https://doi.org/10.1093/mind/fzz069}{10.1093/mind/fzz069}.
+
+\bibitem[\citeproctext]{ref-WOS000332023600001}
+Plunkett, David, and Tim Sundell. 2013. {``Disagreement and the
+Semantics of Normative and Evaluative Terms.''} \emph{Philosophers
+Imprint} 13 (23): 1--37.
+
+\bibitem[\citeproctext]{ref-WOS000309450000003}
+Pohlhaus, Gaile, Jr. 2012. {``Relational Knowing and Epistemic
+Injustice: Toward a Theory of Willful Hermeneutical Ignorance.''}
+\emph{Hypatia} 27 (4): 715--35. doi:
+\href{https://doi.org/10.1111/j.1527-2001.2011.01222.x}{10.1111/j.1527-2001.2011.01222.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1979GW33200004}
+Priest, Graham. 1979. {``The Logic of Paradox.''} \emph{Journal Of
+Philosophical Logic} 8 (2): 219--41.
+
+\bibitem[\citeproctext]{ref-WOS000311002900002}
+Pritchard, Duncan. 2012. {``Anti-Luck Virtue Epistemology.''}
+\emph{Journal Of Philosophy} 109 (3): 247--79. doi:
+\href{https://doi.org/10.5840/jphil201210939}{10.5840/jphil201210939}.
+
+\bibitem[\citeproctext]{ref-WOS000165361800002}
+Pryor, James. 2000. {``The Skeptic and the Dogmatist.''} \emph{Noûs} 34
+(4): 517--49. doi:
+\href{https://doi.org/10.1111/0029-4624.00277}{10.1111/0029-4624.00277}.
+
+\bibitem[\citeproctext]{ref-10.2307_2025079}
+Putnam, Hilary. 1973. {``Meaning and Reference.''} \emph{Journal Of
+Philosophy} 70 (19): 699--711.
+
+\bibitem[\citeproctext]{ref-WOSA1980KJ75900004}
+---------. 1980. {``Models and Reality.''} \emph{Journal Of Symbolic
+Logic} 45 (3): 464--82. doi:
+\href{https://doi.org/10.2307/2273415}{10.2307/2273415}.
+
+\bibitem[\citeproctext]{ref-WOSA1994PF23100001}
+---------. 1994. {``Sense, Nonsense, and the Senses: An Inquiry into the
+Powers of the Human Mind.''} \emph{Journal Of Philosophy} 91 (9):
+445--65. doi: \href{https://doi.org/10.2307/2940978}{10.2307/2940978}.
+
+\bibitem[\citeproctext]{ref-WOS000222134800001}
+Rabinowicz, Wlodek, and Toni Rønnow‐Rasmussen. 2004. {``The Strike of
+the Demon: On Fitting Pro-Attitudes and Value.''} \emph{Ethics} 114 (3):
+391--423. doi: \href{https://doi.org/10.1086/381694}{10.1086/381694}.
+
+\bibitem[\citeproctext]{ref-WOSA1984SH40600002}
+Railton, Peter. 1984. {``Alienation, Consequentialism, and the Demands
+of Morality.''} \emph{Philosophy \& Public Affairs} 13 (2): 134--71.
+
+\bibitem[\citeproctext]{ref-WOSA1986C044900001}
+---------. 1986. {``Moral Realism.''} \emph{Philosophical Review} 95
+(2): 163--207. doi:
+\href{https://doi.org/10.2307/2185589}{10.2307/2185589}.
+
+\bibitem[\citeproctext]{ref-WOSA1980KH88100001}
+Rawls, John. 1980. {``Kantian Constructivism in Moral Theory.''}
+\emph{Journal Of Philosophy} 77 (9): 515--35. doi:
+\href{https://doi.org/10.2307/2025790}{10.2307/2025790}.
+
+\bibitem[\citeproctext]{ref-WOSA1985APA8500001}
+---------. 1985. {``Justice as Fairness: Political Not Metaphysical.''}
+\emph{Philosophy \& Public Affairs} 14 (3): 223--51.
+
+\bibitem[\citeproctext]{ref-WOS000519571300008}
+Ritchie, Katherine. 2020. {``Social Structures and the Ontology of
+Social Groups.''} \emph{Philosophy And Phenomenological Research} 100
+(2): 402--24. doi:
+\href{https://doi.org/10.1111/phpr.12555}{10.1111/phpr.12555}.
+
+\bibitem[\citeproctext]{ref-WOSA1990DR99100001}
+Rosen, Gideon. 1990. {``Modal Fictionalism.''} \emph{Mind} 99 (395):
+327--54.
+
+\bibitem[\citeproctext]{ref-WOSA1986C316000003}
+Rosenthal, David M. 1986. {``Two Concepts of Consciousness.''}
+\emph{Philosophical Studies} 49 (3): 329--59. doi:
+\href{https://doi.org/10.1007/BF00355521}{10.1007/BF00355521}.
+
+\bibitem[\citeproctext]{ref-WOS000333404400001}
+Ross, Jacob, and Mark Schroeder. 2014. {``Belief, Credence, and
+Pragmatic Encroachment.''} \emph{Philosophy And Phenomenological
+Research} 88 (2): 259--88. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2011.00552.x}{10.1111/j.1933-1592.2011.00552.x}.
+
+\bibitem[\citeproctext]{ref-WOS000518880300008}
+Russell, Gillian. 2020. {``Logic Isn't Normative.''} \emph{Inquiry} 63
+(3-4): 371--88. doi:
+\href{https://doi.org/10.1080/0020174X.2017.1372305}{10.1080/0020174X.2017.1372305}.
+
+\bibitem[\citeproctext]{ref-WOS000172282100001}
+Rysiew, Patrick. 2001. {``The Context-Sensitivity of Knowledge
+Attributions.''} \emph{Noûs} 35 (4): 477--514. doi:
+\href{https://doi.org/10.1111/0029-4624.00349}{10.1111/0029-4624.00349}.
+
+\bibitem[\citeproctext]{ref-WOS000272855000002}
+Schaffer, Jonathan. 2010a. {``Monism: The Priority of the Whole.''}
+\emph{Philosophical Review} 119 (1): 31--76. doi:
+\href{https://doi.org/10.1215/00318108-2009-025}{10.1215/00318108-2009-025}.
+
+\bibitem[\citeproctext]{ref-WOS000275147000005}
+---------. 2010b. {``The Least Discerning and Most Promiscuous
+Truthmaker.''} \emph{Philosophical Quarterly} 60 (239): 307--24. doi:
+\href{https://doi.org/10.1111/j.1467-9213.2009.612.x}{10.1111/j.1467-9213.2009.612.x}.
+
+\bibitem[\citeproctext]{ref-WOS000368189400004}
+---------. 2016. {``Grounding in the Image of Causation.''}
+\emph{Philosophical Studies} 173 (1): 49--100. doi:
+\href{https://doi.org/10.1007/s11098-014-0438-1}{10.1007/s11098-014-0438-1}.
+
+\bibitem[\citeproctext]{ref-WOSA1991EW92800001}
+Schiffer, Stephen. 1991. {``Ceteris Paribus Laws.''} \emph{Mind} 100
+(397): 1--17.
+
+\bibitem[\citeproctext]{ref-WOSA1992JQ78400001}
+---------. 1992. {``Belief Ascription.''} \emph{Journal Of Philosophy}
+89 (10): 499--521. doi:
+\href{https://doi.org/10.2307/2941005}{10.2307/2941005}.
+
+\bibitem[\citeproctext]{ref-WOS000334424500001}
+Schoenfield, Miriam. 2014. {``Permission To Believe: Why Permissivism Is
+True and What It Tells Us About Irrelevant Influences on Belief.''}
+\emph{Noûs} 48 (2): 193--218. doi:
+\href{https://doi.org/10.1111/nous.12006}{10.1111/nous.12006}.
+
+\bibitem[\citeproctext]{ref-WOS000284854700005}
+Schwitzgebel, Eric. 2010. {``Acting Contrary To Our Professed Beliefs or
+the Gulf Between Occurrent Judgment and Dispositional Belief.''}
+\emph{Pacific Philosophical Quarterly} 91 (4): 531--53. doi:
+\href{https://doi.org/10.1111/j.1468-0114.2010.01381.x}{10.1111/j.1468-0114.2010.01381.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1982MW01200001}
+Sen, Amartya. 1982. {``Rights and Agency.''} \emph{Philosophy \& Public
+Affairs} 11 (1): 3--39.
+
+\bibitem[\citeproctext]{ref-WOS000224335200001}
+Shah, Nishi. 2003. {``How Truth Governs Belief.''} \emph{Philosophical
+Review} 112 (4): 447--82. doi:
+\href{https://doi.org/10.1215/00318108-112-4-447}{10.1215/00318108-112-4-447}.
+
+\bibitem[\citeproctext]{ref-WOS000240571800003}
+Shah, Nishi, and J. David Velleman. 2005. {``Doxastic Deliberation.''}
+\emph{Philosophical Review} 114 (4): 497--534. doi:
+\href{https://doi.org/10.1215/00318108-114-4-497}{10.1215/00318108-114-4-497}.
+
+\bibitem[\citeproctext]{ref-WOS000587857000011}
+Simion, Mona, and Christoph Kelp. 2020. {``Conceptual Innovation,
+Function First.''} \emph{Noûs} 54 (4): 985--1002. doi:
+\href{https://doi.org/10.1111/nous.12302}{10.1111/nous.12302}.
+
+\bibitem[\citeproctext]{ref-WOS000273550900001}
+Simmons, A. John. 2010. {``Ideal and Nonideal Theory.''}
+\emph{Philosophy \& Public Affairs} 38 (1): 5--36. doi:
+\href{https://doi.org/10.1111/j.1088-4963.2009.01172.x}{10.1111/j.1088-4963.2009.01172.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1972Z066400001}
+Singer, Peter. 1972. {``Famine, Affluence, and Morality.''}
+\emph{Philosophy \& Public Affairs} 1 (3): 229--43.
+
+\bibitem[\citeproctext]{ref-WOS000360509700002}
+Skiles, Alexander. 2015. {``Against Grounding Necessitarianism.''}
+\emph{Erkenntnis} 80 (4): 717--51. doi:
+\href{https://doi.org/10.1007/s10670-014-9669-y}{10.1007/s10670-014-9669-y}.
+
+\bibitem[\citeproctext]{ref-WOS000227058600002}
+Smith, Angela M. 2005. {``Responsibility for Attitudes: Activity and
+Passivity in Mental Life.''} \emph{Ethics} 115 (2): 236--71. doi:
+\href{https://doi.org/10.1086/426957}{10.1086/426957}.
+
+\bibitem[\citeproctext]{ref-WOS000179607800011}
+Stalnaker, Robert C. 2002. {``Common Ground.''} \emph{Linguistics And
+Philosophy} 25 (5-6): 701--21. doi:
+\href{https://doi.org/10.1023/A:1020867916902}{10.1023/A:1020867916902}.
+
+\bibitem[\citeproctext]{ref-WOS000088534100002}
+Stanley, Jason. 2000. {``Context and Logical Form.''} \emph{Linguistics
+And Philosophy} 23 (4): 391--434. doi:
+\href{https://doi.org/10.1023/A:1005599312747}{10.1023/A:1005599312747}.
+
+\bibitem[\citeproctext]{ref-WOS000088616400001}
+Stanley, Jason, and Zoltán Gendler Szabó. 2000. {``On Quantifier Domain
+Restriction.''} \emph{Mind \& Language} 15 (2-3): 219--61. doi:
+\href{https://doi.org/10.1111/1468-0017.00130}{10.1111/1468-0017.00130}.
+
+\bibitem[\citeproctext]{ref-WOS000170277300002}
+Stanley, Jason, and Timothy Williamson. 2001. {``Knowing How.''}
+\emph{Journal Of Philosophy} 98 (8): 411--44. doi:
+\href{https://doi.org/10.2307/2678403}{10.2307/2678403}.
+
+\bibitem[\citeproctext]{ref-WOSA1976CB49000002}
+Stocker, Michael. 1976. {``The Schizophrenia of Modern Ethical
+Theories.''} \emph{Journal Of Philosophy} 73 (14): 453--66. doi:
+\href{https://doi.org/10.2307/2025782}{10.2307/2025782}.
+
+\bibitem[\citeproctext]{ref-WOS000234431300006}
+Street, Sharon. 2006. {``A Darwinian Dilemma for Realist Theories of
+Value.''} \emph{Philosophical Studies} 127 (1): 109--66. doi:
+\href{https://doi.org/10.1007/s11098-005-1726-6}{10.1007/s11098-005-1726-6}.
+
+\bibitem[\citeproctext]{ref-WOSA1971Y116900003}
+Thomson, Judith Jarvis. 1971. {``A Defense of Abortion.''}
+\emph{Philosophy \& Public Affairs} 1 (1): 47--66.
+
+\bibitem[\citeproctext]{ref-WOSA1977EQ83600001}
+Tooley, Michael. 1977. {``Nature of Laws.''} \emph{Canadian Journal Of
+Philosophy} 7 (4): 667--98.
+
+\bibitem[\citeproctext]{ref-WOS000188660700003}
+Travis, Charles. 2004. {``The Silence of the Senses.''} \emph{Mind} 113
+(449): 57--94. doi:
+\href{https://doi.org/10.1093/mind/113.449.57}{10.1093/mind/113.449.57}.
+
+\bibitem[\citeproctext]{ref-WOS000275646800002}
+Turri, John. 2010. {``On the Relationship Between Propositional and
+Doxastic Justification.''} \emph{Philosophy And Phenomenological
+Research} 80 (2): 312--26. doi:
+\href{https://doi.org/10.1111/j.1933-1592.2010.00331.x}{10.1111/j.1933-1592.2010.00331.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1990EG85000002}
+Tye, Michael. 1990. {``Vague Objects.''} \emph{Mind} 99 (396): 535--57.
+
+\bibitem[\citeproctext]{ref-WOSA1996UV93000001}
+Veltman, Frank. 1996. {``Defaults in Update Semantics.''} \emph{Journal
+Of Philosophical Logic} 25 (3): 221--61.
+
+\bibitem[\citeproctext]{ref-WOSA1975W282300001}
+Watson, Gary. 1975. {``Free Agency.''} \emph{Journal Of Philosophy} 72
+(8): 205--20. doi:
+\href{https://doi.org/10.2307/2024703}{10.2307/2024703}.
+
+\bibitem[\citeproctext]{ref-WOSA1996XR76100003}
+Williamson, Timothy. 1996. {``Knowing and Asserting.''}
+\emph{Philosophical Review} 105 (4): 489--523. doi:
+\href{https://doi.org/10.2307/2998423}{10.2307/2998423}.
+
+\bibitem[\citeproctext]{ref-WOS000344393500001}
+Wilson, Jessica M. 2014. {``No Work for a Theory of Grounding.''}
+\emph{Inquiry} 57 (5-6): 535--79. doi:
+\href{https://doi.org/10.1080/0020174X.2014.907542}{10.1080/0020174X.2014.907542}.
+
+\bibitem[\citeproctext]{ref-WOSA1982PB73200001}
+Wolf, Susan. 1982. {``Moral Saints.''} \emph{Journal Of Philosophy} 79
+(8): 419--39. doi:
+\href{https://doi.org/10.2307/2026228}{10.2307/2026228}.
+
+\bibitem[\citeproctext]{ref-WOS000278111100001}
+Woodward, James. 2010. {``Causation in Biology: Stability, Specificity,
+and the Choice of Levels of Explanation.''} \emph{Biology \& Philosophy}
+25 (3): 287--318. doi:
+\href{https://doi.org/10.1007/s10539-010-9200-z}{10.1007/s10539-010-9200-z}.
+
+\bibitem[\citeproctext]{ref-WOSA1973P242100001}
+Wright, Larry. 1973. {``Functions.''} \emph{Philosophical Review} 82
+(2): 139--68. doi:
+\href{https://doi.org/10.2307/2183766}{10.2307/2183766}.
+
+\bibitem[\citeproctext]{ref-WOSA1992JA62400001}
+Yablo, Stephen. 1992. {``Mental Causation.''} \emph{Philosophical
+Review} 101 (2): 245--80. doi:
+\href{https://doi.org/10.2307/2185535}{10.2307/2185535}.
+
+\bibitem[\citeproctext]{ref-WOSA1993KQ63200001}
+---------. 1993. {``Is Conceivability a Guide To Possibility.''}
+\emph{Philosophy And Phenomenological Research} 53 (1): 1--42. doi:
+\href{https://doi.org/10.2307/2108052}{10.2307/2108052}.
+
+\bibitem[\citeproctext]{ref-WOS000251545300007}
+Yalcin, Seth. 2007. {``Epistemic Modals.''} \emph{Mind} 116 (464):
+983--1026. doi:
+\href{https://doi.org/10.1093/mind/fzm983}{10.1093/mind/fzm983}.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+?meta:citation.container-title}, 2024, pp. ?meta:citation.page.
+
+
+\end{document}

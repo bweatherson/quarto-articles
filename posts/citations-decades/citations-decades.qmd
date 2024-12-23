@@ -1,0 +1,937 @@
+---
+title: "Changes in Citation Patterns"
+abstract: |
+    Which journal articles are cited surprisingly often in recent times, given how often they were cited soon after publication? Conversely, which articles have a lot more citations soon after publication than you'd expect from their current prominence. This note goes over some data on these questions.
+date: today
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+  - unpublished
+  - in progress
+bibliography: 
+  - /Users/weath/Documents/citations-2025/cslbib.yaml
+  - /Users/weath/Documents/quarto-articles/brian-quarto.bib
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+format-links: [html]
+filters:
+  - colour.lua
+---
+
+```{r}
+library(tidyr)
+library(dplyr)
+
+require(tidyverse)
+require(knitr)
+require(slider)
+```
+
+```{r}
+#| label: loader
+#| cache: true
+
+library(tidyr)
+library(dplyr)
+require(tidyverse)
+require(knitr)
+require(slider)
+
+load("/Users/weath/Documents/citations-2025/philo_bib.RData")
+load("/Users/weath/Documents/citations-2025/philo_cite.RData")
+
+# Add an id number that includes a year reference
+philo_bib <- philo_bib %>%
+  select(-rowid) %>%
+  group_by(year) %>%
+  mutate(unique_id = paste0(year, sprintf("%05d", row_number()))) %>%
+  ungroup() %>%
+  select(unique_id, everything()) |>
+  rename(wos_id = id,
+         id = unique_id)
+
+# Add this id to citation tibble, and add years to that tibble
+philo_cite <- philo_cite %>%
+  left_join(philo_bib %>% select(old = id, wos_id), by = c("refs" = "wos_id")) %>%
+  left_join(philo_bib %>% select(new = id, wos_id), by = c("id" = "wos_id")) %>%
+  select(old, new) %>%
+  mutate(old_year = as.numeric(
+    str_sub(
+      old,
+      start = 1,
+      end = 4
+    )
+  )
+  ) %>%
+  mutate(new_year = as.numeric(
+    str_sub(
+      new,
+      start = 1,
+      end = 4
+    )
+  )
+  )
+
+# Count citations by year
+year_citations <- philo_cite |>
+  group_by(new_year) |>
+  tally(name = "all_citations")
+
+# Count citations by article
+citation_count <- philo_cite |>
+  group_by(old) |>
+  tally(name = "citations")
+
+# Add number of citations back to philo_bib
+# Remember to add extra line for 0s; they are NA after the join
+philo_bib <- philo_bib |>
+  left_join(
+    select(
+      citation_count,
+      id = old,
+      citations),
+    by = "id"
+  ) |>
+  replace_na(list(citations = 0))
+
+# Use separate_rows to split the authors into separate rows
+philo_bib_expanded <- philo_bib %>%
+    separate_rows(bibauth, sep = " and ")
+
+philo_cite_expanded <- philo_cite |>
+    mutate(new_decade = 
+            paste0(
+                floor(
+                    new_year/10
+                ),
+                "0s"
+            )) |>
+  mutate(old_decade = 
+           paste0(
+             floor(
+               old_year/10
+             ),
+             "0s"
+           )) |>left_join(
+        select(
+            philo_bib_expanded,
+            old_auth = bibauth,
+            old = id
+        ), by = "old", relationship = "many-to-many"
+    )
+
+top_articles_by_decade <- philo_cite_expanded |>
+    distinct(old, new, .keep_all = TRUE) |>
+    filter(new_year >= 1980) |>
+    filter(old_year >= 1970) |>
+    filter(new_year >= old_year) |>
+    group_by(old_decade, new_decade, old, old_year) |>
+    tally(name = "citations") |>
+    ungroup() |>
+    group_by(old_decade, new_decade) |>
+    mutate(adj_citations = case_when(
+      old_decade == new_decade & old_decade != "2020s" ~ citations * 10 / (
+        as.numeric(
+          str_sub(
+            old_decade, 1, 4)
+          ) + 11 - old_year),
+      TRUE ~ citations
+    )) |>
+    slice_max(order_by = adj_citations,
+              n = 20) |>
+    left_join(
+        select(
+            philo_bib,
+            old = id,
+            author = displayauth,
+            title,
+            bib = wos_id
+        ), by = "old"
+    ) |>
+    mutate(bib = paste0(
+      "@", str_replace(bib,":",""))) |>
+    ungroup() |>
+    group_by(old_decade, new_decade) |>
+    mutate(rank = rank(-adj_citations, ties.method = "min")) |>
+    ungroup()
+
+top_authors_by_decade <- philo_cite_expanded |>
+  filter(new_year >= 1980) |>
+  filter(old_year >= 1970) |>
+  filter(new_year >= old_year) |>
+  group_by(old_decade, new_decade, old_auth) |>
+  tally(name = "citations") |>
+  ungroup() |>
+  group_by(old_decade, new_decade) |>
+  slice_max(order_by = citations,
+            n = 20) |>
+  mutate(rank = rank(-citations, ties.method = "min")) |>
+  ungroup()
+```
+
+This note goes over some changes in who and what have been cited over time in philosophy journals. As noted in [a previous post](https://brian.weatherson.org/quarto/posts/citations-raw-data/citations.html), I'm looking at citations between one hundred philosophy journals. That post has lists of which journals I'm looking at, when they started being indexed, and some notes on the methodology.
+
+The focus here is on who and what were most cited in every decade, and from every decade. So for every decade from the 1970s to 2020s, I look at all the papers and all the authors from that decade, and then looking at every decade from that time to the present (excluding 1970s to itself, where the data is sparse), I look at (a) which were the 20 most cited papers, and (b) which were the 20 most cited authors. Without further ado...
+
+# 1970s
+
+```{r}
+#| label: tbl-articles-1970s
+#| tbl-cap: "Most cited articles from the 1970s in various decades."
+#| tbl-subcap: ["1980s", "1990s", "2000s", "2010s", "2020s"]
+#| layout-ncol: 5
+#| column: screen
+
+the_1970s_articles <- top_articles_by_decade |>
+  filter(old_decade == "1970s") |>
+  ungroup() |>
+  select(new_decade, bib, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, bib, fill = list(the_rank = 100)) |>
+  group_by(bib) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "1970s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Article = bib,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#1980s
+kable(
+  the_1970s_articles |>
+  filter(old_decade == "1970s",
+         new_decade == "1980s") |>
+  select(Rank, Article),
+  format = "markdown"
+)
+
+#1990s
+kable(
+  the_1970s_articles |>
+  filter(old_decade == "1970s",
+         new_decade == "1990s") |>
+  select(Rank, Article, Chg),
+  format = "markdown"
+)
+
+#2000s
+kable(
+  the_1970s_articles |>
+  filter(old_decade == "1970s",
+         new_decade == "2000s") |>
+  select(Rank, Article, Chg)
+)
+
+#2010s
+kable(
+  the_1970s_articles |>
+  filter(old_decade == "1970s",
+         new_decade == "2010s") |>
+  select(Rank, Article, Chg)
+)
+
+#2020s
+kable(
+  the_1970s_articles |>
+  filter(old_decade == "1970s",
+         new_decade == "2020s") |>
+  select(Rank, Article, Chg)
+)
+```
+
+```{r}
+#| label: tbl-authors-1970s
+#| tbl-cap: "Most cited authors from the 1970s in various decades."
+#| tbl-subcap: ["1980s", "1990s", "2000s", "2010s", "2020s"]
+#| layout-ncol: 5
+#| column: screen
+
+the_1970s_authors <- top_authors_by_decade |>
+  filter(old_decade == "1970s") |>
+  ungroup() |>
+  select(new_decade, old_auth, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, old_auth, fill = list(the_rank = 100)) |>
+  group_by(old_auth) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "1970s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Author = old_auth,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#1980s
+kable(
+  the_1970s_authors |>
+  filter(old_decade == "1970s",
+         new_decade == "1980s") |>
+  select(Rank, Author),
+  format = "markdown"
+)
+
+#1990s
+kable(
+  the_1970s_authors |>
+  filter(old_decade == "1970s",
+         new_decade == "1990s") |>
+  select(Rank, Author, Chg),
+  format = "markdown"
+)
+
+#2000s
+kable(
+  the_1970s_authors |>
+  filter(old_decade == "1970s",
+         new_decade == "2000s") |>
+  select(Rank, Author, Chg)
+)
+
+#2010s
+kable(
+  the_1970s_authors |>
+  filter(old_decade == "1970s",
+         new_decade == "2010s") |>
+  select(Rank, Author, Chg)
+)
+
+#2020s
+kable(
+  the_1970s_authors |>
+  filter(old_decade == "1970s",
+         new_decade == "2020s") |>
+  select(Rank, Author, Chg)
+)
+```
+
+The general picture here is largely stability. The biggest change is in which Lewis articles get cited at different times. There are fewer citations to @10.2307_2024717 over time. But if I decided that the 1970s started in 1969, so @WOSA1969Y444700002 was there, we'd see a similar pattern to Lewis; the citations to the philosopher stay stable while the citations to individual articles vary.
+
+# 1980s
+
+```{r}
+#| label: tbl-articles-1980s
+#| tbl-cap: "Most cited articles from the 1980s in various decades."
+#| tbl-subcap: ["1980s", "1990s", "2000s", "2010s", "2020s"]
+#| layout-ncol: 5
+#| column: screen
+
+the_1980s_articles <- top_articles_by_decade |>
+  filter(old_decade == "1980s") |>
+  ungroup() |>
+  select(new_decade, bib, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, bib, fill = list(the_rank = 100)) |>
+  group_by(bib) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "1980s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Article = bib,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#1980s
+kable(
+  the_1980s_articles |>
+  filter(old_decade == "1980s",
+         new_decade == "1980s") |>
+  select(Rank, Article),
+  format = "markdown"
+)
+
+#1990s
+kable(
+  the_1980s_articles |>
+  filter(old_decade == "1980s",
+         new_decade == "1990s") |>
+  select(Rank, Article, Chg),
+  format = "markdown"
+)
+
+#2000s
+kable(
+  the_1980s_articles |>
+  filter(old_decade == "1980s",
+         new_decade == "2000s") |>
+  select(Rank, Article, Chg)
+)
+
+#2010s
+kable(
+  the_1980s_articles |>
+  filter(old_decade == "1980s",
+         new_decade == "2010s") |>
+  select(Rank, Article, Chg)
+)
+
+#2020s
+kable(
+  the_1980s_articles |>
+  filter(old_decade == "1980s",
+         new_decade == "2020s") |>
+  select(Rank, Article, Chg)
+)
+```
+
+```{r}
+#| label: tbl-authors-1980s
+#| tbl-cap: "Most cited authors from the 1980s in various decades."
+#| tbl-subcap: ["1980s", "1990s", "2000s", "2010s", "2020s"]
+#| layout-ncol: 5
+#| column: screen
+
+the_1980s_authors <- top_authors_by_decade |>
+  filter(old_decade == "1980s") |>
+  ungroup() |>
+  select(new_decade, old_auth, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, old_auth, fill = list(the_rank = 100)) |>
+  group_by(old_auth) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "1980s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Author = old_auth,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#1980s
+kable(
+  the_1980s_authors |>
+  filter(old_decade == "1980s",
+         new_decade == "1980s") |>
+  select(Rank, Author),
+  format = "markdown"
+)
+
+#1990s
+kable(
+  the_1980s_authors |>
+  filter(old_decade == "1980s",
+         new_decade == "1990s") |>
+  select(Rank, Author, Chg),
+  format = "markdown"
+)
+
+#2000s
+kable(
+  the_1980s_authors |>
+  filter(old_decade == "1980s",
+         new_decade == "2000s") |>
+  select(Rank, Author, Chg)
+)
+
+#2010s
+kable(
+  the_1980s_authors |>
+  filter(old_decade == "1980s",
+         new_decade == "2010s") |>
+  select(Rank, Author, Chg)
+)
+
+#2020s
+kable(
+  the_1980s_authors |>
+  filter(old_decade == "1980s",
+         new_decade == "2020s") |>
+  select(Rank, Author, Chg)
+)
+```
+
+Here there is a massive amount of change over time, and the contrast to the 1970s is striking. It's unsurprising that there are changes between the first and second columns here. Articles published in the second half of the 1980s are not going to have a huge number of citations in the 1980s. But the changes keep happening, and are rather dramatic.
+
+It's interesting too to note that there are more citations to women in the 2020s, even holding fixed the library of articles that are available to be cited. I think the drop for Korsgaard citations is just because she has more recent work that people are more likely to cite.
+
+
+
+# 1990s
+
+```{r}
+#| label: tbl-articles-1990s
+#| tbl-cap: "Most cited articles from the 1990s in various decades."
+#| tbl-subcap: ["1990s", "2000s", "2010s", "2020s"]
+#| layout-ncol: 4
+#| column: screen-inset
+
+the_1990s_articles <- top_articles_by_decade |>
+  filter(old_decade == "1990s") |>
+  ungroup() |>
+  select(new_decade, bib, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, bib, fill = list(the_rank = 100)) |>
+  group_by(bib) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "1990s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Article = bib,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#1990s
+kable(
+  the_1990s_articles |>
+  filter(old_decade == "1990s",
+         new_decade == "1990s") |>
+  select(Rank, Article),
+  format = "markdown"
+)
+
+#2000s
+kable(
+  the_1990s_articles |>
+  filter(old_decade == "1990s",
+         new_decade == "2000s") |>
+  select(Rank, Article, Chg)
+)
+
+#2010s
+kable(
+  the_1990s_articles |>
+  filter(old_decade == "1990s",
+         new_decade == "2010s") |>
+  select(Rank, Article, Chg)
+)
+
+#2020s
+kable(
+  the_1990s_articles |>
+  filter(old_decade == "1990s",
+         new_decade == "2020s") |>
+  select(Rank, Article, Chg)
+)
+```
+
+```{r}
+#| label: tbl-authors-1990s
+#| tbl-cap: "Most cited authors from the 1990s in various decades."
+#| tbl-subcap: ["1990s", "2000s", "2010s", "2020s"]
+#| layout-ncol: 4
+#| column: screen-inset
+
+the_1990s_authors <- top_authors_by_decade |>
+  filter(old_decade == "1990s") |>
+  ungroup() |>
+  select(new_decade, old_auth, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, old_auth, fill = list(the_rank = 100)) |>
+  group_by(old_auth) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "1990s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Author = old_auth,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#1990s
+kable(
+  the_1990s_authors |>
+  filter(old_decade == "1990s",
+         new_decade == "1990s") |>
+  select(Rank, Author),
+  format = "markdown"
+)
+
+#2000s
+kable(
+  the_1990s_authors |>
+  filter(old_decade == "1990s",
+         new_decade == "2000s") |>
+  select(Rank, Author, Chg)
+)
+
+#2010s
+kable(
+  the_1990s_authors |>
+  filter(old_decade == "1990s",
+         new_decade == "2010s") |>
+  select(Rank, Author, Chg)
+)
+
+#2020s
+kable(
+  the_1990s_authors |>
+  filter(old_decade == "1990s",
+         new_decade == "2020s") |>
+  select(Rank, Author, Chg)
+)
+```
+
+The difference between the left two columns here is more striking, because the articles from the early 1990s faded from view so quickly. On the left of @tbl-authors-1990s we see a table that doesn't have David Lewis at the top of it. This is only a survey of articles, so _Parts of Classes_ isn't included. Lewis's articles from the early 1990s didn't get cited very much, by Lewis's standards. By the time normal service was resumed with "Elusive Knowledge", there wasn't enough left in the decade to make up.
+
+Because so many of Williamson's articles were (more-or-less) included in _Knowledge and Its Limits_, Williamson's 1990s articles don't show up here as being quite as influential as they really were. A fun research project would be go through the citations to _Knowledge and Its Limits_, and work out which citations are to which article, and see how tables like these look after having done that.
+
+# 2000s
+
+```{r}
+#| label: tbl-articles-2000s
+#| tbl-cap: "Most cited articles from the 2000s in various decades."
+#| tbl-subcap: ["2000s", "2010s", "2020s"]
+#| layout-ncol: 3
+#| column: body-outset-right
+
+the_2000s_articles <- top_articles_by_decade |>
+  filter(old_decade == "2000s") |>
+  ungroup() |>
+  select(new_decade, bib, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, bib, fill = list(the_rank = 100)) |>
+  group_by(bib) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "2000s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Article = bib,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#2000s
+kable(
+  the_2000s_articles |>
+  filter(old_decade == "2000s",
+         new_decade == "2000s") |>
+  select(Rank, Article)
+)
+
+#2010s
+kable(
+  the_2000s_articles |>
+  filter(old_decade == "2000s",
+         new_decade == "2010s") |>
+  select(Rank, Article, Chg)
+)
+
+#2020s
+kable(
+  the_2000s_articles |>
+  filter(old_decade == "2000s",
+         new_decade == "2020s") |>
+  select(Rank, Article, Chg)
+)
+```
+
+```{r}
+#| label: tbl-authors-2000s
+#| tbl-cap: "Most cited authors from the 2000s in various decades."
+#| tbl-subcap: ["2000s", "2010s", "2020s"]
+#| layout-ncol: 3
+#| column: body-outset-right
+
+the_2000s_authors <- top_authors_by_decade |>
+  filter(old_decade == "2000s") |>
+  ungroup() |>
+  select(new_decade, old_auth, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, old_auth, fill = list(the_rank = 100)) |>
+  group_by(old_auth) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "2000s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Author = old_auth,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+
+#2000s
+kable(
+  the_2000s_authors |>
+  filter(old_decade == "2000s",
+         new_decade == "2000s") |>
+  select(Rank, Author)
+)
+
+#2010s
+kable(
+  the_2000s_authors |>
+  filter(old_decade == "2000s",
+         new_decade == "2010s") |>
+  select(Rank, Author, Chg)
+)
+
+#2020s
+kable(
+  the_2000s_authors |>
+  filter(old_decade == "2000s",
+         new_decade == "2020s") |>
+  select(Rank, Author, Chg)
+)
+```
+
+I'm surprised, and a little disappointed, that the lists are still so male. I thought this stage of the story things would be changing.
+
+I'm also surprised, though not disappointed, to see the citation trend for @WOS000165361800002. I thought this was something that was a big deal as soon as it came out, not a slow-burn paper. But it's been moving up in relative citations over time.
+
+I'm neither surprised nor disappointed that I'm not on these lists. If the lists continued into top 60s, I'd be on all three, with a high rank of 37 in the 2010s.
+
+Finally, the biggest change we see in the data is the change between the 2010s and 2020s for @WOS000085841900002. I think this starts happening around 2018, so still in the 2010s, but I'd have to look more closely at the data to be sure. If you wanted one piece of data to tell you how different philosophy is now to what it was not so long ago, it would be the top right corner of @tbl-articles-2000s.
+
+# 2010s
+
+```{r}
+#| label: tbl-articles-2010s
+#| tbl-cap: "Most cited articles from the 2010s in various decades."
+#| tbl-subcap: ["2010s", "2020s"]
+#| layout-ncol: 2
+
+the_2010s_articles <- top_articles_by_decade |>
+  filter(old_decade == "2010s") |>
+  ungroup() |>
+  select(new_decade, bib, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, bib, fill = list(the_rank = 100)) |>
+  group_by(bib) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "2010s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Article = bib,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#2010s
+kable(
+  the_2010s_articles |>
+  filter(old_decade == "2010s",
+         new_decade == "2010s") |>
+  select(Rank, Article)
+)
+
+#2020s
+kable(
+  the_2010s_articles |>
+  filter(old_decade == "2010s",
+         new_decade == "2020s") |>
+  select(Rank, Article, Chg)
+)
+```
+
+```{r}
+#| label: tbl-authors-2010s
+#| tbl-cap: "Most cited authors from the 2010s in various decades."
+#| tbl-subcap: ["2010s", "2020s"]
+#| layout-ncol: 2
+
+the_2010s_authors <- top_authors_by_decade |>
+  filter(old_decade == "2010s") |>
+  ungroup() |>
+  select(new_decade, old_auth, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, old_auth, fill = list(the_rank = 100)) |>
+  group_by(old_auth) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "2010s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Author = old_auth,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#2010s
+kable(
+  the_2010s_authors |>
+  filter(old_decade == "2010s",
+         new_decade == "2010s") |>
+  select(Rank, Author)
+)
+
+#2020s
+kable(
+  the_2010s_authors |>
+  filter(old_decade == "2010s",
+         new_decade == "2020s") |>
+  select(Rank, Author, Chg)
+)
+```
+
+It's still very male, isn't it? And in contrast to earlier decades, it's notable that we're back in an environment where the citations to articles bounce around a bit, but the citations to philosophers stay stable. Last pair of tables, these two without comment.
+
+```{r}
+#| label: tbl-articles-and-authors-2020s
+#| tbl-cap: "Most cited articles and authors from the 2020s so far."
+#| tbl-subcap: ["Articles", "Authors"]
+#| layout-ncol: 2
+
+the_2020s_articles <- top_articles_by_decade |>
+  filter(old_decade == "2020s") |>
+  ungroup() |>
+  select(new_decade, bib, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, bib, fill = list(the_rank = 100)) |>
+  group_by(bib) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "2020s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Article = bib,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+#2020s
+kable(
+  the_2020s_articles |>
+  filter(old_decade == "2020s",
+         new_decade == "2020s") |>
+  select(Rank, Article)
+)
+
+the_2020s_authors <- top_authors_by_decade |>
+  filter(old_decade == "2020s") |>
+  ungroup() |>
+  select(new_decade, old_auth, rank) |>
+  rename(the_rank = rank) |>
+  complete(new_decade, old_auth, fill = list(the_rank = 100)) |>
+  group_by(old_auth) |>
+  arrange(new_decade, .by_group = TRUE) |>
+  mutate(rank_change = - the_rank + lag(the_rank, default = first(the_rank))) |>
+  filter(the_rank < 100) |>
+  mutate(rank_text = case_when(
+    rank_change > 50 ~ "[New]{color=#22b222}",
+    rank_change > 0 ~ paste0("[▲",rank_change,"]{color=#22b222}"),
+    rank_change == 0 ~ "=",
+    TRUE ~ paste0("[▼",-rank_change,"]{color=#b22222}")
+  )) |>
+  ungroup() |>
+  mutate(old_decade = "2020s") |>
+  select(old_decade,
+         new_decade,
+         Rank = the_rank,
+         Author = old_auth,
+         Chg = rank_text) |>
+  arrange(Rank)
+
+
+#2020s
+kable(
+  the_2020s_authors |>
+  filter(old_decade == "2020s",
+         new_decade == "2020s") |>
+  select(Rank, Author)
+)
+```
