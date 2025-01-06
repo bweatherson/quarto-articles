@@ -1,7 +1,7 @@
 ---
 title: "Changes in Citation Patters"
 abstract: |
-    Which journal articles are cited surprisingly often in recent times, given how often they were cited soon after publication? Conversely, which articles have a lot more citations soon after publication than you'd expect from their current prominence. This note goes over some data on these questions.
+    Which journal articles are cited surprisingly often in recent times, given how often they were cited soon after publication? Conversely, which articles have a lot more citations soon after publication than you'd expect from their current prominence. This note goes over some data on these questions. NB: THIS IS INCOMPLETE BUT USEFUL TABLES HERE FOR SOMETHING THAT MIGHT BE COMPLETED.
 date: today
 author:
   - name: Brian Weatherson 
@@ -12,7 +12,6 @@ author:
 categories:
   - history of analytic
   - unpublished
-  - in progress
 bibliography: 
   - /Users/weath/Documents/citations-2025/cslbib.yaml
   - /Users/weath/Documents/quarto-articles/brian-quarto.bib
@@ -52,7 +51,6 @@ load("/Users/weath/Documents/citations-2025/philo_cite.RData")
 #| label: basic-setup
 #| cache: true
 
- year reference
 philo_bib <- philo_bib %>%
   select(-rowid) %>%
   group_by(year) %>%
@@ -285,6 +283,42 @@ What we see between these two 'striking things' is that philosophers thought it 
 
 Over the last two decades, all that has changed. We'll see this in the early bloomers data, espeically with the citation history of papers particularly on physicalism and on content. In metaphysics, it has become somewhat common to use grounding notions to do the work that used to be done by modality. But this does not mean we're in a grounding era in philosophy, or even, as Sider puts it, a 'post-modal' era. Rather
 
+<!--
+
+```{r}
+#| label: examples
+#| cache: false
+
+first_ex <- 2
+second_ex <- 4
+
+ex1_title <- late_bloomers$title[first_ex]
+ex1_bib <- late_bloomers$bib[first_ex]
+ex1_crossing <- late_bloomers$crossing[first_ex]
+ex1_year <- late_bloomers$year[first_ex]
+ex1_latecite <- late_bloomers$cites_after[first_ex]
+ex1_earlycite <- late_bloomers$cites_before[first_ex]
+ex1_allcite <- late_bloomers$citations[first_ex]
+ex1_percentafter <- scales::percent(ex1_latecite / late_bloomers$citations[first_ex])
+ex1_yearbefore <- late_bloomers$year_before[first_ex]
+ex1_yearafter <- late_bloomers$year_after[first_ex]
+ex1_exppercent <- scales::percent(ex1_yearbefore / (ex1_yearbefore + ex1_yearafter), accuracy = 1)
+ex1_earlyprob <- late_bloomers$early_prob[first_ex]
+
+ex2_title <- late_bloomers$title[second_ex]
+ex2_bib <- late_bloomers$bib[second_ex]
+ex2_crossing <- late_bloomers$crossing[second_ex]
+ex2_year <- late_bloomers$year[second_ex]
+ex2_latecite <- late_bloomers$cites_after[second_ex]
+ex2_earlycite <- late_bloomers$cites_before[second_ex]
+ex2_allcite <- late_bloomers$citations[second_ex]
+ex2_percentafter <- scales::percent(ex2_latecite / late_bloomers$citations[second_ex])
+ex2_yearbefore <- late_bloomers$year_before[second_ex]
+ex2_yearafter <- late_bloomers$year_after[second_ex]
+ex2_exppercent <- scales::percent(ex2_yearbefore / (ex2_yearbefore + ex2_yearafter), accuracy = 1)
+ex2_earlyprob <- late_bloomers$early_prob[second_ex]
+```
+
 "`r ex1_title`" [`r ex1_bib`] gets talked about a lot in philosophy journals. In a study I did of one hundred prominent philosophy journals, it has been cited `r ex1_latecite` times after `r ex1_crossing`. That's a lot, and it's a lot more than you might have expected in `r ex1_crossing`, at which time it had been cited `r ex1_earlycite` times. Here's one way to get a sense of how much more.
 
 "`r ex1_title`" was published in `r ex1_year`. Papers published in those 100 journals in `r ex1_year` were cited (in the journals I'm studying) `r ex1_yearbefore` times through `r ex1_crossing`. They have been cited `r ex1_yearafter` times since then. So about `r ex1_exppercent` of citations of articles published in `r ex1_year` were in or before `r ex1_crossing`.
@@ -305,34 +339,35 @@ I ran this same calculation for every paper in the study with 50 or more citatio
 require(knitr)
 require(tidyverse)
 
-kable(
-  late_bloomers |>
-    mutate(
-      Article = paste0(
-        displayauth,
-        " -",
-        bib,
-        " \"",
-        title,
-        "\""
-      ),
-      Typical = scales::percent(year_before/(year_before + year_after), accuracy = 1),
-      Prob = round(early_prob, 1)
-    ) |>
-    select(Article,
-           Cutoff = crossing,
-           Early = cites_before,
-           Late = cites_after,
-           Typical,
-           Prob) |>
-    slice(1:100),
-    align = c('l', 'r', 'r', 'r', 'r', 'r')
-)
+# kable(
+#   late_bloomers |>
+#     mutate(
+#       Article = paste0(
+#         displayauth,
+#         " -",
+#         bib,
+#         " \"",
+#         title,
+#         "\""
+#       ),
+#       Typical = scales::percent(year_before/(year_before + year_after), accuracy = 1),
+#       Prob = round(early_prob, 1)
+#     ) |>
+#     select(Article,
+#            Cutoff = crossing,
+#            Early = cites_before,
+#            Late = cites_after,
+#            Typical,
+#            Prob) |>
+#     slice(1:100),
+#     align = c('l', 'r', 'r', 'r', 'r', 'r')
+# )
 ```
 
 In @tbl-late-bloomers, 'Cutoff' is the boundary between early and late that's being used in that row. 'Early' is the number of times the paper was cited (in philosophy journals) through that cutoff year, and 'Late' is the number of times it has been cited after that. 'Typical' is the proportion of citations articles published in the year the article was cited through the cutoff year. And Prob is log~10~ of the probability of a binomial process with that probability getting a result that extreme.
 
 I calculated this Prob value for every article with 50 or more citation, and every cutoff from five years after publication to 2018. For each article, I selected the smallest value of Prob. I then selected the 100 articles for which Prob is lowest. Note that I didn't select the 100 pairs of articles-cutoffs for which Prob is lowest. If I'd done that, I would have a list where "Famine, Affluence, and Morality" was repeated ten times at the top.^[The Prob value isn't much changed for any cutoff between 1997 and 2006.] Just including each paper once is a bit more informative.
+-->
 
 There are a few reasons why articles might turn up on a list like this.
 
@@ -342,6 +377,8 @@ There are a few reasons why articles might turn up on a list like this.
 
 What about the other end of the scale? To look at the other end, we create the same binomial distribution, but this time look at articles where it is surprising that there are this few or fewer citations after the cutoff. These are the articles that had a strikingly high number of early citations, given what happened later. The top of that list is shown in @tbl-early-bloomers.
 
+<!--
+
 ```{r}
 #| label: tbl-early-bloomers
 #| tbl-cap: "Papers with more early citations than is typical."
@@ -350,32 +387,33 @@ What about the other end of the scale? To look at the other end, we create the s
 require(knitr)
 require(tidyverse)
 
-kable(
-  early_bloomers |>
-    mutate(
-      Article = paste0(
-        displayauth,
-        " -",
-        bib,
-        " \"",
-        title,
-        "\""
-      ),
-      Typical = scales::percent(year_before/(year_before + year_after), accuracy = 1),
-      Prob = round(late_prob, 1)
-    ) |>
-    select(Article,
-           Cutoff = crossing,
-           Early = cites_before,
-           Late = cites_after,
-           Typical,
-           Prob) |>
-    slice(1:100),
-    align = c('l', 'r', 'r', 'r', 'r', 'r')
-)
+# kable(
+#   early_bloomers |>
+#     mutate(
+#       Article = paste0(
+#         displayauth,
+#         " -",
+#         bib,
+#         " \"",
+#         title,
+#         "\""
+#       ),
+#       Typical = scales::percent(year_before/(year_before + # year_after), accuracy = 1),
+#       Prob = round(late_prob, 1)
+#     ) |>
+#     select(Article,
+#            Cutoff = crossing,
+#            Early = cites_before,
+#            Late = cites_after,
+#            Typical,
+#            Prob) |>
+#     slice(1:100),
+#     align = c('l', 'r', 'r', 'r', 'r', 'r')
+# )
 ```
 
 Even though I've let the Prob values get a fair bit higher than on @tbl-late-bloomers, the list is still somewhat shorter. I think this is because of the third point above; having a later than usual distribution of citations is par for the course among widely cited articles. That said, there are several more reasons why an article's citations might be weighted towards early citations than that it might be weighted towards late citations.
+-->
 
 - The article might get superseded. This happens especially if the same author puts out a later piece that is simply better than the earlier one. I think this is what's going on with @WOSA1978EL93700009; eventually people came to think of later works, such as @WOSA1984TV24600001, as simply better. I suspect it's also true with some of the philosophy of biology papers on this list; that has been a fast moving field, and even very good papers get replaced in the canon by more up to date ones.
 - The article might be incorporated into a book, and the citations move to the book. That's pretty clearly what's happened with @WOSA1985APA8500001 and @WOS000262577100002.
