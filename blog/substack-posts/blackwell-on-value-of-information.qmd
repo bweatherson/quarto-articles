@@ -1,0 +1,125 @@
+---
+title: "Blackwell on the Value of Information"
+abstract: |
+  A quick run through a very powerful result.
+date: November 27 2023
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - probability
+  - epistemic logic
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+format-links: [html]
+image: "blackwell.jpg"
+---
+
+In the early 1950s, David Blackwell[^1] published two papers on the value of what he called experiments.[^2] The result from those papers I’m going to talk about here, and the one that I think has most relevance to current debates in philosophy, can be informally summarised like this:
+
+[^1]: The photo of Blackwell on the title page is from Wikipedia, and is by George M. Bergman.
+
+[^2]: “[Comparison of Experiments](https://projecteuclid.org/proceedings/berkeley-symposium-on-mathematical-statistics-and-probability/Proceedings-of-the-Second-Berkeley-Symposium-on-Mathematical-Statistics-and/Chapter/Comparison-of-Experiments/bsmsp/1200500222)”, 1951, and “[Equivalent Comparison of Experiments](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-24/issue-2/Equivalent-Comparisons-of-Experiments/10.1214/aoms/1177729032.full?tab=ArticleFirstPage)”, 1953.
+
+For any two experiments *f* and *g*, *f* is more valuable than *g* if and only if it is more informative than *g*. That’s the informal version. The formal version takes a bit more setup. Note that this is not going to be Blackwell’s original notation, but I think it’s a notation that’s more familiar to contemporary philosophers.
+
+Say an experimental situation is a quintuple of finite sets/functions:
+
+$$
+\langle W, S, E, B, C \rangle
+$$
+
+-   *W* is a a set of ways the feature of the world under investigation could be. I’ll call these worlds, though note they are small worlds, they are silent on what experiments we choose to run, and what bets we choose to make.
+-   *S* is a set of possible signals.
+-   *E* is a set of experiments. An experiment in this sense is a function from members of *W* to probability distributions over *S*. What we’ll call a deterministic situation is one where every member of *E* is a probability function that gives probability 1 to some member of *S*. In that case, it will be simpler to identify members of *E* with functions simply from *W* to S. Blackwell doesn’t do this, but it will help us to assume that *E* always contains the null experiment, which returns the same signal in every world.
+-   *B* is a set of bets, i.e., functions from *W* to real-values. To avoid St Petersburg problems, we assume the range of the functions in *B* is bounded above and below. We’ll also assume that *B* contains the null bet, which returns 0 in every world. *C* is a function from *E* to credence functions defined over *W* x *S*.
+
+There are going to be a bunch of constraints on *C*, which are all fairly intuitive, but which are worth saying.
+
+-   What the world is like is independent of which experiment is performed. So for any proposition defined entirely over *W*, all members of *C* give it the same credence.
+-   The choice of bets is also independent of what the world is like. There are no Newcomb-like problems around here. So we’ll assume that the choice of a bet *B* is independent of C.
+-   The members of *C* are all correct about the nature of each experiment. For example, if experiment *f* has an 0.2 chance of resulting in signal *s* given world *w*, then *Cr*~F~(*s* \| *w*) = 0.2.
+
+Intuitively then, what’s going to happen is the experimenter will choose an experiment from *E*, observe the result, i.e., be sent a signal from *S*, and then choose a bet from *B*. I’ll write *v*(*b*) as the expected value of bet *b*, and use subscripts and superscripts when this value is conditional on performing an experiment/getting a signal.
+
+It’s completely trivial to show that if the experimenter cares only about expected utility maximisation, they are better off choosing any member of *E* other than the null.
+
+To show this, note that the expected return of the optimal strategy given f, where *f* is an arbitrary member of E, is:
+
+$$
+\sum_{s \in S} Cr_f(s) \max_{b \in B} v^f_s(b)
+$$
+
+If *C* is an arbitrary member of *B*, then that value will obviously be greater than the following value, since the last term can’t be greater than the maximum value of a set it’s a member of:
+
+$$
+\sum_{s \in S} Cr_f(s) v^f_s(c)
+$$
+
+And if the choice of experiment is independent of the probability of being in one or other world, and the value of *C* is just sensitive to which world one is in, that last term just is the expected value of *c*. So the value of the experiment will be non-negative. Indeed, we can work out that value, it’s
+
+$$
+(\sum_{s \in S} Cr_f(s) \max_{b \in B} v^f_s(b)) - \max_{b \in B}v(b)
+$$
+
+That’s a very simple value of information result, and mathematically it’s kind of trivial. The big conceptual leap here is identifying the value of the experiment with this difference between the expected value of the optimal strategy pre- and post-experiment. That is an idea that seems to have been independently discovered a few times over. Charles Sanders Peirce had it in an 1860s report for (iirc) the Coast Guard; Frank Ramsey had it in work that was not published in the first edition of his collected papers; and John von Neumann used it in unpublished game-theoretic work in the late 1940s.[^3] Blackwell didn’t seem to know about the Peirce or Ramsey, but was influenced by von Neumann, who he had worked with at the IAS, and at the RAND Corporation.
+
+[^3]: The Peirce and Ramsey references are from a recent [paper by Nilanjan Das](https://www.journals.uchicago.edu/doi/full/10.1093/bjps/axaa003). The von Neumann is from an older [paper by L. Le Cam](https://www.jstor.org/stable/4355942). I’ve relied on both of these a lot in the text.
+
+Anyway, this isn’t Blackwell’s important result. What is important is that he generalises this result in three ways.
+
+First, he allows that experiments can be **indeterministic**. So it’s clear the result goes through even if an experiment is just a probability function from worlds to signals.
+
+Second, his result is **comparative.** He doesn’t just talk about when *f* is guaranteed to be valuable to perform, but when it is guaranteed to be more valuable than another experiment *g*. I’ll call results that just talk about the value of conducting *f* rather than nothing **positive** results, and results that talk about the value of conducting *f* rather than *g* **comparative** results. The latter are obviously stronger than the former, since we can just generate any positive result from a comparative result by letting *g* be the null experiment.
+
+Third, his result is a **biconditional.** He doesn’t just show that when *f* is more informative than *g*, it is guaranteed to be valuable. He shows that if *f* is guaranteed to be more valuable than *g*, that is, when it has greater expected value no matter what values *B* or *C* take, then it is more informative. As far as I can tell, it’s that direction of his result that’s got the most attention from mathematicians.
+
+What’s commonly called Good’s theorem in philosophy, after [Good’s 1967 paper](https://www.jstor.org/stable/686773), is what you get if you start with Blackwell’s result, weaken the biconditional to a conditional, and weaken the comparative result to a positive result. So it’s a doubly special case of Blackwell’s result. It seems Good was unaware of Blackwell.
+
+Although Blackwell’s result is quite general in these three ways, it is restricted in three important other respects. And some of the most interesting questions about the result concern whether these restrictions can be loosened.
+
+One restriction is that it assumes the various sets are **finite**. This is a restriction we see in a lot of contemporary work as well, and it’s interesting to see when it might be loosened.
+
+A second is that it features full **awareness**. The experimenter starts with a full and correct picture of the quintuple.^[I’m distinguishing awareness from partitionality, largely because as a grad student I spent lots of time thinking about non-partitionality and none about unawareness, so they seem like different things to me. But in the economics literature these are often treated the same way. See this [paper by Spyros Galanis](https://www.sciencedirect.com/science/article/pii/S0022053115000253) for a way of thinking about them that makes them much more tightly connected.]
+
+The third restriction is that it is **partitional**. There is an implicit epistemic logic here, and that logic is S5. That the models are partitional is never explicitly stated, but it falls out of these three features of the model.
+
+1. Experiments are functional: they produce one and only one signal. 
+2. Experimenters are guaranteed to form at least one true belief about the signal generated. 
+3. Experimenters have correct beliefs about the likelihood of each signal given each world. 
+
+Given 1 and 3, experimenters know that the experiments are functional. Given that plus 2, when experimenters get a signal, they know that it is the only signal. From that, it follows that the epistemically possible worlds remaining post-signal are all and only the worlds where that is the signal. And that means that the induced epistemic possibility relation is a partition on the space of signals.
+
+That’s a big restriction, and it’s worth seeing how it can be relaxed. There are important results on this line from [John Geanakoplos](https://ideas.repec.org/p/cwl/cwldpp/914.html), and more recently from [Kevin Dorst and colleagues](https://philpapers.org/rec/DORDDB). They drop partitionality, but also have to drop (to some extent) indeterminacy and comparativeness, and one of my interests is in seeing what results are possible that put indeterminacy and comparativeness back in, but don’t have some of these three restrictions.
+
+That’s going to mostly be in future posts, but I’ll end this one with a conceptual point that hopefully helps make clear some of the things that will need eventual sorting out if one wants to drop these restrictions.
+
+I said in the intro that Blackwell’s results concern situations where one experiment is more informative than another. That’s an easy enough notion to understand if the experiments are deterministic.
+
+Let *f* and *g* be two deterministic experiments, and for any world *w*, let *f*(*w*) be the set of worlds that produce the same signal as *f*, and similarly for *g*(*w). Then *f* is more informative^[Strictly speaking, at least as informative as. But I’ll somewhat sloppily use ‘more’ here. I worry a bit that this sloppiness will have philosophical consequences down the line, but that’s for future posts.] than *g* just in case for all *w*, *f*(*w*) is a subset^[Not necessarily a proper subset, just a subset.] of *g*(*w*).
+
+But what do we say if they are indeterministic? Here it helps to use a concept introduced by [Jacob Marschak and Koichi Miyasawa](https://www.jstor.org/stable/2525472): garbling. An experiment *g* is a garbling of another experiment *f* iff given the outputs of *f*, and a randomising device that is independent of *w*, you can reproduce *g*. I’ll do an example of that, then state the more general result.
+
+Let *W* be really simple: it is just {0, 1}. Intuitively, *W* just concerns whether one proposition is true or false. And similarly *S* is also {0, 1}. Intuitively, when the actual value of *W*, which I’ll write as *w*, equals the actual value of *S*, which I’ll write as *s*, the experiment is accurate, otherwise it is inaccurate. Let *f* be 90% accurate^[The accuracy claims are actually conjunctions. What I mean by this more precisely is that Pr(*s*=0 | *w*=0) = 0.9, and, Pr(*s*=1 | *w*=1) = 0.9.] and *g* be 70% accurate. Now construct a new experiment *h* the following way. First, get the output of *f*, call it *s*. Then say that *h* returns *s* with probability 0.75, and 1-*s* with probability 0.25. That will give you an experiment with 70% accuracy. That’s to say, *h* will be an experiment with the same probability of signal given world as *g*, for all worlds. And that means, in Blackwell’s sense, that it’s the same experiment.
+
+So the more general idea is that *g* is a garbling of *f* iff for some *n*, there is a random variable *R* where each value of *r* being in {1, …, *n*} is equally likely, and independent of *w*, and there is a function from *f* and *R* to *S* that, for any given world, has the same probability distribution over *S* as *g* does.
+
+One last bit of terminology and we can state the result. Say that an experimental frame is a triple that’s the first three elements of the quintuple that’s the experimental situation. Say an experimental situation is built on the frame just in case they have those same first three elements.
+
+Then Blackwell’s result can be more carefully stated as:
+
+- For any experimental situation, if *g* is a garbling of *f*, then the expected return of conducting *f* and choosing the optimal member of *B* is at least as high as the expected return of conducting *g* and choosing the optimal member of *B*. And if for any experimental situation built on that frame, if the expected return of conducting *f* and choosing the optimal member of *B* is at least as high as the expected return of conducting *g* and choosing the optimal member of* B*, then *g* is a garbling of *f*. 
+
+In future posts I’ll come back to why this is significant, and in particular why thinking about the comparative aspect of the result sheds interesting light on ways in which we might think about weakening the partitionality assumption.

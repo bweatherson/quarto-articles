@@ -1,0 +1,114 @@
+---
+title: "Better Experiments"
+abstract: |
+  A surprising consequence of Blackwell's Theorem.
+date: December 4 2023
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - probability
+  - epistemic logic
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+format-links: [html]
+image: "experiments.jpeg"
+---
+
+As I said in [my first post on Blackwell](blackwell-on-value-of-information.html), we’re understanding experiments here as functions from ‘worlds’ to signals. If you don’t like as grand a term as ‘experiment’ for these, think of them as measurements. If I’m wondering how much coffee is in the pot, I can put it on the scale, and I get a signal. The kitchen scale is a device that takes as input a worldly fact, and returns a signal on the display. The model here is that experiments are just more general instances of the humble kitchen scale.
+
+It isn’t always clear that experiments are better or worse. Here are two pairs of experiments where it seems wrong to say that either experiment is better than the other.
+
+1. We are interested in the position of an object in a two-dimensional space. The first experiment is a (noisy) measurement of its *x*-coordinate, the second experiment is a (similarly noisy) measurement of its *y*-coordinate.
+2. We are interested in a real value quantity. The first experiment is a point-estimate of the quantity, with the error (i.e., the difference between real and measured value) being normally distributed with mean 0 and standard deviation 0.5. The second experiment tells us, with 100% certainty, what the nearest integer to the value is.
+
+In neither case does it seem right to say that one experiment is simply better than the other. But a pragmatic approach does naturally suggest itself. In both cases, there might be one or other of these that is more suitable for the task we find ourselves with.
+
+Once we have this pragmatic picture in mind, it seems natural to ask whether there are pairs of experiments where one experiment is always better than another. That is, whether it is better whatever our practical interests are.
+
+If by ‘better’ we mean ‘at least as good as’, the answer is yes. Moreover, we can (with some restrictive assumptions) give a full characterisation of when that is the case. Here are two such cases.
+
+1. We are playing Rock-Paper-Scissors. The first experiment tells us what the other player is going to do (with 100% accuracy). The second experiment tells us (also with 100% accuracy) whether the other player will play Rock.
+2. A flipped coin is mid-flight. The first experiment tells us with 90% accuracy how it will land. That is, conditional on it landing Heads, the experiment will say Heads with probability 0.9, and conditional on it landing Tails, the experiment will say Tails with probability 0.9. The second experiment is the same, but it only has 80% accuracy.
+
+In each case, the first experiment is strictly better than the second. More precisely, if we assume a decision problem is a function from choice-world pairs to real values, and our aim is to maximise the expected value of that real, there is no decision problem where we’d expect to do strictly better by running the second experiment.
+
+Also, the first experiment is more informative than the second experiment. That’s presumably obvious in the first case, but it’s a little less obvious in the second. But there is a natural sense in which it is true.
+
+Say a **garbling** of an experiment is an experiment you get by taking the first experiment, and applying some function to the output. The function might be determinate, as in:
+
+- If the first experiment says “Rock”, say “Rock”.
+- If the first experiment says “Paper” or “Scissors”, say “Not-Rock”
+
+That’s a garbling that maps the first of our Rock-Paper-Scissors experiments onto the other. But the function might also be indeterministic.
+
+- If the first experiment says “Heads”, say “Heads” with probability 0.875, and otherwise say “Tails”.
+- If the first experiment says “Tails”, say “Tails” with probability 0.875, and otherwise say “Heads”.
+That’s a garbling of the first experiment onto the second experiment in the coin-flipping case.
+
+More precisely, the result of running the first experiment, then applying this garbling, is to generate an experiment that gives the correct result 80% of the time (however the coin lands). It doesn’t give the same result as the second experiment, that’s impossible because we don’t know what the second experiment would give, but it generates the same function from worlds to probability distributions over signals.
+
+Note that in the second case I’ve used the same probability, 0.875, in each case. That’s not essential. A garbling could use different probabilities with different signals. What’s crucial is that it only uses the signal; it doesn’t conditionalise on the underlying state of the world.
+
+All that in place, we have a nice way of stating Blackwell’s core result: One experiment is guaranteed to be more valuable than another iff the second is the result of a garbling of the first.
+
+One thing that’s nice about this is that it neatly sums up the two ways in which experiments can be less informative: not making as many distinctions, or not being as accurate.
+
+So far this all seems intuitive to me. If it seems obvious, it’s perhaps because I slid over how tricky the ‘only if’ part of the core result is. It’s that direction that has been the real mathematical focus of the result most of the time.
+
+I do really plan on getting to the two big limitations of this result - it requires finitely many worlds, and it assumes positive and negative luminosity for signals. But not today. Today’s post is about going over a surprising instance of this.
+
+Imagine the Statistician playing something like Rock-Paper-Scissors, and they can cheat a little by running an experiment on the other player. Pre-experiment, they think that each of Opponent’s three plays are equally likely.
+
+The first experiment has a 90% chance of being accurate, whatever Opponent plays. When it’s wrong, it always says the thing that would beat Opponent’s actual play. So if Opponent is going to play Rock, the first experiment will say “Rock” 90% of the time, and “Paper” 10% of the time.
+
+The second experiment is exactly the same, but it says the right thing about what Opponent will do 80% of the time, and the option that would beat it 20% of the time.
+
+Intuitively the first experiment is better than the second. Or, at least, that’s my intuition. This is just another case of comparing a more and less accurate experiment. But that’s not what Blackwell’s result says.
+
+First, there is no garbling that takes the first experiment into the second one. There is no function, deterministic or probabilistic, that Statistician can apply to the outputs of the first experiment that will generate the second experiment. The problem is that it’s really hard to get 0s in the right places, but I’ll leave filling in the details of this to the reader.
+
+Second, sometimes Statistician does better in expectation to run the second experiment than the first. Not, to be sure, if they’re playing Rock-Paper-Scissors. But imagine instead they had the choice between the following seven bets.
+
+\begin{aligned}
+ && w_R    &&  w_P && w_S \\
+a_R   && 3   && -100 && 0  \\
+b_R   && 1   && -100 && 11  \\
+a_P   && 0   && 3 && -100  \\
+b_P   && 11   && 1 && -100  \\
+a_S   && -100   && 0 && 3  \\
+b_S   && -100   && 10 && 1  \\
+z  &&  0  &&  0 && 0 
+\end{aligned}
+ 
+Here’s how to read this table. The columns are the possible states of the world - i.e., what Opponent might do. The rows are the seven bets. They are named in a way that will become clear in a second.
+
+Before running the experiment, all bets except the last have negative utility, so Statistician would take the bet *z*.
+
+After running the first experiment, Statistician will have credence 0.9 in the output of the experiment, and 0.1 in the state that would be beaten by that output. So if it says “Rock”, Statistician will have credence 0.9 in *w~r~*, and credence 0.1 in *w~s~*. (This is a simple application of Bayes’s theorem to the setup I described above.)
+
+The result of that means that the highest expected utility will come from taking one of the a bets - *a~r~* if it says “Rock”, *a~p~* if it says “Paper”, and *a~s~* if it says “Scissors”. That will have expected value 2.7, the matching *b* bet will have expected value 2, *z* will have expected value 0, and the others will all be negative.
+
+After running the second experiment, Statistician will have credence 0.8 in the output of the experiment, and 0.2 in the state that would be beaten by that output. (Again, this is a simple application of Bayes’s theorem to the setup I described above.)
+
+The result of that means that the highest expected utility will come from taking one of the *b* bets - *b~r~* if it says “Rock”, b_p if it says “Paper”, and *b~s~* if it says “Scissors”. That will have expected value 2.8, the matching a bet will have expected value 2.4, *z* will have expected value 0, and the others will all be negative.
+
+And note that 2.8 is greater than 2.7. If Statistician runs the second experiment and then picks, their expected return is 2.8. If they run the first experiment and then pick, their expected return is 2.7. So when faced with these seven choices, they are better off running the second experiment.
+
+Now this isn’t a mathematically stunning result. It’s a consequence of Blackwell’s theorem that if there isn’t a garbling from the first experiment to the second, then there is some situation where the second is strictly better. But it still surprised me to see it. And those two facts - the absence of a garbling and the possibility of a higher expected value from the second experiment - make me think that these are also incomparable experiments, like the pairs we started with. This is not very intuitive, but I think that’s where we’re forced by the results.
+
+So this way of thinking does I think lead to interesting, but initially unintuitive, results.
+
+Still, it’s not what I really meant to be getting into about these cases. Instead what I want to be looking at is what happens when we drop negative introspection for signals. That will have to wait for a future post though.

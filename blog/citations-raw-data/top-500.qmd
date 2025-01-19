@@ -1,0 +1,176 @@
+---
+title: "Most Cited Articles"
+abstract: |
+  An automated post listing (with correct bibliographic information) the top 500 articles in the citation database I'm using, plus graphs of their absolute and relative citation rates over time. The study is of articles published from 1965 onwards, and cited from 1980 onwards.
+date: today
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+csl: ../../chicago-with-note.csl
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.4em #Note this is larger than usual
+---
+
+```{r}
+#| label: starter
+
+load("~/Documents/citations-2025/philo_cite.RData")
+load("~/Documents/citations-2025/philo_bib.RData")
+
+for (ipkg in c("tidyverse", 
+               "scico",
+               "wesanderson")) {
+  if (!require(ipkg, character.only = TRUE)) {
+    install.packages(ipkg)
+    library(ipkg, character.only = TRUE)
+  }
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 24),
+             axis.title = element_text(family = "Scala Sans Pro", size = 24),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(1, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+)
+
+if (knitr::is_latex_output()) {
+  theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+               plot.subtitle = element_text(family = "EB Garamond", size = 11),
+               axis.text = element_text(family = "EB Garamond", size = 10),
+               axis.title = element_text(family = "EB Garamond", size = 10),
+               plot.background = element_rect(fill = "white"),
+               panel.background = element_rect(fill = "white"),
+               legend.background = element_rect(fill = "white"),
+               panel.grid = element_line(color = "grey92"),
+               legend.text = element_text(family = "EB Garamond", size = 11),
+               strip.text = element_text(family = "EB Garamond", size = 12),
+               legend.key.spacing.y = unit(-0.3, 'lines'),
+               legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+
+# Calculate how often each article is cited
+cite_count <- philo_cite |>
+  group_by(refs) |>
+  tally(name = "citations")
+
+# Merge that with list of articles, and include 0s
+short_bib <- philo_bib |>
+  select(id, journal, year, displayauth, title) |>
+  left_join(cite_count, by = c("id" = "refs")) |>
+  replace_na(list(citations = 0)) |>
+  mutate(bibentry = paste0("@",str_replace(id, ":", ""))) |>
+  filter(year >= 1965)
+
+# Note that this has citations from 1980 onwards, of pieces published in 1965 onwards.
+cites_with_years <- philo_cite |>
+  inner_join(
+    select(
+      filter(philo_bib,
+             year >= 1980),
+      id,
+      year
+    ), by = "id"
+  ) |>
+  inner_join(
+    select(
+      filter(
+        philo_bib,
+        year >= 1965),
+      refs = id,
+      ref_year = year
+      ), by = "refs"
+    ) 
+
+cites_per_year <- cites_with_years |>
+  group_by(year) |>
+  tally(name = "citings")
+
+top_500 <- short_bib |>
+  slice_max(order_by = citations, n = 500)
+
+article_cites_tibble <- function(article_id){
+  cites_with_years |>
+    filter(refs == article_id) |>
+    group_by(year) |>
+    tally(n = "yearly_citations") |>
+    left_join(cites_per_year, by = "year") |>
+    mutate(millik = yearly_citations*1000/citings)
+}
+
+citation_count_graph <- function(article_id){
+  ggplot(article_cites_tibble(article_id), aes(x = year, y = yearly_citations)) +
+      geom_point(color = wes_palette(name = "AsteroidCity1")[3], size = 4) +
+  labs(x = element_blank(),
+       y = "Citations per year") +
+  scale_y_continuous(limits = c(0, NA))
+}
+
+citation_rate_graph <- function(article_id){
+  ggplot(article_cites_tibble(article_id), aes(x = year, y = millik)) +
+      geom_point(color = wes_palette(name = "AsteroidCity1")[3], size = 4) +
+  labs(x = element_blank(),
+       y = "Citations per 1000 citings") +
+  scale_y_continuous(limits = c(0, NA))
+}
+```
+
+```{r}
+#| label: the-big-loop
+#| output: asis
+
+for (n in 1:nrow(top_500)){
+  the_id <- top_500$id[n]
+  the_bib <- top_500$bibentry[n]
+  the_auth <- top_500$displayauth[n]
+  the_title <- top_500$title[n]
+  the_year <- top_500$year[n]
+  cite_count <- top_500$citations[n]
+  the_longbib <- paste0(the_auth,
+                        ", -",
+                        the_bib,
+                        ", \'",
+                        the_title,
+                        "\'")
+  
+  cat("\n\n### ", the_longbib, " {-}", sep = "")
+  cat("\n\n**Citations**: ", cite_count, sep = "")
+  cat("\n\n::::: {.column-screen}\n\n")
+  cat("\n\n::: {#fig-code-",n," layout-nrow=1}\n\n", sep = "")
+  cat(":::: {#fig-count-",n,"}\n\n", sep = "")
+  print(citation_count_graph(the_id))
+  cat("\n\nCount\n\n::::\n\n")
+  cat(":::: {#fig-count-",n,"}\n\n", sep = "")
+  print(citation_rate_graph(the_id))
+  cat("\n\nRate\n\n::::\n\n")
+
+  cat("\n\nCitation count and rate for ",the_bib)
+  cat("\n\n:::\n\n")
+  cat("\n\n:::::\n\n")
+}
+```
+

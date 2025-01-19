@@ -1,0 +1,126 @@
+---
+title: "Desire as Belief and Two Kinds of Valuation"
+abstract: |
+ Lewis's (in)famous argument against Desire-As-Belief turns on an interesting equivocation.
+date: December 26 2023
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - lewis
+  - probability
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+    number-sections: false
+image: "dab_preview.jpg"
+---
+
+This post is based around an idea I’d been working on in various ways for years and never got right. At one point I had an outline for a book based on this post and the issues it raises. That would have been foolish. It might deserve more than a Boxing Day blog post though; we’ll see where it goes in the future.[^1]
+
+[^1]: The picture on the front page is by [Matthew Meyer](https://commons.wikimedia.org/wiki/File:%C3%85_i_Lofoten.jpg).
+
+A lot of philosophers, and I guess a lot of non-philosophers too, think there is, or at least should be, some tight connection between these two things:
+
+-   Believing that *A* is good.
+-   Desiring that *A*.
+
+The strongest such connection would be identity; desire just is belief that something is good. David Lewis claimed to have a formal argument that this strong form of desire-as-belief was incoherent.[^2] But his argument, I’ll argue, turns on an equivocation.
+
+[^2]: “[Desire as Belief](https://philpapers.org/rec/LEWDAB-3)” (1988) and “[Desire As Belief II](https://philpapers.org/rec/LEWDAB-2)” (1996)
+
+Lewis’s argument concerns a very simple kind of thinker - one who thinks that everything is Good or Bad, and all Good things are equally good, and all Bad things are equally bad. He says this is a simplification, and the argument would be the same without it, just more complicated. I’m a little sceptical that’s right, but let’s grant him it for today’s purposes.[^3]
+
+[^3]: The way this turned into an idea for a book was that if you dig down into every one of the steps, there really is a lot going on in Lewis’s argument. Today we’re going to elegantly skim across the surface and not worry about the currents underneath.
+
+So for each world w, it either is Good, and gets value 1, or Bad, and gets value 0. Now values are on the same scale as credences, and it is plausible-ish that for our thinker, the following is true.
+
+> *V*(*A*) = *C*(*A*°)
+
+Where *V* is Thinker’s value function (I’ll call them Thinker from now on for simplicity), *C* is their credence function, and for any factual[^4] proposition *A*, *A*° is the proposition that *A* is Good. That’s the Desire-As-Belief thesis.
+
+[^4]: I could also have a long story about what makes a proposition factual. Not today.
+
+But the thesis leads to a problem according to Lewis. It’s not 100% clear from Lewis’s texts exactly what the argument is, and I’m following the way the argument is set out in Jessica Collins’s “[Decision Theory after Lewis](https://philpapers.org/rec/COLDTA-7)”.
+
+Start by making the following assumptions:
+
+Invariance
+
+:   $V_A(w) = V(w)$
+
+Additivity
+
+:   $V(A) = \sum_w V(w)C(w | A)$
+
+Restricted Conditionalisation
+
+:   $C_A(B) = C(B | A)$
+
+Invariance says that learning whether a proposition is true doesn’t change the value of worlds. This has been a very controversial assumption in the literature on Lewis’s argument, but it seems right to me. The value of a terminal node doesn’t change as you learn things through the game tree, even that you’re not going to get to that node. And I think read rightly, that’s all this says.
+
+Additivity is odd, and it’s what Collins says is the mistake. It’s odd because it looks like a form of **Evidential** Decision Theory, and Lewis is a **Causal** Decision Theorist. We’ll come back to this, because I half agree with Collins.
+
+Restricted Conditionalisation says that on learning a factual proposition *A*, the new credence in *B* is the old credence in *B* given *A*. This should also be reasonably uncontroversial in this context, at least given the restriction.
+
+With those premises, Lewis is able to derive the following:
+
+$$
+\begin{aligned}
+C(A°) &=V(A) \\
+         &=\sum_w V(w)C(w | A) &&        (Additivity) \\
+         &=\sum_w V_A(w)C(w | A) &&      (Invariance)  \\
+         &=\sum_w V_A(w)C_A(w) &&  (Restricted  \text{ } Conditionalisation) \\
+       &=V_A(A) && (Additivity)\\ 
+         &=C_A(A°) &&                    (Desire-as-Belief) \\ 
+         &=C(A° | A) &&                  (Restricted \text{ }Conditionalisation) \\ \end{aligned}
+$$
+
+Note that at the second-last and third-last line we apply these principles (Additivity and Desire-as-Belief, after updating on *A*.
+
+So the result is that *A* and *A*° are probabilistically independent. And that seems wrong. Lewis has a roundabout argument for this, but there is a better way of putting the point due to [Ittay Nissan-Rozen](https://philpapers.org/rec/NISATR).
+
+Imagine that *A* is the proposition that Peter performs a particular action. Thinker admires Peter a lot, and trusts Peter’s judgment. Thinker themselves thinks that *A* is probably the right thing to do, but they aren’t sure. They aren’t sure because there is an incompatible action *B* which Peter could do instead of *A*, and which Thinker has non-zero credence is better.
+
+Putting these things together, Thinker believes the following:
+
+-   *A* is probably better than *B.*
+-   If Peter performs *A*, that will be conclusive evidence that it is better than *B*.
+-   If Peter performs *B*, that will be conclusive evidence that it is better than *A*.
+
+That seems like a coherent set of things for Thinker to think, if Thinker has some views about *A* andB, but trusts Peter’s judgment more than their own. And there’s nothing wrong with that kind of deference. But, says Lewis, it is incompatible with Desire-as-Belief, so Desire-as-Belief must be wrong.
+
+But here we see the problem. From Thinker’s perspective, what are the relative values of *V*(*A*) and *V*(*B*)? Two possible answers suggest themselves:
+
+*V*(*A*) is higher than *V*(*B*), since Thinker thinks that *A* is more likely the right thing to do. *V*(*A*) is equal to *V*(*B*), since if either of them were performed, and remember Peter is the only one who has the power to make one or other happen, Thinker would be sure the right thing is happening. The point of this post is not to get drawn into fights about which of these is right.[^5] What I do want to argue is that they can’t both be right. If one of them is right, the other is wrong.
+
+[^5]: I don’t think Thinker should be valuing things on whether they are (probably) right, but instead according to their right-making features. So I think both are wrong, and can’t really argue for one over the other.
+
+That’s a problem for Lewis, because one of his premises relies on the first being correct, i.e., *V*(*A*) \> *V*(*B*), and another premise relies on the second being correct, i.e., *V*(*A*) = *V*(*B*). And you can’t have both.
+
+The premise that relies on the first being correct is that the right way to formulate Desire-as-Belief is as *V*(*A*) = *C*(*A*°) rather than as *V*(*A*) = *C*(*A*° \| *A*). That is, it’s that Lewis’s anti-Humean opponents believe Desire-as-Unconditional-Belief rather than Desire-as-Conditional-Belief.
+
+A lot of people sympathetic to the broad picture that there are connections between desire and belief have endorsed Desire-as-Conditional-Belief. Indeed, Huw Price made the point that this would be a way out of Lewis’s argument in a reply published just one year after Lewis’s original paper.
+
+The premise that relies on the second being correct is Additivity. The only reason to include the ‘conditional on A’ at the end of the clause is if you want *V*(*A*) = *V*(*B*) to come out true. If you want it false, you’ll have something else there; maybe some kind of imaging operator as Collins suggests.
+
+In a sense nothing I said in the last four paragraphs is new. But what I think hasn’t been noticed in the literature is that these very different objections - Price (and many others following him) arguing that Lewis mis-characterised his opponents’ views, and Collins arguing that Lewis is being too friendly to evidential decision theory - are consistent, and combine to form a very strong objection to Lewis. Once we ask the question Is *V*(*A*) greater than *V*(*B*) or not?, we see that Lewis is going to face one of these objections with no particularly good answer.
+
+So I (now) think Lewis’s argument is only an argument against someone who has inconsistent views about whether *V*(*A*) is or is not greater than *V*(*B*). And the problem with such a person is not that they endorse (something like) Desire-as-Belief; it’s that they have inconsistent views.
+
+One last thought. Lewis introduces the halo notation, i.e., *A*°, by explicit reference to what Thinker morally values. But that plays very little role in the argument. If Lewis’s argument worked, it would work however we interpreted the halo.
+
+That’s bad, because one way of interpreting the halo is to say that *A*° means that *A* is profitable. Of course, it’s a little absurd that an action simply is or is not profitable. But it’s also a little absurd that an action simply is or is not good, and that binary is the only moral thing relevant to its choice-worthiness. A more plausible Desire-as-Belief theory will replace these binaries with some kind of scalar value.
+
+When one does that replacement, one is left with an argument that it is incoherent to desire propositions to the extent that one believes they are valuable in any sense of value. And that includes, for instance, how profitable they are. So if Lewis’s argument is right, the standard theory of the firm, which does assume firms value outcomes to the extent they believe they are profitable, is incoherent. Maybe the standard theory of the firm is incoherent, but I think it would take more than Lewis’s arguments to convince me of this.
