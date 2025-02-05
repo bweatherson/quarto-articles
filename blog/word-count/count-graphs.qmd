@@ -1,0 +1,1054 @@
+---
+title: "Word Counts over Time"
+abstract: |
+    Some graphs about changes in word frequencies over 1980-2019 in twenty leading philosophy journals.
+date: today
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - citations
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+---
+
+```{r}
+#| label: loader
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+require(scico)
+require(wesanderson)
+
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 30),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             title = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(-0.3, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+```
+
+```{r}
+#| label: getting-started
+#| cache: true
+#| cache-lazy: false
+
+load("/Users/weath/Documents/jstor-dfr-2025/busy_words.RData")
+load("/Users/weath/Documents/jstor-dfr-2025/all_words.RData")
+load("/Users/weath/Documents/jstor-dfr-2025/all_join.RData")
+load("/Users/weath/Documents/citations-2025/philo_bib.RData")
+
+letters_only <- function(x) !grepl("[^A-Za-z]", x)
+
+big_join <- philo_bib %>%
+  select(id) %>%
+  inner_join(all_join, by = "id")
+
+active_words <- all_words %>%
+  mutate(word = str_to_lower(word)) %>%
+  inner_join(big_join, by = "jstor_id")
+
+active_words <- active_words %>%
+  left_join(
+    select(
+      philo_bib,
+      id,
+      year
+    ), by = "id"
+  ) 
+
+word_by_year <- active_words %>%
+  group_by(word, year) %>%
+  summarise(count = sum(count), .groups = "drop")
+
+all_word_by_year <- active_words %>%
+  group_by(year) %>%
+  summarise(all_count = sum(count), .groups = "drop")
+
+word_appear_by_year <- active_words %>%
+  group_by(word, year) %>%
+  summarise(count = n(), .groups = "drop")
+
+all_word_appear_by_year <- word_appear_by_year %>%
+  group_by(year) |>
+  summarise(all_count = sum(count))
+
+the_threshold <- 10
+
+word_often_by_year <- active_words %>%
+  filter(count >= the_threshold) %>%
+  group_by(word, year) %>%
+  summarise(count = n(), .groups = "drop")
+
+all_word_often_by_year <- word_often_by_year %>%
+  group_by(year) |>
+  summarise(all_count = sum(count))
+
+```
+
+Recently I downloaded data showing how often words were used in articles in twenty prominent philosophy journals. Mostly this came from JSTOR's [Data for Researchers](https://about.jstor.org/whats-in-jstor/text-mining-support/) program, though in a few cases I downloaded the papers manually and used [pdftools](https://cran.r-project.org/web/packages/pdftools/index.html) to extract the words. The journals I'm using are listed in @tbl-list-of-journals.
+
+```{r}
+#| label: tbl-list-of-journals
+#| tbl-cap: "The journals used in this post"
+
+temp <- big_join %>%
+  left_join(
+    select(
+      philo_bib,
+      id,
+      year,
+      journal
+    ), by = "id"
+  ) %>%
+  group_by(journal) %>%
+  summarise(
+    Articles = n(),
+    `Avg. Length` = mean(wordcount)
+  ) %>%
+  rename(Journal = journal) %>%
+  mutate(`Avg. Length` = round(`Avg. Length`, 1))
+
+kable(temp)
+```
+
+This post just runs through a few words whose frequency has notably changed over the years between 1980 and 2019. For each word I'll display three graphs. 
+
+1. How often that word appears as a percentage of all words in all twenty journals that year. That's the simplest measure of word frequency, but it can be a bit misleading. Sometimes it looks like a word is being used very widely, but it's just that it appears several hundred times in one article. So I'll supplement it with two more graphs.
+2. The second graph measures how often that word is in an article at all. More precisely, it calculates all the word-article pairs, where the word appears at least once in the article, and for each year, works out the percentage of such pairs which have the target word as the word in question.^[Why not just show the percentage of articles which contain the word? Because articles have been getting much longer, and the more convoluted thing I'm doing controls for that.]
+3. The third graph measures how often the word appears frequently, meaning ten or more times, in an article. It's interesting to know not just how many articles mention Kant, but how many articles include more than a passing reference to Kant. Any threshold here is arbitrary, but I've picked ten. As with the second graph, I've calculated for each year all word-article pairs, where the word appears ten times or more in the article, then for each word and year, calculated the proportion of pairs from that year which have this word as the first element.
+
+In practice, the graphs look like this. (The word being tracked is in the title of the graph.)
+
+```{r}
+#| label: graph-creator
+
+freq_graph <- function(the_word, the_label){
+
+  graph_data <- word_by_year %>%
+    filter(word == the_word) %>%
+    right_join(all_word_by_year, by = "year") %>%
+    replace_na(list(word = the_word, count = 0)) %>%
+    mutate(freq = count * 1000 /all_count,
+           stat = "Overall Count") %>%
+    bind_rows(word_appear_by_year %>%
+      filter(word == the_word) %>%
+      right_join(all_word_appear_by_year, by = "year") %>%
+      replace_na(list(word = the_word, count = 0)) %>%
+      mutate(freq = count * 1000 /all_count,
+            stat = "At least One Use")
+    ) %>%
+    bind_rows(word_often_by_year %>%
+      filter(word == the_word) %>%
+      right_join(all_word_often_by_year, by = "year") %>%
+      replace_na(list(word = the_word, count = 0)) %>%
+      mutate(freq = count * 1000 /all_count,
+            stat = "Ten or More Uses")
+    )
+  
+  ggplot(graph_data,
+         aes(x = year, y = freq, color = stat)) +
+    geom_smooth(stat = "smooth", 
+                method = "loess",
+                formula = "y ~ x", 
+                fill = "grey93", 
+                linewidth = 0.5) +
+    geom_point(size = 2) +
+    scale_color_manual(values = wes_palette(name = "AsteroidCity1")) +
+    scale_x_continuous(breaks = c(1990, 2010)) +
+    labs(x = element_blank(),
+         y = "Appearances per 1000",
+         subtitle = the_label) +
+    facet_wrap(~forcats::fct_relevel(stat, "Overall Count", "At least One Use", "Ten or More Uses"),
+               nrow = 1) +
+    theme(legend.position="none") +
+    scale_y_continuous(limits = c(0, NA))
+}
+```
+
+```{r}
+#| label: graph-lewis
+#| fig-cap: "Frequency data for 'Lewis'"
+#| fig-height: 4
+
+freq_graph("lewis", "Lewis")
+```
+
+```{r}
+#| label: numbers-for-lewis
+
+the_word <- "lewis"
+
+  graph_data <- word_by_year %>%
+    filter(word == the_word) %>%
+    right_join(all_word_by_year, by = "year") %>%
+    replace_na(list(word = the_word, count = 0)) %>%
+    mutate(freq = count * 1000 /all_count,
+           stat = "Overall Count") %>%
+    bind_rows(word_appear_by_year %>%
+      filter(word == the_word) %>%
+      right_join(all_word_appear_by_year, by = "year") %>%
+      replace_na(list(word = the_word, count = 0)) %>%
+      mutate(freq = count * 1000 /all_count,
+            stat = "Appearance")
+    ) %>%
+    bind_rows(word_often_by_year %>%
+      filter(word == the_word) %>%
+      right_join(all_word_often_by_year, by = "year") %>%
+      replace_na(list(word = the_word, count = 0)) %>%
+      mutate(freq = count * 1000 /all_count,
+            stat = "Ten or More Usages")
+    )
+  
+left_lewis <- format(graph_data$count[25], big.mark = ",")
+left_all <- format(graph_data$all_count[25], big.mark = ",")
+middle_lewis <- format(graph_data$count[80], big.mark = ",")
+middle_all <- format(graph_data$all_count[80], big.mark = ",")
+right_lewis <- format(graph_data$count[105], big.mark = ",")
+right_all <- format(graph_data$all_count[105], big.mark = ",")
+```
+
+The high mark on the left graph is in 2004. That year there were `r left_lewis` occurrences of "Lewis" in the journals, out of a total of `r left_all` words. So the word "Lewis" appears a little over 2 times every 10,000 words.
+
+The high mark on the middle graph is in 2019. That year the word "Lewis" appears in `r middle_lewis` articles. There are `r middle_all` word-article pairs that year such that the word appears at least once in the article. So a bit over 1.2 of those pairs per 10,000 involve "Lewis".
+
+The high mark on the right graph is back in 2004. That year the word "Lewis" appears ten times or more in `r right_lewis` articles. There are `r right_all` word-article pairs that year such that the word appears at least ten times in the article. So a bit over 4 of those pairs per 10,000 involve "Lewis".
+
+So those are the kinds of things we'll show with these graphs. The results show us something about changes in philosophy over time. Some of the changes are purely stylistic, as with all the talk in recent years about *robust challenges*. But some reflect more substantive changes in which philosophers, and which philosophical ideas, are being talked about.
+
+If you'd like to see more of these graphs, they are pretty easy to generate once the setup is done, so let me know and I'll either post them to social media, or add some more to this post.
+
+I'll start with some familiar names. The graphs for "Lewis" are a bit misleading, because you might think they are exclusively about *David* Lewis. And while they are *largely* about him, there are plenty of references to Karen Lewis, and Peter Lewis, and several other philosophers. So I'll try to stick to names where it is clearer which philosopher is being referred to. This is hard: "Fodor" usually means Jerry, but sometimes means Janet; "Williamson" usually means Tim, but often means Jon, and sometimes has another meaning. Still, it isn't worth showing the graphs for "Smith", "Jones", "Anderson" or (though this is a bit of a special case), "Harman". It's also not worth showing graphs for people whose name is a frequently used word like "Fine" or "Field". Because the data I'm using treats words that are broken across lines as separate words, that also makes it impossible to get an accurate count of how often "Sider" is used; too often it is the second half of a word that was hyphenated across a line.^[I don't think there were 36 articles talking about Ted Sider in 1980, but the word 'sider' turns up in the database 36 times for that year.]
+
+The names that follow are in order of the average year in which the name appears. I've used weighted order of word counts, so it is sometimes thrown off by words appearing very often. (That's why, I think, 'Sider' appears so early.) It's a very male list, in part because of how imbalanced philosophy is, and in part because of how many prominent women share names with prominent men. (This is sometimes, but definitely not always, because they are related.)
+
+```{r}
+#| label: fig-popper
+#| fig-cap: "Frequency data for 'Popper'"
+#| fig-height: 4
+
+freq_graph("popper", "Popper")
+```
+
+```{r}
+#| label: fig-kripke
+#| fig-cap: "Frequency data for 'Kripke'"
+#| fig-height: 4
+
+freq_graph("kripke", "Kripke")
+```
+
+```{r}
+#| label: fig-putnam
+#| fig-cap: "Frequency data for 'Putnam'"
+#| fig-height: 4
+
+freq_graph("putnam", "Putnam")
+```
+
+```{r}
+#| label: fig-chisholm
+#| fig-cap: "Frequency data for 'Chisholm'"
+#| fig-height: 4
+
+freq_graph("chisholm", "Chisholm")
+```
+
+```{r}
+#| label: fig-jackson
+#| fig-cap: "Frequency data for 'Jackson'"
+#| fig-height: 4
+
+freq_graph("jackson", "Jackson")
+```
+
+```{r}
+#| label: fig-schiffer
+#| fig-cap: "Frequency data for 'Schiffer'"
+#| fig-height: 4
+
+freq_graph("schiffer", "Schiffer")
+```
+
+```{r}
+#| label: fig-fodor
+#| fig-cap: "Frequency data for 'Fodor'"
+#| fig-height: 4
+
+freq_graph("fodor", "Fodor")
+```
+
+```{r}
+#| label: fig-marx
+#| fig-cap: "Frequency data for 'Marx'"
+#| fig-height: 4
+
+freq_graph("marx", "Marx")
+```
+
+```{r}
+#| label: fig-gauthier
+#| fig-cap: "Frequency data for 'Gauthier'"
+#| fig-height: 4
+
+freq_graph("gauthier", "Gauthier")
+```
+
+```{r}
+#| label: fig-hume
+#| fig-cap: "Frequency data for 'Hume'"
+#| fig-height: 4
+
+freq_graph("hume", "Hume")
+```
+
+```{r}
+#| label: fig-dummett
+#| fig-cap: "Frequency data for 'Dummett'"
+#| fig-height: 4
+
+freq_graph("dummett", "Dummett")
+```
+
+```{r}
+#| label: fig-husserl
+#| fig-cap: "Frequency data for 'Husserl'"
+#| fig-height: 4
+
+freq_graph("husserl", "Husserl")
+```
+
+```{r}
+#| label: fig-frege
+#| fig-cap: "Frequency data for 'Frege'"
+#| fig-height: 4
+
+freq_graph("frege", "Frege")
+```
+
+```{r}
+#| label: fig-nozick
+#| fig-cap: "Frequency data for 'Nozick'"
+#| fig-height: 4
+
+freq_graph("nozick", "Nozick")
+```
+
+```{r}
+#| label: fig-wright
+#| fig-cap: "Frequency data for 'Wright'"
+#| fig-height: 4
+
+freq_graph("wright", "Wright")
+```
+
+```{r}
+#| label: fig-rawls
+#| fig-cap: "Frequency data for 'Rawls'"
+#| fig-height: 4
+
+freq_graph("rawls", "Rawls")
+```
+
+```{r}
+#| label: fig-mcdowell
+#| fig-cap: "Frequency data for 'McDowell'"
+#| fig-height: 4
+
+freq_graph("mcdowell", "McDowell")
+```
+
+```{r}
+#| label: fig-brandom
+#| fig-cap: "Frequency data for 'Brandom'"
+#| fig-height: 4
+
+freq_graph("brandom", "Brandom")
+```
+
+```{r}
+#| label: fig-stalnaker
+#| fig-cap: "Frequency data for 'Stalnaker'"
+#| fig-height: 4
+
+freq_graph("stalnaker", "Stalnaker")
+```
+
+```{r}
+#| label: fig-derose
+#| fig-cap: "Frequency data for 'DeRose'"
+#| fig-height: 4
+
+freq_graph("derose", "DeRose")
+```
+
+```{r}
+#| label: fig-langton
+#| fig-cap: "Frequency data for 'Langton'"
+#| fig-height: 4
+
+freq_graph("langton", "Langton")
+```
+
+```{r}
+#| label: fig-chalmers
+#| fig-cap: "Frequency data for 'Chalmers'"
+#| fig-height: 4
+
+freq_graph("chalmers", "Chalmers")
+```
+
+```{r}
+#| label: fig-haslanger
+#| fig-cap: "Frequency data for 'Haslanger'"
+#| fig-height: 4
+
+freq_graph("haslanger", "Haslanger")
+```
+
+```{r}
+#| label: fig-thomson
+#| fig-cap: "Frequency data for 'Thomson'"
+#| fig-height: 4
+
+freq_graph("thomson", "Thomson")
+```
+
+```{r}
+#| label: fig-millikan
+#| fig-cap: "Frequency data for 'Millikan'"
+#| fig-height: 4
+
+freq_graph("millikan", "Millikan")
+```
+
+```{r}
+#| label: fig-nussbaum
+#| fig-cap: "Frequency data for 'Nussbaum'"
+#| fig-height: 4
+
+freq_graph("nussbaum", "Nussbaum")
+```
+
+```{r}
+#| label: fig-korsgaard
+#| fig-cap: "Frequency data for 'Korsgaard'"
+#| fig-height: 4
+
+freq_graph("korsgaard", "Korsgaard")
+```
+
+```{r}
+#| label: fig-pritchard
+#| fig-cap: "Frequency data for 'Pritchard'"
+#| fig-height: 4
+
+freq_graph("pritchard", "Pritchard")
+```
+
+```{r}
+#| label: fig-schaffer
+#| fig-cap: "Frequency data for 'Schaffer'"
+#| fig-height: 4
+
+freq_graph("schaffer", "Schaffer")
+```
+
+```{r}
+#| label: fig-scanlon
+#| fig-cap: "Frequency data for 'Scanlon'"
+#| fig-height: 4
+
+freq_graph("scanlon", "Scanlon")
+```
+
+```{r}
+#| label: fig-weatherson
+#| fig-cap: "Frequency data for 'Weatherson'"
+#| fig-height: 4
+
+freq_graph("weatherson", "Weatherson")
+```
+
+```{r}
+#| label: fig-hawthorne
+#| fig-cap: "Frequency data for 'Hawthorne'"
+#| fig-height: 4
+
+freq_graph("hawthorne", "Hawthorne")
+```
+
+```{r}
+#| label: fig-macfarlane
+#| fig-cap: "Frequency data for 'MacFarlane'"
+#| fig-height: 4
+
+freq_graph("macfarlane", "MacFarlane")
+```
+
+```{r}
+#| label: fig-fricker
+#| fig-cap: "Frequency data for 'Fricker'"
+#| fig-height: 4
+
+freq_graph("fricker", "Fricker")
+```
+Next I'll run through some words associated with philosophical topics. Again, sometimes there is danger of multiple meanings. "Conception" is used both in papers about conceptual analysis, and papers about abortion. "Internalism" is used with many different meanings. As with the names, these are ordered by the average year in which the word appears.
+
+```{r}
+#| label: fig-capitalist
+#| fig-cap: "Frequency data for 'capitalist'"
+#| fig-height: 4
+
+freq_graph("capitalist", "capitalist")
+```
+
+```{r}
+#| label: fig-utilitarian
+#| fig-cap: "Frequency data for 'utilitarian'"
+#| fig-height: 4
+
+freq_graph("utilitarian", "utilitarian")
+```
+
+```{r}
+#| label: fig-connectionist
+#| fig-cap: "Frequency data for 'connectionist'"
+#| fig-height: 4
+
+freq_graph("connectionist", "connectionist")
+```
+
+```{r}
+#| label: fig-statement
+#| fig-cap: "Frequency data for 'statement'"
+#| fig-height: 4
+
+freq_graph("statement", "statement")
+```
+
+```{r}
+#| label: fig-person
+#| fig-cap: "Frequency data for 'person'"
+#| fig-height: 4
+
+freq_graph("person", "person")
+```
+
+```{r}
+#| label: fig-reference
+#| fig-cap: "Frequency data for 'reference'"
+#| fig-height: 4
+
+freq_graph("reference", "reference")
+```
+
+```{r}
+#| label: fig-description
+#| fig-cap: "Frequency data for 'description'"
+#| fig-height: 4
+
+freq_graph("description", "description")
+```
+
+```{r}
+#| label: fig-conception
+#| fig-cap: "Frequency data for 'conception'"
+#| fig-height: 4
+
+freq_graph("conception", "conception")
+```
+
+```{r}
+#| label: fig-physical
+#| fig-cap: "Frequency data for 'physical'"
+#| fig-height: 4
+
+freq_graph("physical", "physical")
+```
+
+```{r}
+#| label: fig-analysis
+#| fig-cap: "Frequency data for 'analysis'"
+#| fig-height: 4
+
+freq_graph("analysis", "analysis")
+```
+
+```{r}
+#| label: fig-individual
+#| fig-cap: "Frequency data for 'individual'"
+#| fig-height: 4
+
+freq_graph("individual", "individual")
+```
+
+```{r}
+#| label: fig-cause
+#| fig-cap: "Frequency data for 'cause'"
+#| fig-height: 4
+
+freq_graph("cause", "cause")
+```
+
+```{r}
+#| label: fig-matter
+#| fig-cap: "Frequency data for 'matter'"
+#| fig-height: 4
+
+freq_graph("matter", "matter")
+```
+
+```{r}
+#| label: fig-basic
+#| fig-cap: "Frequency data for 'basic'"
+#| fig-height: 4
+
+freq_graph("basic", "basic")
+```
+
+```{r}
+#| label: fig-utterances
+#| fig-cap: "Frequency data for 'utterances'"
+#| fig-height: 4
+
+freq_graph("utterances", "utterances")
+```
+
+```{r}
+#| label: fig-priori
+#| fig-cap: "Frequency data for 'priori'"
+#| fig-height: 4
+
+freq_graph("priori", "priori")
+```
+
+```{r}
+#| label: fig-vague
+#| fig-cap: "Frequency data for 'vague'"
+#| fig-height: 4
+
+freq_graph("vague", "vague")
+```
+
+```{r}
+#| label: fig-utterance
+#| fig-cap: "Frequency data for 'utterance'"
+#| fig-height: 4
+
+freq_graph("utterance", "utterance")
+```
+
+```{r}
+#| label: fig-grounds
+#| fig-cap: "Frequency data for 'grounds'"
+#| fig-height: 4
+
+freq_graph("grounds", "grounds")
+```
+
+```{r}
+#| label: fig-supervenience
+#| fig-cap: "Frequency data for 'supervenience'"
+#| fig-height: 4
+
+freq_graph("supervenience", "supervenience")
+```
+
+```{r}
+#| label: fig-causal
+#| fig-cap: "Frequency data for 'causal'"
+#| fig-height: 4
+
+freq_graph("causal", "causal")
+```
+
+```{r}
+#| label: fig-intrinsic
+#| fig-cap: "Frequency data for 'intrinsic'"
+#| fig-height: 4
+
+freq_graph("intrinsic", "intrinsic")
+```
+
+```{r}
+#| label: fig-knows
+#| fig-cap: "Frequency data for 'knows'"
+#| fig-height: 4
+
+freq_graph("knows", "knows")
+```
+
+```{r}
+#| label: fig-knowledge
+#| fig-cap: "Frequency data for 'knowledge'"
+#| fig-height: 4
+
+freq_graph("knowledge", "knowledge")
+```
+
+```{r}
+#| label: fig-vagueness
+#| fig-cap: "Frequency data for 'vagueness'"
+#| fig-height: 4
+
+freq_graph("vagueness", "vagueness")
+```
+
+```{r}
+#| label: fig-ground
+#| fig-cap: "Frequency data for 'ground'"
+#| fig-height: 4
+
+freq_graph("ground", "ground")
+```
+
+```{r}
+#| label: fig-internalist
+#| fig-cap: "Frequency data for 'internalist'"
+#| fig-height: 4
+
+freq_graph("internalist", "internalist")
+```
+
+```{r}
+#| label: fig-intuition
+#| fig-cap: "Frequency data for 'intuition'"
+#| fig-height: 4
+
+freq_graph("intuition", "intuition")
+```
+
+```{r}
+#| label: fig-statue
+#| fig-cap: "Frequency data for 'statue'"
+#| fig-height: 4
+
+freq_graph("statue", "statue")
+```
+
+```{r}
+#| label: fig-internalism
+#| fig-cap: "Frequency data for 'internalism'"
+#| fig-height: 4
+
+freq_graph("internalism", "internalism")
+```
+
+```{r}
+#| label: fig-evidence
+#| fig-cap: "Frequency data for 'evidence'"
+#| fig-height: 4
+
+freq_graph("evidence", "evidence")
+```
+
+```{r}
+#| label: fig-externalist
+#| fig-cap: "Frequency data for 'externalist'"
+#| fig-height: 4
+
+freq_graph("externalist", "externalist")
+```
+
+```{r}
+#| label: fig-reasons
+#| fig-cap: "Frequency data for 'reasons'"
+#| fig-height: 4
+
+freq_graph("reasons", "reasons")
+```
+
+```{r}
+#| label: fig-externalism
+#| fig-cap: "Frequency data for 'externalism'"
+#| fig-height: 4
+
+freq_graph("externalism", "externalism")
+```
+
+```{r}
+#| label: fig-epistemic
+#| fig-cap: "Frequency data for 'epistemic'"
+#| fig-height: 4
+
+freq_graph("epistemic", "epistemic")
+```
+
+```{r}
+#| label: fig-disagreement
+#| fig-cap: "Frequency data for 'disagreement'"
+#| fig-height: 4
+
+freq_graph("disagreement", "disagreement")
+```
+
+```{r}
+#| label: fig-normative
+#| fig-cap: "Frequency data for 'normative'"
+#| fig-height: 4
+
+freq_graph("normative", "normative")
+```
+
+```{r}
+#| label: fig-zombie
+#| fig-cap: "Frequency data for 'zombie'"
+#| fig-height: 4
+
+freq_graph("zombie", "zombie")
+```
+
+```{r}
+#| label: fig-doxastic
+#| fig-cap: "Frequency data for 'doxastic'"
+#| fig-height: 4
+
+freq_graph("doxastic", "doxastic")
+```
+
+```{r}
+#| label: fig-contextualist
+#| fig-cap: "Frequency data for 'contextualist'"
+#| fig-height: 4
+
+freq_graph("contextualist", "contextualist")
+```
+
+```{r}
+#| label: fig-contextualism
+#| fig-cap: "Frequency data for 'contextualism'"
+#| fig-height: 4
+
+freq_graph("contextualism", "contextualism")
+```
+
+```{r}
+#| label: fig-grounding
+#| fig-cap: "Frequency data for 'grounding'"
+#| fig-height: 4
+
+freq_graph("grounding", "grounding")
+```
+
+```{r}
+#| label: fig-credence
+#| fig-cap: "Frequency data for 'credence'"
+#| fig-height: 4
+
+freq_graph("credence", "credence")
+```
+
+```{r}
+#| label: fig-credences
+#| fig-cap: "Frequency data for 'credences'"
+#| fig-height: 4
+
+freq_graph("credences", "credences")
+```
+
+```{r}
+#| label: fig-slur
+#| fig-cap: "Frequency data for 'slur'"
+#| fig-height: 4
+
+freq_graph("slur", "slur")
+```
+
+Finally, I'll go through some words that I don't think really tell us much about the content of philosophy papers, but do tell us a lot about their style. I hadn't really noticed how stuffy some of the language in 1980s philosophy journals was, or how combative the more recent language has become. (These are more roughly ordered, so some natural terms can go together.)
+
+```{r}
+#| label: fig-men
+#| fig-cap: "Frequency data for 'men'"
+#| fig-height: 4
+
+freq_graph("men", "men")
+```
+
+```{r}
+#| label: fig-his
+#| fig-cap: "Frequency data for 'his'"
+#| fig-height: 4
+
+freq_graph("his", "his")
+```
+
+```{r}
+#| label: fig-himself
+#| fig-cap: "Frequency data for 'himself'"
+#| fig-height: 4
+
+freq_graph("himself", "himself")
+```
+
+```{r}
+#| label: fig-shall
+#| fig-cap: "Frequency data for 'shall'"
+#| fig-height: 4
+
+freq_graph("shall", "shall")
+```
+
+```{r}
+#| label: fig-which
+#| fig-cap: "Frequency data for 'which'"
+#| fig-height: 4
+
+freq_graph("which", "which")
+```
+
+```{r}
+#| label: fig-upon
+#| fig-cap: "Frequency data for 'upon'"
+#| fig-height: 4
+
+freq_graph("upon", "upon")
+```
+
+```{r}
+#| label: fig-would
+#| fig-cap: "Frequency data for 'would'"
+#| fig-height: 4
+
+freq_graph("would", "would")
+```
+
+```{r}
+#| label: fig-quite
+#| fig-cap: "Frequency data for 'quite'"
+#| fig-height: 4
+
+freq_graph("quite", "quite")
+```
+
+```{r}
+#| label: fig-really
+#| fig-cap: "Frequency data for 'really'"
+#| fig-height: 4
+
+freq_graph("really", "really")
+```
+
+```{r}
+#| label: fig-argue
+#| fig-cap: "Frequency data for 'argue'"
+#| fig-height: 4
+
+freq_graph("argue", "argue")
+```
+
+```{r}
+#| label: fig-account
+#| fig-cap: "Frequency data for 'account'"
+#| fig-height: 4
+
+freq_graph("account", "account")
+```
+
+```{r}
+#| label: fig-accounts
+#| fig-cap: "Frequency data for 'accounts'"
+#| fig-height: 4
+
+freq_graph("accounts", "accounts")
+```
+
+```{r}
+#| label: fig-robust
+#| fig-cap: "Frequency data for 'robust'"
+#| fig-height: 4
+
+freq_graph("robust", "robust")
+```
+
+```{r}
+#| label: fig-challenge
+#| fig-cap: "Frequency data for 'challenge'"
+#| fig-height: 4
+
+freq_graph("challenge", "challenge")
+```
+
+```{r}
+#| label: fig-problematic
+#| fig-cap: "Frequency data for 'problematic'"
+#| fig-height: 4
+
+freq_graph("problematic", "problematic")
+```
+
+```{r}
+#| label: fig-response
+#| fig-cap: "Frequency data for 'response'"
+#| fig-height: 4
+
+freq_graph("response", "response")
+```
+
+```{r}
+#| label: fig-target
+#| fig-cap: "Frequency data for 'target'"
+#| fig-height: 4
+
+freq_graph("target", "target")
+```
+
+```{r}
+#| label: fig-worry
+#| fig-cap: "Frequency data for 'worry'"
+#| fig-height: 4
+
+freq_graph("worry", "worry")
+```
+
+```{r}
+#| label: fig-she
+#| fig-cap: "Frequency data for 'she'"
+#| fig-height: 4
+
+freq_graph("she", "she")
+```
