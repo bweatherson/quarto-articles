@@ -3,7 +3,7 @@ require(tidyverse)
 require(wesanderson)
 
 # Set seed for reproducibility
-set.seed(22031848)
+#set.seed(22031848)
 
 
 # Assuming your tibble is named 'data'
