@@ -1,0 +1,746 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+    \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+    \setsansfont[]{EB Garamond}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{3}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Consistency and Resoluteness
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+\cehead{
+        Lederman and Weatherson
+        }
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tikz}{}{\usepackage{tikz}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Consistency and Resoluteness},
+  pdfauthor={Harvey Lederman; Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Consistency and Resoluteness}
+\author{Harvey Lederman \and Brian Weatherson}
+\date{2025}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+When does a little story in which a character loses money, or at least
+comes out with less money than they might easily have had, reveal a
+defect in that character's rationality? We argue that these stories are
+less philosophically revealing than is often assumed. In particular, we
+argue the story can only be used in this kind of argument if the
+character has firm beliefs about what they will do later in the story.
+This constraint is, we argue, violated in recent arguments against
+imprecise credences and incomparable values.
+\end{abstract}
+
+
+\setstretch{1.1}
+One genre of parable has played a key role in philosophical theorizing
+about rationality. In some respects, the conventions of the genre are
+simple: A character is portrayed, presented with certain choices, and,
+in response, loses something of value, with no compensatory gain. The
+inevitable moral is then drawn: the protagonist displays a rational
+defect.
+
+Recently this kind of parable has been deployed by Adam Elga
+(\citeproc{ref-Elga2010}{2010}), to argue against imprecise credences,
+and by Johan Gustaffsson (\citeproc{ref-Gustafsson2022}{2022},
+\citeproc{ref-Gustafsson2025}{Forthcoming}), to argue against incomplete
+preferences. We argue that these parables fail to ground convincing
+arguments. This is interesting both for debates about the nature of
+credences and values, but also for more general debates about the role
+of these parables in philosophy.
+
+Let's start with three such parables that we hope you'll agree are not
+persuasive.
+
+Dylan owns \emph{B}, but has a slight preference for \emph{A}. So they
+trade \emph{B} plus ε for \emph{A}. The next day they wake up with the
+opposite preference, and trade \emph{A} plus ε for \emph{B}. At the end
+they are back where they started, minus 2ε. Should this story make us
+think that rational people never change their tastes? Hopefully not.
+
+Blake has credence 0.6 in \emph{p}. They pay 0.55 for a bet that pays 1
+if \emph{p}, and 0 otherwise. The next morning, they wake up and find,
+much to their surprise, that they now have credence 0.4 in \emph{p}.
+They sell the bet for 0.45, netting a loss of 0.1. This one is a little
+more controversial, but we also don't think that this shows that
+changing one's beliefs is irrational.\footnote{Two important caveats
+  here. One is that believers in various uniqueness theses will think
+  that Blake is not perfectly rational; see Kopec and Titelbaum
+  (\citeproc{ref-KopecTitelbaum2016}{2016}) for a survey of the issues
+  here. But note that uniqueness is a theory of substantive rationality,
+  and these stories are meant to reveal violations of structural
+  rationality. So we think uniqueness shouldn't be assumed here. Another
+  is that there is an argument from David Lewis
+  (\citeproc{ref-Lewis1999b}{1999}) that not conditionalising will lead
+  to a money pump, and Blake doesn't conditionalise. But as several
+  authors have pointed out (e.g., Bradley
+  (\citeproc{ref-Bradley2005}{2005})), Lewis's argument shows at most
+  that any policy other than conditionalisation leads to a money pump.
+  And Blake has no such policy; they just find themselves with new
+  beliefs.}
+
+Leslie is offered the following trade: If they pay 5, they will receive
+a bet that pays 8 if this fair coin lands heads, and 0 if it lands
+tails. Also, they have the option of paying 1 to put off their decision
+until after the coin is flipped. Textbook theories of rationality say
+that they should pay the 1 and take this option. But whatever way the
+coin lands, and whatever they do, they would have been better off doing
+that without paying 1. Here we think everyone will agree that Leslie
+does nothing irrational by paying to delay the decision, even though
+whatever happens, they could have done better. In general, paying for
+options is not always irrational. Anyone who pays extra for a
+cancellable flight or hotel does that, and these payments are not always
+irrational.
+
+These cases show, we think, that stories involving money pumps don't
+reveal irrationality on the part of the protagonist if the story
+involves changes of desire, or changes of belief, either through
+`fickle' change (Woodard (\citeproc{ref-Woodard2022}{2022})) or through
+learning. We want to suggest a similar constraint in the same
+neighbourhood. The protagonist must have beliefs about what they will do
+at future nodes, and these beliefs must update by conditionalisation. If
+that's not true, we will argue, the money pump parable doesn't show
+anything.
+
+So consider a canonical money-pump argument against incomplete
+preferences, often called the ``Single Souring Moneypump''
+(\citeproc{ref-Chang1997}{Chang 1997, 11};
+\citeproc{ref-Gustafsson2022}{Gustafsson 2022, 26}). The tree for this
+is shown in Figure~\ref{fig-single-souring}.
+
+\begin{figure}
+
+\centering{
+
+\input{single-sour-diagram.tex}
+
+}
+
+\caption{\label{fig-single-souring}The Single Souring Moneypump}
+
+\end{figure}%
+
+The agent, call them Evelyn, is presented at \emph{t}\textsubscript{1}
+with a choice between taking Up, which results in \emph{A}, or Down,
+which results in a choice (at \emph{t}\textsubscript{2}) between option
+\emph{B} and \emph{A}-. Evelyn is assumed to prefer \emph{A} to
+\emph{A}-, but to have no relevant preferential relations between either
+\emph{A} and \emph{B} or \emph{A}- and \emph{B} (that is, they are not
+indifferent between the elements of these pairs, and do not prefer one
+to the other). Plausibly, then, Evelyn is rationally permitted, at
+\emph{t}\textsubscript{1}, to take either option: they can take Up and
+get \emph{A} or take Down and face the choice between \emph{A}- and
+\emph{B}. The problem is what happens if they take this second option.
+For in that case, it would seem that they are permitted at
+\emph{t}\textsubscript{2} to take \emph{A}-, but this is a loss relative
+to what they could have had at no cost, i.e.~\emph{A}.
+
+In this simple case, a normal person who made the decision to go Down,
+rather than the sure thing of \emph{A}, would do so in the belief (in
+fact, presumably, in the knowledge) that they would go on to choose
+\emph{B}, not \emph{A}-. Indeed, it seems to us that anyone who made
+this choice without the belief that they would later choose \emph{B}
+would be doing something odd in the case as described. So, if such a
+person did make the choice in the first place, to go down, giving
+themselves the option between \emph{B} and \emph{A}-, and if they then
+chose \emph{A}-, this choice would either (a) require a change in their
+belief about what they would do, or (b) require that the person choose
+\emph{A}- while still believing that we would choose \emph{B}. The
+second of these options, (b), quickly leads to inconsistency given
+natural constraints on the sort of person for whom a moneypump
+dramatizes a rational defect. Provided Evelyn knows that they're in fact
+faced with the choice, and provided they update their conditional belief
+that, if they are faced with the choice, they will choose \emph{B}, then
+at the moment they make the choice, they will believe that they are
+choosing \emph{B}. Provided they also believe that they are choosing
+what they are choosing when they choose it, they will believe that they
+are choosing \emph{A}-. Given knowledge that these were exclusive
+options, Evelyn's beliefs are inconsistent, hence irrational.
+
+If a moneypump only dramatizes incoherence if it is compatible with the
+protagonist's beliefs about what they will do being held fixed (ruling
+out (a) as an option in the above story), and we can furthermore
+motivate a rational requirement that, in this case, the person who goes
+Down believes that they will later choose \emph{B}, this moneypump (and
+its descendants, on which, more soon) would disappear. If, however,
+beliefs like this one are instead allowed to shift in the course of a
+moneypump, and only their preferences must be held fixed throughout the
+story, then the moneypump is genuine. So which is it?
+
+The examples involving Blake and Leslie already provide reasons for
+thinking that beliefs must be held fixed in a moneypump argument. So the
+big issue is whether, as we've suggested in the last two paragraphs, it
+is a requirement that characters like Evelyn have firm beliefs about
+what they will do at later stages. We have six arguments for the view
+that it is. That is, each of these arguments is intended to show that
+the moneypump only shows that Evelyn's preferences are incoherent if we
+can consistently add to the story that at \emph{t}\textsubscript{1}
+Evelyn has a firm belief about what they will do at
+\emph{t}\textsubscript{2} (should the game get that far). The first
+three arguments are probably not going to convince many sceptics, but
+having them on the table is helpful for understanding the later
+arguments. (And they might convince some neutrals, which is our primary
+aim.)\footnote{Note to Harvey: The first three are probably cuttable to
+  be honest; they are as much me writing out how I came to a view like
+  this as anything resembling a standard argument.}
+
+The first argument is a somewhat basic appeal to intuition. The
+moneypump argument, like all arguments, shows that some propositions are
+inconsistent. The further inference that this particular proposition is
+false requires a judgment that it is the least plausible of the
+inconsistent set. In this case, at most what the argument shows is that
+not both (1) and (2) can be correct.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Evelyn can rationally act at \textsubscript{t}\emph{1} without having
+  a firm belief about what they will do at \textsubscript{t}\emph{2}.
+\item
+  Evelyn can rationally have no preference between \emph{A} and
+  \emph{B}, and no preference between \emph{B} and \emph{A}-, but prefer
+  \emph{A} to \emph{A}-.
+\end{enumerate}
+
+It seems to us 2 is much more intuitively plausible than 1. We suspect
+this won't move many people on the other side, however, so let's move on
+to more arguments.
+
+The second argument is a perhaps more basic appeal to authority. Open up
+any game theory textbook and look at how it treats decisions over time.
+All of the theories put forward will assume, usually without comment,
+that each player has firm beliefs about what strategy they will adopt at
+later times. Those strategies might be mixed strategies, so the player
+might not know what move they will make. But it's an unchallenged
+assumption that rational action in a dynamic game requires having a view
+about what one's later self will do. Treating one's later self as a
+foreign agent, or as something like the weather that might change at
+random, is unheard of. Now maybe all these theorists are wrong. Or maybe
+we could try to strengthen this argument by saying that naturalism
+requires taking seriously the best scientific practice and this is the
+best scientific practice. We'll just settle for noting that the view
+we're putting forward is not a strange one; indeed in large parts of the
+literature it is the most mundane orthodoxy.
+
+The third argument is a tu quoque against Elga's deployment of this
+argument in particular.\footnote{For Elga, the options \emph{A},
+  \emph{B}, and \emph{A}- are bets, where \emph{A} and \emph{B} are bets
+  on propositions with incomparable credences, and \emph{A}- is a bet on
+  a proposition that's a little less likely than \emph{A}.} Assume that
+Evelyn has no beliefs at all at \emph{t}\textsubscript{1} about what
+they will do at \emph{t}\textsubscript{2}. Then, on one standard way of
+understanding what an imprecise credence is, Evelyn's credences about
+the proposition \emph{Evelyn will take B at t\textsubscript{2}} are
+imprecise. But Elga says that imprecise credences are irrational. So
+Elga has to, by his own lights, require irrationality in the very setup
+of the problem. So his argument can't show that the attitudes towards
+\emph{A}, \emph{B}, and \emph{A}- in particular are irrational.
+
+The version of the argument in Gustafsson
+(\citeproc{ref-Gustafsson2025}{Forthcoming}) is not subject to this
+criticism. He is careful to note that Evelyn's counterpart (in the
+moneypump he puts forward) has numerical credences about what they will
+do at later stages. He does insist that these credences are in (0, 1);
+i.e., they are not extreme. We'll come back to this assumption below,
+but for now we just want that this particular objection has no force
+against his version of the moneypump argument.
+
+The fourth argument is that the principle we're suggesting here unifies,
+and explains, what's going on in the cases involving Dylan, Blake, and
+Leslie. There should be some story about the losses (or at least
+non-maximal gains) in those cases are not evidence of irrationality, and
+ideally it should be a simple, common, story. We have such a story to
+offer. The parables only work if the protagonist starts with firm
+beliefs about what they will do at later stages, and those beliefs only
+update by conditionalisation.\footnote{That is, the only updates involve
+  moving between \emph{If I get to this choice point, I will take this
+  option} to \emph{Now that I'm at this choice point, I will take this
+  option}.}
+
+The fifth argument is that only with this constraint added can players
+do well in certain kinds of decision problems that, intuitively,
+rational players can do well in. The following example is taken (with
+very minor modifications) from Stalnaker
+(\citeproc{ref-Stalnaker1999}{1999, 317}), who in turn takes it from
+Piccione and Rubinstein (\citeproc{ref-PiccioneRubinstein1997}{1997}).
+
+A fair coin will be flipped, and Casey will see the outcome. Regardless
+of how it comes up, theycan choose to opt out or to opt in. If they opt
+out, they get 2. If they opt in, they lose the memory of the coin flip,
+and face a second choice: guessing the outcome of the coin. If they
+guess correctly they get 6, otherwise 0.
+
+There are two optimal strategies, each of which has an expected payout
+of 4. On the first, Casey opts out if Heads and opts in if Tails,
+choosing Tails at the next choice. On the second, Casey opts out if
+Tails and opts in if Heads, choosing Heads at the next choice. We think
+that the sort of character depicted in a moneypump should be able to
+execute one of these strategies, and obtain the best expectation. If
+Casey can form beliefs about what they will do, and only update those
+beliefs by conditionalisation, then they will carry out one or other of
+these strategies. If it is consistent with the kind of rationality
+depicted in the moneypump stories that Casey could either (a) not form a
+belief at the earlier time about what they will do at the later time, or
+(b) change this belief for no reason, then it would also be consistent
+with this kind of rationality that at the later time they would simply
+have to guess how the coin landed. It would still be rational to opt in,
+because this guess has an expected return of 3, but they could not get
+the return of 4 from playing either of the optimal strategies. This
+seems bad, and not consistent with the kind of rationality that we think
+the stories should depict.
+
+The sixth and final argument is one that we've alluded to above. At
+\emph{t}\textsubscript{3}, after the second choice is made, Evelyn has a
+belief about what they do at \emph{t}\textsubscript{2}. (We're using
+this awkward tenseless formulation because we want to talk about their
+attitude to the proposition before, during and after
+\emph{t}\textsubscript{2}, and any more natural formulation would be
+misleading about two of those three times.) How did they acquire that
+belief? There are three logical options:
+
+\begin{itemize}
+\tightlist
+\item
+  It could have been a belief they had from \emph{t}\textsubscript{1}.
+  That's the view we're defending.
+\item
+  It could have been brought about by some arbitrary change before
+  \emph{t}\textsubscript{2}. Then Evelyn is in the same category as
+  Blake: they have an arbitrary change of belief during the story. That
+  implies (a) that they violate the conventions of the moneypump genre,
+  and (b) that they are arguably independently irrational, so any losses
+  can be chalked up to this irrationality rather than a defect in their
+  preferences.
+\item
+  It could have been something they learned at
+  \emph{t}\textsubscript{2}. On this picture, Evelyn does update by
+  conditionalisation, but the new evidence is that they see what they do
+  at \emph{t}\textsubscript{2}, and update accordingly. This also seems
+  irrational to us. Rational people are not alienated from their own
+  actions in this way; they do not take the observer stance towards
+  themselves. ``Oh look, I chose B!'' they say, as one might notice the
+  action or another, or the involuntary motion of a body part. Choosing
+  \emph{A}- is meant to be an action, a sign of irrationality according
+  to the proponent of the argument, not a mere movement. That's
+  inconsistent with it being something that Evelyn doesn't know will
+  happen until they see it.
+\end{itemize}
+
+The only option that seems reasonable here is the first one: for the
+moneypump argument to work, and Evelyn to be rational in the right kind
+of way, they have to have a belief at \emph{t}\textsubscript{1} about
+what they will do at \emph{t}\textsubscript{2}. If that belief isn't
+accurate, the moneypump argument fails for one reason or another.
+
+In his most recent defence of moneypump arguments, Gustafsson
+(\citeproc{ref-Gustafsson2025}{Forthcoming}) suggests a reason for
+rejecting everything we've just said. He argues that if one has a
+disposition to choose \emph{X} over \emph{Y} with probability 1, that is
+sufficient for preferring \emph{X} to \emph{Y}. He then develops a much
+more complicated moneypump that assumes that the protagonist at earlier
+stages has some non-extremal probability about what they will do at
+later stages when faced with a choice between incomparable options.
+
+This way of setting up the moneypump argument has some nice advantages
+over the one shown in Figure~\ref{fig-single-souring}. First, it takes
+seriously the question of what attitude the protagonist has at earlier
+times towards their actions at later times. Second, it makes that
+attitude one that could be rational given the conclusion of the
+moneypump. That is, it is a numerical credence, not an incomplete or
+imprecise attitude. Third, in the resulting argument, it's not just that
+the protagonist \emph{could} choose suboptimal options; the first move
+at least in his parable is one that the protagonist is required to make
+given the standards of rationality he defends.
+
+But all of these moves require the initial assumption that the
+protagonist cannot simultaneously have probability 1 that they will
+choose \emph{B} over \emph{A}-, and not have a preference for \emph{B}
+over \emph{A}-. We think there are several reasons for thinking these
+attitudes are consistent. To start, note that the principle Gustafsson
+uses would lead to fairly dramatic changes in how we think about
+equilibria. In the centipede game in Figure~\ref{fig-centipede},
+orthodox analysis would say there
+\textless{}\emph{Rr},\emph{R}\textgreater{} is a subgame perfect
+equilibrium, and indeed is a weakly Pareto dominant equilibrium.
+
+\begin{figure}
+
+\centering{
+
+\input{centipede-diagram.tex}
+
+}
+
+\caption{\label{fig-centipede}A centipede game}
+
+\end{figure}%
+
+On Gustafsson's view, \textless{}\emph{Rr},\emph{R}\textgreater{} cannot
+be an equilibrium of \emph{this} game. To be an equilibrium, it is
+required that both players are confident that P1 will play \emph{r}. If
+P2 does not believe this with probability 1, they are better off playing
+\emph{D} than \emph{R}. And normally an equilibrium requires that
+players have common beliefs. But according to Gustafsson, if P1 believes
+they will play \emph{r} with probability 1, they cannot be indifferent
+between the two outcomes on the right. That in turn is inconsistent with
+the way the game is written, where P1 is assigned exactly the same
+payout in those two options. We think the orthodox analysis of the game
+here is correct; P1 can consistently be indifferent between the two
+options on the right, and believe (along with P2) that they will play
+\emph{r} rather than \emph{d} if the game gets that far.
+
+Set that case aside though, and think about another character, Hunter,
+with the following disposition. Whenever they have to bet on the flip of
+a fair coin, they choose Heads. According to Gustafsson's way of setting
+things up, Hunter prefers a bet on Heads to a bet on Tails. This seems
+implausible to us; forming such a tie-breaking resolution seems like a
+different thing than forming a preference.
+
+There are two other reasons for denying that Hunter prefers betting on
+Heads to betting on Tails. A standard principle about rationality, one
+that is often used in deriving credences and utilities from betting
+dispositions, is that one prefers a bet on \emph{p} to a bet on \emph{q}
+(with the same stakes) iff one thinks \emph{p} is more probable than
+\emph{q}. If Hunter genuinely prefers betting on Heads to betting on
+Tails when the coin is fair, they violate this principle. Gustafsson
+also suggests that preference should satisfy a continuity assumption -
+whenever one strictly prefers \emph{X} to \emph{Y}, there should be some
+third option \emph{Z} that one prefers to \emph{Y}, and is less
+preferred than \emph{X}. If Hunter prefers Heads to Tails in virtue of
+having this disposition, they will violate this continuity constraint.
+If this is the \emph{only} such tie-breaking resolution they have, there
+will be nothing which they prefer to Tails, and prefer less than Heads.
+So even without getting into what happens with incomparable options, the
+thought that a consistent choice disposition implies a preference has
+enough unhappy consequences.
+
+The view that characters like Evelyn should have firm beliefs about what
+they will do at later stages of decision trees, and that they should
+only update these beliefs by conditionalisation, suggests a different
+analysis of what's going on in these cases to what is common in the
+literature. It is often thought that if one wants to defend the
+rationality of Evelyn's preferences in light of the fact that they end
+up with \emph{A}-, one should find some way in which the choice of
+\emph{A}- over \emph{B} at \emph{t}\textsubscript{2} is irrational. This
+thought is common ground between philosophers like Chang
+(\citeproc{ref-Chang2005}{2005}), who thinks Evelyn is rational, and
+philosophers like Gustafsson (\citeproc{ref-Gustafsson2022}{2022}), who
+thinks they are not. So there is a lot of debate about whether
+rationality requires sticking to earlier plans, as Chang
+suggests\footnote{Chang's later views on this are a bit more nuanced.
+  See Chang (\citeproc{ref-Chang2017}{2017}) for an updated account, and
+  Doody (\citeproc{ref-Doody2019}{2019}, sect 4) for a careful analysis
+  of how Chang's views on the case have changed over time.}, or whether
+the rationality of a choice at a time is independent of past choices, as
+Gustafsson suggests. We think this debate is looking at the wrong spot.
+There are three other places we could be looking.
+
+It could be that Evelyn is irrational, but the irrationality is at
+\emph{t}\textsubscript{1}. This would be the case if, for example,
+Evelyn chose to go Down at \emph{t}\textsubscript{1} while believing
+that they would take \emph{A}- at \emph{t}\textsubscript{2}.
+
+A more radical possibility is that Evelyn is irrational over the period
+from \emph{t}\textsubscript{1} to \emph{t}\textsubscript{2} without
+being irrational at either time. We want to at least open the
+possibility that changes like Blake's involve intertemporal
+irrationality even if Blake is not irrational at either time. And it
+seems consistent to say that the combination of choosing Down and
+\emph{A}- is irrational even if neither single act is irrational.
+
+But the last option is the one we most want to highlight. Dylan, Blake,
+and Leslie all end up with less than they could have done. But this need
+not be a sign of irrationality; it might be that they simply don't
+satisfy the presuppositions of the moneypump argument. Once one makes
+clear what attitude Evelyn does or does not have at
+\emph{t}\textsubscript{1} towards the action that will be taken at
+\emph{t}\textsubscript{2}, this presupposition failure might be made
+clear.
+
+These last three explanations are not necessarily in tension. It might
+be that if Evelyn believes at \emph{t}\textsubscript{1} that \emph{A}-
+will be chosen at \emph{t}\textsubscript{2}, that the irrational act is
+at \emph{t}\textsubscript{1}, while if they do not believe this before
+\emph{t}\textsubscript{1} but arbitrarily change their belief by
+\emph{t}\textsubscript{2}, they are outside the scope of moneypump
+arguments. Either way, one can reject the moneypump argument without
+saying that Evelyn does something irrational at
+\emph{t}\textsubscript{2}.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Bradley2005}
+Bradley, Richard. 2005. {``Radical Probabilism and Bayesian
+Conditioning.''} \emph{Philosophy of Science} 72 (2): 342--64. doi:
+\href{https://doi.org/10.1086/432427}{10.1086/432427}.
+
+\bibitem[\citeproctext]{ref-Chang1997}
+Chang, Ruth. 1997\emph{.introduction to Incommensurability,
+Incomparability and Practical Reason.} Cambridge, MA: Harvard University
+Press.
+
+\bibitem[\citeproctext]{ref-Chang2005}
+---------. 2005. {``Parity, Interval Value, and Choice.''} \emph{Ethics}
+115 (2): 331--50. doi:
+\href{https://doi.org/10.1086/426307}{10.1086/426307}.
+
+\bibitem[\citeproctext]{ref-Chang2017}
+---------. 2017. {``Hard Choices.''} \emph{Journal of the American
+Philosophical Association} 3 (1): 1--21. doi:
+\href{https://doi.org/10.1017/apa.2017.7}{10.1017/apa.2017.7}.
+
+\bibitem[\citeproctext]{ref-Doody2019}
+Doody, Ryan. 2019. {``Opaque Sweetening and Transitivity.''}
+\emph{Australasian Journal of Philosophy} 97 (3): 579--91. doi:
+\href{https://doi.org/10.1080/00048402.2018.1520269}{10.1080/00048402.2018.1520269}.
+
+\bibitem[\citeproctext]{ref-Elga2010}
+Elga, Adam. 2010. {``Subjective Probabilities Should Be Sharp.''}
+\emph{Philosophers' Imprint} 10: 1--11.
+
+\bibitem[\citeproctext]{ref-Gustafsson2025}
+Gustafsson, Johan E. Forthcoming. {``A Behavioural Money-Pump Argument
+for Completeness.''} \emph{Theory and Decision}, Forthcoming.
+
+\bibitem[\citeproctext]{ref-Gustafsson2022}
+---------. 2022. \emph{Money-Pump Arguments}. Cambridge: Cambridge
+University Press.
+
+\bibitem[\citeproctext]{ref-KopecTitelbaum2016}
+Kopec, Matthew, and Michael G. Titelbaum. 2016. {``The Uniqueness
+Thesis.''} \emph{Philosophy Compass} 11 (4): 189--200. doi:
+\href{https://doi.org/10.1111/phc3.12318}{10.1111/phc3.12318}.
+
+\bibitem[\citeproctext]{ref-Lewis1999b}
+Lewis, David. 1999. {``Why Conditionalize?''} In \emph{Papers in
+Metaphysics and Epistemology}, 403--7. Cambridge University Press.
+Originally written as a course handout in 1972.
+
+\bibitem[\citeproctext]{ref-PiccioneRubinstein1997}
+Piccione, Michele, and Ariel Rubinstein. 1997. {``On the Interpretation
+of Decision Problems with Imperfect Recall.''} \emph{Games and Economic
+Behavior} 20 (1): 3--24. doi:
+\url{https://doi.org/10.1006/game.1997.0536}.
+
+\bibitem[\citeproctext]{ref-Stalnaker1999}
+Stalnaker, Robert. 1999. {``Extensive and Strategic Forms: Games and
+Models for Games.''} \emph{Research in Economics} 53 (3): 293--319. doi:
+\href{https://doi.org/10.1006/reec.1999.0200}{10.1006/reec.1999.0200}.
+
+\bibitem[\citeproctext]{ref-Woodard2022}
+Woodard, Elise. 2022. {``A Puzzle about Fickleness.''} \emph{No{û}s}.
+doi: \href{https://doi.org/10.1111/nous.12359}{10.1111/nous.12359}.
+
+\end{CSLReferences}
+
+
+
+\noindent Draft of February 2025.
+
+
+\end{document}

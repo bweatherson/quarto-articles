@@ -53,23 +53,30 @@ So consider a canonical money-pump argument against incomplete preferences, ofte
 ```{r}
 #| echo: FALSE
 #| output: FALSE
-
-require(Rcpp)
-require(tidyverse)
-font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
-                                   "\\setmainfont{EB Garamond}"))
-
 if(knitr::is_latex_output()) {
   knitr::opts_chunk$set(dev = 'tikz')
 }
 options(tinytex.engine = "xelatex")
 ```
 
+```{r}
+#| echo: FALSE
+#| output: FALSE
+require(Rcpp)
+require(tidyverse)
+font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{Scala Sans Pro}"))
+```
+
+::: {.content-visible unless-format="pdf"}
+
 ```{r, engine='tikz', engine.opts=font_opts}
 #| label: fig-single-souring
 #| fig.cap: "The Single Souring Moneypump"
 #| cache: FALSE
 #| echo: FALSE
+
+include("single-sour-diagram.tex")
 
 \usetikzlibrary{calc}
 
@@ -110,3 +117,135 @@ square node/.style={rectangle,draw, inner sep = 1, fill = black}
     };
 \end{tikzpicture}
 ```
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+![The Single Souring Moneypump](single-sour-diagram.tex){#fig-single-souring}
+
+:::
+
+The agent, call them Evelyn, is presented at _t_~1~ with a choice between taking Up, which results in _A_, or Down, which results in a choice (at _t_~2~) between option _B_ and _A_-. Evelyn is assumed to prefer _A_ to _A_-, but to have no relevant preferential relations between either _A_ and _B_ or _A_- and _B_ (that is, they are not indifferent between the elements of these pairs, and do not prefer one to the other). Plausibly, then, Evelyn is rationally permitted, at _t_~1~, to take either option: they can take Up and get _A_ or take Down and face the choice between _A_- and _B_. The problem is what happens if they take this second option. For in that case, it would seem that they are permitted at _t_~2~ to take _A_-, but this is a loss relative to what they could have had at no cost, i.e. _A_.
+
+In this simple case, a normal person who made the decision to go Down, rather than the sure thing of _A_, would do so in the belief (in fact, presumably, in the knowledge) that they would go on to choose _B_, not _A_-. Indeed, it seems to us that anyone who made this choice without the belief that they would later choose _B_ would be doing something odd in the case as described. So, if such a person did make the choice in the first place, to go down, giving themselves the option between _B_ and _A_-, and if they then chose _A_-, this choice would either (a) require a change in their belief about what they would do, or (b) require that the person choose _A_- while still believing that we would choose _B_. The second of these options, (b), quickly leads to inconsistency given natural constraints on the sort of person for whom a moneypump dramatizes a rational defect. Provided Evelyn knows that they're in fact faced with the choice, and provided they update their conditional belief that, if they are faced with the choice, they will choose _B_, then at the moment they make the choice, they will believe that they are choosing _B_. Provided they also believe that they are choosing what they are choosing when they choose it, they will believe that they are choosing _A_-. Given knowledge that these were exclusive options, Evelyn's beliefs are inconsistent, hence irrational. 
+
+If a moneypump only dramatizes incoherence if it is compatible with the protagonist's beliefs about what they will do being held fixed (ruling out (a) as an option in the above story), and we can furthermore motivate a rational requirement that, in this case, the person who goes Down believes that they will later choose _B_, this moneypump (and its descendants, on which, more soon) would disappear. If, however, beliefs like this one are instead allowed to shift in the course of a moneypump, and only their preferences must be held fixed throughout the story, then the moneypump is genuine. So which is it?
+
+The examples involving Blake and Leslie already provide reasons for thinking that beliefs must be held fixed in a moneypump argument. So the big issue is whether, as we've suggested in the last two paragraphs, it is a requirement that characters like Evelyn have firm beliefs about what they will do at later stages. We have six arguments for the view that it is. That is, each of these arguments is intended to show that the moneypump only shows that Evelyn's preferences are incoherent if we can consistently add to the story that at _t_~1~ Evelyn has a firm belief about what they will do at _t_~2~ (should the game get that far). The first three arguments are probably not going to convince many sceptics, but having them on the table is helpful for understanding the later arguments. (And they might convince some neutrals, which is our primary aim.)^[Note to Harvey: The first three are probably cuttable to be honest; they are as much me writing out how I came to a view like this as anything resembling a standard argument.]
+
+The first argument is a somewhat basic appeal to intuition. The moneypump argument, like all arguments, shows that some propositions are inconsistent. The further inference that this particular proposition is false requires a judgment that it is the least plausible of the inconsistent set. In this case, at most what the argument shows is that not both (1) and (2) can be correct.
+
+1. Evelyn can rationally act at _t_~1~ without having a firm belief about what they will do at _t_~2~.
+2. Evelyn can rationally have no preference between _A_ and _B_, and no preference between _B_ and _A_-, but prefer _A_ to _A_-.
+
+It seems to us 2 is much more intuitively plausible than 1. We suspect this won't move many people on the other side, however, so let's move on to more arguments.
+
+The second argument is a perhaps more basic appeal to authority. Open up any game theory textbook and look at how it treats decisions over time. All of the theories put forward will assume, usually without comment, that each player has firm beliefs about what strategy they will adopt at later times. Those strategies might be mixed strategies, so the player might not know what move they will make. But it's an unchallenged assumption that rational action in a dynamic game requires having a view about what one's later self will do. Treating one's later self as a foreign agent, or as something like the weather that might change at random, is unheard of. Now maybe all these theorists are wrong. Or maybe we could try to strengthen this argument by saying that naturalism requires taking seriously the best scientific practice and this is the best scientific practice. We'll just settle for noting that the view we're putting forward is not a strange one; indeed in large parts of the literature it is the most mundane orthodoxy.
+
+The third argument is a tu quoque against Elga's deployment of this argument in particular.^[For Elga, the options _A_, _B_, and _A_- are bets, where _A_ and _B_ are bets on propositions with incomparable credences, and _A_- is a bet on a proposition that's a little less likely than _A_.] Assume that Evelyn has no beliefs at all at _t_~1~ about what they will do at _t_~2~. Then, on one standard way of understanding what an imprecise credence is, Evelyn's credences about the proposition _Evelyn will take B at t~2~_ are imprecise. But Elga says that imprecise credences are irrational. So Elga has to, by his own lights, require irrationality in the very setup of the problem. So his argument can't show that the attitudes towards _A_, _B_, and _A_- in particular are irrational.
+
+The version of the argument in @Gustafsson2025 is not subject to this criticism. He is careful to note that Evelyn's counterpart (in the moneypump he puts forward) has numerical credences about what they will do at later stages. He does insist that these credences are in (0, 1); i.e., they are not extreme. We'll come back to this assumption below, but for now we just want that this particular objection has no force against his version of the moneypump argument.
+
+The fourth argument is that the principle we're suggesting here unifies, and explains, what's going on in the cases involving Dylan, Blake, and Leslie. There should be some story about the losses (or at least non-maximal gains) in those cases are not evidence of irrationality, and ideally it should be a simple, common, story. We have such a story to offer. The parables only work if the protagonist starts with firm beliefs about what they will do at later stages, and those beliefs only update by conditionalisation.^[That is, the only updates involve moving between _If I get to this choice point, I will take this option_ to _Now that I'm at this choice point, I will take this option_.]
+
+The fifth argument is that only with this constraint added can players do well in certain kinds of decision problems that, intuitively, rational players can do well in. The following example is taken (with very minor modifications) from @Stalnaker1999 [317], who in turn takes it from @PiccioneRubinstein1997. 
+
+A fair coin will be flipped, and Casey will see the outcome. Regardless of how it comes up, theycan choose to opt out or to opt in.  If they opt out, they get 2. If they opt in, they lose the memory of the coin flip, and face a second choice: guessing the outcome of the coin. If they guess correctly they get 6, otherwise 0.
+
+There are two optimal strategies, each of which has an expected payout of 4. On the first, Casey opts out if Heads and opts in if Tails, choosing Tails at the next choice. On the second, Casey opts out if Tails and opts in if Heads, choosing Heads at the next choice. We think that the sort of character depicted in a moneypump should be able to execute one of these strategies, and obtain the best expectation. If Casey can form beliefs about what they will do, and only update those beliefs by conditionalisation, then they will carry out one or other of these strategies. If it is consistent with the kind of rationality depicted in the moneypump stories that Casey could either (a) not form a belief at the earlier time about what they will do at the later time, or (b) change this belief for no reason, then it would also be consistent with this kind of rationality that at the later time they would simply have to guess how the coin landed. It would still be rational to opt in, because this guess has an expected return of 3, but they could not get the return of 4 from playing either of the optimal strategies. This seems bad, and not consistent with the kind of rationality that we think the stories should depict.
+
+The sixth and final argument is one that we've alluded to above. At _t_~3~, after the second choice is made, Evelyn has a belief about what they do at _t_~2~. (We're using this awkward tenseless formulation because we want to talk about their attitude to the proposition before, during and after _t_~2~, and any more natural formulation would be misleading about two of those three times.) How did they acquire that belief? There are three logical options:
+
+- It could have been a belief they had from _t_~1~. That's the view we're defending.
+- It could have been brought about by some arbitrary change before _t_~2~. Then Evelyn is in the same category as Blake: they have an arbitrary change of belief during the story. That implies (a) that they violate the conventions of the moneypump genre, and (b) that they are arguably independently irrational, so any losses can be chalked up to this irrationality rather than a defect in their preferences.
+- It could have been something they learned at _t_~2~. On this picture, Evelyn does update by conditionalisation, but the new evidence is that they see what they do at _t_~2~, and update accordingly. This also seems irrational to us. Rational people are not alienated from their own actions in this way; they do not take the observer stance towards themselves. "Oh look, I chose B!" they say, as one might notice the action or another, or the involuntary motion of a body part. Choosing _A_- is meant to be an action, a sign of irrationality according to the proponent of the argument, not a mere movement. That's inconsistent with it being something that Evelyn doesn't know will happen until they see it.
+
+The only option that seems reasonable here is the first one: for the moneypump argument to work, and Evelyn to be rational in the right kind of way, they have to have a belief at _t_~1~ about what they will do at _t_~2~. If that belief isn't accurate, the moneypump argument fails for one reason or another.
+
+In his most recent defence of moneypump arguments, @Gustafsson2025 suggests a reason for rejecting everything we've just said. He argues that if one has a disposition to choose _X_ over _Y_ with probability 1, that is sufficient for preferring _X_ to _Y_. He then develops a much more complicated moneypump that assumes that the protagonist at earlier stages has some non-extremal probability about what they will do at later stages when faced with a choice between incomparable options.
+
+This way of setting up the moneypump argument has some nice advantages over the one shown in @fig-single-souring. First, it takes seriously the question of what attitude the protagonist has at earlier times towards their actions at later times. Second, it makes that attitude one that could be rational given the conclusion of the moneypump. That is, it is a numerical credence, not an incomplete or imprecise attitude. Third, in the resulting argument, it's not just that the protagonist _could_ choose suboptimal options; the first move at least in his parable is one that the protagonist is required to make given the standards of rationality he defends.
+
+But all of these moves require the initial assumption that the protagonist cannot simultaneously have probability 1 that they will choose _B_ over _A_-, and not have a preference for _B_ over _A_-. We think there are several reasons for thinking these attitudes are consistent. To start, note that the principle Gustafsson uses would lead to fairly dramatic changes in how we think about equilibria. In the centipede game in @fig-centipede, orthodox analysis would say there <_Rr_,_R_> is a subgame perfect equilibrium, and indeed is a weakly Pareto dominant equilibrium.
+
+::: {.content-visible unless-format="pdf"}
+
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-centipede
+#| fig.cap: "A version of centipede."
+#| cache: FALSE
+#| echo: FALSE
+
+\usetikzlibrary{calc}
+
+\tikzset{
+% Two node styles for game trees: solid and hollow
+solid node/.style={circle,draw,inner sep=1.5,fill=black},
+hollow node/.style={circle,draw,inner sep=1.5},
+square node/.style={rectangle,draw, inner sep = 1, fill = black}
+}
+
+\begin{tikzpicture}[]
+  \node[hollow node, label=above:{P1}] {}
+    child[grow=right] {
+      node[solid node, label=above:{P2}] {}
+      child[grow=right] {
+        node[solid node, label=above:{P1}] {}
+        child[grow=right] {
+          node[square node, label=right:{3, 2}] {}
+          edge from parent
+          node[below] {r}
+        }
+        child[grow=down] {
+          node[square node, label=below:{3, 0}] {}
+          edge from parent
+          node[left] {d}
+        }
+        edge from parent
+        node[below] {R}
+      }
+      child[grow=down]  {
+        node[square node, label=below:{0, 2}] {}
+        edge from parent
+        node[left] {D}
+      }
+      edge from parent
+      node[below] {R}
+    }
+    child[grow=down]  {
+      node[square node, label=below:{1, 0}] {}
+      edge from parent
+      node[left] {d}
+    };
+\end{tikzpicture}
+```
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+![A centipede game](centipede-diagram.tex){#fig-centipede}
+
+:::
+
+
+On Gustafsson's view, <_Rr_,_R_> cannot be an equilibrium of _this_ game. To be an equilibrium, it is required that both players are confident that P1 will play _r_. If P2 does not believe this with probability 1, they are better off playing _D_ than _R_. And normally an equilibrium requires that players have common beliefs. But according to Gustafsson, if P1 believes they will play _r_ with probability 1, they cannot be indifferent between the two outcomes on the right. That in turn is inconsistent with the way the game is written, where P1 is assigned exactly the same payout in those two options. We think the orthodox analysis of the game here is correct; P1 can consistently be indifferent between the two options on the right, and believe (along with P2) that they will play _r_ rather than _d_ if the game gets that far.
+
+Set that case aside though, and think about another character, Hunter, with the following disposition. Whenever they have to bet on the flip of a fair coin, they choose Heads. According to Gustafsson's way of setting things up, Hunter prefers a bet on Heads to a bet on Tails. This seems implausible to us; forming such a tie-breaking resolution seems like a different thing than forming a preference.
+
+There are two other reasons for denying that Hunter prefers betting on Heads to betting on Tails. A standard principle about rationality, one that is often used in deriving credences and utilities from betting dispositions, is that one prefers a bet on _p_ to a bet on _q_ (with the same stakes) iff one thinks _p_ is more probable than _q_. If Hunter genuinely prefers betting on Heads to betting on Tails when the coin is fair, they violate this principle. Gustafsson also suggests that preference should satisfy a continuity assumption - whenever one strictly prefers _X_ to _Y_, there should be some third option _Z_ that one prefers to _Y_, and is less preferred than _X_. If Hunter prefers Heads to Tails in virtue of having this disposition, they will violate this continuity constraint. If this is the _only_ such tie-breaking resolution they have, there will be nothing which they prefer to Tails, and prefer less than Heads. So even without getting into what happens with incomparable options, the thought that a consistent choice disposition implies a preference has enough unhappy consequences.
+
+The view that characters like Evelyn should have firm beliefs about what they will do at later stages of decision trees, and that they should only update these beliefs by conditionalisation, suggests a different analysis of what's going on in these cases to what is common in the literature. It is often thought that if one wants to defend the rationality of Evelyn's preferences in light of the fact that they end up with _A_-, one should find some way in which the choice of _A_- over _B_ at _t_~2~ is irrational. This thought is common ground between philosophers like @Chang2005, who thinks Evelyn is rational, and philosophers like @Gustafsson2022, who thinks they are not. So there is a lot of debate about whether rationality requires sticking to earlier plans, as Chang suggests^[Chang's later views on this are a bit more nuanced. See @Chang2017 for an updated account, and @Doody2019 [sect 4] for a careful analysis of how Chang's views on the case have changed over time.], or whether the rationality of a choice at a time is independent of past choices, as Gustafsson suggests. We think this debate is looking at the wrong spot. There are three other places we could be looking.
+
+It could be that Evelyn is irrational, but the irrationality is at _t_~1~. This would be the case if, for example, Evelyn chose to go Down at _t_~1~ while believing that they would take _A_- at _t_~2~.
+
+A more radical possibility is that Evelyn is irrational over the period from _t_~1~ to _t_~2~ without being irrational at either time. We want to at least open the possibility that changes like Blake's involve intertemporal irrationality even if Blake is not irrational at either time. And it seems consistent to say that the combination of choosing Down and _A_- is irrational even if neither single act is irrational.
+
+But the last option is the one we most want to highlight. Dylan, Blake, and Leslie all end up with less than they could have done. But this need not be a sign of irrationality; it might be that they simply don't satisfy the presuppositions of the moneypump argument. Once one makes clear what attitude Evelyn does or does not have at _t_~1~ towards the action that will be taken at _t_~2~, this presupposition failure might be made clear.
+
+These last three explanations are not necessarily in tension. It might be that if Evelyn believes at _t_~1~ that _A_- will be chosen at _t_~2~, that the irrational act is at _t_~1~, while if they do not believe this before _t_~1~ but arbitrarily change their belief by _t_~2~, they are outside the scope of moneypump arguments. Either way, one can reject the moneypump argument without saying that Evelyn does something irrational at _t_~2~.
+
+::: {.content-include unless-format="html"}
+## References {.unnumbered}
+:::
