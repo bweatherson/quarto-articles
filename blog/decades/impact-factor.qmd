@@ -1,0 +1,441 @@
+---
+title: "A Puzzle about Online First"
+abstract: |
+    Why do journal articles sit in Online First for so long?
+date: Feb 20 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - citations
+bibliography: /Users/weath/Documents/citations-2025/cslbib.yaml
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+filters:
+  - colour.lua
+---
+
+```{r}
+#| label: loader
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+require(lsa)
+require(wesanderson)
+
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 30, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 30),
+             axis.text = element_text(family = "Scala Sans Pro", size = 30),
+             axis.title = element_text(family = "Scala Sans Pro", size = 30),
+             title = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 30),
+             strip.text = element_text(family = "Scala Sans Pro", size = 30),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(axis.title = element_text(family = "EB Garamond", size = 11),
+             plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(-0.3, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+```
+
+```{r}
+#| label: buildgraphs
+#| cache: false
+
+load("/Users/weath/Documents/citations-2025/philo_bib.RData")
+load("/Users/weath/Documents/citations-2025/philo_cite.RData")
+
+start_year <- 1990
+end_year <- 2021
+min_data <- 5
+
+# New attempt
+# Two categories: available and typical
+# Available means published before citing article
+# Typical means published 3-10 years before citing article
+# The 3 is because weird things have happened with recent cites in recent years
+
+typical_low <- 3
+typical_high <- 10
+
+# This sets the color for one-color graphs
+
+point_col <- wes_palette("AsteroidCity1")[3]
+
+active_philo_bib <- philo_bib |>
+  filter(year >= start_year, year <= end_year)
+
+active_philo_cite <- philo_cite 
+
+article_years <- active_philo_bib |>
+  as_tibble() |>
+  select(id, year)
+
+citation_tibble <- active_philo_cite |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year) |>
+  filter(old_year >= start_year,
+         new_year <= end_year,
+         old_year >= start_year,
+         new_year <= end_year)
+
+
+# Now a tibble of how many times articles in year x are cited in year y
+
+year_in_year_out <- citation_tibble |>
+  filter(old_year >= start_year) |>
+  group_by(old_year, new_year) |>
+  tally(name = "citations") |> # Now add the 'missing' pairs
+  ungroup() |>
+  complete(old_year, new_year, fill = list(citations = 0))
+
+# This works out how many citations there are each year to 3-10 year old articles
+
+citations_in_typical_year <- year_in_year_out |>
+  mutate(age = new_year - old_year) |>
+  filter(age >= typical_low, age <= typical_high) |>
+  group_by(new_year) |>
+  summarise(typical_citations = sum(citations)) 
+
+# Tibble for raw citation age
+
+raw_age_tibble <- citation_tibble |>
+  mutate(age = new_year - old_year) |>
+  group_by(age) |>
+  tally(name = "count")
+
+raw_age_plot <- raw_age_tibble |>
+  ggplot(aes(x = age, y = count)) +
+  geom_point(color = point_col) + # Using geom_line makes it not obvious how many points there are, because it is *so* straight
+  xlab('Age of citation') +
+  ylab('Number of citations')
+
+# I'm going to count the 'typical' articles as those published between 3 and 10 years before the citing year
+# The 'available' articles are those published before the time
+
+# Tibble for number of publications each year, and cumulative, or 'available'
+
+articles_per_year <- active_philo_bib |>
+  rename(old_year = year) |>
+  group_by(old_year) |>
+  tally(name = "articles") |>
+  mutate(available = cumsum(articles)) |>
+  mutate(typical_articles = slide_dbl(articles, sum, .before  = typical_high) - slide_dbl(articles, sum, .before = typical_low - 1)) |>
+  filter(old_year >= start_year) 
+
+
+# Same for citations
+
+typical_citations_per_year <- citation_tibble |>
+  filter(new_year >= old_year + typical_low, new_year <= old_year + typical_high) |>
+  group_by(new_year) |>
+  tally(name = "citations") 
+
+
+# Outbound citations
+
+all_citations_per_year <- citation_tibble |>
+  group_by(new_year) |>
+  tally(name = "citations") 
+
+outbound_citations <- left_join(
+  articles_per_year,
+  all_citations_per_year,
+  by = c("old_year" = "new_year")
+) |>
+  mutate(outbound_rate = citations/articles) |>
+  mutate(outbound = round(outbound_rate, 2))
+
+
+# Citations per typical article
+
+typical_citation_rate_per_year <- typical_citations_per_year |>
+  left_join(articles_per_year, by = c("new_year" = "old_year")) |>
+  #filter(new_year >= start_year + typical_high) |>
+  left_join(citations_in_typical_year, by = "new_year") |>
+  mutate(mean_cites = typical_citations/typical_articles)
+
+
+
+
+# All citations to typical articles in a year
+ct_all <- citation_tibble |>
+  filter(new_year >= old_year + typical_low, new_year <= old_year + typical_high) |>
+  group_by(new_year) |>
+  tally(name = "typical_citations")
+
+age_effect_tibble <- year_in_year_out |>
+  filter(old_year >= start_year, old_year <= end_year + 1 - min_data, new_year >= start_year + typical_high) |>
+  filter(new_year >= old_year) |>
+  left_join(
+    select(
+      articles_per_year, 
+      old_year, 
+      articles), 
+    by = "old_year") |>
+  left_join(
+    select(
+      articles_per_year, 
+      old_year, 
+      typical_articles), 
+    by = c("new_year" = "old_year")) |>
+  left_join(ct_all, by = "new_year") |> 
+  mutate(age = new_year - old_year) |>
+  mutate(cite_ratio = (citations/articles)/(typical_citations/typical_articles)) 
+
+age_effect_tibble_plot <- age_effect_tibble |>
+  filter(old_year >= start_year + 1, old_year <= end_year - min_data, new_year >= start_year, old_year >= 2001) |>
+  ggplot(aes(x = new_year, y = cite_ratio)) +
+  geom_point(size = 2, color = point_col) +
+  facet_wrap(~old_year, ncol = 4) +
+  xlab(element_blank()) +
+  ylab(element_blank()) +
+  scale_x_continuous(breaks = c(2005, 2015)) +
+  scale_y_continuous(breaks = c(0, 0.5, 1)) +
+  theme(axis.text = element_text(size = 24),
+        strip.text = element_text(size = 24))
+
+age_effect_tibble_plot_short <- age_effect_tibble |>
+  filter(old_year >= start_year + 1, old_year <= end_year - min_data, new_year >= start_year, old_year >= 2001, age <= 10) |>
+  ggplot(aes(x = age, y = cite_ratio)) +
+  geom_point(size = 2, color = point_col) +
+  facet_wrap(~old_year, ncol = 4) +
+  scale_x_continuous(breaks = c(0, 4, 8)) +
+  scale_y_continuous(breaks = c(0, 0.5, 1)) +
+  xlab("Citation age") +
+  ylab(element_blank()) +
+  theme(axis.text = element_text(size = 24),
+        strip.text = element_text(size = 24))
+
+age_effect_grouped <- age_effect_tibble |>
+  filter(new_year >= old_year) |>
+  filter(new_year <= old_year + end_year - start_year + 1 - min_data) |>
+  mutate(age = new_year - old_year) |>
+  group_by(age) |>
+  summarise(mean_effect = mean(cite_ratio))
+
+age_effect_tibble_adj <- age_effect_tibble |>
+  mutate(age = new_year - old_year) |>
+  filter(age <= end_year - start_year - min_data) |>
+  left_join(age_effect_grouped, by = "age")
+
+age_effect_grouped_plot <- age_effect_grouped |>
+  ggplot(aes(x = age, y = mean_effect)) +
+  geom_point() +
+  xlab("Article age") +
+  ylab("Mean citation ratio")
+
+age_effect_everything_plot <- age_effect_tibble_adj |>
+  filter(old_year >= 1975, old_year != 1973) |>
+  ggplot(aes(x = age, y = cite_ratio, color = as.factor(old_year))) +
+  annotate(geom = "rect",
+           xmin = 0.5,
+           xmax = 2.5,
+           ymin = 0,
+           ymax = Inf,
+           alpha = 0.1,
+           fill = "grey40",
+           color = "white") +
+  geom_jitter(size = 2, alpha = 0.7) +
+  # geom_jitter(aes(size=(old_year==2008 | old_year == 1985), shape = (old_year==2008)), alpha = 1) +
+  #  geom_jitter(aes(size=(old_year %in% c(1978, 1980, 1985, 1987)), alpha = 1)) +
+  # scale_size_manual(values=c(0.3,2)) +
+  xlab("Age of cited articles") +
+  ylab("Citation ratio") +
+  geom_line(aes(x = age, y = mean_effect), color = point_col) +
+  geom_point(aes(x = age, y = mean_effect), color = point_col, size = 0.4) +
+  theme(legend.position = "none")
+```
+
+I have a paper coming out sometime in [Erkenntnis](https://link.springer.com/article/10.1007/s10670-025-00921-z). This may change by the time you read this, but as I write it's one of 199 articles in [Online First](https://link.springer.com/journal/10670/online-first). These are articles that have been accepted, copyedited, and typeset twice: once in PDF and once in XML. But they aren't in any issue yet. Why not?
+
+One hypothesis would be that there is a printing budget, and that puts a bottleneck at the last stage of production. That's why there is a queue. I'm rather sceptical of that for at least four reasons.
+
+1. Printing and postage is *cheap*, especially relative to the cost of copyediting and two lots of typesetting. You've done the expensive parts, why hold up now? Resource constraints strike me as a considerably more plausible reason for why accepted articles wouldn't get copyedited or typeset for a while, just not for why they wouldn't hit print on a paper where they've already done those things.
+2. Erkenntnis, like many other commercial journals, has massively increased its output in terms of pages over recent years. There doesn't seem to be any hard constraint on how much it puts out.
+3. The fights over [political philosophy journals](https://dailynous.com/tag/political-philosophy/) suggest that the main downward pressure on publishing is coming from academic editors, not presses. But these 199 articles have been accepted by the academic editors, and just need one last step of processing. Why would publishers, who have gone to great lengths elsewhere to increase the flow of articles, stop here?
+4. If this was something that was worrying the journal, they could put in a submission moratorium like _Noûs_ often does. The non-existence of such a moratorium suggests that they aren't worried by the queue.
+
+So why is Online First, and its counterparts with other publishers, so prevalent? Let's look at some data first. @tbl-spring lists some Springer philosophy journals, with the number of papers currently in the Online First section. If there's a 0 I couldn't find the section, and I think it doesn't exist, but I definitely could have make a mistake.^[Synthese is an interesting special case. They no longer have issues; like Imprint each article comes out as a self-standing piece, with a page number starting at 1. So every article is in final form as soon as it hits the website.]
+
+```{r}
+#| label: tbl-spring
+#| tbl-cap: "Some Springer journals with their Online First queue"
+
+temp <- read_csv("springer.csv", show_col_types = FALSE)
+
+kable(temp)
+```
+
+Why are some (but not all) of these queues so large? Why are the philosophy of science queues generally shorter than the others (though arguably Erkenntnis is a very notable exception). It could be there are resource constraints on going into print, though for the reasons I gave at the top, I'm a little sceptical. But maybe that second column is part of the story.
+
+I've sorted that list by **Impact Factor**. That's something that Springer highlights, and offers as a prominent sort criteria for their journal category pages. 
+
+What is Impact Factor? It's a phenomenally stupid metric for journals that seems to have become rather prominent. The statistic was, I believe, first developed by Clarivate. @fig-clarivate is a screenshot from [their description of it](https://clarivate.com/academia-government/essays/impact-factor/).
+
+![An example of impact factor](impact_factor.jpeg){#fig-clarivate fig-alt="Figure 1: Calculation for journal impact factor. A = total cites in 1992. B = 1992 cites to articles published in 1990-91 (this is a subset of A). C = number of article published in 1990-91. D = B/C = 1992 impact factor."}
+
+In any year, it's the mean number of citations to articles published 1-2 years ago. It's a really big deal - it's the statistic that some companies, including Springer, highlight most prominently. It also makes no sense for philosophy.
+
+Citations in philosophy tend to be somewhat older than this. That is, it isn't common for articles 1-2 years old to get cited that often. Even some of the most prominent philosophy articles didn't have that many citations in that window. 
+
+I'm working on a research project that looks at citations between 100 leading philosophy journals. The data I have goes back into the mid twentieth century, but citations weren't as important then, and in any case the data isn't as clean or as relevant. @tbl-impact shows some very prominent philosophy articles from around the turn of the century, how many citations they have just in these 100 journals since they were published, and how many of those citations were in the first two years.
+
+```{r}
+#| label: tbl-impact
+#| tbl-cap: "Some prominent philosophy articles, along with their citations in the first two years"
+#| column: body-outset
+
+temp <- citation_tibble |>
+  mutate(age_type = case_when(
+    new_year - old_year == 1 | new_year - old_year == 2 ~ "IF",
+    TRUE ~ "Other"
+  )) |>
+  group_by(old, age_type) |>
+  tally(name = "citations") |>
+  ungroup() |>
+  complete(old, age_type, fill = list(citations = 0), explicit = FALSE) |>
+  pivot_wider(id_cols = old,
+              names_from = age_type,
+              values_from = citations) |>
+  mutate(All = IF + Other) |>
+  arrange(-All) |>
+  left_join(
+    select(
+      philo_bib,
+      old = id,
+      displayauth,
+      year,
+      title
+    ), by = "old"
+  ) |>
+  filter(IF <= 2) |>
+  filter(year >= 1996, year <= 2004) |>
+  slice(1:10) |>
+  mutate(Citation = paste0("@",str_replace_all(old, ":", ""))) |>
+  select(`Author-Year` = Citation,
+         Title = title,
+         Citations = All,
+         `First Two Years` = IF)
+  
+kable(temp)
+```
+
+Publishing the articles in @tbl-impact basically hurt the impact factors of the journals that published them. But they are some of the most impactful, and I'd say some of the best, articles published from that time.
+
+Maybe they are outliers though. Let's look at the whole set of articles published in these 100 journals. I'll focus on the period since 2001, since citation norms were a bit different before then.
+
+@fig-first-facet shows a statistic I call citation ratio. For any two years _old_ and _new_, it is the following ratio.
+
+- Mean number of citations in year _new_ per article published in year _old_; divided by
+- Mean number of citations in year _new_ per article published in year _n-10_ to _n-3_.
+
+I picked 3 and 10 there because years 3 to 10 are when typically articles get their most citations. The aim of this statistic is to normalise for the rather dramatic changes in citation practices over the last few decades. I only have full data running through 2021, which is why some of the graphs stop when they do. OK, that said, @fig-first-facet shows the citation ratios. Each facet holds fixed _old_, and the x-axis is _new_.
+
+```{r}
+#| label: fig-first-facet
+#| fig-cap: "Citation ratios for articles published since 2001, and cited by 2021."
+#| column: body-outset
+#| fig-alt: "A grid of 16 graphs showing citation ratios for pairs of years, with old being 2001-2016, and new being 2001-2021. Typically they rise through the first couple of years, peak from 3-5, then fall."
+
+age_effect_tibble_plot
+```
+
+The basic pattern here is not too surprising. Articles take a while to get noticed, then they hit peak citations, then it's a decay, rapid some years and slow in others, into obsolescence. When does this happen? Here it's easiest to put the _age_ of the citation, i.e., _new_ - _old_, on the x-axis. I've done that in @fig-second-facet. I've only plotted the first 10 years to make it more visible where the peaks are.
+
+```{r}
+#| label: fig-second-facet
+#| fig-cap: "Citation ratios for articles published since 2001, and cited by 2021, arranged by age."
+#| column: body-outset
+#| fig-alt: "Just like the last graph, but with the x-axis now being the age, i.e., the difference between the old and new year. It is more apparent that the peak comes around year 3-5."
+
+age_effect_tibble_plot_short
+```
+
+The biggest years are typically 3-5 years after publication. In @fig-first-everything I've put all the data points from @fig-second-facet onto a single plot. There's a bit of jitter added to make the points stand out. The colors are not particularly important; they are different for the different facets but aren't significant for this story. I've also put a trendline through the graph.
+
+```{r}
+#| label: fig-first-everything
+#| fig-cap: "The data from @fig-second-facet arranged on a single graph."
+#| fig-alt: "The data from the previous graph all put on one graph. It is even more clear that the peak comes from years 3-5."
+
+age_effect_everything_plot
+```
+
+I did one other thing in @fig-first-everything: I shaded the first two years. Those are the years that count for Impact Factor. As you can see, they are well below the peak. What would happen if all articles were published with a date stamp two years after their actual publication? Well, now we'd get @fig-second-everything.
+
+```{r}
+#| label: fig-second-everything
+#| fig-cap: "@fig-first-everything with the highlighted window moved."
+#| fig-alt: "Just the same as the previous graph, but now years 3 and 4 are highlighted rather than years 1 and 2."
+
+age_effect_tibble_adj |>
+  filter(old_year >= 1975, old_year != 1973) |>
+  ggplot(aes(x = age, y = cite_ratio, color = as.factor(old_year))) +
+  annotate(geom = "rect",
+           xmin = 2.5,
+           xmax = 4.5,
+           ymin = 0,
+           ymax = Inf,
+           alpha = 0.1,
+           fill = "grey40",
+           color = "white") +
+  geom_jitter(size = 2, alpha = 0.7) +
+  # geom_jitter(aes(size=(old_year==2008 | old_year == 1985), shape = (old_year==2008)), alpha = 1) +
+  #  geom_jitter(aes(size=(old_year %in% c(1978, 1980, 1985, 1987)), alpha = 1)) +
+  # scale_size_manual(values=c(0.3,2)) +
+  xlab("Age of cited articles") +
+  ylab("Citation ratio") +
+  geom_line(aes(x = age, y = mean_effect), color = point_col) +
+  geom_point(aes(x = age, y = mean_effect), color = point_col, size = 0.4) +
+  theme(legend.position = "none")
+```
+
+If you could have the citations highlighted in @fig-second-everything be what counted for the important statistics, rather than the citations highlighted in @fig-first-everything, your journal will look more impressive. By a happy coincidence, having articles in Online First, available to read and cite but not yet with a date stamp so the two year clock for Impact Factor doesn't start ticking, has exactly that effect.
+
+Is that why philosophy journals use Online First so much, and so much more than journals in other disciplines? I don't know, but it would explain something that otherwise seems rather mysterious to me. 
+
+That said, this totally could be a consequence of one or other kind of resource constraint. If so, I hope it gets resolved - it would be good to have page numbers for journal articles sooner rather than later.
