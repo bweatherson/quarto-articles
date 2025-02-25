@@ -1,0 +1,230 @@
+---
+title: "The Demographics of Grand-Citations"
+abstract: |
+    The most depressing citation study I've ever done.
+date: Feb 25 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - citations
+bibliography: /Users/weath/Documents/citations-2025/cslbib.yaml
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+---
+
+{{< include ../_loader.qmd >}}
+
+```{r}
+#| label: buildgraphs
+#| cache: false
+
+load("/Users/weath/Documents/citations-2025/philo_bib.RData")
+load("/Users/weath/Documents/citations-2025/philo_cite.RData")
+
+article_years <- philo_bib |>
+  as_tibble() |>
+  select(id, year)
+
+citation_tibble <- philo_cite |>
+  as_tibble() |>
+  rename(new = id, old = refs) |>
+  left_join(article_years, by = c("old" = "id")) |>
+  rename(old_year = year)  |>
+  left_join(article_years, by = c("new" = "id")) |>
+  rename(new_year = year)
+
+citation_count <- citation_tibble |>
+  filter(new_year == 2022) |>
+  group_by(old) |>
+  tally(name = "citations")
+
+grand_cites <- citation_tibble |>
+  filter(new_year <= 2021) |>
+  left_join(citation_count,
+            by = c("new" = "old")) |>
+  replace_na(replace = list(citations = 0)) |>
+  group_by(old) |>
+  summarise(grand_cites = sum(citations)) |>
+  left_join(
+    select(
+      philo_bib,
+      old = id,
+      displayauth,
+      year,
+      title
+    ), by = "old"
+  ) |>
+  arrange(-grand_cites)
+
+top_100_cites <- citation_count |>
+    arrange(-citations) |>
+    slice(1:100) |>
+    left_join(
+      select(
+        philo_bib,
+        old = id,
+        displayauth,
+        year,
+        title
+      ), by = "old"
+    ) |>
+    left_join(
+        select(
+            grand_cites,
+            old,
+            grand_cites
+        ),
+        by = "old"
+    ) |>
+    mutate(
+        Article = paste0(
+            displayauth,
+            " -@",
+            str_replace_all(old, ":",""),
+            " \"",
+            title,
+            "\""
+        )
+    ) |>
+    mutate(rank = row_number()) |>
+    select(
+        Rank = rank,
+        Article,
+        Citations = citations,
+        `Grand-Citations` = grand_cites
+    )
+
+grand_cites_summary <- grand_cites |>
+    slice(1:100) |>
+    left_join(
+        citation_count,
+        by = "old"
+    ) |>
+    mutate(
+        Article = paste0(
+            displayauth,
+            " -@",
+            str_replace_all(old, ":",""),
+            " \"",
+            title,
+            "\""
+        )
+    ) |>
+    mutate(rank = row_number()) |>
+    select(
+        Rank = rank,
+        Article,
+        Citations = citations,
+        `Grand-Citations` = grand_cites
+    )
+
+both_cites <- bind_rows(
+    grand_cites_summary,
+    top_100_cites
+    ) |>
+    distinct(Article, .keep_all = TRUE)
+```
+
+Say that the number of grand-cites an article _a_ has is the number of pairs (_b_, _c_) such that _b_ cites _a_ and _c_ cites _b_. It's roughly the number of articles that cite something that cite it. (Roughly because it will count _c_ twice if _c_ cites two things that cite _b_.) I think it's a better guide than regular citations to the subjects that are being discussed at a time.
+
+But for now I mostly want to note a rather depressing feature of the demographics of grand citations. As I've discussed previously, I've got this database of 100 prominent philosophy journals, and how often they cite each other. At the end of this post, in @tbl-the-journals, I've listed which journals they are, and when my data for them starts.
+
+The data only runs through 2021, and I suspect (or at least hope) that what I'm about to report wouldn't be true if we included data for the last three years.
+
+So @tbl-grand-cites lists the top 100 articles in the database by number of grand-cites they have. And here are two really striking, and incredibly depressing, features of the data.
+
+1. There are no sole authored papers by women in the top 50. The only women that appear are as co-authors of the only two papers to have three authors.
+2. There are no non-white authors in the top 50 at all.
+
+```{r}
+#| label: tbl-grand-cites
+#| tbl-cap: "A list of the 100 articles with the most grand-citations."
+#| column: body-outset
+ 
+kable(grand_cites_summary)
+```
+
+I knew the statistics would be bad; I didn't expect they would be this bad. I started doing this because I wanted to get a better sense of the central topics of the 1980s. So I started by looking at which articles from the 1980s had the most grand-citations by 1999. That list included some articles by Jaegwon Kim, and several more articles that were primarily about Kim. So I really was surprised to not see something of his higher up this list.
+
+And I thought some articles by women, e.g., "What is the Point of Equality?" [@WOS000078432400003], or "A Darwinian Dilemma for Realist Theories of Value" [@WOS000234431300006], would be higher. This is a counting stat, and they are at the back end of the top 100, so maybe they will move up over time. But then why isn't "A Defense of Abortion" [@WOSA1971Y116900003] or "Modern Moral Philosophy" [@WOSA1958CDL1000001] there at all?
+
+I don't have a great theory for why grand-citations should have even more depressing demographics than citations themselves. But I thought the data was interesting enough to post.
+
+In @fig-two-cites I've graphed the citations and grand-citations for articles that are in the top 100 by either one of these measures.
+
+```{r}
+#| label: fig-two-cites
+#| fig-cap: "A scatterplot of citations and grand-citations for prominent articles."
+
+point_col <- wes_palette("AsteroidCity1")[3]
+
+require(ggrepel)
+
+both_cites |>
+  mutate(the_rat = `Grand-Citations`/Citations) |>
+  arrange(the_rat) |>
+  mutate(the_label = case_when(
+    `Grand-Citations` == 705 ~ "Thomson (1971)",
+    `Grand-Citations` == 1163 ~ "Singer (1972)",
+    `Grand-Citations` == 3071 ~ "Frankfurt (1971)",
+    `Grand-Citations` == 3806 ~ "Nagel (1974)",
+    `Grand-Citations` == 2513 ~ "Jackson (1982)",
+    `Grand-Citations` == 2666 ~ "DeRose (1991)",
+    `Grand-Citations` == 2729 ~ "van Fraassen (1984)",
+    `Grand-Citations` == 5273 ~ "Goldman (1976)",
+    `Grand-Citations` == 4221 ~ "Dretske (1970)",
+    TRUE ~ ""
+  )) |>
+  ggplot(aes(x = Citations, y = `Grand-Citations`, label = the_label)) +
+  geom_point(color = point_col) +
+  geom_text_repel(size = 16/.pt)
+```
+
+It's fairly linear, though articles in ethics or mind are consistently below the trend-line, and articles in epistemology are consistently above it. Maybe that's relevant to the demographics of the grand-citations.
+
+To end I'll list the journals that I'm using in this study, along with the data I have about them.
+
+```{r}
+#| label: tbl-the-journals
+#| tbl-cap: "A list of the journals in this study."
+#| column: body-outset
+ 
+kable(
+    philo_bib |>
+        left_join(citation_count,
+                  by = c("id" = "old")) |>
+        replace_na(replace = list(citations = 0)) |>
+        left_join(
+            select(
+                grand_cites,
+                id = old,
+                grand_cites
+            ),
+            by = "id"
+        ) |>
+        replace_na(replace = list(grand_cites = 0)) |>
+        rename(Journal = journal) |>
+        group_by(Journal) |>
+        summarise(
+            Articles = n(),
+            `First Year` = min(year),
+            `Last Year` = max(year),
+            Citations = sum(citations),
+            `Grand-Citations` = sum(grand_cites)
+        ) |>
+        arrange(-`Grand-Citations`)
+)
+```
