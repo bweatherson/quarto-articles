@@ -75,26 +75,29 @@ A much studied class of problems has this form: given some points on a map, find
 #| cache: true
 #| label: fig-map
 #| fig-cap: "257 American cites; our task is to find the shortest path that goes through all of them."
-#| 
+
 require(tidyverse)
 require(TSP)
 require(maps)
+require(wesanderson)
+
+point_col <- wes_palette("AsteroidCity1")[3]
 
 theme_map <- function(base_size=9, base_family="") {
   require(grid)
-  theme_bw(base_size = base_size, base_family = base_family) %+replace%
-    theme(axis.line = element_blank(),
-          axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          axis.title = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_blank(),
-          panel.grid = element_blank(),
-          panel.spacing = unit(0, "lines"),
-          plot.background = element_blank(),
-          legend.justification = c(0,0),
-          legend.position = c(0,0)
-    )
+  theme_bw(base_size = base_size, base_family = base_family)
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_blank(),
+        panel.grid = element_blank(),
+        panel.spacing = unit(0, "lines"),
+        plot.background = element_blank(),
+        legend.justification = c(0,0),
+        legend.position = c(0,0)
+        )
 }
 
 theme_set(theme_map())
@@ -123,82 +126,80 @@ cities <- as_tibble(as.matrix(USCA312))
 city_numbers <- tibble(
   id = 1:312,
   thecities = colnames(cities)
-) %>% 
-  mutate(used_city = case_when(str_sub(thecities, -2) %in% short_states  ~ 1,
-                               TRUE ~ 0))
+	) |> 
+  mutate(used_city = case_when(
+                       str_sub(thecities, -2) %in% short_states ~ 1,
+                       TRUE ~ 0
+                       )
+        )
 
 the_city_numbers <- filter(city_numbers, used_city == 1)$id
 
-
-our_cities <- cities %>% 
-  select(all_of(the_city_numbers)) %>% 
+our_cities <- cities |> 
+  select(all_of(the_city_numbers)) |>
   slice(the_city_numbers)
 
-our_gps <- USCA312_GPS %>% 
-  slice(the_city_numbers) %>% 
+our_gps <- USCA312_GPS |> 
+  slice(the_city_numbers) |> 
   rowid_to_column()
 
 city_matrix <- as.matrix(our_cities)
 
 rownames(city_matrix) <- filter(city_numbers, used_city == 1)$thecities
 
-## Fine tour
-#tour_line <- solve_TSP(as.TSP(city_matrix), method="farthest_insertion")
-#tour_line <- solve_TSP(as.TSP(city_matrix), method="two_opt", tour = tour_line)
-
-## Not good tour
-#tour_line <- solve_TSP(as.TSP(city_matrix), method="cheapest_insertion", start = 17) # - Very messy
-
-## Generate tour by longitude - really bad
-#tour_line <- TOUR(arrange(our_gps, long)$rowid, tsp = as.TSP(city_matrix))
-
 ## Best tour
 load("tour_line.RData")
 
-#tour_line <- TOUR(bad_path, tsp = as.TSP(city_matrix))
-#tour_line <- solve_TSP(as.TSP(city_matrix), method="two_opt", tour = tour_line)
-#tour_length(tour_line)
-
 # Turn tour to map path
 paths <- tribble(
-  ~step, ~property, ~rowid, ~long, ~lat
+  ~step, 
+  ~property, 
+  ~rowid, 
+  ~long, 
+  ~lat
 )
 
 for (i in 1:nrow(our_gps)){
   x <- tour_line[i]
   first_city <- our_gps %>% slice(x)
-  next_city <- our_gps %>% slice(x %% 31)
   paths <- paths %>%
-    add_row(step = i, property = "from", rowid = first_city$rowid[1], long = first_city$long[1], lat = first_city$lat[1])# %>%
-  #    add_row(step = i, property = "to", rowid = next_city$rowid[1], long = next_city$long[1], lat = next_city$lat[1])
+    add_row(step = i, 
+            property = "from", 
+            rowid = first_city$rowid[1], 
+            long = first_city$long[1], 
+            lat = first_city$lat[1])
 }
 
 x <- tour_line[1]
 
-paths <- paths %>% add_row(step = 24, property = "from", rowid = our_gps$rowid[x], long = our_gps$long[x], lat = our_gps$lat[x])
+paths <- paths |>
+   add_row(step = 24, 
+           property = "from", 
+           rowid = our_gps$rowid[x], 
+           long = our_gps$long[x], 
+           lat = our_gps$lat[x])
 
-
-state_map_data <- map_data("state") %>%
-  #  filter(subregion != "north" | is.na(subregion)) %>%
+state_map_data <- map_data("state") |>
   filter(region %in% long_states) 
 
 tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
-  geom_polygon(fill = "white", colour = "grey90") + 
-  geom_point(data = our_gps %>% select(long, lat), aes(x = long, y = lat), size = 0.25, inherit.aes = FALSE) +
-#  geom_path(data = paths %>% select(long, lat), aes(x = long, y = lat), inherit.aes = FALSE, colour = "grey30", alpha = 0.5 ) + 
+  geom_polygon(fill = "white", 
+               colour = "grey90") + 
+  geom_point(data = our_gps |> select(long, lat), 
+             aes(x = long, y = lat), 
+             size = 0.25, 
+             color = point_col,
+             inherit.aes = FALSE) +
   coord_quickmap() +
-#  labs(x = paste0("Tour length: ", tour_length(tour_line), " miles.")) +
   labs(x = "") +
   theme(axis.title.x = element_text())
-#tour_length(tour_line)
-tour_map
 
-#str_c(our_gps$name, sep = "; ", collapse = "; ")
+tour_map
 ```
 
 The task is to find the shortest path through those 257 cities.^[The 257 cities are the cities in the lower 48 states from the 312 cities in North America that John @Burkhart2011 mapped in his dataset USCA312.]
 
-All nine of the decision theories I mentioned, and as far as I know every competitor to them in the philosophical literature, say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. And least, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandelkernEtAl2017].
+All of the decision theories the critic described in @sec-two, and as far as I know every competitor to them in the philosophical literature, say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. More precisely, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandelkernEtAl2017]. 
 
 One of the striking things about this puzzle is that it turns out there are some helpful things that can be said. One helpful bit of advice to someone trying to solve a problem like this is to use a Farthest Insertion Algorithm.^[To implement both this algorithm and the optimisation I'll mention below, I've used the TSP package by Michael Hashler and Kurt Hornik [-@HashlerHornik2007]. The description of the two steps owes a lot to their summaries in the package documentation.] Insertion algorithms say to start with a random city, then add cities to the path one at a time, at each time finding the point to insert the city into the existing path that adds the least distance. The Farthest Insertion Algorithm says that the city added at each stage is the one farthest from the existing path. Insertion algorithms in general produce pretty good paths in a very short amount of time - at least on normal computers. And the Farthest Insertion Algorithm is, most of the time, the best Insertion Algorithm to use. @fig-farthest shows the result of one output of this algorithm.^[The algorithm is silent on which city you start with, and usually chooses this randomly.]
 
@@ -209,34 +210,54 @@ One of the striking things about this puzzle is that it turns out there are some
 #| message: false 
 #| label: fig-farthest
 #| fig-cap: "An output of the Farthest Insertion Algorithm, with a length of 21075 miles."
+
 theme_set(theme_map())
-tour_line <- solve_TSP(as.TSP(city_matrix), method = "farthest_insertion", start = 1)
+tour_line <- solve_TSP(as.TSP(city_matrix), 
+         method = "farthest_insertion", start = 1)
 
 paths <- tribble(
   ~step, ~property, ~rowid, ~long, ~lat
 )
 
-
 for (i in 1:nrow(our_gps)){
   x <- tour_line[i]
-  first_city <- our_gps %>% slice(x)
-  next_city <- our_gps %>% slice(x %% 31)
-  paths <- paths %>%
-    add_row(step = i, property = "from", rowid = first_city$rowid[1], long = first_city$long[1], lat = first_city$lat[1])# %>%
-  #    add_row(step = i, property = "to", rowid = next_city$rowid[1], long = next_city$long[1], lat = next_city$lat[1])
+  first_city <- our_gps |>
+      slice(x)
+  next_city <- our_gps |> 
+      slice(x %% 31)
+  paths <- paths |>
+    add_row(step = i, 
+            property = "from", 
+            rowid = first_city$rowid[1], 
+            long = first_city$long[1], 
+            lat = first_city$lat[1])
 }
 
 x <- tour_line[1]
 
-
-paths <- paths %>% add_row(step = 1 + nrow(our_gps), property = "from", rowid = our_gps$rowid[x], long = our_gps$long[x], lat = our_gps$lat[x])
+paths <- paths |>
+    add_row(step = 1 + nrow(our_gps), 
+            property = "from", 
+            rowid = our_gps$rowid[x], 
+            long = our_gps$long[x], 
+            lat = our_gps$lat[x])
 
 tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
-  geom_polygon(fill = "white", colour = "grey90") + 
-  geom_point(data = our_gps %>% select(long, lat), aes(x = long, y = lat), size = 0.25, inherit.aes = FALSE) +
-  geom_path(data = paths %>% select(long, lat), aes(x = long, y = lat), inherit.aes = FALSE, colour = "grey30", alpha = 0.5 ) + 
+  geom_polygon(fill = "white", 
+               colour = "grey90") + 
+  geom_point(data = our_gps |>
+               select(long, lat), 
+             aes(x = long, y = lat), 
+             size = 0.25, 
+             color = point_col,
+             inherit.aes = FALSE) +
+  geom_path(data = paths |>
+              select(long, lat), 
+            aes(x = long, y = lat), 
+            inherit.aes = FALSE, 
+            colour = point_col, 
+            alpha = 0.2) + 
   coord_quickmap() +
-#  labs(x = paste0("Tour length: ", tour_length(tour_line), " miles.")) +
   labs(x = "") +
   theme(axis.title.x = element_text())
 tour_map
@@ -251,9 +272,14 @@ The path in @fig-farthest is not bad, but with only a bit of extra computational
 #| fig-cap: "The output of an optimisation process, which reduced the path length to 20891 miles."
 #| warning: false
 #| message: false 
+
 theme_set(theme_map())
-tour_line <- solve_TSP(as.TSP(city_matrix), method = "farthest_insertion", start = 1)
-tour_line <- solve_TSP(as.TSP(city_matrix), method = "two_opt", tour = tour_line)
+tour_line <- solve_TSP(as.TSP(city_matrix), 
+                       method = "farthest_insertion", 
+                       start = 1)
+tour_line <- solve_TSP(as.TSP(city_matrix), 
+                       method = "two_opt", 
+                       tour = tour_line)
 
 paths <- tribble(
   ~step, ~property, ~rowid, ~long, ~lat
@@ -261,8 +287,10 @@ paths <- tribble(
 
 for (i in 1:nrow(our_gps)){
   x <- tour_line[i]
-  first_city <- our_gps %>% slice(x)
-  next_city <- our_gps %>% slice(x %% 31)
+  first_city <- our_gps |>
+    slice(x)
+  next_city <- our_gps |> 
+    slice(x %% 31)
   paths <- paths %>%
     add_row(step = i, property = "from", rowid = first_city$rowid[1], long = first_city$long[1], lat = first_city$lat[1])# %>%
   #    add_row(step = i, property = "to", rowid = next_city$rowid[1], long = next_city$long[1], lat = next_city$lat[1])
