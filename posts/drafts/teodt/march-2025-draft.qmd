@@ -10,6 +10,11 @@ author:
     affiliation_url: https://umich.edu
     orcid_id: 0000-0002-0830-141X
 citation: false
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: false
 categories:
   - games and decisions
   - unpublished
@@ -99,17 +104,14 @@ This is to say, decision theory is not axiology. It's not a theory of evaluating
 A much studied class of problems has this form: given some points on a map, find the shortest path through all of them. Julia @Robinson1949 called this the travelling salesman problem.^[For a thorough history of the problem, see @Schrijver2005. For an accessible history of the problem, which includes these references, see @wiki-salesman.] I'll start with the version that uses the 257 points shown on @fig-map.
 
 ```{r}
-#| echo: false
-#| warning: false
-#| message: false 
-#| cache: false
-#| label: fig-map
-#| fig-cap: "257 American cites; our task is to find the shortest path that goes through all of them."
+#| label: packages-and-theme
 
 require(tidyverse)
 require(TSP)
 require(maps)
 require(wesanderson)
+
+set.seed(1)
 
 point_col <- wes_palette("AsteroidCity1")[3]
 
@@ -132,146 +134,89 @@ theme_map <- function(base_size=9, base_family="") {
 
 theme_set(theme_map())
 
-all_states <- map_data("state") %>% 
-  group_by(region) %>% 
-  tally() %>% 
+data("USCA312")
+data("USCA312_GPS")
+```
+
+```{r}
+#| label: code-for-maps
+
+lower48_states <- map_data("state") |> 
+  group_by(region) |>
+  tally() |>
   select(state = region)
 
-all_states$code <- c("AL", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA",
+lower48_states$code <- c("AL", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA",
                      "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", 
                      "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", 
                      "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", 
                      "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
 
-used_states <- 1:49
-
-long_states <- all_states$state[used_states]
-short_states <- all_states$code[used_states]
-
-data("USCA312")
-data("USCA312_GPS")
-
-cities <- as_tibble(as.matrix(USCA312))
+all_cities <- as_tibble(as.matrix(USCA312))
 
 city_numbers <- tibble(
   id = 1:312,
-  thecities = colnames(cities)
-	) |> 
-  mutate(used_city = case_when(
-                       str_sub(thecities, -2) %in% short_states ~ 1,
-                       TRUE ~ 0
-                       )
-        )
+  thecities = colnames(all_cities)
+	)
 
-the_city_numbers <- filter(city_numbers, used_city == 1)$id
+lower48_city_numbers <- filter(city_numbers,
+                               str_sub(thecities, -2) %in% lower48_states$code)$id
 
-our_cities <- cities |> 
-  select(all_of(the_city_numbers)) |>
-  slice(the_city_numbers)
+lower48_cities <- all_cities |>
+  select(all_of(lower48_city_numbers)) |>
+  slice(lower48_city_numbers)
 
-our_gps <- USCA312_GPS |> 
-  slice(the_city_numbers) |> 
+lower48_gps <- USCA312_GPS |> 
+  slice(lower48_city_numbers) |> 
   rowid_to_column()
 
-city_matrix <- as.matrix(our_cities)
+lower48_matrix <- as.matrix(lower48_cities)
 
-rownames(city_matrix) <- filter(city_numbers, used_city == 1)$thecities
+rownames(lower48_matrix) <- filter(city_numbers,
+                               str_sub(thecities, -2) %in% lower48_states$code)$thecities
 
-## Best tour
-load("/Users/weath/Documents/quarto-articles/posts/drafts/teodt/tour_line.RData")
-
-# Turn tour to map path
-paths <- tribble(
-  ~step, 
-  ~property, 
-  ~rowid, 
-  ~long, 
-  ~lat
-)
-
-for (i in 1:nrow(our_gps)){
-  x <- tour_line[i]
-  first_city <- our_gps %>% slice(x)
-  paths <- paths %>%
-    add_row(step = i, 
-            property = "from", 
-            rowid = first_city$rowid[1], 
-            long = first_city$long[1], 
-            lat = first_city$lat[1])
-}
-
-x <- tour_line[1]
-
-paths <- paths |>
-   add_row(step = 24, 
-           property = "from", 
-           rowid = our_gps$rowid[x], 
-           long = our_gps$long[x], 
-           lat = our_gps$lat[x])
-
-state_map_data <- map_data("state") |>
-  filter(region %in% long_states) 
-
-tour_map <- ggplot(state_map_data, aes(long, lat, group = group)) +
-  geom_polygon(fill = "white", 
-               colour = "grey90") + 
-  geom_point(data = our_gps |> select(long, lat), 
-             aes(x = long, y = lat), 
-             size = 0.25, 
-             color = point_col,
-             inherit.aes = FALSE) +
-  coord_quickmap() +
-  labs(x = "") +
-  theme(axis.title.x = element_text())
-
-tour_map
+lower48_map_data <- map_data("state") |>
+  filter(region %in% lower48_states$state) 
 ```
 
-The task is to find the shortest path through those 257 cities.^[The 257 cities are the cities in the lower 48 states from the 312 cities in North America that John @Burkhart2011 mapped in his dataset USCA312.]
-
-All of the decision theories the critic described in @sec-two, and as far as I know every competitor to them in the philosophical literature, say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. More precisely, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandelkernEtAl2017]. 
-
-Although these theories don't provide any useful advice, there is helpful advice out there. One good starting suggestion is to use a farthest insertion algorithm.^[To implement both this algorithm and the optimisation I'll mention below, I've used the TSP package by Michael Hashler and Kurt Hornik [-@HashlerHornik2007]. The description of the two steps owes a lot to their summaries in the package documentation.] Insertion algorithms start with a random city, then create a path by adding a particular city at the point that would result in the smallest increase to the path length. The big thing is the choice of which city to add. For the farthest insertion algorithm, it's the city farthest from the existing path. In general insertion algorithms do very well at producing short paths quickly, and in general the farthest insertion algorithm does better than other insertion algorithms. @fig-farthest shows the result of one output of the farthest insertion algorithm.^[I say 'one' output because the algorithm chooses the first city at random, so different runs produce different paths.]
-
 ```{r}
-#| echo: false
-#| cache: true
-#| warning: false
-#| message: false 
-#| label: fig-farthest
-#| fig-cap: "An output of the Farthest Insertion Algorithm, with a length of 21075 miles."
+#| label: two-mapping-functions
 
-theme_set(theme_map())
-tour_line <- solve_TSP(as.TSP(city_matrix), 
-         method = "farthest_insertion", start = 1)
+## Function for turning a tour into paths on a map
 
-paths <- tribble(
-  ~step, ~property, ~rowid, ~long, ~lat
-)
-
-for (i in 1:nrow(our_gps)){
-  x <- tour_line[i]
-  first_city <- our_gps |>
-      slice(x)
+tour_to_path <- function(gps, tour_line){
+  paths <- tribble(
+    ~step, 
+    ~property, 
+    ~rowid, 
+    ~long, 
+    ~lat
+  )
+  
+  for (i in 1:nrow(gps)){
+    x <- tour_line[i]
+    first_city <- gps |>
+        slice(x)
+    paths <- paths |>
+      add_row(step = i, 
+              property = "from", 
+              rowid = first_city$rowid[1], 
+              long = first_city$long[1], 
+              lat = first_city$lat[1])
+  }
+  
+  x <- tour_line[1]
+  
   paths <- paths |>
-    add_row(step = i, 
-            property = "from", 
-            rowid = first_city$rowid[1], 
-            long = first_city$long[1], 
-            lat = first_city$lat[1])
+      add_row(step = 1 + nrow(gps), 
+              property = "from", 
+              rowid = gps$rowid[x], 
+              long = gps$long[x], 
+              lat = gps$lat[x])
+  paths
 }
 
-x <- tour_line[1]
-
-paths <- paths |>
-    add_row(step = 1 + nrow(our_gps), 
-            property = "from", 
-            rowid = our_gps$rowid[x], 
-            long = our_gps$long[x], 
-            lat = our_gps$lat[x])
-
-# Way to automatically generate maps
-# Change this to make the others change, though note that they need to be not cached
+# Function for generating a map
 
 make_map <- function(the_data, the_gps, the_path){
   ggplot(the_data, 
@@ -280,7 +225,7 @@ make_map <- function(the_data, the_gps, the_path){
              group = group)) +
     geom_polygon(fill = "white", 
                  colour = "grey90") + 
-    geom_point(data = our_gps |>
+    geom_point(data = the_gps |>
                  select(
                    long, 
                    lat
@@ -307,118 +252,93 @@ make_map <- function(the_data, the_gps, the_path){
     labs(x = "") +
     theme(axis.title.x = element_text())
 }
+```
 
-tour_map <- make_map(
-  state_map_data,
-  our_gps,
-  paths
-  )
-tour_map
+```{r}
+#| label: generate-tours
+
+set.seed(1)
+
+my_list <- as.integer(unlist(strsplit("0,84,59,240,13,198,121,58,102,89,170,20,212,135,231,127,136,107,147,17,151,97,24,142,162,228,87,229,194,206,116,138,244,158,61,108,207,44,54,11,132,9,55,143,26,86,103,47,117,7,96,216,46,251,95,184,69,179,250,174,153,183,242,15,99,119,110,181,248,4,249,164,10,234,71,148,109,152,161,246,222,42,33,150,137,149,100,219,252,175,78,34,30,38,123,130,134,57,173,171,12,16,144,36,32,168,235,2,208,239,25,226,186,35,74,254,167,223,245,39,1,51,256,45,8,56,221,60,98,50,124,129,31,146,159,77,230,118,104,145,83,125,232,6,65,81,19,189,120,106,18,92,112,215,90,49,115,178,139,210,94,133,187,163,28,43,238,62,218,192,53,220,111,82,237,156,73,247,196,233,113,114,191,126,157,213,214,64,243,41,105,67,185,70,225,68,193,140,190,79,141,27,166,180,211,23,93,101,37,169,155,197,176,29,217,241,253,21,209,227,172,195,75,76,22,154,201,204,202,224,188,182,40,85,14,203,128,160,199,200,255,122,80,165,236,72,205,3,88,91,48,63,52,177,66,5,131",",")))
+
+my_list_adj <- my_list + 1
+best_tour <- TOUR(my_list_adj, tsp = as.TSP(lower48_matrix))
+
+farthest_insertion_tour <- solve_TSP(as.TSP(lower48_matrix), 
+                     method = "farthest_insertion", 
+                     start = 1)
+
+two_opt_tour <- tour_line <- solve_TSP(as.TSP(lower48_matrix), 
+                       method = "two_opt", 
+                       tour = farthest_insertion_tour)
+
+best_length <- tour_length(best_tour)
+farthest_insertion_length <- tour_length(farthest_insertion_tour)
+two_opt_length <- tour_length(two_opt_tour)
+
+farthest_insertion_cap <- paste0("An output of the farthest insertion algorithm, with a length of ", farthest_insertion_length, " miles.")
+two_opt_cap <- paste0("The output of an optimisation process, which reduced the path length to ", two_opt_length, " miles.")
+best_cap <- paste0("The shortest path I could find, with a distance of ", best_length, " miles.")
+```
+
+```{r}
+#| label: fig-map
+#| fig-cap: "257 American cites; our task is to find the shortest path that goes through all of them."
+
+make_map(lower48_map_data, lower48_gps, lower48_map_data |> 
+           select(long, lat) |>
+           ungroup() |>
+           slice(1))
+```
+The task is to find the shortest path through those 257 cities.^[The 257 cities are the cities in the lower 48 states from the 312 cities in North America that John @Burkhart2011 mapped in his dataset USCA312.]
+
+All of the decision theories the critic described in @sec-two, and as far as I know every competitor to them in the philosophical literature, say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. More precisely, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandelkernEtAl2017]. 
+
+Although these theories don't provide any useful advice, there is helpful advice out there. One good starting suggestion is to use a farthest insertion algorithm.^[To implement both this algorithm and the optimisation I'll mention below, I've used the TSP package by Michael Hashler and Kurt Hornik [-@HashlerHornik2007]. The description of the two steps owes a lot to their summaries in the package documentation.] Insertion algorithms start with a random city, then create a path by adding a particular city at the point that would result in the smallest increase to the path length. The big thing is the choice of which city to add. For the farthest insertion algorithm, it's the city farthest from the existing path. In general insertion algorithms do very well at producing short paths quickly, and in general the farthest insertion algorithm does better than other insertion algorithms. @fig-farthest shows the result of one output of the farthest insertion algorithm.^[I say 'one' output because the algorithm chooses the first city at random, so different runs produce different paths.]
+
+```{r}
+#| label: fig-farthest
+#| fig-cap: !expr farthest_insertion_cap
+
+make_map(lower48_map_data, 
+         lower48_gps, 
+         tour_to_path(
+           lower48_gps,
+           farthest_insertion_tour
+         )
+)
 ```
 
 The path in @fig-farthest is not bad, but with only a bit of extra computational work, one can do better. A fairly simple optimisation algorithm takes a map as input, and then deletes pairs of edges at a time, and finds the shortest path of all possible paths with all but those two edges. The process continues until no improvements can be made by deleting two edges at a time, at which point you've found a somewhat resilient local minimum. This step is a bit slower than running the insertion algorithm, but it's still quick on modern computers. @fig-two-opt is the output from applying this strategy to the path in @fig-farthest.
 
 ```{r}
-#| echo: false
-#| cache: false
 #| label: fig-two-opt
-#| fig-cap: "The output of an optimisation process, which reduced the path length to 20891 miles."
-#| warning: false
-#| message: false 
+#| fig-cap: !expr two_opt_cap
 
-theme_set(theme_map())
-tour_line <- solve_TSP(as.TSP(city_matrix), 
-                       method = "farthest_insertion", 
-                       start = 1)
-tour_line <- solve_TSP(as.TSP(city_matrix), 
-                       method = "two_opt", 
-                       tour = tour_line)
-
-paths <- tribble(
-  ~step, ~property, ~rowid, ~long, ~lat
+make_map(lower48_map_data, 
+         lower48_gps, 
+         tour_to_path(
+           lower48_gps,
+           two_opt_tour
+         )
 )
-
-for (i in 1:nrow(our_gps)){
-  x <- tour_line[i]
-  first_city <- our_gps |>
-    slice(x)
-  paths <- paths |>
-    add_row(step = i, 
-            property = "from", 
-            rowid = first_city$rowid[1], 
-            long = first_city$long[1], 
-            lat = first_city$lat[1])
-}
-
-x <- tour_line[1]
-
-paths <- paths|>
-  add_row(step = 1 + nrow(our_gps), 
-          property = "from", 
-          rowid = our_gps$rowid[x], 
-          long = our_gps$long[x], 
-          lat = our_gps$lat[x])
-
-
-tour_map <- make_map(
-  state_map_data,
-  our_gps,
-  paths
-  )
-tour_map
 ```
 
 This optimisation tends to produce paths that look a lot like the original, but are somewhat shorter. For most practical purposes, the best advice you could give someone faced with a problem like this is to use a Farthest Insertion Algorithm, then optimise it in this way. Or, if they have a bit more time, they could do this a dozen or so times, and see if different starting cities led to slightly shorter paths.
 
 While this is good advice, and indeed it's what most people should do, it's rarely optimal. So it's rarely what existing decision theories say to do. Those theories implicitly presuppose that one has unlimited costless computing power, so one simply calculates the lengths of all paths and sorts them. I do not have unlimited costless computing power, so I didn't do that. Using some black box algorithms I did not particularly understand, I was able to find a shorter path, however. It took some time, both of mine and my computer's, and for most purposes it would not have been worth the hassle of finding it. Still, just to show it exists, I've plotted it as @fig-best.
 
-
 ```{r}
-#| echo: false
-#| cache: false
 #| label: fig-best
-#| warning: false
-#| message: false
-#| fig-cap: "The shortest path I could find, with a distance of 20301 miles."
+#| fig-cap: !expr best_cap
 
-my_list <- as.integer(unlist(strsplit("0,84,59,240,13,198,121,58,102,89,170,20,212,135,231,127,136,107,147,17,151,97,24,142,162,228,87,229,194,206,116,138,244,158,61,108,207,44,54,11,132,9,55,143,26,86,103,47,117,7,96,216,46,251,95,184,69,179,250,174,153,183,242,15,99,119,110,181,248,4,249,164,10,234,71,148,109,152,161,246,222,42,33,150,137,149,100,219,252,175,78,34,30,38,123,130,134,57,173,171,12,16,144,36,32,168,235,2,208,239,25,226,186,35,74,254,167,223,245,39,1,51,256,45,8,56,221,60,98,50,124,129,31,146,159,77,230,118,104,145,83,125,232,6,65,81,19,189,120,106,18,92,112,215,90,49,115,178,139,210,94,133,187,163,28,43,238,62,218,192,53,220,111,82,237,156,73,247,196,233,113,114,191,126,157,213,214,64,243,41,105,67,185,70,225,68,193,140,190,79,141,27,166,180,211,23,93,101,37,169,155,197,176,29,217,241,253,21,209,227,172,195,75,76,22,154,201,204,202,224,188,182,40,85,14,203,128,160,199,200,255,122,80,165,236,72,205,3,88,91,48,63,52,177,66,5,131",",")))
-
-my_list_adj <- my_list + 1
-tour_line <- TOUR(my_list_adj, tsp = as.TSP(city_matrix))
-
-theme_set(theme_map())
-
-paths <- tribble(
-  ~step, ~property, ~rowid, ~long, ~lat
+make_map(lower48_map_data, 
+         lower48_gps, 
+         tour_to_path(
+           lower48_gps,
+           best_tour
+         )
 )
-
-for (i in 1:nrow(our_gps)){
-  x <- tour_line[i]
-  first_city <- our_gps |>
-    slice(x)
-  paths <- paths |>
-    add_row(step = i, 
-            property = "from", 
-            rowid = first_city$rowid[1], 
-            long = first_city$long[1], 
-            lat = first_city$lat[1])
-}
-
-x <- tour_line[1]
-
-paths <- paths|>
-  add_row(step = 1 + nrow(our_gps), 
-          property = "from", 
-          rowid = our_gps$rowid[x], 
-          long = our_gps$long[x], 
-          lat = our_gps$lat[x])
-
-tour_map <- make_map(
-  state_map_data,
-  our_gps,
-  paths
-  )
-tour_map
 ```
 
 I'm not sure if @fig-best is as short as possible, but I couldn't find a shorter one. Still, for many purposes it wouldn't have been worth the trouble it took to find this map.
@@ -441,4 +361,129 @@ The obvious answer is that it is idealising. It says what an ideal agent, one wh
 
 The prescriptivist goes on to say that since that agent is ideal, we should be more like them, and this ideal agent can serve both as a model to be emulated, and a standard to judge finite agents against. In the next section I'll use other salesman problems to say why I disagree with every part of this.
 
+# Against Prescriptivism {#sec-against-prescriptivism}
 
+The first problem for prescriptivism is that it treats like cases unalike. 
+
+Imagine Suzy and Billy in **Betting**. Suzy does what decision theory recommends and doesn't bet; Billy bets on the home team, and luckily wins. Billy is richer, but Suzy did what theory recommended. What did she do right, if not get the most money? Intuitively, she followed a good process, while Billy followed a bad process. Decision theory, thus understood, is a theory of good processes. That's right as far as it goes; that is the best way to express the value of being a utility maximiser in pre-theoretic terms.
+
+But decision theory does not always endorse good processes. Imagine now Billy and Suzy are doing the version of **Salesman** shown in @fig-west-coast. (This is @fig-map restricted to California, Oregon, and Nevada.)
+
+```{r}
+#| label: setup-west-coast
+
+wc_used_states <- c(36, 4, 27)
+
+wc_long_states <- lower48_states$state[wc_used_states]
+wc_short_states <- lower48_states$code[wc_used_states]
+
+wc_city_numbers <- filter(city_numbers, 
+                          str_sub(thecities, -2) %in% wc_short_states)$id
+
+wc_cities <- all_cities |>
+  select(all_of(wc_city_numbers)) |>
+  slice(wc_city_numbers)
+
+wc_gps <- USCA312_GPS %>% 
+  slice(wc_city_numbers) %>% 
+  rowid_to_column()
+
+wc_city_matrix <- as.matrix(wc_cities)
+
+rownames(wc_city_matrix) <- filter(city_numbers, 
+                            str_sub(thecities, -2) %in% wc_short_states)$thecities
+
+wc_near_tour <- solve_TSP(as.TSP(wc_city_matrix), method="nearest_insertion", start = 7)
+wc_far_tour <- solve_TSP(as.TSP(wc_city_matrix), method="farthest_insertion", start = 19)
+wc_near_length <- tour_length(wc_near_tour)
+wc_far_length <- tour_length(wc_far_tour)
+wc_near_cap <- paste0("Billy's path: ", wc_near_length, " miles.")
+wc_far_cap <- paste0("Suzy's path: ", wc_far_length, " miles.")
+
+wc_map_data <- map_data("state") |>
+           filter(region %in% c(
+             "california", 
+             "oregon", 
+             "nevada"))
+
+```
+
+```{r}
+#| label: fig-west-coast
+#| fig-cap: "The 21 cities in a restricted version of **Salesman**."
+
+make_map(wc_map_data, wc_gps, wc_map_data |> 
+           select(long, lat) |>
+           ungroup() |>
+           slice(1))
+```
+
+Both Billy and Suzy know that insertion algorithms are very efficient, and they have enough computing resources to run precisely one such algorithm. Suzy remembers the lessons about insertion algorithms, and runs a farthest insertion algorithm; Billy does not, and runs a nearest insertion algorithm. The results are shown in @fig-two-west-coast-maps.
+
+:::: {#fig-two-west-coast-maps layout="[0.5, 0.5]"}
+
+::: {#fig-two-west-coast-maps-1}
+```{r}
+make_map(wc_map_data, wc_gps,
+         tour_to_path(wc_gps, wc_near_tour))
+```
+
+`{r} wc_near_cap`
+:::
+
+::: {#fig-two-west-coast-maps-2}
+```{r}
+make_map(wc_map_data, wc_gps,
+         tour_to_path(wc_gps, wc_far_tour))
+```
+
+`{r} wc_far_cap`
+:::
+
+Billy and Suzy's solutions to @fig-west-coast.
+::::
+
+As happened with **Betting**, Billy followed a bad process that led to a good outcome. If we're evaluating the two actors, in each case the thing to say is that Suzy followed a better process, but by luck Billy got to a better outcome. There is no interesting evaluative standard according to which Billy did worse in one case but better in the other. But he did better by the standards of decision theory in one but not the other. So decision theory does not provide a good evaluative standard; it separates out these two cases that a good standard would treat the same way.
+
+It shouldn't be surprising that decision theory fails to provide a suitable evaluative standard. As was shown by @LipseyLancaster, there is no general guarantee that it will be better to adopt characteristics of the ideal. Here are three features that the kind of ideal deciders, the ones who maximise expected utility, have:
+
+1. They believe logical consequences of their beliefs which are relevant to the decision at hand. (They in fact believe all the logical consequences of their beliefs, hence they believe the relevant ones.)
+2. They make an even number of arithmetic mistakes. (That's because they make zero, and zero is even.)
+3. They never pause to think about problems. (That's because pausing is costly, and they already know the answers.)
+
+The first feature is in general a virtue in actual deciders. The second is neutral; one is not better for making six mistakes rather than five, even though six is even. In general, it is neither good nor bad to make an even number of mistakes, it's just better to make fewer. The third is in general a vice; it is very often good to pause to think before acting. The lesson is that resembling the ideal decider in some respect is not in itself a good thing. One has to know that one is resembling the ideal decider in a good way (like in 1), not a bad way (like in 3).
+
+While philosophical decision theory spends a lot of time describing the ideal, it spends very little time classifying features of the ideal as being like 1, 2 or 3. In principle, we could supplement decision theory by adding a theory that described which features are good and bad. In practice, I suspect that this would be no easier than simply describing good making features of deciders without appeal to the ideal. In any case, producing such a supplement would be a radical change from existing practice, and is necessary if decision theory will be guiding for actual deciders. So decision theory is not something that should guide actual deciders.
+
+I've put this argument forward as a bit of meta-decision-theory, as an argument against prescriptivism. It may also have first order consequences. This way of thinking about features of the ideal is helpful for seeing why a simple argument that coherence is evaluative significant fails. The argument says that the ideal decider is coherent, therefore it is good to be coherent. Following @Kolodny2005, the better thing to say is that coherence is like making an even number of mistakes. It is not in itself significant, but something that is brought along by something else which is good, i.e., making zero mistakes.
+
+# Decision Theory in Explanations {#sec-explanations}
+
+I turn now to the worry that explanationism can't be true because decision theory doesn't explain very much. For space reasons I'll only work through one example here. It has the advantage of being well worked out, and fairly well known, and the disadvantage of being somewhat dated. Still, it's a nice example.
+
+In the mid to late twentieth century, the used car market had a striking characteristic. The first thing to note was that there was, as there still is, a healthy market in used cars. This wasn't like the market in used clothes, which is basically moribund outside of thrift stores and some niche specialities. It also wasn't like the market in used houses, which is so vibrant we rarely use the concept 'used house'. There was one other way the used car market differed from the used house market. As soon as one took possession of a new car, in the cliche of the day as soon as you drove it off the lot, the car lost a good chunk of value. The exact amount differed from market to market and car to car, but it was usually twenty to twenty-five percent.
+
+[End of Akerlof discussion]
+
+# Reflexive Explanations {#sec-reflexive}
+
+* Objection: A priori theory but need a posteriori explanations
+* Reply: We're looking for reflexive explanations
+* These take rather a lot of armchair work
+* Muddled Keynes as a version of irreflexive explanation - these aren't stable
+* Akerlof's explanation is stable - everyone could learn it and it still holds
+
+# Varieties of Explanation {#sec-varieties}
+
+* Objection: Shouldn't have one model to rule everything
+* There should be some situations that call for stronger models, and some for weaker
+* Reply: These exist!
+* Assuming people know what actions they can perform, or know the prices of all goods for sale, goes beyond standard rationality. But it is often helpful to make those assumptions. This isn't because of rationality; it's just often true enough that they have this knowledge.
+* Cursed equilibrium is an interesting case of a weaker explanation.
+* It also demonstrated a surprising (to me) side-effect of doing decision theory. Sometimes the tools of decision theory can get mostly used even with slightly different assumptions
+
+# Conclusion
+
+* Yay for explanationism
+* A broadly ratificationist approach to decision theory fits best with the desire that decision theory is an input to reflexive explanations.
+* That suggests that something like Fusco's view is correct, but that's for another day.
