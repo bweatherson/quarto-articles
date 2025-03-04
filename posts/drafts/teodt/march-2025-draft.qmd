@@ -231,7 +231,7 @@ The task is to find the shortest path through those 257 cities.^[The 257 cities 
 
 All of the decision theories the critic described in @sec-two, and as far as I know every competitor to them in the philosophical literature, say the thing to do here is to draw whichever of the 256! possible paths is shortest. That is not particularly helpful advice. Unless you know a lot about problems like this, you can't draw the shortest path through the map. More precisely, you can't draw it as such. You can't draw it in the way that you can't enter the correct code on a locked phone [@MandelkernEtAl2017]. 
 
-One of the striking things about this puzzle is that it turns out there are some helpful things that can be said. One helpful bit of advice to someone trying to solve a problem like this is to use a Farthest Insertion Algorithm.^[To implement both this algorithm and the optimisation I'll mention below, I've used the TSP package by Michael Hashler and Kurt Hornik [-@HashlerHornik2007]. The description of the two steps owes a lot to their summaries in the package documentation.] Insertion algorithms say to start with a random city, then add cities to the path one at a time, at each time finding the point to insert the city into the existing path that adds the least distance. The Farthest Insertion Algorithm says that the city added at each stage is the one farthest from the existing path. Insertion algorithms in general produce pretty good paths in a very short amount of time - at least on normal computers. And the Farthest Insertion Algorithm is, most of the time, the best Insertion Algorithm to use. @fig-farthest shows the result of one output of this algorithm.^[The algorithm is silent on which city you start with, and usually chooses this randomly.]
+Although these theories don't provide any useful advice, there is helpful advice out there. One good starting suggestion is to use a farthest insertion algorithm.^[To implement both this algorithm and the optimisation I'll mention below, I've used the TSP package by Michael Hashler and Kurt Hornik [-@HashlerHornik2007]. The description of the two steps owes a lot to their summaries in the package documentation.] Insertion algorithms start with a random city, then create a path by adding a particular city at the point that would result in the smallest increase to the path length. The big thing is the choice of which city to add. For the farthest insertion algorithm, it's the city farthest from the existing path. In general insertion algorithms do very well at producing short paths quickly, and in general the farthest insertion algorithm does better than other insertion algorithms. @fig-farthest shows the result of one output of the farthest insertion algorithm.^[I say 'one' output because the algorithm chooses the first city at random, so different runs produce different paths.]
 
 ```{r}
 #| echo: false
@@ -316,7 +316,7 @@ tour_map <- make_map(
 tour_map
 ```
 
-The path in @fig-farthest is not bad, but with only a bit of extra computational work, one can do better. A fairly simple optimisation algorithm takes a map as input, and then deletes pairs of edges at a time, and finds the shortest path of all possible paths with all but those two edges. The process continues until no improvements can be made by deleting two edges at a time, at which point you've found a somewhat resilient local minimum. @fig-two-opt is the output from applying this strategy to the path in @fig-farthest.
+The path in @fig-farthest is not bad, but with only a bit of extra computational work, one can do better. A fairly simple optimisation algorithm takes a map as input, and then deletes pairs of edges at a time, and finds the shortest path of all possible paths with all but those two edges. The process continues until no improvements can be made by deleting two edges at a time, at which point you've found a somewhat resilient local minimum. This step is a bit slower than running the insertion algorithm, but it's still quick on modern computers. @fig-two-opt is the output from applying this strategy to the path in @fig-farthest.
 
 ```{r}
 #| echo: false
@@ -370,7 +370,7 @@ tour_map
 
 This optimisation tends to produce paths that look a lot like the original, but are somewhat shorter. For most practical purposes, the best advice you could give someone faced with a problem like this is to use a Farthest Insertion Algorithm, then optimise it in this way. Or, if they have a bit more time, they could do this a dozen or so times, and see if different starting cities led to slightly shorter paths.
 
-While this is good advice, and indeed it's what most people should do, it's not typically what is optimal to do. For that reason, it's not what our nine decision theories would say to do. If one had unlimited and free computing power available, hacks like these would be pointless. One would simply look at all the possible paths, and see which was shortest. I do not have free, unlimited computing power, so I didn't do this. Using some black box algorithms I did not particularly understand, I was able to find a shorter path, however. It took some time, both of mine and my computer's, and for most purposes it would not have been worth the hassle of finding it. Still, just to show it exists, I've plotted it as @fig-best.
+While this is good advice, and indeed it's what most people should do, it's rarely optimal. So it's rarely what existing decision theories say to do. Those theories implicitly presuppose that one has unlimited costless computing power, so one simply calculates the lengths of all paths and sorts them. I do not have unlimited costless computing power, so I didn't do that. Using some black box algorithms I did not particularly understand, I was able to find a shorter path, however. It took some time, both of mine and my computer's, and for most purposes it would not have been worth the hassle of finding it. Still, just to show it exists, I've plotted it as @fig-best.
 
 
 ```{r}
@@ -436,3 +436,9 @@ I'm not sure if @fig-best is as short as possible, but I couldn't find a shorter
 : How three approaches to decision theory handle the two cases {#tbl-examples}
 
 The first row says which action would produce the best outcome in the two cases. The third row says what advice one ought give someone who had to choose in the two cases. And the middle row says what all the decision theories say about the two cases. Notably, it agrees with neither the first nor third row. Decision theory is neither in the business of saying what will produce the best result, nor with giving the most useful advice. So what is it doing?
+
+The obvious answer is that it is idealising. It says what an ideal agent, one who either had unlimited costless computing or could act as if they could, would do.
+
+The prescriptivist goes on to say that since that agent is ideal, we should be more like them, and this ideal agent can serve both as a model to be emulated, and a standard to judge finite agents against. In the next section I'll use other salesman problems to say why I disagree with every part of this.
+
+
