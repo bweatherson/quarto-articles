@@ -1,0 +1,181 @@
+---
+title: "Citations in recent philosophy journals"
+abstract: |
+    Which pieces have been most cited in philosophy journals in the 2020s so far.
+date: March 19 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - citations
+  - history of analytic
+execute:
+  echo: false
+  warning: false
+image: "openalex.png"
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+---
+
+```{r}
+#| label: loader
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+require(scico)
+require(wesanderson)
+
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 30),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             title = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(-0.3, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+```
+
+Recently I've been looking at the citation data available through a new-ish open access initiative: [OpenAlex](https://openalex.org).^[I'm grateful to Kathleen Folger at the UM library for suggesting this. I'd been talking with her about Michigan's Web of Science subscription, and she pointed out, correctly, that it might be better to use an open access source.] Because it's open access, and updated in real time, I though I'd use it to get a sense of which pieces have been most cited in philosophy journals this decade. This took a bit of effort, but I downloaded and processed the citations from the 100 journals I've been looking at [in](https://brian.weatherson.org/quarto/blog/word-count/length.html) [previous](https://brian.weatherson.org/quarto/blog/top-ten/top-ten.html) [posts](https://brian.weatherson.org/quarto/blog/citations-raw-data/top-500.html).^[Actually only 99 of them, because OpenAlex doesn't have outbound citation data for _Journal of Philosophy_. The processing was done largely by the openalexR package [@openalexR].]
+
+@tbl-the-1000 lists the pieces, books, chapters, and journal articles, which have been cited 40 or more times in these journals between 2020 and 2024. The links in each case go to the OpenAlex page for the entry.
+
+```{r}
+#| label: tbl-the-1000
+#| cache: false
+#| tbl-cap: "Pieces with at least 40 citations in recent journals."
+#| tbl-colwidths: [7,7,36,50]
+#| column: page
+
+oa_1000_recent_cites <- readxl::read_xlsx(path = "/Users/weath/Documents/citations-openalexR/oa_cites_to_fix.xlsx") |>
+  filter(delete == FALSE) |>
+  group_by(displayauth, title) |>
+  mutate(all_cites = sum(citations),
+         min_year = min(year)) |>
+  select(-citations, -year, -delete) |>
+  distinct(displayauth, title, .keep_all = TRUE) |>
+  rename(citations = all_cites,
+         year = min_year) |>
+  arrange(-citations) |>
+  mutate(title = str_to_title(title)) |>
+  select(Citations = citations, Author = displayauth, Title = title, everything()) |>
+  arrange(-Citations, year) |>
+  ungroup() |>
+  mutate(Rank = rank(desc(Citations), ties.method = "min")) |>
+  mutate(Title = paste0(
+    "[",
+    Title,
+    "](https://openalex.org/works/",
+    str_sub(old,start=3),
+    ")"
+  )) |>
+  mutate(Rank = as.character(Rank),
+         Citations = as.character(Citations)) |>
+  select(Rank, Citations, Author, Title)
+
+kable(oa_1000_recent_cites) 
+```
+
+# Methods
+
+If you click through any of these links, you'll likely see very different citation numbers to what I've posted. So I want to first talk through how I calculated them.
+
+First, I'm not looking at all citations, only citations in philosophy journals. This is for three reasons.
+
+1. I wanted to get a sense of what's being talked about in *philosophy*. The boundaries of philosophy are vague and hard to pin down, but we can make a more principled start by looking at journals than going book by book.
+2. OpenAlex citations of books seem to be systematically too high because they count each chapter as an entry. If you look at the recent citations for [Normative Externalism](https://openalex.org/works?page=3&sort=publication_year%3Adesc&filter=cites%3Aw4253500829), you'll see that OpenAlex counts it as having been cited many times in Stephen White's recent collection of papers. I think what's happened is that it takes the bibliography of the book to be the bibliography of each paper, so everything cited in the book gets credited with citations in each chapter. So these numbers are a bit high. Sticking to journals fixes this.
+
+On the other hand, the citations are sometimes too low. This is easiest to see for _Knowledge and Its Limits_, where OpenAlex has separate entries for the [hardback](https://openalex.org/works/W3127507699) and [paperback](https://openalex.org/works/W1570100281) version. This makes some sense; they have different publication years. But it's not really what we want. In all these cases, I've merged the data.
+
+I also mostly removed collections of previously published papers, especially handbooks. That said, I left in some prominent ones, including I guess _Knowledge and Its Limits_, which I thought were too important to the story to leave out.
+
+Another bug in the system is that OpenAlex often confuses citations to books with citations to reviews of that book. So most citations to Nozick's _Philosophical Explanations_ are credited to Alvin Goldman's review of the book. (Which is in turn listed as co-authored with Nozick.) This affects about 2-3% of all citations. That's annoying when looking at 1,000 or so entries, but manageable. It's not really manageable when looking at 100,000 or so entries, so I'm not sure what I'll do about this in the future. This mostly affects older books, like Nozick's, but it also affects some newer books that have trade publications. So I don't think they are properly tracking citations to Amia Srinivasan's _The Right to Sex_, and possibly some other books published outside the usual academic channels. I'll come back to this.
+
+One last data cleaning note. OpenAlex dates publications by when they go online, not by the listed cover date. In order to maintain some degree of consistency with older data sets, I prefer to use cover dates. So if an article goes up on Early View in December 2021, then appears in the January 2022 issue of the journal, I'm counting it as a 2022 article, not a 2021 article. This took some work to sort out, but I think I've got it all sorted now.^[It would have been easier if there was a cleaner mapping from journal volumes to journal years, but some journals insist on having one volume per academic year.]
+
+# Topics
+
+My next goal with this data set is to create networks of which pieces are co-cited, and use that to get a sense of which topics are being talked about a lot in the 2020s. Just eyeballing the top of the list, we can make a few guesses about how that will turn out.
+
+It's a boom time for **epistemology**. I don't think a study like this in past years would have seen two epistemology works in the top two spots, and there are plenty more epistemology works throughout the list.
+
+It's also a stronger time than I realised for **metaphysics**. I had a sense that metaphysics was not as central as it had been in previous decades, because there is much less uptake of contemporary metaphysics in other parts of philosophy. You don't see that much talk of grounding, or structure, or fundamentality, in recent work in epistemology, ethics, mind, etc. But apparently it doesn't matter. Work on dependence broadly construed, and on social ontology, is flourishing.
+
+I really did not expect [A World of States of Affairs](https://openalex.org/works/W4250002353) to be the most cited work from the 1990s on this list. I was so surprised that I went and checked a bunch of the references OpenAlex found, in case it was running together some different works, but they all checked out. That might have been the biggest surprise to me of the list. I know that what I see is bound to be an unrepresentative sample of philosophy, but I didn't expect stuff that crosses my desk to undersample Australian metaphysics.
+
+But perhaps the biggest story here is the health of **philosophy of science**. Throughout the top of the list there are so many works, and importantly works on several different parts of philosophy of science, showing up. This is something I need to really look into more to see more details, but it looks like philosophy of science is particularly healthy at the moment.
+
+On the other hand, it's striking how little there is at the top of this list in **language**, **mind**, or **ethics**. Herman Cappelen's book on conceptual engineering is there, as is Ruth Millikan's most important book. But here I'd really like to see the co-citation data to see what's going on. I *think* Millikan is there because it's such an important work on functions, and that's been such a big topic, so this is really one more aspect of the strength of philosophy of science.
+
+What's striking is that (assuming we count political philosophy as being separate to ethics) how far down the list you have to go to see works on traditional questions in language, mind, or ethics. Scroll down a bit from the top and you'll get to [Assessment Sensitivity](https://openalex.org/works/W4246951427), [The Predictive Mind](https://openalex.org/works/W4247883378) and (a bit earlier) [The Sources of Normativity](https://openalex.org/works/W4231644576). But I suspect a similar exercise 20 years ago, or 40 years ago, would have seen much more language, mind, and ethics appearing.
+
+Part of the story in mind is the increased importance of empirical work, and perhaps that is pushing against having a handful of canoncial works capturing all the citations. But that's for future research.
+
+# Demographics
+
+If you look at citation data from the 20th century, it's very white and very male. I had been expecting, or at least hoping, that looking at citations from the 2020s would be a little less like that. A quick glance at the top of @tbl-the-1000 will show you that those hopes were not realised. At the top, it's still about 80% male, and incredibly white.
+
+If you really want to squint to look for good news, things look a little more interesting if you focus on people in that list with relatively recent degrees. I did a quick count of how many citations to articles on that list each author has. I'm not including it here because I haven't cleaned it up (e.g., making sure everyone who is listed under different names for different pieces, like "Lasonen Aarnio" and "Lasonen-Aarnio" is grouped together), and it is a bit misleading since it doesn't count pieces with under 40 citations. So what follows will all be very rough. That said...
+
+In the 50 most cited authors, I think the only ones with PhDs from 2010 or later are Jane Friedman and David Plunkett. In the 100 most cited authors, I think the only one with a PhD from 2015 or later is Rima Basu.
+
+More generally, the later you do this cutoff, the less male, and less white, the citations get. I'd prefer to use date of first degree than date of PhD for this kind of study, but this turned out to be harder to find than I thought. (And you do have to look. I spent way too much time trying to figure out who had a first degree before 2000.)
+
+So the glass half-full take is that a good chunk of the demographic problems here are pipeline problems, and if current trends continue, citations to recent work will get more demographically diverse. They will also, I suspect, get a little more geographically diverse. So that's all good news.
+
+The glass half-empty take is that it's a pretty clogged up pipeline. Only two of the 50 most cited authors^[Again, I mean 'most cited' according to the noisy and imprecise measure I'm using. I'm moderately confident that cleaning it up wouldn't change much in this score, save that if Amia Srinivasan's book was tracked properly, she might be on this list too.] of the last five years have PhDs since 2010, and they were in 2010 and 2011. That isn't a great sign for how quickly we, as a discipline, are bringing new voices into the conversation. If it's this hard for new voices to be heard, it won't make much of a difference if the new voices which are heard are more diverse.
+
+And even if you don't care about the effects on diversity, it's just not good for the discipline to be refreshed by new voices. Personally, I think the work that younger philosophers are doing is more interesting than a lot of the older stuff, but it doesn't seem to be getting as much uptake. So there are a few reasons for disquiet at the lack of new voices in the citation list.
+
+# Further Work
+
+As I mentioned above, there are plenty of things one can do with this data. If you'd like to look at it yourself, I've made a CSV with the core data:
+
+- [Table of citations from selected journals](https://brian.weatherson.org/quarto/blog/openalex/Citations_in_selected_philosophy_journals_via_OpenAlex.csv.zip)
+
+The table has four columns:
+
+1. `Cited Piece` is the OpenAlex code for the work cited.
+2. `Citing Article` is the OpenAlex code for the article doing the citing.
+3. `Year` is the publication year of the citing article. From 2020 onwards, I've checked these against the listed volume and issue numbers; before 2020 it's the raw data.
+4. `Journal` is which journal the citing article appears in.
+
+If you're interested in using this data, be sure to properly credit OpenAlex. And if you have ideas for collaborations on this, get in touch!
