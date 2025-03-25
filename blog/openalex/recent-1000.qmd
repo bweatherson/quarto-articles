@@ -1,8 +1,8 @@
 ---
 title: "Citations in recent philosophy journals"
 abstract: |
-    Which pieces have been most cited in philosophy journals in the 2020s so far.
-date: March 20 2025
+    A list of the most cited works in recent philosophy journals, with a couple of observations. The top of the list has lots of epistemology, metaphysics, and philosophy of science. It has much less mind, language, ethics and (recent) political philosophy. The list is very white, male, and not particularly young. That said, the list of younger authors on the list is much more diverse than the list as a whole.
+date: March 24 2025
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -16,6 +16,7 @@ execute:
   echo: false
   warning: false
 image: "openalex.png"
+draft: false
 format:
   html:
     fig-format: svg
@@ -74,7 +75,7 @@ theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
 }
 ```
 
-Recently I've been looking at the citation data available through a new-ish open access initiative: [OpenAlex](https://openalex.org).^[I'm grateful to Kathleen Folger at the UM library for suggesting this. I'd been talking with her about Michigan's Web of Science subscription, and she pointed out, correctly, that it might be better to use an open access source.] Because it's open access, and updated in real time, I though I'd use it to get a sense of which pieces have been most cited in philosophy journals this decade. This took a bit of effort, but I downloaded and processed the citations from the 100 journals I've been looking at [in](https://brian.weatherson.org/quarto/blog/word-count/length.html) [previous](https://brian.weatherson.org/quarto/blog/top-ten/top-ten.html) [posts](https://brian.weatherson.org/quarto/blog/citations-raw-data/top-500.html).^[Actually only 99 of them, because OpenAlex doesn't have outbound citation data for _Journal of Philosophy_. The processing was done largely by the openalexR package [@openalexR].]
+Recently I've been looking at the citation data available through a new-ish open access initiative: [OpenAlex](https://openalex.org).^[I'm grateful to Kathleen Folger at the UM library for suggesting this. I'd been talking with her about Michigan's Web of Science subscription, and she pointed out, correctly, that it might be better to use an open access source.] Because it's open access, and updated in real time, I though I'd use it to get a sense of which pieces have been most cited in philosophy journals this decade.^[The journals I'm looking at are listed in @sec-sources.] This took a bit of effort, but I downloaded and processed the citations from the 100 journals I've been looking at [in](https://brian.weatherson.org/quarto/blog/word-count/length.html) [previous](https://brian.weatherson.org/quarto/blog/top-ten/top-ten.html) [posts](https://brian.weatherson.org/quarto/blog/citations-raw-data/top-500.html).^[The processing was done largely by the openalexR package [@openalexR].]
 
 @tbl-the-1000 lists the pieces, books, chapters, and journal articles, which have been cited 40 or more times in these journals between 2020 and 2024. The links in each case go to the OpenAlex page for the entry.
 
@@ -191,3 +192,53 @@ The table has four columns:
 4. `Journal` is which journal the citing article appears in.
 
 If you're interested in using this data, be sure to properly credit OpenAlex. And if you have ideas for collaborations on this, get in touch!
+
+# Sources {#sec-sources}
+
+The data for this post comes from the OpenAlex records for citations from some prominent philosophy journals. I'm using these journals in part because they are indexed by Web of Science. (That's why _Proceedings of the Aristotelian Society_ is not on the list.) And I'm using them in part because they seemed like prominent philosophy journals.
+
+The way I generated the list was as follows.
+
+1. I downloaded all the citation data in Web of Science for journal articles listed as either Philosophy or History and Philosophy of Science.
+2. I looked at the citations between articles in this set.
+3. I ranked the journals the articles appeared in by the average number of citations per article they had, just within this set.
+4. I excluded journals that seemed primarily to be history of science (as opposed to philosophy of science), theology, or contintental philosophy. The first two categories were pretty straightforward, the last was a little trickier, and possibly I was too strict in some exclusions.
+5. I also excluded journals that had very few articles per year in this data set. In practice, this meant ruling out a bunch of interdisciplinary journals in which philosophers frequently publish, but which were largely not philosophy journals. As with step 4, I'm not certain I made the right decisions at every point here, and possibly it would have been better to include some more interdisciplinary journals.
+6. After those exclusions, I took the 100 journal with the highest number of average citations per article, meaning of course citations in other articles marked as Philosophy or HPS.
+7. Then for this study, I looked at what those journals did between 2020 and 2024.
+8. In the future I mean to remove book reviews and discussion notes, but for now I haven't, so they are still in the data.
+9. I adjusted the `year` entry so that it matched the listed year of publication, and not the date the article was uploaded.
+10. I merged entries for cited articles, when they either had multiple listed dates (e.g., one date for the hardback publication and one for paperback), multiple listed titles (e.g., one with the subtitle, and one without), or multiple listed authors (e.g., just listing the first author, or varying whether a middle initial or a diacritic was included).
+11. When the citations to a book were systematically attributed to a review of that book, I also corrected that as much as I could.
+
+I did not filter which kinds of entries were cited. The categories in Web of Science weren't used beyond finding that initial list, which was ultimately highly edited. The categories in OpenAlex (which seem very unreliable to me) weren't used at all.
+
+@tbl-the-journals lists which journals were used in this post.
+
+```{r}
+#| label: tbl-the-journals
+#| tbl-cap: "The journals that are being measured in this post"
+
+load("/Users/weath/Documents/citations-openalexR/oa_cite_with_year.RData")
+
+the_journals <- oa_cite_with_year |>
+  filter(new_year >= 2020, new_year <= 2024) |>
+  group_by(new_journal) |>
+  summarise(
+    Articles = n_distinct(new),
+    `Outbound Citations` = n()
+  ) |>
+  rename(Journal = new_journal) |>
+  mutate(`Mean Citations` = round(`Outbound Citations`/Articles, 2))
+
+kable(the_journals)
+```
+
+A few notes on this:
+
+- The articles here include any piece that has listed citations in OpenAlex.
+- For some journals, especially Journal of Philosophy, Journal of Philosophical Research, Logique et Analyse, and Review of Metaphysics, that means we're missing a bunch of more recent articles, because OpenAlex can only get things where the bibliography is not behind a paywall.
+- It is a bit random whether a book review is included, since some but not all book reviews have outbound citations.
+- The mean number of outbound citations is incredibly high by historical standards, especially when you remember that it is being pulled down by the book reviews.
+- The differences in mean citations between fields partially explains which kinds of articles are appearing at the top of this list.
+
