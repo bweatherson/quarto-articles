@@ -23,7 +23,7 @@ format:
     fig-width: 12
     fig-dpi: 300
     fig-responsive: true
-    fontsize: 1.4em #Note this is larger than usual
+#    fontsize: 1.4em #Note this is larger than usual
 ---
 
 ```{r}
@@ -73,6 +73,8 @@ if (knitr::is_latex_output()) {
                legend.key.spacing.x = unit(0, 'cm')
   )
 }
+
+options(knitr.kable.NA = '')
 ```
 
 ```{r}
@@ -112,8 +114,9 @@ recent_high_cites <- active_philo_cite |>
 record_for_year <- recent_high_cites |>
   filter(year >= 1965) |>
   group_by(year) |>
-  slice_max(order_by = citations, n = 20, with_ties = TRUE) |>
-  arrange(-year, -citations)
+  slice_max(order_by = citations, n = 10, with_ties = TRUE) |>
+  arrange(-year, -citations) |>
+  select(id, year, citations)
 
 cite_count <- active_philo_cite |>
   group_by(refs) |>
@@ -167,6 +170,16 @@ cites_with_years <- active_philo_cite |>
     by = "refs"
   )
 
+record_at_time <- cites_with_years |>
+  filter(new_year <= 2024,
+         new_year - old_year <= 10) |>
+  group_by(refs, old_year) |>
+  tally(name = "then_citations") |>
+  ungroup() |>
+  group_by(old_year) |>
+  slice_max(order_by = then_citations, n = 10, with_ties = TRUE) |>
+  arrange(-old_year, -then_citations)
+
 recent_cites_by_year <- cites_with_years |>
   filter(new_year >= 2020, new_year <= 2024) |>
   group_by(old_year) |>
@@ -187,23 +200,126 @@ cites_at_time <- cites_with_years |>
   tally(name = "then_citations") |>
   rename(id = refs)
 
-recent_high_cites_kable <- record_for_year |>
-  left_join(cites_at_time, by = "id") |>
-  replace_na(replace = list(then_citations = 0)) |>
-  mutate(Article = paste0(
-    displayauth,
-    " (-@",
-    str_replace_all(id,":",""),
-    ") \"",
-    title,
-    "\"")
+yearly_kable <- function(y){
+  the_tibble <- record_for_year |>
+    filter(year == y) |>
+    left_join(cites_at_time, by = "id") |>
+    replace_na(replace = list(then_citations = 0)) |>
+    left_join(
+      select(
+        active_philo_bib,
+        id,
+        displayauth,
+        title
+      ),
+      by = "id"
     ) |>
-  select(Article,
-         `Citations 2020-2024` = citations,
-         `Citations in First 10 Years` = then_citations,
-         year) |>
-  arrange(-year, -`Citations 2020-2024`)
+    mutate(Article = paste0(
+      displayauth,
+      " -@",
+      str_replace_all(id,":",""),
+      " \"",
+      title,
+      "\"")
+      ) |>
+    ungroup() |>
+    select(Article,
+         `2020-2024` = citations,
+         `First 10 Years` = then_citations) 
+  
+    old_articles_to_add <- record_at_time |>
+      ungroup() |>
+      rename(id = refs) |>
+      filter(!id %in% record_for_year$id,
+             old_year == y)
+    
+    if (nrow(old_articles_to_add) > 0){
+      the_tibble <- the_tibble |>
+        add_row(
+          Article = "...",
+          `2020-2024` = NA,
+          `First 10 Years` = NA
+        ) |>
+        bind_rows(
+          record_at_time |>
+            ungroup() |>
+            rename(year = old_year,
+                   id = refs) |>
+            filter(year == y,
+                   !id %in% record_for_year$id) |>
+            left_join(
+              select(
+                recent_high_cites,
+                id,
+                citations
+                ),
+              by = "id") |>
+            replace_na(replace = list(citations = 0)) |>
+            left_join(
+              select(
+                active_philo_bib,
+                id,
+                displayauth,
+                title
+              ),
+              by = "id"
+            ) |>
+            mutate(Article = paste0(
+              displayauth,
+              " -@",
+              str_replace_all(id,":",""),
+              " \"",
+              title,
+              "\"")
+              ) |>
+            select(Article,
+                  `2020-2024` = citations,
+                  `First 10 Years` = then_citations) 
+        )
+    }
+    the_tibble
+}
+# 
+# recent_high_cites_kable <- record_for_year |>
+#   left_join(cites_at_time, by = "id") |>
+#   replace_na(replace = list(then_citations = 0)) |>
+#   mutate(Article = paste0(
+#     displayauth,
+#     " (-@",
+#     str_replace_all(id,":",""),
+#     ") \"",
+#     title,
+#     "\"")
+#     ) |>
+#   select(Article,
+#          `Citations 2020-2024` = citations,
+#          `Citations in First 10 Years` = then_citations,
+#          year) |>
+#   arrange(-year, -`Citations 2020-2024`)
     
 ```
+
+
+```{r}
+#| label: the-big-loop
+#| output: asis
+
+for (the_year in 2024:1965){
+  cat("\n\n::::: {.column-page}\n\n")
+  cat("\n\n::: {#tbl-",the_year," }\n\n", sep = "")
+  print(
+    knitr::kable(
+      yearly_kable(
+        the_year
+      ),
+      format = "pipe"
+    )
+  )
+  cat("\n\n: Citations to prominent articles from ",the_year, " {.striped .hover}")
+  cat("\n\n:::\n\n")
+  cat("\n\n:::::\n\n")
+}
+```
+
 
 
