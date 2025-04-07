@@ -1,0 +1,209 @@
+---
+title: "Which articles have recently been cited a lot"
+abstract: |
+  I just downloaded citation data through 2024, so I made a short (mostly automated) post showing which articles have been cited a lot in the 2020s.
+date: April 7 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+  - citations
+csl: ../../chicago-with-note.csl
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.4em #Note this is larger than usual
+---
+
+```{r}
+#| label: starter
+
+load("~/Documents/citations-2025/philo_cite_through_2024.RData")
+load("~/Documents/citations-2025/philo_bib_through_2024.RData")
+
+for (ipkg in c("tidyverse", 
+               "scico",
+               "wesanderson")) {
+  if (!require(ipkg, character.only = TRUE)) {
+    install.packages(ipkg)
+    library(ipkg, character.only = TRUE)
+  }
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 24),
+             axis.title = element_text(family = "Scala Sans Pro", size = 24),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(1, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+)
+
+if (knitr::is_latex_output()) {
+  theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+               plot.subtitle = element_text(family = "EB Garamond", size = 11),
+               axis.text = element_text(family = "EB Garamond", size = 10),
+               axis.title = element_text(family = "EB Garamond", size = 10),
+               plot.background = element_rect(fill = "white"),
+               panel.background = element_rect(fill = "white"),
+               legend.background = element_rect(fill = "white"),
+               panel.grid = element_line(color = "grey92"),
+               legend.text = element_text(family = "EB Garamond", size = 11),
+               strip.text = element_text(family = "EB Garamond", size = 12),
+               legend.key.spacing.y = unit(-0.3, 'lines'),
+               legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+```
+
+```{r}
+#| label: getting-going
+
+start_year <- 1965
+end_year <- 2024
+min_data <- 5
+
+active_philo_bib <- philo_bib_through_2024 |>
+  filter(year >= start_year, year <= end_year) |>
+  filter(bibauth != "Anonymous] NA")
+
+active_philo_cite <- philo_cite_through_2024 |>
+  filter(
+    id %in% active_philo_bib$id,
+    refs %in% active_philo_bib$id
+  )
+
+recent_high_cites <- active_philo_cite |>
+  left_join(
+    select(
+      active_philo_bib,
+      id,
+      new_year = year
+    ),
+    by = "id"
+  ) |>
+  filter(new_year >= 2020, new_year <= 2024) |>
+  group_by(refs) |>
+  tally(name = "citations") |>
+  rename(id = refs) |>
+  left_join(active_philo_bib, by = "id") |>
+  select(citations, displayauth, year, title, everything()) |>
+  arrange(-citations)
+
+record_for_year <- recent_high_cites |>
+  filter(year >= 1965) |>
+  group_by(year) |>
+  slice_max(order_by = citations, n = 20, with_ties = TRUE) |>
+  arrange(-year, -citations)
+
+cite_count <- active_philo_cite |>
+  group_by(refs) |>
+  tally(name = "all_citations") |>
+  ungroup() |>
+  rename(id = refs)
+
+summary_table <- active_philo_bib |>
+  left_join(cite_count, by = "id") |>
+  left_join(
+    select(
+      recent_high_cites,
+      id,
+      recent_citations = citations
+    ),
+    by = "id"
+  ) |>
+  replace_na(replace = list(
+    all_citations = 0,
+    recent_citations = 0
+    )
+    ) |>
+  mutate(is_new = case_when(
+    year >= 2020 & year <= 2024 ~ 1,
+    TRUE ~ 0
+  )) |>
+  group_by(journal) |>
+  summarise(`First Year Indexed` = min(year),
+            Articles = n_distinct(id),
+            Citations = sum(all_citations),
+            `Articles since 2020` = sum(is_new),
+            `Citations since 2020` = sum(recent_citations)) |>
+  ungroup() |>
+  rename(Journal = journal)
+
+cites_with_years <- active_philo_cite |>
+  left_join(
+    select(
+      active_philo_bib,
+      id,
+      new_year = year
+    ),
+    by = "id"
+  ) |>
+  left_join(
+    select(
+      active_philo_bib,
+      refs = id,
+      old_year = year
+    ),
+    by = "refs"
+  )
+
+recent_cites_by_year <- cites_with_years |>
+  filter(new_year >= 2020, new_year <= 2024) |>
+  group_by(old_year) |>
+  tally(name = "citations") |>
+  ungroup() |>
+  rename(year = old_year) |>
+  left_join(
+    active_philo_bib |>
+      group_by(year) |>
+      tally(name = "articles"),
+    by = "year"
+  ) |>
+  mutate(mean_citations = citations/articles)
+
+cites_at_time <- cites_with_years |>
+  filter(new_year - old_year <= 10) |>
+  group_by(refs) |>
+  tally(name = "then_citations") |>
+  rename(id = refs)
+
+recent_high_cites_kable <- record_for_year |>
+  left_join(cites_at_time, by = "id") |>
+  replace_na(replace = list(then_citations = 0)) |>
+  mutate(Article = paste0(
+    displayauth,
+    " (-@",
+    str_replace_all(id,":",""),
+    ") \"",
+    title,
+    "\"")
+    ) |>
+  select(Article,
+         `Citations 2020-2024` = citations,
+         `Citations in First 10 Years` = then_citations,
+         year) |>
+  arrange(-year, -`Citations 2020-2024`)
+    
+```
+
+
