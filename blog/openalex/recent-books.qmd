@@ -1,0 +1,100 @@
+---
+title: "Most cited recent philosophy books"
+abstract: |
+    Which books have been cited at the highest rate in recent years?
+date: March 22 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - citations
+  - books
+execute:
+  echo: false
+  warning: false
+image: "openalex.png"
+draft: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+---
+
+```{r}
+#| label: loader
+#| cache: false
+
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+require(scico)
+require(wesanderson)
+
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 30),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             title = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(0.5, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if(knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(-0.3, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+```
+
+Harvey Lederman started [a nice thread](https://bsky.app/profile/harveylederman.bsky.social/post/3lkvajawxt226) yesterday asking for favourite books from the last 10 years. My suggestion was Lea Ypi's [Free](https://bookshop.org/p/books/free-coming-of-age-at-the-end-of-history-lea-ypi/18515409?ean=9781324050292&next=t), and there are lots of other good suggestions.
+
+This being a data blog, I thought I'd see what the citation data said. I'm using here citation data from a service that's new to me: [OpenAlex](https://openalex.org). It's not perfect, but it is (a) free, and (b) reasonably timely. This gives it some big advantages over a lot of other services.
+
+I looked at which books from 2015 onwards have been most cited in the 100 journals I've been looking at [in](https://brian.weatherson.org/quarto/blog/word-count/length.html) [previous](https://brian.weatherson.org/quarto/blog/top-ten/top-ten.html) [posts](https://brian.weatherson.org/quarto/blog/citations-raw-data/top-500.html).^[Actually only 99 of them, because OpenAlex doesn't have outbound citation data for _Journal of Philosophy_. The processing was done largely by the openalexR package [@openalexR].] And I looked at just what they cited from 2020 to 2025.
+
+Just counting citations isn't sensible when dealing with very recent works, because obviously works from 2016 will accrue more citations in 2020 and 2021 than books published in 2023. So I've ranked the books by their number of citations divided by their age.^[Since we're just looking at citations since 2020, it is probably wrong to have a larger denominator for books from 2015 than books from 2016, but it's close enough for a Saturday morning post while we wait for [the cricket to start](https://www.espncricinfo.com/series/ipl-2025-1449924/kolkata-knight-riders-vs-royal-challengers-bengaluru-1st-match-1473438/live-cricket-score).] By that measure, @tbl-top-20 shows the top 20.
+
+```{r}
+#| label: tbl-top-20
+#| tbl-cap: "20 highly cited recent books"
+
+load('/Users/weath/Documents/citations-openalexR/new_books.RData')
+kable(new_books)
+```
+
+There is some overlap with the books that get mentioned in Harvey's thread. The books by Nick Shea, Richard Pettigrew and Sarah Moss all turned up in the thread, and maybe some others I didn't notice.
+
+But I wouldn't want to leave the impression this is a perfect measure of quality. As I said, my favorite philosophy book of the last 10 years is _Free_, and it isn't close to this list. In fact, I can't remember seeing it ever cited in a journal article - though maybe that's because I don't follow political philosophy journals closely enough. If you treat citations as measuring quality, you'll get a lot of false negatives.
+
+Still, I think it's useful to be reminded which things are getting talked about a lot. And while it's often true that very good works get very few citations, my feeling is that the opposite is less common. It's rare for real duds to get huge numbers of citations.
+
+One striking thing about the list is the lack of co-authored books. I don't know whether this is because there are fewer of them these days, or because they aren't taking off for some reason, or simply that it's a coincidence. But I would have expected before running the numbers to have a handful of co-authored works there, and I don't have any good theory as to why there aren't any.

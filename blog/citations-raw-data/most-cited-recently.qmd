@@ -1,0 +1,421 @@
+---
+title: "Which articles have recently been cited a lot"
+abstract: |
+  I just downloaded citation data through 2024, and this post goes over some of the basic facts about the data.
+date: April 8 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+  - citations
+csl: ../../chicago-with-note.csl
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+#    fontsize: 1.4em #Note this is larger than usual
+---
+
+```{r}
+#| label: starter
+
+load("~/Documents/citations-2025/philo_cite_through_2024.RData")
+load("~/Documents/citations-2025/philo_bib_through_2024.RData")
+
+for (ipkg in c("tidyverse", 
+               "scico",
+               "wesanderson")) {
+  if (!require(ipkg, character.only = TRUE)) {
+    install.packages(ipkg)
+    library(ipkg, character.only = TRUE)
+  }
+}
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 24),
+             axis.title = element_text(family = "Scala Sans Pro", size = 24),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(1, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+)
+
+if (knitr::is_latex_output()) {
+  theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+               plot.subtitle = element_text(family = "EB Garamond", size = 11),
+               axis.text = element_text(family = "EB Garamond", size = 10),
+               axis.title = element_text(family = "EB Garamond", size = 10),
+               plot.background = element_rect(fill = "white"),
+               panel.background = element_rect(fill = "white"),
+               legend.background = element_rect(fill = "white"),
+               panel.grid = element_line(color = "grey92"),
+               legend.text = element_text(family = "EB Garamond", size = 11),
+               strip.text = element_text(family = "EB Garamond", size = 12),
+               legend.key.spacing.y = unit(-0.3, 'lines'),
+               legend.key.spacing.x = unit(0, 'cm')
+  )
+}
+
+options(knitr.kable.NA = '')
+```
+
+```{r}
+#| label: getting-going
+
+point_col <- wes_palette("AsteroidCity1")[3]
+
+start_year <- 1965
+end_year <- 2024
+min_data <- 5
+
+active_philo_bib <- philo_bib_through_2024 |>
+  filter(year >= start_year, year <= end_year) |>
+  filter(bibauth != "Anonymous] NA")
+
+active_philo_cite <- philo_cite_through_2024 |>
+  filter(
+    id %in% active_philo_bib$id,
+    refs %in% active_philo_bib$id
+  )
+
+recent_high_cites <- active_philo_cite |>
+  left_join(
+    select(
+      active_philo_bib,
+      id,
+      new_year = year
+    ),
+    by = "id"
+  ) |>
+  filter(new_year >= 2020, new_year <= 2024) |>
+  group_by(refs) |>
+  tally(name = "citations") |>
+  rename(id = refs) |>
+  left_join(active_philo_bib, by = "id") |>
+  select(citations, displayauth, year, title, everything()) |>
+  arrange(-citations)
+
+record_for_year <- recent_high_cites |>
+  filter(year >= 1965) |>
+  group_by(year) |>
+  slice_max(order_by = citations, n = 10, with_ties = TRUE) |>
+  arrange(-year, -citations) |>
+  select(id, year, citations)
+
+cite_count <- active_philo_cite |>
+  group_by(refs) |>
+  tally(name = "all_citations") |>
+  ungroup() |>
+  rename(id = refs)
+
+summary_table <- active_philo_bib |>
+  left_join(cite_count, by = "id") |>
+  left_join(
+    select(
+      recent_high_cites,
+      id,
+      recent_citations = citations
+    ),
+    by = "id"
+  ) |>
+  replace_na(replace = list(
+    all_citations = 0,
+    recent_citations = 0
+    )
+    ) |>
+  mutate(is_new = case_when(
+    year >= 2020 & year <= 2024 ~ 1,
+    TRUE ~ 0
+  )) |>
+  group_by(journal) |>
+  summarise(`First Year Indexed` = min(year),
+            Articles = n_distinct(id),
+            Citations = sum(all_citations),
+            `Articles since 2020` = sum(is_new),
+            `Citations since 2020` = sum(recent_citations)) |>
+  ungroup() |>
+  rename(Journal = journal)
+
+cites_with_years <- active_philo_cite |>
+  left_join(
+    select(
+      active_philo_bib,
+      id,
+      new_year = year
+    ),
+    by = "id"
+  ) |>
+  left_join(
+    select(
+      active_philo_bib,
+      refs = id,
+      old_year = year
+    ),
+    by = "refs"
+  )
+
+record_at_time <- cites_with_years |>
+  filter(new_year <= 2024,
+         new_year - old_year <= 10) |>
+  group_by(refs, old_year) |>
+  tally(name = "then_citations") |>
+  ungroup() |>
+  group_by(old_year) |>
+  slice_max(order_by = then_citations, n = 10, with_ties = TRUE) |>
+  arrange(-old_year, -then_citations)
+
+recent_cites_by_year <- cites_with_years |>
+  filter(new_year >= 2020, new_year <= 2024) |>
+  group_by(old_year) |>
+  tally(name = "citations") |>
+  ungroup() |>
+  rename(year = old_year) |>
+  left_join(
+    active_philo_bib |>
+      group_by(year) |>
+      tally(name = "articles"),
+    by = "year"
+  ) |>
+  mutate(mean_citations = citations/articles)
+
+cites_at_time <- cites_with_years |>
+  filter(new_year - old_year <= 10) |>
+  group_by(refs) |>
+  tally(name = "then_citations") |>
+  rename(id = refs)
+
+yearly_kable <- function(y){
+  the_tibble <- record_for_year |>
+    filter(year == y) |>
+    left_join(cites_at_time, by = "id") |>
+    replace_na(replace = list(then_citations = 0)) |>
+    left_join(
+      select(
+        active_philo_bib,
+        id,
+        displayauth,
+        title
+      ),
+      by = "id"
+    ) |>
+    mutate(Article = paste0(
+      displayauth,
+      " -@",
+      str_replace_all(id,":",""),
+      " \"",
+      title,
+      "\"")
+      ) |>
+    ungroup() |>
+    select(Article,
+         `2020-2024` = citations,
+         `First 10 Years` = then_citations) 
+  
+    old_articles_to_add <- record_at_time |>
+      ungroup() |>
+      rename(id = refs) |>
+      filter(!id %in% record_for_year$id,
+             old_year == y)
+    
+    if (nrow(old_articles_to_add) > 0){
+      the_tibble <- the_tibble |>
+        add_row(
+          Article = "...",
+          `2020-2024` = NA,
+          `First 10 Years` = NA
+        ) |>
+        bind_rows(
+          record_at_time |>
+            ungroup() |>
+            rename(year = old_year,
+                   id = refs) |>
+            filter(year == y,
+                   !id %in% record_for_year$id) |>
+            left_join(
+              select(
+                recent_high_cites,
+                id,
+                citations
+                ),
+              by = "id") |>
+            replace_na(replace = list(citations = 0)) |>
+            left_join(
+              select(
+                active_philo_bib,
+                id,
+                displayauth,
+                title
+              ),
+              by = "id"
+            ) |>
+            mutate(Article = paste0(
+              displayauth,
+              " -@",
+              str_replace_all(id,":",""),
+              " \"",
+              title,
+              "\"")
+              ) |>
+            select(Article,
+                  `2020-2024` = citations,
+                  `First 10 Years` = then_citations) 
+        )
+    }
+    the_tibble
+}
+# 
+# recent_high_cites_kable <- record_for_year |>
+#   left_join(cites_at_time, by = "id") |>
+#   replace_na(replace = list(then_citations = 0)) |>
+#   mutate(Article = paste0(
+#     displayauth,
+#     " (-@",
+#     str_replace_all(id,":",""),
+#     ") \"",
+#     title,
+#     "\"")
+#     ) |>
+#   select(Article,
+#          `Citations 2020-2024` = citations,
+#          `Citations in First 10 Years` = then_citations,
+#          year) |>
+#   arrange(-year, -`Citations 2020-2024`)
+    
+```
+
+In some previous posts (e.g., [here](https://brian.weatherson.org/quarto/blog/citations-raw-data/citations.html)), I've looked at citations from the Web of Science XML (hereafer WoS) through mid-2022. I was hoping to get similar data for more recent years, but it seems that the price of that is prohibitive. Then I tried using OpenAlex for more recent data, but the quality of their data wasn't quite what I needed, and matching the data to WoS proved impossible.
+
+So I simply downloaded via the website three years of citation data for the 100 journals I'd been looking at. This still needed some work to match the new citations to the old citations - the website data didn't include the WoS ID numbers for cited articles that I've been using for most purposes. But they did include DOIs, which covered about 90% of the citations, and by some other kinds of matching (e.g., any 'two' articles with the same journal name, journal volume, and first page number are probably identical, unless the journal is something like _Imprint_ that restarts page numbers for every article) I got to I think about 98% of the citations.^[I actually downloaded the website data for 2021, which I already had via the XML, and used the same techniques there to check how well it was doing.] So I have something like citation data through 2024.^[Or, in cases like _Canadian Journal of Philosophy_ which hasn't yet published a 2024 edition, as recent as possible.]
+
+This post goes over some facts about those citations. (For this post I'm starting with data from 1965; the data before that are rather misleading because they don't include so many journals, especially _Analysis_.)
+
+First, the explosion in the number of articles published has levelled off. In fact because _Synthese_ stopped publishing special issues, it actually declined. @fig-articles shows how many articles I have in the dataset each year, and @fig-articles-sans-synthese is the same graph just with _Synthese_ excluded.
+
+```{r}
+#| label: fig-articles
+#| fig-cap: "Number of articles in the dataset each year"
+
+active_philo_bib |>
+  group_by(year) |>
+  tally(name = "articles") |>
+  ggplot(aes(x = year, y = articles)) +
+  geom_point(color = point_col) +
+  labs(x = element_blank(),
+         y = element_blank())
+
+```
+
+```{r}
+#| label: fig-articles-sans-synthese
+#| fig-cap: "Number of articles in the dataset each year, excluding _Synthese_."
+
+active_philo_bib |>
+  filter(journal != "Synthese") |>
+  group_by(year) |>
+  tally(name = "articles") |>
+  ggplot(aes(x = year, y = articles)) +
+  geom_point(color = point_col) +
+  labs(x = element_blank(),
+         y = element_blank())
+
+```
+
+The drop at the end of @fig-articles-sans-synthese is largely from journals that either haven't yet published their 2024 editions, or which are not going to publish a 2024 edition because of the move to open access.
+
+The number of citations (to philosophy journals) per article has also somewhat stabilised, as shown in @fig-outbound-citations-per-article.
+
+```{r}
+#| label: fig-outbound-citations-per-article
+#| fig-cap: "Mean number of outbound citations per article published in different years."
+
+cites_with_years |>
+  group_by(new_year) |>
+  summarise(articles = n_distinct(id),
+            citations = n()) |>
+  mutate(mean_cites = citations/articles) |>
+  ggplot(aes(x = new_year, y = mean_cites)) +
+  geom_point(color = point_col) +
+  labs(x = element_blank(),
+         y = element_blank())
+```
+
+The gap from 2020 to 2021 is so striking that if I had changed data sources between those two years, rather than between 2021 and 2022, I wouldn't believe it was real. It's possible the source I'm using post-2022 is slightly undercounting citations, which might be why we have the longest period where this statistic is flat since the late 1990s.
+
+There are a lot more citations now, and possibly because of that, older articles are being cited much more frequently than before. In @fig-age-of-recent-cites, I plot how often the average article from different years is cited in 2020-2024.
+
+```{r}
+#| label: fig-age-of-recent-cites
+#| fig-cap: "Mean citations of articles published in various years, in articles published 2020-2024."
+
+cites_with_years |>
+  filter(new_year >= 2020, new_year <= 2024) |>
+  group_by(old_year) |>
+  tally(name = "citations") |>
+  left_join(
+    active_philo_bib |>
+      rename(old_year = year) |>
+      group_by(old_year) |>
+      tally(name = "articles"),
+    by = "old_year"
+  ) |>
+  mutate(mean_cites = citations/articles) |>
+  ggplot(aes(x = old_year, y = mean_cites)) +
+  geom_point(color = point_col) +
+  labs(x = element_blank(),
+         y = element_blank())
+
+```
+
+The drop at the right side of @fig-age-of-recent-cites is simply because some of those articles couldn't possibly have been cited throughout 2020-2024 because they weren't published.
+
+The really striking parts of the graph are the period 2014-2019, and 2000-2013.
+
+The period from 2014-2019 is a really long peak. If we did the same kind of graphs at different times in the past, it would have the same shape - a slow rise to a plateau, then a rapid falling off from articles that couldn't have been cited throughout the period. But in general, the plateau would not be nearly this long. It's really striking that articles that are 10 years old by the end of the period are being cited so much.
+
+The thing to note about 2000-2013 is that the citation rates for every year in that period are above half the peak value reached in 2019. Again, if we did the same graph for previous five year periods, we typically would not see anything like that. The historical norm is that citation rates for earlier years are more like one-third or less the rate of the most cited year.
+
+
+
+```{r}
+#| label: the-big-loop
+#| output: asis
+
+for (the_year in 2020:1965){
+  cat("\n\n::::: {.column-body-outset}\n\n")
+  cat("\n\n::: {#tbl-",the_year," tbl-colwidths=\"[70,15,15]\"}\n\n", sep = "")
+  print(
+    knitr::kable(
+      yearly_kable(
+        the_year
+      ),
+      format = "pipe"
+    )
+  )
+  cat("\n\n: Citations to prominent articles from ",
+      the_year,
+      " {.striped .hover}")
+  cat("\n\n:::\n\n")
+  cat("\n\n:::::\n\n")
+}
+```
+
+
+
