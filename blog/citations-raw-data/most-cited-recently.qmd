@@ -1,8 +1,8 @@
 ---
 title: "Which articles have recently been cited a lot"
 abstract: |
-  I just downloaded citation data through 2024, so I made a short (mostly automated) post showing which articles have been cited a lot in the 2020s.
-date: April 7 2025
+  I just downloaded citation data through 2024, and this post goes over some of the basic facts about the data.
+date: April 8 2025
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -79,6 +79,8 @@ options(knitr.kable.NA = '')
 
 ```{r}
 #| label: getting-going
+
+point_col <- wes_palette("AsteroidCity1")[3]
 
 start_year <- 1965
 end_year <- 2024
@@ -299,14 +301,106 @@ yearly_kable <- function(y){
     
 ```
 
+In some previous posts (e.g., [here](https://brian.weatherson.org/quarto/blog/citations-raw-data/citations.html)), I've looked at citations from the Web of Science XML (hereafer WoS) through mid-2022. I was hoping to get similar data for more recent years, but it seems that the price of that is prohibitive. Then I tried using OpenAlex for more recent data, but the quality of their data wasn't quite what I needed, and matching the data to WoS proved impossible.
+
+So I simply downloaded via the website three years of citation data for the 100 journals I'd been looking at. This still needed some work to match the new citations to the old citations - the website data didn't include the WoS ID numbers for cited articles that I've been using for most purposes. But they did include DOIs, which covered about 90% of the citations, and by some other kinds of matching (e.g., any 'two' articles with the same journal name, journal volume, and first page number are probably identical, unless the journal is something like _Imprint_ that restarts page numbers for every article) I got to I think about 98% of the citations.^[I actually downloaded the website data for 2021, which I already had via the XML, and used the same techniques there to check how well it was doing.] So I have something like citation data through 2024.^[Or, in cases like _Canadian Journal of Philosophy_ which hasn't yet published a 2024 edition, as recent as possible.]
+
+This post goes over some facts about those citations. (For this post I'm starting with data from 1965; the data before that are rather misleading because they don't include so many journals, especially _Analysis_.)
+
+First, the explosion in the number of articles published has levelled off. In fact because _Synthese_ stopped publishing special issues, it actually declined. @fig-articles shows how many articles I have in the dataset each year, and @fig-articles-sans-synthese is the same graph just with _Synthese_ excluded.
+
+```{r}
+#| label: fig-articles
+#| fig-cap: "Number of articles in the dataset each year"
+
+active_philo_bib |>
+  group_by(year) |>
+  tally(name = "articles") |>
+  ggplot(aes(x = year, y = articles)) +
+  geom_point(color = point_col) +
+  labs(x = element_blank(),
+         y = element_blank())
+
+```
+
+```{r}
+#| label: fig-articles-sans-synthese
+#| fig-cap: "Number of articles in the dataset each year, excluding _Synthese_."
+
+active_philo_bib |>
+  filter(journal != "Synthese") |>
+  group_by(year) |>
+  tally(name = "articles") |>
+  ggplot(aes(x = year, y = articles)) +
+  geom_point(color = point_col) +
+  labs(x = element_blank(),
+         y = element_blank())
+
+```
+
+The drop at the end of @fig-articles-sans-synthese is largely from journals that either haven't yet published their 2024 editions, or which are not going to publish a 2024 edition because of the move to open access.
+
+The number of citations (to philosophy journals) per article has also somewhat stabilised, as shown in @fig-outbound-citations-per-article.
+
+```{r}
+#| label: fig-outbound-citations-per-article
+#| fig-cap: "Mean number of outbound citations per article published in different years."
+
+cites_with_years |>
+  group_by(new_year) |>
+  summarise(articles = n_distinct(id),
+            citations = n()) |>
+  mutate(mean_cites = citations/articles) |>
+  ggplot(aes(x = new_year, y = mean_cites)) +
+  geom_point(color = point_col) +
+  labs(x = element_blank(),
+         y = element_blank())
+```
+
+The gap from 2020 to 2021 is so striking that if I had changed data sources between those two years, rather than between 2021 and 2022, I wouldn't believe it was real. It's possible the source I'm using post-2022 is slightly undercounting citations, which might be why we have the longest period where this statistic is flat since the late 1990s.
+
+There are a lot more citations now, and possibly because of that, older articles are being cited much more frequently than before. In @fig-age-of-recent-cites, I plot how often the average article from different years is cited in 2020-2024.
+
+```{r}
+#| label: fig-age-of-recent-cites
+#| fig-cap: "Mean citations of articles published in various years, in articles published 2020-2024."
+
+cites_with_years |>
+  filter(new_year >= 2020, new_year <= 2024) |>
+  group_by(old_year) |>
+  tally(name = "citations") |>
+  left_join(
+    active_philo_bib |>
+      rename(old_year = year) |>
+      group_by(old_year) |>
+      tally(name = "articles"),
+    by = "old_year"
+  ) |>
+  mutate(mean_cites = citations/articles) |>
+  ggplot(aes(x = old_year, y = mean_cites)) +
+  geom_point(color = point_col) +
+  labs(x = element_blank(),
+         y = element_blank())
+
+```
+
+The drop at the right side of @fig-age-of-recent-cites is simply because some of those articles couldn't possibly have been cited throughout 2020-2024 because they weren't published.
+
+The really striking parts of the graph are the period 2014-2019, and 2000-2013.
+
+The period from 2014-2019 is a really long peak. If we did the same kind of graphs at different times in the past, it would have the same shape - a slow rise to a plateau, then a rapid falling off from articles that couldn't have been cited throughout the period. But in general, the plateau would not be nearly this long. It's really striking that articles that are 10 years old by the end of the period are being cited so much.
+
+The thing to note about 2000-2013 is that the citation rates for every year in that period are above half the peak value reached in 2019. Again, if we did the same graph for previous five year periods, we typically would not see anything like that. The historical norm is that citation rates for earlier years are more like one-third or less the rate of the most cited year.
+
+
 
 ```{r}
 #| label: the-big-loop
 #| output: asis
 
-for (the_year in 2024:1965){
-  cat("\n\n::::: {.column-page}\n\n")
-  cat("\n\n::: {#tbl-",the_year," }\n\n", sep = "")
+for (the_year in 2020:1965){
+  cat("\n\n::::: {.column-body-outset}\n\n")
+  cat("\n\n::: {#tbl-",the_year," tbl-colwidths=\"[70,15,15]\"}\n\n", sep = "")
   print(
     knitr::kable(
       yearly_kable(
@@ -315,7 +409,9 @@ for (the_year in 2024:1965){
       format = "pipe"
     )
   )
-  cat("\n\n: Citations to prominent articles from ",the_year, " {.striped .hover}")
+  cat("\n\n: Citations to prominent articles from ",
+      the_year,
+      " {.striped .hover}")
   cat("\n\n:::\n\n")
   cat("\n\n:::::\n\n")
 }
