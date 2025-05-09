@@ -106,9 +106,9 @@ load("~/Documents/lda-cites-unigrams-only/ps_cites.RData")
 load("~/Documents/lda-cites-unigrams-only/ps_meta.RData")
 load("~/Documents/lda-cites-unigrams-only/ps_join.RData")
 load("~/Documents/lda-cites-unigrams-only/common_ps_words.RData")
+load("~/Documents/citations-2025/philo_cite_through_2024.RData")
+load("~/Documents/citations-2025/philo_bib_through_2024.RData")
 load("~/Documents/lda-cites-unigrams-only/ps_lda_s155376_c5_r1000.RData")
-load("~/Documents/citations-2025/philo_cite.RData")
-load("~/Documents/citations-2025/philo_bib.RData")
 load("/Users/weath/Dropbox (Personal)/ps_lda_s387354_c5_r1000.RData")
 ```
 
@@ -116,13 +116,13 @@ load("/Users/weath/Dropbox (Personal)/ps_lda_s387354_c5_r1000.RData")
 #| label: commontibs
 #| cache: false
 
-philo_bib <- philo_bib |>
+philo_bib <- philo_bib_through_2024 |>
   mutate(year = as.numeric(year))
 
 id_year_journal <- philo_bib |>
   select(wos_id = id, year, journal)
 
-all_cites <- philo_cite |>
+all_cites <- philo_cite_through_2024 |>
   rename(old = refs, new = id) |>
   left_join(id_year_journal, by = c("old" = "wos_id")) |>
   rename(old_year = year, old_journal = journal) |>
@@ -409,6 +409,8 @@ distinctive_articles <- phil_studies_titles_and_topics |>
   ungroup() |>
   group_by(topic) |>
   slice_max(order_by = gamma, n = 15)
+
+# This has to be checked when the final LDA comes in
 
 topics_tibble <- tribble(
   ~topic, ~Topic,
