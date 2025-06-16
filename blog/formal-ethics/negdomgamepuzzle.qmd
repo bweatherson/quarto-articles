@@ -1,0 +1,118 @@
+---
+title: "A Puzzle about Games and Choices"
+abstract: |
+ I present a somewhat surprising pair of games, where the choices in the first game are random mixtures of choices in the second game. Surprisingly, while all choices are permissible in the second game, only one of the two lotteries is permissible in the first game. This suggests that there is no simple connection between the choiceworthiness of lotteries and of their prizes.
+date: June 16 2025
+pdf-engine: xelatex
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - ethics
+  - games and decisions
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+    number-sections: false
+    css: ..\trad_defn.css
+---
+
+```{r}
+#| echo: FALSE
+#| output: FALSE
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'tikz')
+}
+options(tinytex.engine = "xelatex")
+```
+
+```{r}
+#| echo: FALSE
+#| output: FALSE
+require(Rcpp)
+require(tidyverse)
+font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
+                                   "\\setmainfont{Scala Sans Pro}"))
+```
+
+::: {.content-visible unless-format="pdf"}
+```{r engine='tikz', engine.opts=font_opts}
+#| label: fig-second-anti-war
+#| fig.cap: "Tree Diagram of the Coins and Signals Game"
+#| fig.ext: 'jpg'
+#| cache: FALSE
+#| echo: FALSE
+#| fig.width: 4
+
+\usetikzlibrary{calc}
+
+\begin{tikzpicture}[scale=1.4]
+\tikzset{
+% Two node styles for game trees: solid and hollow
+solid node/.style={circle,draw,inner sep=1.5,fill=black},
+hollow node/.style={circle,draw,inner sep=1.5},
+square node/.style={rectangle,draw, inner sep = 1, fill = black}
+}
+
+% Specify spacing for each level of the tree
+\tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
+\tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
+\tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+
+% The Tree
+\node(0)[hollow node,label=above:{Nature}]{}
+child[grow=left]{node[solid node,label=left:{
+Chooser
+}] {}
+child[grow=up]{node(1)[solid node]{}
+child{node[square node,label=above:{400,0}]{} edge from parent node [right]{T}}
+child{node[square node,label=above:{40,1}]{} edge from parent node [left]{H}}
+edge from parent node [left, yshift = -5]{Up}
+}
+child[grow=down]{node(3)[solid node]{}
+child{node[square node,label=below:{0,1}]{} edge from parent node [left]{H}}
+child{node[square node,label=below:{0,0}]{} edge from parent node [right]{T}}
+edge from parent node [left, yshift = 5]{Down}
+}
+edge from parent node [below, align=center]{H \\ 0.5}
+}
+child[grow=right]{node[solid node,label=right:{
+Chooser
+}] {}
+child[grow=up]{node(2)[solid node]{}
+child{node[square node,label=above:{28,1}]{} edge from parent node [right]{T}}
+child{node[square node,label=above:{40,0}]{} edge from parent node [left]{H}}
+edge from parent node [right, yshift = -5]{Up}
+}
+child[grow=down]{node(4)[solid node]{}
+child{node[square node,label=below:{0,0}]{} edge from parent node [left]{H}}
+child{node[square node,label=below:{44,1}]{} edge from parent node [right]{T}}
+edge from parent node [right, yshift = 5]{Down}
+}
+edge from parent node [below,align=center]{T \\ 0.5}
+};
+
+% information set
+\draw[dashed,rounded corners=10]($(1) + (-.45,.45)$)rectangle($(2) +(.45,-.45)$);
+\draw[dashed,rounded corners=10]($(3) + (-.45,.45)$)rectangle($(4) +(.45,-.45)$);
+% specify mover at 2nd information set
+\node at ($(1)!.5!(2)$) {Demon};
+\node at ($(3)!.5!(4)$) {Demon};
+\end{tikzpicture}
+```
+:::
+
+
+
+
