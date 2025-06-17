@@ -2,8 +2,9 @@
 title: "A Puzzle about Games and Choices"
 abstract: |
  I present a somewhat surprising pair of games, where the choices in the first game are random mixtures of choices in the second game. Surprisingly, while all choices are permissible in the second game, only one of the two lotteries is permissible in the first game. This suggests that there is no simple connection between the choiceworthiness of lotteries and of their prizes.
-date: June 16 2025
+date: June 17 2025
 pdf-engine: xelatex
+image: "fouropt.png"
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -28,91 +29,89 @@ format:
     css: ..\trad_defn.css
 ---
 
-```{r}
-#| echo: FALSE
-#| output: FALSE
-if(knitr::is_latex_output()) {
-  knitr::opts_chunk$set(dev = 'tikz')
-}
-options(tinytex.engine = "xelatex")
-```
+In an [earlier post](https://brian.weatherson.org/quarto/blog/formal-ethics/antinegdom.html), I discussed the principle **Negative Dominance** that Harvey Lederman has used in a series of papers [@Lederman2025; @LedermanEtAl2025; @Lederman2023]. Here's a strong version of the principle, stronger I think than Harvey thinks is plausible.
 
-```{r}
-#| echo: FALSE
-#| output: FALSE
-require(Rcpp)
-require(tidyverse)
-font_opts <- list(extra.preamble=c("\\usepackage{fontspec}", 
-                                   "\\setmainfont{Scala Sans Pro}"))
-```
+Negative Dominance
+:    If a lottery *L*~1~ is preferred to another lottery *L*~2~, then at least one of the prizes in *L*~1~ must be preferred to one of the prizes in *L*~2~.
 
-::: {.content-visible unless-format="pdf"}
-```{r engine='tikz', engine.opts=font_opts}
-#| label: fig-second-anti-war
-#| fig.cap: "Tree Diagram of the Coins and Signals Game"
-#| fig.ext: 'jpg'
-#| cache: FALSE
-#| echo: FALSE
-#| fig.width: 4
+We can put various restrictions on this. We might restrict it so the prizes are *outcomes* rather than further lotteries. (This gets to something that Harvey and his co-authors are endorsing.) Or we could restrict it further so that *L*~2~ is not a lottery at all, as in this principle.
 
-\usetikzlibrary{calc}
+Negative Dominance (One-Sided)
+:    If a lottery *L* is preferred to an outcome *o*, then at least one of the prizes of *L* must be preferred to *o*.
 
-\begin{tikzpicture}[scale=1.4]
-\tikzset{
-% Two node styles for game trees: solid and hollow
-solid node/.style={circle,draw,inner sep=1.5,fill=black},
-hollow node/.style={circle,draw,inner sep=1.5},
-square node/.style={rectangle,draw, inner sep = 1, fill = black}
-}
+It turns out that principle^[With or without the restriction that the prizes of *L* are outcomes] is enough for the argument in @Lederman2025 to go through, but not for the argument in @LedermanEtAl2025, which uses the stronger principle. This will matter in a bit.
 
-% Specify spacing for each level of the tree
-\tikzstyle{level 1}=[level distance=12mm,sibling distance=25mm]
-\tikzstyle{level 2}=[level distance=15mm,sibling distance=15mm]
-\tikzstyle{level 3}=[level distance=13mm,sibling distance=11mm]
+I think all these principles are false because I like the following kind of model for indeterminate value. Chooser has a set of value functions. One outcome is strictly preferred to another if it gets a higher value on every function. Each value function values a lottery by its expected value; since the functions are numerical this is possible even though value generally is indeterminate. And the same principle relates lotteries to options and to each other; a lottery/outcome is strictly preferred to another lottery/outcome if it has higher expected value on every function.^[I've said 'if' not 'iff' here because I'm not sure what to say about cases where one outcome merely weakly dominates another; i.e., it is higher on some functions and tied on others. There are a few options here, and they are all a bit messy; that's for another day.] If there is some function on which option *x* does better than *y*, then *y* is not preferred to *x*.
 
-% The Tree
-\node(0)[hollow node,label=above:{Nature}]{}
-child[grow=left]{node[solid node,label=left:{
-Chooser
-}] {}
-child[grow=up]{node(1)[solid node]{}
-child{node[square node,label=above:{400,0}]{} edge from parent node [right]{T}}
-child{node[square node,label=above:{40,1}]{} edge from parent node [left]{H}}
-edge from parent node [left, yshift = -5]{Up}
-}
-child[grow=down]{node(3)[solid node]{}
-child{node[square node,label=below:{0,1}]{} edge from parent node [left]{H}}
-child{node[square node,label=below:{0,0}]{} edge from parent node [right]{T}}
-edge from parent node [left, yshift = 5]{Down}
-}
-edge from parent node [below, align=center]{H \\ 0.5}
-}
-child[grow=right]{node[solid node,label=right:{
-Chooser
-}] {}
-child[grow=up]{node(2)[solid node]{}
-child{node[square node,label=above:{28,1}]{} edge from parent node [right]{T}}
-child{node[square node,label=above:{40,0}]{} edge from parent node [left]{H}}
-edge from parent node [right, yshift = -5]{Up}
-}
-child[grow=down]{node(4)[solid node]{}
-child{node[square node,label=below:{0,0}]{} edge from parent node [left]{H}}
-child{node[square node,label=below:{44,1}]{} edge from parent node [right]{T}}
-edge from parent node [right, yshift = 5]{Down}
-}
-edge from parent node [below,align=center]{T \\ 0.5}
-};
+Anyway, the negative dominance principles fail in the case shown in @tbl-first-nd-fail.
 
-% information set
-\draw[dashed,rounded corners=10]($(1) + (-.45,.45)$)rectangle($(2) +(.45,-.45)$);
-\draw[dashed,rounded corners=10]($(3) + (-.45,.45)$)rectangle($(4) +(.45,-.45)$);
-% specify mover at 2nd information set
-\node at ($(1)!.5!(2)$) {Demon};
-\node at ($(3)!.5!(4)$) {Demon};
-\end{tikzpicture}
-```
-:::
+|     | *v*~1~ | *v*~2~ |
+|----:|:------:|:------:|
+| *a* |    6   |    0   |
+| *b* |   2    |   2    |
+| *c* |   0    |    6   |
 
+: A negative dominance violation {#tbl-first-nd-fail}
 
+I'll write *Lxy* for a 50/50 lottery with prizes *x* and *y*. In @tbl-first-nd-fail, *Lac* is preferred to *b*; it has expected value 3 on each value. But neither *a* nor *c* is preferred to *b*, since *b* beats each of them on one or other value.
 
+I thought I had a simple explanation for why this wasn't a big deal. Here's an even weaker version of the Negative Dominance principle.
 
+Negative Dominance (One-Sided, Choice)
+:    If a lottery *L* is uniquely choiceworthy from {*L*, *o*}, where *o* is some option, then *o* is not choiceworthy from the set consisting of it plus the prizes of *L*.
+
+That principle is consistent with the sets of value function approach, given the  natural view that to be choiceworthy an option (lottery or outcome) must do best on some linear mixture of the value functions.^[It isn't obvious that it is consistent, since lotteries are linear mixtures of options, and the principle talks about linear mixtures of values. But lemma 3 in @Pearce1984 shows that we can switch between these easily.] That's what I thought was going on in @tbl-first-nd-fail. Option *b* is worse than *Lac* for the same reason that it's not choiceworthy from {*a*, *b*, *c*}.
+
+The key thing is that the picture of choice I've sketched here, which is of course far from original, generates choice functions which violate what @Sen1970sec calls Property γ.
+
+Property γ
+:    (*x* ∈ *C*(*S*) ∧ *x* ∈ *C*(*T*)) → (*x* ∈ *C*(*S* ∪ *T*))
+
+Option *b* is choiceworthy from {*a*, *b*}, and from {*b*, *c*}, but not from their union. Choice functions which are grounded in preference functions will always satisfy γ. But I think there are plenty of reasons to not impose γ as a condition.
+
+One of them comes from a variant of @tbl-first-nd-fail. In @tbl-first-degen we have what I call (probably not originally) a *degenerate* game. By this I mean a game where for one of the players, the outcome is the same no matter what happens in the game. We may as well call this outcome 0.
+
+|     | *d*~1~ | *d*~2~ |
+|----:|:------:|:------:|
+| *a* |   6,0  |   0,0  |
+| *b* |   2,0  |   2,0  |
+| *c* |   0,0  |   6,0  |
+
+: A degenerate game where negative dominance fails {#tbl-first-degen}
+
+The only rationalizable pure strategies in @tbl-first-degen, for Row, are *a* and *c*. But if either option was removed, *b* would be rationalizable, and indeed an equilibrium.^[In general in degenerate games, the rationalizability/equilibrium distinction collapses.] If we link choiceworthiness to rationalizability, which I think is plausible at least for degenerate games, this is also a counterexample to γ.
+
+Let's recap. There is a plausible sounding principle, Negative Dominance, which conflicts with a plausible looking model, the sets of value function model for indeterminate value. I thought I had a clever way of dealing with the tension. The choice-theoretic version of Negative Dominance does not conflict with the sets of value function approach, at least when the right hand side of the comparison is a single option rather than a lottery. Since the main example in @Lederman2025 did have a single option on the right hand side, I thought this was going to be maybe enough. 
+
+Still, it would be good to find a choice-theoretic version of the general form of Negative Dominance. If the goal was to explain away the appeal of Negative Dominance by showing that there is a true choice-theoretic principle around here, and the false principle comes from too quickly moving from choice to preference (via γ), then we better be able to state the true choice-theoretic principle.
+
+But we can't. In general, there is no principle like **Negative Dominance (One-Sided, Choice)** that works when the right hand side is a lottery. A version of the main example in @LedermanEtAl2025, translated into the language of degenerate games, shows this.
+
+So I'm going to describe two games, both of them built out of @tbl-main.
+
+|     | *d*~1~ | *d*~2~ | *d*~3~ | *d*~4~ |
+|----:|:------:|:------:|:------:|:------:|
+| *a* |  6,0   |   6,0  |  0,0   |  0,0   |
+| *b* |  0,0   |   0,0  |  6,0   |  6,0   |
+| *x* |  4,0   |   0,0  |  4,0   |  0,0   |
+| *y* |  0,0   |   4,0  |  0,0   |  4,0   |
+
+: The table for the two games {#tbl-main}
+
+Now consider the following two games:
+
+> **Game One**    
+> A standard strategic game built from @tbl-main. Row chooses a row, Column chooses a column.
+
+> **Game Two**    
+> Row chooses one of two lotteries *Lab* or *Lxy*, Column chooses a column. To make it more vivid, imagine Row chooses *ab* or *xy*, and then a coin is flipped. If it's heads, Row gets the first letter from their choice; if it's tails, they get the second.
+
+In Game One, all four choices are choiceworthy. In any variant on Game One where some of the options are eliminated, all the remaining choices are choiceworthy. Any choice is rationalizable given the right view about what Column will do. For instance, *x* is optimal if Row thinks Column will flip a coin and play *d*~1~ if heads, and *d*~3~ if tails. There's no reason to think Column will do that, but there's no reason to think Column won't do that, since any move is as good as any other for Column.
+
+But in Game Two, the only permissible choice is *Lab*. It has an expected value of 3 whatever Column does (including if Column randomises), while *Lxy* has an expected value of 2. So given a natural view about the relationship between choice and preference, *Lab* is strictly preferred to *Lxy*. But there is no true claim we can make about the prizes in *Lxy* not being choiceworthy when *a*, *b*, or *Lab* are available to ground this. In other words, we can't explain away the appeal of **Negative Dominance** the same way we explain away the appeal of **Negative Dominance (One-Sided)**.
+
+And what goes for the degenerate game in @tbl-main goes for the situation where the columns are not choices by Column, but four values that Row has. So this situation doesn't just arise for games, but for multiple values.
+
+So this is all too bad. I'd hoped to reconcile some inconsistent intuitions by showing that in one case, there was a true principle adjacent to the intuitive one, which was close enough to rescue the intuition. But @tbl-main shows that can't work; the sets of value function approach is in more tension with intuitions about negative dominance than I'd realised.
+
+For what it's worth, I still think we should stick with the sets of value function approach, and I've written up a much longer [paper](https://brian.weatherson.org/quarto/posts/binary-choice/binary-choice.html) saying why I think we should not try to explain choiceworthiness in terms of preference. When I say longer, I mean this example appears in section 22 of the paper; I'm not sure I've had a section 22 in a paper before.
