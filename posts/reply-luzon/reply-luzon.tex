@@ -1,0 +1,827 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{EB Garamond}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Akrasia and Traitors
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Akrasia and Traitors},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Akrasia and Traitors}
+\author{Brian Weatherson}
+\date{2025}
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent Bar Luzon argues that akrasia is irrational because it leads
+to violating a principle called \textbf{Avoid Treachery}. In response, I
+argue that Avoid Treachery is insufficiently motivated, that it
+presupposes a picture of rational inference that defenders of akrasia
+have independent reason to reject, and that there are models in which
+Avoid Treachery is false.
+\end{abstract}
+
+
+\setstretch{1.1}
+\section{The Debate}\label{sec-intro}
+
+\noindent A prominent debate in recent epistemology has been whether it
+can ever be rational to believe propositions of the form of \textbf{SA},
+or of some similar forms.
+
+\begin{description}
+\tightlist
+\item[SA]
+\emph{q} and it is irrational for me to believe \emph{q}.
+\end{description}
+
+The \emph{enkratic} philosopher says all beliefs of that form are
+irrational. The \emph{anti-enkratic} philosopher says that they are
+sometimes rational.
+
+The debate here isn't always about \textbf{SA} (Simple Akrasia); some
+philosophers focus on \textbf{LA} (Likely Akrasia).
+
+\begin{description}
+\tightlist
+\item[LA]
+\emph{q} and it is probably irrational for me to believe \emph{q}.
+\end{description}
+
+The difference between these will be important, especially in
+Section~\ref{sec-aim}, because Timothy Williamson
+(\citeproc{ref-Williamson2000}{2000},
+\citeproc{ref-Williamson2011}{2011},
+\citeproc{ref-Williamson2014}{2014}) has offered the most influential
+arguments for the anti-enkrasia position about \textbf{LA}, but agrees
+with the enkratic philosopher about \textbf{SA}.
+
+Recently in this journal, Bar Luzon
+(\citeproc{ref-Luzon2025}{Forthcoming}) has argued on the side of the
+enkratic philosophers about \textbf{SA}. Rather than start with a mere
+appeal to intuitions, as many in this debate do, she starts with a
+principle she calls \textbf{Avoid Treachery}.
+
+\begin{description}
+\tightlist
+\item[Avoid Treachery (AT)]
+For every proposition \emph{p} and for every positive epistemic status
+\emph{E}, if one knows that {[}\emph{p} has \emph{E} for one only if
+\emph{p} is false{]}, then one ought not believe \emph{p}.
+\end{description}
+
+In this principle, E ranges over the statuses epistemic justification,
+epistemic rationality, evidential support and epistemic permissibility,
+and the conditional is a material conditional. The `ought' is purely
+epistemic; if one thought belief in God was justified on Pascalian
+grounds one wouldn't be moved by an argument from \textbf{AT}. So I'll
+take `one ought not believe \emph{p}' to just be that it's
+(epistemically) irrational to believe that \emph{p}. So we can formalise
+\textbf{AT} as \textbf{AT Formalised}. In it, KA is that Hero knows A,
+RA is that Hero rationally beliefs A, and E picks out one of the four
+statuses from the start of the paragraph. Whichever one E picks out, EA
+is that \emph{p} has that status for Hero.
+
+\begin{description}
+\tightlist
+\item[AT Formalised]
+K¬(\emph{p} ∧ E\emph{p}) → ¬R\emph{p}
+\end{description}
+
+The argument for the irrationality of \textbf{SA} follows pretty
+quickly. Let \emph{p} be (\emph{q} ∧ ¬R\emph{q}). Assume E(A ∧ B)
+implies EA, that RA implies EA, and that Hero knows anything that can be
+proven in a few lines of logic. Then it's easy to show K¬(\emph{p} ∧
+E\emph{p}), and hence ¬R\emph{p}, which just is the enkratic view.
+
+The point of this note is to argue that the anti-enkratic philosopher
+mostly has good reasons to reject \textbf{AT}. I say mostly because
+there is one argument for \textbf{AT} that might work, but only if like
+Williamson one treats \textbf{SA} and \textbf{LA} differently.
+
+It would be too easy to say that the anti-enkratic view view implies
+\textbf{AT} is false. Of course it does, since Luzon's argument against
+from \textbf{AT} to the enkratic view is valid! What I want to argue is
+that the reasons behind the anti-enkratic view give us somewhat
+independent reason to reject \textbf{AT}. I'm going to offer the
+following arguments against \textbf{AT} in sections \ref{sec-status} to
+\ref{sec-model}.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{AT} fails for other nearby values of E, and this undermines
+  the motivation for believing it holds for these values.
+\item
+  The main argument for \textbf{AT} turns on an understanding of what it
+  means to say evidence is a guide to truth that the anti-enkratic
+  philosopher rejects.
+\item
+  An argument for \textbf{AT} from the idea that beliefs violating
+  \textbf{AT} would be `self-undermining' at most supports the enkratic
+  view about \textbf{SA}, not \textbf{LA}.
+\item
+  There are plausible models for evidence and belief where \textbf{AT}
+  fails.
+\end{enumerate}
+
+But first it helps to rehearse the arguments for the anti-enkratic view,
+to see how these objections flow from them.
+
+\section{The Arguments}\label{sec-arguments}
+
+Simplifying greatly, the anti-enkratic view relies on one
+presupposition, followed by one of two (independent) arguments. The
+presupposition is easiest to see with an example.
+
+Hero has a faculty meeting today, but they have forgotten about it.
+Fortunately, they just got a reminder email from their chair saying
+there's a meeting today. Now they believe, indeed know, there's a
+meeting today.
+
+The presupposition is that the following three things are in principle
+distinct.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Hero's reason for believing that there is a meeting today, i.e., the
+  email they got from the chair.
+\item
+  The facts that make the email from the chair a reason to believe there
+  is a meeting today. Just what those are turns on the full theory of
+  testimony, but presumably they include things like the chair's
+  reliability, the frequency of emails being faked, and so on.
+\item
+  The reasons Hero has for believing that the email is a reason to
+  believe there's a meeting today.
+\end{enumerate}
+
+The presupposition is that 1 and 3 are distinct. The reason that they
+are distinct is that 1 and 2 are distinct, and 3 requires Hero to have
+thoughts about (or at least sensitive to) 2, while 1 does not.
+
+With that in place, the first argument for the anti-enkrasia view starts
+with anti-exceptionalism about epistemology.\footnote{For
+  anti-exceptionalism about logic, see Martin and Thomassen Hjortland
+  (\citeproc{ref-MartinHjortland2024}{2024}). This kind of argument is
+  particularly prominent in Lasonen-Aarnio
+  (\citeproc{ref-Lasonen-Aarnio2020}{2020}).} Just like Hero might not
+know descriptive facts like when the meeting is, she might not know
+epistemological facts like just why the email is a reason to believe its
+content. If Hero can reasonably have false beliefs about descriptive
+facts, she can have false beliefs about what makes something a reason to
+believe.\footnote{If, like Williamson, one denies that false beliefs can
+  be reasonable, one will treat \textbf{SA} and \textbf{LA} differently.
+  As noted earlier, I'm mostly ignoring that distinction here.} If those
+beliefs are \emph{false}, she could reasonably believe that the meeting
+is today, while reasonably believing that 2 fails to obtain.
+
+The second argument relies on formal models, like the model of
+Williamson's unmarked clock, in which the formal translations of
+\textbf{SA} (or at least \textbf{LA}) are rationally believed. What's
+distinctive about these formal models is that while agents know the
+epistemic facts, they know what is rational to believe in what
+situation, they don't know what situation they are in. It makes the
+discussion clearer to have a concrete theory about what is rational in a
+situation, so I'll work with a very crude form of evidentialism.
+(Everything I say could, with some work, be repurposed for an argument
+that makes different assumptions about what facts about a situation are
+relevant, but this is an easy one to work with.) In particular I'll
+assume:
+
+\begin{itemize}
+\tightlist
+\item
+  What's rational to believe supervenes on one's evidnce;
+\item
+  One's evidence is all and only what one knows.
+\item
+  It is rational for a person whose evidence is E to believe \emph{p}
+  iff Pr(\emph{p} \textbar{} E) ⩾ 0.9, where Pr is the evidential
+  probability function.
+\end{itemize}
+
+Again, I'm not saying this theory is true; in fact it's completely
+implausible. What matters is that (a) what's rational to believe varies
+from one situation to another, and (b) someone might not know precisely
+what situation they are in, just like they might be ignorant of any
+empirical fact.
+
+Assuming evidentialism lets us distinguish two ways in which one might
+be ignorant about one's situation.
+
+\begin{itemize}
+\tightlist
+\item
+  One might know \emph{p}, but not know one knows it.
+\item
+  One might not know \emph{p}, but not know one doesn't know it.
+\end{itemize}
+
+Williamson's models typically assume the first kind of ignorance, and
+this has been rather controversial. But as I'll discuss in
+Section~\ref{sec-model}, we can get the problem going with just the
+second kind of ignorance.
+
+So anti-enkratic philosophers have employed two kinds of strategies:
+argue that people can believe \textbf{SA} (\textbf{LA}) because they can
+rationally have false beliefs (lack true beliefs) about what is rational
+in a situation, or because they can rationally have false beliefs (lack
+true beliefs) about what situation they are in. These strategies seem to
+exhaust the options for the anti-enkratic philosopher. If agents always
+know which situation they are in, and know what's rational in every
+situation, they'll know what's rational for them. So they can't
+rationally believe \emph{p} and not know they rationally believe it. But
+both strategies seem promising.
+
+\section{Other Statuses}\label{sec-status}
+
+The first reason to be sceptical of \textbf{AT} is that it doesn't hold
+for some nearby statuses a proposition might have. A simple case is that
+since one can rationally believe \emph{p} without having Cartesian
+certainty that it's true, if we took E to be Cartesian certainty the
+principle, \textbf{AT} would be clearly false.
+
+More interestingly, consider the case where E is \emph{is provable in
+Peano Arithmetic}. That's not really an \emph{epistemic} status, since
+it doesn't refer to an agent. But it's interesting to note how
+\textbf{AT} fails for this value of E. If \emph{p} is that Peano
+Arithmetic is consistent, then Hero knows that \emph{p} is E iff
+\emph{p} is false. But that's no reason to reject \emph{p}; indeed, Hero
+should believe \emph{p}.
+
+The point here is not that epistemic rationality is so analogous to
+Cartesian certainty, or provability in Peano arithmetic that we can
+simply argue by analogy that since \textbf{AT} fails when E is one of
+the latter statuses, it fails when E is epistemic rationality. That's a
+weak analogy; there are too many differences between them.\footnote{I'm
+  grateful here to a reviewer for steering me away from a not very
+  plausible argument.} A better argument is that noting \textbf{AT}
+fails for these latter statuses puts a constraint on what any argument
+for an instance of \textbf{AT} must look like. An argument that
+\textbf{AT} holds when E is epistemic rationality better not generalise
+to an argument that \textbf{AT} holds for these two latter statuses.
+That would be a clear case of overgeneration.
+
+That last claim is what I'll argue for in the rest of this paper. The
+arguments that Luzon offers for \textbf{AT} are mostly arguments that do
+overgenerate.
+
+\section{Guide}\label{sec-guide}
+
+The example of provability in Peano Arithmetic is relevant to the main
+argument Luzon gives for \textbf{AT}. She argues that \textbf{AT} must
+be true for the values of E she presents because if it fails, E can't be
+a good guide to truth. Since justification, rationality, etc are guides
+to truth, \textbf{AT} must be true.
+
+The simplest response is that this claim about \textbf{AT} can't be
+right in general because provability in Peano Arithmetic is a good guide
+to truth when discussing the natural numbers, but \textbf{AT} fails when
+E is provability in Peano Arithmetic. Provability is a good guide to
+arithmetic truth in general, even if there are cases where it is not in
+fact a good guide.
+
+What would be implausible is to say that provability is the \emph{only}
+guide to truth, but \textbf{AT} fails for it. Assuming that any reason
+is a guide to truth, then if provability were the only guide, we'd have
+no reason to believe that arithmetic is consistent. Assuming also that
+it is irrational to believe something we have no reason to believe, it
+would follow that we're irrational to believe that arithmetic is
+consistent, and we would not in fact have a counterexample to
+\textbf{AT}.
+
+The argument from the last paragraph generalises. In general, it seems
+incoherent to say of any E that it is the only guide to truth, but
+\textbf{AT} fails for it. It would be nice here to have a theory about
+what it takes for something to be a guide, but we don't need one for the
+argument to work. As long as being a reason is sufficient to being a
+guide, the argument goes through. But the key point here is that this
+argument only goes through on the assumption that E is the only guide.
+If there is another guide, the argument fails. Just what that other
+guide is in arithmetic, whether it is Gödelian intuition, or
+diagrammatic reasoning, or something else, is controversial.\footnote{The
+  discussion of ``proof chauvinism'' about explanation in D'Alessandro
+  (\citeproc{ref-DAlessandro2020}{2020}) is helpful here, though his
+  focus is on explanation not knowledge.} But all that matters is that
+there is some other guide, which there must be if we rationally believe
+Peano arithmetic is consistent.
+
+At this point you might think it matters that Luzon restricted E to
+things like evidential support. Surely the evidentialist does think that
+evidence is the only guide to truth. Here the presupposition I noted in
+Section~\ref{sec-arguments} is important. When Hero believes that
+there's a meeting today, her guide is not that she has evidence for
+this: it's the email. She's guided by the fact that she received this
+email, not by the fact that it's evidence. If she checks her computer
+and sees snow is forecast, her belief that it will snow is guided by
+something different. That's so even though there are a few descriptions
+we can give which make it look like she is guided by the same thing. In
+both cases, for instance, she is guided by words on her computer screen.
+In the same sense, she is guided in both cases by her evidence. But in
+the most important sense, the email and the weather forecast are
+different guides.
+
+This I suspect is ultimately the biggest difference between the enkratic
+and the anti-enkratic philosopher. The enkratic philosopher thinks that
+all beliefs are guided by the same thing: one's evidence. The
+anti-enkratic philosopher thinks different beliefs are guided by
+different things: the different pieces of evidence. \textbf{AT} is not,
+I say, a good constraint on E being a guide, but it is a good constraint
+on E being the only guide. So the anti-enkratic philosopher who
+distinguishes facts which constitute evidence from the fact that that
+fact is a piece of evidence, has good reason to reject AT.
+
+\section{Undermining}\label{sec-aim}
+
+The other big argument for \textbf{AT} is that if \textbf{AT} holds, a
+belief that \emph{p} would be self-undermining, and hence irrational.
+Presumably this means that the belief couldn't achieve it's aim or goal.
+What it is to undermine someone is to stop them achieving their aim or
+goal, so to be self-undermining is to do this to yourself.
+
+Whether \textbf{AT} implies this depends on what one thinks the aim of
+belief is. If it's truth, then \textbf{AT} doesn't have this
+implication. It could be that \textbf{AT} is true with E something like
+evidential support, and still \emph{p} is true. Indeed, part of what's
+puzzling about enkratic arguments is that beliefs like \emph{p and I'm
+irrational to believe p} could well be true. I often have irrational
+beliefs, and sometimes I'm lucky and they're true!
+
+So the argument must assume a stronger view about the aim of belief. A
+natural thought is that the aim of belief is knowledge. Here I think the
+argument for \textbf{AT} does go through. If the aim of belief is
+knowledge, then if \emph{p} satisfies the antecedent of \textbf{AT} it
+can't possibly satisfy it's aim, and it's irrational to do something
+that can't satisfy it's aim. So given that aim, Luzon's argument goes
+through, and the enktratic philosopher is right to say that any belief
+of the form \textbf{SA} is irrational.
+
+Note here that the overgeneralisation worries that I've been leaning on
+simply don't apply. No one thinks the aim of belief is Cartesian
+certainty, or provability in Peano arithmetic. Violations of \textbf{AT}
+for the case where E is one of those statuses are not self-undermining
+because belief does not aim for those statuses. This is another reason
+to not think the examples in Section~\ref{sec-status} don't work as
+arguments by analogy; one important feature of the statuses Luzon
+stresses is that they are all plausible aims (or entailments of aims) of
+belief.
+
+The argument for \textbf{AT} from the aim of belief generalises in one
+important direction, but not in another. The important direction is if
+the aim of belief is such that beliefs that achieve their aim are (a)
+true and (b) satisfy E, then any belief which satisfies the antecedent
+of \textbf{AT} will be self-defeating, and hence irrational. So any such
+hypothesis about the aim of belief will imply, via \textbf{AT} that any
+belief of the form \textbf{SA} is irrational. The direction in which it
+does not generalise is that there isn't an argument here for
+\textbf{LA}. This can be seen from the fact that Williamson endorses
+knowledge as the aim of belief (and says that beliefs like \textbf{SA}
+are irrational), but also says that beliefs like \textbf{LA} can be
+rational. Assuming his position is even coherent, which I think we have
+good reason to believe is true, the anti-enkratic philosopher can
+coherently say that there is no argument against their position about
+\textbf{LA} from considerations about the aim of belief.
+
+We could at this point debate about whether the core debate here
+concerns \textbf{SA} or \textbf{LA}, or about what akrasia/enkrasia
+really is. This does not strike me as a productive line of inquiry. It's
+better, I think, to note the space of possibilities here.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  On weak theories of the aim of belief, e.g., where the aim is merely
+  truth, the argument for \textbf{AT} does not go through.
+\item
+  On strong theories of the aim of belief, where satisfaction of the aim
+  implies truth and rationality, the argument for \textbf{AT} does work,
+  and the anti-akratic philosopher is correct, but only about
+  \textbf{SA} not \textbf{LA}.
+\item
+  Either way, there isn't yet an argument here for the anti-akratic view
+  about \textbf{LA}. Such an argument would require an extra premise
+  that it is irrational to have a belief which is probably
+  self-undermining.
+\end{enumerate}
+
+So to wrap up, I'll make a small note about the status of that missing
+premise, that it is irrational to have a belief that probably doesn't
+achieve its aim.
+
+\section{Formal Models}\label{sec-model}
+
+In several places, Williamson has used formal models to show that
+\textbf{LA} is compatible with the knowledge aim of belief. I think
+these arguments are perfectly sound, but they have been criticised in a
+number of ways. The following four stand out.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The epistemic accessibility relation in the model is intransitive, so
+  the the KK principle fails (Das and Salow
+  (\citeproc{ref-DasSalow2019}{2019})).
+\item
+  The epistemic accessibility relation in the model is not nested, so
+  intuitive principles about the value of evidence fail (Geanakoplos
+  (\citeproc{ref-Geanakoplos1989}{{[}1989{]} 2021}), Dorst et al.
+  (\citeproc{ref-DorstEtAl2021}{2021})).
+\item
+  The models are cases where the probability of the target proposition
+  is not a good guide to its truth. (Horowitz
+  (\citeproc{ref-Horowitz2014}{2014}))
+\item
+  The models assume that updating is by conditionalisation on one's
+  evidence, even when isn't sure precisely what one's evidence is.
+  (Gallow (\citeproc{ref-Gallow2021}{2021}))
+\end{enumerate}
+
+I'm going to present a model where \textbf{AT} fails\footnote{For ease
+  of expression, from now on I mean \textbf{AT} to just mean the version
+  of it where E is epistemic rationality.} (and so does \textbf{LA})
+even though the model is modified to avoid the first three objections.
+That is, I'll present a model where epistemic accessibility is
+transitive and nested, and in a sense I'll make precise probability is a
+good guide to truth, but where \textbf{AT} is still false. I won't have
+anything to say about the fourth objection; I think there are good
+defences of that assumption, but it would be a massive digression to
+present them here.
+
+Onto the model. There is a random variable X whose prior probability is
+a uniform distribution over {[}0, 1{]}. If X = \emph{x}, Hero will learn
+X ⩽ \emph{x}. That is, from the world X = \emph{x}, all worlds X =
+\emph{y} are possible, as long as \emph{y} ⩽ \emph{x}. This
+accessibility relation is clearly transitive and nested.
+
+Hero will update on what they learn, i.e.~X ⩽ \emph{x}. I'll use Pr for
+the initial probability of some proposition, and Cr for Hero's credence
+after learning X ⩽ \emph{x}.
+
+I'm going to focus primarily on propositions of the form X \(\in\)
+(\emph{a}, \emph{b}), where 0 \textless{} \emph{a} \textless{} \emph{b}
+\textless{} 1. Call this proposition \emph{i}, for interval. There are
+three interesting possibilities for \emph{Cr}(\emph{i}).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  If X ⩽ \emph{a}, then \emph{Cr}(\emph{i}) = 0, and \emph{p} is false,
+  so that's all good.
+\item
+  If X = \emph{b}, then \emph{Cr}(\emph{i}) is at its highest value,
+  (\emph{b} - \emph{a})/\emph{b}. That's not great since \emph{p} is
+  false, but it's just one point.
+\item
+  Otherwise \emph{Cr}(\emph{i}) is in ((\emph{b} - \emph{a})/\emph{b},
+  \emph{b} - \emph{a}).
+\end{enumerate}
+
+In the third case, there's a striking result we can prove about
+\emph{Cr}.
+
+\begin{quote}
+For any threshold \emph{t} ∈ ((\emph{b} - \emph{a})/\emph{b}, \emph{b} -
+\emph{a}), Pr(\emph{i} \textbar{} Cr(\emph{i}) ⩾ \emph{t}) = \emph{t}.
+\end{quote}
+
+That is, conditional on Hero, who is inside the model, having credence
+at least \emph{t} in \emph{i}, the probability that we, who are outside
+the model, should have in \emph{i} is \emph{t}. That is, I think, a good
+sign that in this case Hero's credence in \emph{i}, the evidential
+probability of \emph{i} inside the model, is correlated with the truth
+of \emph{i}. The correlation isn't perfect, the edge case in point 2
+will become important, but in general the posterior probability of
+\emph{i} is correlated with its truth.
+
+I won't go over the proof of this result here. It's a trivial but
+somewhat tedious bit of algebra. What's more interesting is to see how
+this affects \textbf{AT}.
+
+Consider the case where the interval is (0.03, 0.3). So \emph{i} is that
+X is in that interval. And consider in particular the case where X is
+0.3. In that case Cr(\emph{i}) is 0.9, which we earlier assumed was the
+threshold for rational belief. Indeed, this is the only point where
+Cr(\emph{i}) reaches that threshold. But in that case \emph{i} is false.
+So the only case where it is rational to believe \emph{i}, \emph{i} is
+false. Since Hero knows the model, they are certain before receiving any
+evidence that if they rationally believe \emph{i}, it will be false. But
+still, this is case satisfies all the constraints that anti-akratic
+philosophers have argued were missing from Williamson's earlier models.
+Accessibility is transitive and nested, and in a good sense the
+evidential probability is a good (if not perfect) guide to truth.
+
+So if the anti-enkratic philosopher was moved in the first place by
+models like Williamson, then even taking on board the criticisms of
+those models, they have good reason to reject \textbf{AT}: it fails in
+cases like these.
+
+\section{Conclusion}\label{sec-conclusions}
+
+So much of the literature on enkrasia consists of raw appeals to the
+unintuitiveness of \textbf{SA} and \textbf{LA}. So I think it's great to
+see actual arguments from principles like \textbf{AT} for enkratic
+principles. But I don't think the anti-enkratic philosophers should be
+changing their minds over this.
+
+If one's initial motivation for anti-enkrasia was based in the
+metaphysical distinction between reasons and what makes something a
+reason, then there are good grounds for rejecting the idea that
+rationality can only be guiding if \textbf{AT} is true. And if one's
+initial motivation was based in the kinds of models that Williamson
+developed, then even taking on board the recent criticisms of those
+models, there are variants of his models that falsify \textbf{AT}.
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-DAlessandro2020}
+D'Alessandro, William. 2020. {``Mathematical Explanation Beyond
+Explanatory Proof.''} \emph{British Journal for the Philosophy of
+Science} 71 (2): 581--603. doi:
+\href{https://doi.org/10.1093/bjps/axy009}{10.1093/bjps/axy009}.
+
+\bibitem[\citeproctext]{ref-DasSalow2019}
+Das, Nilanjan, and Bernard Salow. 2019. {``Transparency and the {KK}
+Principle.''} \emph{No{û}s} 52 (1): 3--23. doi:
+\href{https://doi.org/10.1111/nous.12158}{10.1111/nous.12158}.
+
+\bibitem[\citeproctext]{ref-DorstEtAl2021}
+Dorst, Kevin, Benjamin A. Levinstein, Bernhard Salow, Brooke E. Husic,
+and Branden Fitelson. 2021. {``Deference Done Better.''}
+\emph{Philosophical Perspectives} 35 (1): 99--150. doi:
+\href{https://doi.org/10.1111/phpe.12156}{10.1111/phpe.12156}.
+
+\bibitem[\citeproctext]{ref-Gallow2021}
+Gallow, J. Dmitri. 2021. {``Updating for Externalists.''} \emph{Noûs} 55
+(3): 487--516. doi:
+\href{https://doi.org/10.1111/nous.12307}{10.1111/nous.12307}.
+
+\bibitem[\citeproctext]{ref-Geanakoplos1989}
+Geanakoplos, John. (1989) 2021. {``Game Theory Without Partitions, and
+Applications to Speculation and Consensus.''} \emph{The B.E. Journal of
+Theoretical Economics} 21 (2): 361--94. doi:
+\url{https://doi.org/10.1515/bejte-2019-0010}.
+
+\bibitem[\citeproctext]{ref-Horowitz2014}
+Horowitz, Sophie. 2014. {``Immoderately Rational.''} \emph{Philosohical
+Studies} 167 (1): 41--56. doi:
+\href{https://doi.org/10.1007/s11098-013-0231-6}{10.1007/s11098-013-0231-6}.
+
+\bibitem[\citeproctext]{ref-Lasonen-Aarnio2020}
+Lasonen-Aarnio, Maria. 2020. {``Enkrasia or Evidentialism? Learning to
+Love Mismatch.''} \emph{Philosophical Studies} 177 (3): 597--632. doi:
+\href{https://doi.org/10.1007/s11098-018-1196-2}{10.1007/s11098-018-1196-2}.
+
+\bibitem[\citeproctext]{ref-Luzon2025}
+Luzon, Bar. Forthcoming. {``Epistemic Akrasia and Treacherous
+Propositions.''} \emph{Philosophical Quarterly}, Forthcoming.
+
+\bibitem[\citeproctext]{ref-MartinHjortland2024}
+Martin, Ben, and Ole Thomassen Hjortland. 2024. {``Anti-Exceptionalism
+about Logic (Part i): From Naturalism to Anti-Exceptionalism.''}
+\emph{Philosophy Compass} 19 (8): e13014. doi:
+\url{https://doi.org/10.1111/phc3.13014}.
+
+\bibitem[\citeproctext]{ref-Williamson2000}
+Williamson, Timothy. 2000. \emph{{Knowledge and its Limits}}. Oxford
+University Press.
+
+\bibitem[\citeproctext]{ref-Williamson2011}
+---------. 2011. {``Improbable Knowing.''} In \emph{Evidentialism and
+Its Discontents}, edited by Trent Dougherty, 147--64. Oxford: Oxford
+University Press.
+
+\bibitem[\citeproctext]{ref-Williamson2014}
+---------. 2014. {``Very Improbable Knowing.''} \emph{Erkenntnis} 79
+(5): 971--99. doi:
+\href{https://doi.org/10.1007/s10670-013-9590-9}{10.1007/s10670-013-9590-9}.
+
+\end{CSLReferences}
+
+
+
+\noindent Published in\emph{
+Philosophical Quarterly}, 2025, pp. tbc.
+
+
+\end{document}
