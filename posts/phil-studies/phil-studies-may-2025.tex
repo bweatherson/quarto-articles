@@ -1,0 +1,2515 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{EB Garamond}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Trends in Philosophical Studies, 1980-2019
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+\setkomafont{descriptionlabel}{\normalfont\scshape\bfseries}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Trends in Philosophical Studies, 1980-2019},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Trends in \emph{Philosophical Studies}, 1980-2019}
+\author{Brian Weatherson}
+\date{2025}
+\begin{document}
+\maketitle
+\begin{abstract}
+\emph{Philosophical Studies} is the most cited journal in
+English-language philosophy. This essay looks at how it became so
+central, and how the changes in its subject matter over time reflect
+changes in English language philosophy. Special attention is paid to the
+role of special issues of the journal, notably the publication of
+conference proceedings, and to the rise in papers in social philosophy
+in the second half of the 2010s.
+\end{abstract}
+
+
+\setstretch{1.1}
+\section{Introduction}\label{sec-introduction}
+
+\emph{Philosophical Studies} is the most cited journal in philosophy
+journals, so it is worthy of study both in its own right, and as a
+mirror of broader trends in philosophy. This paper uses a variety of
+tools from data analysis to look at the nature of \emph{Philosophical
+Studies}, and how it has changed over time, from 1980 to 2019.
+
+In the first half of the paper, I look at the growth the citation rate
+(i.e., number of citations per article) in \emph{Philosophical Studies}.
+If we take its peers to be the twenty philosophy journals with the
+highest citation rates over the last forty years, it has gone from
+having a citation rate 10-20 percent below the average, to a rate 10-20
+percent above the average. And it's done this despite increasing its
+publication volume, which one would normally expect to decrease citation
+rate. This is explained in part by the move to publishing more special
+issues, with the special issues from the Bellingham Summer Philosophy
+Conference being particularly important, and in part by the topic mix in
+\emph{Philosophical Studies} changing in ways that tracked changes in
+the broader philosophical community.
+
+This leads to the second half of the paper, on just how the topic mix of
+the journal changed over the years. The short version of those changes
+is shown in Figure~\ref{fig-five-topics}.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-five-topics-1.pdf}}
+
+}
+
+\caption{\label{fig-five-topics}Proportion of \emph{Philosophical
+Studies} articles that are in different topics, 1980-2019.}
+
+\end{figure}%
+
+In the late twentieth century, \emph{Philosophical Studies} was focussed
+on philosophy of language, and in particular on core analytic questions
+about reference and description. These were central to philosophy in the
+1970s after \emph{Naming and Necessity}, and stayed central to graduate
+education at top schools well into the twenty-first century. But the
+focus of other journals moved away from these questions earlier than
+\emph{Philosophical Studies} did.
+
+After the turn of the century, the journal moved into two topics that
+did not hurt its citation rates. First, it was part of the enormous
+discussion on epistemology, and in particular on contextualism in
+epistemology, in the 2000s. Second, in the 2010s, it, along with much of
+the rest of the discipline, moved more strongly into social philosophy.
+
+\section{Overview}\label{sec-overview}
+
+\subsection{Editorial History}\label{editorial-history}
+
+\emph{Philosophical Studies} was founded by Herbert Feigl and Wilfrid
+Sellars, both then at the University of Minnesota, in 1950, as the
+``first American journal expressly devoted to analytic philosophy''
+(\citeproc{ref-DeVries2005}{DeVries 2005, 1--2}). They stayed as editors
+until Feigl's retirement in 1971, though after 1954 Sellars was listed
+as the first editor. At Feigl's retirement the journal moved from the
+University of Minnesota Press to Reidel, where it has stayed ever
+since.\footnote{Springer is the current continuant of Reidel after
+  several mergers and takeovers.} Sellars edited the journal alone until
+Keith Lehrer was brought on as associate editor in 1974, starting an
+association with the journal that would last nearly half a century.
+
+In 1975 Lehrer, who had just moved from Rochester to Arizona, became
+editor. He stayed in that role until 1982, having been joined by John
+Pollock (also at Arizona) in 1979. From 1982, Pollock was
+Editor-in-Chief, and Lehrer went back to being Associate Editor.
+
+In 1992 the journal moved 100 miles up I-10, as Stewart Cohen, then at
+Arizona State, took over as Editor.\footnote{While the journal was at
+  Arizona, each year a grad student assistant was recognised on the
+  title page as an editorial assistant. Many prominent philosophers had
+  this role over the years, including, in 1983, Stewart Cohen.} Cohen
+stayed as editor through the rest of the time covered in this study,
+eventually being an editor of the journal for longer than even Wilfrid
+Sellars.
+
+Thomas Blackson joined as book symposium editor in 2003. In 2010, Cohen
+moved to the University of Arizona, and so the journal was edited out of
+Tuscon for a second time. Jennifer Lackey and Wayne Davis, who would
+eventually take over from Cohen, joined as Associate Editors in 2014. In
+2016 Cohen was made Editor-in-Chief, while Davis and Lackey became
+Editors, and that was the arrangement that persisted through 2019, the
+end of the focus of this paper.
+
+There are three things about this editorial history that will become
+important in what follows. One is that the names here include several of
+the most important epistemologists of the last half century. A second is
+that the journal has had a very stable editorial history; a summary like
+this for most other leading journals would take twice as long to write.
+And the third is that the biggest single change, the transition from
+John Pollock to Stewart Cohen as Editor in 1992, does not seem to have
+had an immediate impact on the journal. You see dramatic changes
+straight away at \emph{Mind} when G.~E.~Moore takes over in 1921, and
+again when Gilbert Ryle takes over in 1947.\footnote{See Lewy
+  (\citeproc{ref-Lewy1976}{1976}) on Moore, and Warnock
+  (\citeproc{ref-Warnock1976}{1976}) on Ryle.} The effects of the switch
+from Pollock to Cohen are much more delayed.
+
+\subsection{Articles}\label{articles}
+
+\emph{Philosophical Studies} increased its output considerably when it
+moved to Reidel, and then increased it again between 1980 and 2019.
+Figure~\ref{fig-article-count-by-year} shows how many articles
+\emph{Philosophical Studies} has published each year;
+Figure~\ref{fig-word-count-by-year} shows the total word count for the
+journal each year; Figure~\ref{fig-word-max-by-year} shows the count of
+the longest article each year; and Figure~\ref{fig-word-quartiles} shows
+the 25th, 50th, and 75th percentile article by word count for each year.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-article-count-by-year-1.pdf}}
+
+}
+
+\caption{\label{fig-article-count-by-year}Number of articles published
+each year}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-word-count-by-year-1.pdf}}
+
+}
+
+\caption{\label{fig-word-count-by-year}Number of words published each
+year}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-word-max-by-year-1.pdf}}
+
+}
+
+\caption{\label{fig-word-max-by-year}Longest article published each
+year}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-word-quartiles-1.pdf}}
+
+}
+
+\caption{\label{fig-word-quartiles}25th, 50th, and 75th percentile word
+lengths each year.}
+
+\end{figure}%
+
+Some of these changes reflect wider disciplinary changes, but others do
+not. Most journals have a much more stable publication rate. Journals
+that are commercially published, like \emph{Philosophical Studies}, have
+tended to increase their production in recent years, but this growth is
+still unusual.
+
+Articles have been getting longer all across philosophy. What's striking
+in Figure~\ref{fig-word-quartiles} is the 25th percentile rising to over
+8000 words by the end of the 2010s. It used to be common for philosophy
+colloquia to include papers that were read out by the author. This was a
+bad practice, and it's been mostly gone for several years. But starting
+in the mid-2010s it became an impractical practice. No one was writing
+papers that even could be read out in the length of a typical colloquium
+slot.
+
+Everything I've said so far is about \emph{articles} in
+\emph{Philosophical Studies}. As I'll go over in
+Section~\ref{sec-what-is-an-article}, this is a less clear category than
+we might like, in part because of the variety of kinds of issues
+\emph{Philosophical Studies} puts out.
+
+\subsection{Special Issues}\label{sec-special-issues}
+
+\emph{Philosophical Studies} has had many special issues, especially
+since the mid-1990s. These fall into four main categories. The first
+three are papers from three long-running conferences that
+\emph{Philosophical Studies} published selected papers from:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The APA Pacific Divsion
+\item
+  The Oberlin Colloquium
+\item
+  The Bellingham Summer Philosophy Conference (BSPC)
+\end{enumerate}
+
+The fourth category consists of one-off issues, either on a special
+topic, or, in two cases, conferences that \emph{Philosophical Studies}
+published once but did not continue with. I'll call all of these
+\textbf{One-off} issues.
+
+Often these were double, or occasionally triple, issues. I'm counting
+these as 2, or 3, issues, because provides a better sense of what
+proportion of the papers in a year are from special issues. As
+Table~\ref{tbl-issues-by-decade} shows, the special issues become a big
+part of what \emph{Philosophical Studies} does in the 1990s.
+
+\begin{longtable}[]{@{}lrrrr@{}}
+
+\caption{\label{tbl-issues-by-decade}How many of each type of special
+issue were published each decade.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Type & 1980s & 1990s & 2000s & 2010s \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Normal & 62 & 79 & 111 & 107 \\
+One-off & 4 & 14 & 13 & 10 \\
+APA Pacific & 0 & 18 & 12 & 10 \\
+Oberlin & 0 & 6 & 5 & 4 \\
+BSPC & 0 & 0 & 8 & 5 \\
+
+\end{longtable}
+
+The special issues differ from the normal issues in some striking ways,
+so it will be helpful to keep their presence in mind.
+
+\section{Methods}\label{sec-methods}
+
+\subsection{Sources}\label{sec-sources}
+
+The studies here are primarily based on two sources: citation data from
+Web of Science, and word lists from JSTOR.
+
+Through the University of Michigan I downloaded the Web of Science
+(hereafter, WoS) Core Collection in XML format. Within it, I selected
+100 prominent philosophy journals that WoS indexes. The journals I
+selected are, like \emph{Philosophical Studies} primarily
+English-language, analytic philosophy journals. I filtered the citations
+for just citations from and to those 100 journals.
+
+WoS has a special way of recording citations in indexed articles to
+other articles that it has indexed. These records are easy to extract,
+and are considerably more reliable than citation records in general.
+That's not to say they are perfect. They certainly have false negatives,
+especially when there are any errors in the original citation. As
+Eugenio Petrovich (\citeproc{ref-Petrovich2024}{2024, 77n10}) notes,
+they are more reliable when the citations are in a bibliography than
+when they are in footnotes. They also do badly with supplements. So for
+this study I've excluded all the supplemenmts to \emph{Noûs}, i.e.,
+those issues of \emph{Philosophical Perspectives} and
+\emph{Philosophical Issues} which were listed as supplements to
+\emph{Noûs}. I did include the supplemental issue \emph{Philosophical
+Studies} issued in 2013, because the data there looked reliable enough.
+What follows uses just those citations. So it is citations from indexed
+journals to indexed journals, where WoS recognised that both the cited
+and citing journal were in its database.
+
+This is obviously a small subset of all citations. It excludes citations
+in academic journals in other fields, in books and edited volumes, and
+in many other places that Google Scholar indexes, such as dissertations,
+lecture notes, slides, and draft manuscripts. Losing that information is
+a cost, but there are three large upsides. First, these citations are
+much more accurate. Second, we can be more confident that our data set
+is relatively complete; finding a full list of philosophy journals is
+easier than finding a full list of edited volumes, or manuscripts on
+websites, in philosophy. Third, by looking at citations internal to
+philosophy, we can get a sense of philosophy's self-image, and how it
+changes over time.
+
+The downloadable citation data is not particularly up to date. I am
+including citations beyond 2019, because it's helpful to get a sense of
+how some of these articles have been received in more recent years. But
+the data I have only goes through mid-2022.
+
+The other source I used is JSTOR, and in particular the Data for
+Research (DfR) program that they provide through their Constellate
+project. This lets you download lists of the words used in various
+journal articles, along with a count of how often each word is
+used.\footnote{It also provides bigrams and trigrams, which I've looked
+  at in preparing this paper, but didn't end up using.} It also provides
+word counts for the articles, which I have used in
+Section~\ref{sec-overview}. The words an author uses are a pretty good
+guide to what they are talking about; if the word `denotation' is used
+frequently, it's probably a philosophy of language article.
+
+\subsection{Articles?}\label{sec-what-is-an-article}
+
+I said I'm talking about articles here, but what exactly is an
+\emph{article}? A more helpful question is, which things that philosophy
+journals publish are not articles?
+
+Some things are easy. The table of contents is not an article. Nor is a
+correction, or a report on editorial change. Book reviews are not
+articles. If they were, \emph{Philosophical Review} would have the
+lowest rate of citations per article, not the highest.\footnote{I'll
+  report on citations per article in Table~\ref{tbl-citation-rate}.}
+Both WoS and JSTOR also distinguish articles from discussion notes,
+especially if the journal has a designated discussions section. Without
+this distinction, \emph{Mind} would have a much lower rate of citations
+per article.
+
+Both of these last two categories are relevant to \emph{Philosophical
+Studies}, even though it does not run book reviews or have designated
+discussion sections. Although it has neither of those things, it does
+have many book symposia. The classifiers, WoS and JSTOR, struggle with
+how to classify articles in these symposia. They disagree with each
+other, and occasionally with their own past practice.
+
+I have some sympathy for the classifiers; these are really borderline
+cases. Mostly what they settled on was that the précis and replies by
+the book author are not articles, and that the contributions by
+commentators are. But they did not stick precisely to this.
+
+For the most part, I've gone with WoS's classifications. It would be
+practical, just barely, to go through \emph{Philosophical Studies} issue
+by issue and reclassify the book symposium entries so all and only the
+commentaries are articles. But it would not be practical to do this for
+all one hundred journals. And for this paper, we're mostly interested in
+comparing articles in \emph{Philosophical Studies} with articles in
+other journals, so it's best to not modify only one journal.
+
+There is one place we're I've overridden WoS's classifications. It has
+categories of Discussion, Note, and Review, each of which make up about
+0.75\% of the articles across the 100 journals. The three categories
+include similar enough pieces that I'll treat them as a unified
+category. Mostly these are discussion notes, or longer book reviews,
+that we want to exclude. But, especially in \emph{Philosophical Review},
+they occasionally put ordinary articles here. So important articles by
+Stanley Cavell (\citeproc{ref-WOSA1962CGX0500005}{1962}), Jonathan
+Schaffer (\citeproc{ref-WOS000272855000002}{2010}), and Harvey
+(\citeproc{ref-WOS000810220800002}{\textbf{WOS000810220800002?}}) all
+got listed as not being articles.\footnote{The Cavell article was in the
+  discussion section of the January 1962 issue of the Review, so this
+  classification is understandable. The other two are not.} I've counted
+any piece in these three categories twenty pages or longer as an
+article.
+
+There is one last tricky category to flag. The special issues on the
+Oberlin Colloquium sometimes include commentaries on the main articles.
+These are mostly not counted as articles, and I think rightly so.
+Occasionally, as when Andy Egan (\citeproc{ref-Egan2011}{2011}) was the
+commentator on an important paper by Tamar Szabò Gendler
+(\citeproc{ref-WOS000295087100003}{2011}), the commentary gets a
+reasonable number of citations. But mostly these commentaries are rarely
+if ever cited, and I think they aren't really what most people think of
+as journal articles. So I've been happy to exclude them.\footnote{If
+  these aren't articles, what are they? WoS classifies Egan's paper as
+  `Editorial-Matter'. That's wrong, but I'm not sure what I would say in
+  their position.}
+
+\section{Outbound Citations}\label{sec-outbound}
+
+\subsection{Overview of Citations}\label{sec-citations-overview}
+
+Articles in \emph{Philosophical Studies} get cited a lot.
+Table~\ref{tbl-all-cites} shows the five journals with the largest
+number of citations of articles published between 1980 and 2019 in the
+100 journals we're looking at.
+
+\begin{longtable}[]{@{}lr@{}}
+
+\caption{\label{tbl-all-cites}Leading journals by total number of
+citations (Articles published 1980-2019).}
+
+\tabularnewline
+
+\toprule\noalign{}
+Journal & Citations \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Philosophical Studies & 36644 \\
+Synthese & 28083 \\
+Journal of Philosophy & 23251 \\
+Philosophy of Science & 21904 \\
+Philosophy and Phenomenological Research & 21295 \\
+
+\end{longtable}
+
+\emph{Philosophical Studies} is in first place on that list in part, but
+only in part, because it publishes so much. Table~\ref{tbl-all-articles}
+lists the top five journals by the number of articles they have
+published.
+
+\begin{longtable}[]{@{}lr@{}}
+
+\caption{\label{tbl-all-articles}Leading journals by total number of
+articles (Articles published 1980-2019).}
+
+\tabularnewline
+
+\toprule\noalign{}
+Journal & Articles \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Synthese & 4524 \\
+Philosophical Studies & 3776 \\
+Journal of Medical Ethics & 3517 \\
+Journal of Symbolic Logic & 3283 \\
+Analysis & 2236 \\
+
+\end{longtable}
+
+\emph{Synthese} has 20\% more articles, but 25\% fewer citations. The
+other three journals on Table~\ref{tbl-all-articles} are somewhat
+special cases. Two of them get a lot of citations outside of philosophy,
+and this is only a study of citations in philosophy journals.
+\emph{Analysis} only publishes short papers, and so while they get a lot
+of citations per page, they don't get as many citations per article as
+other journals.
+
+Still, we'd expect on general principles that raw volume of publication
+wouldn't make a big difference. Citations tend to follow something like
+a log-normal distribution (\citeproc{ref-Brzezinski2015}{Brzezinski
+2015}). The bulk of the citations come from a handful of highly cited
+articles. Publishing more articles helps, but is no guarantee.
+
+If we look not at total citations, but at citations per article as in
+Table~\ref{tbl-citation-rate}, we get a list that looks a bit more like
+a familiar ranking of philosophy journals by prestige.
+
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0685}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4795}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1233}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1370}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1918}}@{}}
+
+\caption{\label{tbl-citation-rate}Leading journals by citation rate
+(Articles published 1980-2019).}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedleft
+Rank
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Journal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Articles
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citation Rate
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & Philosophical Review & 511 & 17016 & 33.30 \\
+2 & Philosophy \& Public Affairs & 521 & 9996 & 19.19 \\
+3 & Journal of Philosophy & 1221 & 23251 & 19.04 \\
+4 & Noûs & 1152 & 18967 & 16.46 \\
+5 & Mind & 1072 & 16750 & 15.62 \\
+& \ldots{} & & & \\
+13 & Australasian Journal of Philosophy & 1362 & 13328 & 9.79 \\
+14 & Philosophical Studies & 3776 & 36644 & 9.70 \\
+
+\end{longtable}
+
+I've included \emph{Philosophy and Phenomenological Research} there
+because, like \emph{Philosophical Studies}, it publishes many book
+symposia. And, like \emph{Philosophical Studies}, the articles in these
+symposia are typically not cited very much.
+
+\subsection{Large Trend}\label{sec-large-trend}
+
+There is a striking step-change in citations to \emph{Philosophical
+Studies} that occurred in the mid-2000s. To bring this out, I'll compare
+\emph{Philosophical Studies} to nineteen other prominent philosophy
+journals. From the one hundred journals that I'm primarily looking at, I
+selected the twenty (including \emph{Philosophical Studies}) that have
+the highest rate of citations per published article, and which Web of
+Science has indexed every year since 1980.\footnote{The last constraint
+  notably rules out \emph{Philosophers' Imprint} and \emph{Mind and
+  Language}.}
+
+Figure~\ref{fig-compare-cites-dots} shows, for each year from 1980 to
+2019, the average number of citations for articles published in
+\emph{Philosophical Studies} (in green), and in the other nineteen (in
+red). The figure is fairly noisy, but some trends are clear. Before
+2000, the red dots, for the other journals, are mostly above the green
+dots, for \emph{Philosophical Studies}. After 2000, and especially from
+2003 onwards, that is mostly reversed.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-compare-cites-dots-1.pdf}}
+
+}
+
+\caption{\label{fig-compare-cites-dots}Average citation rates for
+\emph{Philosophical Studies} and peer journals.}
+
+\end{figure}%
+
+Figure~\ref{fig-compare-cites-rolling} smooths out some of the noise in
+Figure~\ref{fig-compare-cites-dots} in two ways. First, instead of
+measuring average citations per year, I measure average citations over a
+five-year rolling window. Second, instead of showing the red and green
+dots separately, I've just displayed the ratio between them.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-compare-cites-rolling-1.pdf}}
+
+}
+
+\caption{\label{fig-compare-cites-rolling}Ratio of citations to
+Philosophical Studies to citations to other journals, for five year
+rolling windows.}
+
+\end{figure}%
+
+The difference in Figure~\ref{fig-compare-cites-rolling} between the
+earlier and later years is striking. By this one measure, citations per
+article, \emph{Philosophical Studies} was doing ok before 2003, but was
+below the average of the top 20 journals. After 2003, it is consistently
+doing better than the average journal \emph{in the top 20}.
+
+My very anecdotal impression is that \emph{Philosophical Studies} is
+viewed as being more prestigious by younger philosophers than by older
+philosophers. A toy model of prestige, where it is heavily anchored to
+how often a journal was cited when one was in graduate school, would
+explain that difference. That said, I have not done (and am not going to
+do) a careful study of comparative prestige judgments to know if there
+is even an effect here to find, or whether my informal sample was not
+reflective of the wider population.
+
+I won't repeat the analysis here, but if build
+Figure~\ref{fig-compare-cites-rolling} using median citations, or 75th
+percentile citations, rather than means, the shape of the graph doesn't
+change much. On any of these measures, \emph{Philosophical Studies} was
+below the middle of this group of twenty before 2000, and above it
+afterwards.
+
+\subsection{Citations of Special
+Issues}\label{sec-citations-of-special-issues}
+
+Part of the explanation of the pattern in
+Figure~\ref{fig-compare-cites-rolling} is that the special issues that
+\emph{Philosophical Studies} published in the 2000s were very heavily
+cited. Table~\ref{tbl-citation-by-type} shows three summary statistics,
+mean, median, and 75th percentile (Q3), for the normal
+\emph{Philosophical Studies} issues, and for the four classes of special
+issues. Table~\ref{tbl-citation-by-type-decade} shows the means for the
+five classes over each of the four decades from 1980-2019. (The blank
+cells mean that there aren't any special issues of that type that
+decade.)
+
+\begin{longtable}[]{@{}lrrr@{}}
+
+\caption{\label{tbl-citation-by-type}Summary citation statistics for the
+five types of \emph{Philosophical Studies} issues.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Type & Mean & Median & Q3 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+BSPC & 26.6 & 14.0 & 46.0 \\
+Oberlin & 19.0 & 5.5 & 14.0 \\
+One-off & 13.3 & 5.0 & 14.5 \\
+APA Pacific & 9.1 & 3.0 & 8.0 \\
+Normal & 8.6 & 4.0 & 10.0 \\
+
+\end{longtable}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+
+\caption{\label{tbl-citation-by-type-decade}Mean citations by decade for
+the five types of \emph{Philosophical Studies} issues.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Type & 1980s & 1990s & 2000s & 2010s \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Normal & 6.8 & 7.7 & 10.6 & 8.6 \\
+One-off & 9.1 & 14.4 & 16.6 & 11.6 \\
+APA Pacific & & 5.1 & 16.6 & 7.8 \\
+Oberlin & & 18.5 & 21.5 & 18.1 \\
+BSPC & & & 32.6 & 21.0 \\
+
+\end{longtable}
+
+The numbers for BSPC are particularly striking. In the full set of
+articles I'm working from, i.e., all the indexed articles from 100
+journals, only 1.1\% of articles have 39 or more citations. But one
+quarter of the articles that \emph{Philosophical Studies} published from
+BSPC are in that 1.2\%. Surprisingly, only one of the 25 most cited
+articles in \emph{Philosophical Studies} was from a BSPC special
+issue.\footnote{``Epistemic Modals, Relativism and Assertion''
+  (\citeproc{ref-WOS000245280800001}{Egan 2007}) is the equal 12th most
+  cited paper in \emph{Philosophical Studies}.} The high average isn't
+being caused by outliers, but many BSPC articles being cited very
+frequently. By contrast, four of the ten most cited articles were from
+the Oberlin colloquium. This is why the Q3 numbers for BSPC and Oberlin
+are so different, even though the means aren't that far apart.
+
+The fact that the normal issues have such lower citation statistics than
+the special issues might make us think that the explanation of
+Figure~\ref{fig-compare-cites-rolling} can be found entirely in the
+special issues. Indeed, if we just compare the normal issues of
+\emph{Philosophical Studies} to the other 19 journals, the effect we
+were seeing basically vanishes. This can be seen in
+Figure~\ref{fig-means-normal-only}.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-means-normal-only-1.pdf}}
+
+}
+
+\caption{\label{fig-means-normal-only}Ratio of citations of normal
+issues of \emph{Philosophical Studies} citations to citations of other
+leading journals, five year rolling window.}
+
+\end{figure}%
+
+When we just focus on the normal issues, there are on average more
+citations to the other 19 journals than to \emph{Philosophical Studies}
+until the mid-2010s. So part of the story behind
+Figure~\ref{fig-compare-cites-rolling} is that the special issues of
+\emph{Philosophical Studies} in the 2000s were well cited. But it's
+potentially misleading to compare normal issues of one journal to all
+issues of other journals. I looked at the most cited article since 2005
+in each of the 20 journals that go into
+Figure~\ref{fig-means-normal-only}, and in 6 of them (including
+\emph{Philosophical Studies}), the most cited article was in a special
+issue. (Or, in one case, a special unit in a regular issue.) Special
+issues, including refereed special issues, have been very widely cited
+in recent times.
+
+Rather than go further down this rabbit hole, let's turn to what was in
+\emph{Philosophical Studies} over the years, starting with its inbound
+citations.
+
+\section{Inbound Citatations}\label{sec-inbound-citations}
+
+This section looks at the eighty journal articles that are most cited
+across the hundred journals between 1980 and 2019, and looks at what
+proportion of their citations are in \emph{Philosophical Studies}. On
+average, those articles have about 10\% of their citations in
+\emph{Philosophical Studies}, but the proportion varies greatly by
+articles. Table~\ref{tbl-mainly-in-ps} lists the ten articles whose
+citations are most concentrated in \emph{Philosophical
+Studies}.\footnote{The ranking here is not by proportion of cites in
+  \emph{Philosophical Studies}, but instead by the probability that an
+  article would have this many cites in \emph{Philosophical Studies},
+  given how many overall citations it has and that highly cited articles
+  have about 10\% of their citations in \emph{Philosophical Studies}. I
+  think this is a slightly better way to separate the signal from the
+  noise.}
+
+
+\begin{longtable}[]{@{}lrr@{}}
+
+\caption{\label{tbl-mainly-in-ps}Articles with a high concentration of
+ciations in \emph{Philosophical Studies}.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Article & PS Citations & All Citations \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Pryor (\citeproc{ref-WOS000165361800002}{2000})
+& 54 & 270 \\
+Kolodny (\citeproc{ref-WOS000231037900002}{2005})
+& 37 & 173 \\
+Schaffer (\citeproc{ref-WOS000272855000002}{2010})
+& 38 & 181 \\
+Lewis (\citeproc{ref-WOSA1996VY21200001}{1996})
+& 65 & 391 \\
+Johnston (\citeproc{ref-WOSA1992KC39800002}{1992})
+& 40 & 216 \\
+Lewis (\citeproc{ref-WOSA1979JB14500003}{1979})
+& 50 & 298 \\
+Lewis (\citeproc{ref-WOSA1984TQ70900001}{1984})
+& 32 & 171 \\
+Lewis (\citeproc{ref-WOSA1997WP33800001}{1997})
+& 31 & 171 \\
+Frankfurt (\citeproc{ref-WOSA1969Y444700002}{1969})
+& 60 & 412 \\
+Broome (\citeproc{ref-WOS000084073700005}{1999})
+& 24 & 142 \\
+Lewis (\citeproc{ref-WOSA1983RR51600001}{1983})
+& 70 & 518 \\
+Dretske (\citeproc{ref-WOSA1970ZE33800001}{1970})
+& 41 & 278 \\
+
+\end{longtable}
+
+There are articles here in the five main topics \emph{Philosophical
+Studies} covers: language, ethics, metaphysics, mind, and epistemology
+(hereafter, LEMME). The other end of the scale looks quite different, as
+shown in Table~\ref{tbl-mainly-out-ps}. There we mainly see articles in
+political philosophy, philosophy of science, and logic, with Clark and
+Chalmers (\citeproc{ref-WOS000073222300002}{1998}) being a notable (and
+surprising) exception.
+
+
+\begin{longtable}[]{@{}lrr@{}}
+
+\caption{\label{tbl-mainly-out-ps}Articles with a low concentration of
+ciations in \emph{Philosophical Studies}.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Article & PS Citations & All Citations \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Machamer, Darden, and Craver (\citeproc{ref-WOS000087305900001}{2000})
+& 11 & 372 \\
+Alchourrón, Gärdenfors, and Makinson(\citeproc{ref-WOSA1985AKA2200025}{1985})
+& 3 & 219 \\
+Laudan (\citeproc{ref-WOSA1981LY92900002}{1981})
+& 4 & 223 \\
+Anderson (\citeproc{ref-WOS000078432400003}{1999})
+& 7 & 264 \\
+Cummins (\citeproc{ref-WOSA1975BF60100001}{1975})
+& 9 & 275 \\
+Clark and Chalmers (\citeproc{ref-WOS000073222300002}{1998})
+& 11 & 306 \\
+Singer (\citeproc{ref-WOSA1972Z066400001}{1972})
+& 10 & 287 \\
+Rawls (\citeproc{ref-WOSA1980KH88100001}{1980})
+& 4 & 181 \\
+Cohen (\citeproc{ref-WOSA1989AE70300010}{1989})
+& 7 & 231 \\
+Kitcher (\citeproc{ref-WOSA1981NA08400001}{1981})
+& 6 & 197 \\
+
+\end{longtable}
+
+These tables tell us that the LEMME topics are at the heart of what
+\emph{Philosophical Studies} has published over these four decades. I'll
+use that fact in the next analysis.
+
+\section{\texorpdfstring{A Topic Model for \emph{Philosophical
+Studies}}{A Topic Model for Philosophical Studies}}\label{sec-topic-model}
+
+\subsection{The Model}\label{the-model}
+
+Following the groundbreaking work of Christophe Malaterre and
+colleagues, I analysed the content of \emph{Philosophical Studies}
+articles by building a five-topic topic model.\footnote{This technique
+  is used to analyse \emph{Philosophy of Science} by Malaterre,
+  Chartier, and Pulizzotto (\citeproc{ref-Malaterre2019}{2019}), to
+  analyse \emph{Biology and Philosophy} by Malaterre, Pulizzotto, and
+  Lareau (\citeproc{ref-Malaterre2019b}{2019}), and to analyse a family
+  of eight philosophy of science journals by Malaterre et al.
+  (\citeproc{ref-Malaterre2020}{2020}). In Malaterre and Lareau
+  (\citeproc{ref-Malaterre2022}{2022}) the technique is extended to
+  journals that don't publish exclusively in one language, but that's
+  not relevant to \emph{Philosophical Studies}.} Without going too deep
+into the details of what topic modeling is, I'll note four features of
+it that are relevant.
+
+First, a topic model divides some texts into \emph{k} topics, where
+\emph{k} is given by the model builder. On the one hand, the model
+itself doesn't tell you how many topics to use. On the other hand, the
+model builder doesn't tell the model what those topics should be. I
+thought a five topic model should work because \emph{Philosophical
+Studies} concentrates on the LEMME topics. After asking the model to
+divide the articles into five topics, it more or less found those five
+groups. (Though with some caveats that will become clearer in what
+follows.) The model doesn't give names to those topics; that's something
+I did. But it does create the five groupings.
+
+Second, the model takes as input the words in an article, but not the
+order those words appear in. For this reason, it is poorly suited to
+determining which side of a debate an article is on. Articles on
+utilitarianism use different words to articles on mental content;
+articles for and against utilitarianism tend to use similar words. So
+the model isn't much help at telling us whether articles in
+\emph{Philosophical Studies} are for or against the topic being
+discussed; for that we have to read the articles.
+
+Third, the model doesn't simply say that an article is in one or other
+topic. For each of the five topics, it gives a probability to the
+article being in that topic. This is helpful for classifying articles
+that don't slot cleanly into one or other group. \emph{Philosophical
+Studies} has published a lot of papers on physicalism. For many of
+these, it would be arbitrary to call them mind articles or metaphysics
+articles. The model doesn't require that we choose. It gives a
+probability to the article being in metaphysics, and a probability to it
+being in mind. In some cases, such as ``Chalmers on the Addition of
+Consciousness To the Physical World''
+(\citeproc{ref-WOS000086712500005}{Latham 2000}), the model gives almost
+equal probability to the two topics.
+
+Often when topic models are used, articles are classified by their
+maximal probability. I prefer to use the actual probabilities. So the
+graph in Figure~\ref{fig-five-topics} shows the average probability that
+an article is in each topic by year. I think it shouldn't matter much
+whether Latham's article is counted as 51\% mind and 49\% metaphysics or
+vice versa, and using the probabilities allows for that.
+
+Finally, the models are rather random. Somewhat metaphorically, they
+work by picking a random starting point, and scanning for a local
+maximum. The scanning procedure is deterministic, but the starting point
+is not. This can make a difference to individual articles. Every model I
+built was unsure how to classify ``What Do Philosophers Believe?''
+(\citeproc{ref-WOS000340619100006}{Bourget and Chalmers 2014}). The one
+I'm using said it was 50\% metaphysics, and 50\% spread between the
+other four topics, but other models said it was 60\% mind, or largely
+ethics. All this makes sense; the article cuts across all the fields.
+
+But this randomness raises a problem: how do we choose which random
+starting point to use? We could just use the first one we run, but that
+might be a very idiosyncratic output. We could hand code the starting
+point, but that would introduce our own biases. We could build many
+models and just which one looks most like familiar topics, but that
+would just introduce different biases.
+
+Here I got around this problem by using citation data. I had the
+computer build (or at least start building) several thousand models. I
+told it to focus on the ones where articles were classified in a similar
+way to articles that they cited. In general, the greater the similarity
+between the classification of articles and classification of citations
+of those articles, the more the model resembled familiar topics. So
+rather than using my own judgment about the best model\footnote{If I had
+  used my own judgment, I would have picked a model similar to, but not
+  quite identical to, this one. But I'd rather trust citation data than
+  my idiosyncratic judgments.}, I used the one that best conformed to
+the citation data.\footnote{There was one real oddity in this model. It
+  put articles on phenomenal properties in metaphysics, and articles on
+  dispositions in mind. Most other models did not do this, and I would
+  have preferred this one didn't either. But overall, this model did
+  best at co-classifying articles and articles they cite, and every
+  model is odd in some respect, so I stuck with this model.}
+
+\subsection{The Five Topics}\label{sec-five-topics}
+
+I picked five topics for the model hoping, correctly, that it would land
+on something like the LEMME topics. And that's more or less what
+happened.
+
+I labeled the topics, and mostly the labels are straightforward. The
+only one of those labels that might be misleading is `ethics'. In the
+model, that topic includes all papers on norms broadly construed. So it
+includes papers on decision theory\footnote{I think this is the right
+  way to classify decision theory; it could sensibly be called `formal
+  ethics'. But I'm not relying on my views here, just noting that the
+  model was remarkably confident that decision theory papers go in
+  ethics.}, on political philosophy (though there aren't a lot of
+those), and even some papers on epistemic norms. So Kelly's ``The
+Rationality of Belief and Some Other Propositional Attitudes''
+(\citeproc{ref-WOS000178572700004}{Kelly 2002}) is classified as 50\%
+ethics and 50\% epistemology.\footnote{The model I'm using actually had
+  it at 51\% ethics. Most models I looked at had it around 51/49 the
+  other direction, but we shouldn't treat this difference as meaningful.}
+Other articles which seem similar to me are classified as 99\% or more
+epistemology. This model (and all the others I looked at) put any
+article with explicit discussion of norms at least partially in ethics.
+
+What happens to articles that are not from the LEMME topics? The simple
+answer is that they are mostly not published in \emph{Philosophical
+Studies}. That's part of what we learn from
+Table~\ref{tbl-mainly-out-ps}. If there were more political philosophy
+papers, for example, we would see more citations to Rawls or Anderson.
+
+Philosophy of science raises a complication though. There is a good
+sense in which \emph{Philosophical Studies} publishes a fair bit of
+philosophy of science; it publishes many papers that could easily appear
+in \emph{Philosophy of Science}. Despite that, the five way
+classification used here makes sense. The important thing is that the
+philosophy of science articles that \emph{Philosophical Studies} publish
+also fall into one of those five topics. So there are a lot of articles
+on Bayesian epistemology, e.g., ``Belief and the Problem of Ulysses and
+the Sirens'' (\citeproc{ref-WOSA1995QE80400001}{van Fraassen 1995}), but
+it makes sense to count them in epistemology. There are also a lot of
+articles on the metaphysics of science, e.g., ``Realism,
+Anti-foundationalism and the Enthusiasm for Natural Kinds''
+(\citeproc{ref-WOSA1991FC38500010}{Boyd 1991}), but we don't lose much
+if we count these as metaphysics. What \emph{Philosophical Studies}
+doesn't have (or, more precisely, doesn't have much of) are articles
+like ``Thinking about Mechanisms''
+(\citeproc{ref-WOS000087305900001}{Machamer, Darden, and Craver 2000}),
+that are clearly philosophy of science articles but not in one of these
+five topics. So we aren't losing much by not having a separate topic for
+those articles. And we can see that by looking at the fact that
+``Thinking about Mechanisms'', and several other papers like it, are
+cited rather rarely in \emph{Philosophical Studies}.
+
+The main use I'll put this model to is looking for changes in
+publication rates, and Section~\ref{sec-words-and-trends} will go over
+those changes in more detail. I'll end this section by looking at how
+these five topics relate to the special issues, and the citation rates
+of articles in those five topics.
+
+\subsection{Topics and Special Issues}\label{topics-and-special-issues}
+
+Table~\ref{tbl-topics-special} shows the distribution of the five topics
+over the types of issues that \emph{Philosophical Studies} publishes.
+
+\begin{longtable}[]{@{}llllll@{}}
+
+\caption{\label{tbl-topics-special}Distribution of philosophical topics
+over types of issue.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Type & Epistemology & Mind & Ethics & Language & Metaphysics \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+APA Pacific & 17.6\% & 21.5\% & 32.6\% & 11.2\% & 17.1\% \\
+BSPC & 20.7\% & 6.1\% & 30.5\% & 12.4\% & 30.3\% \\
+Normal & 17.5\% & 15.2\% & 23.3\% & 22.3\% & 21.6\% \\
+Oberlin & 20.5\% & 35.5\% & 8.5\% & 12\% & 23.5\% \\
+One-off & 28.6\% & 22.1\% & 13\% & 19.6\% & 16.8\% \\
+
+\end{longtable}
+
+The differences between Oberlin and BSPC are striking, even if not
+surprising. BSPC was primarily an ethics and metaphysics conference,
+while Oberlin has focused more on philosophy of mind. The higher numbers
+for language in the normal issues is in part a factor of there just
+being more normal issues before the mid-1990s, when language was more
+central to the journal and perhaps the discipline.
+
+I've noted a few times that you see less epistemology in the journal
+than you might expect given the prominence of the editors in
+epistemology. Here we do see an effect. The one-off issues, where the
+editors have more say over the topic, lean more towards epistemology
+than the rest of the journal.
+
+\subsection{Topics and Citations}\label{topics-and-citations}
+
+Table~\ref{tbl-topics-cites} shows how often, on average, articles in
+the different topics were cited.
+
+\begin{longtable}[]{@{}lrrr@{}}
+
+\caption{\label{tbl-topics-cites}Average citation rates for the five
+main topics.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Topic & Articles & Citations & Rate \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Epistemology & 722.8 & 8389.9 & 11.61 \\
+Ethics & 899.0 & 7726.5 & 8.59 \\
+Language & 746.0 & 5766.4 & 7.73 \\
+Metaphysics & 775.5 & 8556.6 & 11.03 \\
+Mind & 628.6 & 6177.6 & 9.83 \\
+
+\end{longtable}
+
+The differences are not as stark as in Table~\ref{tbl-citation-by-type},
+but they are still notable. Epistemology articles are cited, on average,
+about 50\% more often than language articles. Now a simple explanation
+for that might be that epistemology articles appear on average later,
+and articles that appear later get cited more often. As
+Table~\ref{tbl-topics-cites-decades} shows, that is partially right. But
+breaking up the citations by decades reveals something suprising.
+
+\begin{longtable}[]{@{}lrrrr@{}}
+
+\caption{\label{tbl-topics-cites-decades}Average citation rates for the
+five main topics by decade.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Topic & 1980s & 1990s & 2000s & 2010s \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Epistemology & 8.80 & 9.66 & 15.80 & 10.74 \\
+Ethics & 6.67 & 7.38 & 12.12 & 8.00 \\
+Language & 5.80 & 6.03 & 11.91 & 7.15 \\
+Metaphysics & 7.54 & 10.18 & 14.21 & 11.14 \\
+Mind & 6.38 & 10.38 & 11.47 & 9.60 \\
+
+\end{longtable}
+
+The difference between the 2000s and every other decade in
+Table~\ref{tbl-topics-cites-decades} is stark. But the really striking
+thing is the lack of citations to language articles before the 2000s.
+I'll come back to this point in Section~\ref{sec-1980s-articles}, as
+part of a broader look at how the topic distribution in
+\emph{Philosophical Studies} changed over time.
+
+\section{Words and Trends}\label{sec-words-and-trends}
+
+Four of the five topics retain a stable stable share of papers in
+\emph{Philosophical Studies} over time, while philosophy of language
+falls away dramatically. Figure~\ref{fig-language} isolates the language
+panel from Figure~\ref{fig-five-topics}, and adds a trendline, to make
+this more visible.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-language-1.pdf}}
+
+}
+
+\caption{\label{fig-language}Proportion of \emph{Philosophical Studies}
+articles in philosophy of language.}
+
+\end{figure}%
+
+If you don't trust black box methods like topic modeling, you can see a
+similar trend just in the word usage. Figure~\ref{fig-frege-russell}
+shows the frequency of the words ``description'' and ``reference'' over
+time.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-frege-russell-1.pdf}}
+
+}
+
+\caption{\label{fig-frege-russell}Frequency of the words `description'
+and `reference' in \emph{Philosophical Studies}.}
+
+\end{figure}%
+
+These trends in word usage are a more fine-grained guide to what is
+happening in \emph{Philosophical Studies} than the five topic model. I
+did use topic modeling to build many more fine-grained models for the
+journal, but there was too much variation between the models to use any
+one model as the basis for this section. Instead I'll look at word
+frequency, and how it relates to citation patterns.
+
+The main study I'll talk about looks at the relative frequency of the
+roughly 6000 most common word types over the four decades from
+1980-2019. For each word, and each decade, I'll look at how improbable
+it is that the word is used that often in that decade, given how many
+words the journal printed that decade, and how often the word is used
+overall.
+
+This is easiest to work through with an example. The word
+``contextualism'' is used 2282 times between 1980 and 2019, with 984 of
+those uses in the 2000s. Overall, 26.48\% of the words published are in
+issues from the 2000s. A random process with 2282 trials (one for each
+usage), and a `success' probability 0f 26.48\%, has a probability of
+roughly 10\textsuperscript{-65} of succeeding 984 or more times. That
+is, if the uses of `contextualism' were distributed at random over the
+journal, the probability at least that many would appear in the 2000s is
+10\textsuperscript{-65}. Not surprisingly, we get the result papers
+using ``contextualism'' are concentrated in the 2000s. I'll use these
+probabilities as measures of concentration in what follows. When the
+decade is clear, I'll simply write the probability after the word, e.g.,
+contextualism (10\textsuperscript{-65}), to indicate how concentrated it
+is.
+
+\subsection{Three Initial
+Observations}\label{three-initial-observations}
+
+Before getting into words that tell us about changes in the subject
+matter, I want to briefly note three other things we can see in the word
+count.
+
+The JSTOR set includes all the words in the article, including headers,
+footnotes, and bibliography. \emph{Philosophical Studies} gradually
+moved from footnote citations to author-text plus bibliography. So `op'
+and `cit' appear primarily in the 1980s dataset. More strikingly,
+``Oxford'' is concentrated in the 2010s, with 17159 of its 24239
+appearances being in the 2010s. The probability of that happening by
+chance is less than 10\textsuperscript{-300}. This is in part a result
+of longer bibliographies in the 2010s, in part a consequence of the
+proliferation of Oxford Handbooks and Oxford Studies publications, but
+largely a sign of the dominance of philosophy book publishing in the
+2010s by Oxford University Press.
+
+Another word that appears a lot in the 2010s is ``thanks''
+(10\textsuperscript{-60}). As Eugenio Petrovich
+(\citeproc{ref-Petrovich2024}{2024}) notes, one pattern in the 2010s is
+that acknowledgements footnotes became more frequent, and more informal.
+So papers will cite ``Theodore Sider'' and thank ``Ted Sider''. And they
+will not start with ``I am grateful to\ldots{}'' but simply ``Thanks
+to\ldots{}''.
+
+Finally, the trend in gender terms is remarkable. The word most
+concentrated in the 1980s (by the probability measure I'm using) is
+`which'; I think this just reflects stylistic changes. The second most
+concentrated is `he'. Figure~\ref{fig-gender-words} shows the frequency
+over time of male (he/him/his) and female (she/her/hers) pronouns over
+the years.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-gender-words-1.pdf}}
+
+}
+
+\caption{\label{fig-gender-words}Frequency of gendered words in
+\emph{Philosophical Studies}.}
+
+\end{figure}%
+
+I'll leave it for someone else to figure out what proportion of the
+change in Figure~\ref{fig-gender-words} is due to there being more
+references to particular women, and what proportion is due to
+philosophers using female pronouns for arbitrary or fictional
+characters.
+
+\subsection{1980s}\label{sec-1980s-articles}
+
+From the 1990s to at least the mid 2010s, the bulk of ethics papers in
+\emph{Philosophical Studies} were on fairly theoretical questions, with
+special focus on questions moral realism, moral motivation, and (a topic
+I'll return to) moral responsibility. But in the 1980s the ethics papers
+in the journal had a different focus.
+
+There were several papers on utilitarianism. So there was a lot of
+discussion of ``utility'' (10\textsuperscript{-15}), ``utilitarianism''
+(10\textsuperscript{-41}) and ``utilitarian'' (10\textsuperscript{-45}).
+One can use almost any philosophical term in a paper attacking the
+theory it names; indeed the 1980s paper with the most uses of
+``Kantian'' (\citeproc{ref-WOSA1989CE37600004}{Terzis 1989}) is an
+anti-Kantian paper. But most of these papers were supporting
+utilitarianism. (Some of the uses of ``utility'', both in the 1980s and
+afterwards, were in decision theory papers.)
+
+There were also many papers on abortion.\footnote{One of these,
+  (\citeproc{ref-WOSA1985ANT6600005}{Gensler 1985},
+  \citeproc{ref-WOSA1986AZA8100007}{1986}), got printed twice because
+  the pages were out of order the first time.} These were largely
+\emph{anti}-abortion arguments. They did not get much uptake in
+philosophy journals. The nine\footnote{Or ten, if you count both
+  printings of the Gensler piece.} papers from the 1980s that use
+``abortion'' five times or more average less than one citation per
+article in philosophy journals. Google Scholar shows that some of them
+have more uptake elsewhere, especially in specialist bioethics journals.
+After the 1980s, \emph{Philosophical Studies} largely lost interest in
+this topic. Over the last forty years, ``A Defense of Abortion''
+(\citeproc{ref-WOSA1971Y116900003}{Thomson 1971}) is cited less often in
+\emph{Philosophical Studies} than you'd expect given its citation rate
+elsewhere.
+
+The big story of the 1980s is the centrality of philosophy of language
+to the journal, and how different this is to what the journal became in
+later years. The kind of philosophy of language \emph{Philosophical
+Studies} published in the 1980s (and 1990s) was centered around issues
+about reference and description that became central to philosophy over
+the 1960s and 1970s.
+
+Part of the evidence for that consists of which words were central to
+the journal in the 1980s. There was a lot of discussion of Donnellan's
+distinction between referential and attributive uses of definite
+descriptions. The words ``Donnellan'' (10\textsuperscript{-72}),
+``Donnellan's'' (10\textsuperscript{-58}), ``referential''
+(10\textsuperscript{-34}) and ``attributive'' (10\textsuperscript{-23})
+appear much more often than they do in later decades. The 21 articles
+that use ``Donnellan's'' five times or more are cited on average 15
+times, which is a relatively high number given their publication year.
+Strikingly, over 25\% of those citations are in \emph{Philosophical
+Studies}. That shows discussion of this topic was playing a bigger role
+in \emph{Philosophical Studies} than it was in the wider literature.
+
+More generally, the story here is that while \emph{Philosophical
+Studies} was publishing a lot of philosophy of language, it was not
+publishing the kind of philosophy of language that would become central
+to the next couple of decades. Ultimately, this is why the language
+articles it published in the 1980s and 1990s have relatively few
+citations. I'll quickly go over three kinds of articles that rarely
+appear in \emph{Philosophical Studies} : articles on conditionals;
+articles on speech acts; and interdisciplinary articles.
+
+Despite the prominence of philosophy of language before 2000, the words
+``conditional'', ``conditionals'' and ``counterfactuals'' appear less
+frequently these decades than in later decades. There are no
+\emph{Philosophical Studies} articles cited in Dorothy Edgington's
+influential and comprehensive ``On Conditionals''
+(\citeproc{ref-WOSA1995QX94800001}{Edgington 1995}).
+
+Similarly, there was very little on speech acts, or on context
+sensitivity. The words ``assertion'' and ``Austin'' appear at lower than
+average frequency before 2000, as do all the cognates of ``context''.
+
+Perhaps most significantly, despite the centrality of philosophy of
+language, there was very little interaction with linguistics, and
+especially not with linguists working on formal semantics. Here it helps
+to look at the 1980s and 1990s together, because this trend continues
+through the turn of the century. Before 2000, only one paper mentioned
+Irene Heim (\citeproc{ref-WOSA1988P180000006}{King 1988}), only two
+mentioned Angelika Kratzer (\citeproc{ref-WOSA1986D182100003}{Cross
+1986}; \citeproc{ref-WOSA1984SK63200001}{Tichý 1984}), and only three
+mentioned James McCawley (\citeproc{ref-WOSA1985ABV7900005}{Asher and
+Bonevac 1985}; \citeproc{ref-WOSA1988M482100005}{Blackburn 1988};
+\citeproc{ref-WOS000083809100001}{Ostertag 1999}). As you can see from
+those dates, if anything there was even less engagement with linguists
+in the 1990s than there had been in the 1980s. There were more mentions
+of Chomsky, though they were mostly in passing, and as often in
+philosophy of mind papers as philosophy of language. Similarly, there
+were a few mentions of George Lakoff, but again not always in philosophy
+of language. The closest thing I see to interdisciplinary work are some
+applications of Montague grammar, e.g., by
+(\citeproc{ref-WOSA1984TJ24700012}{Hazen 1984}). But there is a much
+sharper division between philosophers of language and linguists working
+on semantics in \emph{Philosophical Studies} before 2000 than you see in
+more recent work in philosophy of language.
+
+In Figure~\ref{fig-1980s-words-big} and
+Figure~\ref{fig-1980s-words-small} I show the frequency of some of the
+words mentioned in this subsection over time. I've put this in two
+graphs so the movement in the less frequently used words is easier to
+see. And as I will do in later sections, I've shaded the decade under
+discussion.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-1980s-words-big-1.pdf}}
+
+}
+
+\caption{\label{fig-1980s-words-big}Words that appear more often in the
+1980s.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-1980s-words-small-1.pdf}}
+
+}
+
+\caption{\label{fig-1980s-words-small}Words that are concentrated in the
+1980s.}
+
+\end{figure}%
+
+\subsection{1990s}\label{sec-1990s-articles}
+
+There are two notable trends in the 1990s. First, as well as many
+articles on the nature of linguistic content, there are many articles on
+the nature of mental content. Second, there is a major focus, across
+many different parts of philosophy, on issues about causation.
+
+As Figure~\ref{fig-frege-russell} shows, there is still a lot of talk
+about `description' and `reference' through the 1990s. What's new is the
+focus on mental content. So as well as continued discussion of Hesperus
+and Phosphorus, there is now a lot of discussion of arthritis, mostly in
+response to Burge (\citeproc{ref-WOSA1986AYX3200001}{1986}). There is
+more discussion of Fodor and mentalese than before or after.
+
+Looking back, a lot of this discussion feels stale by the mid-1990s.
+There is a sense that the important things to say have been said. This
+shows up in the citation data. The \emph{Philosophical Studies} papers
+using these terms have a disproportionately high rate of citation in
+\emph{Philosophical Studies} itself. The rest of the field was moving
+on, but \emph{Philosophical Studies} was a step behind.
+
+Even the giants of the field weren't immune to this change in
+philosophical fashion. Fodor published \emph{The Elm and the Expert} in
+1995. It has around 500 citations on Google Scholar. Most of us would be
+happy with that kind of recognition, but by Fodor's lofty standards it
+was a flop. \emph{Holism} (\citeproc{ref-FodorLepore1992}{Fodor and
+Lepore 1992}) has over 1500 Google Scholar citations; \emph{Concepts}
+(\citeproc{ref-Fodor1998}{Fodor 1998}) has nearly 3000. Content
+externalism was not as central to philosophy in the 1990s as it had been
+in earlier decades.
+
+The other big trend in \emph{Philosophical Studies} this decade is
+causation. The word `causal' (10\textsuperscript{-68}) is heavily
+concentrated in this decade. This is for three reasons. First, there
+were lots of papers simply on causation. Second, there were more uses of
+causal notions in analysing other concepts. This was hardly unique to
+the 1990s, but it was more frequent then.
+
+But the biggest factor is the discussion of mental causation in general,
+and Jaegwon Kim's causal exclusion argument in particular. Dozens of
+papers in \emph{Philosophical Studies} either centered on, or at least
+touched on, these issues. Unlike the topics I've discussed so far, here
+the topic rose to prominence in \emph{Philosophical Studies} at the same
+time it was becoming central in the discipline. The articles using words
+like `Kim', `exclusion' and `causal' are being cited widely outside of
+\emph{Philosophical Studies}.
+
+Kim himself published two articles that discussed causation at length in
+\emph{Philosophical Studies} in the 1990s.\footnote{These were both in
+  special issues.} ``Making Sense of Emergence''
+(\citeproc{ref-WOS000082592000002}{Kim 1999b}) surveys classical
+emergentist theories, arguing that they get into troubles with
+causation. And ``Hempel, Explanation, Metaphysics''
+(\citeproc{ref-WOS000081337700001}{Kim 1999a}) is a lovely appreciation
+of Kim's graduate supervisor, Carl Hempel, also stressing the importance
+of causation for thinking about explanation.
+
+The causal exclusion argument has a strange history after the 1990s. By
+the late 2000s it had largely faded from philosophy of mind. This was in
+part because it was an in-house dispute between physicalists, and
+Chalmers (\citeproc{ref-Chalmers1996}{1996}) had made the prior question
+of whether physicalism was true more pressing. And it was in part
+because of various objections, Bennett
+(\citeproc{ref-WOS000184542900004}{2003}) is particularly important
+here, to the stronger forms of Kim's arguments. But while discussions of
+whether mental causation was possible (on various theories) faded away,
+there was a lot of interest elsewhere in the question of when mental
+states are really causes. This was important for thinking about the
+broader case of causation throughout the special sciences, and of
+mechanistic causation/explanation in particular. In particular, ``Mental
+Causation'' (\citeproc{ref-WOSA1992JA62400001}{Yablo 1992}) continues to
+be widely cited, though now more often in philosophy of science for its
+discussion of proportionality, rather than in discussions directly about
+the metaphysics of mind. Since \emph{Philosophical Studies} publishes
+little on philosophy of special sciences, or on mechanistic explanation,
+this won't be part of our story going forward.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-1990s-words-big-1.pdf}}
+
+}
+
+\caption{\label{fig-1990s-words-big}Words that appear more often in the
+1990s.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-1990s-words-small-1.pdf}}
+
+}
+
+\caption{\label{fig-1990s-words-small}Words that are concentrated in the
+1990s.}
+
+\end{figure}%
+
+\subsection{2000s}\label{sec-2000s-articles}
+
+Philosophers have long been fond of named ideologies, and labels for
+proponents of these ideologies. The earliest years of philosophy
+journals are full of disputes between idealists, realists, pragmatists,
+and positivists. These labels can obscure as much as they reveal.
+Indeed, another theme of those early years are long disputes about just
+what idealism, realism, pragmaticism, and positivism, really are.
+
+This trend intensified in the 2000s, with a twist. Now the `isms' most
+used tended to be words not in wide circulation just a few years
+earlier. In some cases that's because an old view got a new name. In
+some cases, it's because a new view appeared on center stage.
+Figure~\ref{fig-2000s-isms} shows the usage of three such words:
+``contextualism'', ``fictionalism'', and ``physicalism'', as well as the
+nouns/adjectives for proponents of those views.\footnote{A similar graph
+  for the 2010s would highlight ``expressivism'', ``monism'', and
+  ``presentism''.}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-2000s-isms-1.pdf}}
+
+}
+
+\caption{\label{fig-2000s-isms}Frequently discussed ideologies in the
+2000s.}
+
+\end{figure}%
+
+The discussions of fictionalism and fictionalists are much more
+concentrated: all these usages are in just 14 articles. But there are 70
+articles that talk about contextualism, and 72 articles that talk about
+physicalism. In both of the last two cases, that means the term is used
+in about 8\% of all articles that decade. In both cases, that's a
+dramatic increase on previous usage. The term `contextualism' appears
+more often in ``Contextualism, Externalism and Epistemic Standards''
+(\citeproc{ref-WOS000168853300001}{Williams 2001}) than it had appeared
+in the history of the journal to that point.
+
+As well as the novelty, there are two things worth noting about this
+rise. One is that these were, like with mental causation in the 1990s,
+debates where \emph{Philosophical Studies} was publishing pieces that
+became central to the literature. This was especially true for debates
+about contextualism, where papers like ``Contextualism and Warranted
+Assertibility Manoeuvres'' (\citeproc{ref-WOS000241143100001}{Brown
+2006}), ``From Contextualism To Contrastivism''
+(\citeproc{ref-WOS000222384400005}{Schaffer 2004}) and ``Knowledge
+Claims and Context: Loose Use'' (\citeproc{ref-WOS000245280900001}{Davis
+2007}) quickly became widely cited.
+
+This leads to the big story of the 2000s, the rise of epistemology.
+According to the topic model, epistemology went from being 15\% of the
+journal over the previous two decades, to being 20\% in the 2000s, and
+then rising again in the 2010s. In the 2000s, this was mostly because of
+discussions about knowledge. (In the 2010s, the focus would shift more
+to justification.) The center of that were debates about contextualism.
+``Elusive Knowledge'' (\citeproc{ref-WOSA1996VY21200001}{Lewis 1996})
+was cited in 3.3\% of all articles that decade, and ``Solving the
+Sceptical Problem'' in 2.9\% of all articles. That's a higher rate than
+any other article was cited over a decade. The next highest rate is that
+``The Skeptic and the Dogmatist''
+(\citeproc{ref-WOS000165361800002}{Pryor 2000}) is cited in 2.8\% of
+articles in the 2010s, as the focus moved over to justification.
+
+Figure~\ref{fig-2000s-epistemology-big} shows the increase in word usage
+for some words primarily used in epistemology articles. The notable
+thing about these graphs is the small number of dots at the lower end of
+the scale during the 2000s. What drives the increase here is not a
+handful of articles using the term repeatedly, but that in the 2000s,
+unlike other decades, the words get used year after year.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-2000s-epistemology-big-1.pdf}}
+
+}
+
+\caption{\label{fig-2000s-epistemology-big}Terms from epistemology that
+appear more often in the 2000s.}
+
+\end{figure}%
+
+\emph{Philosophical Studies} isn't the only journal that sees a shift to
+epistemology at this time. Petrovich
+(\citeproc{ref-Petrovich2024}{2024}) looked at citation data from
+\emph{Mind}, \emph{Noûs}, \emph{Philosophical Review}, \emph{Journal of
+Philosophy} and \emph{Philosophy and Phenomenological Research}, and
+concluded that there was a marked uptick in epistemology articles being
+written, and cited, in the 2000s. His study wasn't restricted to
+citations of journal articles, like this study is. That's relevant not
+because there are so many epistemology books that get cited in that
+time, but rather because his study lets us see when books like
+\emph{Word and Object} and \emph{Naming and Necessity} start getting
+cited less, and articles like ``Elusive Knowledge'' start getting cited
+more. As with \emph{Philosophical Studies}, that seems to happen in the
+2000s.
+
+\subsection{2010s}\label{sec-2010s-articles}
+
+The big story of the 2010s is the rise of social philosophy. This isn't
+specific to \emph{Philosophical Studies}. Indeed, none of the stories
+I'll tell here are particularly unique to \emph{Philosophical Studies};
+everything that happens in the journal reflects wider trends in the
+discipline.\footnote{The reverse isn't always true, especially outside
+  the LEMME topics there are changes that aren't reflected in
+  \emph{Philosophical Studies}.} I'll start with some more superficial
+results, and end with social philosophy.
+
+I've already mentioned that get longer, and make more references to
+``Oxford'' over this decade. Figure~\ref{fig-citations-by-year} shows
+how many more citations there are to articles in philosophy journals.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-citations-by-year-1.pdf}}
+
+}
+
+\caption{\label{fig-citations-by-year}Citations per article to other
+philosophy journals in \emph{Philosophical Studies} 1980-2019.}
+
+\end{figure}%
+
+The graph isn't just going up, it is \emph{accelerating}. The data I
+have from the 2020s suggests this trend does not stop.
+
+\emph{Philosophical Studies} was founded to be a journal of analytic
+philosophy. By the 2010s, what it meant to be doing analytic philosophy
+had changed. It was less about analysis, and more about continuity with
+a tradition. That continuity is still there; there are no radical breaks
+in the citation patterns. But as Figure~\ref{fig-analytic-words} shows,
+some keywords associated with analytic philosophy are used less and
+less.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-analytic-words-1.pdf}}
+
+}
+
+\caption{\label{fig-analytic-words}Keywords of analytic philosophy}
+
+\end{figure}%
+
+There is an uptick in ``logic'' in 2019, but the trend in
+Figure~\ref{fig-analytic-words} looks clear. Some of this could be
+fashion. I don't think Figure~\ref{fig-theory-words} shows that
+\emph{Philosophical Studies} authors are less interested in theories,
+but rather than the words they use for theories are changing.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-theory-words-1.pdf}}
+
+}
+
+\caption{\label{fig-theory-words}How to refer to theories}
+
+\end{figure}%
+
+The pattern in Figure~\ref{fig-theory-words} extends to negative terms
+as well. I had associated robust challenges more with football than
+philosophy, but Figure~\ref{fig-objection-words} suggests this is an
+outdated view.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-objection-words-1.pdf}}
+
+}
+
+\caption{\label{fig-objection-words}How to critcise theories}
+
+\end{figure}%
+
+This last graph perhaps reveals a deeper point than the previous ones.
+One reason for greater use of ``robust'' is that \emph{Philosophical
+Studies} increased the amount of empirical, inter-disciplinary work that
+it published, especially in philosophy of mind.
+Figure~\ref{fig-empirical-words} shows some other words that reveal this
+pattern.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-empirical-words-1.pdf}}
+
+}
+
+\caption{\label{fig-empirical-words}Words associated with empirical
+work}
+
+\end{figure}%
+
+This empirical turn comes with a more dramatic than usual turnover in
+which philosophers are frequently mentioned in the journal. I'm just
+going to use a crude method here of counting tokens, and not try to
+distinguish philosophers with the same last name. I'll mostly stick to
+names which, in \emph{Philosophical Studies} at least, almost
+exclusively pick out one philosopher. That said, I've included
+``Schroeder'' because both Mark and Tim are important to the story of
+the decade. For names it's distracting to have dots for each year, the
+data is too noisy, so I've included Table~\ref{tbl-names-early-late}
+showing how often the name is used before and after 2010. (There are
+roughly 90\% as many words published from 1980-2009 as 2010-2019, so
+this is almost a half-way point.)
+
+\begin{longtable}[]{@{}lrr@{}}
+
+\caption{\label{tbl-names-early-late}Uses of some names before and after
+2010.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Name & 1980-2009 & 2010-2019 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sellars & 1348 & 161 \\
+Chisholm & 1128 & 272 \\
+Putnam & 1675 & 469 \\
+Davidson & 2080 & 703 \\
+Quine & 2146 & 831 \\
+Wittgenstein & 765 & 302 \\
+Aristotle & 1291 & 570 \\
+Plantinga & 860 & 406 \\
+Searle & 926 & 449 \\
+Fodor & 1713 & 850 \\
+Sider & 654 & 1303 \\
+Hawthorne & 412 & 1188 \\
+Huemer & 117 & 683 \\
+Schaffer & 239 & 1477 \\
+Siegel & 51 & 591 \\
+Schroeder & 120 & 1473 \\
+Cappelen & 31 & 522 \\
+Enoch & 19 & 470 \\
+Schwitzgebel & 7 & 501 \\
+Schellenberg & 3 & 485 \\
+
+\end{longtable}
+
+I don't know a good way to measure turnover in who is being talked
+about, but this feels like a more dramatic change than one sees most
+decades.
+
+The biggest story in metaphysics this decade was the end of what Sider
+(\citeproc{ref-Sider2020}{2020}) calls the `modal era' in metaphysics.
+From the late 1960s to the late 2000s, the most active discussions in
+metaphysics were about ontology and modality. The most notable book of
+this period, \emph{On the Plurality of Worlds}
+(\citeproc{ref-Lewis1986a}{Lewis 1986}) was about both. From 2010
+onwards, the focus shifted to discussions of fundamentality, priority,
+and, most of all, grounding. As Figure~\ref{fig-grounding} shows,
+\emph{Philosophical Studies} was definitely part of this shift.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-grounding-1.pdf}}
+
+}
+
+\caption{\label{fig-grounding}Uses of grounding in \emph{Philosophical
+Studies}.}
+
+\end{figure}%
+
+Although there was less discussion of grounding before 2010, there were
+several important, and widely cited, papers on grounding published in
+\emph{Philosophical Studies} in the first part of the decade
+(\citeproc{ref-WOS000341924300014}{Nolan 2014};
+\citeproc{ref-WOS000325717500012}{Bliss 2013};
+\citeproc{ref-WOS000289572300004}{Bennett 2011}). This discussion was
+mainly confined to metaphysics. At the start of the modal era, modal
+notions became commonplace across philosophy. That's mostly not happened
+with grounding. That said, \emph{Philosophical Studies} has published
+papers by Beddor (\citeproc{ref-WOS000356355000009}{2015}) and Wodak
+(\citeproc{ref-WOS000468369800007}{2019}) that apply grounding ideas to
+debates in epistemology.
+
+Over the 2010s, the space between ethics and epistemology continued to
+shrink. This wasn't an entirely new phenomenon; ``Why Be Rational?''
+(\citeproc{ref-WOS000231037900002}{Kolodny 2005}) was arguably the most
+cited ethics paper of the 2000s. But the focus on questions common to
+ethics and epistemology, particularly about the nature of reasons, meant
+the two fields were more entwined. Figure~\ref{fig-normative-reasons}
+shows how dramatic this was over the 2010s.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-normative-reasons-1.pdf}}
+
+}
+
+\caption{\label{fig-normative-reasons}Uses of normative and reasons in
+\emph{Philosophical Studies}.}
+
+\end{figure}%
+
+The scale of Figure~\ref{fig-normative-reasons} is larger than any of
+the previous graphs. That's not surprising for `reasons'; it's a word
+you can use when not writing a paper on reasons themselves. It's more
+surprising for `normative'.
+
+The biggest story of the 2010s though, is the social turn across
+philosophy. The decade saw a growing emphasis on social epistemology,
+social metaphysics and social philosophy of language.
+Figure~\ref{fig-social} displays the simplest way to measure this
+growth: how often the word `social' is used.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-social-1.pdf}}
+
+}
+
+\caption{\label{fig-social}Uses of social in \emph{Philosophical
+Studies}.}
+
+\end{figure}%
+
+Figure~\ref{fig-social} might be misleading unless you know how
+philosophers use `social'.\footnote{I'm indebted here to Ishani Maitra.}
+Almost anything involving multiple people will be classed as social.
+There isn't a distinction here between interpersonal, or what Darwall
+(\citeproc{ref-Darwall2006}{2006}) calls second-personal, phenomena, and
+phenomena that only emerge at the level of large societies. So the
+increased discussion of reactive attitudes, especially blame, is part of
+this social turn. I'm not sure this is optimal; society-level phenomena
+are rather different from phenomena that arise in groups of two or
+three. But that's how the terminology has developed, and I'll follow
+common practice here.
+
+The social turn can be seen in the word usage graphs for many different
+kinds of words. Figure~\ref{fig-social-general},
+Figure~\ref{fig-social-ethics}, and Figure~\ref{fig-social-epistemology}
+display some notable examples.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-social-general-1.pdf}}
+
+}
+
+\caption{\label{fig-social-general}Uses of terms for groups.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-social-ethics-1.pdf}}
+
+}
+
+\caption{\label{fig-social-ethics}Uses of terms associated with
+interpersonal ethics.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{phil-studies-may-2025_files/figure-pdf/fig-social-epistemology-1.pdf}}
+
+}
+
+\caption{\label{fig-social-epistemology}Uses of terms from social
+epistemology and social philosophy of language}
+
+\end{figure}%
+
+There are other terms where graphs like this don't work because the term
+was so rare before 2010. Between 1980 and 2009, the terms `slur',
+`slurs' and `slurring' appeared a total of 10 times. Between 2010 and
+2019 they appeared 266 times.
+
+So we have some evidence for a social turn in \emph{Philosophical
+Studies}. I'll end with some reasons to think this isn't particularly
+distinctive to \emph{Philosophical Studies}.
+
+One reason comes from where articles are cited. On average, articles in
+\emph{Philosophical Studies} have about 12.7\% of their citations in
+\emph{Philosophical Studies}. But this proportion varies in systematic
+ways. For words associated with topics the journal does not concentrate
+on, the proportion is much lower. Articles that use the word
+``institutions'' five or more times have 10.2\% of their citations in
+\emph{Philosophical Studies}. For ``simulation'', the proportion is
+10.0\%. But for words associated with topics the journal does publish on
+frequently, the proportion is much higher. Articles using the word
+``analyticity'' five or more times have 12.4\% of their citations in
+\emph{Philosophical Studies}. When a word appears particularly
+frequently in one kind of article, this measure is helpful for
+distinguishing trends relatively specific to \emph{Philosophical
+Studies} from trends in the wider journal ecosystem.
+
+For some topics that are prominent in the 2000s and 2010s, this
+proportion is rather high. We see that with `grounding' (12.9\%),
+`context-sensitive' (13.7\%), and `incompatibilism' (17.6\%). But for
+many of the words in the graphs above, the percentage is lower than
+average. Examples of this include `data' (11.1\%), `participants'
+(11.2\%), `groups' (10.7\%), `interpersonal' (9.3\%), `racial' (9.2\%),
+`gender' (10.1\%) and `deference' (9.7\%). This isn't conclusive, but
+suggests that while \emph{Philosophical Studies} is more empirical, and
+more social, than it was in previous decades, other philosophy journals
+have been changing even more rapidly.
+
+And there are some parts of the social turn that are not particularly
+visible in \emph{Philosophical Studies} through 2019. Kristie Dotson's
+paper on epistemic violence (\citeproc{ref-WOS000289948200002}{Dotson
+2011}) is one of the most cited papers of the 2010s, but it doesn't get
+cited in \emph{Philosophical Studies} until 2019
+(\citeproc{ref-WOS000460037300009}{Matthes 2019}). It has been cited
+more often in \emph{Philosophical Studies} since 2019, but this adds to
+the evidence in the previous paragraph that \emph{Philosophical Studies}
+didn't move into social philosophy as rapidly as some of its peers.
+
+\section{Conclusions and Further
+Questions}\label{conclusions-and-further-questions}
+
+One theme of this essay has been the change in the status of
+\emph{Philosophical Studies}. In 1980, it primarily published papers
+that responded to ideas introduced in books or higher prestige journals
+some time earlier, often several years earlier. A few decades later, it
+is publishing papers that set the research agenda others to which other
+journals respond. There are two interestingly different stories for how
+this could have happened.
+
+Philosophy is notoriously hierarchical. If you're reading this journal
+you probably don't need much evidence for this. If you want such
+evidence, look back to Table~\ref{tbl-citation-rate}. If
+\emph{Philosophical Studies} is playing more of an agenda setting role,
+this could be because it has moved up in the hierarchy, or because the
+hierarchy is getting flatter. (Or both, these are not exclusive.) When
+\emph{Noûs} underwent a similar change a decade or two before
+\emph{Philosophical Studies}, this was not a sign of the hierarchy
+flattening; \emph{Noûs} just got more prestigious. In this case it's
+possible we are seeing a journal ecosystem that is getting more
+receptive to ideas from places it had traditionally treated as lower
+prestige. But it's also possible that all we're seeing is one journal
+move up while others move down. This can't be resolved by just looking
+at one journal, and it's an interesting question for future research.
+
+\emph{Philosophical Studies} is often referred to as a generalist
+journal. I've presented some reasons here for questioning that label. It
+doesn't publish much logic, or history of philosophy, or political
+philosophy, or philosophy of various academic subjects, e.g.,
+mathematics, biology, economics, history, or music. One question is
+whether that should matter. Must one publish articles on philosophy of
+history to be a generalist journal? If so, how many such articles must
+one publish? If this is a reason for not counting \emph{Philosophical
+Studies} as truly generalist, are there \emph{any} generalist journals
+in philosophy. If so, what are they, and how would we tell?
+
+But the biggest open questions are ones we cannot answer until we see
+how philosophy itself develops. The very short version of the story of
+\emph{Philosophical Studies} over these four decades is that it moved
+from being centered on core analytic questions about language, to first
+covering more epistemology, and then doing more empirical and social
+philosophy. These moves tracked broader changes in the discipline; if
+anything, the changes in \emph{Philosophical Studies} were less dramatic
+than the changes in peer journals. The biggest question, at least by my
+lights, is which of the trends of the 2010s will continue in the 2020s
+and beyond.
+
+We can make some of these questions more precise. Will metaphysics
+continue to be post-modal, or will we see a revival of modal
+metaphysics? Will philosophy of mind continue its trend to becoming more
+empirical, or will there be a return to armchair approaches? Will
+epistemology and ethics continue to move closer together? Will
+philosophy of language keep moving closer to linguistics? And, most of
+all, will the social turn across so many different parts of philosophy
+continue? If it does, will it turn more towards questions about society
+as a whole, or will it continue to be based in interpersonal, or
+second-personal, phenomena?
+
+One could use the evidence from these four decades of
+\emph{Philosophical Studies} to give two contradictory answers to these
+questions. On the one hand, the trends, especially since 2014, seem so
+dramatic it's hard to imagine them suddenly reversing. (And the
+preliminary data we have from the early 2020s backs up this intuition.)
+On the other hand, previous trends have ended rather abruptly, without
+much obvious warning, and perhaps these trends will as well.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-WOSA1985AKA2200025}
+Alchourrón, Carlos E., Peter Gärdenfors, and David Makinson. 1985. {``On
+the Logic of Theory Change: Partial Meet Contraction and Revision
+Functions.''} \emph{Journal of Symbolic Logic} 50 (2): 510--30. doi:
+\href{https://doi.org/10.2307/2274239}{10.2307/2274239}.
+
+\bibitem[\citeproctext]{ref-WOS000078432400003}
+Anderson, Elizabeth S. 1999. {``What Is the Point of Equality?''}
+\emph{Ethics} 109 (2): 287--337. doi:
+\href{https://doi.org/10.1086/233897}{10.1086/233897}.
+
+\bibitem[\citeproctext]{ref-WOSA1985ABV7900005}
+Asher, Nicholas, and Daniel Bonevac. 1985. {``Situations and Events.''}
+\emph{Philosophical Studies} 47 (1): 57--77. doi:
+\href{https://doi.org/10.1007/BF00355087}{10.1007/BF00355087}.
+
+\bibitem[\citeproctext]{ref-WOS000356355000009}
+Beddor, Bob. 2015. {``Evidentialism, Circularity, and Grounding.''}
+\emph{Philosophical Studies} 172 (7): 1847--68. doi:
+\href{https://doi.org/10.1007/s11098-014-0375-z}{10.1007/s11098-014-0375-z}.
+
+\bibitem[\citeproctext]{ref-WOS000184542900004}
+Bennett, Karen. 2003. {``Why the Exclusion Problem Seems Intractable,
+and How, Just Maybe To Tract It.''} \emph{Noûs} 37 (3): 471--97. doi:
+\href{https://doi.org/10.1111/1468-0068.00447}{10.1111/1468-0068.00447}.
+
+\bibitem[\citeproctext]{ref-WOS000289572300004}
+---------. 2011. {``Construction Area (No Hard Hat Required).''}
+\emph{Philosophical Studies} 154 (1): 79--104. doi:
+\href{https://doi.org/10.1007/s11098-011-9703-8}{10.1007/s11098-011-9703-8}.
+
+\bibitem[\citeproctext]{ref-WOSA1988M482100005}
+Blackburn, William K. 1988. {``Wettstein on Definite Descriptions.''}
+\emph{Philosophical Studies} 53 (2): 263--78. doi:
+\href{https://doi.org/10.1007/BF00354644}{10.1007/BF00354644}.
+
+\bibitem[\citeproctext]{ref-WOS000325717500012}
+Bliss, Ricki Leigh. 2013. {``Viciousness and the Structure of
+Reality.''} \emph{Philosophical Studies} 166 (2): 399--418. doi:
+\href{https://doi.org/10.1007/s11098-012-0043-0}{10.1007/s11098-012-0043-0}.
+
+\bibitem[\citeproctext]{ref-WOS000340619100006}
+Bourget, David, and David J. Chalmers. 2014. {``What Do Philosophers
+Believe?''} \emph{Philosophical Studies} 170 (3): 465--500. doi:
+\href{https://doi.org/10.1007/s11098-013-0259-7}{10.1007/s11098-013-0259-7}.
+
+\bibitem[\citeproctext]{ref-WOSA1991FC38500010}
+Boyd, Richard. 1991. {``Realism, Anti-Foundationalism and the Enthusiasm
+for Natural Kinds.''} \emph{Philosophical Studies} 61 (1-2): 127--48.
+doi: \href{https://doi.org/10.1007/BF00385837}{10.1007/BF00385837}.
+
+\bibitem[\citeproctext]{ref-WOS000084073700005}
+Broome, John. 1999. {``Normative Requirements.''} \emph{Ratio} 12 (4):
+398--419. doi:
+\href{https://doi.org/10.1111/1467-9329.00101}{10.1111/1467-9329.00101}.
+
+\bibitem[\citeproctext]{ref-WOS000241143100001}
+Brown, J. 2006. {``Contextualism and Warranted Assertibility
+Manoeuvres.''} \emph{Philosophical Studies} 130 (3): 407--35. doi:
+\href{https://doi.org/10.1007/s11098-004-5747-3}{10.1007/s11098-004-5747-3}.
+
+\bibitem[\citeproctext]{ref-Brzezinski2015}
+Brzezinski, Michal. 2015. {``Power Laws in Citation Distributions:
+Evidence from Scopus.''} \emph{Scientometrics} 103 (1): 213--28. doi:
+\href{https://doi.org/10.1007/s11192-014-1524-z}{10.1007/s11192-014-1524-z}.
+
+\bibitem[\citeproctext]{ref-WOSA1986AYX3200001}
+Burge, Tyler. 1986. {``Individualism and Psychology.''}
+\emph{Philosophical Review} 95 (1): 3--45. doi:
+\href{https://doi.org/10.2307/2185131}{10.2307/2185131}.
+
+\bibitem[\citeproctext]{ref-WOSA1962CGX0500005}
+Cavell, S. 1962. {``The Availability of Wittgenstein's Later
+Philosophy.''} \emph{Philosophical Review} 71 (1): 67--93. doi:
+\href{https://doi.org/10.2307/2183682}{10.2307/2183682}.
+
+\bibitem[\citeproctext]{ref-Chalmers1996}
+Chalmers, David J. 1996. \emph{The Conscious Mind}. Oxford: Oxford
+University Press.
+
+\bibitem[\citeproctext]{ref-WOS000073222300002}
+Clark, Andy, and David J. Chalmers. 1998. {``The Extended Mind.''}
+\emph{Analysis} 58 (1): 7--19. doi:
+\href{https://doi.org/10.1111/1467-8284.00096}{10.1111/1467-8284.00096}.
+
+\bibitem[\citeproctext]{ref-WOSA1989AE70300010}
+Cohen, G. A. 1989. {``On the Currency of Egalitarian Justice.''}
+\emph{Ethics} 99 (4): 906--44. doi:
+\href{https://doi.org/10.1086/293126}{10.1086/293126}.
+
+\bibitem[\citeproctext]{ref-WOSA1986D182100003}
+Cross, Charles B. 1986. {``Can and the Logic of Ability.''}
+\emph{Philosophical Studies} 50 (1): 53--64. doi:
+\href{https://doi.org/10.1007/BF00355160}{10.1007/BF00355160}.
+
+\bibitem[\citeproctext]{ref-WOSA1975BF60100001}
+Cummins, Robert. 1975. {``Functional Analysis.''} \emph{Journal of
+Philosophy} 72 (20): 741--65. doi:
+\href{https://doi.org/10.2307/2024640}{10.2307/2024640}.
+
+\bibitem[\citeproctext]{ref-Darwall2006}
+Darwall, Stephen. 2006. \emph{The Second Person Standpoint: Morality,
+Respect, and Accountability,}. Cambridge, MA: Harvard University Press.
+
+\bibitem[\citeproctext]{ref-WOS000245280900001}
+Davis, Wayne A. 2007. {``Knowledge Claims and Context: Loose Use.''}
+\emph{Philosophical Studies} 132 (3): 395--438. doi:
+\href{https://doi.org/10.1007/s11098-006-9035-2}{10.1007/s11098-006-9035-2}.
+
+\bibitem[\citeproctext]{ref-DeVries2005}
+DeVries, Willem A. 2005. \emph{Wilfrid Sellars}. Abingdon: Routledge.
+
+\bibitem[\citeproctext]{ref-WOS000289948200002}
+Dotson, Kristie. 2011. {``Tracking Epistemic Violence, Tracking
+Practices of Silencing.''} \emph{Hypatia} 26 (2): 236--57. doi:
+\href{https://doi.org/10.1111/j.1527-2001.2011.01177.x}{10.1111/j.1527-2001.2011.01177.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1970ZE33800001}
+Dretske, Fred. 1970. {``Epistemic Operators.''} \emph{Journal of
+Philosophy} 67 (24): 1007--23. doi:
+\href{https://doi.org/10.2307/2024710}{10.2307/2024710}.
+
+\bibitem[\citeproctext]{ref-WOSA1995QX94800001}
+Edgington, Dorothy. 1995. {``On Conditionals.''} \emph{Mind} 104 (414):
+235--329. doi:
+\href{https://doi.org/10.1093/mind/104.414.235}{10.1093/mind/104.414.235}.
+
+\bibitem[\citeproctext]{ref-WOS000245280800001}
+Egan, Andy. 2007. {``Epistemic Modals, Relativism and Assertion.''}
+\emph{Philosophical Studies} 133 (1): 1--22. doi:
+\href{https://doi.org/10.1007/s11098-006-9003-x}{10.1007/s11098-006-9003-x}.
+
+\bibitem[\citeproctext]{ref-Egan2011}
+---------. 2011. {``Comments on Gendler's, 'the Epistemic Costs of
+Implicit Bias'.''} \emph{Philosophical Studies} 156 (1): 65--79. doi:
+\href{https://doi.org/10.1007/s11098-011-9803-5}{10.1007/s11098-011-9803-5}.
+
+\bibitem[\citeproctext]{ref-Fodor1998}
+Fodor, Jerry A. 1998. \emph{Concepts: Where Cognitive Science Went
+Wrong}. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-FodorLepore1992}
+Fodor, Jerry A., and Ernest Lepore. 1992. \emph{Holism: A Shopper's
+Guide}. Cambridge: Blackwell.
+
+\bibitem[\citeproctext]{ref-WOSA1995QE80400001}
+van Fraassen, Bas C. 1995. {``Belief and the Problem of Ulysses and the
+Sirens.''} \emph{Philosophical Studies} 77 (1): 7--37. doi:
+\href{https://doi.org/10.1007/BF00996309}{10.1007/BF00996309}.
+
+\bibitem[\citeproctext]{ref-WOSA1969Y444700002}
+Frankfurt, Harry G. 1969. {``Alternate Possibilities and Moral
+Responsibility.''} \emph{Journal of Philosophy} 66 (23): 829--39. doi:
+\href{https://doi.org/10.2307/2023833}{10.2307/2023833}.
+
+\bibitem[\citeproctext]{ref-WOS000295087100003}
+Gendler, Tamar Szabò. 2011. {``On the Epistemic Costs of Implicit
+Bias.''} \emph{Philosophical Studies} 156 (1): 33--63. doi:
+\href{https://doi.org/10.1007/s11098-011-9801-7}{10.1007/s11098-011-9801-7}.
+
+\bibitem[\citeproctext]{ref-WOSA1985ANT6600005}
+Gensler, Harry J. 1985. {``A Kantian Argument Against Abortion.''}
+\emph{Philosophical Studies} 48 (1): 57--72. doi:
+\href{https://doi.org/10.1007/BF00372407}{10.1007/BF00372407}.
+
+\bibitem[\citeproctext]{ref-WOSA1986AZA8100007}
+---------. 1986. {``A Kantian Argument Against Abortion.''}
+\emph{Philosophical Studies} 49 (1): 83--98. doi:
+\href{https://doi.org/10.1007/BF00372885}{10.1007/BF00372885}.
+
+\bibitem[\citeproctext]{ref-WOSA1984TJ24700012}
+Hazen, Allen. 1984. {``Modality as Many Metalinguistic Predicates.''}
+\emph{Philosophical Studies} 46 (2): 271--77. doi:
+\href{https://doi.org/10.1007/BF00373111}{10.1007/BF00373111}.
+
+\bibitem[\citeproctext]{ref-WOSA1992KC39800002}
+Johnston, Mark. 1992. {``How To Speak of the Colors.''}
+\emph{Philosophical Studies} 68 (3): 221--63. doi:
+\href{https://doi.org/10.1007/BF00694847}{10.1007/BF00694847}.
+
+\bibitem[\citeproctext]{ref-WOS000178572700004}
+Kelly, Thomas. 2002. {``The Rationality of Belief and Some Other
+Propositional Attitudes.''} \emph{Philosophical Studies} 110 (2):
+163--96. doi:
+\href{https://doi.org/10.1023/A:1020212716425}{10.1023/A:1020212716425}.
+
+\bibitem[\citeproctext]{ref-WOS000081337700001}
+Kim, Jaegwon. 1999a. {``Hempel, Explanation, Metaphysics.''}
+\emph{Philosophical Studies} 94 (1-2): 1--20. doi:
+\href{https://doi.org/10.1023/A:1004420102896}{10.1023/A:1004420102896}.
+
+\bibitem[\citeproctext]{ref-WOS000082592000002}
+---------. 1999b. {``Making Sense of Emergence.''} \emph{Philosophical
+Studies} 95 (1-2): 3--36. doi:
+\href{https://doi.org/10.1023/A:1004563122154}{10.1023/A:1004563122154}.
+
+\bibitem[\citeproctext]{ref-WOSA1988P180000006}
+King, Jeffrey C. 1988. {``Are Indefinite Descriptions Ambiguous.''}
+\emph{Philosophical Studies} 53 (3): 417--40. doi:
+\href{https://doi.org/10.1007/BF00353515}{10.1007/BF00353515}.
+
+\bibitem[\citeproctext]{ref-WOSA1981NA08400001}
+Kitcher, Philip. 1981. {``Explanatory Unification.''} \emph{Philosophy
+of Science} 48 (4): 507--31. doi:
+\href{https://doi.org/10.1086/289019}{10.1086/289019}.
+
+\bibitem[\citeproctext]{ref-WOS000231037900002}
+Kolodny, Niko. 2005. {``Why Be Rational?''} \emph{Mind} 114 (455):
+509--63. doi:
+\href{https://doi.org/10.1093/mind/fzi509}{10.1093/mind/fzi509}.
+
+\bibitem[\citeproctext]{ref-WOS000086712500005}
+Latham, Noa. 2000. {``Chalmers on the Addition of Consciousness To the
+Physical World.''} \emph{Philosophical Studies} 98 (1): 71--97.
+
+\bibitem[\citeproctext]{ref-WOSA1981LY92900002}
+Laudan, Larry. 1981. {``A Confutation of Convergent Realism.''}
+\emph{Philosophy of Science} 48 (1): 19--49. doi:
+\href{https://doi.org/10.1086/288975}{10.1086/288975}.
+
+\bibitem[\citeproctext]{ref-WOSA1979JB14500003}
+Lewis, David. 1979. {``Counterfactual Dependence and Time's Arrow.''}
+\emph{Noûs} 13 (4): 455--76. doi:
+\href{https://doi.org/10.2307/2215339}{10.2307/2215339}.
+
+\bibitem[\citeproctext]{ref-WOSA1983RR51600001}
+---------. 1983. {``New Work for a Theory of Universals.''}
+\emph{Australasian Journal of Philosophy} 61 (4): 343--77. doi:
+\href{https://doi.org/10.1080/00048408312341131}{10.1080/00048408312341131}.
+
+\bibitem[\citeproctext]{ref-WOSA1984TQ70900001}
+---------. 1984. {``Putnam's Paradox.''} \emph{Australasian Journal of
+Philosophy} 62 (3): 221--36. doi:
+\href{https://doi.org/10.1080/00048408412340013}{10.1080/00048408412340013}.
+
+\bibitem[\citeproctext]{ref-Lewis1986a}
+---------. 1986. \emph{On the Plurality of Worlds}. Oxford: Blackwell
+Publishers.
+
+\bibitem[\citeproctext]{ref-WOSA1996VY21200001}
+---------. 1996. {``Elusive Knowledge.''} \emph{Australasian Journal of
+Philosophy} 74 (4): 549--67. doi:
+\href{https://doi.org/10.1080/00048409612347521}{10.1080/00048409612347521}.
+
+\bibitem[\citeproctext]{ref-WOSA1997WP33800001}
+---------. 1997. {``Finkish Dispositions.''} \emph{Philosophical
+Quarterly} 47 (187): 143--58. doi:
+\href{https://doi.org/10.1111/1467-9213.00052}{10.1111/1467-9213.00052}.
+
+\bibitem[\citeproctext]{ref-Lewy1976}
+Lewy, C. 1976. {``Mind Under {G. E. Moore} (1921-1947).''} \emph{Mind}
+85 (337): 37--46. doi:
+\href{https://doi.org/10.1093/mind/LXXXV.337.37}{10.1093/mind/LXXXV.337.37}.
+
+\bibitem[\citeproctext]{ref-WOS000087305900001}
+Machamer, Peter, Lindley Darden, and Carl F. Craver. 2000. {``Thinking
+About Mechanisms.''} \emph{Philosophy of Science} 67 (1): 1--25. doi:
+\href{https://doi.org/10.1086/392759}{10.1086/392759}.
+
+\bibitem[\citeproctext]{ref-Malaterre2019}
+Malaterre, Christophe, Jean-François Chartier, and Davide Pulizzotto.
+2019. {``What Is This Thing Called Philosophy of Science? A
+Computational Topic-Modeling Perspective, 1934?2015.''} \emph{Hopos: The
+Journal of the International Society for the History of Philosophy of
+Science} 9 (2): 215--49. doi:
+\href{https://doi.org/10.1086/704372}{10.1086/704372}.
+
+\bibitem[\citeproctext]{ref-Malaterre2022}
+Malaterre, Christophe, and Francis Lareau. 2022. {``The Early Days of
+Contemporary Philosophy of Science: Novel Insights from Machine
+Translation and Topic-Modeling of Non-Parallel Multilingual Corpora.''}
+\emph{Synthese} 200 (3): 1--33. doi:
+\href{https://doi.org/10.1007/s11229-022-03722-x}{10.1007/s11229-022-03722-x}.
+
+\bibitem[\citeproctext]{ref-Malaterre2020}
+Malaterre, Christophe, Francis Lareau, Davide Pulizzotto, and Jonathan
+St-Onge. 2020. {``Eight Journals over Eight Decades: A Computational
+Topic-Modeling Approach to Contemporary Philosophy of Science.''}
+\emph{Synthese} 199 (1-2): 2883--923. doi:
+\href{https://doi.org/10.1007/s11229-020-02915-6}{10.1007/s11229-020-02915-6}.
+
+\bibitem[\citeproctext]{ref-Malaterre2019b}
+Malaterre, Christophe, Davide Pulizzotto, and Francis Lareau. 2019.
+{``Revisiting Three Decades of Biology and Philosophy: A Computational
+Topic-Modeling Perspective.''} \emph{Biology and Philosophy} 35 (5):
+1--25. doi:
+\href{https://doi.org/10.1007/s10539-019-9729-4}{10.1007/s10539-019-9729-4}.
+
+\bibitem[\citeproctext]{ref-WOS000460037300009}
+Matthes, Erich Hatala. 2019. {``Cultural Appropriation and
+Oppression.''} \emph{Philosophical Studies} 176 (4): 1003--13. doi:
+\href{https://doi.org/10.1007/s11098-018-1224-2}{10.1007/s11098-018-1224-2}.
+
+\bibitem[\citeproctext]{ref-WOS000341924300014}
+Nolan, Daniel. 2014. {``Hyperintensional Metaphysics.''}
+\emph{Philosophical Studies} 171 (1): 149--60. doi:
+\href{https://doi.org/10.1007/s11098-013-0251-2}{10.1007/s11098-013-0251-2}.
+
+\bibitem[\citeproctext]{ref-WOS000083809100001}
+Ostertag, Gary. 1999. {``A Scorekeeping Error.''} \emph{Philosophical
+Studies} 96 (2): 123--46. doi:
+\href{https://doi.org/10.1023/A:1004293605139}{10.1023/A:1004293605139}.
+
+\bibitem[\citeproctext]{ref-Petrovich2024}
+Petrovich, Eugenio. 2024. \emph{A Quantitative Portrait of Analytic
+Philosophy: Looking Through the Margins}. Cham: Springer.
+
+\bibitem[\citeproctext]{ref-WOS000165361800002}
+Pryor, James. 2000. {``The Skeptic and the Dogmatist.''} \emph{Noûs} 34
+(4): 517--49. doi:
+\href{https://doi.org/10.1111/0029-4624.00277}{10.1111/0029-4624.00277}.
+
+\bibitem[\citeproctext]{ref-WOSA1980KH88100001}
+Rawls, John. 1980. {``Kantian Constructivism in Moral Theory.''}
+\emph{Journal of Philosophy} 77 (9): 515--35. doi:
+\href{https://doi.org/10.2307/2025790}{10.2307/2025790}.
+
+\bibitem[\citeproctext]{ref-WOS000222384400005}
+Schaffer, Jonathan. 2004. {``From Contextualism To Contrastivism.''}
+\emph{Philosophical Studies} 119 (1-2): 73--103. doi:
+\href{https://doi.org/10.1023/B:PHIL.0000029351.56460.8c}{10.1023/B:PHIL.0000029351.56460.8c}.
+
+\bibitem[\citeproctext]{ref-WOS000272855000002}
+---------. 2010. {``Monism: The Priority of the Whole.''}
+\emph{Philosophical Review} 119 (1): 31--76. doi:
+\href{https://doi.org/10.1215/00318108-2009-025}{10.1215/00318108-2009-025}.
+
+\bibitem[\citeproctext]{ref-Sider2020}
+Sider, Theodore. 2020. \emph{The Tools of Metaphysics and the
+Metaphysics of Science}. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-WOSA1972Z066400001}
+Singer, Peter. 1972. {``Famine, Affluence, and Morality.''}
+\emph{Philosophy \& Public Affairs} 1 (3): 229--43.
+
+\bibitem[\citeproctext]{ref-WOSA1989CE37600004}
+Terzis, George N. 1989. {``An Objection To Kantian Ethical
+Rationalism.''} \emph{Philosophical Studies} 57 (3): 299--313. doi:
+\href{https://doi.org/10.1007/BF00372699}{10.1007/BF00372699}.
+
+\bibitem[\citeproctext]{ref-WOSA1971Y116900003}
+Thomson, Judith Jarvis. 1971. {``A Defense of Abortion.''}
+\emph{Philosophy \& Public Affairs} 1 (1): 47--66.
+
+\bibitem[\citeproctext]{ref-WOSA1984SK63200001}
+Tichý, Pavel. 1984. {``Subjunctive Conditionals: Two Parameters
+Vs.~Three.''} \emph{Philosophical Studies} 45 (2): 147--79. doi:
+\href{https://doi.org/10.1007/BF00372476}{10.1007/BF00372476}.
+
+\bibitem[\citeproctext]{ref-Warnock1976}
+Warnock, G. J. 1976. {``Gilbert Ryle's Editorship.''} \emph{Mind} 85
+(337): 47--56. doi:
+\href{https://doi.org/10.1093/mind/LXXXV.337.47}{10.1093/mind/LXXXV.337.47}.
+
+\bibitem[\citeproctext]{ref-WOS000168853300001}
+Williams, Michael. 2001. {``Contextualism, Externalism and Epistemic
+Standards.''} \emph{Philosophical Studies} 103 (1): 1--23. doi:
+\href{https://doi.org/10.1023/A:1010349100272}{10.1023/A:1010349100272}.
+
+\bibitem[\citeproctext]{ref-WOS000468369800007}
+Wodak, Daniel. 2019. {``Moral Perception, Inference, and Intuition.''}
+\emph{Philosophical Studies} 176 (6): 1495--1512. doi:
+\href{https://doi.org/10.1007/s11098-019-01250-y}{10.1007/s11098-019-01250-y}.
+
+\bibitem[\citeproctext]{ref-WOSA1992JA62400001}
+Yablo, Stephen. 1992. {``Mental Causation.''} \emph{Philosophical
+Review} 101 (2): 245--80. doi:
+\href{https://doi.org/10.2307/2185535}{10.2307/2185535}.
+
+\end{CSLReferences}
+
+
+
+\noindent Published online in May 2025.
+
+
+\end{document}

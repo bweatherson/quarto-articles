@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Brian Weatherson">
+<meta name="dcterms.date" content="2024-06-11">
+
+<title>Against Inconclusive Updating Rules – Brian Weatherson</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-de070a7b0ab54f8780927367ac907214.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-2b3e328b71be8d25427581baeb23079b.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-de070a7b0ab54f8780927367ac907214.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-4c44098e78fdd705b9debb9eb66aa123.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-dcf4b32a2094a7fbc35852421cc1fa0d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-4c44098e78fdd705b9debb9eb66aa123.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="stylesheet" href="https://use.typekit.net/uzz2drx.css">
+<meta name="quarto:status" content="draft">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="floating nav-fixed slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Brian Weatherson</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-papers" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Papers</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-papers">    
+        <li>
+    <a class="dropdown-item" href="../../../papers.html">
+ <span class="dropdown-text">All Papers</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../epist.html">
+ <span class="dropdown-text">Epistemology</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../gdt.html">
+ <span class="dropdown-text">Games and Decisions</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../books.html">
+ <span class="dropdown-text">On Books</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-books" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Books</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-books">    
+        <li>
+    <a class="dropdown-item" href="https://brian.weatherson.org/ne/">
+ <span class="dropdown-text">Normative Externalism</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://lda.weatherson.org/">
+ <span class="dropdown-text">A History of Philosophy Journals</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://brian.weatherson.org/kahis/">
+ <span class="dropdown-text">Knowledge: A Human Interest Story</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../teaching.html"> 
+<span class="menu-text">Teaching Notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://scholar.google.com/citations?user=rz5RF8kAAAAJ&amp;hl=en&amp;oi=ao" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-google"></i></a>
+    <a href="mailto: brian@weatherson.org" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-mailbox"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Against Inconclusive Updating Rules</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">games and decisions</div>
+                <div class="quarto-category">epistemology</div>
+                <div class="quarto-category">unpublished</div>
+              </div>
+                  </div>
+  </div>
+    
+  <div class="quarto-title-meta-author">
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Affiliation</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author"><a href="http://brian.weatherson.org">Brian Weatherson</a> </p>
+    </div>
+    <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              University of Michigan
+            </p>
+        </div>
+    </div>
+
+  <div class="quarto-title-meta">
+
+        
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 11, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  <div>
+    <div class="abstract">
+      <div class="block-title">Abstract</div>
+      <p>Many formal epistemologists think that there should be a rule for how rational agents update their credences when some part of their credal state is adjusted in a way that does not involve learning, with certainty, some proposition. The most popular such rule is Jeffrey conditionalization. This note argues that no such rule is correct. The only rational rule of update is that one should conditionalize on one’s evidence.</p>
+    </div>
+  </div>
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Sections</h2>
+   
+  <ul>
+  <li><a href="#sec-intro" id="toc-sec-intro" class="nav-link active" data-scroll-target="#sec-intro"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#sec-defer" id="toc-sec-defer" class="nav-link" data-scroll-target="#sec-defer"><span class="header-section-number">2</span> Deference</a></li>
+  <li><a href="#sec-accuracy" id="toc-sec-accuracy" class="nav-link" data-scroll-target="#sec-accuracy"><span class="header-section-number">3</span> Accuracy</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="updating.docx"><i class="bi bi-file-word"></i>MS Word</a></li><li><a href="Against Inconclusive Updating Rules.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+
+
+<section id="sec-intro" class="level1 page-columns page-full" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>The two central commitments of Bayesian epistemology are that credences should obey the probability calculus, and that they should be updated by conditionalization on new evidence. But many Bayesian epistemologists hold that there are other rules too. After all, they say, conditionalization has its limits. To update on <em>E</em> means to move one’s credence in <em>E</em> to 1, and hence to be willing to bet on <em>E</em> at any odds. Since there are few if any propositions that we would bet on at any odds, there isn’t much evidence in this strong sense. So something else is needed. In particular, they say, we need extra rules that say what to do when some other change is externally imposed on a credal state. The simplest such imposition is that some proposition <em>p</em> has its credence set to be <em>x</em>. In that case the most popular rule is Jeffrey conditionalisation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;For more details on Jeffrey conditionalization, see Lin <span class="citation" data-cites="Lin2022">(<a href="#ref-Lin2022" role="doc-biblioref"><strong>Lin2022?</strong></a> sec 5.3)</span></p></div></div><p><span class="math display">\[
+\Pr_{\text{New}}(q) = x\Pr(q | p) + (1-x)\Pr(q | \neg p)
+\]</span></p>
+<p>There are a couple of initial inconclusive reasons to be sceptical of the possibility of any such rule.</p>
+<p>One reason, loosely following <span class="citation" data-cites="Williamson2000">Williamson (<a href="#ref-Williamson2000" role="doc-biblioref">2000</a>)</span>, says that all updating involves learning, learning involves acquiring evidence, evidence is propositional, and an externally imposed move of one’s credences is not the acquisition of a proposition.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Now as an argument against the importance of Jeffrey conditionalisation, this is question-begging at every step. Still, question-begging arguments can be valuable.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> They can help those of us who are antecedently disposed to reject a view see where our rejection is coming from. But it would be nice to turn that into an argument.</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Though note that someone else has a particular credence is a proposition. This will become important in <a href="#sec-defer" class="quarto-xref">Section&nbsp;2</a>.</p></div><div id="fn3"><p><sup>3</sup>&nbsp;As <span class="citation" data-cites="Lewis1982c">Lewis (<a href="#ref-Lewis1982c" role="doc-biblioref">1982</a>)</span> points out, the most powerful argument against dialethism is blatantly question-begging.</p></div></div><p>A second reason, loosely following <span class="citation" data-cites="vanFraassen1981">(<a href="#ref-vanFraassen1981" role="doc-biblioref"><strong>vanFraassen1981?</strong></a>)</span>, says that this rule is too much of a special case. Unconditional credences are special cases of two things. They are expectations of a very special kind of random variable: one whose value is 1 when a particular proposition is true, and 0 otherwise. And they are conditional credences conditional on a trivial proposition. We might hope that any rule around here would fall out as a special case of a plausible rule that is general enough to cover these more general cases. The absence of such a rule from the literature might give one pause here. But again, this is hardly a conclusive argument. Maybe someone will develop such a rule tomorrow.</p>
+<p>There are a couple of natural ways that one might try to build such a rule: the way of deference, and the way of accuracy. Unfortunately, they both don’t work. And they don’t work in ways that undermine the normative force of any rule that is restricted just to changes in the credence of a single, unconditional, proposition. Let’s take these in turn.</p>
+</section>
+<section id="sec-defer" class="level1 page-columns page-full" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Deference</h1>
+<p>Start with the following natural thought. What one should do when one changes one’s credence in <em>p</em> to <em>x</em> is what one would do if one learned that an expert to whom one properly defers has credence <em>x</em> in <em>p</em>. This approach has two attractive features. First, it is easy to see its justification. Even a sceptic who only believed that updating goes by learning could agree that sometimes one should act as if one had learned something about an expert. Second, it promises to generalise. One could also ask about what credences one would have if one learned the expert’s credence in <em>p</em> given <em>q</em> was <em>x</em>, or one learned the expert’s expected value for a particular random variable was <em>x</em>.</p>
+<p>The rule requires that one be able to identify experts to whom one properly defers. But here again there is a simple model. Let Thinker be the person doing the deferring. Let Experimenter be someone who was a cognitive duplicate of Thinker just before conducting an experiment, and now they have conducted the experiment and learned the result.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Assume the evidence Experimenter gets is luminous; they know what they learned, and they know what they didn’t learn. So we don’t have any concerns about learning having negative value, as happens when evidence is not luminous (<span class="citation" data-cites="Dasnd">(<a href="#ref-Dasnd" role="doc-biblioref"><strong>Dasnd?</strong></a>)</span>). Then, given the venerable rule that one should use as much evidence as possible (<span class="citation" data-cites="Hosiasson1931">(<a href="#ref-Hosiasson1931" role="doc-biblioref"><strong>Hosiasson1931?</strong></a>)</span>; <span class="citation" data-cites="Torsellnd">(<a href="#ref-Torsellnd" role="doc-biblioref"><strong>Torsellnd?</strong></a>)</span>), Thinker should defer to Experimenter.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;The underlying picture I’m using here is taken from <span class="citation" data-cites="Blackwell1951">Blackwell (<a href="#ref-Blackwell1951" role="doc-biblioref">1951</a>)</span>.</p></div></div><p>All this seems fine, but the problem is that we haven’t uniquely specified an Experimenter here. Different background assumptions about what the Experimenter is like might lead to different posterior credences if following this rule. So any general rule, like Jeffrey conditionalization, which is silent about the nature of the experimenter, cannot be justified this way. Let’s see this with an example.</p>
+<p>Let X, Y and Z be normal distributions with mean 0 and variance 1. In symbols, each of them is <span class="math inline">\(\mathcal{N}\)</span>(0,1). So the sum of any two of them has distribution <span class="math inline">\(\mathcal{N}\)</span>(0,2), and the sum of all three has distribution <span class="math inline">\(\mathcal{N}\)</span>(0,3). Let <em>p</em> be the proposition that this sum, X&nbsp;+&nbsp;Y&nbsp;+&nbsp;Z, is positive, and <em>q</em> be the proposition that the sum is greater than 1. Let C be a probability function that incorporates all these facts, but has no other direct information about X, Y, and Z. So C(<em>p</em>)&nbsp;=&nbsp;½, since in all respects C’s opinions are symmetric around 0.</p>
+<p>C knows some things about A and B. Both of them know everything C knows about X, Y, Z, and each are logically and mathematically omniscient, and know precisely what evidence they have. Also, A just conducted an experiment that revealed the value of X, and nothing else, and B conducted an experiment that revealed the value of X + Y, and nothing else. Both A and B are experts for C, in the above sense. What we’ll do now is work out what C’s posterior credence in <em>q</em> should be after first learning that A(<em>p</em>)&nbsp;=&nbsp;0.6, and second learning that B(<em>p</em>)&nbsp;=&nbsp;0.6.</p>
+<p>We can work out the value of X, which we’ll call <em>x</em>, from A(<em>p</em>)&nbsp;=&nbsp;0.6. In what follows, <span class="math inline">\(\Phi\)</span>(<em>x</em>) is the cumulative distribution for the standard normal distribution, i.e., for <span class="math inline">\(\mathcal{N}\)</span>(0,1), and <span class="math inline">\(\Phi\)</span><sup>-1</sup> is its inverse. If X&nbsp;=&nbsp;<em>x</em>, then <em>p</em> is true iff Y&nbsp;+&nbsp;Z&nbsp;&gt; -<em>x</em>. Since Y&nbsp;+&nbsp;Z is a normal distribution with mean 0 and variance 2, i.e., standard deviation <span class="math inline">\(\sqrt{2}\)</span>, the probability of this is <span class="math inline">\(\Phi\)</span>(<span class="math inline">\(\frac{x}{\sqrt{2}}\)</span>). So <em>x</em>&nbsp;=&nbsp;<span class="math inline">\(\sqrt{2}\Phi\)</span><sup>-1</sup>(0.6), which is about 0.358. So A(<em>q</em>) is the probability that Y&nbsp;+&nbsp;Z is greater than 1&nbsp;-&nbsp;<em>x</em>, i.e., about 0.642. Since the distribution of Y&nbsp;+&nbsp;Z is <span class="math inline">\(\mathcal{N}\)</span>(0,2), we can work out this probability: it is very close to 0.325. So if C learns that A’s credence in <em>p</em> is 0.6, C’s new credence in <em>q</em> should be about 0.325.</p>
+<p>We can also do the same calculation for B(<em>p</em>)&nbsp;=&nbsp;0.6. Since the only thing B doesn’t know is Z, and Z has distribution <span class="math inline">\(\mathcal{N}\)</span>(0,1), it must be that X&nbsp;+&nbsp;Y has value <span class="math inline">\(\Phi\)</span><sup>-1</sup>(0.6), which is about 0.253. So for B, the probability of <em>q</em> is the probability that Z is greater than (about) 0.747. That is, B(<em>q</em>) is about 0.228. So if C learns that B’s credence in <em>p</em> is 0.6, C’s new credence in <em>q</em> should be about 0.228.</p>
+<p>Now we have a problem. There is no such thing as <em>the</em> credence in <em>q</em> that an expert to whom C should defer would have, if their credence in <em>p</em> was 0.6. If that expert knows X, the posterior credence in <em>q</em> is around 0.325; if the expert knows X&nbsp;+&nbsp;Y, the posterior credence in <em>q</em> is around 0.228. For what it’s worth, neither of these is the number you’d get by Jeffrey conditionalising C’s prior credence with the condition that <em>p</em> goes to 0.6; that would take <em>q</em> to around 0.338.</p>
+<p>So the way of deference doesn’t work. The idea seems right; see what an expert who does this would do. But there are too many experts who do <em>this</em>, and they differ in other respects. Let’s move on to a different strategy.</p>
+</section>
+<section id="sec-accuracy" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Accuracy</h1>
+<p>A popular move in recent years, tracing back to <span class="citation" data-cites="Joyce1998">Joyce (<a href="#ref-Joyce1998" role="doc-biblioref">1998</a>)</span>, has been to justify probabilistic principles by appeal to accuracy. As <span class="citation" data-cites="GreavesWallace200x">(<a href="#ref-GreavesWallace200x" role="doc-biblioref"><strong>GreavesWallace200x?</strong></a>)</span> show, we can justify ordinary conditionalisation this way. And there is a natural way to try to justify inconclusive updates too. Assume Thinker starts with some credence function, and consider the class of probabilistically coherent credence functions that satisfy some constraint. Ask which of them has highest expected accuracy given Thinker’s prior credences. That should be the one that Thinker adopts after updating on the new constraint.</p>
+<p>Here’s a simple example of how this might work. Say that there are three exclusive and exhaustive possibilities: <em>p</em>, <em>q</em>, and <em>r</em>. Initially Thinker has credence 1/6 in <em>p</em>, 1/6 in <em>q</em>, and 2/3 in <em>r</em>, and the new constraint is that <em>p</em> moves to 0.3. Assume for now that we’re using the Brier score to measure inaccuracy. If the credence in <em>p</em> is fixed, there is only one degree of freedom left. Let <em>c</em> be Thinker’s new credence in <em>r</em>, so their credence in <em>q</em> is 0.7-<em>c</em>. Then the expected inaccuracy</p>
+
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Blackwell1951" class="csl-entry" role="listitem">
+Blackwell, David. 1951. <span>“Comparison of Experiments.”</span> <em>Proceedings of the Berkeley Symposium on Mathematical Statistics and Probability</em> 2 (1): 93–102.
+</div>
+<div id="ref-Joyce1998" class="csl-entry" role="listitem">
+Joyce, James M. 1998. <span>“A Non-Pragmatic Vindication of Probabilism.”</span> <em>Philosophy of Science</em> 65 (4): 575–603. doi: <a href="https://doi.org/10.1086/392661">10.1086/392661</a>.
+</div>
+<div id="ref-Lewis1982c" class="csl-entry" role="listitem">
+Lewis, David. 1982. <span>“Logic for Equivocators.”</span> <em>No<span>û</span>s</em> 16 (3): 431–41. doi: <a href="https://doi.org/10.1017/cbo9780511625237.009">10.1017/cbo9780511625237.009</a>. Reprinted in his <em>Papers in Philosophical Logic</em>, Cambridge: Cambridge University Press, 1998, 97-110. References to reprint.
+</div>
+<div id="ref-Williamson2000" class="csl-entry" role="listitem">
+Williamson, Timothy. 2000. <em><span class="nocase">Knowledge and its Limits</span></em>. Oxford University Press.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/brian\.weatherson\.org\/quarto-papers");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
