@@ -15,7 +15,7 @@ categories:
 execute:
   echo: false
   warning: false
-draft: true
+draft: false
 format:
   html:
     fig-format: svg
@@ -25,8 +25,12 @@ format:
     fig-responsive: true
     fontsize: 1.1rem
     number-sections: false
-    css: ..\trad_defn.css
+    css: 
+     - ..\trad_defn.css
+     - color.css
 image: "ab.png"
+filters:
+  - color-spans.lua
 ---
 
 Jake @Nebel2025 has a nice argument coming out in *Noûs* against the possibility of having agent-neutral values in certain infinite worlds. That's to say, he has a proof that in infinite cases a bunch of plausible principles turn out to be inconsistent, one of them being the possibility of agent-neutral values. He argues that's the one of the inconsistent set we should reject.
@@ -35,16 +39,16 @@ I'm going to use his example to argue for a different conclusion. I think what h
 
 Here is the main case that Nebel uses.^[His example draws on @Goodsell2021.] We have a world consisting of a countable infinity of people, *a*~1~, *a*~2~, …, *b*~1~, *b*~2~, …. Each of these people has one of two possible welfare states, which we'll denote as 0 and 1. We'll say an outcome is any assignment of a probability distribution of welfare payouts to each individual. (This means that we're not going to consider what happens if the world population changes; that raises a whole host of different concerns.)
 
-One of four lotteries will take place. The lotteries are shown in @tbl-nebel. The number at the top of the column shows the probability of each possible state (the lottery outcomes are all sensitive to the same probability distribution), and the names in each cell are the names of the people who get payout 1. I've listed the payouts in column 2 for consistency with what comes next, but for now everyone who is listed gets payout 1 if that lottery is chosen and that state obtains.
+One of four lotteries will take place. The lotteries are shown in @tbl-nebel. In each lottery, there are two random devices that contribute to the state. The first is a fair [red]{.text-red} coin which will be flipped once. The second is a fair coin that will be flipped indefinitely until it lands heads. We'll write [H]{.text-red} and [T]{.text-red} for the [red]{.text-red} coin landing heads and tails respectively, and H~*i*~ for the proposition that the other coin will be flipped *i* times. (For completeness, say that H~1~ also includes the possibility that it lands tails every time.) So we have the states shown in the top row of @tbl-nebel, with their probability below them. In each cell, we show the people who get payout 1 in that state from that lottery; everyone else gets payout 0.
 
 ::: {.column-screen-inset}
-| Lottery | Payout | *S*~1~ | *S*~2~ | *S*~3~ | *S*~4~ | … | *S*~2*k*-1~ | *S*~2*k*~ | … |
-|----:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-| **Probability** |    | 1/4 | 1/4 | 1/8 | 1/8 | … | 1/2^*k*^ |  1/2^*k*^ | … |
-| *P* | 1 | *a*~1~, *a*~2~ | *a*~1~, *a*~2~ | *a*~1~ … *a*~4~ | *a*~1~ … *a*~4~ | … | *a*~1~ … *a*~2^*k*-1^~ | *a*~1~ … *a*~2^*k*-1^~ | … |
-| *Q* | 1 | *a*~1~, *a*~2~ | *b*~1~, *b*~2~ | *a*~1~ … *a*~4~ | *b*~1~ … *b*~4~ | … | *a*~1~ … *a*~2^*k*-1^~ | *b*~1~ … *b*~2^*k*-1^~ | … |
-| *P*ʹ | 1 | *a*~1~, *a*~2~ | *a*~1~ … *a*~4~ | *a*~1~, *a*~2~ | *a*~1~ … *a*~8~ | … | *a*~1~, *a*~2~ | *a*~1~ … *a*~2^*k*^~ | … |
-| *Q*ʹ | 1 | *a*~1~, *b*~1~ | *a*~1~, *a*~2~, *b*~1~, *b*~2~ | *a*~2~, *b*~2~ | *a*~1~ … *a*~4~, *b*~1~ … *b*~4~ | … | *a*~*k*-1~, *b*~*k*-1~ | *a*~1~ … *a*~2^*k*-1^~, *b*~1~ … *b*~2^*k*-1^~  | … |
+| Lottery | [H]{.text-red}H~1~ | [T]{.text-red}H~1~ | [H]{.text-red}H~2~ | [T]{.text-red}H~2~ | … | [H]{.text-red}H~*k*~ | [T]{.text-red}H~*k*~ | … |
+|----:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| **Probability** | 1/4 | 1/4 | 1/8 | 1/8 | … | 1/2^*k*+1^ |  1/2^*k*+1^ | … |
+| *P*  | *a*~1~, *a*~2~ | *a*~1~, *a*~2~ | *a*~1~ … *a*~4~ | *a*~1~ … *a*~4~ | … | *a*~1~ … *a*~2^*k*^~ | *a*~1~ … *a*~2^*k*^~ | … |
+| *Q*  | *a*~1~, *a*~2~ | *b*~1~, *b*~2~ | *a*~1~ … *a*~4~ | *b*~1~ … *b*~4~ | … | *a*~1~ … *a*~2^*k*^~ | *b*~1~ … *b*~2^*k*^~ | … |
+| *P*ʹ | *a*~1~, *a*~2~ | *a*~1~ … *a*~4~ | *a*~1~, *a*~2~ | *a*~1~ … *a*~8~ | … | *a*~1~, *a*~2~ | *a*~1~ … *a*~2^*k*+1^~ | … |
+| *Q*ʹ | *a*~1~, *b*~1~ | *a*~1~, *a*~2~, *b*~1~, *b*~2~ | *a*~2~, *b*~2~ | *a*~1~ … *a*~4~, *b*~1~ … *b*~4~ | … | *a*~*k*-1~, *b*~*k*-1~ | *a*~1~ … *a*~2^*k*^~, *b*~1~ … *b*~2^*k*^~  | … |
 
 : Nebel's example {#tbl-nebel}
 :::
@@ -82,52 +86,6 @@ Fourth, to prove *P*ʹ &#126;~∀~ *Q*ʹ. Here it is the same reasoning as in s
 
 Fifth, by two applications of Transitivity of Indifference we get from *Q* &#126;~∀~ *P*, *P* &#126;~∀~ *P*ʹ, and *P*ʹ &#126;~∀~ *Q*ʹ to *Q* &#126;~∀~ *Q*ʹ, contradicting *Q*ʹ ≻~∀~ *Q*.
 
-Nebel argues that the culprit here is Pairwise Anonymity. I think that's not right. And my argument is that a variant of this example gets to a contradiction without any appeal to Pairwise Anonymity.
+Nebel argues that the culprit here is Pairwise Anonymity. I think that's not right. I'm going to develop a similar puzzle that gets to a contradiction without Pairwise Anonymity. To be sure, I will use other assumptions which one could reasonably argue are to blame for the contradiction we'll get. But I hope this provides independent evidence for 
 
-For what it's worth, in Nebel's example my first reaction is that the culprit is Transitivity of Indifference. We have plenty of examples, going back to @Armstrong1939 and @Debreu1960 of violations of Transitivity of Indifference, and @Sen1970sec argues at length that we should expect it to fail in social settings like this. But I'm not sure even that is right, because I won't use Transitivity of Indifference in the following example.
-
-The variant of Nebel's example I'll use is slightly more complicated. We start with two groups of people, the *c*'s and the *d*'s. Each group has a countable infinity of numbered people, starting at 9. So we have *c*~9~, *c*~10~, …, and *d*~9~, *d*~10~, …. Each group also has eight oligarchs. The following three stage lottery is going to be run.
-
-First, each of the oligarchs will be assigned a number. Each of them has a 1/8 chance of being assigned each possible number, and these are independent between the two groups. So now we have *c*~1~ … *c*~8~, the oligarchs, and *c*~9~ …, the commoners.
-
-Second, a fair coin will be flipped. If it lands heads, the *c*'s will be assigned the role of the *a*'s in something like Nebel's game, and the *d*'s will be assigned the role of the *b*'s. If it lands tails, it will be the other way around.
-
-Third, we will do a small variation of Nebel's game. The states and their probabilities will be the same, and which people get a positive payout in each state will be the same. But now we think of *a*~i~ and *b*~i~ as something like roles rather than names. We don't know until the first two stages are run who is, for example, *a*~7~. It could be any of the sixteen oligarchs. And *a*~9~ could be either *c*~9~ or *d*~9~. Further, the payouts will be slightly different. Instead of just being 1 or 0, the payouts could be 0, 1, 1 + ε, 1 + 2ε, or 1 + 3ε. The extra ε is positive, so each person prefers getting any positive probability of an ε increase in payout to not getting it. But it isn't very great. Crucially, for any probability *p*, each person prefers a payout of 1 with probability *p* (and 0 otherwise) to a payout of 1 + 3ε with probability 2*p*/3 (and 0 otherwise).
-
-@tbl-variant is the (slightly) modified game table.
-
-::: {.column-screen-inset}
-| Lottery | Payout | *S*~1~ | *S*~2~ | *S*~3~ | *S*~4~ | … | *S*~2*k*-1~ | *S*~2*k*~ | … |
-|----:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-| **Probability** |    | 1/4 | 1/4 | 1/8 | 1/8 | … | 1/2^*k*^ |  1/2^*k*^ | … |
-| *P* | 1 + 2ε | *a*~1~, *a*~2~ | *a*~1~, *a*~2~ | *a*~1~ … *a*~4~ | *a*~1~ … *a*~4~ | … | *a*~1~ … *a*~2^*k*-1^~ | *a*~1~ … *a*~2^*k*-1^~ | … |
-| *Q* | 1 + 3ε | *a*~1~, *a*~2~ | *b*~1~, *b*~2~ | *a*~1~ … *a*~4~ | *b*~1~ … *b*~4~ | … | *a*~1~ … *a*~2^*k*-1^~ | *b*~1~ … *b*~2^*k*-1^~ | … |
-| *P*ʹ | 1 + ε | *a*~1~, *a*~2~ | *a*~1~ … *a*~4~ | *a*~1~, *a*~2~ | *a*~1~ … *a*~8~ | … | *a*~1~, *a*~2~ | *a*~1~ … *a*~2^*k*^~ | … |
-| *Q*ʹ | 1 | *a*~1~, *b*~1~ | *a*~1~, *a*~2~, *b*~1~, *b*~2~ | *a*~2~, *b*~2~ | *a*~1~ … *a*~4~, *b*~1~ … *b*~4~ | … | *a*~*k*-1~, *b*~*k*-1~ | *a*~1~ … *a*~2^*k*-1^~, *b*~1~ … *b*~2^*k*-1^~  | … |
-
-: The variant example {#tbl-variant}
-:::
-
-We now derive a contradiction using just three principles. One of them we've already used, Pareto Strict Preference. The other two are Lottery Strict Preference, and Transitivity of Strict Preference.
-
-Transitivity of Strict Preference
-:    If *A* ≻~∀~ *B* and *B* ≻~∀~ *C* then *A* ≻~∀~ *C*.
-
-Lottery Strict Preference
-:    For any two lotteries *A* and *B* defined over the same partition of the possibilities in states, if in each state *A* ≻~∀~ *B*, then prior to the lottery taking place, *A* ≻~∀~ *B*.
-
-We now reason as follows, mimicing what we saw above. (Note that I'm going to make a bunch of assertions in the next few paragraphs that could use more mathematical justification. Hopefully that will come in a fuller version of this note.)
-
-First, to prove *Q*ʹ ≻~∀~ *Q*. Whatever happens in steps 1 and 2, the following will be true before step 3. Each individual has a higher probability of getting a positive payour in *Q*ʹ than *Q*. Indeed, whatever probability *p* an individual has of getting a positive payout in *Q*, they have probability 3*p*/2 of getting a positive payout in *Q*ʹ. And by hypothesis they don't think the difference between 1 and 1 + 3ε justifies the lower chance of getting any positive payout at all. So before stage 3, *Q*ʹ ≻~*x*~ *Q* for all *x*, so by Pareto Strict Preference, *Q*ʹ ≻~∀~ *Q*. So by two applications of Lottery Indifference, we get that *Q*ʹ ≻~∀~ *Q*.
-
-Second, to prove that *Q* ≻~∀~ *P*. Before the game starts, each player has the same probability of getting some payout in *Q* as in *P*. And for each player, that probability is positive. Since each player prefers some positive probability of 1 + 3ε to the same probability of 1 + 2ε, it follows that every player prefers *Q* to *P*. So by Pareto Strict Preference, *Q* ≻~∀~ *P*.
-
-Third, to prove that *P* ≻~∀~ *P*ʹ. The reasoning is the same as in the previous paragraph. Before the game starts, each player has the same probability of getting some payout in *P* as in *P*ʹ. And for each player, that probability is positive. Since each player prefers some positive probability of 1 + 2ε to the same probability of 1 + ε, it follows that every player prefers *P* to *P*ʹ. So by Pareto Strict Preference, *P* ≻~∀~ *P*ʹ.
-
-Fourth, to prove that *P*ʹ ≻~∀~ *Q*ʹ. This one is the trickiest. Once numbers are assigned to the oligarchs, whoever is assigned 1 and 2 (in either group) will prefer *Q*ʹ to *P*ʹ. But before the assignment of numbers to oligarchs, each of the oligarchs will prefer *P*ʹ to *Q*ʹ. Both before and after the assignment, but before the coin flip at stage two, every one of the commoners will prefer *P*ʹ to *Q*ʹ. So at the start of the game, everyone prefers *P*ʹ to *Q*ʹ. So again by Pareto Strict Preference, *P*ʹ ≻~∀~ *Q*ʹ.
-
-Now by Transitivity of Strict Preference we get a contradiction, since we have *Q*ʹ ≻~∀~ *Q* and *Q* ≻~∀~ *Q*ʹ. What could be the culprit.
-
-It's very hard to motivate failures of transitivity in short sequences like this, so that doesn't look like the problem. And Lottery Strict Preference just looks like a simple dominance principle.^[I suspect we could even do without it; but this would require being more careful in writing up the proof.]
-
-So the problem looks to be Pareto Strict Preference. Even 
+For what it's worth, in Nebel's example my first reaction is that the culprit is Transitivity of Indifference. We have plenty of examples, going back to @Armstrong1939 and @Debreu1960 of violations of Transitivity of Indifference, and @Sen1970sec argues at length that we should expect it to fail in social settings like this. 
