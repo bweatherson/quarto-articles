@@ -1,0 +1,902 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=11in, paperwidth=8.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{EB Garamond}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Infinity and Intransitivity
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Anon
+  }
+\cohead{
+  Infinity and Intransitivity
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\author{Anon}
+\renewenvironment{abstract}
+ {\vspace{1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\usepackage{xcolor}
+\newcommand{\textred}[1]{\textcolor{red}{#1}}
+\newcommand{\textblue}[1]{\textcolor{blue}{#1}}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Infinity and Intransitivity},
+  pdfauthor={Anon},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Infinity and Intransitivity}
+\author{Anon}
+\date{2025}
+\begin{document}
+\maketitle
+\begin{abstract}
+Jacob Nebel has an example that he uses to argue that a kind of
+impartiality is impossible when the world population is infinite. I
+think it shows something else, namely that infinite worlds give us
+another reason to reject the transitivity of indifference.
+\end{abstract}
+
+
+\setstretch{1.1}
+The most famous result in social choice theory, the impossibility
+theorem due to Kenneth Arrow (\citeproc{ref-Arrow1951}{1951}), shows
+that if some structural conditions are met, any function for aggregating
+social preferences must treat people asymmetrically. In Arrow's case,
+the asymmetry is very strong; one person must be a dictator. In a
+forthcoming paper in \emph{Noûs}, Jacob Nebel
+(\citeproc{ref-Nebel2025}{2025}) makes an argument with the same kind of
+structure. He shows that if certain structural conditions are met,
+anyone trying to act benevolently in the interest of people in general
+must treat people asymmetrically. In Nebel's case the result is not that
+there must be anything like a dictator, just that there must be
+asymmetric treatment.
+
+The usual way to prove Arrow's theorem is to start with the plausible
+structural assumptions, and show that they entail the existence of a
+dictator. Nevertheless, it is not a particularly common inference from
+Arrow's theorem that, since the structural conditions are clearly true,
+we should have a dictator. Still, it is interesting to ask just which of
+the structural conditions should fail.
+
+Nebel does argue that the structural conditions are true, and hence we
+should embrace asymmetry. I'm going to argue that would be a mistake,
+the same kind of mistake someone would be making if they accepted the
+structural conditions in Arrow's proof. As with Arrow's theorem, we
+should take the proof as a \emph{reductio} of the assumptions.
+
+The assumption I think fails in Nebel's case is that indifference is
+transitive. Amartya Sen (\citeproc{ref-Sen1970sec}{{[}1970{]} 2017})
+noted that this is also a load-bearing assumption in Arrow's theorem,
+and explored what would a theory that rejected it would look like. It
+turns out in that case rejecting the transitivity of indifference alone
+is not enough to get out of an intolerable result
+(\citeproc{ref-Gibbard2014}{Gibbard 2014}). Something similar will be
+true here; once transitivity of indifference goes some other principles
+will have to go too. But the idea that Sen had in response to Arrow's
+result is, I'll argue, the right response to Nebel's result.
+
+The point is not just to defend the possibility of impartiality from
+Nebel's argument, important though that is. The central point is that
+cases like this provide a new kind of reason to reject the transitivity
+of indifference.
+
+\section{Nebel's Paradox}\label{sec-nebel}
+
+This section describes the argument that Nebel gives against the
+possibility of impartial beneficence.\footnote{The main example in this
+  argument draws on Goodsell (\citeproc{ref-Goodsell2021}{2021}).} We
+have a world that includes a countable infinity of people,
+\emph{a}\textsubscript{1}, \emph{a}\textsubscript{2}, \ldots,
+\emph{b}\textsubscript{1}, \emph{b}\textsubscript{2}, \ldots.\footnote{Actually
+  all that matters is that these people are in the world. There could be
+  other people who are not affected by any actions in what follows. I'll
+  come back to this point.} Each of these people has one of two possible
+welfare states, which we'll denote as 0 and 1.\footnote{So while we will
+  be interested in paradoxes involving unbounded good, none of these
+  paradoxes are relevant to the maximisation of expected welfare for any
+  individual.} We'll say an outcome is any assignment of a probability
+distribution of welfare payouts to each individual.\footnote{This means
+  that we're not going to consider what happens if the world population
+  changes; that raises a whole host of different concerns.}
+
+One of four lotteries will take place. The lotteries are shown in
+Table~\ref{tbl-nebel}. In each lottery, there are two random devices
+that contribute to the determination of the state``. The first is a fair
+{red} coin which will be flipped once. The second is a fair coin that
+will be flipped indefinitely until it lands heads. We'll write {H} and
+{T} for the {red} coin landing heads and tails respectively, and
+H\textsubscript{\emph{i}} for the proposition that the other coin will
+be flipped \emph{i} times. (For completeness, say that
+H\textsubscript{1} also includes the possibility that it lands tails
+every time.) So we have the states shown in the top row of
+Table~\ref{tbl-nebel}, with their probability below them. In each cell,
+we show the people who get payout 1 in that state from that lottery;
+everyone else gets payout 0.
+
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1351}}
+  >{\centering\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1081}}@{}}
+\caption{Nebel's example}\label{tbl-nebel}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedleft
+Lottery
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{H}H\textsubscript{1}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{T}H\textsubscript{1}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{H}H\textsubscript{2}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{T}H\textsubscript{2}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\ldots{}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{H}H\textsubscript{\emph{k}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{T}H\textsubscript{\emph{k}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\ldots{}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedleft
+Lottery
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{H}H\textsubscript{1}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{T}H\textsubscript{1}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{H}H\textsubscript{2}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{T}H\textsubscript{2}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\ldots{}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{H}H\textsubscript{\emph{k}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+{T}H\textsubscript{\emph{k}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\ldots{}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Probability} & 1/4 & 1/4 & 1/8 & 1/8 & \ldots{} &
+1/2\textsuperscript{\emph{k}+1} & 1/2\textsuperscript{\emph{k}+1} &
+\ldots{} \\
+\emph{P} & \emph{a}\textsubscript{1}, \emph{a}\textsubscript{2} &
+\emph{a}\textsubscript{1}, \emph{a}\textsubscript{2} &
+\emph{a}\textsubscript{1} \ldots{} \emph{a}\textsubscript{4} &
+\emph{a}\textsubscript{1} \ldots{} \emph{a}\textsubscript{4} & \ldots{}
+& \emph{a}\textsubscript{1} \ldots{}
+\emph{a}\textsubscript{2\textsuperscript{\emph{k}}} &
+\emph{a}\textsubscript{1} \ldots{}
+\emph{a}\textsubscript{2\textsuperscript{\emph{k}}} & \ldots{} \\
+\emph{Q} & \emph{a}\textsubscript{1}, \emph{a}\textsubscript{2} &
+\emph{b}\textsubscript{1}, \emph{b}\textsubscript{2} &
+\emph{a}\textsubscript{1} \ldots{} \emph{a}\textsubscript{4} &
+\emph{b}\textsubscript{1} \ldots{} \emph{b}\textsubscript{4} & \ldots{}
+& \emph{a}\textsubscript{1} \ldots{}
+\emph{a}\textsubscript{2\textsuperscript{\emph{k}}} &
+\emph{b}\textsubscript{1} \ldots{}
+\emph{b}\textsubscript{2\textsuperscript{\emph{k}}} & \ldots{} \\
+\emph{P}ʹ & \emph{a}\textsubscript{1}, \emph{a}\textsubscript{2} &
+\emph{a}\textsubscript{1} \ldots{} \emph{a}\textsubscript{4} &
+\emph{a}\textsubscript{1}, \emph{a}\textsubscript{2} &
+\emph{a}\textsubscript{1} \ldots{} \emph{a}\textsubscript{8} & \ldots{}
+& \emph{a}\textsubscript{1}, \emph{a}\textsubscript{2} &
+\emph{a}\textsubscript{1} \ldots{}
+\emph{a}\textsubscript{2\textsuperscript{\emph{k}+1}} & \ldots{} \\
+\emph{Q}ʹ & \emph{a}\textsubscript{1}, \emph{b}\textsubscript{1} &
+\emph{a}\textsubscript{1}, \emph{a}\textsubscript{2},
+\emph{b}\textsubscript{1}, \emph{b}\textsubscript{2} &
+\emph{a}\textsubscript{2}, \emph{b}\textsubscript{2} &
+\emph{a}\textsubscript{1} \ldots{} \emph{a}\textsubscript{4},
+\emph{b}\textsubscript{1} \ldots{} \emph{b}\textsubscript{4} & \ldots{}
+& \emph{a}\textsubscript{\emph{k}-1}, \emph{b}\textsubscript{\emph{k}-1}
+& \emph{a}\textsubscript{1} \ldots{}
+\emph{a}\textsubscript{2\textsuperscript{\emph{k}}},
+\emph{b}\textsubscript{1} \ldots{}
+\emph{b}\textsubscript{2\textsuperscript{\emph{k}}} & \ldots{} \\
+\end{longtable}
+
+Now assume that that for each person \emph{x} we have relations of
+strict welfare preference ≻\textsubscript{\emph{x}} and welfare
+indifference \textasciitilde{}\textsubscript{\emph{x}}. We also have a
+social welfare ordering, i.e., a pair of relations of strict preference
+≻\textsubscript{∀} and indifference \textasciitilde{}\textsubscript{∀}.
+In Nebel's discussion, these are the preference orderings of a
+benevolent person. I think it's more intuitive to think of them as the
+preference orderings of a good state, but not much turns on this. Either
+way, they are a social ordering, in just the sense that Arrow was
+interested in, and they should relate to the individual orderings in
+some principled way.
+
+We'll make the following assumptions:
+
+\begin{itemize}
+\tightlist
+\item
+  No matter the subscript, \textasciitilde{} is symmetric and ≻ is
+  asymmetric;
+\item
+  No matter the subscript, ≻ is transitive;
+\item
+  For any individual \emph{x}, \textasciitilde{}\textsubscript{\emph{x}}
+  is transitive;
+\item
+  No matter the subscript, for any options \emph{A} and \emph{B},
+  \emph{A}~≻~\emph{B}, \emph{A}~\textasciitilde~\emph{B} and
+  \emph{B}~≻~\emph{A} are exclusive and exhaustive.\footnote{The last
+    assumption I'll denote below as \textbf{I-completeness}.}
+\item
+  Every individual prefers a higher probability of getting 1 to a lower
+  probability, and is indifferent between any two states with the same
+  probability of getting 1.
+\end{itemize}
+
+Nebel then derives a contradiction from the following principles.
+
+\begin{description}
+\tightlist
+\item[Transitivity of Social Indifference]
+If \emph{A}~\textasciitilde{}\textsubscript{∀}~\emph{B} and
+\emph{B}~\textasciitilde{}\textsubscript{∀}~\emph{C} then
+\emph{A}~\textasciitilde{}\textsubscript{∀}~\emph{C}.
+\item[Pareto Indifference]
+If \emph{A}~\textasciitilde{}\textsubscript{\emph{x}}~\emph{B} for all
+\emph{x}, then \emph{A}~\textasciitilde{}\textsubscript{∀}~\emph{B}.
+\item[Pareto Strict Preference]
+If \emph{A}~≻\textsubscript{\emph{x}}~\emph{B} for all \emph{x}, then
+\emph{A}~≻\textsubscript{∀}~\emph{B}.
+\item[Pairwise Anonymity]
+For outcome \emph{O} and individual \emph{x}, write
+\emph{O\textsubscript{x}} for the outcome individual \emph{x} gets in
+\emph{O}. For any outcomes \emph{A} and \emph{B} if there are two
+individuals \emph{i} and \emph{j} such that
+\emph{A\textsubscript{i}}~\textasciitilde{}\textsubscript{\emph{i}}
+\emph{B}\textsubscript{j} and
+\emph{A\textsubscript{j}}~\textasciitilde{}\textsubscript{\emph{j}}
+\emph{B}\textsubscript{i}, and for all other individuals \emph{h},
+\emph{A\textsubscript{h}}~\textasciitilde{}\textsubscript{\emph{h}}
+\emph{B}\textsubscript{h}, then
+\emph{A}~\textasciitilde{}\textsubscript{∀} \emph{B}.
+\item[State Indifference]
+For any two lotteries \emph{A} and \emph{B}, and any partition of the
+state space, if in each state
+\emph{A}~\textasciitilde{}\textsubscript{∀} \emph{B}, then prior to the
+lottery taking place, \emph{A}~\textasciitilde{}\textsubscript{∀}
+\emph{B}.
+\end{description}
+
+The derivation involves proving \emph{Q}ʹ~≻\textsubscript{∀} \emph{Q},
+\emph{Q}~\textasciitilde{}\textsubscript{∀} \emph{P},
+\emph{P}~\textasciitilde{}\textsubscript{∀} \emph{P}ʹ and
+\emph{P}ʹ~\textasciitilde{}\textsubscript{∀} \emph{Q}ʹ.
+
+First, to prove \emph{Q}ʹ~≻\textsubscript{∀} \emph{Q}. Note that each
+individual has a higher probability of getting 1 in \emph{Q}ʹ than
+\emph{Q}. So \emph{Q}ʹ~≻\textsubscript{\emph{x}}~\emph{Q} for all
+\emph{x}, so by Pareto Strict Preference, \emph{Q}ʹ~≻\textsubscript{∀}
+\emph{Q}.
+
+Second, to prove \emph{Q}~\textasciitilde{}\textsubscript{∀} \emph{P}.
+In each result of the lottery, the same number of people get 1. So in
+each state, a finite number of applications of Pairwise Anonymity plus
+one use of Pareto Indifference we have
+\emph{Q}~\textasciitilde{}\textsubscript{∀} \emph{P} conditional on each
+state of the lottery. So by Lottery Indifference,
+\emph{Q}~\textasciitilde{}\textsubscript{∀} \emph{P}.
+
+Third, to prove \emph{P}~\textasciitilde{}\textsubscript{∀} \emph{P}ʹ.
+Each individual has the same probability of getting 1 in each lottery,
+so each individual is indifferent between the lotteries, so by Pareto
+Indifference, \emph{P}~\textasciitilde{}\textsubscript{∀} \emph{P}ʹ.
+
+Fourth, to prove \emph{P}ʹ~\textasciitilde{}\textsubscript{∀} \emph{Q}ʹ.
+Here it is the same reasoning as in step 2. No matter what lottery
+outcome we're in, the same number of people get payout 1 in \emph{P}ʹ as
+\emph{Q}ʹ, so by many (but in each state a finite number of)
+applications of Pairwise Anonymity plus one use of Pareto Indifference
+we have \emph{Q}~\textasciitilde{}\textsubscript{∀} \emph{P} conditional
+on each state of the lottery. So by Lottery Indifference,
+\emph{Q}~\textasciitilde{}\textsubscript{∀} \emph{P}.
+
+Finally, by two applications of Transitivity of Indifference we get from
+\emph{Q}~\textasciitilde{}\textsubscript{∀} \emph{P},
+\emph{P}~\textasciitilde{}\textsubscript{∀} \emph{P}ʹ, and
+\emph{P}ʹ~\textasciitilde{}\textsubscript{∀} \emph{Q}ʹ to
+\emph{Q}~\textasciitilde{}\textsubscript{∀} \emph{Q}ʹ, contradicting
+\emph{Q}ʹ~≻\textsubscript{∀} \emph{Q}.
+
+Nebel argues that the culprit here is Pairwise Anonymity. He argues that
+his means that a certain kind of impartial benevolence is impossible.
+I'm going to argue that it's really the transitivity assumption we
+should give up. The short version of my argument is going to be that (a)
+there are situations where the first four steps of this proof seem just
+like good reasoning, and (b) if we accept the transitivity of
+indifference, then not only can we prove the social welfare ordering
+does not treat everyone alike, we can prove that it has arbitrarily
+large differences in how it treats people. The latter seems
+unacceptable, particularly when we are thinking about how the state
+should allocate resources and risks across a population.
+
+\section{Background Ideology}\label{sec-ideology}
+
+There are two ways of presenting welfare orderings that get used in the
+literature, and they end up being helpful for different purposes.
+
+One is to start with notions of \emph{better than} and \emph{exactly as
+good as}, where the latter is assumed to be an equivalence relation.
+This is I think the standard way to do things in contemporary
+philosophy. But there is an older notation that I will use here, because
+I think it turns out to be more useful.
+
+Following Sen (\citeproc{ref-Sen1970sec}{{[}1970{]} 2017}), I'll write
+\emph{xRy} for the claim that \emph{x} is at least as good as \emph{y}.
+More precisely, I'll understand it as the claim that \emph{x} is
+choiceworthy when it and \emph{y} are the available options. Using
+\emph{R} we can define relations of strict indifference, \emph{P}, and
+indifference, \emph{I}, as the asymmetric and symmetric parts of
+\emph{R}. We could also, if we like, define a relation of equality
+\emph{E}, where \emph{xEy} means that \emph{x} and \emph{y} stand in the
+same \emph{R}-relations with respect to some space of
+options.\footnote{Formally, \emph{xEy} is true iff \emph{xRx} and for
+  all \emph{z}, \emph{xRz}~\leftrightarrow *yRz\emph{, and
+  }zRx\emph{~\leftrightarrow *zRy}.} So defined, \emph{E} is clearly an
+equivalence relation. But while \emph{I} is by definition symmetric, it
+isn't obvious it is transitive.\footnote{It also isn't obvious it is
+  reflexive. I'll come back to this presently. Rejecting the
+  transitivity of \emph{I} does not give us a reason to reject the
+  transitivity of \emph{P}, as advocated by, e.g., Temkin
+  (\citeproc{ref-Temkin1987}{1987}).}
+
+The different notations naturally suggest slightly different
+understandings of what it is for a preference relation to be
+\emph{complete}. If we start with a strict better than ≻, and a relation
+of exactly as good as that's assumed to be an equivalent relation, it's
+natural to write a relation of being preferred or equal as ≽. And then
+it's natural to understand completeness as what I'll call
+\textbf{E-completeness}.
+
+\begin{description}
+\tightlist
+\item[E-completeness]
+\emph{x}~≽~\emph{y}~∨~\emph{y}~≽~\emph{x}
+\end{description}
+
+In Nebel's paper he talks about how dropping completeness might be a way
+out of the problem, and by this he means, as I think most philosophers
+would these days, E-completeness. If we start with \emph{R} as our basic
+notion, it's more natural to define completeness as what I'll call
+\textbf{I-completeness}.
+
+\begin{description}
+\tightlist
+\item[I-completeness]
+\emph{xRy}~∨~\emph{yRx}
+\end{description}
+
+Both E-completeness and I-completeness can be stated as trichotomy
+theses.\footnote{The language of trichotomy is taken from Chang
+  (\citeproc{ref-Chang2002}{2002}).} E-completeness is equivalent to
+\emph{xPy}~∨~\emph{xEy}~∨~\emph{yPx}, while I-completeness is equivalent
+to \emph{xPy}~∨~\emph{xIy}~∨~\emph{yPx}.
+
+Assuming \emph{P} is transitive, E-completeness is entailed by
+I-completeness and the transitivity of \emph{I}. A reason to prefer
+starting with notions like \emph{R} and \emph{I} is that the last line
+suggests there are two quite distinct ways for E-completeness to fail.
+One is that I-completeness fails, and the other is that \emph{I} is
+intransitive. And it might be useful to readily distinguish these two
+failure cases.
+
+It is very common to assume \emph{I} is complete, at least as an
+idealising assumption. There are really two prominent ways for \emph{I}
+to fail to be complete. One is that the thinker simply has no attitude
+about (at least one of) \emph{x} and \emph{y}, perhaps because they
+don't have the capacity to think about them. Think about a subject who
+has never heard of Porepunkah or Tidbinbilla, and ask what preferences
+they have over a holiday in one or the other.\footnote{I don't mean ask
+  them; that might cause them to form attitudes. I mean ask whether they
+  prefer one or the other before hearing about either. The reason I
+  included \emph{xRx} in the formal definition of \emph{E} is so we
+  wouldn't say \emph{E} holds in cases where the agent has no attitude
+  towards either relata.} It's natural to say that any positive claim
+about what preferences they have is false, so I-completeness fails.
+I-completeness might also fail if there are prudential dilemmas, where
+neither choice is acceptable.
+
+The cases where I-completeness fails are very different from the cases
+where \emph{I} appears to be intransitive. In the next section we'll
+look at some cases from the literature that have been argued to be
+counterexamples to transitivity.
+
+\section{Why Intransitivity?}\label{sec-intransitivity}
+
+One reason to reject intransitivity, first discussed by Wallace
+Armstrong (\citeproc{ref-Armstrong1939}{1939}), starts with the
+assumption that perceptual discriminability is intransitive. There may
+be a Sorites series of cups of coffee with sugar where the subject
+cannot tell any two adjacent cups apart, and so is indifferent between
+any pair, but the last one is too sweet for the chooser, so they
+strictly prefer the first cup to the last cup. This looks like a good
+argument against the transitivity of indifference iff perceptual
+indiscriminability really is intransitive. If it is transitive, as Delia
+Graff Fara (\citeproc{ref-Fara2001}{2001}) argues, then it is less
+compelling.
+
+A second reason traces back to an example by Gerard Debreu
+(\citeproc{ref-Debreu1960}{1960}). Let \emph{x} and \emph{y} be very
+different options that the chooser is indifferent between, in the sense
+that they could happily choose either. Now let
+\emph{x}\textsuperscript{+} be something that strictly improves
+\emph{x}, e.g., it is \emph{x} plus a dollar.\footnote{Debreu describes
+  an example like this but not this argument. I haven't been able to
+  find anything I'd happily say is the first instance of this argument.}
+Plausibly we have \emph{xIy} and \emph{yIx}\textsuperscript{+}, but we
+definitely do not have \emph{xIx}\textsuperscript{+}. This is the kind
+of example that motivated Sen (\citeproc{ref-Sen1970sec}{{[}1970{]}
+2017}) to look for what happens to Arrow's impossibility theorem when we
+drop the assumption that indifference in the social ordering is
+transitive.
+
+A third reason involves non-numerical probability. There is a long line
+of arguments from Keynes (\citeproc{ref-Keynes1921}{1921}) to
+(\citeproc{ref-HajekHawthorneEtc}{\textbf{HajekHawthorneEtc?}}) arguing
+that some propositions do not have numerical probabilities. Let \emph{p}
+be such a proposition, \emph{x} a bet that pays 1 if \emph{p} and 0
+otherwise, and \emph{y} a constant return of some value that the
+probability of \emph{p} is neither strictly greater than nor strictly
+less than. If we model non-numerical probability by using sets of
+probability functions, and say that \emph{xRy} iff \emph{x} has as high
+an expected return as \emph{y} according to at least one of the
+functions in that set, then \emph{I} will be intransitive.
+
+One important strand in Sen's work on social choice functions was to
+investigate whether dropping the assumption of transitivity of
+indifference in the social ordering provided a natural way out of
+Arrow's impossibility result. My impression is that most theorists think
+this part of his project was unsuccessful. Once Gibbard
+(\citeproc{ref-Gibbard2014}{2014}) proved (in a note first circulated in
+1969) that dropping this assumption just meant that oligarchic as well
+as dictatorial decision rules were compatible with the other
+assumptions, this was not seen as a particularly promising path forward.
+
+The argument in this paper will not involve Arrow's theorem, but it will
+follow Sen's work in one respect. I'm going to be looking at, indeed
+endorsing, arguments that even if indifference is transitive for
+individual preferences and welfare, it is not transitive in the social
+ordering.
+
+\section{Nebel's Paradox Revisited}\label{sec-nebel-revisited}
+
+In this section I'll set out one intuitive argument for thinking that
+the culprit in Nebel's paradox, the false assumption, is the
+transitivity of indifference. Imagine that the world contains a
+countable infinity of people, whose welfare levels are 0 or 1, as in
+Nebel's original case. In that world B is a benevolent person, who wants
+what is best for others. B is approached one day by an angel who
+convinces B that she has the ability to carry out lotteries like
+\emph{P} and \emph{Q}, and can be trusted to make the payouts.
+
+The angel tells B that she has identified infinitely many people B is
+not acquainted and who will, if left unattended, have welfare level 0.
+(I assume B is only acquainted with, and has the capacity for singular
+thought about, finitely many people, so there will be infinitely many he
+has no singular thoughts about.) The angel has divided these people into
+six classes. Within each of those six classes, the angel has numbered
+each of the people \emph{a}\textsubscript{1}, \emph{a}\textsubscript{2},
+\ldots, \emph{b}\textsubscript{1}, \emph{b}\textsubscript{2}, \ldots.
+Each of the classes is associated with a pair of lotteries from
+\emph{P}, \emph{Q}, \emph{P}ʹ and \emph{Q}ʹ. For each such pair, the
+angel will ask B which lottery he wants carried out, and will ensure
+that the people the angel will ask B which lottery should be carried
+out, and then after flipping the {red} coin once and the black coin
+sufficiently often, increase the welfare of the winners.
+
+I don't have good intuitions about what B should do when presented with
+the pairs (\emph{P}, \emph{Q}ʹ), and (\emph{Q}, \emph{P}ʹ). But the
+arguments from Section~\ref{sec-nebel} that B should be indifferent when
+presented with (\emph{P}, \emph{Q}), (\emph{P}, \emph{P}ʹ), and
+(\emph{P}ʹ, \emph{Q}ʹ) seem compelling, as does the argument that B
+should definitely choose \emph{Q}ʹ rather than \emph{Q}. If one is at
+all antecedently sympathetic to the arguments from Keynes, Armstrong,
+Debreu, Sen, and so on that indifference is sometimes intransitive, it
+is very natural to think this is just another such case. The alternative
+is that B should, with just the information the angel has presented,
+form a sufficiently asymmetric attitude towards the people who happen to
+have some labels rather than another than the arguments for indifference
+are blocked. That doesn't seem particularly plausible to me.
+
+While I think the intuitions here are reasonably good, as intuitions go,
+it would be good to have something more solid to rely on. That's what
+I'll try to do over the next two sections.
+
+\section{Intransitivity and Principles}\label{sec-iandt}
+
+If we accept that indifference can be intransitive, a lot of otherwise
+plausible sounding principles must be rejected, or at least qualified.
+Start with the principle, which Nebel uses of Pareto Indifference.
+
+Pareto Indiffernce says that if everyone is indifferent between what
+they receive in \emph{w}\textsubscript{1} and \emph{w}\textsubscript{2},
+then \emph{w}\textsubscript{1} is just as good as
+\emph{w}\textsubscript{2}. Now consider four possible outcomes,
+\emph{c}, \emph{c}\textsuperscript{+}, \emph{d}, and
+\emph{d}\textsuperscript{+}, with \emph{c}\textsuperscript{+}\emph{Pc},
+\emph{d}\textsuperscript{+}\emph{Pd}, and indifference between the other
+four options. The mere possibility of intransitivity doesn't entail that
+such a quadruple exists. But it seems plausible that it should if
+Debreu-style small improvement cases are possible. For example, let
+\emph{c} be the Paris holiday, \emph{d} be the Rome holiday, and the
+\textsuperscript{+} variants better by a dollar. Now consider the two
+worlds described in Table~\ref{tbl-pareto-indifference}. Everyone except
+\emph{a}\textsubscript{1} and \emph{a}\textsubscript{2} gets the same
+outcome in \emph{w}\textsubscript{1} and \emph{w}\textsubscript{2}, and
+the social welfare function regards \emph{a}\textsubscript{1} and
+\emph{a}\textsubscript{2} as equally important.\footnote{Even we
+  accepted that it was impossible for the social welfare function to
+  treat everyone equally, it should be possible to find two people who
+  are treated equally.}
+
+\begin{longtable}[]{@{}cccc@{}}
+\caption{A counterexample to Pareto
+Indifference}\label{tbl-pareto-indifference}\tabularnewline
+\toprule\noalign{}
+& \emph{w}\textsubscript{1} & \emph{w}\textsubscript{2} &
+\emph{w}\textsubscript{3} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& \emph{w}\textsubscript{1} & \emph{w}\textsubscript{2} &
+\emph{w}\textsubscript{3} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\emph{a}\textsubscript{1} & \emph{c} & \emph{d}\textsuperscript{+} &
+\emph{c}\textsuperscript{+} \\
+\emph{a}\textsubscript{2} & \emph{d} & \emph{c}\textsuperscript{+} &
+\emph{d}\textsuperscript{+} \\
+\end{longtable}
+
+Since \emph{w}\textsubscript{2} is exactly as good as
+\emph{w}\textsubscript{3}, and \emph{w}\textsubscript{1} is worse than
+\emph{w}\textsubscript{3}, it's plausible that \emph{w}\textsubscript{1}
+is worse than \emph{w}\textsubscript{2}. Also, the net outcome of
+\emph{w}\textsubscript{2} is the same as the net outcome of
+\emph{w}\textsubscript{1}, holidays in Paris and Rome for two citizens,
+plus two dollars. But every individual is indifferent between what they
+have in \emph{w}\textsubscript{2} as is in \emph{w}\textsubscript{1}. So
+we have a counterexample to Pareto Indifference.
+
+A similar example shows that State Indifference fails.\footnote{This
+  example is similar to the `sweetening' example described by Casper
+  (\citeproc{ref-Hare2010}{\textbf{Hare2010?}}).} Now just consider
+\emph{a}\textsubscript{1}, and imagine that they have to choose between
+lotteries \emph{L} and \emph{L}\textsuperscript{+}, as shown in
+Table~\ref{tbl-state-indifference}. The outcome of the lotteries depends
+on whether the {[}red{]}\{text-red\} coin from earlier lands
+{[}Heads{]}\{text-red\} or {[}Tails{]}\{text-red\}
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{A counterexample to State
+Indifference}\label{tbl-state-indifference}\tabularnewline
+\toprule\noalign{}
+& {[}H{]}\{text-red\} & {[}T{]}\{text-red\} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& {[}H{]}\{text-red\} & {[}T{]}\{text-red\} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\emph{L} & \emph{c} & \emph{d} \\
+\emph{L}\textsuperscript{+} & \emph{d}\textsuperscript{+} &
+\emph{c}\textsuperscript{+} \\
+\emph{L}-alt & \emph{c}\textsuperscript{+} &
+\emph{d}\textsuperscript{+} \\
+\end{longtable}
+
+However the coin lands, \emph{a}\textsubscript{1} is indifferent between
+the outcomes of \emph{L} and \emph{L}\textsuperscript{+}. But since
+\emph{a}\textsubscript{1} strictly prefers \emph{L}-alt to \emph{L} in
+every state, and \emph{L}\textsuperscript{+} is stochastically
+equivalent to \emph{L}-alt, it seems plausible that they should prefer
+\emph{L}\textsuperscript{+} to \emph{L}. This violates State
+Indifference.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Armstrong1939}
+Armstrong, W. E. 1939. {``The Determinateness of the Utility
+Function.''} \emph{The Economic Journal} 49 (195): 453--67. doi:
+\href{https://doi.org/10.2307/2224802}{10.2307/2224802}.
+
+\bibitem[\citeproctext]{ref-Arrow1951}
+Arrow, Kenneth J. 1951. \emph{Social Choice and Individual Values}. New
+York: John Wiley \& Sons.
+
+\bibitem[\citeproctext]{ref-Chang2002}
+Chang, Ruth. 2002. {``The Possibility of Parity.''} \emph{Ethics} 112
+(4): 659--88. doi:
+\href{https://doi.org/10.1086/339673}{10.1086/339673}.
+
+\bibitem[\citeproctext]{ref-Debreu1960}
+Debreu, Gerard. 1960. {``Review of \emph{Individual Choice Behavior: A
+Theoretical Analysis}, by {R. Duncan Luce}.''} \emph{American Economic
+Review} 50 (1): 186--88.
+
+\bibitem[\citeproctext]{ref-Fara2001}
+Fara, Delia Graff. 2001. {``Phenomenal Continua and the Sorites.''}
+\emph{Mind} 110 (440): 905--36. doi:
+\href{https://doi.org/10.1093/mind/110.440.905}{10.1093/mind/110.440.905}.
+This paper was first published under the name {``Delia Graff.''}
+
+\bibitem[\citeproctext]{ref-Gibbard2014}
+Gibbard, Allan F. 2014. {``Social Choice and the Arrow Conditions.''}
+\emph{Economics and Philosophy} 30 (3): 269--84. doi:
+\href{https://doi.org/10.1017/S026626711400025X}{10.1017/S026626711400025X}.
+
+\bibitem[\citeproctext]{ref-Goodsell2021}
+Goodsell, Zachary. 2021. {``A St Petersburg Paradox for Risky Welfare
+Aggregation.''} \emph{Analysis} 81 (3): 420--26. doi:
+\href{https://doi.org/10.1093/analys/anaa079}{10.1093/analys/anaa079}.
+
+\bibitem[\citeproctext]{ref-Keynes1921}
+Keynes, John Maynard. 1921. \emph{Treatise on Probability}. London:
+Macmillan.
+
+\bibitem[\citeproctext]{ref-Nebel2025}
+Nebel, Jacob M. 2025. {``Infinite Ethics and the Limits of
+Impartiality.''} No{û}s. 2025. doi:
+\href{https://doi.org/10.1111/nous.70010}{10.1111/nous.70010}.
+
+\bibitem[\citeproctext]{ref-Sen1970sec}
+Sen, Amartya. (1970) 2017. \emph{Collective Choice and Social Welfare:}
+An expanded edition. Cambridge, MA: Harvard University Press. doi:
+\href{https://doi.org/10.4159/9780674974616}{10.4159/9780674974616}.
+
+\bibitem[\citeproctext]{ref-Temkin1987}
+Temkin, Larry S. 1987. {``Intransitivity and the Mere Addition
+Paradox.''} \emph{Philosophy \& Public Affairs} 16 (2): 138--87.
+
+\end{CSLReferences}
+
+
+
+Draft of September 2025.
+
+
+\end{document}
