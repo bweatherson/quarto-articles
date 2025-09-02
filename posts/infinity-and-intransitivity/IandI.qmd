@@ -10,6 +10,8 @@ execute:
 categories:
   - ethics
   - games and decisions
+filters: 
+  - color-spans.lua
 format:
     html:
         css:
@@ -70,7 +72,7 @@ One of four lotteries will take place. The lotteries are shown in @tbl-nebel. In
 :::
 :::
 
-::: {.content-visible when-format="pdf"}
+::: {.content-visible unless-format="html"}
 {{< include _nebel-example.qmd >}}
 :::
 
@@ -147,7 +149,7 @@ One reason to reject intransitivity, first discussed by Wallace @Armstrong1939, 
 
 A second reason  traces back to an example by Gerard @Debreu1960. Let *x* and *y* be very different options that the chooser is indifferent between, in the sense that they could happily choose either. Now let *x*^+^ be something that strictly improves *x*, e.g., it is *x* plus a dollar.^[Debreu describes an example like this but not this argument. I haven't been able to find anything I'd happily say is the first instance of this argument.] Plausibly we have *xIy* and *yIx*^+^, but we definitely do not have *xIx*^+^. This is the kind of example that motivated @Sen1970sec to look for what happens to Arrow's impossibility theorem when we drop the assumption that indifference in the social ordering is transitive.
 
-A third reason involves non-numerical probability. There is a long line of arguments from @Keynes1921 to @HajekHawthorneEtc arguing that some propositions do not have numerical probabilities. Let *p* be such a proposition, *x* a bet that pays 1 if *p* and 0 otherwise, and *y* a constant return of some value that the probability of *p* is neither strictly greater than nor strictly less than. If we model non-numerical probability by using sets of probability functions, and say that *xRy* iff *x* has as high an expected return as *y* according to at least one of the functions in that set, then *I* will be intransitive.
+A third reason involves non-numerical probability. There is a long line of arguments from @Keynes1921 to @Isaacs2021 arguing that some propositions do not have numerical probabilities. Let *p* be such a proposition, *x* a bet that pays 1 if *p* and 0 otherwise, and *y* a constant return of some value that the probability of *p* is neither strictly greater than nor strictly less than. If we model non-numerical probability by using sets of probability functions, and say that *xRy* iff *x* has as high an expected return as *y* according to at least one of the functions in that set, then *I* will be intransitive.
 
 One important strand in Sen's work on social choice functions was to investigate whether dropping the assumption of transitivity of indifference in the social ordering provided a natural way out of Arrow's impossibility result. My impression is that most theorists think this part of his project was unsuccessful. Once @Gibbard2014 proved (in a note first circulated in 1969) that dropping this assumption just meant that oligarchic as well as dictatorial decision rules were compatible with the other assumptions, this was not seen as a particularly promising path forward.
 
@@ -213,6 +215,63 @@ So the fact that in @tbl-pareto-indifference, everyone is indifferent between *w
 
 There are very few principles connecting the welfare of individuals and how good societies are which are completely indefeasible. Even Pareto Strict Preference, the principle that if everyone strictly prefers *w*~1~ to *w*~2~ then *w*~1~ is better than *w*~2~, can be defeated by considerations about liberty [@Sen1970]. Still, that everyone prefers *w*~1~ to *w*~2~ is an incredibly powerful reason to believe that *w*~1~ is better. The three principles discussed in this section don't provide quite as strong reasons Pareto Strict Preference, but they do provide reasons which are sufficient in the absence of defeaters.
 
-::: {.content-visible when-format="pdf"}
+# Moderate Asymmetry {#sec-moderate}
+
+If we accept all the principles that generate Nebel's paradox, we're forced to admit that the social welfare function can't treat everyone alike. It turns out we can show much more than that. Those principles require that there be arbitrarily large differences in how the social welfare function treats different groups of people. This seems implausible, and so we should reject those principles. As we saw in @sec-iandt, those principles all seem plausible iff indifference is transitive. So we have another reason to reject the transitivity of indifference. Or, at least, so I'll argue in this section.
+
+The argument starts with a principle I'll call **Minimal Egalitarianism**.
+
+Minimal Egalitarianism
+:    There is some constant *c* > 1 such that for any group of size *g*, there is some group of size at most *cg* (possibly including the first group) such that for any two outcomes *x* and *y*, where every individual prefers *x* to *y*, the social welfare function regards it as being at least as good if everyone in the larger group has a 1/3 chance of getting *x* and a 2/3 chance of getting *y* as if the smaller group gets *x* and everyone in the larger group but not the smaller gets *y*.
+
+For simplicity, I'll talk as if *c* is one million, but really all that matters is that it is finite. Roughly speaking, this principle says that for any privileged group, there is another almost as privileged group no bigger than a million times as large, whose interests count twice as much in the social welfare function. So we'd rather have everyone in the larger group have a 1/3 chance of getting a good, even if that means reducing by 2/3 the chance that everyone in the smaller group gets the good.
+
+Note that the quantifier here over groups is an existential. Perhaps the social welfare function cares about the four people in the royal family much more than any four million commoners. All that the principle requires is that there be four million aristocrats and minor nobles that it cares about sufficiently to balance the interests of the royals. And then there are four billion cousins, friends, and so on of these people whose interests outweigh those four million, etc. Even if we don't think the social welfare function counts everyone equally, it should be possible to find some people whose interests count for half a million times as much. Or, failing that, that this should be possible for some value *c*.
+
+If we assume **Minimal Egalitarianism**, then we can generate a version of the two envelope paradox [@TwoEnvelope], as shown in @tbl-two-envelope. The same kind of random process will be run as in @tbl-nebel. There are two lotteries, which we'll call [Green]{.text-green} and [Blue]{.text-blue}. The population consists of people *a*~1~, *a*~2~, …, arranged in the order that the social welfare function cares about their interests. Each cell shows which people will get welfare 1 if that lottery is chosen and the coins fall the way shown in that column; everyone else will get 0. And *c* is the value from **Minimal Egalitarianism**.
+
+::: {.content-visible when-format="html"}
+::: {.column-screen-inset}
+{{< include _two-envelope.qmd >}}
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+{{< include _two-envelope.qmd >}}
+:::
+
+Intuitively, the way to think about @tbl-two-envelope is that if H~*k*~ is true, then one of the lotteries will give welfare 1 to the first *c*^*k*^ people, and the other will give welfare 1 to the first *c*^*k*-1^ people. If the [red]{.text-red} coin lands heads, [Green]{.text-green} will be less valuable, and [Blue]{.text-blue} will be more valuable. If the [red]{.text-red} coin lands tails, it will be the other way around.
+
+Since both lotteries have the same probability of returning welfare 1 to each individual, there is a perfectly good sense in which the social welfare function should be indifferent between them. We'll now argue that if we accept the principles from @sec-nebel, it should also, inconsistently, prefer each lottery to the other. For simplicity we'll argue that [Blue]{.text-blue} ≻~∀~ [Green]{.text-green}; the reverse case is completely symmetric.
+
+Let the possible states of the world be the people who get welfare 1 if [Green]{.text-green} is selected. If that group is just *a*~1~, then [Blue]{.text-blue} will mean that the first *c* people get 1, which is worse for no one and better for *a*~2~ to *a*~c~. 
+
+Conditional on [Green]{.text-green} returning 1 to *a*~1~ to *a*~c~, there is a 2/3 chance that [Blue]{.text-blue} will return 1 to just *a*~1~, and a 1/3 chance that [Blue]{.text-blue} will return 1 to everyone from *a*~1~ to *a*~*c*^2^~. By Minimal Egalitarianism, the social welfare function would be willing to give up everyone in *a*~1~ to *a*~c~ getting 1 for a 1/3 chance that everyone from *a*~1~ to *a*~*c*^2^~ gets 1. In this case the trade-off isn't quite as bad, because *a*~1~ gets 1 for sure either way. And everyone after *a*~*c*^2^~ gets nothing from either green or blue. So by several applications of Strong Pareto (and transitivity) the social welfare function strictly prefers [Blue]{.text-blue} to [Green]{.text-green}, conditional on [Green]{.text-green} returning 1 to *a*~1~ to *a*~c~.
+
+The same kind of argument goes through for every possible payout for [Green]{.text-green}. So by a principle I'll call **State Preference**, the social welfare function strictly prefers [Blue]{.text-blue} to [Green]{.text-green}.
+
+State Preference
+:    For any two lotteries *A* and *B*, and any partition of the state space, if in each state *A* ≻~∀~ *B*, then prior to the lottery taking place, *A* ≻~∀~ *B*.
+
+Now we've proved that each lottery is preferred to the other, from the perspective of the social welfare function, and that they are equally good. Something must have gone wrong. And a natural conjecture is that the culprit is the use of principles, like Strong Pareto, that are ruled out by the intransitivity of indifference. Without Strong Pareto, we can't show that [Blue]{.text-blue} is better than [Green]{.text-green} conditional on each possible payout for [Green]{.text-green}. All we showed was that [Blue]{.text-blue} was better than [Green]{.text-green} for some people, and not worse for anyone else. But as we saw earlier, given the intransitivity of indifference, that doesn't mean that it is better overall.
+
+So it isn't just Pairwise Anonymity that is inconsistent with the principles in @sec-nebel. Even something as weak as Minimal Egalitarianism will lead to the same kind of contradiction. And even if we were to accept that the social welfare function can't treat everyone alike, we shouldn't accept this much asymmetry.
+
+# Conclusion {#sec-conclusion}
+
+If one tries to create a social welfare function for infinite populations, as several philosophers have been trying to do recently, there is an immediate problem one runs into. One has to answer what I'll call the **Individual-Group Question**.
+
+Individual-Group Question
+:    Let *x* and *y* be outcomes such that everyone prefers *x* to *y*. Let *a* be an individual. Is there some positive probability *p* such the social welfare function strictly prefers that *a* gets *x* and everyone else gets *y*, to everyone having probability *p* of getting *x*, and probability 1-*p* of getting *y*?
+
+If the answer is *yes*, then there is a good sense in which *a* is infinitely more valuable than other people. We'd strictly prefer that the expected number of people who get the better outcome is 1 to it being infinite, as long as that 1 is *a*.
+
+If the answer is *no*, then we have two possible choices. One choice is that *a*, and everyone else, has value 0 according to the social welfare function. That is, we can have the social welfare simply not care about any individuals. This is the option Nebel suggests at the end of his paper when he floats (very much without endorsing) the view that from the point of view of the Universe "each individual is, in their own right, of no importance at all." (18).
+
+The other choice is that we end up with something like infinite utility, and with it all the variants of the St Petersburg paradox. That's how you get Nebel's paradox, that's how you get the version of the two-envelope paradox that I described in @sec-moderate, and there are any number of other ways to create a paradox.
+
+The argument I've been making here is that while the last option creates some unintuitive implications, when you work through the cases, the implications all require principles that we have independent reason to qualify once we accept the intransitivity of indifference. So, I think, these cases of social welfare for infinite populations should be considered alongside the cases described by Keynes, Armstrong, Debreu, Sen, and others which suggest that indifference is not always transitive.
+
+::: {.content-visible unless-format="html"}
 ## References {-}
 :::
