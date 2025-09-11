@@ -527,24 +527,24 @@ enter the correct code on a locked phone
 (\citeproc{ref-MandelkernEtAl2017}{Mandelkern, Schultheis, and Boylan
 2017}).
 
-One of the striking things about this puzzle is that it turns out there
-are some helpful things that can be said. One helpful bit of advice to
-someone trying to solve a problem like this is to use a Farthest
-Insertion Algorithm.\footnote{To implement both this algorithm and the
-  optimisation I'll mention below, I've used the TSP package by Michael
-  Hashler and Kurt Hornik (\citeproc{ref-HashlerHornik2007}{2007}). The
-  description of the two steps owes a lot to their summaries in the
-  package documentation.} Insertion algorithms say to start with a
-random city, then add cities to the path one at a time, at each time
-finding the point to insert the city into the existing path that adds
-the least distance. The Farthest Insertion Algorithm says that the city
-added at each stage is the one farthest from the existing path.
-Insertion algorithms in general produce pretty good paths in a very
-short amount of time - at least on normal computers. And the Farthest
-Insertion Algorithm is, most of the time, the best Insertion Algorithm
-to use. Figure~\ref{fig-farthest} shows the result of one output of this
-algorithm.\footnote{The algorithm is silent on which city you start
-  with, and usually chooses this randomly.}
+Although these theories don't provide any useful advice, there is
+helpful advice out there. One good starting suggestion is to use a
+farthest insertion algorithm.\footnote{To implement both this algorithm
+  and the optimisation I'll mention below, I've used the TSP package by
+  Michael Hashler and Kurt Hornik
+  (\citeproc{ref-HashlerHornik2007}{2007}). The description of the two
+  steps owes a lot to their summaries in the package documentation.}
+Insertion algorithms start with a random city, then create a path by
+adding a particular city at the point that would result in the smallest
+increase to the path length. The big thing is the choice of which city
+to add. For the farthest insertion algorithm, it's the city farthest
+from the existing path. In general insertion algorithms do very well at
+producing short paths quickly, and in general the farthest insertion
+algorithm does better than other insertion algorithms.
+Figure~\ref{fig-farthest} shows the result of one output of the farthest
+insertion algorithm.\footnote{I say `one' output because the algorithm
+  chooses the first city at random, so different runs produce different
+  paths.}
 
 \begin{figure}
 
@@ -554,8 +554,8 @@ algorithm.\footnote{The algorithm is silent on which city you start
 
 }
 
-\caption{\label{fig-farthest}An output of the Farthest Insertion
-Algorithm, with a length of 21075 miles.}
+\caption{\label{fig-farthest}An output of the farthest insertion
+algorithm, with a length of 21140 miles.}
 
 \end{figure}%
 
@@ -565,8 +565,10 @@ optimisation algorithm takes a map as input, and then deletes pairs of
 edges at a time, and finds the shortest path of all possible paths with
 all but those two edges. The process continues until no improvements can
 be made by deleting two edges at a time, at which point you've found a
-somewhat resilient local minimum. Figure~\ref{fig-two-opt} is the output
-from applying this strategy to the path in Figure~\ref{fig-farthest}.
+somewhat resilient local minimum. This step is a bit slower than running
+the insertion algorithm, but it's still quick on modern computers.
+Figure~\ref{fig-two-opt} is the output from applying this strategy to
+the path in Figure~\ref{fig-farthest}.
 
 \begin{figure}
 
@@ -577,7 +579,7 @@ from applying this strategy to the path in Figure~\ref{fig-farthest}.
 }
 
 \caption{\label{fig-two-opt}The output of an optimisation process, which
-reduced the path length to 20891 miles.}
+reduced the path length to 20834 miles.}
 
 \end{figure}%
 
@@ -589,16 +591,15 @@ they have a bit more time, they could do this a dozen or so times, and
 see if different starting cities led to slightly shorter paths.
 
 While this is good advice, and indeed it's what most people should do,
-it's not typically what is optimal to do. For that reason, it's not what
-our nine decision theories would say to do. If one had unlimited and
-free computing power available, hacks like these would be pointless. One
-would simply look at all the possible paths, and see which was shortest.
-I do not have free, unlimited computing power, so I didn't do this.
-Using some black box algorithms I did not particularly understand, I was
-able to find a shorter path, however. It took some time, both of mine
-and my computer's, and for most purposes it would not have been worth
-the hassle of finding it. Still, just to show it exists, I've plotted it
-as Figure~\ref{fig-best}.
+it's rarely optimal. So it's rarely what existing decision theories say
+to do. Those theories implicitly presuppose that one has unlimited
+costless computing power, so one simply calculates the lengths of all
+paths and sorts them. I do not have unlimited costless computing power,
+so I didn't do that. Using some black box algorithms I did not
+particularly understand, I was able to find a shorter path, however. It
+took some time, both of mine and my computer's, and for most purposes it
+would not have been worth the hassle of finding it. Still, just to show
+it exists, I've plotted it as Figure~\ref{fig-best}.
 
 \begin{figure}
 
@@ -647,6 +648,86 @@ decision theories say about the two cases. Notably, it agrees with
 neither the first nor third row. Decision theory is neither in the
 business of saying what will produce the best result, nor with giving
 the most useful advice. So what is it doing?
+
+The obvious answer is that it is idealising. It says what an ideal
+agent, one who either had unlimited costless computing or could act as
+if they could, would do.
+
+The prescriptivist goes on to say that since that agent is ideal, we
+should be more like them, and this ideal agent can serve both as a model
+to be emulated, and a standard to judge finite agents against. In the
+next section I'll use other salesman problems to say why I disagree with
+every part of this.
+
+\section{Against Prescriptivism}\label{sec-against-prescriptivism}
+
+The first problem for prescriptivism is that it treats like cases
+unalike.
+
+Imagine Suzy and Billy in \textbf{Betting}. Suzy does what decision
+theory recommends and doesn't bet; Billy bets on the home team, and
+luckily wins. Billy is richer, but Suzy did what theory recommended.
+What did she do right, if not get the most money? Intuitively, she
+followed a good process, while Billy followed a bad process. Decision
+theory, thus understood, is a theory of good processes. That's right as
+far as it goes; that is the best way to express the value of being a
+utility maximiser in pre-theoretic terms.
+
+But decision theory does not always endorse good processes. Imagine now
+Billy and Suzy are doing the version of \textbf{Salesman} shown in
+Figure~\ref{fig-west-coast}. (This is Figure~\ref{fig-map} restricted to
+California, Oregon, and Nevada.)
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{march-2025-draft_files/figure-pdf/fig-west-coast-1.pdf}}
+
+}
+
+\caption{\label{fig-west-coast}The 21 cities in a restricted version of
+\textbf{Salesman}.}
+
+\end{figure}%
+
+Both Billy and Suzy know that insertion algorithms are very efficient,
+and they have enough computing resources to run precisely one such
+algorithm. Suzy remembers the lessons about insertion algorithms, and
+runs a farthest insertion algorithm; Billy does not, and runs a nearest
+insertion algorithm. The results are shown in
+Figure~\ref{fig-two-west-coast-maps}.
+
+\begin{figure}
+
+\begin{minipage}{0.50\linewidth}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{march-2025-draft_files/figure-pdf/unnamed-chunk-11-1.pdf}}
+
+}
+
+\subcaption{\label{fig-two-west-coast-maps-1}Billy's path: 2341 miles.}
+
+\end{minipage}%
+%
+\begin{minipage}{0.50\linewidth}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{march-2025-draft_files/figure-pdf/unnamed-chunk-12-1.pdf}}
+
+}
+
+\subcaption{\label{fig-two-west-coast-maps-2}Suzy's path: 2432 miles.}
+
+\end{minipage}%
+
+\caption{\label{fig-two-west-coast-maps}Billy and Suzy's solutions to
+Figure~\ref{fig-west-coast}.}
+
+\end{figure}%
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
