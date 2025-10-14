@@ -1,0 +1,87 @@
+---
+title: "Infinite Worlds and the Two Envelope Paradox"
+abstract: |
+ There have been a lot of discussions recently about how versions of the St Petersburg paradox affect theories about welfare in infinite worlds. This note is about how the two envelope paradox affects things. The tentative suggestion is that it gives us a reason to give up on an otherwise very plausible looking principle of state-level strict dominance.
+date: October 14 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - ethics
+  - games and decisions
+execute:
+  echo: false
+  warning: false
+draft: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+    number-sections: false
+    css: 
+     - ..\trad_defn.css
+     - color.css
+  pdf: default
+image: "hilbert-hotel.jpg"
+filters:
+  - color-spans.lua
+---
+
+There have been a flurry of interesting recent papers on welfare aggregation principles in infinite worlds. A small sample includes:
+
+- Hayden Wilkinson, _Infinite Aggregation and Risk_ [@Wilkinson2023]
+- Frank Hong and Jeffrey Sanford Russell, _Paradoxes of Infinite Aggregation_ [@HongRussell2025]
+- Jake Nebel, _Infinite Ethics and the Limits of Impartiality_ [@Nebel2025]
+- Jeremy Goodman, _Permutation-Invariant Social Welfare Orders Are Anonymous_ [@Goodman2025]
+- Jeremy Goodman and Harvey Lederman, _Maximal Social Welfare Relations on Infinite Populations Satisfying Permutation Invariance_ [@GoodmanLederemanArXiV]
+
+I'm going to be drawing on all of these here, but especially the last one.^[And it should be noted that a lot of these works are downstream of Amanda Askell's PhD Thesis _Pareto Principles in Infinite Ethics_ [@Askell2018]. The positive point of this note is to provide another argument for using what Goodman and Lederman call the *Sum Preorder* for comparing infinite worlds. But I'll leave most of that argument implicit; hopefully I'll return to it in a later post.]
+
+@HongRussell2025 use variants of the St Petersburg paradox to show that the following four principles are inconsistent. Notably, they do so even given the extra assumption that welfare levels for individuals can only take one of two possible values.^[It's much easier to derive contradictions if we allow that individuals can have unbounded utility.] I'll adopt that assumption too.^[The following principles are mostly direct quotes from Hong and Russell's paper, but I've expanded the notation for **Stochastic Compensation** for clarity.]
+
+(Weak) Ex Ante Pareto
+:    If *X* is at least as good as *Y* for every individual, then *X* is at least as good as *Y* overall.
+
+Stochastic Compensation
+:    For any good *x* for an individual *i*, and any events *E* and *F* such that Pr(*E*) ≤ Pr(*F*), there is some good *y* for *i* such that the gamble ⟨*y* if *F*, 0 otherwise⟩ is at least as good for *i* than the gamble ⟨*x* if *E*, 0 otherwise⟩.
+
+Interpersonal Compensation
+:    For any allocation *x* for a finite set of individuals *I*, there is an allocation *y* for some finite set of individuals *J*  disjoint from *y* such that *y* is better overall than *x*.
+
+(Strict) Statewise Dominance
+:    If the outcome that results from a prospect *X* is strictly better than the outcome that results from a prospect *Y* in every possible state, then *X* is strictly better than *Y*.
+
+The first point I'll make is that slight generalisations of the last two on their own suffice for a contradiction. That makes me rather sceptical that the first two principles are the problems. Here are the two principles that I need.
+
+Risk Spreading
+:    For some integer *m*, and some probability *p* < ½, the following holds. It is better that *m^n^* people get 1 for certain, and *m*^*n*+2^ ‑ *m^n^* people have chance *p* of 1 (and chance 1‑*p* of 0), than that *m*^*n*+1^ people get 1 and everyone else gets 0.
+
+(Strict) Partition Dominance
+:    If a prospect *X* is strictly better than a prospect *Y* conditional on each member of a countable partition, then *X* is strictly better than *Y*.
+
+I take **Risk Spreading** to be a probabilistic form of **Interpersonal Compensation**. It's better that a much larger group of people have a good chance (nearly ½) of the good, than that a much smaller group have the good for sure, and everyone misses out. This would hold given any plausible kind of Additivity principle, and it's if anything a fairer distribution of goods.
+
+And I take **(Strict) Partition Dominance** to be motivated by the same things that motivate **(Strict) Statewise Dominance**. When we talk about states in this bit of philosophy/economics, that's always shorthand. We never really know in real life what the full outcome of any action will be. We can save the child from the pond, but they might grow up to be a mass murderer. The typical, and I think correct, practice is to simply bracket off those considerations. The relevant 'states' are that the child lives, or the child drowns. In reality, each of those states is another lottery; it's just that the first is a much much better one. Any principle that reasons from properties of states to properties of prospects is really reasoning from properties of more fine-grained prospects to properties of less fine-grained prospects. From that perspective, **(Strict) Partition Dominance** is really just a reformulation of **(Strict) Statewise Dominance**.
+
+Given this, that these are inconsistent is quite simple, and just follows the familiar pattern from the literature on the Two Envelope Paradox.^[For a primer on that, see @TwoEnvelope.] There are two coins, a [green]{.text-green} coin and a fair [brown]{.text-brown} coin. Unlike the [brown]{.text-brown} coin, the [green]{.text-green} coin is not fair; [it]{.text-green} has chance ε of landing [heads]{.text-green}. The [green]{.text-green} coin will be flipped repeatedly until [it]{.text-green} lands [heads]{.text-green}. Let *n* be the number of times [it]{.text-green} lands [tails]{.text-green}; unless [it]{.text-green} never lands [tails]{.text-green}, in which case *n* = 0. Then the [brown]{.text-brown} coin is flipped once. Assume (as is normal in these problems) that we have an infinite population, *p*~1~, *p*~2~, …, with the numbers being arbitrary. And then assume we have two prospects, which we'll call [Blue]{.text-blue} and [Red]{.text-red}. (Assume *m* is the same large number that witnesses **Risk Spreading**, and that *m* > 2.)
+
+[Blue]{.text-blue}
+:    If the [brown]{.text-brown} coin lands [heads]{.text-brown}, the first *m^n^* people get 1, everyone else gets 0.
+:    If the [brown]{.text-brown} coin lands [tails]{.text-brown}, the first *m*^*n*+1^ people get 1, everyone else gets 0.
+
+[Red]{.text-red}
+:    If the [brown]{.text-brown} coin lands [heads]{.text-brown}, the first *m*^*n*+1^ people get 1, everyone else gets 0.
+:    If the [brown]{.text-brown} coin lands [tails]{.text-brown}, the first *m^n^* people get 1, everyone else gets 0.
+
+Let *B* be a random variable equalling the number of people who will get 1 if [Blue]{.text-blue} is chosen, and *R* be a random variable equalling the number of people who will get 1 if [Red]{.text-red} is chosen. Just look at the possible values for *B*; what happens with *R* will be entirely parallel. If *B* = 1, then *R* = *m*, so [Red]{.text-red} is clearly better. If *B* = *m*^*n*+1^ for *n* ⩾ 0, then *R* = *m^n^* with probability 1/(2‑ε), and *R* = *m*^*n*+2^ with probability (1‑ε)/(2‑ε). Provided ε is small enough, that will be greater than the value *p* in **Risk Spreading**, so again [Red]{.text-red} will be better. 
+
+So conditional on any possible value of *B*, [Red]{.text-red} is better than [Blue]{.text-blue}. So by **(Strict) Statewise Dominance**, [Red]{.text-red} is better than [Blue]{.text-blue}. But an exactly parallel argument shows that conditional on any possible value of *R*, [Blue]{.text-blue} is better than [Red]{.text-red}. So by **(Strict) Statewise Dominance**, [Blue]{.text-blue} is better than [Red]{.text-red}. Contradiction.
+
+We could probably tighten this up, but I think this shows that fairly weak dominance principles, plus fairly weak compensation principles, are inconsistent in infinite worlds. This makes me think that the guilty principle in Hong and Russell's tetralemma will be one of **(Strict) Statewise Dominance** and **Interpersonal Compensation**. I'm inclined to give up **(Strict) Statewise Dominance**, though it's possible that the right lesson to draw from the two envelope cases is that there is an argument in the style of @Nebel2025 against impartiality which does not rely on completeness.
