@@ -29,7 +29,7 @@ marginparsep=0in]{geometry}
 \ifPDFTeX\else
   % xetex/luatex font selection
   \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
-Bold]{EB Garamond Math}
+Bold,BoldFont=EB Garamond SemiBold]{EB Garamond Math}
   \setsansfont[]{EB Garamond}
   \setmathfont[]{Garamond-Math}
 \fi
@@ -244,7 +244,7 @@ principle that has the most interesting consequences.
 Consider the kind of problem that Kenneth Arrow
 (\citeproc{ref-Arrow1950}{1950}) was interested in when he developed his
 famous impossibility result. We have some citizens:
-\emph{c}\textsubscript{1}, \ldots, \emph{c\textsubscript{n}}. Each
+\emph{c}\textsubscript{1}, \ldots,~\emph{c\textsubscript{n}}. Each
 citizen \emph{c\textsubscript{i}} has a preference has a preference
 relation ≿\textsubscript{\emph{i}} over the possible outcomes, which is
 assumed to be symmetric, transitive, and complete. Our task is to find a
@@ -263,10 +263,10 @@ from Arrow's in three dimensions.
 
 First, we assume that the citizens are self-interested, or at least
 differentially interested enough that we can which of them have their
-preferences satisfied can vary freely. This turns out be enough to get
-out of Arrow's original puzzle; it's a big enough violation of his
-Unrestricted Domain principle that it's possible to satisfy the rest of
-the principles.
+preferences satisfied can vary freely. This violates Arrow's condition
+of Unrestricted Domain. In several of the cases we'll look at, the
+violation of this condition is so extensive that all the other
+conditions he described can be satisifed.
 
 Second, we drop the assumption that ≿\textsubscript{∀} is complete.
 Maybe for some social outcomes, neither is at least as good as the
@@ -309,41 +309,35 @@ in order.
 
 Jake Nebel (\citeproc{ref-Nebel2025}{2025}), who developed one of the
 impossibility results I'll be discussing here, starts by inquiring into
-what preferences a \emph{benevolent} agent would have. This way of
-thinking about the problem has a few consequences. (None of this
-paragraph is meant to be new; Nebel notes all these points in his
-paper.) For one thing, we shouldn't assume that ≿\textsubscript{∀} will
-be unique. It's at least conceptually possible that there are different
-ways to be maximally benevolent. For another, we \emph{possibly}
-shouldn't be treating ≿\textsubscript{\emph{i}} as measuring each
-person's preferences, as opposed to their welfare. Here we get into
-quite tricky questions about the nature of benevolence, and these
-questions get very hard when we're thinking about probabilistic
-benevolence.
+what preferences a \emph{benevolent} agent would have. Since some of us
+are benevolent, and we may for all we know be living in an infinite
+world, that's a reason to take the problems seriously.
 
-I'm going to sidestep all those worries by taking our task to not be
-benevolence, but governance. Assume we have a basically pleasant
-bureaucrat who has to make a decision that will affect many people in
-various, not entirely predicatable, ways. To make it concrete, assume
-there is a moderately busy intersection that isn't working as it stands,
-and the bureaucrat's job is to redesign it. In theory we might say that
-in a democracy what matters should be what people want the intersection
-to look like. In practice, we've all settled on representative democracy
-as the form of government, and approximately no one changes their vote
-on the design of a moderately busy intersection, so really the
-bureaucrat is unconstrained by the democratic system. (At least, they
-are unconstrained as long as they don't do anything particularly
-egregious.) That doesn't mean they do what they want. Most traffic
-engineers care about safety, and traffic flow, and noise, and cost, and
-everything else that might be relevant, and try really hard to balance
-the competing interests when designing intersections. That is, they try
-do turn the various preferences users have into a social ordering and
-pick the best option. But how do they manage this alchemy, of turning
-the many orderings into one? That's the kind of project we're interested
-in here. It's got the same formal structure as Nebel's project of
-creating a benevolent preference ranking, but the differences might
-matter once we have to make hard choices about which plausible principle
-to give up.
+While that's a perfectly good reason to be interested in these problems,
+it's not the only reason, and it's not really my reason. I'm going to be
+less interested in benevolence than in governance. Assume we have a
+basically pleasant bureaucrat who has to make a decision that will
+affect many people in various, not entirely predicatable, ways. To make
+it concrete, assume there is a moderately busy intersection that isn't
+working as it stands, and the bureaucrat's job is to redesign it. In
+theory we might say that in a democracy what matters should be what
+people want the intersection to look like. In practice, we've settled on
+representative democracy as our form of government, and approximately no
+one changes their vote on the design of a moderately busy intersection,
+so really the bureaucrat is unconstrained by the democratic system. (At
+least, they are unconstrained as long as they don't do anything
+particularly egregious.) In practice, the good bureaucrat is, with
+respect to this problem, a well meaning dictator. That doesn't mean they
+do what they want. Most traffic engineers care about safety, and traffic
+flow, and noise, and cost, and everything else that might be relevant,
+and try really hard to balance the competing interests when designing
+intersections. That is, they try do turn the various preferences users
+have into a social ordering and pick the best option. But how do they
+manage this alchemy, of turning the many orderings into one? That's the
+kind of project we're interested in here. It's got the same formal
+structure as Nebel's project of creating a benevolent preference
+ranking, but the differences might matter once we have to make hard
+choices about which plausible principle to give up.
 
 But bureaucrats don't have infinite populations to deal with. Well,
 maybe they don't. We actually don't know how big the universe is, and
@@ -365,8 +359,417 @@ strange consequences about how we compare infinite worlds even if the
 worlds being compared only differ in finitely many ways. (Hong and
 Russell developed the other big impossibility result we'll be talking
 about here.) It turns out that looking hard at the infinite cases has
-consequences for how we build up ≿\textsubscript{∀}, even if we don't
-think anything that might be done has infinitely large consequences.
+lessons for how we build up ≿\textsubscript{∀}, even if we don't think
+anything that might be done has infinitely large consequences. Those
+lessons will be the focus here.
+
+\section{Formalism}\label{sec-formalism}
+
+For the most part we'll be interested in these infinite worlds, though
+in \textbf{?@sec-buchak} I'll return to what happens in finite worlds.
+We have our infinitely many citizens, the \emph{c\textsubscript{i}}. To
+keep things simple, we'll assume that the citizens only have one of two
+welfare levels. Nebel denotes these with sad and happy faces, but we'll
+just use 0 and 1. That's not as charming, but we don't want our traffic
+engineers to be too whimsical. Besides, it simplifies the presentation
+in a few ways. To get some lotteries going, we'll also assume that there
+are infinitely many fair coins.
+
+A world specifies the welfare level of each of the citizens, and the
+results of each of the coin tosses. We'll denote these with two
+sequences. I'll use \emph{x}, or when expanded out
+\(\langle\)\emph{x}\textsubscript{1},~\(\ldots\)~\emph{x\textsubscript{i}}~\(\ldots \rangle\)
+for the values of the citizens. And I'll use \emph{n}, or when expanded
+out
+\(\langle\)\emph{n}\textsubscript{1},~\(\ldots\)~\emph{n\textsubscript{i}}
+\(\ldots \rangle\) for the values of the coins. So a \textbf{world} is a
+pair \(\langle\)\emph{x},~\emph{n}\(\rangle\), and a
+\textbf{proposition} is a set of worlds. There are three kinds of
+propositions that will be especially important.
+
+\begin{itemize}
+\tightlist
+\item
+  A \textbf{distribution} is a proposition that settles everyone's
+  welfare levels and nothing else. So if \emph{p} is a proposition, and
+  \(\langle\)\emph{x}\textsubscript{1},~\emph{n}\textsubscript{1}\(\rangle\)
+  and
+  \(\langle\)\emph{x}\textsubscript{2},~\emph{n}\textsubscript{2}\(\rangle\)
+  are both in \emph{p}, then
+  \emph{x}\textsubscript{1}~=~\emph{x}\textsubscript{2}, and if
+  \(\langle\)\emph{x}\textsubscript{1},~\emph{n}\textsubscript{1}\(\rangle\)
+  is in \emph{p}, so is
+  \(\langle\)\emph{x}\textsubscript{1},~\emph{n}\textsubscript{2}\(\rangle\).
+\item
+  A \textbf{state} is a proposition that settles how some of the coins
+  land and nothing else. So if \emph{p} is a proposition, so is
+  \(\langle\)\emph{x}\textsubscript{2},~\emph{n}\textsubscript{1}\(\rangle\).
+\item
+  A \textbf{lottery} is a proposition that says what distribution is
+  actual given some coin flips. So if \emph{p} is a lottery, then there
+  is some set \emph{N} of outcomes of the coin flips, and for each
+  \emph{n}~∈~\emph{N}, there is a unique
+  \(\langle\)\emph{x},~\emph{n}\(\rangle\) in \emph{p}. One consequence
+  of this definition is that distributions are degenerate lotteries.
+\end{itemize}
+
+I'll use capital letters \emph{X},~\emph{Y}, etc., for lotteries, and
+lower case letters \emph{x},~\emph{y}, etc. for distributions. I'll
+assume that the comparisons we're interested in,
+≿\textsubscript{\emph{i}} and ≿\textsubscript{∀} are defined over pairs
+of lotteries. But sometimes I'll write
+\emph{x}~≿\textsubscript{∀}~\emph{y}; that means that the degenerate
+lottery which returns \emph{x} for sure is at least as good (socially)
+as the degenerate lottery that returns \emph{y} for sure.
+
+I'll say that a lottery is \textbf{unconditional} if it includes a pair
+\(\langle\)\emph{x},~\emph{n}\(\rangle\), and \textbf{conditional} if it
+does not. Each lottery determines a probability for each state
+consistent with it, and hence for each distribution. If the lottery is
+unconditional, these probabilities are fairly obvious. The probability
+of \emph{n\textsubscript{i}}~=~1~is 0.5 for any \emph{i}, for example.
+But for conditional lotteries, the probability might be less obvious. If
+\emph{N} is the set of coin landings such that
+\emph{n}\textsubscript{1}~=~1 or \emph{n}\textsubscript{1}~=~2, and
+\emph{X} is a lottery defined in \emph{N}, then
+Pr(\emph{n}\textsubscript{1}~=~1~\textbar~\emph{X})~=~2/3, while
+Pr(\emph{n}\textsubscript{2}~=~1~\textbar~\emph{X})~=~1/3.
+
+I'll say that a lottery is \textbf{finite} if the set of distributions
+consistent with it is finite, and infinite otherwise.
+
+\section{Dramatis Personae}\label{sec-principles}
+
+A lot of the philosophical moves start by showing that some combination
+of constraints on ≿\textsubscript{∀} cannot be jointly satisfied. Before
+the proofs and arguments start, it helps to have these constraints on
+the table.
+
+\subsection{Preference Constraints}\label{preference-constraints}
+
+As noted earlier, we're going to mostly assume that people are
+self-interested. Alternatively, we're going to assume that
+≿\textsubscript{∀} doesn't aggregate the citizens' preferences, but
+their interests. Formally, these two assumptions come to the same thing.
+
+\begin{description}
+\tightlist
+\item[Self-Interestedness]
+\emph{x}~≿\textsubscript{\emph{i}} \emph{y} iff
+\emph{x\textsubscript{i}}~≥~\emph{y\textsubscript{i}}
+\item[Stochastic Self-Interestedness]
+\emph{X}~≿\textsubscript{\emph{i}} \emph{Y} iff
+Pr(\emph{x\textsubscript{i}}~=~1~\textbar~\emph{X}) ≥
+Pr(\emph{x\textsubscript{i}}~=~1~\textbar~\emph{Y})
+\end{description}
+
+The second of these is similar to what Nebel calls ``Simple
+Stochasticism for Individuals'' and what Hong and Russell call
+``Stochastic Compensation''. It's a little stronger than either of their
+principles, but hardly less plausible.
+
+There are weaker versions of \textbf{Stochastic Self-Interestedness}
+that only quantify over unconditional and/or finite lotteries (as
+Nebel's principle does), but I won't focus on either distinction in what
+follows.
+
+\subsection{Dominance Principles}\label{dominance-principles}
+
+These principles constrain how ≿\textsubscript{∀} treats related
+conditional and unconditional lotteries. In the principles, a
+\textbf{partition} is a set of sets of worlds, such that every world is
+in exactly one of the sets. I'll write \emph{E} for a generic partition,
+and \emph{E}\textsubscript{1},~\(\ldots\)~for the members of it. I'll
+say that a partition is consistent with a lottery iff for each cell of
+the partition, the intersection of it with the lottery is non-empty.
+
+\begin{description}
+\tightlist
+\item[Partitionwise Dominance]
+For any unconditional lotteries \emph{X} and \emph{Y} and partition
+\emph{E}, if for each \emph{E\textsubscript{i}},
+\emph{X}~∧~\emph{E\textsubscript{i}}~≿\textsubscript{∀}~\emph{Y}~∧~\emph{E\textsubscript{i}},
+then \emph{X}~≿\textsubscript{∀}~\emph{Y}.
+\item[Statewise Dominance]
+The principle \textbf{Partitionwise Dominance} holds for each partition
+where for each \emph{i}, only one distribution is consistent with
+\emph{X}~∧~\emph{E\textsubscript{i}}, and only one distribution is
+consistent with \emph{Y}~∧~\emph{E\textsubscript{i}}.
+\end{description}
+
+Given the way I've defined lotteries in general, and in particular
+conditional lotteries,
+\emph{X}~∧~\emph{E\textsubscript{i}}~≿\textsubscript{∀}~\emph{Y}~∧~\emph{E\textsubscript{i}}
+just means that \emph{X} is better than \emph{Y} conditional on
+\emph{E\textsubscript{i}}. That is, it means that between the lotteries
+we get by just looking at the worlds in \emph{E\textsubscript{i}}, by
+taking \emph{E\textsubscript{i}} as given, \emph{X} still does better
+than \emph{Y}.
+
+Both Nebel, and Hong and Russell, use \textbf{Statewise Dominance}. I'm
+going to use the somewhat stronger \textbf{Partitionwise Dominance},
+which means the results I get are going to be weaker. That said, I'll
+use slightly weaker principles elsewhere, and the way I'll get the core
+contradiction will be simpler, so that hopefully makes up for using a
+somewhat stronger principle. It's also a little hard to see what could
+motivate \textbf{Statewise Dominance} but not \textbf{Partitionwise
+Dominance}; the arguments they each give for these principles don't seem
+to rely in any particular way on the members of the partition being
+states.
+
+In real life cases, we don't want something as weak as \textbf{Statewise
+Dominance} anyway. Go back to our traffic engineer. They think it's
+50/50 whether a new housing estate will be built just east of the
+intersection in the next ten years. But after running the model, they
+decide that design \emph{d}\textsubscript{1} will be better than
+\emph{d}\textsubscript{2} whether or not the estate is built. That seems
+to settle that they should do \emph{d}\textsubscript{1} rather than
+\emph{d}\textsubscript{2}. But the little partition we've used, \{Estate
+built, Estate not built\}, does not settle all issues about the welfare
+of road users. Still, it seems like a good bit of reasoning on the
+engineer's part.
+
+But now we should worry that \textbf{Partitionwise Dominance} hasn't
+quite got what our engineer needed either. All it says is that
+\emph{d}\textsubscript{1} is at least as good as
+\emph{d}\textsubscript{2}. We need a stricter version of it. For this
+principle we'll use the standard notation
+\emph{X}~≻\textsubscript{∀}~\emph{Y} means
+\emph{X}~≿\textsubscript{∀}~\emph{Y} and not
+\emph{Y}~≿\textsubscript{∀}~\emph{X}.
+
+\begin{description}
+\tightlist
+\item[Strict Partitionwise Dominance]
+For any unconditional lotteries \emph{X} and \emph{Y} and partition
+\emph{E}, if for each \emph{E\textsubscript{i}},
+\emph{X}~∧~\emph{E\textsubscript{i}}~≻\textsubscript{∀}~\emph{Y}~∧~\emph{E\textsubscript{i}},
+then \emph{X}~≻\textsubscript{∀}~\emph{Y}.
+\item[Strict Statewise Dominance]
+The principle \textbf{Strict Partitionwise Dominance} holds for each
+partition where for each \emph{i}, only one distribution is consistent
+with \emph{X}~∧~\emph{E\textsubscript{i}}, and only one distribution is
+consistent with \emph{Y}~∧~\emph{E\textsubscript{i}}.
+\end{description}
+
+These are the dominance principles we'll mainly be using.
+
+\subsection{Pareto Principles}\label{pareto-principles}
+
+We now turn to principles relating individual good and social good. The
+first three of these seem fairly obvious given the assumption that there
+are only two welfare levels, but actually they seem reasonable more
+broadly. We'll write \emph{X}~\textasciitilde~\emph{Y}, with any
+subscript, to mean \emph{X}~≿~\emph{Y}~∧~\emph{Y}~≿~\emph{X}.
+
+\begin{description}
+\tightlist
+\item[Pareto Indifference]
+If for all \emph{i},
+\emph{x}~\textasciitilde{}\textsubscript{i}~\emph{y}, then
+\emph{x}~\textasciitilde{}\textsubscript{∀}~\emph{y}.
+\item[Pareto Superiority]
+If for all \emph{i}, \emph{x}~≽\textsubscript{i}~\emph{y}, then
+\emph{x}~≽\textsubscript{∀}~\emph{y}.
+\item[Pareto Strict Superiority]
+If for all \emph{i}, \emph{x}~≻\textsubscript{i}~\emph{y}, then
+\emph{x}~≻\textsubscript{∀}~\emph{y}.
+\end{description}
+
+That is, for any two distributions, for any of the three key relations,
+if the relation holds with respect to all individuals, it holds
+socially. We're going to primarily use something slightly stronger than
+\textbf{Pareto Strict Superiority}, which we'll follow convention in
+calling \textbf{Strong Pareto}.
+
+\begin{description}
+\tightlist
+\item[Pareto Superiority]
+If for all \emph{i}, \emph{x}~≽\textsubscript{i}~\emph{y}, and for some
+\emph{i}, \emph{x}~≻\textsubscript{i}~\emph{y}, then
+\emph{x}~≻\textsubscript{∀}~\emph{y}.
+\end{description}
+
+This makes sense again given our traffic engineer. There are these two
+designs, \emph{d}\textsubscript{1} and \emph{d}\textsubscript{2}, and
+\emph{d}\textsubscript{1} will make some people better off and no one
+worse off. That seems to settle that \emph{d}\textsubscript{1} is
+strictly better. It doesn't matter whether the city is embedded in a
+finite or infinite universe, that still looks like a good inference. And
+that's what \textbf{Pareto Superiority} says.
+
+We get \textbf{Ex Ante} versions of all four principles by quantifying
+not just over distributions, but over arbitrary lotteries. I won't write
+all four of them out, because there is really only one that we'll focus
+on. If it fails, the other four look pretty implausible.
+
+\begin{description}
+\tightlist
+\item[Ex Ante Pareto Indifference]
+If for all \emph{i},
+\emph{X}~\textasciitilde{}\textsubscript{i}~\emph{Y}, then
+\emph{X}~\textasciitilde{}\textsubscript{∀}~\emph{Y}.
+\end{description}
+
+The big aim of this paper is to argue that this principle, weak as it
+is, is false.
+
+\subsection{Equality Principles}\label{equality-principles}
+
+Next we turn to principles which play the same role as Arrow's
+non-dictatorship condition. They are all principles that say that in
+principle, the welfare of some group can be outweighed by the welfare of
+others.
+
+The first three principles involve \emph{permutations}. A distribution
+\emph{y} is a permutation of \emph{x} if there is a function
+π:~\(\mathbb{N} \rightarrow \mathbb{N}\) and
+\emph{y\textsubscript{i}}~=~\emph{x}\textsubscript{π(\emph{i})}. Abusing
+notation a bit, we'll write that as \emph{y}~=~π(\emph{x}). The
+\emph{support} of π is the set \{\emph{n}: π(\emph{x})~≠~\emph{x}\}.
+
+\begin{description}
+\tightlist
+\item[Anonymity]
+\emph{x}~\textasciitilde~π(\emph{x})
+\item[Finite Anonymity]
+If π has finite support, then \emph{x}~\textasciitilde~π(\emph{x})
+\end{description}
+
+\textbf{Anonymity} is usually rejected because it conflicts with
+\textbf{Strong Pareto}. So \textbf{Finite Anonymity} is a natural
+fallback. And it's what we're mostly going to be interested in here. But
+you might worry, as Goodman and Lederman
+(\citeproc{ref-GoodmanLederemanArXiV}{2024}) do, that we really should
+have infinitary equality principles for an infinite world. They take as
+their primary equality principle \textbf{Permutation Invariance}.
+
+\begin{description}
+\tightlist
+\item[Permutation Invariance]
+\emph{x}~≽\textsubscript{∀}~\emph{y}~↔︎
+π(\emph{x})~≽\textsubscript{∀}~π(\emph{y})
+\end{description}
+
+These are all principles that require treating everyone alike. But we
+can get some interesting results, as Arrow did, but simply requiring
+that we not treat people too differently. Hong and Russell use a
+principle they call \textbf{Interpersonal Allocation}.
+
+\begin{description}
+\tightlist
+\item[Interpersonal Allocation]
+If \emph{x} has finite support, then there is some \emph{y} with finite
+support, whose support is entirely distinct from \emph{x}'s, such that
+\emph{y}~≻\textsubscript{∀}~\emph{x}.
+\end{description}
+
+What this says is that for any group of citizens who could get welfare
+1, it could be better for some other (presumably larger) group of
+citizens to get welfare 1.
+
+I'm going to use a principle that's a little harder to state, but
+hopefully just as plausible. To state it, I need some terminology. Let
+\emph{x} be a distribution with support \emph{S}, \emph{G} a subset of
+\emph{S}, and \emph{G}\textsuperscript{′} set of citizens such that
+\emph{G}\textsuperscript{′} ⊃ \emph{G} and
+\emph{G}\textsuperscript{′}~∩~\emph{S}~=~\emph{G}. (That is, all the
+others in \emph{G}\textsuperscript{′} get 0 in \emph{x}.) Let
+\emph{x}{[}\emph{G},~\emph{G}\textsuperscript{′}, \emph{p}{]} be a
+lottery such that:
+
+\begin{itemize}
+\tightlist
+\item
+  Everyone in \emph{G}\textsuperscript{′} has chance \emph{p} of getting
+  1;
+\item
+  Everyone else gets, with chance 1, the same welfare they get in
+  \emph{x}.
+\end{itemize}
+
+Then the equality principle I'll use is:
+
+\begin{description}
+\tightlist
+\item[Stochastic Interpersonal Allocation]
+Let \emph{G} be any subset of the support of \emph{x}. There is some
+\emph{G}\textsuperscript{′} such that
+\emph{x}{[}\emph{G},~\emph{G}\textsuperscript{′},
+1/3{]}~≻\textsubscript{∀}~\emph{x}.
+\end{description}
+
+Very roughly, we could argue from \textbf{Interpersonal Allocation} to
+\textbf{Stochastic Interpersonal Allocation} as follows. There is some
+\emph{G}\textsubscript{1} which is more valuable than \emph{G}, i.e., it
+is more valuable that everyone in \emph{G}\textsubscript{1} get a good
+outcome than that everyone in \emph{G} get a good outcome. Similarly,
+there is some \emph{G}\textsubscript{2} which is more valuable than
+\emph{G}\textsubscript{1}. So if
+\emph{G}\textsuperscript{′}~=~\emph{G}~∪~\emph{G}\textsubscript{1}~∪~\emph{G}\textsubscript{2},
+then \emph{G}\textsuperscript{′} is more than three times as valuable as
+\emph{G}. So replacing \emph{G} for sure with a 1/3 chance of
+\emph{G}\textsuperscript{′} should be a positive trade-off.
+
+That last paragraph is rough because really none of the steps follow
+given just these equality principles. What is true is that given some
+other principles listed here, especially \textbf{Ex Ante Pareto
+Indifference}, we can tidy that argument up.
+
+\subsection{Structural Principles}\label{structural-principles}
+
+I mentioned at the start that I wasn't going to assume
+\textbf{Completeness}.
+
+\begin{description}
+\tightlist
+\item[Completeness]
+\emph{X}~≿\textsubscript{∀}~\emph{Y}~∨~\emph{Y}~≿\textsubscript{∀}~\emph{X}
+\end{description}
+
+Indeed, as Goodman and Lederman
+(\citeproc{ref-GoodmanLederemanArXiV}{2024}) notes, following Askell
+(\citeproc{ref-Askell2018}{2018}), \textbf{Completeness} conflicts with
+\textbf{Strong Pareto} and \textbf{Permutation Invariance}. What's more
+plausible, as they also note, is \textbf{Finite Completeness}.
+
+\begin{description}
+\tightlist
+\item[Finite Completeness]
+If \emph{x} and \emph{y} are distributions with finite support, then
+\emph{x}~≿\textsubscript{∀}~\emph{y}~∨~\emph{x}~≿\textsubscript{∀}~\emph{y}.
+\end{description}
+
+As they note, \textbf{Finite Completeness} plus \textbf{Permutation
+Invariance} entails \textbf{Finite Anonymity}. I'll explore later two
+stronger principles.
+
+\begin{description}
+\tightlist
+\item[Finite Evaluability]
+There is some real-valued function \emph{v} such that (a) if \emph{x}
+has finite support, then \emph{v}(\emph{x}) is defined, (b) if \emph{X}
+is a lottery that only has finitely many distributions as possible
+outcomes, and every one of those distribution has finite support, then
+\emph{v}(\emph{X}) is the expected value of the outcome of \emph{X}, and
+(c) if \emph{X} and \emph{Y} are two lotteries thereby in the domain of
+\emph{v}, \emph{X}~≿\textsubscript{∀}~\emph{Y} iff
+\emph{v}(\emph{X})~≥~\emph{v}(\emph{Y}).
+\end{description}
+
+That's a mouthful, but the short version is that expected value
+maximisation is the right theory for comparing lotteries that have
+finitely many outcomes, each of which has finitely many happy people.
+Again, this is the kind of thing that we'd need to assume if we wanted
+to use expected utility maximisation as our choice rule around here,
+while being unsure whether we are part of a finite or infinite universe.
+
+\section{A Contradiction}\label{a-contradiction}
+
+C'est la vie
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
@@ -375,10 +778,19 @@ Arrow, Kenneth J. 1950. {``A Difficulty in the Concept of Social
 Welfare.''} \emph{Journal of Political Economy} 58 (4): 328--46. doi:
 \href{https://doi.org/10.1086/256963}{10.1086/256963}.
 
+\bibitem[\citeproctext]{ref-Askell2018}
+Askell, Amanda. 2018. {``Pareto Principles in Infinite Ethics.''} PhD
+thesis, New York University.
+
 \bibitem[\citeproctext]{ref-Gibbard2014}
 Gibbard, Allan F. 2014. {``Social Choice and the Arrow Conditions.''}
 \emph{Economics and Philosophy} 30 (3): 269--84. doi:
 \href{https://doi.org/10.1017/S026626711400025X}{10.1017/S026626711400025X}.
+
+\bibitem[\citeproctext]{ref-GoodmanLederemanArXiV}
+Goodman, Jeremy, and Harvey Lederman. 2024. {``Maximal Social Welfare
+Relations on Infinite Populations Satisfying Permutation Invariance.''}
+\url{https://arxiv.org/abs/arXiv:2408.05851}. arXiv preprint.
 
 \bibitem[\citeproctext]{ref-HongRussell2025}
 Hong, Frank, and Jeffrey Sanford Russell. 2025. {``Paradoxes of Infinite
@@ -399,8 +811,7 @@ An expanded edition. Cambridge, MA: Harvard University Press. doi:
 
 
 
-\noindent Published in\emph{
-?meta:citation.container-title}, 2025, pp. ?meta:citation.page.
+Draft of October 2025.
 
 
 \end{document}
