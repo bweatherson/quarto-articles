@@ -138,37 +138,7 @@ Bold,BoldFont=EB Garamond SemiBold]{EB Garamond Math}
  
 
 
-\setlength\heavyrulewidth{0ex}
-\setlength\lightrulewidth{0ex}
-\usepackage[automark]{scrlayer-scrpage}
-\clearpairofpagestyles
-\cehead{
-  Brian Weatherson
-  }
-\cohead{
-  Against Ex Ante Pareto
-  }
-\ohead{\bfseries \pagemark}
-\cfoot{}
-\makeatletter
-\newcommand*\NoIndentAfterEnv[1]{%
-  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
-\makeatother
-\NoIndentAfterEnv{itemize}
-\NoIndentAfterEnv{enumerate}
-\NoIndentAfterEnv{description}
-\NoIndentAfterEnv{quote}
-\NoIndentAfterEnv{equation}
-\NoIndentAfterEnv{longtable}
-\NoIndentAfterEnv{abstract}
-\renewenvironment{abstract}
- {\vspace{-1.25cm}
- \quotation\small\noindent\emph{Abstract}:}
- {\endquotation}
-\newfontfamily\tfont{EB Garamond}
-\addtokomafont{disposition}{\rmfamily}
-\addtokomafont{title}{\normalfont\itshape}
-\let\footnoterule\relax
+\usepackage{multirow}
 \KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -378,10 +348,10 @@ are infinitely many fair coins.
 A world specifies the welfare level of each of the citizens, and the
 results of each of the coin tosses. We'll denote these with two
 sequences. I'll use \emph{x}, or when expanded out
-\(\langle\)\emph{x}\textsubscript{1},~\(\ldots\)~\emph{x\textsubscript{i}}~\(\ldots \rangle\)
+\(\langle\)\emph{x}\textsubscript{1},~\ldots~\emph{x\textsubscript{i}}~\(\ldots \rangle\)
 for the values of the citizens. And I'll use \emph{n}, or when expanded
 out
-\(\langle\)\emph{n}\textsubscript{1},~\(\ldots\)~\emph{n\textsubscript{i}}
+\(\langle\)\emph{n}\textsubscript{1},~\ldots~\emph{n\textsubscript{i}}
 \(\ldots \rangle\) for the values of the coins. So a \textbf{world} is a
 pair \(\langle\)\emph{x},~\emph{n}\(\rangle\), and a
 \textbf{proposition} is a set of worlds. There are three kinds of
@@ -479,9 +449,9 @@ These principles constrain how ≿\textsubscript{∀} treats related
 conditional and unconditional lotteries. In the principles, a
 \textbf{partition} is a set of sets of worlds, such that every world is
 in exactly one of the sets. I'll write \emph{E} for a generic partition,
-and \emph{E}\textsubscript{1},~\(\ldots\)~for the members of it. I'll
-say that a partition is consistent with a lottery iff for each cell of
-the partition, the intersection of it with the lottery is non-empty.
+and \emph{E}\textsubscript{1},~\ldots~for the members of it. I'll say
+that a partition is consistent with a lottery iff for each cell of the
+partition, the intersection of it with the lottery is non-empty.
 
 \begin{description}
 \tightlist
@@ -699,22 +669,10 @@ Let \emph{G} be any subset of the support of \emph{x}. There is some
 1/3{]}~≻\textsubscript{∀}~\emph{x}.
 \end{description}
 
-Very roughly, we could argue from \textbf{Interpersonal Allocation} to
-\textbf{Stochastic Interpersonal Allocation} as follows. There is some
-\emph{G}\textsubscript{1} which is more valuable than \emph{G}, i.e., it
-is more valuable that everyone in \emph{G}\textsubscript{1} get a good
-outcome than that everyone in \emph{G} get a good outcome. Similarly,
-there is some \emph{G}\textsubscript{2} which is more valuable than
-\emph{G}\textsubscript{1}. So if
-\emph{G}\textsuperscript{′}~=~\emph{G}~∪~\emph{G}\textsubscript{1}~∪~\emph{G}\textsubscript{2},
-then \emph{G}\textsuperscript{′} is more than three times as valuable as
-\emph{G}. So replacing \emph{G} for sure with a 1/3 chance of
-\emph{G}\textsuperscript{′} should be a positive trade-off.
-
-That last paragraph is rough because really none of the steps follow
-given just these equality principles. What is true is that given some
-other principles listed here, especially \textbf{Ex Ante Pareto
-Indifference}, we can tidy that argument up.
+This isn't nearly as immediately plausible as the other axioms we've
+looked at. It is, however, useful as a waystation in some proofs. Its
+significance will mostly come from how easy it is to derive from other
+principles given \textbf{Ex Ante Pareto Indifference}.
 
 \subsection{Structural Principles}\label{structural-principles}
 
@@ -741,35 +699,81 @@ If \emph{x} and \emph{y} are distributions with finite support, then
 \end{description}
 
 As they note, \textbf{Finite Completeness} plus \textbf{Permutation
-Invariance} entails \textbf{Finite Anonymity}. I'll explore later two
-stronger principles.
+Invariance} entails \textbf{Finite Anonymity}. I'll explore later a
+stronger principle.
 
 \begin{description}
 \tightlist
 \item[Finite Evaluability]
-There is some real-valued function \emph{v} such that (a) if \emph{x}
-has finite support, then \emph{v}(\emph{x}) is defined, (b) if \emph{X}
-is a lottery that only has finitely many distributions as possible
-outcomes, and every one of those distribution has finite support, then
-\emph{v}(\emph{X}) is the expected value of the outcome of \emph{X}, and
-(c) if \emph{X} and \emph{Y} are two lotteries thereby in the domain of
-\emph{v}, \emph{X}~≿\textsubscript{∀}~\emph{Y} iff
-\emph{v}(\emph{X})~≥~\emph{v}(\emph{Y}).
+The restriction of ≿\textsubscript{∀} to finite lotteries with finite
+support is representable by a cardinal utility function \emph{v}.
 \end{description}
 
-That's a mouthful, but the short version is that expected value
-maximisation is the right theory for comparing lotteries that have
-finitely many outcomes, each of which has finitely many happy people.
-Again, this is the kind of thing that we'd need to assume if we wanted
-to use expected utility maximisation as our choice rule around here,
-while being unsure whether we are part of a finite or infinite universe.
+That is, expected value maximisation is the right theory for comparing
+lotteries that have finitely many outcomes, each of which has finitely
+many happy people. Again, this is the kind of thing that we'd need to
+assume if we wanted to use expected utility maximisation as our choice
+rule around here, while being unsure whether we are part of a finite or
+infinite universe.
 
-\section{A Contradiction}\label{a-contradiction}
+\section{A Contradiction}\label{sec-contradiction}
 
-C'est la vie
+The following three principles are inconsistent:
 
-\subsection*{References}\label{references}
-\addcontentsline{toc}{subsection}{References}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Strong Pareto}
+\item
+  \textbf{Partitionwise Strict Dominance}
+\item
+  \textbf{Stochastic Interpersonal Compensation}
+\end{enumerate}
+
+Here's the proof. First we define two sequences of sets as follows. Let
+\emph{G}\textsubscript{1} be ∅, and \emph{G}\textsubscript{2} be
+\{\emph{x}\textsubscript{1}\}. For any \emph{i},
+\emph{H\textsubscript{i}} will be
+\emph{G}\textsubscript{1}~∪~\ldots~∪~\emph{G\textsubscript{i}}. For any
+group \emph{G}, \emph{x}(\emph{G}) is the assignment of 1 to the members
+of \emph{G} and 0 to everyone else. Finally, for \emph{i \textgreater{}
+2}, \emph{G}\textsubscript{\emph{i}+1} will be such that
+\emph{x}(\emph{G\textsubscript{i}}){[}\emph{G\textsubscript{i}},~\emph{G\textsubscript{i}}~∪~\emph{G}\textsubscript{\emph{i}+1},
+1/3{]}~≻\textsubscript{∀}~\emph{x}(\emph{G\textsubscript{i}}). By
+\textbf{Stochastic Interpersonal Compensation}, such a group must exist,
+and be finite.
+
+We then use the coin flips as follows.\footnote{What follows is a
+  version of the familiar two envelope paradox, as discussed in Jackson,
+  Menzies, and Oppy (\citeproc{ref-TwoEnvelope}{1994}).} If the sequence
+〈\emph{n}\textsubscript{2},~\emph{n}\textsubscript{3},~\ldots〉is all
+zeroes, then \emph{k}~=~0. Otherwise, \emph{k} is the number of zeroes
+before the first 1. We define two gambles, called \textcolor{red}{Red}
+and \textcolor{blue}{Blue}. Table~\ref{tbl-red-blue} shows which people
+get value 1 for each gamble, and each result of the coin flips.
+
+\begin{table}
+
+\caption{\label{tbl-red-blue}The Red-Blue choice}
+
+\centering{
+
+\centering
+\begin{tabular}{llcccccc}
+\hline
+ & & $k=0$ & $k=1$ & $k=2$ & … & $k=i$ & … \\
+\hline
+\multirow{2}{*}{\textcolor{red}{Red}} & $n_0 = 1$ & $H_1$ & $H_2$ & $H_3$ & & $H_{i+1}$ & \\
+ & $n_0 = 0$ & $H_2$ & $H_3$ & $H_4$ & & $H_{i+2}$ & \\[3pt]
+\multirow{2}{*}{\textcolor{blue}{Blue}} & $n_0 = 1$ & $H_2$ & $H_3$ & $H_4$ & & $H_{i+2}$ & \\
+ & $n_0 = 0$ & $H_1$ & $H_2$ & $H_3$ & & $H_{i+1}$ & \\
+\hline
+\end{tabular}
+
+}
+
+\end{table}%
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
@@ -797,6 +801,11 @@ Hong, Frank, and Jeffrey Sanford Russell. 2025. {``Paradoxes of Infinite
 Aggregation.''} \emph{Noûs} 59 (3): 809--27. doi:
 \href{https://doi.org/10.1111/nous.12535}{10.1111/nous.12535}.
 
+\bibitem[\citeproctext]{ref-TwoEnvelope}
+Jackson, Frank, Peter Menzies, and Graham Oppy. 1994. {``The Two
+Envelope {`Paradox'}.''} \emph{Analysis} 54 (1): 43--45. doi:
+\href{https://doi.org/10.1093/analys/54.1.43}{10.1093/analys/54.1.43}.
+
 \bibitem[\citeproctext]{ref-Nebel2025}
 Nebel, Jacob M. 2025. {``Infinite Ethics and the Limits of
 Impartiality.''} No{û}s. 2025. doi:
@@ -811,7 +820,7 @@ An expanded edition. Cambridge, MA: Harvard University Press. doi:
 
 
 
-Draft of October 2025.
+\noindent Draft of October 2025.
 
 
 \end{document}

@@ -16,15 +16,22 @@ categories:
   - games and decisions
 format:
     html: 
-        css: ..\trad_defn.css
+      css: 
+        - ..\trad_defn.css
+        - color.css
     pdf:
         output-file: "Against Ex Ante Pareto"
+        filters:
+          - color-spans.lua
         mainfontoptions: 
           - ItalicFont=EB Garamond Italic
           - BoldFont=EB Garamond SemiBold
         include-after-body: 
           text: |
             \noindent Draft of October 2025.
+        include-in-header:
+          text: |
+            \usepackage{multirow}
 ---
 
 Consider the kind of problem that Kenneth @Arrow1950 was interested in when he developed his famous impossibility result. We have some citizens: *c*~1~, …, *c~n~*. Each citizen *c~i~* has a preference has a preference relation ≿~*i*~ over the possible outcomes, which is assumed to be symmetric, transitive, and complete. Our task is to find a social preference relation ≿~∀~, which is also symmetric, transitive, and complete, as a function of those individual relations. The problem is that some weak-ish looking desiderata concerning how the social ordering relates to the individual ordering entail that the job cannot be done. There are some familiar moves to make next, in my opinion by far the best is to deny to desirability of the Independence condition Arrow uses, but all I need for now is that it's a familiar problem.
@@ -128,7 +135,7 @@ Pareto Strict Superiority
 
 That is, for any two distributions, for any of the three key relations, if the relation holds with respect to all individuals, it holds socially. We're going to primarily use something slightly stronger than **Pareto Strict Superiority**, which we'll follow convention in calling **Strong Pareto**.
 
-Pareto Superiority
+Strong Pareto
 :    If for all *i*, *x* ≽~i~ *y*, and for some *i*, *x* ≻~i~ *y*, then *x* ≻~∀~ *y*.
 
 This makes sense again given our traffic engineer. There are these two designs, *d*~1~ and *d*~2~, and *d*~1~ will make some people better off and no one worse off. That seems to settle that *d*~1~ is strictly better. It doesn't matter whether the city is embedded in a finite or infinite universe, that still looks like a good inference. And that's what **Pareto Superiority** says.
@@ -138,7 +145,7 @@ We get **Ex Ante** versions of all four principles by quantifying not just over 
 Ex Ante Pareto Indifference
 :    If for all *i*, *X* \~~i~ *Y*, then *X* \~~∀~ *Y*.
 
-The big aim of this paper is to argue that this principle, weak as it is, is false.
+The big aim of this paper is to argue that this principle, weak as it is, is false. Note that each Ex Ante principle entails the corresponding simple principle, because we can just take the gambles to be degenerate gambles, i.e., states.
 
 ## Equality Principles
 
@@ -159,7 +166,7 @@ Permutation Invariance
 
 These are all principles that require treating everyone alike. But we can get some interesting results, as Arrow did, but simply requiring that we not treat people too differently. Hong and Russell use a principle they call **Interpersonal Allocation**.
 
-Interpersonal Allocation
+Interpersonal Compensation
 :    If *x* has finite support, then there is some *y* with finite support, whose support is entirely distinct from *x*'s, such that *y* ≻~∀~ *x*.
 
 What this says is that for any group of citizens who could get welfare 1, it could be better for some other (presumably larger) group of citizens to get welfare 1.
@@ -171,7 +178,7 @@ I'm going to use a principle that's a little harder to state, but hopefully just
 
 Then the equality principle I'll use is:
 
-Stochastic Interpersonal Allocation
+Stochastic Interpersonal Compensation
 :    Let *G* be any subset of the support of *x*. There is some *G*^′^ such that *x*[*G*, *G*^′^, 1/3] ≻~∀~ *x*.
 
 This isn't nearly as immediately plausible as the other axioms we've looked at. It is, however, useful as a waystation in some proofs. Its significance will mostly come from how easy it is to derive from other principles given **Ex Ante Pareto Indifference**.
@@ -201,13 +208,75 @@ The following three principles are inconsistent:
 
 1. **Strong Pareto**
 2. **Partitionwise Strict Dominance**
-3. **Stochastic Interpersonal Allocation**
+3. **Stochastic Interpersonal Compensation**
 
-Here's the proof. First we define two sequences of sets as follows. Let *G*~1~ be ∅, and *G*~2~ be {*x*~1~}. For any *i*, *H~i~* will be *G*~1~ ∪ … ∪ *G~i~*. The distribution *x^i^* will assign 1 to members of *H~i~* and 0 to everyone else. (The superscript here is so it isn't confused with points in a particular distribution.) Finally, for *i > 2*, *G*~*i*+1~ will be such that *x^i^*[*G~i~*, *G~i~* ∪ *G*~*i*+1~, 1/3] ≻~∀~ *x^i^*. By **Stochastic Interpersonal Allocation**, such a group must exist, and be finite.
+Here's the proof. First we define two sequences of sets as follows. Let *G*~1~ be ∅, and *G*~2~ be {*x*~1~}. For any *i*, *H~i~* will be *G*~1~ ∪ … ∪ *G~i~*. For any group *G*, *x*(*G*) is the assignment of 1 to the members of *G* and 0 to everyone else. Finally, for *i > 2*, *G*~*i*+1~ will be such that *x*(*G~i~*)[*G~i~*, *G~i~* ∪ *G*~*i*+1~, 1/3] ≻~∀~ *x*(*G~i~*). By **Stochastic Interpersonal Compensation**, such a group must exist, and be finite.
 
-We then use the coin flips as follows.^[What follows is a version of the familiar two envelope paradox, as discussed in @TwoEnvelope.] If the sequence 〈*n*~2~, *n*~3~, …〉is all zeroes, then *k* = 0. Otherwise, *k* is the number of zeroes before the first 1. We define two gambles, called [Red]{.text-red} a
+We then use the coin flips as follows.^[What follows is a version of the familiar two envelope paradox, as discussed in @TwoEnvelope.] If the sequence 〈*n*~2~, *n*~3~, …〉is all zeroes, then *k* = 0. Otherwise, *k* is the number of zeroes before the first 1. We define two gambles, called [Red]{.text-red} and [Blue]{.text-blue}. @tbl-red-blue shows which people get value 1 for each gamble, and each result of the coin flips.
 
-
-::: {.content-visible unless-format="html"}
-## References {-}
+::: {.context-visible when-format="pdf"}
+\begin{table}[h]
+\caption{The Red-Blue choice}
+\label{tbl-red-blue}
+\centering
+\begin{tabular}{llcccccc}
+\hline
+ & & $k=0$ & $k=1$ & $k=2$ & … & $k=i$ & … \\
+\hline
+\multirow{2}{*}{\textcolor{red}{Red}} & $n_0 = 1$ & $H_1$ & $H_2$ & $H_3$ & & $H_{i+1}$ & \\
+ & $n_0 = 0$ & $H_2$ & $H_3$ & $H_4$ & & $H_{i+2}$ & \\[3pt]
+\multirow{2}{*}{\textcolor{blue}{Blue}} & $n_0 = 1$ & $H_2$ & $H_3$ & $H_4$ & & $H_{i+2}$ & \\
+ & $n_0 = 0$ & $H_1$ & $H_2$ & $H_3$ & & $H_{i+1}$ & \\
+\hline
+\end{tabular}
+\end{table}
 :::
+
+::: {.content-visible unless-format="pdf"}
+
+|      |          | *k*=0  | *k*=1  | *k*=2  | …   | *k*=*i*    | …   |
+|------|----------|------|------|------|-----|--------|-----|
+| [Red]{.text-red}  | *n*~0~ = 1   | *H*~1~   | *H*~2~   | *H*~3~   |     | *H*~*i*+1~   |     |
+|      | *n*~0~ = 0   | *H*~2~   | *H*~3~   | *H*~4~   |     | *H*~*i*+2~   |     |
+| [Blue]{.text-blue} | *n*~0~ = 1   | *H*~2~   | *H*~3~   | *H*~4~   |     | *H*~*i*+2~   |     |
+|      | *n*~0~ = 0   | *H*~1~   | *H*~2~   | *H*~3~   |     | *H*~*i*+1~   |     |
+
+:    The Red-Blue choice {#tbl-red-blue}
+:::
+
+The next step is easiest to understand with a little story. The coins are flipped, and the payouts that result from each gamble are written inside two envelopes, whose colour matches the gamble's name. Then whichever choice the bureaucrat makes, they are shown that envelope. A quick argument, which we'll spell out presently, shows that whatever they see in the envelope, they'd prefer to have selected the other envelope. So by **Partitionwise Strict Dominance**, the other gamble is better. But that holds whichever choice they make. So each gamble is preferable to the other. Contradiction.
+
+More formally, we'll show that [Blue]{.text-blue} ≻~∀~ [Red]{.text-red}. We'll use ⟨*x*, *y*⟩ to mean *n*~0~ = *x* and *k* = *y*. Partition the possible results of coin flips as follows. The first cell is just ⟨0, 0⟩. The second cell is ⟨1, 0⟩ ∨ ⟨0, 1⟩. And so on, with the *i*'th cell being ⟨*i*–1, 0⟩ ∨ ⟨*i*–2, 1⟩. In the first cell, [Red]{.text-red} returns *H*~1~ (i.e., gives value 1 to all and only those in *H*~1~), and [Blue]{.text-blue} returns *H*~2~, so [Blue]{.text-blue} is better. For any later cell *i*, [Red]{.text-red} returns *H~i~* for sure. Conditional on being in that cell, [Blue]{.text-blue} has a 2/3 chance of returning *H*~*i*–1~ and a 1/3 chance of returning *H*~*i*+1~. By the construction of the *H*, that's a better gamble than *H~i~* for sure. So [Blue]{.text-blue} is better on every cell, so it is better. But the case is completely symmetric, so exactly the same style of argument shows [Red]{.text-red} is better than [Blue]{.text-blue}.
+
+# Other Contradictions {#sec-other-contradictions}
+
+This result might seem underwhelming for two reasons. First, **Stochastic Interpersonal Compensation** is very complicated, and it isn't clear what's wrong with simply denying it. Second, this is an argument against **Ex Ante Pareto Indifference**, and that's not one of principles we've used! Happily, we can deal with both these problems at once.
+
+The argument in @sec-contradiction is a way of unifying the apparently different arguments in @Nebel2025 and in @HongRussell2025. Nebel shows that these principles are inconsistent.
+
+- **Finite Anonymity**
+- **Statewise Dominance**
+- **Ex Ante Strong Pareto**
+- **Stochastic Self-Interestedness**
+- **Individual Statewise Dominance** (i.e., **Statewise Dominance** with individual orders in place of social orders)
+
+Given **Finite Anonymity**, **Statewise Dominance** and **Ex Ante Strong Pareto** we can easily prove **Stochastic Interpersonal Compensation**. I'll show this with one example; it's more enlightening than the general case and the generalisation is trivial. Assume that the support of *x* is {*x*~1~, …, *x*~10~}, and *G* is {*x*~9~, *x*~10~}. Then {*x*~11~, …, *x*~16~} works as a witness for *G*^′^. Here's why. The gamble *x*[*G*, *G*^′^, 1/3] is equivalent, given just **Ex Ante Pareto Indifference** to the gamble that has 1/3 chance of given value 1 to each of the following sets.
+
+- {*x*~1~, …, *x*~8~, *x*~9~, *x*~10~}
+- {*x*~1~, …, *x*~8~, *x*~11~, *x*~12~, *x*~13~}
+- {*x*~1~, …, *x*~8~, *x*~14~, *x*~15~, *x*~16~}
+
+Either way, the first 8 people get 1 for sure, and the next 8 get 1 with probability 1/3. The first of those just is *x*, and by **Finite Anonymity** plus **Strong Pareto** (which is entailed **Ex Ante Strong Pareto**) the other two states are better than *x*. So by **Statewise Dominance**, the lottery is better than *x*. In general, as long as *G*^′^ is the union of *G* with two  sets each bigger than *G*, and disjoint from each other and *G*, we can use this style of argument to show *x*[*G*, *G*^′^, 1/3] is better than *x*.
+
+So given Nebel's premises we can derive **Interpersonal Stochastic Compensation**, and hence the contradiction. To be clear, Nebel only uses **Statewise Dominance**, and I've used **Partitionwise Dominance**, so his result is stronger in that respect. But I don't think a lot turns on this distinction. What does matter is that there is a natural argument from **Ex Ante Strong Pareto** to **Interpersonal Stochastic Compensation**.
+
+Hong and Russell derive a contradiction from these four principles.
+
+- Something
+- A
+- B
+- C
+
+It's a bit more work, but a similar kind of argument shows that these premises also entail **Interpersonal Stochastic Compensation**, and hence can get to the same kind of contradiction.
+
+More generally, we can get 
