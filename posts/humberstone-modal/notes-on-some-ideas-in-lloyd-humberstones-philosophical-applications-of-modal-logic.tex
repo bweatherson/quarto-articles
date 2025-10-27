@@ -29,7 +29,7 @@ marginparsep=0in]{geometry}
 \ifPDFTeX\else
   % xetex/luatex font selection
   \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
-Bold]{EB Garamond Math}
+SemiBold]{EB Garamond Math}
   \setsansfont[]{EB Garamond}
   \setmathfont[]{Garamond-Math}
 \fi
@@ -169,6 +169,32 @@ Bold]{EB Garamond Math}
 \addtokomafont{disposition}{\rmfamily}
 \addtokomafont{title}{\normalfont\itshape}
 \let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
 \cehead{
        Ishani Maitra and Brian Weatherson
         }
@@ -1030,7 +1056,6 @@ The required derivations are sketched below.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   \((A\wedge B)\rightarrow B\) by D0
 \item
@@ -1042,15 +1067,6 @@ The required derivations are sketched below.
 \item
   \((A\wedge \mathbf{D}B)\rightarrow \mathbf{D}(A\wedge B))\)from 3 and
   D1 by TFC
-\end{enumerate}
-
-::: \{.content-visible when-format=``docx''
-
-:::
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   \((A\wedge B)\rightarrow (A\wedge B)\) by D0
 \item
@@ -1059,32 +1075,6 @@ The required derivations are sketched below.
 \item
   \(\mathbf{D}(A\wedge B)\rightarrow (\mathbf{D}A\vee \mathbf{D}B)\)from
   2 and D1 by TFC
-\end{enumerate}
-
-::: \{.content-visible when-format=``docx''
-
-:::
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \((A\wedge B)\rightarrow (A\vee B)\) by D0
-\item
-  \((A\wedge B)\rightarrow ((\mathbf{D}A\wedge \mathbf{D}B)\rightarrow \mathbf{D}(A\vee B))\)
-  from 1 by RD\(_{1,2}\)
-\item
-  \(\mathbf{D}(A\wedge B)\rightarrow \mathbf{D}(A\vee B)\)from 2 and D1
-  by TFC
-\end{enumerate}
-
-::: \{.content-visible when-format=``docx''
-
-:::
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   \(\top \rightarrow \top\)by D0
 \item

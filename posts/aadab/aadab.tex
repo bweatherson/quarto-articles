@@ -1,0 +1,811 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.55in, right=1.55in, top=1.45in, bottom=1.45in,
+includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+SemiBold]{EB Garamond Math}
+  \setsansfont[]{EB Garamond}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Anti-Anti-Desire-As-Belief
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+\cehead{
+      Anon
+      }
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Anti-Anti-Desire-As-Belief},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Anti-Anti-Desire-As-Belief}
+\author{Brian Weatherson}
+\date{2025}
+\begin{document}
+\maketitle
+\begin{abstract}
+David Lewis put forward a decision theoretic argument against there
+being a tight connection between desires and beliefs about the good. I
+reply on behalf of the targets of his arguments. I first present a
+puzzle that anyone who believes in a connection between desire and
+belief has to answer. I then argue that there are two plausible answers
+to this puzzle, and whichever answer one gives, one has a prior reason
+to reject a premise in Lewis's argument.
+\end{abstract}
+
+
+\setstretch{1.1}
+\section{Lewis's Argument}\label{sec-lewis}
+
+David Lewis (\citeproc{ref-Lewis1988}{1988},
+\citeproc{ref-Lewis1996}{1996}) has an argument against the view that
+desires can be reduced to beliefs. I'm going to respond on behalf of the
+Desire-as-Belief (hereafter, DAB) thesis. In particular, I'm going to
+offer two responses. The responses themselves will not be particularly
+original; one is due to Huw Price (\citeproc{ref-Price1989}{1989}), and
+the other to Jessica Collins (\citeproc{ref-Collins2015}{2015}). What
+will I hope be original is showing how they fit together. I'll argue
+that given the other assumptions Lewis makes, the DAB theorist has
+independent reason to reject one or other of the premises Lewis offers.
+The reason is that there is a tricky puzzle that defenders of DAB must
+have an answer to, and there are two viable answers, one of which leads
+to (and motivates) Price's response to Lewis, the other of which leads
+to (and motivates) Collins's.
+
+I'll start with a presentation of Lewis's argument, shorn of what seem
+to me to be extraneous details. This will look a little different to
+Lewis's own presentation, but all the premises here are ones he uses,
+and its gets to the conclusion he wants, so it seems to be a fair
+representation.\footnote{I'm drawing here on presentations of the
+  argument by Collins (\citeproc{ref-Collins2015}{2015}), Hàjek
+  (\citeproc{ref-Hajek2015}{2015}), and Nissan-Rozen
+  (\citeproc{ref-Nissan-Rozen2015-NISATR}{2015}).}
+
+Assume that we have a finite set of worlds. We will use \emph{w} as a
+variable over worlds. A world, in this sense, is a specification of the
+truth value of all the truth-apt things that are relevant to a
+particular decision. They are `small worlds' in the sense of Savage
+(\citeproc{ref-Savage1954}{1954}), not possible worlds in the sense of
+Lewis (\citeproc{ref-Lewis1986a}{1986}). For the most part they are more
+coarse-grained than the concrete worlds of \emph{Plurality}, but in one
+respect they are more fine-grained: they might differ from each other
+purely in normative features.\footnote{This is a consequence of the
+  point Chalmers (\citeproc{ref-Chalmers2011b}{2011}) makes that it is
+  epistemic, not metaphysical, possibility that matters here, plus the
+  assumption that our characters might be normatively uncertain.}
+
+For any descriptive proposition A, assume there is a distinct
+proposition Å, meaning that A is desirable.\footnote{It's more common
+  here to let Å be that A is good, but I want to separate questions
+  about the desire-belief relationship from questions about moral
+  motivation, so my characters will be motivated to do something just to
+  the extent they believe it desirable, leaving it as a further question
+  whether all and only good things are desirable.} Let V be an agent's
+value function, and Pr their credence function, with subscripts
+representing what those functions are like after updating. So
+V\textsubscript{A} and Pr\textsubscript{A} are the values of the value
+and credence functions after updating on A. Strictly speaking given how
+I've set this up, propositions not worlds have values. But it is
+convenient to talk about the value of a world, so I'll sometimes write
+V(\emph{w}) when strictly it should be V(\{\emph{w}\}); I don't think
+this can lead to any confusion. (Later I'll also write Pr(\emph{w}) for
+the probability of Pr(\{\emph{w}\}); again it shouldn't result in
+confusion.)
+
+Lewis's argument against DAB uses six assumptions. In these assumptions
+B is an arbitrary proposition, and A is an arbitrary \emph{descriptive}
+proposition.
+
+\begin{description}
+\tightlist
+\item[Binary Desirability]
+All worlds are either desirable or undesirable. If \emph{w} is
+desirable, then V(\emph{w})~=~1, and otherwise V(\emph{w})~=~0.
+\item[Equation]
+Given \textbf{Binary Desirability}, the correct way to represent DAB is
+V(A)~=~Pr(Å).
+\item[Additivity]
+V(A)~=~Σ\textsubscript{\emph{w}}V(\emph{w})Pr(\emph{w}~\textbar~A)
+\item[Worldly Invariance]
+V\textsubscript{A}(\emph{w})~=~V(\emph{w})
+\item[Restricted Conditionalisation]
+Pr\textsubscript{A}(B)~=~Pr(B~\textbar~A)
+\item[Possible Independence]
+For some Å, Pr(Å) ≠ Pr(Å \textbar{} A)
+\end{description}
+
+The first assumption is obviously absurd, but it is useful for setting
+out the argument. In any case, if the last five assumptions are true,
+then they should be consistent with \textbf{Binary Desirability}. Given
+those assumptions, here is Lewis's argument. By \textbf{Possible
+Independence} there is an Å such that Pr(Å) ≠ Pr(Å \textbar{} A). But
+given the other assumptions we can reason as follows.
+
+\begin{longtable}[]{@{}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1071}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3929}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Pr(Å) & ~=~V(A) & (\textbf{Binary Desirability} + \textbf{Equation}) \\
+& ~=~Σ\textsubscript{\emph{w}}V(\emph{w}) Pr(\emph{w}~\textbar~A) &
+(\textbf{Additivity}) \\
+& ~=~Σ\textsubscript{\emph{w}}V\textsubscript{A}(\emph{w})
+Pr(\emph{w}~\textbar~A) & (\textbf{Worldly Invariance}) \\
+& ~=~Σ\textsubscript{\emph{w}}V\textsubscript{A}(\emph{w})
+Pr\textsubscript{A}(\emph{w} \textbar~A) & (\textbf{Restricted
+Conditionalisation}) \\
+& ~=~V\textsubscript{A}(A) & (\textbf{Additivity}, applied to updated
+values) \\
+& ~=~Pr\textsubscript{A}(Å) & (\textbf{Equation}, again after
+updating) \\
+& ~=~Pr(Å~\textbar~A) & (\textbf{Restriced Conditionalisation}) \\
+\end{longtable}
+
+And the last line contradicts our assumption. So not all six of these
+assumptions can be correct, if DAB is true. Since Lewis thinks they are
+all correct, he concludes DAB is false.
+
+As I said, this presentation doesn't look a lot like Lewis's argument.
+Most notably, \textbf{Possible Independence} isn't an assumption for
+Lewis, it is something he derives from yet further premises. Much of the
+1988 paper is devoted to spelling out the absurd consequences of denying
+\textbf{Possible Independence}. These arguments haven't convinced
+everyone. They assume that conditionalisation is the right way to update
+on any new information, descriptive or normative. If normative
+propositions are centered worlds, as the picture in Lewis
+(\citeproc{ref-Lewis1989b}{1989}) suggests, that seems like the wrong
+way to update. If the picture of self-locating belief that Lewis
+(\citeproc{ref-Lewis1979b}{1979}) offers is correct, we can't update our
+beliefs about what time it is by conditionalisation on the noise the
+alarm clock makes.\footnote{The point that conditionalisation isn't the
+  right way to update beliefs with centered worlds contents, and this
+  raises a problem for Lewis, is made by Graham Oddie
+  (\citeproc{ref-Oddie1994}{1994}).}
+
+But \textbf{Possible Independence} is surely true. Assume that A is a
+proposition about someone, call him Peter, might do. And assume that we
+desire that the morally good thing is done, that we don't know whether A
+is good or not, but we are very confidence in Peter's moral judgment. If
+Peter does A, that's good evidence A is good. That all seems coherent,
+which is enough to support \textbf{Possible Independence}.
+
+While unrestricted conditionalisation is questionable,
+\textbf{Restricted Conditionalisation} seems fairly secure. In some
+presentations of the argument, Lewis uses a version of invariance that
+says the value of any proposition does not change on learning A. This is
+questionable, but \textbf{Worldly Invariance} seems fairly secure. It's
+just the view that in a decision tree, the value of a terminal node
+doesn't depend on where we are in the tree. That's normally taken for
+granted in formal models of dynamic choice, and I think rightly so.
+
+If we treat \textbf{Binary Desirability} as a harmless simplification,
+that means the only substantive assumptions left are \textbf{Equation}
+and \textbf{Additivity}. Given those, the argument against DAB goes
+through. I'm going to argue that anyone sympathetic to DAB has
+independent reason to reject one or other of those claims. Part of the
+argument that this is an \emph{independent} reason is that different
+sympathisers will reject one rather than the other. To show this, I'll
+start with a short story.
+
+\section{Auntie and Auntie}\label{sec-auntie}
+
+Our heroes are two anti-Humeans, called Auntie E and Auntie C, who both
+endorse a version of DAB. Both of them are aunts of Peter, the moral
+exemplar from Section~\ref{sec-lewis}. Both Aunties E and Auntie C think
+that if Peter does something, it's very likely to be the right thing to
+do. Indeed, they are fairly deferential to Peter in this respect; if
+Peter does something they thought was wrong, they take that as some
+(strong but inconclusive) reason to change their belief about the
+morality of the action. They are both moralists, and think something is
+desirable iff it is good.
+
+Let A be the Proposition that Peter does some action \emph{a}, and Å
+that it is deisrable/good. Like Lewis does with \textbf{Binary
+Desirability}, I'll make a simplifying assumption: it's common knowledge
+that not doing \emph{a} is good iff doing \emph{a} is not good. That
+means ¬Å can be read as either of the epistemically equivalent
+propositions \emph{a is not good} and \emph{not a is good}.
+
+Before Peter acts, both Auntie's have the same credal distribution,
+satisfying these constraints.
+
+\begin{itemize}
+\tightlist
+\item
+  C(Å~\textbar~A) = 0.8
+\item
+  C(¬Å \textbar{} ¬A) = 0.9
+\item
+  C(A) = 0.7
+\end{itemize}
+
+Table~\ref{tbl-credence} shows the credence each Auntie has in each of
+the four possibilities from crossing A with Å.
+
+\begin{longtable}[]{@{}rcc@{}}
+\caption{Auntie's credence that Peter will do A, and that it will be
+right.}\label{tbl-credence}\tabularnewline
+\toprule\noalign{}
+& Å & ¬Å \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Å & ¬Å \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+A & 0.56 & 0.14 \\
+¬A & 0.03 & 0.27 \\
+\end{longtable}
+
+Now you might think at this point that I've said enough to tell you what
+each Auntie hopes Peter will do. After all, I've told you everything
+relevant about each Auntie's credence in Å, and I've told you that their
+credences in propositions about goodness determine their values. But I
+haven't told you one thing extra - I haven't told you what decision
+theory the two Aunties follow.
+
+Auntie E is an evidential decision theorist. For her, the value of an
+arbitrary action \emph{x} is given by \textbf{Auntie E's Value}. In this
+formula, where X is the proposition that \emph{x} is performed, and D is
+the propositions that things are desirable.
+
+\begin{description}
+\tightlist
+\item[Auntie E's Value]
+V(\emph{x}) = C(D~\textbar~X)
+\end{description}
+
+That is, she looks at Peter's options, and hopes that he does the one
+that she is most confident is good, conditional on Peter doing it. That
+means she hopes Peter does not do \emph{a}, since then she'll have
+credence 0.9 that Peter has done the right thing. If Peter does
+\emph{a}, she'll only have credence 0.8 that he'll have done the right
+thing, which isn't as good.
+
+Auntie C endorses a version of causal decision theory, in particular
+something like the version supported by David Lewis
+(\citeproc{ref-Lewis1981bn}{1981}).\footnote{Here I'm following Collins,
+  who notes that it is odd that Lewis attributes to Auntie a form of
+  evidential decision theory, which Lewis himself does not endorse.} In
+particular, Auntie's values are given by \textbf{Auntie C's Value}. In
+the formula, C\textsubscript{\emph{x}} be the result of \emph{imaging}
+the credence function C on the proposition \emph{x} is performed. Auntie
+C believes changing the moral facts is a bigger change to the world than
+changing any descriptive facts, so imaging always moves credences up or
+down in Table~\ref{tbl-credence}, never left or right.\footnote{Recall
+  here that the worlds are epistemic possibilities, not metaphysical
+  ones, so it makes sense to talk about merely changing the moral facts.}
+
+\begin{description}
+\tightlist
+\item[Auntie C's Value]
+V(\emph{x}) = C\textsubscript{\emph{x}}(D)
+\end{description}
+
+This resembles equation (11) in ``Causal Decision Theory''. Indeed,
+after the first character, it just is the special case of that equation
+where the only possible values are 1 and 0. But the first character
+matters. Lewis is presenting a theory of usefulness, not of value. His
+formula is meant to measure the thing that a rational actor maximises.
+It is not measuring the thing an altruistic friend hopes is maximised.
+We'll come back to this point in Section~\ref{sec-auntie-c}. For now, I
+just want to note the similarities to Lewis's own theory.
+
+Using this formula, Auntie C hopes that Peter does a iff C(Å)
+\textgreater{} C(¬Å). Since C(Å)~=~0.59, and C(¬Å)~=~0.41, that means
+she does hope that Peter does A.
+
+The next two steps are to see why the Aunties reject Lewis's argument.
+
+\section{DAB and EDT}\label{sec-auntie-e}
+
+The easier case is Auntie E. She rejects \textbf{Equation}. The
+relationship between desire and belief is not V(A)~=~Pr(Å), but
+V(A)~=~Pr(Å \textbar{} A). Lewis is aware of this response, it's
+developed by Price (\citeproc{ref-Price1989}{1989}), and his response is
+that this isn't a form of desire as \emph{belief}. His thought, and this
+comes out a little more clearly in a recently published letter than in
+the papers (\citeproc{ref-Lewis-McDermott-06121993}{Lewis {[}1993{]}
+2020}), is that belief isn't load-bearing in Auntie E's view.
+
+Everyone agrees that beliefs play a role in instrumental desires. If
+desires to take a pill because one believes it will cure one's disease,
+that desire will go away if one loses either the belief that it's a
+cure, or the belief that one is diseased. Lewis notes that Auntie E is
+committed to the existence of a proposition D consisting of all and only
+the desirable worlds, and to the claim that by necessity any agent with
+desires will desire it. Moreover, he argues, on Auntie E's view this is
+the only non-instrumental desire an agent has. Beliefs don't affect
+non-instrumental desires on this view, since everyone has the same
+non-instrumental desires. They just affect instrumental desires. But
+Humeans and anti-Humeans agree about the connection between belief and
+non-instrumental desires.
+
+I'll offer three replies on Auntie E's behalf. I'm not defending her
+view in general; I'm not an evidential decision theorist. I'm just
+defending the claim that this is a kind of desire as beleif.
+
+First, the simplifying assumption \textbf{Binary Desirability} looks
+less benign here. The construction of the necessarily desired
+proposition D requires this assumption. If some worlds are more
+desirable than others there are still preferences that Auntie E thinks
+are necessary (i.e., that a more desirable world is preferred to a less
+desirable one), but no desires.
+
+Second, the necessity claim Auntie E seems committed to looks less
+worrying once remember what kinds of things worlds are in this context.
+They are the elements of the contents of attitudes. That is, on Lewis's
+view, they are centered worlds. Auntie E's view is really that by
+necessity an agent desires that one of the centered worlds found
+desirable by the current center, i.e., that very agent, is actualised.
+That is, agents desire what they believe desirable. That's not a
+surprising necessity claim. It's arguably just a kind of verbal
+necessity; Auntie E could simply say that a belief doesn't count as a
+belief about \emph{desirabilty} unless it is matched by a desire. Lewis
+is committed to the view that anyone who believes \emph{p and q}
+believes \emph{p}; this isn't a worrying necessity because a belief
+wouldn't count as a belief in a conjunction unless it had this property.
+Auntie E is making a version of the same move.
+
+Third, the objection that this isn't really the right kind of reduction
+is a very odd complaint from \emph{David Lewis}. It's agreed on all
+sides that, on Auntie E's view, what an agent desires supervenes on what
+they believe. Moreover, the reverse supervenience, of belief on desire,
+in general doesn't hold. Lewis's complaint here is that Auntie E hasn't
+made desire depend on belief in the right way, even though she has
+ensured these supervenience claims hold. The only way to make this
+complaint work is to understand dependence using some hyperintensional
+notion like grounding. But there's no sign of such a notion in Lewis's
+work, and there are good reasons to think it couldn't be added to his
+view (\citeproc{ref-MacBrideJL2022}{MacBride and Janssen-Lauret 2022}).
+
+So EDT offers a way out of Lewis's argument. That's not totally
+surprising; it's not Lewis's view. Things are trickier with Auntie C.
+
+\section{DAB and CDT}\label{sec-auntie-c}
+
+Auntie C says that the misstep in Lewis's argument is
+\textbf{Additivity}. Following Collins, she says that this is something
+that only an adherent of EDT should accept. She's mostly mystified about
+why Lewis, famously an enemy of EDT, would have accepted it in the first
+place.
+
+In the second DAB paper, Lewis has a response to this. Oddly, it's in a
+parenthetical paragraph. After describing an action that's essentially
+two-boxing in Newcomb's problem, he writes
+
+\begin{quote}
+Should you take that actions?---Yes \ldots{} Do you desire to perform
+it?---No \ldots{} {[}O{]}ur topic here is not choiceworthiness but
+desire \ldots{} {[}so{]} we adopt an ``evidential'' conception of
+expected value \ldots{} Choiceworthiness is governed by a different
+``causal'' conception. (\citeproc{ref-Lewis1996}{Lewis 1996, 303})
+\end{quote}
+
+So Lewis thinks that Auntie C is confusing the two notions, and that she
+only rejects \textbf{Aditivity} because of this confusion. But there's
+something important that can be said on Auntie C's behalf.
+
+In the first DAB paper, Lewis sets out the notion of desire that he
+thinks is at issue. There, he is most concerned to distinguish it from a
+notion that is intuitively used in actions taken from duty. We might
+intuitively say that we did X from duty, though we desired to do Y.
+Lewis resists; he thinks that in any such case we also desire X. As he
+puts it,
+
+\begin{quote}
+We are within our rights to construe `desire' inclusively, to cover the
+entire range of states that move us. (\citeproc{ref-Lewis1988}{Lewis
+1988, 323})
+\end{quote}
+
+This isn't an optional move on Lewis's part. If he doesn't make this
+move, the Humean picture of action he wants to defend fails immediately.
+
+Now Auntie C says that if we're modelling ``the entire range of states
+that move us'', and we are, as Lewis recommends, moved to take two boxes
+in Newcomb's Problem, we really better not insist that our model
+satisfies \textbf{Additivity}. We'd be left saying that the two-boxer
+acts against all desire, merely motivated by the duty to do what's
+rational. This would be a violation of Lewis's Humeanism. It would also
+be phenomenologically implausible. The two-boxer isn't moved by duty,
+but by the desire for the extra \$1000. So for both theoretical and
+phenomenological reasons, we need a notion of desire that violates
+\textbf{Additivity}.
+
+Indeed, she insists that it isn't just in first-personal cases like
+Newcomb's Problem that \textbf{Additivity} fails. Imagine that Peter
+faces the choice in Table~\ref{tbl-peter-second}, where the values in
+the box now represent the moral value of the choice, and Auntie C thinks
+Peter choosing Up is excellent evidence for Left, while his choosing
+Down is excellent evidence for Right.
+
+\begin{longtable}[]{@{}rcc@{}}
+\caption{Peter's second choice}\label{tbl-peter-second}\tabularnewline
+\toprule\noalign{}
+& Left & Right \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Left & Right \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Up & 3 & 0 \\
+Down & 5 & 1 \\
+\end{longtable}
+
+The first quote of Lewis's suggests that both Auntie's should desire
+that Peter choose Up, since that will be evidence that an outcome of
+value 3 will obtain. But it seems coherent to hope that he chooses Down.
+Several of the arguments for two-boxing seem replicable here. It's weird
+to hope that Peter chooses Down conditional on Left, and hope he chooses
+Down conditional on Right, and unconditionally hope that he chooses Up.
+
+This is not to deny that there is a theoretical role for something like
+news-value. Joyce (\citeproc{ref-Joyce1999}{1999}) makes extensive use
+of that notion in developing a causal decision theory. It's just that in
+the context of defending Humeanism about action, two-boxers like Lewis
+can't equate news-value with desirability. So \textbf{Addition} has to
+fail, since as Lewis agrees, \textbf{Addition} entails that desirability
+goes with news value.
+
+\section{Conclusion}\label{sec-conclusion}
+
+Any defender of DAB has to pick whether to take Auntie E's side or
+Auntie C's side in the original question about Peter. Whichever side
+they pick, they will have an independent reason to reject one of the
+premises Lewis puts forward in his argument against their view. So they
+have independent reason to reject Lewis's argument.
+
+I've been stressing \emph{independent} here because it's not news that
+any defender of DAB has to reject some premise of Lewis's argument. That
+follows from the fact that his argument is valid! For the response to be
+more than table-thumping, the proponent of DAB has to say which premise
+they reject, and why it is reasonable to reject it. The point of the
+examples involving Peter is to identify the premise in question, which
+will differ between different proponents, and say what that reason is.
+In the second DAB paper, Lewis offers responses to each of these
+reasons, and in the last two sections I've gone over why those responses
+don't work. It's somewhat ironic that in each case my analysis has
+rested in part on the view that Lewis's response is inconsistent with
+what he says elsewhere: about the role of possible worlds in philosophy
+in Section~\ref{sec-auntie-e}, and about the role of desire in producing
+action in Section~\ref{sec-auntie-c}. I'll leave to another day whether
+someone who was willing to abandon large parts of the Lewisian framework
+might be able to rescue his argument against DAB.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Chalmers2011b}
+Chalmers, David. 2011. {``Frege's Puzzle and the Objects of Credence.''}
+\emph{Mind} 120 (479): 587--635. doi:
+\href{https://doi.org/10.1093/mind/fzr046}{10.1093/mind/fzr046}.
+
+\bibitem[\citeproctext]{ref-Collins2015}
+Collins, Jessica. 2015. {``Decision Theory After Lewis.''} In \emph{A
+Companion to David Lewis}, edited by Barry Loewer and Jonathan Schaffer,
+446--58. John Wiley \& Sons.
+
+\bibitem[\citeproctext]{ref-Hajek2015}
+Hàjek, Alan. 2015. {``On the Plurality of Lewis's Triviality Results.''}
+In \emph{A Companion to David Lewis}, edited by Barry Loewer and
+Jonathan Schaffer, 425--45. John Wiley \& Sons.
+
+\bibitem[\citeproctext]{ref-Joyce1999}
+Joyce, James M. 1999. \emph{The Foundations of Causal Decision Theory}.
+Cambridge: Cambridge University Press.
+
+\bibitem[\citeproctext]{ref-Lewis1979b}
+Lewis, David. 1979. {``Attitudes \emph{de Dicto} and \emph{de Se}.''}
+\emph{Philosophical Review} 88 (4): 513--43. doi:
+\href{https://doi.org/10.2307/2184646}{10.2307/2184646}. Reprinted in
+his \emph{Philosophical Papers}, Volume 1, Oxford: Oxford University
+Press, 1983, 133-156. References to reprint.
+
+\bibitem[\citeproctext]{ref-Lewis1981bn}
+---------. 1981. {``Causal Decision Theory.''} \emph{Australasian
+Journal of Philosophy} 59 (1): 5--30. doi:
+\href{https://doi.org/10.1080/00048408112340011}{10.1080/00048408112340011}.
+
+\bibitem[\citeproctext]{ref-Lewis1986a}
+---------. 1986. \emph{On the Plurality of Worlds}. Oxford: Blackwell
+Publishers.
+
+\bibitem[\citeproctext]{ref-Lewis1988}
+---------. 1988. {``Desire as Belief.''} \emph{Mind} 97 (387): 323--32.
+doi:
+\href{https://doi.org/10.1093/mind/xcvii.387.323}{10.1093/mind/xcvii.387.323}.
+
+\bibitem[\citeproctext]{ref-Lewis1989b}
+---------. 1989. {``Dispositional Theories of Value.''}
+\emph{Aristotelian Society Supplementary Volume} 63 (1): 113--37. doi:
+\href{https://doi.org/10.1093/aristoteliansupp/63.1.89}{10.1093/aristoteliansupp/63.1.89}.
+Reprinted in his \emph{Papers in Ethics and Social Philosophy},
+Cambridge: Cambridge University Press, 2000, 68-94. References to
+reprint.
+
+\bibitem[\citeproctext]{ref-Lewis1996}
+---------. 1996. {``Desire as Belief {II}.''} \emph{Mind} 105 (418):
+303--13. doi:
+\href{https://doi.org/10.1093/mind/105.418.303}{10.1093/mind/105.418.303}.
+
+\bibitem[\citeproctext]{ref-Lewis-McDermott-06121993}
+---------. (1993) 2020. {``Letter to Michael McDermott, 6 December
+1993.''} In \emph{Philosophical Letters of David {K}. Lewis}, edited by
+Helen Beebee and A. R. J. Fisher, 2:508. Oxford: Oxford University
+Press.
+
+\bibitem[\citeproctext]{ref-MacBrideJL2022}
+MacBride, Fraser, and Frederique Janssen-Lauret. 2022. {``Why Lewis
+Would Have Rejected Grounding.''} In \emph{Perspectives on the
+Philosophy of {D}avid {K}. {L}ewis}, edited by Helen Beebee and A. R. J.
+Fisher, 66--91. {O}xford {U}niversity {P}ress. doi:
+\href{https://doi.org/10.1093/oso/9780192845443.003.0005}{10.1093/oso/9780192845443.003.0005}.
+
+\bibitem[\citeproctext]{ref-Nissan-Rozen2015-NISATR}
+Nissan-Rozen, Ittay. 2015. {``A Triviality Result for the ``Desire by
+Necessity''thesis.''} \emph{Synthese} 192 (8): 2535--56.
+
+\bibitem[\citeproctext]{ref-Oddie1994}
+Oddie, Graham. 1994. {``Harmony, Purity, Truth.''} \emph{Mind} 103
+(412): 451--72. doi:
+\href{https://doi.org/10.1093/mind/103.412.451}{10.1093/mind/103.412.451}.
+
+\bibitem[\citeproctext]{ref-Price1989}
+Price, Huw. 1989. {``Defending Desire-as-Belief.''} \emph{Mind} 98
+(389): 119--27. doi:
+\href{https://doi.org/10.1093/mind/XCVIII.389.119}{10.1093/mind/XCVIII.389.119}.
+
+\bibitem[\citeproctext]{ref-Savage1954}
+Savage, Leonard. 1954. \emph{The Foundations of Statistics}. New York:
+John Wiley.
+
+\end{CSLReferences}
+
+
+
+\noindent Draft for submission.
+
+
+\end{document}

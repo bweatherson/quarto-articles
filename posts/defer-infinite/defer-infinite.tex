@@ -29,7 +29,7 @@ marginparsep=0in]{geometry}
 \ifPDFTeX\else
   % xetex/luatex font selection
   \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
-Bold]{EB Garamond Math}
+SemiBold]{EB Garamond Math}
   \setsansfont[]{EB Garamond}
   \setmathfont[]{Garamond-Math}
 \fi
@@ -169,6 +169,32 @@ Bold]{EB Garamond Math}
 \addtokomafont{disposition}{\rmfamily}
 \addtokomafont{title}{\normalfont\itshape}
 \let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
 \usepackage{amsfonts}
 \KOMAoption{captions}{tableheading}
 \makeatletter
@@ -569,13 +595,12 @@ standard terminology in philosophy and say that a function from worlds
 to reals is a \emph{random variable}. Given a random variable X (defined
 on W) and a probability function Pr, we can define the expectation
 Exp(X, Pr) as ΣPr(\emph{w})X(\emph{w}), where the sum is across members
-of W.\footnote{This definition of expected value needs to be generalised
-  in familiar ways if W is uncountable. I'm defining random variable and
-  expected value the way they are usually defined in philosophy. In some
-  fields it is more common to define random variables as functions from
-  a probability space to reals, where a probability space has W and Pr
-  as constituents. Then we can define expectation as a one-place
-  function that simply takes a random variable as input. I think the
+of W.\footnote{I'm defining random variable and expected value the way
+  they are usually defined in philosophy. In some fields it is more
+  common to define random variables as functions from a probability
+  space to reals, where a probability space has W and Pr as
+  constituents. Then we can define expectation as a one-place function
+  that simply takes a random variable as input. I think the
   philosophers' way of speaking is more useful, and in any case I'm a
   philosopher so it's more natural to me. But note there is a potential
   terminological confusion here.}
