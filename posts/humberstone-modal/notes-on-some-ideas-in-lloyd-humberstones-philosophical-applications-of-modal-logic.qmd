@@ -31,13 +31,19 @@ format:
       - file: ../quarto2024.tex
       - text: |
          \cehead{
-                Ishani Maitra and Brian Weatherson
+                Steven Kuhn and Brian Weatherson
                  }
          \cohead{Notes on Humberstone} 
 
 ---
 
+::: {.content-visible when-format="pdf"}
+\lettrine{L}{loyd} Humberstone's recently published *Philosophical Applications of Modal Logic* (@Humberstone2016) presents a number of new ideas in modal logic as well explication and critique of recent work of many others. In this note we extend some of these ideas and answer some questions that are left open in the book. Numbers without other identification refer to pages in that book.
+:::
+
+::: {.content-visible unless-format="pdf"}
 Lloyd Humberstone's recently published *Philosophical Applications of Modal Logic* (@Humberstone2016) presents a number of new ideas in modal logic as well explication and critique of recent work of many others. In this note we extend some of these ideas and answer some questions that are left open in the book. Numbers without other identification refer to pages in that book.
+:::
 
 # Local and Global Conditions
 
@@ -49,20 +55,20 @@ Another topic that gets well-deserved attention in @Humberstone2016 is the prope
 
 We begin by restating Zolin's definition in our own terminology. If $p_1,{\ldots},p_n$ are sentence letters, then a state description in ${p_1,{\ldots},p_n}$ is a conjunction $p_1^*\wedge {\ldots}\wedge p_n^*$, where, for $1\le i\le n, p_i^*$ is either $p_i$ or $\neg p_i$. The (truth-functional) constituents of a formula $A$ are the sentence-letters and $\Box$-formulas occurring in $A$ that do not properly occur within the scope of any $\Box$. Zolin observes that every formula $A$ can be "decomposed" into a formula of the form ${\bigvee}\{(\vec{p}\wedge B(\vec{p}))\!:\vec{p}$ is a state description in the sentence letter constituents of $A$}, where, for each $\vec{p}$ , $B(\vec{p})$ is some truth functional combination of the modal constituents of $A$. By fixing on a particular ordering of formulas and taking the $B(\vec{p})$'s to be in a disjunctive normal form that conforms to this ordering, we can single out a unique decomposition of this kind. Let's call it the *Zolin form* of $A$ and let's call the formulas $B(\vec{p})$ that occur as right conjunct of a disjunct in the Zolin form of $A$, the *Zolin components* of $A$. Note that every formula is truth-funtionally equivalent to its Zolin form. Then, according to Zolin's definition, a logic is fully modalized if $\vdash A$ implies $\vdash B(\vec{p})$ for every $B(\vec{p})$ that is a Zolin component of $A$.
 
-**Theorem 1**  
+### Theorem 1 {-}
 A logic L is fully modalized (according to Zolin's definition) iff every theorem of L is a tautological consequence of a fully modalized theorem.
 
-**Proof**  
+### Proof {-}
 (Left to right). Suppose L satisfies Zolin's definition and $\vdash_L A$. Let $(\vec{p}_1\wedge B(\vec{p}_1))\vee {\ldots}\vee (\vec{p}_n\wedge B(\vec{p}_n))$ be the Zolin form of $A$. Then, according to Zolin's definition, $\vdash_L B(\vec{p}_i)$ for each $i$, $1\le i\le n$. Let $A^\prime = B(\vec{p}_1)\wedge {\ldots}\wedge B(\vec{p}_n)$. $A^\prime$ is fully modalized and, since each of its conjuncts is provable in L, $A^\prime$ is as well. All that remains is to show that $A$ is a truth-functional consequence of $A^\prime$. Let $\alpha$ be any assignment of truth values to the constituents of $A$ such that $\alpha\models A^\prime$. Let $\vec{p}_\alpha$ be the state description in the sentence letters that are truth-functional constiuents of $A$ that corresponds to $\alpha$ in the sense that each conjunct of $\vec{p}_\alpha$ is the literal *p* or $\neg p$ according to whether $\alpha(p)$ is true or false. Then $\alpha$ verifies $(\vec{p}_\alpha \wedge B(\vec{p}_\alpha))$, which is a disjunct of $A$ and so $\alpha\models A$ as required.
 
 (Right to left). We are given that every theorem of L is a tautological consequence of some fully modalized theorem. Now suppose $\vdash_L A$ and $B(\vec{p})$ is a Zolin component of $A$, with a view towards showing $\vdash_L B(\vec{p})$. By the initial suppositions, $A$ is a truth-functional consequence of some fully modalized formula $A^\prime$. Then the Zolin form of $A$, call it $(\vec{p}_1\wedge B(\vec{p}_1))\vee {\ldots}\vee (p_n\wedge B(\vec{p}_n))$, is also a truth functional consequence of $A^\prime$, where for some $i$, $1\le i\le n$, $B(\vec{p}_i)=B(\vec{p})$. We show that $B(\vec{p})$ is provable in L by showing that it is also a truth-functional consequence of the theorem $A^\prime$. To that end, let $\alpha$ be any assignment of truth values to the constituents of $A$, such that $\alpha\models A^\prime$. Since $A^\prime$ is fully modalized, its truth value under an assignment is not affected by the truth assignments to sentence letters, so we can assume without loss of generality that these conform to the state description . Since the disjunction $(\vec{p}_1\wedge B(\vec{p}_1))\vee {\ldots}\vee (\vec{p}_n\wedge B(\vec{p}_n))$ is a truth functional consequence of $A^\prime$, $\alpha$ must verify this disjunction. But $\vec{p}_1,{\ldots},\vec{p}_n$ are state descriptions, so $\alpha$ can verify only one disjunct of this formula, namely $\wedge B(\vec{p})$. Hence $\alpha\models B(\vec{p})$ as required. ◻
 
 It is possible that there are applications for which Zolin's more detailed normal-form characterization of a fully modalized logic is more useful than the simple characterization given here. But the proof below shows that property that Humberstone extracts in @Humberstone2016 can be proved at least as easily from our simple characterization.
 
-**Theorem 2**  
+### Theorem 2 {-}
 Suppose every theorem of L is a tautological consequence of a fully modalized theorem. Then $\vdash_LM\vee N$ where $M$ is fully modalized and $N$ is modality-free implies either $\vdash_LM$ or $\vdash_LN$.
 
-**Proof**  
+### Proof {-}
 Assume the hypothesis of the claim and $\vdash_LM\vee N$ for appropriate $M$ and $N$. Then there is some fully modalized L-theorem $A^\prime$ such that $M\vee N$ is a truth functional consequence of $A^\prime$. Suppose for reductio that neither $M$ nor $N$ is provable. Then neither $M$ nor $N$ is a truth functional consequence of $A^\prime$. So there is an assignment $\alpha$ of truth values to the constituents of $A^\prime$ and $M$ that makes the former true and the latter false. Similarly, there is an assignment $\beta$ to the constituents of $A^\prime$ and $N$ that makes $A^\prime$ true and $N$ false. Now extend the assignment $\alpha$ to the sentence letters in $N$ by assigning them the same truth values as $\beta$ does, and call the result $\alpha^\prime$. Since $\alpha^\prime$ agrees with $\alpha$ on the modal constituents it verifies $A^\prime$ and falsifies $M$. Since it agrees with $\beta$ on sentence letters, it falsifies $N$. This contradicts the earlier observation that $(M\vee N)$ is a truth functional consequence of $A^\prime$. ◻
 
 # "Nothing in Between" and the Equivalence of Modal Logics
@@ -86,12 +92,12 @@ We identify a "logic" with a many-one deducibility relation on formulas satisfyi
 
 *s* and *t* are to be thought of as translations between the logics. If $L_1$ and $L_2$ are weakly translationally equivalent then the word *implies* in i and ii can be strengthened to *if and only if*, so that *s* and *t* are faithful embeddings. For example, by condition ii, ${A_1}^s,{\ldots},{A_n}^s \vdash_2 B^s$ implies $({A_1}^s)^t,{\ldots},({A_n}^s)^t \vdash_1({B^s})^t$, and so, by condition iii $A_1,{\ldots},A_n \vdash_1 B$. But the strengthened versions of i and ii still do not imply iii and iv. (See, for example, @French2010 pp 111-124.) $L_1$ and $L_2$ are said to be *translationally equivalent* if the translations securing their weak equivalence meet some additional requirement, commonly that they be compositional, i.e., that they be maps $f$ such that for every n-ary connective $\#$ in the source language there is formula schema $\sigma$ of the target language with $n$ schematic variables such that $f(\#A_1{\ldots}A_n)=\sigma(f(A_1),{\ldots},f(A_n))$. If we are interested in what can be said within a logic rather than the structure of the formulas saying it, however, the restriction to compositional translations seems unwarranted. A translation can be "sentence by sentence" rather than "symbol by symbol." It is plausible to take formulas to be saying the same thing in a logic when they are provably equivalent. In that case the structure of the things that can be said in a logic is given by its *Lindenbaum lattice*. By this, we mean the structure $(X,\le )$ where the members of X are the equivalence classes $[A]_L$ of formulas $A$ under the relation $_L\!{\dashv}{\vdash}\!_L~$ and $[A]_L\le [B]_L$ iff $A\vdash \!_LB$. In that case, we may say that two logics are the same with regards to what they can say if their Lindenbaum lattices are isomorphic. It is not difficult to show that under conditions of interest here, this condition coincides with weak translational equivalence.
 
-**Theorem 3**  
+### Theorem 3 {-}
 
 i.  If* $L_1$ and $L_2$ are weakly translationally equivalent then they have isomorphic Lindenbaum lattices. 
 ii.  If $L_1$ and $L_2$ are classically based and they have isomorphic Lindenbaum lattices then they are weakly translationally equivalent.
 
-**Proof**  
+### Proof {-}
 Here and below, we drop the subscripts from the brackets and turnstile symbols, when the logic is intended is clear. To prove i, suppose *s* and *t* satisfy conditions i-iv defining weak translational equivalence. Let $\Phi([A])=[A^s]$. We show that $\Phi$ is an isomorphism. i)$\Phi$ is well defined. Suppose $[A]=[B]$. Then $A{\dashv}{\vdash}B$. By condition i, this implies $A^s{\dashv}{\vdash}B^s$. Hence $[A^s] = [B^s]$ and $\Phi([A])=\Phi([B])$, as required. ii)$\Phi$ is 1-1. Suppose $\Phi([A])=\Phi([B])$. Then $[A^s]=[B^s]$ and so $A^s{\dashv}{\vdash}B^s$. By condition ii, $(A^s)^t{\dashv}{\vdash}(B^s)^t$. By condition iii, $A{\dashv}{\vdash}B,$ and so $[A]=[B]$, as required. iii)$\Phi$ is onto. Take any $C$ in the language of $L_2$. By condition iv, $C{\dashv}{\vdash}(C^t)^s$. Hence $[C] = [(C^t)^s]$. Therefore $[C]=\Phi([C^t])$, and $[C]$ is in the range of $\Phi$, as required.
 
 The proof of ii is facilitated by a lemma. Let us say that a translation $f\colon A{\mapsto}A^f$ *conforms to falsum* if $\bot^f {\dashv}{\vdash} \bot$; *to negation* if $(\neg A)^f {\dashv}{\vdash} \neg A^f$; *to conjunction* if $(A\wedge B)^f {\dashv}{\vdash}A^f \wedge B^f$ and similarly for all the other Boolean connectives. To prove part ii of the theorem, we use only that *s* and *t* conform to conjunction, but we take the opportunity to prove something more general.
@@ -99,7 +105,7 @@ The proof of ii is facilitated by a lemma. Let us say that a translation $f\colo
 **Lemma 1**.   
 Suppose *s* and *t* are translations securing the weak equivalence of classically based modal logics $L_1$ and $L_2$. Then *s* and *t* conform to all the Boolean connectives.
 
-**Proof**  
+### Proof {-}
 Suppose *s* and *t* satisfy the hypothesis of the lemma. We show that *s* and *t* conform to falsum (i) and the conditional (ii) and that it follows that they conform to all the other Boolean connectives (iii).
 
 \(i\): (We include the subscripts for clarity here.) Since $L_1$ and $L_2$ are classically based, $\bot\vdash_2 \bot^s$ and $\bot \vdash_1 \bot^t$. From the second of these it follows that $\bot^s \vdash_2 (\bot^t)^s$, and therefore that $\bot^s \vdash_2 \bot$. Hence $\bot_2\!{\dashv}{\vdash}\!_2 \bot^s$ and so *s* conforms to $\bot$. The proof that *t* conforms to $\bot$ is similar.
@@ -114,10 +120,10 @@ Since the modal logics under consideration are classically based, their Lindenba
 
 We do know that the translations between classically based modal logics conform to the Boolean connectives. This allows us to sharpen the result slightly in the direction of Pelletier/Urquhart.
 
-**Theorem 4**  
+### Theorem 4 {-}
 Suppose $L_1$ and $L_2$ are classically based modal logics. Then $L_1$ and $L_2$ are weakly translationally equivalent by way of translations $s^*$ and $t^*$ that preserve the Boolean connectives.
 
-**Proof**  
+### Proof {-}
 Since the logics are classically based they have isomorphic Lindenbaum lattices. By the previous theorem they are weakly translationally equivalent. Let *s* and *t* be the translations securing this similarity. We define $s^*$ and $t^*$ by cases:
 
 1.  $s^*(A)=A^s$ if $A$ is a sentence letter or $A = {\#}A_1{\ldots}A_n$ for ${\#}$ an $n$-ary non-Boolean connective
@@ -148,7 +154,7 @@ It will be convenient to label three additional formulas that appear in the cour
 
 We will show the following:
 
-**Theorem 5**
+### Theorem 5 {-}
 
 > i.  **5**$^{\prime}~_{\text{K}}\!{\dashv}{\vdash}_\text{K}~\textbf{5}^{\prime\prime}$
 > ii.  $\vdash_\text{KT4} ~ \neg \textbf{F}\rightarrow \textbf{A}$
@@ -157,7 +163,7 @@ We will show the following:
 
 i allows us to work within **S45**$^{\prime\prime}$ rather than **S45**′, and ii, iii, iv constitute a *reductio* proof of **F** within that system. It should be noted that Humberstone uses **5**′ as a label for the schema corresponding to the axiom given here. We work within a natural deduction system that allows us to use a rule of truth-functional consequence under assumptions, and to apply rules of necessitation and uniform substitution to formulas that are not under any assumptions.
 
-**Proof**
+### Proof {-}
 To prove i we note the following chain of K-equivalent formulas:
 
 1.  $(p \wedge \neg \Box p \wedge \Box (p \vee \Box (p \rightarrow \Box p))) \rightarrow \Box \neg \Box p~~~$(=**5**′)
@@ -226,7 +232,7 @@ Truth in the model is truth at all $u{\in}U$, and validity is is truth in all mo
 -   D2: $(A\wedge\mathbf{D}B) \rightarrow \mathbf{D}(A\wedge B)$
 -   D3: $\mathbf{D}(A\wedge B) \rightarrow (\mathbf{D}A\vee \mathbf{D}B)$
 -   MP: $A\rightarrow B, A ~~/~~ B$
--   RD$_{m,n}$: $(B_1 \wedge {\ldots}\wedge B_m) \rightarrow (A_1\vee {\ldots}\vee A_n) ~~/ \\$$(B_1 \wedge {\ldots}\wedge B_m) \rightarrow ((\mathbf{D}A_1\wedge {\ldots}\wedge \mathbf{D}A_n) \rightarrow (\mathbf{D}B_1 \vee {\ldots}\vee \mathbf{D}B_m))$
+-   RD$_{m,n}$: $(B_1 \wedge {\ldots}\wedge B_m) \rightarrow (A_1\vee {\ldots}\vee A_n)$ ~~/ \\$(B_1 \wedge {\ldots}\wedge B_m) \rightarrow ((\mathbf{D}A_1\wedge {\ldots}\wedge \mathbf{D}A_n) \rightarrow (\mathbf{D}B_1 \vee {\ldots}\vee \mathbf{D}B_m))$
 
 The last rule schema is intended to include the cases $m=0$ and $n=0$ with the usual stipulation that an empty conjunction is $\top$ and an empty disjunction is $\bot$. The reader is asked to show that D2 and D3 are provable from the remaining schemas as an exercise and the valid formulas are then shown to be axiomatized by D0, D1, MP and all the RD rules. In this section we consider two additional schemas.
 
@@ -243,21 +249,24 @@ It is easy to check that D0, D1, D2, D3 and D5 all remain valid and MP and RD$_{
 
 First, however, we turn to the connection between the formula schemas and the rule schema RD$_{m,n}$ and the proof that the logic of coming about is finitely axiomatizable. Note that any logic containing D0 and closed under MP is closed under truth-functional consequence (TFC). This facilitates the proof of the following:
 
-
-**Claim 1**  
+### Claim 1 {-}
 In the presence of D0, D1 and MP: D2 is provable from RD$_{1,1}$, D3 is provable from RD$_{2,1}$, D4 is provable from RD$_{1,2}$ and D5 is provable from RD$_{0,1}$
 
-**Proof**  
+### Proof {-}
 The required derivations are sketched below.
 
 1.  $(A\wedge B)\rightarrow B$ by D0
 2.  $(A\wedge B)\rightarrow (\mathbf{D}B\rightarrow \mathbf{D}(A\wedge B))$from 1 by RD$_{1,1}$
-3.  $(A\wedge B\wedge \mathbf{D}B)\rightarrow \mathbf{D}(A\wedge B))$from 2 by TFC
-4.  $(A\wedge \mathbf{D}B)\rightarrow \mathbf{D}(A\wedge B))$from 3 and D1 by TFC
+3.  $(A\wedge B\wedge \mathbf{D}B)\rightarrow \mathbf{D}(A\wedge B)$from 2 by TFC
+4.  $(A\wedge \mathbf{D}B)\rightarrow \mathbf{D}(A\wedge B)$from 3 and D1 by TFC
  
+<!-- -->
+
 1.  $(A\wedge B)\rightarrow (A\wedge B)$ by D0
 2.  $(A\wedge B)\rightarrow (\mathbf{D}(A\wedge B)\rightarrow (\mathbf{D}A\vee \mathbf{D}B))$from 1 by RD$_{2,1}$
-3.  $\mathbf{D}(A\wedge B)\rightarrow (\mathbf{D}A\vee \mathbf{D}B)$from 2 and D1 by TFC
+3.  $\mathbf{D}(A\wedge B)\rightarrow (\mathbf{D}A\vee \mathbf{D}B)$ from 2 and D1 by TFC
+
+<!-- -->
 
 1.  $\top \rightarrow \top$by D0
 2.  $\top \rightarrow (D\top \rightarrow \bot)$from 1 by RD$_{0,1}$
@@ -279,22 +288,22 @@ For the case $m=0$ we will need D4\* and D5. Suppose $\vdash \top \rightarrow (A
 
 Our proof that Humberstone's logic of coming about has a simple, finite axiomatization is complete and so we turn our attention to the axiomatization of the logic of contingent truth.
 
-**Theorem 6**  
+### Theorem 6 {-}
 The axioms D0, D1, D3, D4, D5 and rules MP and RD$_{1,1}$ provide a complete axiomatization of the logic of contingently true under the interpretation CT.
 
-*Proof*  
+### Proof {-} 
 Soundness was observed above so it is sufficient to prove sufficiency. This can be done by constructing a canonical model out of maximally consistent sets in a familiar way. Let $M^c=(W^c\!, R^c\!,V^c)$, where $W^c$ is the set of all maximally consistent formulas, $V^c(p)=\{w{\in}W^c\!: p{\in}w\}$, and $xR^cy$ iff $A{\in}y$ whenever both $A{\in}x$ and $\mathbf{D}A{\notin}x$.
 
-**Lemma 2** (Witness lemma)  
+### Lemma 2 (Witness lemma)  {-}
 *If* $\mathbf{D}A{\in}x$ then $\exists y (xR^cy$ and $A{\in}y)$.
 
-*Proof*  
+### Proof {-}
 Suppose $\mathbf{D}A {\in}x$ and let $y^- = \{B{:}~ B{\in}x$ and $\mathbf{D}B{\in}x\}\cup\{\neg A\}$. Then $y^-$ is consistent. For otherwise either $\vdash A$ or there are formulas $B_1,{\ldots},B_n$ such that for $1\le i\le n, B_i{\in}x$ and $\mathbf{D}B_i{\in}x$ and $\vdash B_1\wedge {\ldots}\wedge B_n\rightarrow A$. In the first case, by D0, $\vdash A{\leftrightarrow}\top$. Since the logic is congruential, $\vdash \mathbf{D}\top$, violating D5. So we may assume that the second case obtains. By RD$_{1,1}$, $\vdash B_1\wedge {\ldots}\wedge B_n\rightarrow (\mathbf{D}A\rightarrow \mathbf{D}(B_1\wedge {\ldots}\wedge B_n))$. Each $B_i$ is a member of *x* by construction and $\mathbf{D}A$ is a member of *x* by supposition, so it follows that $\mathbf{D}(B_1\wedge {\ldots}\wedge B_n){\in}x$. By D3\* this implies $\mathbf{D}B_1\vee {\ldots}\vee \mathbf{D}B_n \in x$. But by construction none of the formulas $\mathbf{D}B_i$ is a member of *x*, so we have reached a contradiction. Thus $y^-$ is consistent as claimed. By Lindenbaum's lemma, it can be extended to a maximal consistent set y satisfying the conditions of the lemma. ◻
 
-**Lemma 3** (Truth Lemma)   
+### Lemma 3 (Truth Lemma) {-}
 In the canonical model for our logic, $\models _x A$ iff $A{\in}x$.
 
-*Proof*  
+### Proof {-}
 By induction on $A$. We consider the case $A=\mathbf{D}B$. First suppose $\models _x A$. By the truth definition, $\models _x B$ and $\exists y (xR^cy$ and ${\nvDash_y}B)$. By induction hypothesis, $B{\in}x$ and $\exists y (xR^cy$ and $B{\notin}y)$. By the definition of $R^c$, $\mathbf{D}B{\in}x$ as required.
 
 For the converse, suppose $A{\in}x$. By the witness lemma, $\exists y (xR^cy$ and $B{\in}y)$. By induction hypothesis, $\exists y( xR^cy$ and ${\models_y}B)$. Furthermore, since $A{\in}x$, D1 implies that $B{\in}x$, and,by induction hypothesis, this implies that $\models _x B$. So, by the truth definition, $\models _x A$, as required. ◻
