@@ -51,9 +51,10 @@ ps_wordcount_by_year <-  ps_uni_grouped |>
       year),
     by = "wos_id"
   ) |>
+  mutate(year = as.integer(year)) |>
   group_by(year) |>
-  summarise(all_ps_words = sum(count),
-            all_ps_articles = n_distinct(jstor_id))
+  summarise(all_ps_words = sum(count) |> as.integer(),
+            all_ps_articles = n_distinct(jstor_id) |> as.integer())
 
 top20_summary <- top20_words_by_year |>
   rename(t20_count = this_word_this_year) |>
@@ -70,7 +71,16 @@ top20_summary <- top20_words_by_year |>
   mutate(t20_word_rate = t20_count * 1000 / all_words_this_year,
          t20_appear_rate = t20_appear / articles,
          t20_topic_rate = t20_topic / articles) |>
-  select(-all_words_this_year, -articles)
+  ungroup() |>
+  mutate(year = as.integer(year),
+         t20_count = as.integer(t20_count),
+         t20_appear = as.integer(t20_appear),
+         t20_topic = as.integer(t20_topic),
+         articles = as.integer(articles),
+         all_words_this_year = as.integer(all_words_this_year)) |>
+  rename(t20_articles = articles,
+         t20_words = all_words_this_year
+  )
 
 phil_studies_by_year <- phil_studies_words |>
   mutate(appear = 1,
@@ -78,6 +88,10 @@ phil_studies_by_year <- phil_studies_words |>
            count >= 10 ~ 1,
            TRUE ~ 0)) |>
   ungroup() |>
+  mutate(year = as.integer(year),
+         count = as.integer(count),
+         topic = as.integer(topic),
+         appear = as.integer(appear)) |>
   group_by(word, year) |>
   summarise(count = sum(count),
          appear = sum(appear),

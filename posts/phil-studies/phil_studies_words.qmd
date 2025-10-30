@@ -1,0 +1,508 @@
+---
+title: "Words in *Philosophical Studies* 1980-2019"
+abstract: |
+    Some graphs about word frequencies in *Philosophical Studies* from 1980-2019.
+date: May 12 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - word usage
+  - history of analytic
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    fig-format: svg
+    fig-height: 9
+    fig-width: 12
+    fig-dpi: 300
+    fig-responsive: true
+    fontsize: 1.1rem
+---
+
+```{r}
+#| label: packages
+#| cache: false
+
+for (ipkg in c("tidyverse", 
+               "tidytext", 
+               "tm", 
+               "topicmodels", 
+               "lsa",
+               "slider",
+               "knitr",
+               "scico",
+               "wesanderson")) {
+  if (!require(ipkg, character.only = TRUE)) {
+    install.packages(ipkg)
+    library(ipkg, character.only = TRUE)
+  }
+}
+
+if (knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'cairo_pdf')
+}
+
+options(knitr.kable.NA = '')
+
+# Graph Themes
+old <- theme_set(theme_minimal())
+theme_set(old)
+theme_update(plot.title = element_text(family = "Scala Sans Pro", size = 24, face = "bold"),
+             plot.subtitle = element_text(family = "Scala Sans Pro", size = 20),
+             axis.text = element_text(family = "Scala Sans Pro", size = 18),
+             axis.title = element_text(family = "Scala Sans Pro", size = 18),
+             plot.background = element_rect(fill = "#F9FFFF"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "#F9FFFF"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "Scala Sans Pro", size = 20),
+             strip.text = element_text(family = "Scala Sans Pro", size = 20),
+             legend.key.spacing.y = unit(1, 'lines'),
+             legend.key.spacing.x = unit(1, 'cm')
+  )
+
+if (knitr::is_latex_output()) {
+theme_update(plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.subtitle = element_text(family = "EB Garamond", size = 11),
+             axis.text = element_text(family = "EB Garamond", size = 10),
+             axis.title = element_text(family = "EB Garamond", size = 10),
+             plot.background = element_rect(fill = "white"),
+             panel.background = element_rect(fill = "white"),
+             legend.background = element_rect(fill = "white"),
+             panel.grid = element_line(color = "grey92"),
+             legend.text = element_text(family = "EB Garamond", size = 11),
+             strip.text = element_text(family = "EB Garamond", size = 12),
+             legend.key.spacing.y = unit(-0.3, 'lines'),
+             legend.key.spacing.x = unit(0, 'cm')
+  )
+
+}
+
+point_col <- wes_palette("AsteroidCity1")[3]
+```
+
+```{r}
+#| label: loader
+
+load("~/Documents/lda-cites-unigrams-only/ps_cites.RData")
+load("~/Documents/lda-cites-unigrams-only/ps_meta.RData")
+load("~/Documents/lda-cites-unigrams-only/ps_join.RData")
+load("~/Documents/lda-cites-unigrams-only/common_ps_words.RData")
+load("~/Documents/citations-2025/philo_cite_through_2024.RData")
+load("~/Documents/citations-2025/philo_bib_through_2024.RData")
+load("../../posts/phil-studies/phil_studies_by_year.RData")
+```
+
+```{r}
+#| label: makinggraphs
+
+count_graph <- function(word,d){
+  word_data <- phil_studies_by_year %>% 
+    filter(word == !!str_to_lower(word)) %>%
+    mutate(
+      ps_appear_rate = ps_appear_rate * 100,
+      ps_topic_rate = ps_topic_rate * 100,
+      t20_appear_rate = t20_appear_rate * 100,
+      t20_topic_rate = t20_topic_rate * 100
+    )
+
+  avg_frequency <- sum(word_data$count) / sum(word_data$all_ps_words) * 1000
+  avg_percentage_appear <- mean(
+    word_data$appear / word_data$all_ps_articles * 100, 
+    na.rm =   TRUE)
+  avg_percentage_topic <- mean(
+    word_data$topic / word_data$all_ps_articles * 100, 
+    na.rm =   TRUE)
+  
+  gg <- ggplot(word_data, aes(x = year, y = ps_word_rate)) +
+  #  geom_rect(data = tibble(start = d-0.5, end = d+9.5), 
+  #            aes(xmin = start , xmax = end, ymin = -Inf, ymax = Inf),
+  #            inherit.aes=FALSE, alpha = 0.4, fill = rgb(249/300,255/300,255/300)) +
+    geom_point(aes(x = year, y = t20_word_rate), 
+               color = "grey50",
+               alpha = 0.5,
+               shape = 15,
+               size = 3) +
+    geom_point(color = point_col, size = 4) +
+    geom_hline(yintercept = avg_frequency, linetype = "dashed", color = "black") +
+    labs(title = paste("Word Frequency for:", word),
+         x = element_blank(), y = "Frequency per 1000 Words") +
+    ylim(0, NA) +
+    scale_x_continuous(breaks = c(1980,1990,2000,2010))
+  
+  if (!is.na(d)){
+    gg <- gg +
+      geom_rect(data = tibble(start = d-0.5, end = d+9.5), 
+                aes(xmin = start , xmax = end, ymin = -Inf, ymax = Inf),
+                inherit.aes=FALSE, alpha = 0.05, fill = "black")
+  }
+  
+  gg
+}
+
+appear_graph <- function(word,d){
+  word_data <- phil_studies_by_year %>% 
+    filter(word == !!str_to_lower(word)) %>%
+    mutate(
+      ps_appear_rate = ps_appear_rate * 100,
+      ps_topic_rate = ps_topic_rate * 100,
+      t20_appear_rate = t20_appear_rate * 100,
+      t20_topic_rate = t20_topic_rate * 100
+    )
+
+  avg_frequency <- sum(word_data$count) / sum(word_data$all_ps_words) * 1000
+  avg_percentage_appear <- mean(
+    word_data$appear / word_data$all_ps_articles * 100, 
+    na.rm =   TRUE)
+  avg_percentage_topic <- mean(
+    word_data$topic / word_data$all_ps_articles * 100, 
+    na.rm =   TRUE)
+  
+  gg <- ggplot(word_data, aes(x = year, y = ps_appear_rate)) +
+  #  geom_rect(data = tibble(start = d-0.5, end = d+9.5), 
+  #            aes(xmin = start , xmax = end, ymin = -Inf, ymax = Inf),
+  #            inherit.aes=FALSE, alpha = 0.4, fill = rgb(249/300,255/300,255/300)) +
+    geom_point(aes(x = year, y = t20_appear_rate), 
+               color = "grey50",
+               alpha = 0.5,
+               shape = 15,
+               size = 3) +
+    geom_point(color = point_col, size = 4) +
+    geom_hline(yintercept = avg_percentage_appear, linetype = "dashed", color = "black") +
+    labs(title = paste("Percentage of Articles Including:", word),
+         x = element_blank(), y = "Percentage of Articles") +
+    ylim(0, NA) +
+    scale_x_continuous(breaks = c(1980,1990,2000,2010))
+  
+  if (!is.na(d)){
+    gg <- gg +
+      geom_rect(data = tibble(start = d-0.5, end = d+9.5), 
+                aes(xmin = start , xmax = end, ymin = -Inf, ymax = Inf),
+                inherit.aes=FALSE, alpha = 0.05, fill = "black")
+  }
+  
+  gg
+}
+
+topic_graph <- function(word,d){
+  word_data <- phil_studies_by_year %>% 
+    filter(word == !!str_to_lower(word)) %>%
+    mutate(
+      ps_appear_rate = ps_appear_rate * 100,
+      ps_topic_rate = ps_topic_rate * 100,
+      t20_appear_rate = t20_appear_rate * 100,
+      t20_topic_rate = t20_topic_rate * 100
+    )
+
+  avg_frequency <- sum(word_data$count) / sum(word_data$all_ps_words) * 1000
+  avg_percentage_appear <- mean(
+    word_data$appear / word_data$all_ps_articles * 100, 
+    na.rm =   TRUE)
+  avg_percentage_topic <- mean(
+    word_data$topic / word_data$all_ps_articles * 100, 
+    na.rm =   TRUE)
+  
+  gg <- ggplot(word_data, aes(x = year, y = ps_topic_rate)) +
+  #  geom_rect(data = tibble(start = d-0.5, end = d+9.5), 
+  #            aes(xmin = start , xmax = end, ymin = -Inf, ymax = Inf),
+  #            inherit.aes=FALSE, alpha = 0.4, fill = rgb(249/300,255/300,255/300)) +
+    geom_point(aes(x = year, y = t20_topic_rate), 
+               color = "grey50",
+               alpha = 0.5,
+               shape = 15,
+               size = 3) +
+    geom_point(color = point_col, size = 4) +
+    geom_hline(yintercept = avg_percentage_topic, linetype = "dashed", color = "black") +
+    labs(title = paste("Percentage of Articles with 10+ Uses of:", word),
+         x = element_blank(), y = "Percentage of Articles") +
+    ylim(0, NA) +
+    scale_x_continuous(breaks = c(1980,1990,2000,2010))
+  
+  if (!is.na(d)){
+    gg <- gg +
+      geom_rect(data = tibble(start = d-0.5, end = d+9.5), 
+                aes(xmin = start , xmax = end, ymin = -Inf, ymax = Inf),
+                inherit.aes=FALSE, alpha = 0.05, fill = "black")
+  }
+  
+  gg
+}
+```
+
+```{r}
+#| label: graphbuilder
+
+three_graphs <- function(the_word, the_decade){
+  cat("\n\n")
+  cat("::: {.column-screen}\n\n")
+  cat(":::: {#fig-",
+      the_word,
+      " layout-ncol=3}\n\n",
+      sep = "")
+  cat("::::: {#fig-",
+      the_word,
+      "-first}\n\n",
+      sep = "")
+  print(count_graph(the_word, the_decade))
+  cat("\n\nFrequency\n:::::")
+  cat("\n\n::::: {#fig-",
+      the_word,
+      "-second}\n\n",
+      sep = "")
+  print(appear_graph(the_word, the_decade))
+  cat("\n\nAppearances\n:::::")
+  cat("\n\n::::: {#fig-",
+      the_word,
+      "-third}\n\n",
+      sep = "")
+  print(topic_graph(the_word, the_decade))
+  cat("\n\n10+ Appearances\n:::::")
+  cat("\n\n \"",the_word,"\"\n::::", sep="")
+  cat("\n\n:::")
+}
+```
+
+*Philosophical Studies* is the most cited philosophy journal of recent times, at least if you restrict attention to citations in philosophy journals. Actually, it's lead is large enough that I suspect it's the most cited philosophy journal full stop, but I don't quite have the data for that. It's also changed a lot more over the last few decades than most journals. So it's a pretty good place to look for trends in philosophy over that time.
+
+I'm working on a much larger piece about these trends, but for this post I just want to run through some graphs showing some of these changes. I've been using some fancier techniques involving topic modeling, or cluster detection on citations, but nothing has been as useful as simply looking at word usage.
+
+In the graphs below, the larger red circles show the rates in *Philosophical Studies*, and the smaller grey squares show the matching rates in twenty leading journals. For each word, I'm going to do three graphs:
+
+1. How often the word appears each year per 1000 words published.
+2. What percentage of articles in a year include the word.
+3. What percentage of articles in a year include the word at least 10 times.
+
+These tend to be fairly well correlated, and I'm mostly going to focus on words where they are correlated, but they aren't perfectly correlated. The first graph might seem like the most important, but it can easily be thrown off by a handful of articles where authors needlessly repeat a word dozens, or even hundreds, of times. The second graph adjusts for that, and gives a better measure of the spread of a word. But sometimes it gives a misleading impression of how often a word is used if, for example, it's the name of a philosopher who is name-checked more often than they are discussed. The third is probably the best single measure of how central a word is to the philosophical discussion at a time, but 10 is obviously arbitrary, and it does lose information the other two graphs have.
+
+In each graph I'll include a dashed line showing the average value of the statistic in *Philosophical Studies* over the 40 year period. This will often be above most of the grey dots, because I'm picking out things that are distinctive to *Philosophical Studies*.
+
+I'll start with two very simple sets of graphs that show something about the changes in the gender makeup of the discipline over the last few decades.
+
+```{r}
+#| output: asis
+
+three_graphs("his", NA)
+three_graphs("her", NA)
+```
+
+I'm mostly looking at what is in *Philosophical Studies*, but it's striking also which words aren't there. It really isn't a journal for history of philosophy or political philosophy.
+
+```{r}
+#| output: asis
+
+three_graphs("Spinoza", NA)
+three_graphs("Rawls", NA)
+```
+
+In both cases the simplest thing to note is that most of the grey dots, showing the standard across other journals, are above the dashed line, showing the norm in *Philosophical Studies*.
+
+# 1980s
+
+The two most striking topics in *Philosophical Studies* in the 1980s were philosophy of language articles centered on the semantic externalism debates, and ethics articles centered on abortion and/or utilitarianism. These were largely, though not exclusively, anti-abortion and pro-utilitarianism.
+
+For a lot of graphs, I'll shade the decade that I'm talking about to make it easier to see the difference between that decade and other times.
+
+```{r}
+#| output: asis
+
+three_graphs("statement", 1980)
+three_graphs("description", 1980)
+three_graphs("reference", 1980)
+three_graphs("referential", 1980)
+three_graphs("Donnellan", 1980)
+three_graphs("attributive", 1980)
+three_graphs("abortion", 1980)
+three_graphs("fetus", 1980)
+three_graphs("utilitarian", 1980)
+```
+
+# 1990s
+
+It's a little trickier to say what's distinctive about the 1990s as a decade. Some of the trends from the 1980s are still there, but largely it's a transitional time. The words that standout the most are names of various giants of 20th century American philosophy (plus one prominent Austrian), as well as some words indicating that philosophy of mind and language is still central.
+
+The thing I'm looking for here is how many of the red dots in the shaded area are above the dashed line, and especially how many of them are above the dashed line when that line is above most of the grey dots. That combination tells us that something distinctive is happening with that word in that decade in *Philosophical Studies*.
+
+```{r}
+#| output: asis
+
+three_graphs("Davidson", 1990)
+three_graphs("Quine", 1990)
+three_graphs("Fodor", 1990)
+three_graphs("Putnam", 1990)
+three_graphs("Burge", 1990)
+three_graphs("Wittgenstein", 1990)
+three_graphs("translation", 1990)
+three_graphs("word", 1990)
+three_graphs("physical", 1990)
+three_graphs("supervenience", 1990)
+three_graphs("belief", 1990)
+three_graphs("function", 1990)
+three_graphs("cause", 1990)
+```
+
+# 2000s
+
+Pretty much all the editors of *Philosophical Studies* have been important epistemologists. But this doesn't show up nearly as much in the content of what the journal has published. That starts to change somewhat in the 2000s. The other big trends concern a flurry of new -isms, debates about two-dimensionalism, new paradigms becoming prominent in philosophy of language, and what might turn out to be the last great period of modal metaphysics.
+
+## General
+
+```{r}
+#| output: asis
+
+three_graphs("intuitions", 2000)
+three_graphs("Lewis", 2000)
+```
+
+## Theories
+
+```{r}
+#| output: asis
+
+three_graphs("contextualism", 2000)
+three_graphs("contextualist", 2000)
+three_graphs("physicalism", 2000)
+three_graphs("physicalist", 2000)
+three_graphs("fictionalism", 2000)
+three_graphs("fictionalist", 2000)
+```
+
+## Metaphysics
+
+```{r}
+#| output: asis
+
+three_graphs("possibility", 2000)
+three_graphs("necessarily", 2000)
+three_graphs("necessity", 2000)
+three_graphs("worlds", 2000)
+three_graphs("world", 2000)
+three_graphs("causation", 2000)
+three_graphs("effect", 2000)
+```
+
+## Language
+
+```{r}
+#| output: asis
+
+three_graphs("utterance", 2000)
+three_graphs("character", 2000)
+three_graphs("semantic", 2000)
+three_graphs("context", 2000)
+three_graphs("content", 2000)
+three_graphs("vague", 2000)
+three_graphs("water", 2000)
+```
+
+## Epistemology
+
+```{r}
+#| output: asis
+
+three_graphs("know", 2000)
+three_graphs("knowledge", 2000)
+three_graphs("priori", 2000)
+```
+
+## Mind
+
+```{r}
+#| output: asis
+
+three_graphs("conscious", 2000)
+three_graphs("consciousness", 2000)
+three_graphs("zombie", 2000)
+```
+
+# 2010s
+
+There are three big trends in the 2010s:
+
+1. The focus on reasons in ethics and epistemology, along with the movement of epistemology from something adjacent to metaphysics/language to something adjacent to ethics.
+2. The move from modality to grounding in metaphysics.
+3. The social turn across many areas of philosophy.
+
+The third is the most recent - you don't really see it in some areas until the middle of the decade, the most widespread - it affects at least metaphysics, epistemology, ethics and language, and I suspect the most significant in the long term.
+
+We also in this decade start to see a real turnover in which philosophers are being talked about. This isn't a takeover by the young; this isn't a 30 under 30 list. But it is still interesting to see that there is some turnover happening. (Though for the most part the names we see are still largely male; the gender changes are not showing up here.)
+
+We also see some very distinctive new terminology, including one very worrying development, and a big uptick in the amount of empirical work being reported in the journals.
+
+## General
+
+```{r}
+#| output: asis
+
+three_graphs("normative", 2010)
+three_graphs("reason", 2010)
+three_graphs("reasons", 2010)
+three_graphs("ground", 2010)
+three_graphs("grounding", 2010)
+three_graphs("social", 2010)
+```
+
+## Terminology
+
+```{r}
+#| output: asis
+
+three_graphs("account", 2010)
+three_graphs("approach", 2010)
+three_graphs("view", 2010)
+three_graphs("robust", 2010)
+three_graphs("challenge", 2010)
+three_graphs("worry", 2010)
+three_graphs("epistemic", 2010)
+```
+
+## Experimental
+
+```{r}
+#| output: asis
+
+three_graphs("experiment", 2010)
+three_graphs("data", 2010)
+three_graphs("participants", 2010)
+```
+
+## New Names
+
+```{r}
+#| output: asis
+
+three_graphs("Schroeder", 2010)
+three_graphs("Sider", 2010)
+three_graphs("Hawthorne", 2010)
+three_graphs("Schwitzgebel", 2010)
+three_graphs("Schaffer", 2010)
+three_graphs("Cappelen", 2010)
+three_graphs("Siegel", 2010)
+three_graphs("Enoch", 2010)
+three_graphs("Huemer", 2010)
+```
+
+## Social
+
+```{r}
+#| output: asis
+
+three_graphs("group", 2010)
+three_graphs("interpersonal", 2010)
+three_graphs("race", 2010)
+three_graphs("gender", 2010)
+three_graphs("blame", 2010)
+three_graphs("blameworthy", 2010)
+three_graphs("friendship", 2010)
+three_graphs("testimony", 2010)
+three_graphs("trust", 2010)
+three_graphs("disagreement", 2010)
+three_graphs("deference", 2010)
+```
+
+This post is largely a data dump, though hopefully it includes some things about what I think the biggest trends are, at least in this one journal. As I said, this is part of a larger project of telling the story about what's been happening in philosophy the last few decades, and getting some data like this is an essential part of making sure I'm not just telling the story of what people around me have been up to.
