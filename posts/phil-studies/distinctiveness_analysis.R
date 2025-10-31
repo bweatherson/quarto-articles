@@ -80,20 +80,33 @@ combined_distinctiveness <- combined_distinctiveness %>%
     count_distinct_z = scale(count_distinct)[,1],
     appear_distinct_z = scale(appear_distinct)[,1],
     topic_distinct_z = scale(topic_distinct)[,1],
-    combined_distinct_standardized = (count_distinct_z + appear_distinct_z + topic_distinct_z) / 3
+    combined_distinct_standardized = (count_distinct_z + appear_distinct_z + topic_distinct_z) / 3,
+    
+    # Separate temporal and spatial components
+    # Temporal: how distinctive is this word in this decade vs other decades in PS
+    count_temporal_z = scale(count_temporal)[,1],
+    appear_temporal_z = scale(appear_temporal)[,1],
+    topic_temporal_z = scale(topic_temporal)[,1],
+    combined_temporal_standardized = (count_temporal_z + appear_temporal_z + topic_temporal_z) / 3,
+    
+    # Spatial: how distinctive is this word in PS vs T20 in this decade
+    count_spatial_z = scale(count_spatial)[,1],
+    appear_spatial_z = scale(appear_spatial)[,1],
+    topic_spatial_z = scale(topic_spatial)[,1],
+    combined_spatial_standardized = (count_spatial_z + appear_spatial_z + topic_spatial_z) / 3
   )
 
 # Find top distinctive words per decade using different combination methods
 top_words_mean <- combined_distinctiveness %>%
   group_by(decade) %>%
   arrange(desc(combined_distinct_mean)) %>%
-  slice_head(n = 50) %>%
+  slice_head(n = 20) %>%
   ungroup()
 
 top_words_standardized <- combined_distinctiveness %>%
   group_by(decade) %>%
   arrange(desc(combined_distinct_standardized)) %>%
-  slice_head(n = 50) %>%
+  slice_head(n = 20) %>%
   ungroup()
 
 # Alternative: require word to be distinctive on ALL three metrics
@@ -102,7 +115,7 @@ top_words_conservative <- combined_distinctiveness %>%
   mutate(combined_distinct_min = pmin(count_distinct, appear_distinct, topic_distinct)) %>%
   group_by(decade) %>%
   arrange(desc(combined_distinct_min)) %>%
-  slice_head(n = 50) %>%
+  slice_head(n = 20) %>%
   ungroup()
 
 # View results
@@ -114,6 +127,42 @@ print(top_words_standardized %>% select(decade, word, combined_distinct_standard
 
 print("\nTop 20 words per decade (conservative - minimum score):")
 print(top_words_conservative %>% select(decade, word, combined_distinct_min, count, appear, topic))
+
+# NEW: Analyze temporal and spatial components separately
+top_words_temporal <- combined_distinctiveness %>%
+  group_by(decade) %>%
+  arrange(desc(combined_temporal_standardized)) %>%
+  slice_head(n = 20) %>%
+  ungroup()
+
+top_words_spatial <- combined_distinctiveness %>%
+  group_by(decade) %>%
+  arrange(desc(combined_spatial_standardized)) %>%
+  slice_head(n = 20) %>%
+  ungroup()
+
+print("\nTop 20 words per decade (TEMPORAL distinctiveness - signature of this decade in PS):")
+print(top_words_temporal %>% select(decade, word, combined_temporal_standardized, count, appear, topic))
+
+print("\nTop 20 words per decade (SPATIAL distinctiveness - signature of PS vs other journals):")
+print(top_words_spatial %>% select(decade, word, combined_spatial_standardized, count, appear, topic))
+
+# Compare temporal vs spatial patterns
+print("\nWords with high temporal but low spatial distinctiveness (decade-specific in PS but not distinctive from other journals):")
+combined_distinctiveness %>%
+  filter(combined_temporal_standardized > 1, combined_spatial_standardized < 0) %>%
+  arrange(desc(combined_temporal_standardized)) %>%
+  select(decade, word, combined_temporal_standardized, combined_spatial_standardized) %>%
+  head(20) %>%
+  print()
+
+print("\nWords with high spatial but low temporal distinctiveness (consistently distinctive in PS across decades):")
+combined_distinctiveness %>%
+  filter(combined_spatial_standardized > 1, combined_temporal_standardized < 0) %>%
+  arrange(desc(combined_spatial_standardized)) %>%
+  select(decade, word, combined_spatial_standardized, combined_temporal_standardized) %>%
+  head(20) %>%
+  print()
 
 # Summary statistics to help choose combination method
 print("\nCorrelations between metrics:")
@@ -128,7 +177,7 @@ top_words_filtered <- combined_distinctiveness %>%
   filter(count >= 50, appear >= 10) %>%  # adjust thresholds as needed
   group_by(decade) %>%
   arrange(desc(combined_distinct_standardized)) %>%
-  slice_head(n = 50) %>%
+  slice_head(n = 20) %>%
   ungroup()
 
 print("\nTop 20 words per decade (filtered for minimum frequency):")
