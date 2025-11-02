@@ -703,7 +703,8 @@ phil_studies_by_year <- phil_studies_words |>
   mutate(ps_word_rate = count * 1000 / all_ps_words,
          ps_appear_rate = appear / all_ps_articles,
          ps_topic_rate = topic / all_ps_articles) |>
-  left_join(top20_summary, by = c("word", "year"))
+  left_join(top20_summary, by = c("word", "year")) |>
+  filter(!is.na(year))
 
 
 save(phil_studies_by_year, file = "phil_studies_by_year.RData")
@@ -933,6 +934,7 @@ t5000_words <- phil_studies_by_year |>
   slice_max(count, n = 3500)
 
 high_frequency_data <- phil_studies_by_year |>
+  filter(!is.na(year)) |>
   filter(word %in% t5000_words$word) |>
   mutate(count = as.integer(count),
          appear = as.integer(appear),
@@ -1830,6 +1832,8 @@ The difference between the 2000s and every other decade in @tbl-topics-cites-dec
 
 # Words and Trends {#sec-words-and-trends}
 
+## The Decline of Philosophy of Language
+
 Four of the five topics retain a stable stable share of papers in _Philosophical Studies_ over time, while philosophy of language falls away dramatically. @fig-language isolates the language panel from @fig-five-topics, and adds a trendline, to make this more visible.
 
 ```{r}
@@ -1866,8 +1870,6 @@ The third graph shows the proportion of articles that the target word appears te
 three_graphs("description", NA)
 three_graphs("reference", NA)
 ```
-
-
 
 ```{r}
 #| label: word-graphs
@@ -1918,23 +1920,59 @@ word_graphs_shaded <- function(x, y, d){
 
 In @fig-description and @fig-reference, the word counts go down sharply over time. The other graphs don't decline quite as steeply; after all, there are plenty of reasons to use the words other than talking about the relationship between reference and description. But it is still noteworthy that the dots in the 2010s are consistently below the trendline in all of the graphs.
 
+## Word Trends as a Guide
+
 These trends in word usage are a more fine-grained guide to what is happening in _Philosophical Studies_ than the five topic model. I did use topic modeling to build many more fine-grained models for the journal, but there was too much variation between the models to use any one model as the basis for this section. Instead I'll look at word frequency, and how it relates to citation patterns.
 
 For each decade, I'll look at words whose usage in _Philosophical Studies_, as measured by these three kinds of graphs, stands out. That typically means it is used more often in _Philosophical Studies_ than in other decades, so the red dots in that decade are higher than elsewhere, and it is used more often in _Philosophical Studies_ at that time than elsewhere, so the red dots are higher in that time than the grey dots.
 
-**Include examples of all four possibilities - grounding for the ++ quadrant**
-
-## Three Initial Observations
-
-Before getting into words that tell us about changes in the subject matter, I want to briefly note three other things we can see in the word count.
-
-The JSTOR set includes all the words in the article, including headers, footnotes, and bibliography. _Philosophical Studies_ gradually moved from footnote citations to author-text plus bibliography. So 'op' and 'cit' appear primarily in the 1980s dataset. More strikingly, @fig-oxford shows how much more common the word "Oxford" has become. This is in part a result of longer bibliographies in the 2010s, in part a consequence of the proliferation of Oxford Handbooks and Oxford Studies publications, but largely a sign of the dominance of philosophy book publishing in the 2010s by Oxford University Press. (Note that in @fig-oxford I've shaded the 2010s; I'll do that when highlighting some decade.)
+The two tests I just measured are somewhat independent. Sometimes they point in the same direction. For instance, @fig-sentences, @fig-worlds, and @fig-grounding show examples where a word's usage in the highlighted decade is above both the line showing the long term average, and above the grey dots showing usage at the time in other journals. In the other direction, @fig-knowledge, @fig-logic, and @fig-context, show words that, in the highlighted decades, were used less often than in other decades or other journals. 
 
 ```{r}
 #| output: asis
 
-three_graphs("oxford", NA)
-three_graphs("thanks", NA)
+three_graphs("sentences", 1990)
+three_graphs("worlds", 2000)
+three_graphs("grounding", 2010)
+```
+
+```{r}
+#| output: asis
+
+three_graphs("knowledge", 1990)
+three_graphs("logic", 2000)
+three_graphs("context", 2010)
+```
+
+The other directions are possibly more interesting. Words associated with topics that are not as common in _Philosophical Studies_, especially in philosophy of science, can get used above their long term average, but below the average across journals. We see this in @fig-quantum, @fig-genetic, and @fig-model.
+
+```{r}
+#| output: asis
+
+three_graphs("quantum", 1990)
+three_graphs("genetic", 1990)
+three_graphs("model", 2010)
+```
+
+In the other direction, sometimes a word is less often than at other times, but more often than in peer journals. When this happens, it can be a sign that _Philosophical Studies_ is publishing articles in topics that other journals have not yet picked up. One notable example of this is in @fig-intuition, and I'll come back to that case in @sec-1990s.
+
+```{r}
+#| output: asis
+
+three_graphs("intuition", 1990)
+```
+
+## Three Observations
+
+Before getting into words that tell us about changes in the subject matter, I want to briefly note three other things we can see in the word count.
+
+The JSTOR set includes all the words in the article, including headers, footnotes, and bibliography. _Philosophical Studies_ gradually moved from footnote citations to author-text plus bibliography. So 'op' and 'cit' appear primarily in the 1980s dataset. More strikingly, @fig-oxford shows how much more common the word "Oxford" has become. This is in part a result of longer bibliographies in the 2010s, in part a consequence of the proliferation of Oxford Handbooks and Oxford Studies publications, but largely a sign of the dominance of philosophy book publishing in the 2010s by Oxford University Press.
+
+```{r}
+#| output: asis
+
+three_graphs("oxford", 2010)
+three_graphs("thanks", 2010)
 ```
 
 Another word that appears a lot in the 2010s is "thanks", as @fig-thanks shows. As Eugenio @Petrovich2024 notes, one pattern in the 2010s is that acknowledgements footnotes became more frequent, and more informal. So papers will cite "Theodore Sider" and thank "Ted Sider". And they will not start with "I am grateful to..." but simply "Thanks to...".
@@ -1948,7 +1986,7 @@ three_graphs("his", NA)
 three_graphs("her", NA)
 ```
 
-## 1980s {#sec-1980s-articles}
+# 1980s {#sec-1980s-articles}
 
 From the 1990s to at least the mid 2010s, the bulk of ethics papers in _Philosophical Studies_ were on fairly theoretical questions, with special focus on questions moral realism, moral motivation, and (a topic I'll return to) moral responsibility. But in the 1980s the ethics papers in the journal had a different focus. 
 
