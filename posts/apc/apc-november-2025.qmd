@@ -59,6 +59,8 @@ format:
       file: preamble.tex
     include-after-body: 
         text: |
+          \noindent 
+          
           \noindent Draft for submission
     cite-method: natbib
     biblio-style: "apalike"
@@ -104,7 +106,7 @@ theme_update(plot.title = element_text(family = "Scala Pro", size = 24, face = "
 
 if(knitr::is_latex_output()) {
 theme_update(axis.title = element_text(family = "Palatino", size = 11),
-             plot.title = element_text(family = "Europa-Bold", size = 14),
+             plot.title = element_text(family = "Palatino", face = "bold", size = 14),
              plot.subtitle = element_text(family = "Palatino", size = 11),
              axis.text = element_text(family = "Palatino", size = 10),
              plot.background = element_rect(fill = "white"),
@@ -739,6 +741,8 @@ That can't explain the massive jumps we see at the right hand edge of @fig-outbo
 
 A sharp jump like this is a warning sign that there is something wrong with the data, and so the data should be checked. It's impractical to cross-check every entry, but those I have checked look correct. The change seems led by the most prestigious journals. For each journal I calculated the average number of outbound citations (to these hundred journal) for both the 2010s, and the first two years of the 2020s. The ten journals with the largest increase between the decades are shown in @tbl-large-growth.
 
+\newpage
+
 ```{r}
 #| label: tbl-large-growth
 #| tbl-cap: "Mean outbound citations for some journals over the last two decades."
@@ -871,7 +875,7 @@ age_effect_tibble |>
   filter(old_year >= start_year + 1, old_year <= end_year - min_data, new_year >= start_year) |>
   filter(old_year >= 1968, old_year <= 1992) |>
   ggplot(aes(x = new_year, y = cite_ratio)) +
-  geom_point(size = 0.4, color = point_col) +
+  geom_point(size = 0.7, color = point_col) +
   facet_wrap(~old_year, ncol = 5) +
   xlab(element_blank()) +
   ylab(element_blank()) +
@@ -889,7 +893,7 @@ age_effect_tibble |>
   filter(old_year >= start_year + 1, old_year <= end_year - min_data, new_year >= start_year) |>
   filter(old_year >= 1993, old_year <= 2017) |>
   ggplot(aes(x = new_year, y = cite_ratio)) +
-  geom_point(size = 0.4, color = point_col) +
+  geom_point(size = 0.7, color = point_col) +
   facet_wrap(~old_year, ncol = 5) +
   xlab(element_blank()) +
   ylab(element_blank()) +
@@ -1181,7 +1185,7 @@ When we move into the 2000s, the focus shifts dramatically, as we see in @tbl-gr
 kable(
   overall_grand_cites |>
     filter(`As Of` == 2010) |>
-    select(-`As Of`) |>
+    select(-`As Of`, -old) |>
     slice(1:10)
 )
 ```
@@ -1197,7 +1201,7 @@ When we move in the 2010s, the focus shifts again, as shown in @tbl-grand-cite-2
 kable(
   overall_grand_cites |>
     filter(`As Of` == 2020) |>
-    select(-`As Of`) |>
+    select(-`As Of`, -old) |>
     slice(1:10)
 )
 ```
