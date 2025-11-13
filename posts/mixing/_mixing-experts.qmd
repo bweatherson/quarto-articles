@@ -34,7 +34,7 @@ format:
 
 As @ElkinPettigrew2025 point out, there are many reasons that we might want to pool probability functions. One reason they discuss, and which has been discussed elsewhere in the recent literature, is when there is a clash between two experts each of whom our protagonist is disposed to defer to. So imagine that our protagonist, let's call them Quinn, is disposed to defer to both Ava and Ben with respect to *p* in the sense that for any *x*, Quinn's credence in *p* conditional on one of Ava and Ben having credence *x* in *p* and nothing else, is *x*. If Quinn just knows what one expert says, they'll follow that expert. What should they do, however, if Ava and Ben disagree?
 
-Traditionally there are two kinds of answer to this. One approach says that Quinn’s credence should be a fixed function of Ava and Ben’s. For instance, Quinn’s credence should be half way between Ava and Ben’s, or perhaps it should be some more complicated mixture. Call this the formulaic approach. The other approach, the supra-Bayesian approach, says that Quinn should conditionalise on Ava and Ben’s credences. The problem traditionally with this approach was that it seems computationally infeasible. The problem is not the update, that’s just reading a number off a table, the problem is the antecedent demand it puts on Quinn to have conditional credences for everything that Ava and Ben might announce.^[For a useful overview of work on this in the twentieth century, see https://www.jstor.org/stable/1390869. In that literature they draw a three way distinction between the linear, logarithmic and supra-Bayesian approaches. In the classification I’m using, the first two are both versions of the formulaic approach.]
+Traditionally there are two kinds of answer to this. One approach says that Quinn’s credence should be a fixed function of Ava and Ben’s. For instance, Quinn’s credence should be half way between Ava and Ben’s, or perhaps it should be some more complicated mixture. Call this the formulaic approach. The other approach, the supra-Bayesian approach, says that Quinn should conditionalise on Ava and Ben’s credences. The problem traditionally with this approach was that it seems computationally infeasible. The problem is not the update, that’s just reading a number off a table, the problem is the antecedent demand it puts on Quinn to have conditional credences for everything that Ava and Ben might announce.^[For a useful overview of work on this in the twentieth century, see https://www.jstor.org/stable/1390869. In that literature they draw a three way distinction between the linear, logarithmic and supra-Bayesian approaches. In the classification I’m using, the first two are both versions of the formulaic approach. The binary division I'm using is taken from @BaccelliStewart2021, though I've tinkered with the terminology. What I'm calling a formulaic approach, they call a 'pooling' approach. I prefer to use 'pooling' for the general question of how to merge attitudes, which allows for the supra-Bayesian answer.]
 
 In general, that’s a huge problem. But there are some special cases where it can be solved. And in some of those cases, it’s possible to make some very simple generalisations about the approximate value of the solutions. Those generalisations are, I hope, interesting in their own right, and a useful constraint on what kind of formulae we might use if we are thinking of the formulaic approach as a non-ideal approximation to the ideal supra-Bayesian approach.
 
@@ -48,46 +48,27 @@ The second point I’ll make is that in a lot of realistic cases, what Ben @Levi
 
 # Setup
 
-Assume Player regards Ivy and Zack as experts about *p* in the following sense.
+We're assuming that Quinn regards Ava and Ben as experts about *p* in the following sense.
 
-(@expi) If Player learns that Ivy's credence in *p* is *x*, and nothing else, he will change his credence in *p* to *x*.
+(@expi) If Quinn learns that Ava's credence in *p* is *x*, and nothing else, they will change their credence in *p* to *x*.
 
-(@expz) If Player learns that Zack's credence in *p* is *x*, and nothing else, he will change his credence in *p* to *x*.
+(@expz) If Quinn learns that Ben's credence in *p* is *x*, and nothing else, they will change their credence in *p* to *x*.
 
 Given that, what is the answer to this question.
 
-(@expp) If Player learns that Ivy's credence in *p* is *y*, and Zack's credence in *p* is *z*, and nothing else, what should his credence in *p* become?
+(@expp) If Quinn learns that Ava's credence in *p* is *y*, and Ben's credence in *p* is *z*, and nothing else, what should their credence in *p* become?
 
-Following @BaccelliStewart2021, let's distinguish two kinds of answers to this question. The *supra-Bayesian* says that this case, like every other case, calls for conditionalisation. This is going to be the kind of answer I defend. Here's how we spell this answer out. First, we rewrite (@expi) and (@expz) as (@expib) and (@expzb).
+The supra-Bayesian says that this case, like every other case, ideally calls for conditionalisation. Fomrally, this means that (@expi) and (@expz) are equivalent to (@expib) and (@expzb).
 
-(@expib) ∀*x*: *Cr~P~*(*p* | *Cr~I~*(*p*) = *x*) = *x*
-(@expzb) ∀*x*: *Cr~P~*(*p* | *Cr~Z~*(*p*) = *x*) = *x*
+(@expib) ∀*x*: *Cr~Q~*(*p* | *Cr~A~*(*p*) = *x*) = *x*
+(@expzb) ∀*x*: *Cr~Q~*(*p* | *Cr~B~*(*p*) = *x*) = *x*
 
-Where *Cr~P~*, *Cr~I~* and *Cr~Z~* are Player, Ivy and Zack's credence functions respectively. Then (@expp) gets rephrased as a request for the value of 
+Where *Cr~Q~*, *Cr~A~* and *Cr~B~* are Quinn, Ava and Ben's credence functions respectively. Then (@expp) gets rephrased as a request for the value of 
 
-(@exppb) *Cr~P~*(p | *Cr~I~*(*p*) = *y* ∧ *Cr~I~*(*p*) = *z*)
+(@exppb) *Cr~Q~*(p | *Cr~A~*(*p*) = *y* ∧ *Cr~A~*(*p*) = *z*)
 
-That's good as far as it goes, but it raises two natural questions. First, what reasonable credal functions make (@expib) and (@expzb) true, and what do they tend to say about (@exppb)? Second, given the massive computational difficulty in calculating values like (@exppb) in real time, are there heuristics for approximating its value in realistic cases? This paper aims to make progress on both questions. It offers some examples of reasonable credal functions satisfying (@expib) and (@expzb), and uses them to suggest some heuristics for approximating (@exppb) in somewhat realistic cases.
+That's good as far as it goes, but it raises two natural questions. First, what reasonable credal functions make (@expib) and (@expzb) true, and what do they tend to say about (@exppb)? Second, given the massive work it would be for Quinn to have these conditional plans for what to do whatever Ava and Ben say, are there heuristics for approximating the value of (@exppb) realistic cases? We'll make some progress on both questions.
 
-But before we get to those answers, we should look at the other kind of answer @BaccelliStewart2021 mention: pooling answers. A pooling answer to (@expp) says that we should find some function that in some way 'pools' *y* and *z* to answer (@expp). One obvious such function is the arithmetic mean. The answer to (@expp) is just (*y* + *z*)/2. Unfortunately, this won't do for three reasons. One reason, as proven independently by @Gallow2018 and @Bradley2017 is that it is incompatible with supra-Bayesianism. A second reason, as stressed by @RussellEtAl2015, is that it is in cases where Player defers to Ivy and Zack across a range of questions, this answer is incompatible with Player, Ivy and Zack all updating on external evidence by conditionalisation.^[Note that supra-Bayesianism is the view that Player should update on expert testimony by conditionalisation. This objection does not assume supra-Bayesianism, but does assume that conditionalisation is the right rule for normal, non-testimonial, updating.] A third reason, as stressed by @Levinstein2015 and @EaswaranEtAl2016 is that in some cases the intuitively correct answer to (@expp) is not between *y* and *z*.
-
-The last of these reasons is most pressing. The natural response to the first two reasons is to move to some other kind of pooling. Both @RussellEtAl2015 and @BaccelliStewart2021 suggest that we should use some kind of geometric pooling instead of linear pooling. In this context, to use geometric pooling is to give an answer to (@expp) something like^[I say 'something like' because you might want to allow some extra parameters in the answer if, for example, you want to give different weights to the two experts. That kind of detail won't matter to the argument here; we're just going to focus on cases where the experts are treated symmetrically.]
-
-$$
-\frac{\sqrt{yz}}{\sqrt{yz} + {\sqrt{(1-y)(1-z)}}}
-$$
-
-And that pooling function can be shown to avoid the first two reasons for not using linear pooling. But it can't avoid the third, and that's what I'm going to focus on here.
-
-There are three somewhat distinct reasons you might use pooling to answer (@expp). 
-
-First, you might use it as a replacement for supra-Bayesianism. I'm going to argue that if you do this, you also have to give up on Bayesianism across the board. Sometimes the recipient of expert opinion can reliably infer the evidence behind the opinion reliably. In those cases, regular Bayesianism implies that the recipient should update on just that evidence. And that regular, not supra, Bayesian principle is enough to dispose of pooling answers. 
-
-There are two more plausible uses for a pooling answer. Second, you might use it as a constraint on supra-Bayesianism. You could argue that if the values that (@exppb) takes for various *y*, *z* do not look like some kind of pooling function, that's evidence the prior *Cr~P~* was irrational to start with. And third, you might use it as an approximation for supra-Bayesianism. It's a lot easier to calculate linear or geometric means than to work out precisely the value of (@exppb). Both of the last two uses are intuitively very plausible. One of the arguments of this paper is that they are, unfortunately, ultimately untenable. There just isn't much use around here for pooling.
-
-Pooling answers to (@expp) look a lot like conciliationist approaches to peer disagreement. Indeed, the form of pooling that uses linear averaging is sometimes thought to be a application of the Equal Weight View [@Elga2007]. Supra-Bayesian answers look like evidentialist approaches to peer disagreement. In particular, they look a lot like the Total Evidence View [@Lackey2010-LACWSW]. I'm going to use an even older motivation for them: the evidentialist approach to testimony defended by Frank @Jackson1987. On Jackson's view, testimony that *p* is evidence that the speaker has evidence for *p*. The way to rationally update on it depends on what kind of evidence you think the speaker is likely to have, given they've concluded *p*, and what you would (rationally) do with that evidence. Typically, the answer is _Conclude p_. Jackson argues that while this is typical, it isn't always the right answer. And it fails to be the right answer in just the cases you shouldn't accept the speaker's testimony.
-
-So to simplify here, I'm going to look at some cases where Player can simply deduce, given one of the experts' credences, what their evidence must have been. And then Player will update on that evidence. As we'll see, different assumptions about how the evidence of the experts interacts leads to different answers to (@expp).
 
 Two quick notes. First, I'm only going to look at cases where the experts are treated symmetrically. That's a restriction, but it's a useful one for letting us see the range of cases. Second, I'm going to be agreeing with @EaswaranEtAl2016 a lot, especially in the first half of the paper. I'm ultimately going to consider some different kinds of cases to what they consider - but that's a difference in focus, not a difference in conclusions. (They look at a bunch of kinds of cases that I won't consider as well; it's not like I'm going strictly beyond their work.) This paper is intended as a complement to theirs, not at all a substitute. But I think it's a valuable complement, because I'll show how some very realistic cases require a generalisation of their model, and make some suggestions for what that generalisation should look like.
 
@@ -95,13 +76,13 @@ Two quick notes. First, I'm only going to look at cases where the experts are tr
 
 In our first case, the experts' evidence is as independent as possible. Here's a story to think about how that could be. Carmen has an urn with 50 marbles, 25 black and 25 white. She draws one at random and marks it with invisible ink. She has a scanner that can detect which marble is marked, but no one else can tell it apart from the other marbles. Let *p* be the proposition that the marked marble is white - that's what we'll focus on from now on.
 
-After selecting one marble to be marked, she puts together a jar containing the marked marble and 9 other marbles drawn at random from the urn. (I'll use 'urn' for where Carmen keeps all the unused marbles, and 'jar' for what she constructs to show the experts.) She shows that to one of the experts, let's say Ivy. She gets to inspect the jar, i.e., count how many marbles in it are white and black. She then reports to Player, but crucially not to Zack, her credence in *p*.
+After selecting one marble to be marked, she puts together a jar containing the marked marble and 9 other marbles drawn at random from the urn. (I'll use 'urn' for where Carmen keeps all the unused marbles, and 'jar' for what she constructs to show the experts.) She shows that to one of the experts, let's say Ava. She gets to inspect the jar, i.e., count how many marbles in it are white and black. She then reports to Quinn, but crucially not to Ben, her credence in *p*.
 
-In this example, the next thing that happens is that Carmen takes the jar back, removes the 9 unmarked marbles, puts them back in the urn, and draws a new set of 9 marbles. (That set may overlap with the first set of course.) She puts these 9 in the jar, along with the marked marble, and shows the jar to Zack. He examines the jar, and reports to Player his credence in *p*.
+In this example, the next thing that happens is that Carmen takes the jar back, removes the 9 unmarked marbles, puts them back in the urn, and draws a new set of 9 marbles. (That set may overlap with the first set of course.) She puts these 9 in the jar, along with the marked marble, and shows the jar to Ben. He examines the jar, and reports to Quinn his credence in *p*.
 
-Now in this case we can work out precisely how Player should update on these two pieces of information. When one expert reports a credence of *x* in *p*, Player can infer that they saw 10*x* white marbles. After all, what the expert knows is just that the marked marble is equally likely to be any of the marbles in the jar they see. So given *Cr~I~*(*p*) = *y* and *Cr~Z~*(*p*) = *z*, Player can infer how many white marbles were in each jar. And he can work out the probability of each of those jars turning up given *p* and given ¬*p*. And that's enough to plug into Bayes's Theorem to work out a posterior probability for *p*. When you do that, you get the following result.
+Now in this case we can work out precisely how Quinn should update on these two pieces of information. When one expert reports a credence of *x* in *p*, Quinn can infer that they saw 10*x* white marbles. After all, what the expert knows is just that the marked marble is equally likely to be any of the marbles in the jar they see. So given *Cr~A~*(*p*) = *y* and *Cr~B~*(*p*) = *z*, Quinn can infer how many white marbles were in each jar. And he can work out the probability of each of those jars turning up given *p* and given ¬*p*. And that's enough to plug into Bayes's Theorem to work out a posterior probability for *p*. When you do that, you get the following result.
 
-(@indform) *Cr~P~*(p | *Cr~I~*(*p*) = *y* ∧ *Cr~Z~*(*p*) = *z*) = *yz*/(*yz* + (1-*y*)(1-*z*))
+(@indform) *Cr~Q~*(p | *Cr~A~*(*p*) = *y* ∧ *Cr~B~*(*p*) = *z*) = *yz*/(*yz* + (1-*y*)(1-*z*))
 
 I'm not going to work through the derivation of this, because it's a straightforward consequence of something I will derive below. If you do want to check it for yourself, the key input is that the probability of drawing *x* white balls in *t* draws without replacement from an urn with *w* white balls and *b* black balls is
 
@@ -109,17 +90,17 @@ $$
 \frac{\binom{w}{x} \binom{b}{t-x}}{\binom{w+b}{t}}
 $$
 
-More importantly, (@indform) looks just like a special case of the central formula (Upco) that @EaswaranEtAl2016 use. And that's not surprising, since this case uses the same conditional independence assumption that they make through much of their paper. To say that *A* and *B* are conditionally independent given *C* is just to say that Pr(*A* ∧ *B* | *C*) = Pr(*A* | *C*)Pr(*B* | *C*). In this case, any pair of claims about how many white balls are in the jars shown to Ivy and to Zack are conditionally independent, both conditional on *p* and on ¬*p*.
+More importantly, (@indform) looks just like a special case of the central formula (Upco) that @EaswaranEtAl2016 use. And that's not surprising, since this case uses the same conditional independence assumption that they make through much of their paper. To say that *A* and *B* are conditionally independent given *C* is just to say that Pr(*A* ∧ *B* | *C*) = Pr(*A* | *C*)Pr(*B* | *C*). In this case, any pair of claims about how many white balls are in the jars shown to Ava and to Ben are conditionally independent, both conditional on *p* and on ¬*p*.
 
-The right hand side of (@indform) also looks a lot like the geometric means described above. The big difference is that the square root signs have disappeared. And that makes a difference, because it means the result violates what @BaccelliStewart2021 call Unanimity. This principle requires that *Cr~P~*(*p* | *Cr~I~*(*p*) = *y* ∧ *Cr~I~*(*p*) = *y*) = *y*. If (@indform) is true then Unanimity is violated in every case except where *y* equals 0, 0.5 or 1. But this is bad news for Unanimity, because the case for (@indform) in this case seems very strong. Player really knows how many white marbles were in each jar, and it's just a bit of algebra to get from there to (@indform) via conditionalisation. And it's very plausible that conditionalisation is the right way to update on evidence about how many marbles are in a jar. So any principle incompatible with (@indform) is false.
+The right hand side of (@indform) also looks a lot like the geometric means described above. The big difference is that the square root signs have disappeared. And that makes a difference, because it means the result violates what @BaccelliStewart2021 call Unanimity. This principle requires that *Cr~Q~*(*p* | *Cr~A~*(*p*) = *y* ∧ *Cr~A~*(*p*) = *y*) = *y*. If (@indform) is true then Unanimity is violated in every case except where *y* equals 0, 0.5 or 1. But this is bad news for Unanimity, because the case for (@indform) in this case seems very strong. Quinn really knows how many white marbles were in each jar, and it's just a bit of algebra to get from there to (@indform) via conditionalisation. And it's very plausible that conditionalisation is the right way to update on evidence about how many marbles are in a jar. So any principle incompatible with (@indform) is false.
 
 It turns out that varying how many marbles are in the urn Carmen starts with does not change (@indform). But changing the ratio of white marbles to black marbles in the urn does change the formula. If the proportion of the initial urn that is white is *r*, then the general result is:
 
-(@indformgen) *Cr~P~*(p | *Cr~I~*(*p*) = *y* ∧ *Cr~I~*(*p*) = *z*) = (*yz*(1-*r*))/(*yz*(1-*r*) + (1-*y*)(1-*z*)*r*)
+(@indformgen) *Cr~Q~*(p | *Cr~A~*(*p*) = *y* ∧ *Cr~A~*(*p*) = *z*) = (*yz*(1-*r*))/(*yz*(1-*r*) + (1-*y*)(1-*z*)*r*)
 
 Again, this isn't a new result; @EaswaranEtAl2016 [27] derive an even more general formula from which this falls out as a special case. But my way of deriving it is just different enough to be worth including.
 
-Let *I~x~* be the disjunction of all possible evidence propositions that would lead Ivy to have credence *x* in *p*. In this case *I~x~* is a simple proposition that there are 10*x* white marbles in the jar, but we don't need to assume that *I~x~* will be anything like that simple. Everything that follows about *I~x~* also holds for *Z~x~*, the disjunction of all possible evidence propositions that would lead Ivy to have credence *x* in *p*, but I won't repeat the derivations. Since Player defers to Ivy, i.e., (@expib) is true, we have the following proof. (All credences are Player's, so I'll drop the subscripts.) 
+Let *I~x~* be the disjunction of all possible evidence propositions that would lead Ava to have credence *x* in *p*. In this case *I~x~* is a simple proposition that there are 10*x* white marbles in the jar, but we don't need to assume that *I~x~* will be anything like that simple. Everything that follows about *I~x~* also holds for *Z~x~*, the disjunction of all possible evidence propositions that would lead Ava to have credence *x* in *p*, but I won't repeat the derivations. Since Quinn defers to Ava, i.e., (@expib) is true, we have the following proof. (All credences are Quinn's, so I'll drop the subscripts.) 
 
 \begin{align*}
 Cr(p | I_x) &= x &&\therefore \\
@@ -136,7 +117,7 @@ $$
 Cr(p | I_y ∧ Z_z) = \frac{Cr(p ∧ I_y ∧ Z_z)}{Cr(I_y ∧ Z_z)}
 $$
 
-Using the general fact that *X* is equivalent to (*p* ∧ *X*) ∨ (¬*p* ∧ *X*), and that Player's credences are probabilistic, so his credence in an exclusive disjunction equals the sum of the credence in the disjuncts, we know this equals.
+Using the general fact that *X* is equivalent to (*p* ∧ *X*) ∨ (¬*p* ∧ *X*), and that Quinn's credences are probabilistic, so his credence in an exclusive disjunction equals the sum of the credence in the disjuncts, we know this equals.
 
 $$
 \frac{Cr(p ∧ I_y ∧ Z_z)}{Cr(p ∧ I_y ∧ Z_z) + Cr(\neg p ∧ I_y ∧ Z_z)}
@@ -172,17 +153,17 @@ $$
 \frac{yz(1-r)}{yz(1-r) + (1-y)(1-z)r}
 $$
 
-And that's the completely general result when the evidence the experts has is conditionally independent of both *p* and ¬*p*, and Player starts with credence *r* in *p*.
+And that's the completely general result when the evidence the experts has is conditionally independent of both *p* and ¬*p*, and Quinn starts with credence *r* in *p*.
 
 But this case is surely rare. Experts typically have some training in common that isn't shared by non-experts. So their reasons for having a credence in *p* that differs from our prior will not be completely independent. @EaswaranEtAl2016 note that sometimes we can adjust for the common evidence by conditionalising on the common evidence to come up with a new 'prior', or perhaps I should say 'intermediate' credence, *r*, then applying this formula. This is slightly more general, but still not a lot. Part of what makes us non-experts be non-experts is that we don't have this common training, so we can't identify what's common between the experts. Let's see if we can come up with a slightly more general case.
 
 # Case Two: Common Marbles
 
-In our second case, Carmen once again has an urn with 50 marbles, 25 black and 25 white. She draws one at random and marks it with invisible ink. She can tell which one this is, but no one else can. And *p* is still the proposition that the marked marble is white - that's what we'll focus on from now on. After selecting the marble to be marked, she puts together a jar containing the marked marble and 9 other marbles drawn at random from the urn.  She shows that to one of the experts, let's say Ivy. She gets to inspect the jar, i.e., count how many marbles in it are white and black. She then reports to Player, but crucially not to Zack, her credence in *p*.
+In our second case, Carmen once again has an urn with 50 marbles, 25 black and 25 white. She draws one at random and marks it with invisible ink. She can tell which one this is, but no one else can. And *p* is still the proposition that the marked marble is white - that's what we'll focus on from now on. After selecting the marble to be marked, she puts together a jar containing the marked marble and 9 other marbles drawn at random from the urn.  She shows that to one of the experts, let's say Ava. She gets to inspect the jar, i.e., count how many marbles in it are white and black. She then reports to Quinn, but crucially not to Ben, her credence in *p*.
 
-So far, it's just like the last case. But what happens next is (possibly) different. In this case, Carmen removes *m* unmarked marbles from the jar, puts them back in the urn, and draws a new set of *m* marbles to put in the jar. It's all random, so this could include some of the marbles she just removed. She shows the jar to Zack, he inspects it, and reports his credence in *p* to Player. And, crucially, player knows *m*, the number of marbles that are in common between the jars. So *m* is a measure of the independence of the experts' opinions.
+So far, it's just like the last case. But what happens next is (possibly) different. In this case, Carmen removes *m* unmarked marbles from the jar, puts them back in the urn, and draws a new set of *m* marbles to put in the jar. It's all random, so this could include some of the marbles she just removed. She shows the jar to Ben, he inspects it, and reports his credence in *p* to Quinn. And, crucially, Quinn knows *m*, the number of marbles that are in common between the jars. So *m* is a measure of the independence of the experts' opinions.
 
-Once again, we can work out precisely what Player's credence should be given *m*, and the two credences. Unfortunately, it's just a long formula that doesn't seem to reduce nicely. But if you've got a machine that's good at calculating hypergeometric distributions, and you dear reader are probably reading this paper on a machine that's good at calculating hypergeometric distributions, it's not that hard to calculate the values by brute force. I won't list all the values, there are several hundred of them, but I'll present them graphically in @fig-conexp. (Note I'll leave off the case where one or other expert announces a credence of 0 or 1; in that case Player knows whether *p* is true, so the question of how to merge the credences is easy.)
+Once again, we can work out precisely what Quinn's credence should be given *m*, and the two credences. Unfortunately, it's just a long formula that doesn't seem to reduce nicely. But if you've got a machine that's good at calculating hypergeometric distributions, and you dear reader are probably reading this paper on a machine that's good at calculating hypergeometric distributions, it's not that hard to calculate the values by brute force. I won't list all the values, there are several hundred of them, but I'll present them graphically in @fig-conexp. (Note I'll leave off the case where one or other expert announces a credence of 0 or 1; in that case Quinn knows whether *p* is true, so the question of how to merge the credences is easy.)
 
 ```{r, include=FALSE}
 require(knitr)
@@ -199,83 +180,83 @@ knitr::opts_chunk$set(echo = FALSE)
 r <- 0.5 # Proportion of balls that are white
 
 master <- expand_grid(marked_ball = 0:1, 
-                      ivy_white = 0:10, 
+                      Ava_white = 0:10, 
                       to_remove = 1:9, 
                       white_remove = 0:9, 
                       white_add = 0:9) %>%
-  filter(white_remove <= ivy_white - marked_ball) %>%
+  filter(white_remove <= Ava_white - marked_ball) %>%
   filter(white_remove <= to_remove) %>%
   filter(white_add <= to_remove) %>%
-  filter(ivy_white >= marked_ball) %>%
-  filter(ivy_white <= 9 + marked_ball) %>%
-  mutate(ivy_black = 10 - ivy_white,
+  filter(Ava_white >= marked_ball) %>%
+  filter(Ava_white <= 9 + marked_ball) %>%
+  mutate(Ava_black = 10 - Ava_white,
          black_remove = to_remove - white_remove,
          black_add = to_remove - white_add) %>%
-  filter(black_remove <= ivy_black - 1 + marked_ball) %>%
-  mutate(zack_white = ivy_white - white_remove + white_add,
-         zack_black = ivy_black - black_remove + black_add,
-         zack_total = zack_white + zack_black,
-         ivy_prob = dhyper(ivy_white - marked_ball, 50 * r - marked_ball, 50 * (1-r) - 1 + marked_ball, 9),
-         remove_prob = dhyper(white_remove, ivy_white - marked_ball, ivy_black - 1 + marked_ball, to_remove),
-         add_prob = dhyper(white_add, 50 * r - ivy_white + white_remove, 50 * (1-r) - ivy_black + black_remove, to_remove),
-         all_prob = (1-r + marked_ball * (2 * r - 1)) * ivy_prob * remove_prob * add_prob)
+  filter(black_remove <= Ava_black - 1 + marked_ball) %>%
+  mutate(Ben_white = Ava_white - white_remove + white_add,
+         Ben_black = Ava_black - black_remove + black_add,
+         Ben_total = Ben_white + Ben_black,
+         Ava_prob = dhyper(Ava_white - marked_ball, 50 * r - marked_ball, 50 * (1-r) - 1 + marked_ball, 9),
+         remove_prob = dhyper(white_remove, Ava_white - marked_ball, Ava_black - 1 + marked_ball, to_remove),
+         add_prob = dhyper(white_add, 50 * r - Ava_white + white_remove, 50 * (1-r) - Ava_black + black_remove, to_remove),
+         all_prob = (1-r + marked_ball * (2 * r - 1)) * Ava_prob * remove_prob * add_prob)
 
-player <- master %>%
-  group_by(ivy_white, zack_white, to_remove) %>%
+Quinn <- master %>%
+  group_by(Ava_white, Ben_white, to_remove) %>%
   summarise(prob = weighted.mean(marked_ball, all_prob), .groups = 'drop') %>%
-  rename(Ivy = ivy_white, Zack = zack_white, Removed = to_remove, Probability = prob) %>%
-  mutate(Ivy = Ivy/10, Zack = Zack / 10)
+  rename(Ava = Ava_white, Ben = Ben_white, Removed = to_remove, Probability = prob) %>%
+  mutate(Ava = Ava/10, Ben = Ben / 10)
 
-player_plot <- ggplot(player %>%
-                        filter(Ivy != round(Ivy, 0), Zack != round(Zack, 0)), 
+Quinn_plot <- ggplot(Quinn %>%
+                        filter(Ava != round(Ava, 0), Ben != round(Ben, 0)), 
                       aes(Removed, Probability)) +
   geom_point(size = 0.2) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  facet_grid(rows = vars(Ava), cols = vars(Ben)) +
   theme_light() +
   scale_x_continuous(breaks = seq(2, 8, 3)) +
   scale_y_continuous(breaks = seq(0.2, 0.8, 0.3)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-  labs(x="Number of marbles removed between the expert inspections", y = "Player's final credence in p")
+  labs(x="Number of marbles removed between the expert inspections", y = "Quinn's final credence in p")
 
-player_plot
+Quinn_plot
 ```
 
-Here is how to read the graph in @fig-conexp. Each row corresponds to a particular credence announced by Ivy; the credence is shown on the right. Each column corresponds to a particular credence announced by Zack; that credence is shown on the top. The x-axis of the individual graphs shows the value for *m*, the number of marbles removed. And the y-axis shows Player's final credence in *p*. There are more dots on some graphs than others because some combinations of Ivy credence, Zack credence and *m* are impossible. The announced credences can't, by the rules of the game, differ by more than 0.1*m*.
+Here is how to read the graph in @fig-conexp. Each row corresponds to a particular credence announced by Ava; the credence is shown on the right. Each column corresponds to a particular credence announced by Ben; that credence is shown on the top. The x-axis of the individual graphs shows the value for *m*, the number of marbles removed. And the y-axis shows Quinn's final credence in *p*. There are more dots on some graphs than others because some combinations of Ava credence, Ben credence and *m* are impossible. The announced credences can't, by the rules of the game, differ by more than 0.1*m*.
 
-One notable feature of that graph is that as *m* gets larger, the final credence tends to move away from 0.5; it tends to get more opinionated. Another notable feature, though probably not one you can see in this resolution, is that this move towards greater opinionation happens in a surprisingly linear fashion. To a first approximation, Player's credence moves away from 0.5 roughly the same amount for each addition to *m*, at least holding *y* and *z* fixed.
+One notable feature of that graph is that as *m* gets larger, the final credence tends to move away from 0.5; it tends to get more opinionated. Another notable feature, though probably not one you can see in this resolution, is that this move towards greater opinionation happens in a surprisingly linear fashion. To a first approximation, Quinn's credence moves away from 0.5 roughly the same amount for each addition to *m*, at least holding *y* and *z* fixed.
 
 It's not perfectly linear, but it's much closer than I would have guessed looking at how really quite non-linear the inputs are. @fig-cap-bottom-right shows the result of zooming in on a part of the graph to see this more vividly.
 
 ```{r}
 #| fig-cap: "The bottom right corner of @fig-conexp"
 #| label: fig-cap-bottom-right
-ggplot(player %>%
-            filter(Ivy != round(Ivy, 0), Zack != round(Zack, 0), Ivy > 0.6, Zack > 0.6),
+ggplot(Quinn %>%
+            filter(Ava != round(Ava, 0), Ben != round(Ben, 0), Ava > 0.6, Ben > 0.6),
             aes(Removed, Probability)) +
   geom_point(size = 0.2) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  facet_grid(rows = vars(Ava), cols = vars(Ben)) +
   theme_light() +
   scale_x_continuous(breaks = seq(2, 8, 3)) +
   scale_y_continuous(breaks = seq(0.75, 0.95, 0.1)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Number of marbles removed between the expert inspections", y = "Player's final credence in p")
+  labs(x="Number of marbles removed between the expert inspections", y = "Quinn's final credence in p")
 ```
 
-The curve in the bottom right panel of @fig-cap-bottom-right is not really linear; it definitely curves downwards. But as you move your eye upwards and leftwards in the table, the curves look much much straighter. The panel where they both announce 0.7 is really remarkably straight. If we focus on the middle of @fig-conexp, this is even more striking. (I've left off the cases where Zack announces a credence under 0.5 because those graphs are just mirror images of graphs already shown.)
+The curve in the bottom right panel of @fig-cap-bottom-right is not really linear; it definitely curves downwards. But as you move your eye upwards and leftwards in the table, the curves look much much straighter. The panel where they both announce 0.7 is really remarkably straight. If we focus on the middle of @fig-conexp, this is even more striking. (I've left off the cases where Ben announces a credence under 0.5 because those graphs are just mirror images of graphs already shown.)
 
 ```{r}
 #| fig-cap: "A detail of the middle of @fig-conexp"
 #| label: fig-cap-middle
-ggplot(player %>%
-            filter(Ivy > 0.2, Zack > 0.4, Ivy < 0.8, Zack < 0.8),
+ggplot(Quinn %>%
+            filter(Ava > 0.2, Ben > 0.4, Ava < 0.8, Ben < 0.8),
             aes(Removed, Probability)) +
   geom_point(size = 0.2) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  facet_grid(rows = vars(Ava), cols = vars(Ben)) +
   theme_light() +
   scale_x_continuous(breaks = seq(2, 8, 3)) +
   scale_y_continuous(breaks = seq(0.3, 0.7, 0.2)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Number of marbles removed between the expert inspections", y = "Player's final credence in p")
+  labs(x="Number of marbles removed between the expert inspections", y = "Quinn's final credence in p")
 ```
 
 Why does this matter? Because pooling functions are easy to use, and the supra-Bayesian needs something to match that ease of use. It's a cliche that for every problem there is a solution that is simple, intuitive, and wrong. And the version of the pooling approach that uses linear averages is very simple, very intuitive, and very wrong. The version that uses geometric averages strikes most people as less simple and intuitive (or maybe I'm just bad at explaining it), but it is less wrong. But still, sometimes simple, intuitive and wrong is exactly what you need! Computation is hard, life is short, precision is overrated. Why not just average if you are just looking to get something roughly right?
@@ -291,23 +272,23 @@ Let's check visually how this does against the exact calculations. In the graphs
 ```{r}
 #| label: fig-twoprob-bottom-right
 #| fig-cap: "A detail from @fig-conexp with estimated probabilities shown."
-player$type = "Calculated"
+Quinn$type = "Calculated"
 
-player_model <- player %>%
-  mutate(Probability =  #(9 - Removed) / 9 * (Ivy + Zack) / 2 + 
-                        (9 - Removed) / 9  * (Ivy * Zack)^0.5 / ((Ivy * Zack)^0.5 + ((1 - Ivy)* (1 - Zack))^0.5) +
-                        Removed / 9 * (Ivy * Zack) / ((Ivy * Zack) + ((1 - Ivy)* (1 - Zack)))
+Quinn_model <- Quinn %>%
+  mutate(Probability =  #(9 - Removed) / 9 * (Ava + Ben) / 2 + 
+                        (9 - Removed) / 9  * (Ava * Ben)^0.5 / ((Ava * Ben)^0.5 + ((1 - Ava)* (1 - Ben))^0.5) +
+                        Removed / 9 * (Ava * Ben) / ((Ava * Ben) + ((1 - Ava)* (1 - Ben)))
   ) %>%
    mutate(type = "Estimated")
 
-all_player <- bind_rows(player, player_model) %>%
+all_Quinn <- bind_rows(Quinn, Quinn_model) %>%
   rename(`Credence Type` = type)
 
-ggplot(all_player %>%
-         filter(Ivy >= 0.7, Ivy <= 0.9, Zack >= 0.7, Zack <= 0.9),
+ggplot(all_Quinn %>%
+         filter(Ava >= 0.7, Ava <= 0.9, Ben >= 0.7, Ben <= 0.9),
        aes(Removed, Probability)) +
   geom_point(size = 1, aes(shape = `Credence Type`)) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  facet_grid(rows = vars(Ava), cols = vars(Ben)) +
   theme_light() +
   scale_x_continuous(breaks = seq(2, 8, 3)) +
   scale_y_continuous(breaks = seq(0.75, 0.95, 0.1)) +
@@ -319,11 +300,11 @@ That looks pretty good. There is a tiny bit of separation in the bottom right pa
 ```{r}
 #| label: fig-twoprob-middle
 #| fig-cap: "The middle of @fig-conexp with estimated probabilities shown."
-ggplot(all_player %>%
-         filter(Ivy >= 0.3, Ivy <= 0.7, Zack >= 0.5, Zack <= 0.7),
+ggplot(all_Quinn %>%
+         filter(Ava >= 0.3, Ava <= 0.7, Ben >= 0.5, Ben <= 0.7),
        aes(Removed, Probability)) +
   geom_point(size = 1, aes(shape = `Credence Type`)) +
-  facet_grid(rows = vars(Ivy), cols = vars(Zack)) +
+  facet_grid(rows = vars(Ava), cols = vars(Ben)) +
   theme_light() +
   scale_x_continuous(breaks = seq(2, 8, 3)) +
   scale_y_continuous(breaks = seq(0.3, 0.7, 0.2)) +
@@ -351,11 +332,11 @@ What I will try to make some headway on instead is the last question, what happe
 
 # Case Three: Differentially Informed Experts
 
-In our last case, one expert is better informed than the other. Carmen first fills the jar with the marked marble and 19 randomly chosen unmarked marbles. She flips a coin to decide which expert to show this jar to. They inspect the jar, and record their credence in *p* to the nearest 0.1. (We'll come back very soon to why this is rounded.) Carmen then removes 10 unmarked marbles from the jar, chosen at random, and then shows it to the other expert. They inspect it, and come up with a new credence in *p*. Then both these recorded numbers are reported to Player, without any indication about who saw the larger jar and who saw the smaller one.
+In our last case, one expert is better informed than the other. Carmen first fills the jar with the marked marble and 19 randomly chosen unmarked marbles. She flips a coin to decide which expert to show this jar to. They inspect the jar, and record their credence in *p* to the nearest 0.1. (We'll come back very soon to why this is rounded.) Carmen then removes 10 unmarked marbles from the jar, chosen at random, and then shows it to the other expert. They inspect it, and come up with a new credence in *p*. Then both these recorded numbers are reported to Quinn, without any indication about who saw the larger jar and who saw the smaller one.
 
 There is a weird thing in this setup in that one of the experts reports something other than their precise credence. The reason I set up the example this way is to make it impossible for the recipient of the expert opinion to infer who saw the smaller jar. If they both reported their actual credence, it would be possible for the recipient to be told one of them has credence 0.75 in *p* and the other has credence 0.6. And then it would be obvious that the hearer should have credence 0.6 in *p*, since that's the credence of the more informed person. So I made the first person round to the nearest 0.1 to make it harder to make such inferences.
 
-Given all that setup we can work out what Player's credence in *p* should be given the two announcements, and I've shown the values in @tbl-diffk. (I'm rounding to three decimal places to save space.I'm leaving off the cases where one or other party announces an extremal credence - the hearer agrees with those credences, at least to three decimal places. And the 'NA' values are where it is impossible given the setup for those to be the announced values.)
+Given all that setup we can work out what Quinn's credence in *p* should be given the two announcements, and I've shown the values in @tbl-diffk. (I'm rounding to three decimal places to save space.I'm leaving off the cases where one or other party announces an extremal credence - the hearer agrees with those credences, at least to three decimal places. And the 'NA' values are where it is impossible given the setup for those to be the announced values.)
 
 
 
@@ -363,7 +344,7 @@ Given all that setup we can work out what Player's credence in *p* should be giv
 #| label: tbl-diffk
 #| tbl-cap: "The posterior probability after hearing two differentially informed experts."
 master <- expand_grid(marked_ball = 0:1, 
-                      who_first = c("Ivy", "Zack"),
+                      who_first = c("Ava", "Ben"),
                       how_round = 0:1,
                       first_white = 0:20, 
                       white_remove = 0:10) %>% 
@@ -379,27 +360,27 @@ master <- expand_grid(marked_ball = 0:1,
          first_white_display = case_when(first_white %% 2 == 0 ~ first_white / 2,
                                          TRUE ~ first_white/2 - 0.5 + how_round),
          first_white_display = as.integer(first_white_display),
-         ivy_white = case_when(who_first == "Ivy" ~ first_white_display,
+         Ava_white = case_when(who_first == "Ava" ~ first_white_display,
                                TRUE ~ second_white),
-         zack_white = case_when(who_first == "Zack" ~ first_white_display,
+         Ben_white = case_when(who_first == "Ben" ~ first_white_display,
                                TRUE ~ second_white),
          first_prob = dhyper(first_white - marked_ball, 25 - marked_ball, 24 + marked_ball, 19),
          remove_prob = dhyper(white_remove, first_white - marked_ball, first_black - 1 + marked_ball, 10),
          all_prob = 1/8 * first_prob * remove_prob)
 
-player <- master %>%
-  group_by(ivy_white, zack_white) %>%
+Quinn <- master %>%
+  group_by(Ava_white, Ben_white) %>%
   summarise(prob = weighted.mean(marked_ball, all_prob), .groups = 'drop') %>%
-  rename(Ivy = ivy_white, Zack = zack_white, Probability = prob) %>%
-  mutate(Ivy = Ivy/10,
-         Zack = Zack / 10,
+  rename(Ava = Ava_white, Ben = Ben_white, Probability = prob) %>%
+  mutate(Ava = Ava/10,
+         Ben = Ben / 10,
          Probability = round(Probability, 3)) %>%
-  filter(Ivy != round(Ivy), Zack != round(Zack)) %>%
+  filter(Ava != round(Ava), Ben != round(Ben)) %>%
   pivot_wider(values_from = Probability,
-              names_from = Zack) %>%
-  rename(`Ivy/Zack` = Ivy)
+              names_from = Ben) %>%
+  rename(`Ava/Ben` = Ava)
 
-kable(player)
+kable(Quinn)
 ```
 
 And a striking thing about @tbl-diffk is how close it comes to verifying a strong form of what @Levinstein2015 calls Thrasymachus' Principle. The hearer defers to the expert with the strongest view, i.e., the view that's furthest from the prior. In contemporary terms, the hearer listens to the expert with the hottest take. It isn't an unvarnished form of that. When one says 0.5 and the other says 0.6 you end up with 0.561, not 0.6. But that's in large part because there's a good chance that the person who said 0.6 was merely rounding up as the result of a coin flip. In general, the rule in this case is find the expert credence that is furthest from the prior, and adopt it.
