@@ -17,12 +17,21 @@ categories:
   - unpublished
   - online only
   - notes
-bibliography: ../../../brian-quarto.bib
-csl: ../../../chicago-with-note.csl
+csl: chicago-author-date.csl
+bibliography: ../../brian-quarto.bib
+knitr:
+  opts_chunk:
+    dpi: 600
+    dev: "ragg_png"
 format:
   html: default
   docx:
-      reference-doc: ../../../quarto-articles-template.docx
+      reference-doc: reference-doc.docx
+      number-sections: true
+      output-file: "Mixing Experts"
+      abstract-title: ""
+      fig-height: 5
+      fig-width: 6.5
   pdf:
     output-file: "Mixing Experts"
     include-after-body: 
@@ -30,11 +39,13 @@ format:
          \noindent \vspace{2pt}
 ---
 
-# Introduction
+# Introduction {@sec-intro}
 
 As @ElkinPettigrew2025 point out, there are many reasons that we might want to pool probability functions. One reason they discuss, and which has been discussed elsewhere in the recent literature, is when there is a clash between two experts each of whom our protagonist is disposed to defer to. So imagine that our protagonist, let's call them Quinn, is disposed to defer to both Ava and Ben with respect to *p* in the sense that for any *x*, Quinn's credence in *p* conditional on one of Ava and Ben having credence *x* in *p* and nothing else, is *x*. If Quinn just knows what one expert says, they'll follow that expert. What should they do, however, if Ava and Ben disagree?
 
-Traditionally there are two kinds of answer to this. One approach says that Quinn’s credence should be a fixed function of Ava and Ben’s. For instance, Quinn’s credence should be half way between Ava and Ben’s, or perhaps it should be some more complicated mixture. Call this the formulaic approach. The other approach, the supra-Bayesian approach, says that Quinn should conditionalise on Ava and Ben’s credences. The problem traditionally with this approach was that it seems computationally infeasible. The problem is not the update, that’s just reading a number off a table, the problem is the antecedent demand it puts on Quinn to have conditional credences for everything that Ava and Ben might announce.^[For a useful overview of work on this in the twentieth century, see https://www.jstor.org/stable/1390869. In that literature they draw a three way distinction between the linear, logarithmic and supra-Bayesian approaches. In the classification I’m using, the first two are both versions of the formulaic approach. The binary division I'm using is taken from @BaccelliStewart2021, though I've tinkered with the terminology. What I'm calling a formulaic approach, they call a 'pooling' approach. I prefer to use 'pooling' for the general question of how to merge attitudes, which allows for the supra-Bayesian answer.]
+Traditionally there are two kinds of answer to this. One approach says that Quinn’s credence should be a fixed function of Ava and Ben’s. Call this the formulaic approach. There are two versions of this approach that are particularly prominent in the recent philosophical literature. The linear averaging version says that if Ava's credence in *y*, and Ben's is *z*, then Quinn's credence should be $\frac{y + z}{2}$. The (simplest form of) the geoemtric version says that instead Quinn's credence should be $\frac{\sqrt{yz}}{\sqrt{yz}\sqrt{(1-y)(1-z)}}$.^[I'm using a special case of the geometric averaging formula here. The general version is discussed in @PettigrewWeisberg2025.] I'm mostly going to set these aside however, because this isn't a paper about formulaic approaches.
+
+Instead I'll discuss the other approach, the supra-Bayesian approach. It says that Quinn should conditionalise on Ava and Ben’s credences. The problem traditionally with this approach was that it seems computationally infeasible. The problem is not the update, that’s just reading a number off a table, the problem is the antecedent demand it puts on Quinn to have conditional credences for everything that Ava and Ben might announce.^[For a useful overview of work on this in the twentieth century, see @GivensRoback1999. In the literature they discuss, thed standard taxonomy is a three-way distinction between the linear, logarithmic and supra-Bayesian approaches. In the classification I’m using, the first two are both versions of the formulaic approach. The binary division I'm using is taken from @BaccelliStewart2021, though I've tinkered with the terminology. What I'm calling a formulaic approach, they call a 'pooling' approach. I prefer to use 'pooling' for the general question of how to merge attitudes, which allows for the supra-Bayesian answer.]
 
 In general, that’s a huge problem. But there are some special cases where it can be solved. And in some of those cases, it’s possible to make some very simple generalisations about the approximate value of the solutions. Those generalisations are, I hope, interesting in their own right, and a useful constraint on what kind of formulae we might use if we are thinking of the formulaic approach as a non-ideal approximation to the ideal supra-Bayesian approach.
 
@@ -44,35 +55,34 @@ This paper is part of a broader project of arguing that ideally, this special ca
 
 The first point that I’ll make is that how Quinn should update when Ava and Ben disagree depends in part on the relationship between their evidence. That will be shown by working through some cases where changing that relationship changes how Quinn should merge the opinions. 
 
-The second point I’ll make is that in a lot of realistic cases, what Ben @Levinstein2014 calls Thrasymdhcn Principle is correct. Quinn often doesn’t go too far wrong if they defer to whichever of Ava and Ben makes the strongest, ie the most surprising, claim. 
+The second point I’ll make is that in a lot of realistic cases, what Ben @Levinstein2015 calls Thrasymdhcn Principle is correct. Quinn often doesn’t go too far wrong if they defer to whichever of Ava and Ben makes the strongest, ie the most surprising, claim. 
 
 # Setup
 
 We're assuming that Quinn regards Ava and Ben as experts about *p* in the following sense.
 
-(@expi) If Quinn learns that Ava's credence in *p* is *x*, and nothing else, they will change their credence in *p* to *x*.
+(@expa) If Quinn learns that Ava's credence in *p* is *x*, and nothing else, they will change their credence in *p* to *x*.
 
-(@expz) If Quinn learns that Ben's credence in *p* is *x*, and nothing else, they will change their credence in *p* to *x*.
+(@expb) If Quinn learns that Ben's credence in *p* is *x*, and nothing else, they will change their credence in *p* to *x*.
 
 Given that, what is the answer to this question.
 
 (@expp) If Quinn learns that Ava's credence in *p* is *y*, and Ben's credence in *p* is *z*, and nothing else, what should their credence in *p* become?
 
-The supra-Bayesian says that this case, like every other case, ideally calls for conditionalisation. Fomrally, this means that (@expi) and (@expz) are equivalent to (@expib) and (@expzb).
+The supra-Bayesian says that this case, like every other case, ideally calls for conditionalisation. Fomrally, this means that (@expa) and (@expb) are equivalent to (@expab) and (@expbb).
 
-(@expib) ∀*x*: *Cr~Q~*(*p* | *Cr~A~*(*p*) = *x*) = *x*
-(@expzb) ∀*x*: *Cr~Q~*(*p* | *Cr~B~*(*p*) = *x*) = *x*
+(@expab) ∀*x*: *Cr~Q~*(*p* | *Cr~A~*(*p*) = *x*) = *x*
+(@expbb) ∀*x*: *Cr~Q~*(*p* | *Cr~B~*(*p*) = *x*) = *x*
 
 Where *Cr~Q~*, *Cr~A~* and *Cr~B~* are Quinn, Ava and Ben's credence functions respectively. Then (@expp) gets rephrased as a request for the value of 
 
 (@exppb) *Cr~Q~*(p | *Cr~A~*(*p*) = *y* ∧ *Cr~A~*(*p*) = *z*)
 
-That's good as far as it goes, but it raises two natural questions. First, what reasonable credal functions make (@expib) and (@expzb) true, and what do they tend to say about (@exppb)? Second, given the massive work it would be for Quinn to have these conditional plans for what to do whatever Ava and Ben say, are there heuristics for approximating the value of (@exppb) realistic cases? We'll make some progress on both questions.
-
+That's good as far as it goes, but it raises two natural questions. First, what reasonable credal functions make (@expab) and (@expbb) true, and what do they tend to say about (@exppb)? Second, given the massive work it would be for Quinn to have these conditional plans for what to do whatever Ava and Ben say, are there heuristics for approximating the value of (@exppb) realistic cases? We'll make some progress on both questions.
 
 Two quick notes. First, I'm only going to look at cases where the experts are treated symmetrically. That's a restriction, but it's a useful one for letting us see the range of cases. Second, I'm going to be agreeing with @EaswaranEtAl2016 a lot, especially in the first half of the paper. I'm ultimately going to consider some different kinds of cases to what they consider - but that's a difference in focus, not a difference in conclusions. (They look at a bunch of kinds of cases that I won't consider as well; it's not like I'm going strictly beyond their work.) This paper is intended as a complement to theirs, not at all a substitute. But I think it's a valuable complement, because I'll show how some very realistic cases require a generalisation of their model, and make some suggestions for what that generalisation should look like.
 
-# Case One: Conditionally Independent Evidence
+# Case One: Conditionally Independent Evidence {#sec-cie}
 
 In our first case, the experts' evidence is as independent as possible. Here's the example we'll use to illustrate that. Carmen has an urn with 50 marbles, 25 black and 25 white. She draws one at random and marks it with invisible ink. She has a scanner that can detect which marble is marked, but no one else can distinguish it from the other marbles. Let *p* be the proposition that the marked marble is white - that's what we'll focus on from now on.
 
@@ -92,7 +102,7 @@ $$
 
 More importantly, (@indform) looks just like a special case of the central formula (Upco) that @EaswaranEtAl2016 use. And that's not surprising, since this case uses the same conditional independence assumption that they make through much of their paper. To say that *A* and *B* are conditionally independent given *C* is just to say that Pr(*A* ∧ *B* | *C*) = Pr(*A* | *C*)Pr(*B* | *C*). In this case, any pair of claims about how many white balls are in the jars shown to Ava and to Ben are conditionally independent, both conditional on *p* and on ¬*p*.
 
-(@indform) violates what @BaccelliStewart2021 call Unanimity. This principle requires that *Cr~Q~*(*p* | *Cr~A~*(*p*) = *y* ∧ *Cr~A~*(*p*) = *y*) = *y*. If (@indform) is true then Unanimity is violated in every case except where *y* equals 0, 0.5 or 1. But this is bad news for Unanimity, because the case for (@indform) in this case seems very strong. Quinn really knows how many white marbles were in each jar, and it's just a bit of algebra to get from there to (@indform) via conditionalisation. And it's very plausible that conditionalisation is the right way to update in this case, when Quinn has so much background knowledge about how Ava and Ben got their credences. So any principle incompatible with (@indform) is false.
+Equation (@indform) violates what @BaccelliStewart2021 call Unanimity. This principle requires that *Cr~Q~*(*p* | *Cr~A~*(*p*) = *y* ∧ *Cr~A~*(*p*) = *y*) = *y*. If (@indform) is true then Unanimity is violated in every case except where *y* equals 0, 0.5 or 1. But this is bad news for Unanimity, because the case for (@indform) in this case seems very strong. Quinn really knows how many white marbles were in each jar, and it's just a bit of algebra to get from there to (@indform) via conditionalisation. And it's very plausible that conditionalisation is the right way to update in this case, when Quinn has so much background knowledge about how Ava and Ben got their credences. So any principle incompatible with (@indform) is false.
 
 It turns out that varying how many marbles are in the urn Carmen starts with does not change (@indform). But changing the ratio of white marbles to black marbles in the urn does change the formula. If the proportion of the initial urn that is white is *r*, then the general result is:
 
@@ -100,16 +110,18 @@ It turns out that varying how many marbles are in the urn Carmen starts with doe
 
 Again, this isn't a new result; @EaswaranEtAl2016 [27] derive an even more general formula from which this falls out as a special case. But my way of deriving it is just different enough to be worth including.
 
-Let *A~x~* be the disjunction of all possible evidence propositions that would lead Ava to have credence *x* in *p*. In this case *A~x~* is a simple proposition that there are 10*x* white marbles in the jar, but we don't need to assume that *A~x~* will be anything like that simple. Everything that follows about *A~x~* also holds for *B~x~*, the disjunction of all possible evidence propositions that would lead Ava to have credence *x* in *p*, but I won't repeat the derivations. Since Quinn defers to Ava, i.e., (@expib) is true, we have the following proof. (All credences are Quinn's, so I'll drop the subscripts.) 
+Let *A~x~* be the disjunction of all possible evidence propositions that would lead Ava to have credence *x* in *p*. In this case *A~x~* is a simple proposition that there are 10*x* white marbles in the jar, but we don't need to assume that *A~x~* will be anything like that simple. Everything that follows about *A~x~* also holds for *B~x~*, the disjunction of all possible evidence propositions that would lead Ava to have credence *x* in *p*, but I won't repeat the derivations. Since Quinn defers to Ava, i.e., (@expab) is true, we have the following proof. (All credences are Quinn's, so I'll drop the subscripts.) 
 
-\begin{align*}
-Cr(p | A_x) &= x &&\therefore \\
-Cr(p ∧ A_x) &= x \cdot Cr(A_x) \\
- &= x (Cr(p ∧ A_x) + Cr(\neg p ∧ A_x)) &&\therefore \\
-(1-x)Cr(p ∧ A_x) &= x \cdot Cr(\neg p ∧ A_x) &&\therefore \\
-Cr(\neg p ∧ A_x) &= \frac{1-x}{x} Cr(p ∧ A_x) &&\therefore \\
-Cr(A_x | \neg p) &= \frac{(1-x)Cr(*p*)}{x\cdot Cr(\neg p)}Cr(A_x | p)
-\end{align*}
+$$
+\begin{aligned}
+Cr(p | A_x) &= x \\
+Cr(p \wedge A_x) &= x \cdot Cr(A_x) \\
+ &= x (Cr(p \wedge A_x) + Cr(\neg p \wedge A_x)) \\
+(1-x)Cr(p \wedge A_x) &= x \cdot Cr(\neg p \wedge A_x) \\
+Cr(\neg p \wedge A_x) &= \frac{1-x}{x} Cr(p \wedge A_x) \\
+Cr(A_x | \neg p) &= \frac{(1-x)Cr(p)}{x\cdot Cr(\neg p)}Cr(A_x | p)
+\end{aligned}
+$$
 
 So we know the ratio of *Cr*(*A~x~* | *p*) to *Cr*(*A~x~* | ¬*p*). That will become useful in what follows. Assuming evidentialism, what matters for (@exppb) is working out the value of *Cr*(*p* | *A~y~* ∧ *B~z~*). But we now know enough to do that.
 
@@ -132,7 +144,7 @@ $$
 And since *A~y~* and *B~z~* are independent given both *p* and ¬*p*, this becomes:
 
 $$
-\frac{Cr(A_y| p) Cr(B_z | p) Cr(*p*)}{Cr(A_y| p) Cr(B_z | p) Cr(*p*) + Cr(A_y| \neg p) Cr(B_z | \neg p) Cr(\neg p)}
+\frac{Cr(A_y| p) Cr(B_z | p) Cr(p)}{Cr(A_y| p) Cr(B_z | p) Cr(p) + Cr(A_y| \neg p) Cr(B_z | \neg p) Cr(\neg p)}
 $$
 
 If we assume the initial value of *Cr*(*p*) = *r*, and use the earlier derived fact that *Cr*(*A~x~* | ¬*p*) = ((1-*x*)*r*)/(*x*(1-*r*)*Cr*(*p*)) this becomes:
@@ -155,11 +167,9 @@ $$
 
 And that's the completely general result when the evidence the experts have is conditionally independent of both *p* and ¬*p*, and Quinn starts with credence *r* in *p*. It turns out we don't need the extra assumption that each expert has the same starting credence, because the way the case is set up, the expert's prior credences (and hence prior evidence) is screened off by the new evidence. In practice, that kind of complete screening is rare, so it's safest to use this formula when all three of them start with credence *r*.
 
-For instance, imagine that Quinn, Ava, and Ben are part of a team trying to make a new hire. There is a particular candidate Deanna that they all think is likely the best candidate. In fact, they all think it is 0.6 likely that Deanna is the best person for the job. Ava and Ben are equally good interviewers, and they each get to separately interview Deanna. They are both impressed, and each of them independently raises their credence that Deanna is the best person to 0.8. ~
+For instance, imagine that Quinn, Ava, and Ben are detectives investigating a murder, and they all think Dallas is the most likely suspect. They are, however, far from sure. Each of them has 0.6 credence that Dallas is guilty. Ava and Ben go back to scour different parts of the evidence to see what they may have missed. Quinn trusts each of them to extract correct information and update on it appropriately, and so satisfies both (@expab) and (@expbb). Ava goes over the forensic reports more carefully, and comes away with credence 0.8 that Dallas is guilty. Ben goes over the witness statements more carefully, and also comes away with credence 0.8 that Dallas is guilty. It's plausible that Ava and Ben's credences, while sensitive to Dallas's guilt and hence not independent, are conditionally independent, conditional on whether Dallas is guilty. If so, Quinn's credence on learning both Ava and Ben's new credences should rise, according to this formula, to 32/35, i.e., a little over 0.9. That violates Unanimity, but sounds fairly plausible. The fact that Ava raised her credence is evidence that Dallas is guilty. The fact that Ben raised his credence, after looking at different evidence, is further evidence that Dallas is guilty. So it's plausible that Quinn should raise their credence more when learning both these things than they would when learning just one of them. Since just learning one would raise Quinn's credence to 0.8, learning both should raise it further still.
 
-
-
-But this case is surely rare. Experts typically have some training in common that isn't shared by non-experts. So their reasons for having a credence in *p* that differs from our prior will not be completely independent. @EaswaranEtAl2016 note that sometimes we can adjust for the common evidence by conditionalising on the common evidence to come up with a new 'prior', or perhaps I should say 'intermediate' credence, *r*, then applying this formula. This is slightly more general, but still not a lot. Part of what makes us non-experts be non-experts is that we don't have this common training, so we can't identify what's common between the experts. Let's see if we can come up with a slightly more general case.
+Still, cases like this are fairly special. It's rare for a non-expert to think that two different experts have no common cause for their credences other than the truth or falsity of the target claim. The next model will help with more realistic case.
 
 # Case Two: Common Marbles
 
@@ -167,7 +177,7 @@ In our second case, Carmen once again has an urn with 50 marbles, 25 black and 2
 
 So far, it's just like the last case. But what happens next is (possibly) different. In this case, Carmen removes *m* unmarked marbles from the jar, puts them back in the urn, and draws a new set of *m* marbles to put in the jar. It's all random, so this could include some of the marbles she just removed. She shows the jar to Ben, he inspects it, and reports his credence in *p* to Quinn. And, crucially, Quinn knows *m*, the number of marbles that are in common between the jars. So *m* is a measure of the independence of the experts' opinions.
 
-Once again, we can work out precisely what Quinn's credence should be given *m*, and the two credences. Unfortunately, it's just a long formula that doesn't seem to reduce nicely. But if you've got a machine that's good at calculating hypergeometric distributions, and you dear reader are probably reading this paper on a machine that's good at calculating hypergeometric distributions, it's not that hard to calculate the values by brute force. I won't list all the values, there are several hundred of them, but I'll present them graphically in @fig-conexp. (Note I'll leave off the case where one or other expert announces a credence of 0 or 1; in that case Quinn knows whether *p* is true, so the question of how to merge the credences is easy.)
+Once again, we can work out precisely what Quinn's credence should be given *m*, and the two credences. Unfortunately, it's a long formula that doesn't seem to reduce nicely. But if you've got a machine that's good at calculating hypergeometric distributions, and you dear reader are probably reading this paper on a machine that's good at calculating hypergeometric distributions, it's not that hard to calculate the values by brute force. I won't list all the values, there are several hundred of them, but I'll present them graphically in @fig-conexp. (Note I'll leave off the case where one or other expert announces a credence of 0 or 1; in that case Quinn knows whether *p* is true, so the question of how to merge the credences is easy.)
 
 ```{r, include=FALSE}
 require(knitr)
@@ -229,7 +239,7 @@ Here is how to read the graph in @fig-conexp. Each row corresponds to a particul
 
 One notable feature of that graph is that as *m* gets larger, the final credence tends to move away from 0.5; it tends to get more opinionated. Another notable feature, though probably not one you can see in this resolution, is that this move towards greater opinionation happens in a surprisingly linear fashion. To a first approximation, Quinn's credence moves away from 0.5 roughly the same amount for each addition to *m*, at least holding *y* and *z* fixed.
 
-It's not perfectly linear, but it's much closer than I would have guessed looking at how really quite non-linear the inputs are. @fig-cap-bottom-right shows the result of zooming in on a part of the graph to see this more vividly.
+It's not perfectly linear, but it's surprisingly close to being linear. @fig-cap-bottom-right shows the result of zooming in on a part of the graph to see this more vividly.
 
 ```{r}
 #| fig-cap: "The bottom right corner of @fig-conexp"
@@ -263,12 +273,12 @@ ggplot(Quinn %>%
   labs(x="Number of marbles removed between the expert inspections", y = "Quinn's final credence in p")
 ```
 
-Why does this matter? Because pooling functions are easy to use, and the supra-Bayesian needs something to match that ease of use. It's a cliche that for every problem there is a solution that is simple, intuitive, and wrong. And the version of the pooling approach that uses linear averages is very simple, very intuitive, and very wrong. The version that uses geometric averages strikes most people as less simple and intuitive (or maybe I'm just bad at explaining it), but it is less wrong. But still, sometimes simple, intuitive and wrong is exactly what you need! Computation is hard, life is short, precision is overrated. Why not just average if you are just looking to get something roughly right?
+This matters because the big problem in practice with the supra-Bayesian approach is that it is impractical, especially in contrast with the formulaic approaches. If we're prepared to tolerate a little imprecision, it turns out that in cases like this one, there is a simple and close approximation to the supra-Bayesian answer. 
 
-The supra-Bayesian can exploit the more-or-less linearity of the graphs above graphs to come up with an approximation to these ideal Bayesian credence. And the approximation isn't that much harder to calculate than the geometric average. Intuitively, it works like this. If the experts have exactly the same evidence, we take the geometric average of their opinions.^[We are working with cases so far where there is a unique rational credence for each evidence, so if they have the same evidence they have the same credence, and which kind of averaging we use is redundant. What matters about the geometric average is how it enters into mixtures, as we're about to see.] If the experts' evidence is conditionally independent, we use the formula from @EaswaranEtAl2016 that I rederived in the last section. In between, we just need a guess *k* about what proportion of the evidence they share, and what is independent. And we use that guess to come up with an average of those two things, the geometric average and the formula for conditionally independent evidence. So our estimation of the new credence is this, where *y* and *z* are the announced credences, and *k* is the measure of independence of the evidence.
+Intuitively, the approximation works like this. Let *g* be the geometric average of Ava and Ben's opinions, as discussed in @sec-intro. That is, if Ava's credence in *p* is *y* and Ben's is *z*, the geometric average of their opinions assigns credence $\frac{\sqrt{yz}}{\sqrt{yz}\sqrt{(1-y)(1-z)}}$ to *p*. Let *h* be the credence we worked out in @sec-cie Quinn would have if they were certain that Ava and Ben's credences were conditionally independent. Let *k* be the proportion of evidence that they share; in this case the proportion of non-marked marbles that were by design put into *both* of their jars. Then roughly, Quinn's credence in *p* should be *kg* + (1—*k*)*h*. That is, it's a weighted average of the geometric mean and the value that @EaswaranEtAl2016 showed was correct in the conditional independence case, with the weights given by how much evidence Ava and Ben share. Spelling all that out, the approximate credence Quinn should have is this:
 
 $$
-(1-k)\frac{\sqrt{yz}}{\sqrt{yz} + \sqrt{(1-y)(1-z)}} + k\frac{yz}{yz + (1-y)(1-z)}
+k\frac{\sqrt{yz}}{\sqrt{yz} + \sqrt{(1-y)(1-z)}} + (1-k)\frac{yz}{yz + (1-y)(1-z)}
 $$
 
 Let's check visually how this does against the exact calculations. In the graphs that follow, starting with @fig-twoprob-bottom-right, I'll use circles for the ideally calculated posterior credences, and triangles for the estimates made using this formula.
@@ -315,9 +325,9 @@ ggplot(all_Quinn %>%
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
 
-And all through @fig-twoprob-middle the dots are overlapping. That's close enough. So at least in this special case, the supra-Bayesian can produce an estimate that is very close to the ideally calculated credence. So we don't need to resort to pooling even as an approximation device.
+And all through @fig-twoprob-middle the dots are overlapping. That's close enough. So at least in this special case, the supra-Bayesian can produce an estimate that is very close to the ideally calculated credence. The formula for it is not as trivial as adding up and dividing by two, but it's not that complicated as these things go. So if Quinn's situation resembles this common marbles case, we don't need to use an all-purpose formula as an approximation device.
 
-But the simplifications here are dire. Here are six ways we might want to generalise the model.
+To be sure, the simplifications here are dire. Here are six ways we might want to generalise the model.
 
 1. Have the prior probabilities of *p* and ¬*p* vary.
 2. Have more colors for the marbles, and have each expert announce credences over all the colors.
@@ -330,19 +340,19 @@ The first two points are not that hard. I could produce a string of graphs for d
 
 The next two points are harder. It's not that they are harder to come up with the ideal value. For any prior over *k*, or sampling technique that's available to the expert, it's pretty easy to write code to come up with the optimal calculated credences. It's rather that the number of degrees of freedom are so great that it gets a little harder to eyeball how good any given approximation is. The big point is that the posterior distribution of *k* will usually be different to the prior. In extreme cases, the announced expert credences might rule out some hypotheses about *k*. So it won't just be a matter of calculating the values of the above formula for each value of *k*, and averaging them out using the prior probabilities of *k*. There is a lot of possible future research here.
 
-Having more than two experts raises both computational questions, like what we've just discussed, and conceptual questions. The number of variables we need to specify to say how connected the experts are roughly doubles every time one ads an expert. But the point is not just that the computations of the ideal supra-Bayesian credence require an exponentially increasing number of inputs as the number of experts rises. It's that even thinking about how to approximate this ideal calculation, we need a good way to conceptualise this space whose dimensionality rises exponentially with the number of experts in a way that lets us even think about what a good approximation would look like. I don't have an answer to this; it feels like a question for future research.
+Having more than two experts raises both computational questions, like what we've just discussed, and conceptual questions. The number of variables we need to specify to say how connected the experts are roughly doubles every time one ads an expert. But the point is not just that the computations of the ideal supra-Bayesian credence require an exponentially increasing number of inputs as the number of experts rises. It's that even thinking about how to approximate this ideal calculation, we need a good way to conceptualise this space whose dimensionality rises exponentially with the number of experts in a way that lets us even think about what a good approximation would look like. I don't have an answer to this; it too feels like a question for future research.
+
+That said, there are real-life cases where even this simplified model looks like it is useful. (Run though hiring case.)
 
 What I will try to make some headway on instead is the last question, what happens if we do not assume the experts are just as well informed as each other.
 
-# Case Three: Differentially Informed Experts
+# Case Three: Differentially Informed Experts {#sec-diffinfo}
 
-In our last case, one expert is better informed than the other. Carmen first fills the jar with the marked marble and 19 randomly chosen unmarked marbles. She flips a coin to decide which expert to show this jar to. They inspect the jar, and record their credence in *p* to the nearest 0.1. (We'll come back very soon to why this is rounded.) Carmen then removes 10 unmarked marbles from the jar, chosen at random, and then shows it to the other expert. They inspect it, and come up with a new credence in *p*. Then both these recorded numbers are reported to Quinn, without any indication about who saw the larger jar and who saw the smaller one.
+In our last case, one expert is better informed than the other. Carmen first fills the jar with the marked marble and 19 randomly chosen unmarked marbles. She flips a coin to decide which expert to show this jar to. They inspect the jar, and record their credence in *p* to the nearest 0.1. (We'll come back very soon to why this is rounded. If their credence is half-way between two multiples of 0.1, as it often will be, they flip a fair coin to decide whether to round up or down.) Carmen then removes 10 unmarked marbles from the jar, chosen at random, and then shows it to the other expert. They inspect it, and come up with a new credence in *p*. Then both these recorded numbers are reported to Quinn, without any indication about who saw the larger jar and who saw the smaller one.
 
-There is a weird thing in this setup in that one of the experts reports something other than their precise credence. The reason I set up the example this way is to make it impossible for the recipient of the expert opinion to infer who saw the smaller jar. If they both reported their actual credence, it would be possible for the recipient to be told one of them has credence 0.75 in *p* and the other has credence 0.6. And then it would be obvious that the hearer should have credence 0.6 in *p*, since that's the credence of the more informed person. So I made the first person round to the nearest 0.1 to make it harder to make such inferences.
+There is a weird thing in this setup in that one of the experts reports something other than their precise credence. The reason I set up the example this way is to make it impossible for the recipient of the expert opinion to infer who saw the smaller jar. If they both reported their actual credence, it would be possible for the recipient to be told one of them has credence 0.75 in *p* and the other has credence 0.6. And then it would be obvious that the hearer should have credence 0.75 in *p*, since that's the credence of the more informed person. So I made the first person round to the nearest 0.1 to make it harder to make such inferences.
 
-Given all that setup we can work out what Quinn's credence in *p* should be given the two announcements, and I've shown the values in @tbl-diffk. (I'm rounding to three decimal places to save space.I'm leaving off the cases where one or other party announces an extremal credence - the hearer agrees with those credences, at least to three decimal places. And the 'NA' values are where it is impossible given the setup for those to be the announced values.)
-
-
+Given all that setup we can work out what Quinn's credence in *p* should be given the two announcements, and I've shown the values in @tbl-diffk. (I'm rounding to three decimal places to save space. I'm leaving off the cases where one or other party announces an extremal credence - the hearer agrees with those credences, at least to three decimal places. And the 'NA' values are where it is impossible given the setup for those to be the announced values.)
 
 ```{r}
 #| label: tbl-diffk
@@ -387,11 +397,17 @@ Quinn <- master %>%
 kable(Quinn)
 ```
 
-And a striking thing about @tbl-diffk is how close it comes to verifying a strong form of what @Levinstein2015 calls Thrasymachus' Principle. The hearer defers to the expert with the strongest view, i.e., the view that's furthest from the prior. In contemporary terms, the hearer listens to the expert with the hottest take. It isn't an unvarnished form of that. When one says 0.5 and the other says 0.6 you end up with 0.561, not 0.6. But that's in large part because there's a good chance that the person who said 0.6 was merely rounding up as the result of a coin flip. In general, the rule in this case is find the expert credence that is furthest from the prior, and adopt it.
+A striking thing about @tbl-diffk is how close it comes to verifying a strong form of what @Levinstein2015 calls Thrasymachus' Principle. The hearer defers to the expert with the strongest view, i.e., the view that's furthest from the prior. In contemporary terms, the hearer listens to the expert with the hottest take. It isn't an unvarnished form of that. When one says 0.5 and the other says 0.6 you end up with 0.561, not 0.6. But that's in large part because there's a good chance that the person who said 0.6 was merely rounding up as the result of a coin flip. In general, the rule in this case is find the expert credence that is furthest from the prior, and adopt it.
 
-There is a reason that a case like this should follow Thrasymachus' Principle. If the experts are rational, hotter takes should correspond to stronger evidence. And while it isn't impossible for the person with more evidence to have in a sense weaker evidence, the extra evidence may be full of defeaters for the first obtained evidence, it is pretty unlikely. In general, if someone is worthy of deference, and they have a strong view, they have strong evidence. If someone else has a weaker view, i.e., a view closer to the prior, the best explanation is that they simply don't have the evidence that the person with stronger view does.
+There is a reason that a case like this should follow Thrasymachus' Principle. If the experts are rational, hotter takes should correspond to stronger evidence. While it isn't impossible for the person with more evidence to have in a sense weaker evidence, the extra evidence may be full of defeaters for the first obtained evidence, it is pretty unlikely. In general, if someone is worthy of deference, and they have a strong view, they have strong evidence. If someone else has a weaker view, i.e., a view closer to the prior, the best explanation is that they simply don't have the evidence that the person with stronger view does.
 
-So again, we shouldn't pool the opinions in any interesting sense. The table shows the optimal response by supra-Bayesian lights. And the simple approximation is, "When one expert has clearly stronger views, listen to them. Otherwise take the geometric mean."
+In general, any kind of averaging in cases like these will be 
+
+
+
+
+
+So we shouldn't pool the opinions in any interesting sense. The table shows the optimal response by supra-Bayesian lights. And the simple approximation is, "When one expert has clearly stronger views, listen to them. Otherwise take the geometric mean."
 
 # Summary
 
