@@ -28,9 +28,6 @@ marginparsep=0in]{geometry}
 \usepackage{lmodern}
 \ifPDFTeX\else
   % xetex/luatex font selection
-  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
-Bold]{EB Garamond Math}
-  \setsansfont[]{EB Garamond}
   \setmathfont[]{Garamond-Math}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
@@ -183,6 +180,43 @@ Bold]{EB Garamond Math}
 \addtokomafont{disposition}{\rmfamily}
 \addtokomafont{title}{\normalfont\itshape}
 \let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
 \KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
@@ -230,7 +264,7 @@ Bold]{EB Garamond Math}
 \urlstyle{same}
 \hypersetup{
   pdftitle={Mixing Expert Opinion},
-  pdfauthor={Brian Weatherson},
+  pdfauthor={Anon},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
@@ -243,8 +277,8 @@ Bold]{EB Garamond Math}
 }
 \makeatother
 \subtitle{Three Worked Examples}
-\author{Brian Weatherson}
-\date{2021}
+\author{Anon}
+\date{2025}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -262,38 +296,126 @@ results change given different prior beliefs about this relationship.
 
 
 \setstretch{1.1}
-What should you do if two experts, each of whom you are disposed to
-defer to, disagree? The answer depends on what you know about the
-relationship between the experts' evidence. I'm going to argue for this
-dependence claim, and work through three examples that start the process
-of illustrating the nature of the dependence. The first example concerns
-a case where the evidence the experts have is maximally independent.
-This case has been well analysed by Easwaran et al.
-(\citeproc{ref-EaswaranEtAl2016}{2016}), and my main contribution is to
-offer a new (and perhaps more explanatory) proof of their primary
-conclusion. The second case is where you know what proportion of the
-experts' evidence is shared. And the third is where you know that one
-expert is more informed, but you don't know which. In each of the last
-two cases I'll show the computed exact values of the posterior
-probabilities after conditionalising on the expert credences, and also
-show some simple methods for approximating these exact values. The
-approximations are, I suspect, a little more robust when we move from
-the simple examples I'll describe to more realistic ones.
+\section{Introduction}\label{sec-intro}
 
-So let's get more precise about the question we're asking, and also give
-names to the characters in the story. (It feels weird to talk about you
-when I don't know who you are, so I prefer having named characters.)
-Assume Player regards Ivy and Zack as experts about \emph{p} in the
-following sense.
+As Elkin and Pettigrew (\citeproc{ref-ElkinPettigrew2025}{2025}) point
+out, there are many reasons that we might want to pool probability
+functions. One reason they discuss, and which has been discussed
+elsewhere in the recent literature, is when there is a clash between two
+experts each of whom our protagonist is disposed to defer to.\footnote{Important
+  recent papers on this include Gallow
+  (\citeproc{ref-Gallow2018}{2018}), Zhang
+  (\citeproc{ref-Zhang2025}{Forthcoming}), Dellsén
+  (\citeproc{ref-Dellsen2020}{2020}) and Wright
+  (\citeproc{ref-Wright2024}{forthcoming}). The first two provide formal
+  results which, I think, give us independent reason to be sceptical of
+  the Unanimity principle discussed below. The second two make important
+  points about the relationships between experts, a point that will
+  become important in Section~\ref{sec-commonmarbles}.} So imagine that
+our protagonist, let's call them Quinn, is disposed to defer to both Ava
+and Ben with respect to \emph{p} in the sense that for any \emph{x},
+Quinn's credence in \emph{p} conditional on one of Ava and Ben having
+credence \emph{x} in \emph{p} and nothing else, is \emph{x}. If Quinn
+just knows what one expert says, they'll follow that expert. What should
+they do, however, if Ava and Ben disagree?
+
+Traditionally there are two kinds of answer to this. One approach says
+that Quinn's credence should be a fixed function of Ava and Ben's. Call
+this the formulaic approach. There are two versions of this approach
+that are particularly prominent in the recent philosophical literature.
+The linear averaging version says that if Ava's credence in \emph{y},
+and Ben's is \emph{z}, then Quinn's credence should be
+\(\frac{y + z}{2}\). The (simplest form of) the geometric version says
+that instead Quinn's credence should be
+\(\frac{\sqrt{yz}}{\sqrt{yz}\sqrt{(1-y)(1-z)}}\).\footnote{I'm using a
+  special case of the geometric averaging formula here. The general
+  version is discussed in Pettigrew and Weisberg
+  (\citeproc{ref-PettigrewWeisberg2025}{forthcoming}).} I'm mostly going
+to set these aside however, because this isn't a paper about formulaic
+approaches.
+
+Instead I'll discuss the other approach, the supra-Bayesian approach. It
+says that Quinn should conditionalise on Ava and Ben's credences. The
+problem traditionally with this approach was that it seems
+computationally infeasible. The problem is not the update, that's just
+reading a number off a table, the problem is the antecedent demand it
+puts on Quinn to have conditional credences for everything that Ava and
+Ben might announce.\footnote{For a useful overview of work on this in
+  the twentieth century, see Givens and Roback
+  (\citeproc{ref-GivensRoback1999}{1999}). In the literature they
+  discuss, the standard taxonomy is a three-way distinction between the
+  linear, logarithmic and supra-Bayesian approaches. In the
+  classification I'm using, the first two are both versions of the
+  formulaic approach. The binary division I'm using is taken from
+  Baccelli and Stewart (\citeproc{ref-BaccelliStewart2021}{2021}),
+  though I've tinkered with the terminology. What I'm calling a
+  formulaic approach, they call a `pooling' approach. I prefer to use
+  `pooling' for the general question of how to merge attitudes, which
+  allows for the supra-Bayesian answer.}
+
+In general, that's a huge problem. But there are some special cases
+where it can be solved. And in some of those cases, it's possible to
+make some very simple generalisations about the approximate value of the
+solutions. Those generalisations are, I hope, interesting in their own
+right, and a useful constraint on what kind of formulae we might use if
+we are thinking of the formulaic approach as a non-ideal approximation
+to the ideal supra-Bayesian approach.
+
+The cases I'll discuss all have the following form. Quinn regards Ava
+and Ben as experts because all three of them have the same prior
+credences, Ava and Ben are better informed, and Quinn knows that Ava and
+Ben update by conditionalisation.\footnote{In Ned Hall's terminology,
+  Ava and Ben are database experts not analysis experts. See Hall
+  (\citeproc{ref-Hall2004b}{2004}) for the distinction, and Bokros
+  (\citeproc{ref-Bokros2020}{2020}) and Lane
+  (\citeproc{ref-Lane2025}{2025}) for more recent discussions about
+  whether complete deference is ever warranted outside this special
+  case.} Moreover, while Quinn doesn't know exactly what evidence Ava
+and Ben have, they do know the experiment that each performed to acquire
+that evidence, so they can form probabilistic beliefs about the results
+of those experiments. As a result, Quinn's own posterior credences can
+be a weighted average of what their credences would be if they had
+performed the experiments Ava and Ben actually performed, with the
+weights given by the probabilities the experiment turned out this or
+that way.
+
+This paper is part of a broader project of arguing that ideally, this
+special case isn't so special. That is, I think in general the ideal
+receiver of expert opinion updates by conditionalisation not just on
+what the experts say, but on hypotheses about what evidence the experts
+got that led them to say that.\footnote{This view is in turn motivated
+  by the model of testimony as evidence sharing that Frank Jackson
+  (\citeproc{ref-Jackson1987}{1987}) developed.} If that broader project
+succeeds, cases like these are really fundamental. But even if the
+project fails, it should be common ground that in the special case where
+the experts are database experts, and the receiver knows what
+experiments they performed, it gives the correct answers. And that's a
+useful guide to, and constraint on, the correct approach.
+
+The first point that I'll make is that how Quinn should update when Ava
+and Ben disagree depends in part on the relationship between their
+evidence. That will be shown by working through some cases where
+changing that relationship changes how Quinn should merge the opinions.
+
+The second point I'll make is that in some realistic cases, what Ben
+Levinstein (\citeproc{ref-Levinstein2015}{2015}) calls Thrasymachus'
+Principle is correct. Quinn often doesn't go too far wrong if they defer
+to whichever of Ava and Ben makes the strongest, ie the most surprising,
+claim.
+
+\section{Setup}\label{setup}
+
+We're assuming that Quinn regards Ava and Ben as experts about \emph{p}
+in the following sense.
 
 \begin{enumerate}
 \def\labelenumi{(\arabic{enumi})}
 \item
-  If Player learns that Ivy's credence in \emph{p} is \emph{x}, and
-  nothing else, he will change his credence in \emph{p} to \emph{x}.
+  If Quinn learns that Ava's credence in \emph{p} is \emph{x}, and
+  nothing else, they will change their credence in \emph{p} to \emph{x}.
 \item
-  If Player learns that Zack's credence in \emph{p} is \emph{x}, and
-  nothing else, he will change his credence in \emph{p} to \emph{x}.
+  If Quinn learns that Ben's credence in \emph{p} is \emph{x}, and
+  nothing else, they will change their credence in \emph{p} to \emph{x}.
 \end{enumerate}
 
 Given that, what is the answer to this question.
@@ -303,17 +425,14 @@ Given that, what is the answer to this question.
 \setcounter{enumi}{2}
 \tightlist
 \item
-  If Player learns that Ivy's credence in \emph{p} is \emph{y}, and
-  Zack's credence in \emph{p} is \emph{z}, and nothing else, what should
-  his credence in \emph{p} become?
+  If Quinn learns that Ava's credence in \emph{p} is \emph{y}, and Ben's
+  credence in \emph{p} is \emph{z}, and nothing else, what should their
+  credence in \emph{p} become?
 \end{enumerate}
 
-Following Baccelli and Stewart
-(\citeproc{ref-BaccelliStewart2021}{2021}), let's distinguish two kinds
-of answers to this question. The \emph{supra-Bayesian} says that this
-case, like every other case, calls for conditionalisation. This is going
-to be the kind of answer I defend. Here's how we spell this answer out.
-First, we rewrite (1) and (2) as (4) and (5).
+The supra-Bayesian says that this case, like every other case, ideally
+calls for conditionalisation. Formally, this means that (1) and (2) are
+equivalent to (4) and (5).
 
 \begin{enumerate}
 \def\labelenumi{(\arabic{enumi})}
@@ -321,14 +440,14 @@ First, we rewrite (1) and (2) as (4) and (5).
 \tightlist
 \item
   ∀\emph{x}:
-  \emph{Cr\textsubscript{P}}(\emph{p}~\textbar~\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{x})~=~\emph{x}
+  \emph{Cr\textsubscript{Q}}(\emph{p}~\textbar~\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{x})~=~\emph{x}
 \item
   ∀\emph{x}:
-  \emph{Cr\textsubscript{P}}(\emph{p}~\textbar~\emph{Cr\textsubscript{Z}}(\emph{p})~=~\emph{x})~=~\emph{x}
+  \emph{Cr\textsubscript{Q}}(\emph{p}~\textbar~\emph{Cr\textsubscript{B}}(\emph{p})~=~\emph{x})~=~\emph{x}
 \end{enumerate}
 
-Where \emph{Cr\textsubscript{P}}, \emph{Cr\textsubscript{I}} and
-\emph{Cr\textsubscript{Z}} are Player, Ivy and Zack's credence functions
+Where \emph{Cr\textsubscript{Q}}, \emph{Cr\textsubscript{A}} and
+\emph{Cr\textsubscript{B}} are Quinn, Ava and Ben's credence functions
 respectively. Then (3) gets rephrased as a request for the value of
 
 \begin{enumerate}
@@ -336,108 +455,15 @@ respectively. Then (3) gets rephrased as a request for the value of
 \setcounter{enumi}{5}
 \tightlist
 \item
-  \emph{Cr\textsubscript{P}}(p~\textbar~\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{y}~∧~\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{z})
+  \emph{Cr\textsubscript{Q}}(p~\textbar~\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{y}~∧~\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{z})
 \end{enumerate}
 
 That's good as far as it goes, but it raises two natural questions.
 First, what reasonable credal functions make (4) and (5) true, and what
-do they tend to say about (6)? Second, given the massive computational
-difficulty in calculating values like (6) in real time, are there
-heuristics for approximating its value in realistic cases? This paper
-aims to make progress on both questions. It offers some examples of
-reasonable credal functions satisfying (4) and (5), and uses them to
-suggest some heuristics for approximating (6) in somewhat realistic
-cases.
-
-But before we get to those answers, we should look at the other kind of
-answer Baccelli and Stewart (\citeproc{ref-BaccelliStewart2021}{2021})
-mention: pooling answers. A pooling answer to (3) says that we should
-find some function that in some way `pools' \emph{y} and \emph{z} to
-answer (3). One obvious such function is the arithmetic mean. The answer
-to (3) is just (\emph{y}~+~\emph{z})/2. Unfortunately, this won't do for
-three reasons. One reason, as proven independently by Gallow
-(\citeproc{ref-Gallow2018}{2018}) and Bradley
-(\citeproc{ref-Bradley2017}{2017}) is that it is incompatible with
-supra-Bayesianism. A second reason, as stressed by Russell, Hawthorne,
-and Buchak (\citeproc{ref-RussellEtAl2015}{2015}), is that it is in
-cases where Player defers to Ivy and Zack across a range of questions,
-this answer is incompatible with Player, Ivy and Zack all updating on
-external evidence by conditionalisation.\footnote{Note that
-  supra-Bayesianism is the view that Player should update on expert
-  testimony by conditionalisation. This objection does not assume
-  supra-Bayesianism, but does assume that conditionalisation is the
-  right rule for normal, non-testimonial, updating.} A third reason, as
-stressed by Levinstein (\citeproc{ref-Levinstein2015}{2015}) and
-Easwaran et al. (\citeproc{ref-EaswaranEtAl2016}{2016}) is that in some
-cases the intuitively correct answer to (3) is not between \emph{y} and
-\emph{z}.
-
-The last of these reasons is most pressing. The natural response to the
-first two reasons is to move to some other kind of pooling. Both
-Russell, Hawthorne, and Buchak (\citeproc{ref-RussellEtAl2015}{2015})
-and Baccelli and Stewart (\citeproc{ref-BaccelliStewart2021}{2021})
-suggest that we should use some kind of geometric pooling instead of
-linear pooling. In this context, to use geometric pooling is to give an
-answer to (3) something like\footnote{I say `something like' because you
-  might want to allow some extra parameters in the answer if, for
-  example, you want to give different weights to the two experts. That
-  kind of detail won't matter to the argument here; we're just going to
-  focus on cases where the experts are treated symmetrically.}
-
-\[
-\frac{\sqrt{yz}}{\sqrt{yz} + {\sqrt{(1-y)(1-z)}}}
-\]
-
-And that pooling function can be shown to avoid the first two reasons
-for not using linear pooling. But it can't avoid the third, and that's
-what I'm going to focus on here.
-
-There are three somewhat distinct reasons you might use pooling to
-answer (3).
-
-First, you might use it as a replacement for supra-Bayesianism. I'm
-going to argue that if you do this, you also have to give up on
-Bayesianism across the board. Sometimes the recipient of expert opinion
-can reliably infer the evidence behind the opinion reliably. In those
-cases, regular Bayesianism implies that the recipient should update on
-just that evidence. And that regular, not supra, Bayesian principle is
-enough to dispose of pooling answers.
-
-There are two more plausible uses for a pooling answer. Second, you
-might use it as a constraint on supra-Bayesianism. You could argue that
-if the values that (6) takes for various \emph{y},~\emph{z} do not look
-like some kind of pooling function, that's evidence the prior
-\emph{Cr\textsubscript{P}} was irrational to start with. And third, you
-might use it as an approximation for supra-Bayesianism. It's a lot
-easier to calculate linear or geometric means than to work out precisely
-the value of (6). Both of the last two uses are intuitively very
-plausible. One of the arguments of this paper is that they are,
-unfortunately, ultimately untenable. There just isn't much use around
-here for pooling.
-
-Pooling answers to (3) look a lot like conciliationist approaches to
-peer disagreement. Indeed, the form of pooling that uses linear
-averaging is sometimes thought to be a application of the Equal Weight
-View (\citeproc{ref-Elga2007}{Elga 2007}). Supra-Bayesian answers look
-like evidentialist approaches to peer disagreement. In particular, they
-look a lot like the Total Evidence View
-(\citeproc{ref-Lackey2010-LACWSW}{Lackey 2010}). I'm going to use an
-even older motivation for them: the evidentialist approach to testimony
-defended by Frank Jackson (\citeproc{ref-Jackson1987}{1987}). On
-Jackson's view, testimony that \emph{p} is evidence that the speaker has
-evidence for \emph{p}. The way to rationally update on it depends on
-what kind of evidence you think the speaker is likely to have, given
-they've concluded \emph{p}, and what you would (rationally) do with that
-evidence. Typically, the answer is \emph{Conclude p}. Jackson argues
-that while this is typical, it isn't always the right answer. And it
-fails to be the right answer in just the cases you shouldn't accept the
-speaker's testimony.
-
-So to simplify here, I'm going to look at some cases where Player can
-simply deduce, given one of the experts' credences, what their evidence
-must have been. And then Player will update on that evidence. As we'll
-see, different assumptions about how the evidence of the experts
-interacts leads to different answers to (3).
+do they tend to say about (6)? Second, given the massive work it would
+be for Quinn to have these conditional plans for what to do whatever Ava
+and Ben say, are there heuristics for approximating the value of (6)
+realistic cases? We'll make some progress on both questions.
 
 Two quick notes. First, I'm only going to look at cases where the
 experts are treated symmetrically. That's a restriction, but it's a
@@ -453,14 +479,13 @@ valuable complement, because I'll show how some very realistic cases
 require a generalisation of their model, and make some suggestions for
 what that generalisation should look like.
 
-\section{Case One: Conditionally Independent
-Evidence}\label{case-one-conditionally-independent-evidence}
+\section{Case One: Conditionally Independent Evidence}\label{sec-cie}
 
 In our first case, the experts' evidence is as independent as possible.
-Here's a story to think about how that could be. Carmen has an urn with
+Here's the example we'll use to illustrate that. Carmen has an urn with
 50 marbles, 25 black and 25 white. She draws one at random and marks it
 with invisible ink. She has a scanner that can detect which marble is
-marked, but no one else can tell it apart from the other marbles. Let
+marked, but no one else can distinguish it from the other marbles. Let
 \emph{p} be the proposition that the marked marble is white - that's
 what we'll focus on from now on.
 
@@ -468,36 +493,36 @@ After selecting one marble to be marked, she puts together a jar
 containing the marked marble and 9 other marbles drawn at random from
 the urn. (I'll use `urn' for where Carmen keeps all the unused marbles,
 and `jar' for what she constructs to show the experts.) She shows that
-to one of the experts, let's say Ivy. She gets to inspect the jar, i.e.,
+to one of the experts, let's say Ava. She gets to inspect the jar, i.e.,
 count how many marbles in it are white and black. She then reports to
-Player, but crucially not to Zack, her credence in \emph{p}.
+Quinn, but crucially not to Ben, her credence in \emph{p}.
 
 In this example, the next thing that happens is that Carmen takes the
 jar back, removes the 9 unmarked marbles, puts them back in the urn, and
 draws a new set of 9 marbles. (That set may overlap with the first set
 of course.) She puts these 9 in the jar, along with the marked marble,
-and shows the jar to Zack. He examines the jar, and reports to Player
-his credence in \emph{p}.
+and shows the jar to Ben. He examines the jar, and reports to Quinn his
+credence in \emph{p}.
 
-Now in this case we can work out precisely how Player should update on
+Now in this case we can work out precisely how Quinn should update on
 these two pieces of information. When one expert reports a credence of
-\emph{x} in \emph{p}, Player can infer that they saw 10\emph{x} white
+\emph{x} in \emph{p}, Quinn can infer that they saw 10\emph{x} white
 marbles. After all, what the expert knows is just that the marked marble
 is equally likely to be any of the marbles in the jar they see. So given
-\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{y} and
-\emph{Cr\textsubscript{Z}}(\emph{p})~=~\emph{z}, Player can infer how
-many white marbles were in each jar. And he can work out the probability
-of each of those jars turning up given \emph{p} and given ¬\emph{p}. And
-that's enough to plug into Bayes's Theorem to work out a posterior
-probability for \emph{p}. When you do that, you get the following
-result.
+\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{y} and
+\emph{Cr\textsubscript{B}}(\emph{p})~=~\emph{z}, Quinn can infer how
+many white marbles were in each jar. And they can work out the
+probability of each of those jars turning up given \emph{p} and given
+¬\emph{p}. And that's enough to plug into Bayes's Theorem to work out a
+posterior probability for \emph{p}. When you do that, you get the
+following result.
 
 \begin{enumerate}
 \def\labelenumi{(\arabic{enumi})}
 \setcounter{enumi}{6}
 \tightlist
 \item
-  \emph{Cr\textsubscript{P}}(p~\textbar~\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{y}~∧~\emph{Cr\textsubscript{Z}}(\emph{p})~=~\emph{z})~=~\emph{yz}/(\emph{yz}~+~(1-\emph{y})(1-\emph{z}))
+  \emph{Cr\textsubscript{Q}}(p~\textbar~\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{y}~∧~\emph{Cr\textsubscript{B}}(\emph{p})~=~\emph{z})~=~\emph{yz}/(\emph{yz}~+~(1-\emph{y})(1-\emph{z}))
 \end{enumerate}
 
 I'm not going to work through the derivation of this, because it's a
@@ -518,24 +543,21 @@ they make through much of their paper. To say that \emph{A} and \emph{B}
 are conditionally independent given \emph{C} is just to say that
 Pr(\emph{A}~∧~\emph{B}~\textbar~\emph{C})~=~Pr(\emph{A}~\textbar~\emph{C})Pr(\emph{B}~\textbar~\emph{C}).
 In this case, any pair of claims about how many white balls are in the
-jars shown to Ivy and to Zack are conditionally independent, both
+jars shown to Ava and to Ben are conditionally independent, both
 conditional on \emph{p} and on ¬\emph{p}.
 
-The right hand side of (7) also looks a lot like the geometric means
-described above. The big difference is that the square root signs have
-disappeared. And that makes a difference, because it means the result
-violates what Baccelli and Stewart
+Equation (7) violates what Baccelli and Stewart
 (\citeproc{ref-BaccelliStewart2021}{2021}) call Unanimity. This
 principle requires that
-\emph{Cr\textsubscript{P}}(\emph{p}~\textbar~\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{y}~∧~\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{y})~=~\emph{y}.
+\emph{Cr\textsubscript{Q}}(\emph{p}~\textbar~\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{y}~∧~\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{y})~=~\emph{y}.
 If (7) is true then Unanimity is violated in every case except where
 \emph{y} equals 0, 0.5 or 1. But this is bad news for Unanimity, because
-the case for (7) in this case seems very strong. Player really knows how
+the case for (7) in this case seems very strong. Quinn really knows how
 many white marbles were in each jar, and it's just a bit of algebra to
 get from there to (7) via conditionalisation. And it's very plausible
-that conditionalisation is the right way to update on evidence about how
-many marbles are in a jar. So any principle incompatible with (7) is
-false.
+that conditionalisation is the right way to update in this case, when
+Quinn has so much background knowledge about how Ava and Ben got their
+credences. So any principle incompatible with (7) is false.
 
 It turns out that varying how many marbles are in the urn Carmen starts
 with does not change (7). But changing the ratio of white marbles to
@@ -547,7 +569,7 @@ the initial urn that is white is \emph{r}, then the general result is:
 \setcounter{enumi}{7}
 \tightlist
 \item
-  \emph{Cr\textsubscript{P}}(p~\textbar~\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{y}~∧~\emph{Cr\textsubscript{I}}(\emph{p})~=~\emph{z})~=~(\emph{yz}(1-\emph{r}))/(\emph{yz}(1-\emph{r})~+~(1-\emph{y})(1-\emph{z})\emph{r})
+  \emph{Cr\textsubscript{Q}}(p~\textbar~\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{y}~∧~\emph{Cr\textsubscript{A}}(\emph{p})~=~\emph{z})~=~(\emph{yz}(1-\emph{r}))/(\emph{yz}(1-\emph{r})~+~(1-\emph{y})(1-\emph{z})\emph{r})
 \end{enumerate}
 
 Again, this isn't a new result; Easwaran et al.
@@ -555,46 +577,49 @@ Again, this isn't a new result; Easwaran et al.
 formula from which this falls out as a special case. But my way of
 deriving it is just different enough to be worth including.
 
-Let \emph{I\textsubscript{x}} be the disjunction of all possible
-evidence propositions that would lead Ivy to have credence \emph{x} in
-\emph{p}. In this case \emph{I\textsubscript{x}} is a simple proposition
+Let \emph{A\textsubscript{x}} be the disjunction of all possible
+evidence propositions that would lead Ava to have credence \emph{x} in
+\emph{p}. In this case \emph{A\textsubscript{x}} is a simple proposition
 that there are 10\emph{x} white marbles in the jar, but we don't need to
-assume that \emph{I\textsubscript{x}} will be anything like that simple.
-Everything that follows about \emph{I\textsubscript{x}} also holds for
-\emph{Z\textsubscript{x}}, the disjunction of all possible evidence
-propositions that would lead Ivy to have credence \emph{x} in \emph{p},
-but I won't repeat the derivations. Since Player defers to Ivy, i.e.,
-(4) is true, we have the following proof. (All credences are Player's,
-so I'll drop the subscripts.)
+assume that \emph{A\textsubscript{x}} will be anything like that simple.
+Everything that follows about \emph{A\textsubscript{x}} also holds for
+\emph{B\textsubscript{x}}, the disjunction of all possible evidence
+propositions that would lead Ava to have credence \emph{x} in \emph{p},
+but I won't repeat the derivations. Since Quinn defers to Ava, i.e., (4)
+is true, we have the following proof. (All credences are Quinn's, so
+I'll drop the subscripts.)
 
-\begin{align*}
-Cr(p | I_x) &= x &&\therefore \\
-Cr(p ∧ I_x) &= x \cdot Cr(I_x) \\
- &= x (Cr(p ∧ I_x) + Cr(\neg p ∧ I_x)) &&\therefore \\
-(1-x)Cr(p ∧ I_x) &= x \cdot Cr(\neg p ∧ I_x) &&\therefore \\
-Cr(\neg p ∧ I_x) &= \frac{1-x}{x} Cr(p ∧ I_x) &&\therefore \\
-Cr(I_x | \neg p) &= \frac{(1-x)Cr(*p*)}{x\cdot Cr(\neg p)}Cr(I_x | p)
-\end{align*}
+\[
+\begin{aligned}
+Cr(p | A_x) &= x \\
+Cr(p \wedge A_x) &= x \cdot Cr(A_x) \\
+ &= x (Cr(p \wedge A_x) + Cr(\neg p \wedge A_x)) \\
+(1-x)Cr(p \wedge A_x) &= x \cdot Cr(\neg p \wedge A_x) \\
+Cr(\neg p \wedge A_x) &= \frac{1-x}{x} Cr(p \wedge A_x) \\
+Cr(A_x | \neg p) &= \frac{(1-x)Cr(p)}{x\cdot Cr(\neg p)}Cr(A_x | p)
+\end{aligned}
+\]
 
 So we know the ratio of
-\emph{Cr}(\emph{I\textsubscript{x}}~\textbar~\emph{p}) to
-\emph{Cr}(\emph{I\textsubscript{x}}~\textbar~¬\emph{p}). That will
+\emph{Cr}(\emph{A\textsubscript{x}}~\textbar~\emph{p}) to
+\emph{Cr}(\emph{A\textsubscript{x}}~\textbar~¬\emph{p}). That will
 become useful in what follows. Assuming evidentialism, what matters for
 (6) is working out the value of
-\emph{Cr}(\emph{p}~\textbar~\emph{I\textsubscript{y}}~∧~\emph{Z\textsubscript{z}}).
+\emph{Cr}(\emph{p}~\textbar~\emph{A\textsubscript{y}}~∧~\emph{B\textsubscript{z}}).
 But we now know enough to do that.
 
 \[
-Cr(p | I_y ∧ Z_z) = \frac{Cr(p ∧ I_y ∧ Z_z)}{Cr(I_y ∧ Z_z)}
+Cr(p | A_y ∧ B_z) = \frac{Cr(p ∧ A_y ∧ B_z)}{Cr(A_y ∧ B_z)}
 \]
 
 Using the general fact that \emph{X} is equivalent to
-(\emph{p}~∧~\emph{X})~∨~(¬\emph{p}~∧~\emph{X}), and that Player's
-credences are probabilistic, so his credence in an exclusive disjunction
-equals the sum of the credence in the disjuncts, we know this equals.
+(\emph{p}~∧~\emph{X})~∨~(¬\emph{p}~∧~\emph{X}), and that Quinn's
+credences are probabilistic, so their credence in an exclusive
+disjunction equals the sum of the credence in the disjuncts, we know
+this equals.
 
 \[
-\frac{Cr(p ∧ I_y ∧ Z_z)}{Cr(p ∧ I_y ∧ Z_z) + Cr(\neg p ∧ I_y ∧ Z_z)}
+\frac{Cr(p ∧ A_y ∧ B_z)}{Cr(p ∧ A_y ∧ B_z) + Cr(\neg p ∧ A_y ∧ B_z)}
 \]
 
 Since
@@ -602,27 +627,27 @@ Since
 we can rewrite this as:
 
 \[
-\frac{Cr(I_y ∧ Z_z | p) Cr(*p*)}{Cr(I_y ∧ Z_z | p)Cr(*p*) + Cr(I_y ∧ Z_z | \neg p)Cr(\neg p)}
+\frac{Cr(A_y ∧ B_z | p) Cr(p)}{Cr(A_y ∧ B_z | p)Cr(p) + Cr(A_y ∧ B_z | \neg p)Cr(\neg p)}
 \]
 
-And since \emph{I\textsubscript{y}} and \emph{Z\textsubscript{z}} are
+And since \emph{A\textsubscript{y}} and \emph{B\textsubscript{z}} are
 independent given both \emph{p} and ¬\emph{p}, this becomes:
 
 \[
-\frac{Cr(I_y| p) Cr(Z_z | p) Cr(*p*)}{Cr(I_y| p) Cr(Z_z | p) Cr(*p*) + Cr(I_y| \neg p) Cr(Z_z | \neg p) Cr(\neg p)}
+\frac{Cr(A_y| p) Cr(B_z | p) Cr(p)}{Cr(A_y| p) Cr(B_z | p) Cr(p) + Cr(A_y| \neg p) Cr(B_z | \neg p) Cr(\neg p)}
 \]
 
 If we assume the initial value of \emph{Cr}(\emph{p})~=~\emph{r}, and
 use the earlier derived fact that
-\emph{Cr}(\emph{I\textsubscript{x}}~\textbar~¬\emph{p})~=~((1-\emph{x})\emph{r})/(\emph{x}(1-\emph{r})\emph{Cr}(\emph{p}))
+\emph{Cr}(\emph{A\textsubscript{x}}~\textbar~¬\emph{p})~=~((1-\emph{x})\emph{r})/(\emph{x}(1-\emph{r})\emph{Cr}(\emph{p}))
 this becomes:
 
 \[
-\frac{Cr(I_y| p) Cr(Z_z | p)r}{Cr(I_y| p) Cr(Z_z | p)r + \frac{(1-y)r}{y(1-r)} Cr(I_y| p) \frac{(1-z)r}{z(1-r)} Cr(Z_z | p) (1-r)}
+\frac{Cr(A_y| p) Cr(B_z | p)r}{Cr(A_y| p) Cr(B_z | p)r + \frac{(1-y)r}{y(1-r)} Cr(A_y| p) \frac{(1-z)r}{z(1-r)} Cr(B_z | p) (1-r)}
 \]
 
 Now we can finally eliminate
-\emph{Cr}(\emph{I\textsubscript{y}}~\textbar~\emph{p})\emph{Cr}(\emph{Z\textsubscript{z}}~\textbar~\emph{p})\emph{r}
+\emph{Cr}(\emph{A\textsubscript{y}}~\textbar~\emph{p})\emph{Cr}(\emph{B\textsubscript{z}}~\textbar~\emph{p})\emph{r}
 from the top and bottom, so this becomes:
 
 \[
@@ -636,46 +661,68 @@ Or in other words:
 \]
 
 And that's the completely general result when the evidence the experts
-has is conditionally independent of both \emph{p} and ¬\emph{p}, and
-Player starts with credence \emph{r} in \emph{p}.
+have is conditionally independent of both \emph{p} and ¬\emph{p}, and
+Quinn starts with credence \emph{r} in \emph{p}. It turns out we don't
+need the extra assumption that each expert has the same starting
+credence, because the way the case is set up, the expert's prior
+credences (and hence prior evidence) is screened off by the new
+evidence. In practice, that kind of complete screening is rare, so it's
+safest to use this formula when all three of them start with credence
+\emph{r}.
 
-But this case is surely rare. Experts typically have some training in
-common that isn't shared by non-experts. So their reasons for having a
-credence in \emph{p} that differs from our prior will not be completely
-independent. Easwaran et al. (\citeproc{ref-EaswaranEtAl2016}{2016})
-note that sometimes we can adjust for the common evidence by
-conditionalising on the common evidence to come up with a new `prior',
-or perhaps I should say `intermediate' credence, \emph{r}, then applying
-this formula. This is slightly more general, but still not a lot. Part
-of what makes us non-experts be non-experts is that we don't have this
-common training, so we can't identify what's common between the experts.
-Let's see if we can come up with a slightly more general case.
+For instance, imagine that Quinn, Ava, and Ben are detectives
+investigating a murder, and they all think Dallas is the most likely
+suspect. They are, however, far from sure. Each of them has 0.6 credence
+that Dallas is guilty. Ava and Ben go back to scour different parts of
+the evidence to see what they may have missed. Quinn trusts each of them
+to extract correct information and update on it appropriately, and so
+satisfies both (4) and (5). Ava goes over the forensic reports more
+carefully, and comes away with credence 0.8 that Dallas is guilty. Ben
+goes over the witness statements more carefully, and also comes away
+with credence 0.8 that Dallas is guilty. It's plausible that Ava and
+Ben's credences, while sensitive to Dallas's guilt and hence not
+independent, are conditionally independent, conditional on whether
+Dallas is guilty. If so, Quinn's credence on learning both Ava and Ben's
+new credences should rise, according to this formula, to 32/35, i.e., a
+little over 0.9. That violates Unanimity, but sounds fairly plausible.
+The fact that Ava raised her credence is evidence that Dallas is guilty.
+The fact that Ben raised his credence, after looking at different
+evidence, is further evidence that Dallas is guilty. So it's plausible
+that Quinn should raise their credence more when learning both these
+things than they would when learning just one of them. Since just
+learning one would raise Quinn's credence to 0.8, learning both should
+raise it further still.
 
-\section{Case Two: Common Marbles}\label{case-two-common-marbles}
+Still, cases like this are fairly special. It's rare for a non-expert to
+think that two different experts have no common cause for their
+credences other than the truth or falsity of the target claim. The next
+model will help with more realistic case.
+
+\section{Case Two: Common Marbles}\label{sec-commonmarbles}
 
 In our second case, Carmen once again has an urn with 50 marbles, 25
 black and 25 white. She draws one at random and marks it with invisible
-ink. She can tell which one this is, but no one else can. And \emph{p}
+ink. She can tell which one is marked, but no one else can. And \emph{p}
 is still the proposition that the marked marble is white - that's what
 we'll focus on from now on. After selecting the marble to be marked, she
 puts together a jar containing the marked marble and 9 other marbles
 drawn at random from the urn. She shows that to one of the experts,
-let's say Ivy. She gets to inspect the jar, i.e., count how many marbles
-in it are white and black. She then reports to Player, but crucially not
-to Zack, her credence in \emph{p}.
+let's say Ava. She gets to inspect the jar, i.e., count how many marbles
+in it are white and black. She then reports to Quinn, but crucially not
+to Ben, her credence in \emph{p}.
 
 So far, it's just like the last case. But what happens next is
 (possibly) different. In this case, Carmen removes \emph{m} unmarked
 marbles from the jar, puts them back in the urn, and draws a new set of
 \emph{m} marbles to put in the jar. It's all random, so this could
-include some of the marbles she just removed. She shows the jar to Zack,
-he inspects it, and reports his credence in \emph{p} to Player. And,
-crucially, player knows \emph{m}, the number of marbles that are in
+include some of the marbles she just removed. She shows the jar to Ben,
+he inspects it, and reports his credence in \emph{p} to Quinn. And,
+crucially, Quinn knows \emph{m}, the number of marbles that are in
 common between the jars. So \emph{m} is a measure of the independence of
 the experts' opinions.
 
-Once again, we can work out precisely what Player's credence should be
-given \emph{m}, and the two credences. Unfortunately, it's just a long
+Once again, we can work out precisely what Quinn's credence should be
+given \emph{m}, and the two credences. Unfortunately, it's a long
 formula that doesn't seem to reduce nicely. But if you've got a machine
 that's good at calculating hypergeometric distributions, and you dear
 reader are probably reading this paper on a machine that's good at
@@ -683,7 +730,7 @@ calculating hypergeometric distributions, it's not that hard to
 calculate the values by brute force. I won't list all the values, there
 are several hundred of them, but I'll present them graphically in
 Figure~\ref{fig-conexp}. (Note I'll leave off the case where one or
-other expert announces a credence of 0 or 1; in that case Player knows
+other expert announces a credence of 0 or 1; in that case Quinn knows
 whether \emph{p} is true, so the question of how to merge the credences
 is easy.)
 
@@ -691,7 +738,7 @@ is easy.)
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-conexp-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-conexp-1.png}}
 
 }
 
@@ -701,13 +748,13 @@ opinions.}
 \end{figure}%
 
 Here is how to read the graph in Figure~\ref{fig-conexp}. Each row
-corresponds to a particular credence announced by Ivy; the credence is
+corresponds to a particular credence announced by Ava; the credence is
 shown on the right. Each column corresponds to a particular credence
-announced by Zack; that credence is shown on the top. The x-axis of the
+announced by Ben; that credence is shown on the top. The x-axis of the
 individual graphs shows the value for \emph{m}, the number of marbles
-removed. And the y-axis shows Player's final credence in \emph{p}. There
+removed. And the y-axis shows Quinn's final credence in \emph{p}. There
 are more dots on some graphs than others because some combinations of
-Ivy credence, Zack credence and \emph{m} are impossible. The announced
+Ava credence, Ben credence and \emph{m} are impossible. The announced
 credences can't, by the rules of the game, differ by more than
 0.1\emph{m}.
 
@@ -716,11 +763,10 @@ final credence tends to move away from 0.5; it tends to get more
 opinionated. Another notable feature, though probably not one you can
 see in this resolution, is that this move towards greater opinionation
 happens in a surprisingly linear fashion. To a first approximation,
-Player's credence moves away from 0.5 roughly the same amount for each
+Quinn's credence moves away from 0.5 roughly the same amount for each
 addition to \emph{m}, at least holding \emph{y} and \emph{z} fixed.
 
-It's not perfectly linear, but it's much closer than I would have
-guessed looking at how really quite non-linear the inputs are.
+It's not perfectly linear, but it's surprisingly close to being linear.
 Figure~\ref{fig-cap-bottom-right} shows the result of zooming in on a
 part of the graph to see this more vividly.
 
@@ -728,7 +774,7 @@ part of the graph to see this more vividly.
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-cap-bottom-right-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-cap-bottom-right-1.png}}
 
 }
 
@@ -742,7 +788,7 @@ is not really linear; it definitely curves downwards. But as you move
 your eye upwards and leftwards in the table, the curves look much much
 straighter. The panel where they both announce 0.7 is really remarkably
 straight. If we focus on the middle of Figure~\ref{fig-conexp}, this is
-even more striking. (I've left off the cases where Zack announces a
+even more striking. (I've left off the cases where Ben announces a
 credence under 0.5 because those graphs are just mirror images of graphs
 already shown.)
 
@@ -750,7 +796,7 @@ already shown.)
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-cap-middle-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-cap-middle-1.png}}
 
 }
 
@@ -759,40 +805,32 @@ Figure~\ref{fig-conexp}}
 
 \end{figure}%
 
-Why does this matter? Because pooling functions are easy to use, and the
-supra-Bayesian needs something to match that ease of use. It's a cliche
-that for every problem there is a solution that is simple, intuitive,
-and wrong. And the version of the pooling approach that uses linear
-averages is very simple, very intuitive, and very wrong. The version
-that uses geometric averages strikes most people as less simple and
-intuitive (or maybe I'm just bad at explaining it), but it is less
-wrong. But still, sometimes simple, intuitive and wrong is exactly what
-you need! Computation is hard, life is short, precision is overrated.
-Why not just average if you are just looking to get something roughly
-right?
+This matters because the big problem in practice with the supra-Bayesian
+approach is that it is impractical, especially in contrast with the
+formulaic approaches. If we're prepared to tolerate a little
+imprecision, it turns out that in cases like this one, there is a simple
+and close approximation to the supra-Bayesian answer.
 
-The supra-Bayesian can exploit the more-or-less linearity of the graphs
-above graphs to come up with an approximation to these ideal Bayesian
-credence. And the approximation isn't that much harder to calculate than
-the geometric average. Intuitively, it works like this. If the experts
-have exactly the same evidence, we take the geometric average of their
-opinions.\footnote{We are working with cases so far where there is a
-  unique rational credence for each evidence, so if they have the same
-  evidence they have the same credence, and which kind of averaging we
-  use is redundant. What matters about the geometric average is how it
-  enters into mixtures, as we're about to see.} If the experts' evidence
-is conditionally independent, we use the formula from Easwaran et al.
-(\citeproc{ref-EaswaranEtAl2016}{2016}) that I rederived in the last
-section. In between, we just need a guess \emph{k} about what proportion
-of the evidence they share, and what is independent. And we use that
-guess to come up with an average of those two things, the geometric
-average and the formula for conditionally independent evidence. So our
-estimation of the new credence is this, where \emph{y} and \emph{z} are
-the announced credences, and \emph{k} is the measure of independence of
-the evidence.
+Intuitively, the approximation works like this. Let \emph{g} be the
+geometric average of Ava and Ben's opinions, as discussed in
+Section~\ref{sec-intro}. That is, if Ava's credence in \emph{p} is
+\emph{y} and Ben's is \emph{z}, the geometric average of their opinions
+assigns credence \(\frac{\sqrt{yz}}{\sqrt{yz}\sqrt{(1-y)(1-z)}}\) to
+\emph{p}. Let \emph{h} be the credence we worked out in
+Section~\ref{sec-cie} Quinn would have if they were certain that Ava and
+Ben's credences were conditionally independent. Let \emph{k} be the
+proportion of evidence that they share; in this case the proportion of
+non-marked marbles that were by design put into \emph{both} of their
+jars. Then roughly, Quinn's credence in \emph{p} should be
+\emph{kg}~+~(1---\emph{k})\emph{h}. That is, it's a weighted average of
+the geometric mean and the value that Easwaran et al.
+(\citeproc{ref-EaswaranEtAl2016}{2016}) showed was correct in the
+conditional independence case, with the weights given by how much
+evidence Ava and Ben share. Spelling all that out, the approximate
+credence Quinn should have is this:
 
 \[
-(1-k)\frac{\sqrt{yz}}{\sqrt{yz} + \sqrt{(1-y)(1-z)}} + k\frac{yz}{yz + (1-y)(1-z)}
+k\frac{\sqrt{yz}}{\sqrt{yz} + \sqrt{(1-y)(1-z)}} + (1-k)\frac{yz}{yz + (1-y)(1-z)}
 \]
 
 Let's check visually how this does against the exact calculations. In
@@ -805,7 +843,7 @@ using this formula.
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-twoprob-bottom-right-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-twoprob-bottom-right-1.png}}
 
 }
 
@@ -823,7 +861,7 @@ Figure~\ref{fig-twoprob-middle} shows the middle of the graph.
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-twoprob-middle-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{mixing-experts_files/figure-pdf/fig-twoprob-middle-1.png}}
 
 }
 
@@ -835,11 +873,13 @@ with estimated probabilities shown.}
 And all through Figure~\ref{fig-twoprob-middle} the dots are
 overlapping. That's close enough. So at least in this special case, the
 supra-Bayesian can produce an estimate that is very close to the ideally
-calculated credence. So we don't need to resort to pooling even as an
-approximation device.
+calculated credence. The formula for it is not as trivial as adding up
+and dividing by two, but it's not that complicated as these things go.
+So if Quinn's situation resembles this common marbles case, we don't
+need to use an all-purpose formula as an approximation device.
 
-But the simplifications here are dire. Here are six ways we might want
-to generalise the model.
+To be sure, the simplifications here are dire. Here are six ways we
+might want to generalise the model.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -882,32 +922,71 @@ lot of possible future research here.
 Having more than two experts raises both computational questions, like
 what we've just discussed, and conceptual questions. The number of
 variables we need to specify to say how connected the experts are
-roughly doubles every time one ads an expert. But the point is not just
+roughly doubles every time one adds an expert. But the point is not just
 that the computations of the ideal supra-Bayesian credence require an
 exponentially increasing number of inputs as the number of experts
 rises. It's that even thinking about how to approximate this ideal
 calculation, we need a good way to conceptualise this space whose
 dimensionality rises exponentially with the number of experts in a way
 that lets us even think about what a good approximation would look like.
-I don't have an answer to this; it feels like a question for future
+I don't have an answer to this; it too feels like a question for future
 research.
 
-What I will try to make some headway on instead is the last question,
-what happens if we do not assume the experts are just as well informed
-as each other.
+That said, there are real-life cases where even this simplified model
+looks like it is useful. Imagine that Quinn, Ava and Ben are part of an
+American academic department trying to make a new hire.\footnote{I'm
+  specifying it's American to allow for the possibility of informal
+  interviews like the ones I'll describe to matter to the verdict.} They
+each have credence 0.6 that Elsa is the best person for the job. Quinn
+learns that each of Ava and Ben have talked more with Elsa and come away
+with credence 0.8 that she's the best person for the job, and Quinn is
+sure that they would have the same credence had they sat in on either
+interview. What should they do with this pair of facts?
+
+The model in this section suggests the following procedure.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  If Quinn thinks Ava and Ben asked the exact same questions and got the
+  exact same answers, Quinn's credence should be 0.8.
+\item
+  If Quinn thinks they asked completely separate questions, and whether
+  Elsa did well on one interview is independent of how well she did on
+  the other, conditional on her suitability for the job, Quinn's
+  credence should be 32/35, as in the previous section.
+\item
+  If Quinn thinks the proportion of the two interviews that overlapped,
+  i.e., Ava and Ben asked questions that tested the same skills, is
+  \emph{k}, Quinn's credence should be 0.8\emph{k} + 32\emph{k}/35. That
+  is, it should be a weighted average of the first two, with the weight
+  being the overlap in the evidence.
+\end{enumerate}
+
+Point 3 is not mathematically precise. But it's really close; close
+enough for practical purposes. In any realistic case, the error bars in
+the estimate of \emph{k} will be many times larger than the difference
+between this linear estimate and the mathematically precise answer. So
+this is a useful estimate in realistic cases.
+
+The last example I'll go on to discuss considers what happens if we do
+not assume the experts are roughly as well informed as each other.
 
 \section{Case Three: Differentially Informed
-Experts}\label{case-three-differentially-informed-experts}
+Experts}\label{sec-diffinfo}
 
 In our last case, one expert is better informed than the other. Carmen
 first fills the jar with the marked marble and 19 randomly chosen
 unmarked marbles. She flips a coin to decide which expert to show this
 jar to. They inspect the jar, and record their credence in \emph{p} to
-the nearest 0.1. (We'll come back very soon to why this is rounded.)
+the nearest 0.1. (We'll come back very soon to why this is rounded. If
+their credence is half-way between two multiples of 0.1, as it often
+will be, they flip a fair coin to decide whether to round up or down.)
 Carmen then removes 10 unmarked marbles from the jar, chosen at random,
 and then shows it to the other expert. They inspect it, and come up with
 a new credence in \emph{p}. Then both these recorded numbers are
-reported to Player, without any indication about who saw the larger jar
+reported to Quinn, without any indication about who saw the larger jar
 and who saw the smaller one.
 
 There is a weird thing in this setup in that one of the experts reports
@@ -917,29 +996,29 @@ expert opinion to infer who saw the smaller jar. If they both reported
 their actual credence, it would be possible for the recipient to be told
 one of them has credence 0.75 in \emph{p} and the other has credence
 0.6. And then it would be obvious that the hearer should have credence
-0.6 in \emph{p}, since that's the credence of the more informed person.
+0.75 in \emph{p}, since that's the credence of the more informed person.
 So I made the first person round to the nearest 0.1 to make it harder to
 make such inferences.
 
-Given all that setup we can work out what Player's credence in \emph{p}
+Given all that setup we can work out what Quinn's credence in \emph{p}
 should be given the two announcements, and I've shown the values in
 Table~\ref{tbl-diffk}. (I'm rounding to three decimal places to save
-space.I'm leaving off the cases where one or other party announces an
+space. I'm leaving off the cases where one or other party announces an
 extremal credence - the hearer agrees with those credences, at least to
 three decimal places. And the `NA' values are where it is impossible
 given the setup for those to be the announced values.)
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1429}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0952}}@{}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1290}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0968}}@{}}
 
 \caption{\label{tbl-diffk}The posterior probability after hearing two
 differentially informed experts.}
@@ -948,7 +1027,7 @@ differentially informed experts.}
 
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedleft
-Ivy/Zack
+Ava/Ben
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 0.1
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
@@ -987,8 +1066,8 @@ Ivy/Zack
 
 \end{longtable}
 
-And a striking thing about Table~\ref{tbl-diffk} is how close it comes
-to verifying a strong form of what Levinstein
+A striking thing about Table~\ref{tbl-diffk} is how close it comes to
+verifying a strong form of what Levinstein
 (\citeproc{ref-Levinstein2015}{2015}) calls Thrasymachus' Principle. The
 hearer defers to the expert with the strongest view, i.e., the view
 that's furthest from the prior. In contemporary terms, the hearer
@@ -1001,83 +1080,100 @@ that is furthest from the prior, and adopt it.
 
 There is a reason that a case like this should follow Thrasymachus'
 Principle. If the experts are rational, hotter takes should correspond
-to stronger evidence. And while it isn't impossible for the person with
-more evidence to have in a sense weaker evidence, the extra evidence may
-be full of defeaters for the first obtained evidence, it is pretty
+to stronger evidence. While it isn't impossible for the person with more
+evidence to have in a sense weaker evidence, the extra evidence may be
+full of defeaters for the first obtained evidence, it is pretty
 unlikely. In general, if someone is worthy of deference, and they have a
 strong view, they have strong evidence. If someone else has a weaker
 view, i.e., a view closer to the prior, the best explanation is that
 they simply don't have the evidence that the person with stronger view
 does.
 
-So again, we shouldn't pool the opinions in any interesting sense. The
-table shows the optimal response by supra-Bayesian lights. And the
-simple approximation is, ``When one expert has clearly stronger views,
-listen to them. Otherwise take the geometric mean.''
+As with the model in Section~\ref{sec-cie}, this seems like it could
+reasonably model several cases involving detection. Go back to Ava and
+Ben doing another run through the evidence while Quinn is busy. In this
+case, they look at the same documents, but it's possible that one of
+them will notice something in the documents the other will not. In these
+cases we often call things like forensic reports and witness statements
+the `evidence', but here it's important if we are sympathetic to
+something like Williamson's E=K picture to distinguish the documents
+themselves from what the detectives take from the documents
+(\citeproc{ref-Williamson2000}{Williamson 2000}). In the latter sense,
+one of Ava and Ben might get more evidence from the same document
+because they observed something in them the other did not.\footnote{Compare
+  the discussion in ``A Scandal in Bohemia''
+  (\citeproc{ref-HolmesAdventures}{Conan Doyle 2015}) about how many
+  steps are in their lodgings. Holmes and Watson had access to the same
+  staircase, but Holmes took in more evidence than Watson did. In that
+  case it's not surprising which one got more evidence, but the same
+  thing can happen in more symmetric relationships.} That's a fairly
+plausible explanation of why they might come away from the same
+documents with different credences, because one of them acquired
+evidence the other did not. And in those cases, Quinn should defer to
+the one with more surprising credences.
 
-\section{Summary}\label{summary}
+In general, any kind of averaging in cases like these will not be
+respecting the evidence Quinn has. If one of Ava and Ben has a very
+surprising credence, that's evidence that they have more evidence, and
+hence are more worthy of deference. Quinn should use that higher-order
+evidence in coming to a composite view. They shouldn't average the
+opinions in any interesting sense. Table~\ref{tbl-diffk} shows the
+optimal response by supra-Bayesian lights. And the simple approximation
+is, ``When one expert has clearly stronger views, listen to them.
+Otherwise take the geometric mean.''
 
-Let's take stock of what's been covered so far.
+\section{Conclusions}\label{conclusions}
 
-\begin{itemize}
-\tightlist
-\item
-  I've argued against all three uses of pooling answers to the question
-  of how to merge expert opinions. Sometimes the pooling answer is
-  clearly wrong, often it won't be a good constraint on priors, and
-  there are better ways to approximate the correct supra-Bayesian
-  answer.
-\item
-  I've connected supra-Bayesianism to some familiar positions in
-  epistemology, the view on testimony in Jackson
-  (\citeproc{ref-Jackson1987}{1987}) and the view on disagreement in
-  Lackey (\citeproc{ref-Lackey2010-LACWSW}{2010}).
-\item
-  I've shown that if you take that approach, that conditionalising on
-  someone else's credence is just conditionalising on the fact that they
-  have evidence that rationalises such a credence by their lights, then
-  the principle Easwaran et al. (\citeproc{ref-EaswaranEtAl2016}{2016})
-  recommend for updating on the credences of others follows directly
-  from the assumptions that each expert is independently worthy of
-  deference, and the evidence the experts have is conditionally
-  independent.
-\item
-  I've developed a toy example that lets us think about cases where the
-  hearer doesn't know which parts of the evidence are in common, but
-  does know how much is in common.
-\item
-  And I've shown that in that case, the correct supra-Bayesian answer is
-  nicely approximated by a linear average of two familiar formulas.
-\item
-  I developed a toy example that lets us think about the case where one
-  expert is known to be more informed, but we aren't sure which it is.
-\item
-  And in that case I showed that what Levinstein
-  (\citeproc{ref-Levinstein2015}{2015}) calls Thrasymachus' Principle is
-  approximately right; we should defer to the `stronger', i.e., more
-  opinionated, expert.
-\end{itemize}
+There are many arguments that, ideally, we should be Bayesians. But when
+it comes to merging expert opinions, the thoroughly Bayesian approach is
+practically infeasible. One response to this is to move to some
+completely different approach, such as using linear or geometric means.
+This paper is a start at showing a different response to this problem,
+one that develops relatively simple approximations to the complex
+supra-Bayesian answers. The thought is that by having a family of
+approximations to hand, and having some of those approximations include
+variables like the amount of overlap between the experts' evidence in
+Section~\ref{sec-commonmarbles}, we can produce practical results that
+are both more plausible, and more theoretically sound, than any one
+formula.
 
-At the end of section 2 I mentioned six ways in which we might make the
-model even more general. This is very much not meant to be the last
-word. But I suspect these kinds of examples can be used to provide
-useful approximations, or guides, to real life situations where we know
-something about the relationship between the experts. The general lesson
-is that by looking at toy cases, we can provide practical advice for how
-to emulate, or at least approximate, the supra-Bayesian approach for
-merging expert opinion. And this advice will be better than the advice
-that anyone who ignores the relationship between the experts can offer.
+There are three attitudes one could take towards the urns and jars and
+marbles examples I've used in this paper. I'll describe them in
+decreasing order of philosophical commitment.
 
-But there is one last kind of relationship between experts that I
-haven't made any progress on modelling, and it is a big one. What should
-we say about cases where the experts know each others credences? This is
-an old and, to my mind, open question. For reasons that trace back to
-Aumann (\citeproc{ref-Aumann1976}{1976}), in anything like the kind of
-model I've used here, if the experts know each other's credences, they
-have to agree. And someone who knows both credences should agree with
-them. But the real world obviously contains experts who do agree to
-disagree. What to say about those cases is the biggest open questions
-around here, and I'm not sure whether this approach can help. Gallow
+One is that these kinds of examples are basically the right way to think
+about basically all problems of practical uncertainty. This is, I think,
+a plausible view, but I haven't come close to defending it here.
+
+A second is that there are many real life cases that are usefully
+modelled by these kinds of examples. That's what I have argued for here.
+The point of my cases involving detectives and search committees was to
+argue that sometimes, realistic cases are similar enough in structure to
+urns and marbles that we can model them that way. When we do that
+modelling we get mathematical results which, despite conflicting with
+principles like Unanimity, seem fairly intuitive in the particular
+cases.
+
+A third, and much weaker, position is that the kind of probabilistic
+reasoning involving urns and marbles is a good way to think about urns
+and marbles, but possibly not much else. If that's right, then the
+examples here would be less interesting than I've suggested. But note
+that even on that weak view, we still have reason to reject Unanimity,
+and we still have reason to reject the global application of any kind of
+averaging. Even if I'm wrong about the positive application of these
+models to real-life cases, the argument against unrestricted
+applications of averaging rules still goes through.
+
+The models here all do have one important idealisation in common. I've
+assumed that the experts do not know each others' credences. What should
+we say about cases where they do? This is an old and, to my mind, open
+question. For reasons that trace back to Aumann
+(\citeproc{ref-Aumann1976}{1976}), in anything like the kind of model
+I've used here, if the experts know each other's credences, they have to
+agree. And someone who knows both credences should agree with them. But
+the real world obviously contains experts who do agree to disagree. What
+to say about those cases is the biggest open questions around here, and
+I'm not sure whether this approach can help. Gallow
 (\citeproc{ref-Gallow2018}{2018}) ends his paper by raising doubts about
 whether it is rational to be disposed to defer to two different experts.
 I'm not worried about that in general; I've described three very
@@ -1096,56 +1192,91 @@ for what to do in those interesting cases.
 \begin{CSLReferences}{1}{0}
 \bibitem[\citeproctext]{ref-Aumann1976}
 Aumann, Robert J. 1976. {``Agreeing to Disagree.''} \emph{The Annals of
-Statistics} 4 (6): 1236--39. doi:
-\href{https://doi.org/10.1214/aos/1176343654}{10.1214/aos/1176343654}.
+Statistics} 4 (6): 1236--1239.
+\url{https://doi.org/10.1214/aos/1176343654}.
 
 \bibitem[\citeproctext]{ref-BaccelliStewart2021}
 Baccelli, Jean, and Rush T. Stewart. 2021. {``Support for Geometric
-Pooling.''} \emph{Review of Symbolic Logic} forthcoming. doi:
-\href{https://doi.org/doi:10.1017/S1755020320000416}{doi:10.1017/S1755020320000416}.
+Pooling.''} \emph{Review of Symbolic Logic} 16 (1): 298--337.
+\url{https://doi.org/doi:10.1017/S1755020320000416}.
 
-\bibitem[\citeproctext]{ref-Bradley2017}
-Bradley, Richard. 2017. {``Learning from Others: Conditioning Versus
-Averaging.''} \emph{Theory and Decision} 85 (1): 5--20. doi:
-\href{https://doi.org/10.1007/s11238-017-9615-y}{10.1007/s11238-017-9615-y}.
+\bibitem[\citeproctext]{ref-Bokros2020}
+Bokros, Sofia Ellinor. 2020. {``A Deference Model of Epistemic
+Authority.''} \emph{Synthese} 198 (12): 12041--12069.
+\url{https://doi.org/10.1007/s11229-020-02849-z}.
+
+\bibitem[\citeproctext]{ref-HolmesAdventures}
+Conan Doyle, Arthur. 2015. \emph{The Adventures of Sherlock Holmes}.
+Urbana, Illinois: Project Gutenberg.
+
+\bibitem[\citeproctext]{ref-Dellsen2020}
+Dellsén, Finnur. 2020. {``The Epistemic Value of Expert Autonomy.''}
+\emph{Philosophy and Phenomenological Research} 100 (2): 344--361.
+\url{https://doi.org/10.1111/phpr.12550}.
 
 \bibitem[\citeproctext]{ref-EaswaranEtAl2016}
 Easwaran, Kenny, Luke Fenton-Glynn, Christopher Hitchcock, and Joel D.
 Velasco. 2016. {``Updating on the Credences of Others: Disagreement,
 Agreement, and Synergy.''} \emph{Philosophers' Imprint} 16 (11): 1--39.
 
-\bibitem[\citeproctext]{ref-Elga2007}
-Elga, Adam. 2007. {``Reflection and Disagreement.''} \emph{No{û}s} 41
-(3): 478--502. doi:
-\href{https://doi.org/10.1111/j.1468-0068.2007.00656.x}{10.1111/j.1468-0068.2007.00656.x}.
+\bibitem[\citeproctext]{ref-ElkinPettigrew2025}
+Elkin, Lee, and Richard Pettigrew. 2025. \emph{Opinion Pooling}.
+Cambridge: Cambridge University Press.
+\url{https://doi.org/10.1017/9781009315203}.
 
 \bibitem[\citeproctext]{ref-Gallow2018}
 Gallow, J. Dmitri. 2018. {``No One Can Serve Two Epistemic Masters.''}
-\emph{Philosophical Studies} 175 (10): 2389--98. doi:
-\href{https://doi.org/10.1007/s11098-017-0964-8}{10.1007/s11098-017-0964-8}.
+\emph{Philosophical Studies} 175 (10): 2389--2398.
+\url{https://doi.org/10.1007/s11098-017-0964-8}.
+
+\bibitem[\citeproctext]{ref-GivensRoback1999}
+Givens, Geof H., and Paul J. Roback. 1999. {``Logarithmic Pooling of
+Priors Linked by a Deterministic Simulation Model.''} \emph{Journal of
+Computational and Graphical Statistics} 8 (3): 452--478.
+\url{https://doi.org/10.2307/1390869}.
+
+\bibitem[\citeproctext]{ref-Hall2004b}
+Hall, Ned. 2004. {``Two Mistakes about Credence and Chance.''}
+\emph{Australasian Journal of Philosophy} 82 (1): 93--111.
+\url{https://doi.org/10.1080/713659806}.
 
 \bibitem[\citeproctext]{ref-Jackson1987}
 Jackson, Frank. 1987. \emph{Conditionals}. Blackwell: Oxford.
 
-\bibitem[\citeproctext]{ref-Lackey2010-LACWSW}
-Lackey, Jennifer. 2010. {``What Should We Do When We Disagree.''}
-\emph{Oxford Studies in Epistemology} 3: 274--93.
+\bibitem[\citeproctext]{ref-Lane2025}
+Lane, Devin. 2025. {``Should You Defer to Individual Experts?''}
+\emph{Philosophy and Phenomenological Research} 111 (1): 216--234.
+\url{https://doi.org/10.1111/phpr.70025}.
 
 \bibitem[\citeproctext]{ref-Levinstein2015}
 Levinstein, Benjamin Anders. 2015. {``With All Due Respect: The
 Macro-Epistemology of Disagreement.''} \emph{Philosophers' Imprint} 15
 (13): 1--20.
 
-\bibitem[\citeproctext]{ref-RussellEtAl2015}
-Russell, Jeffrey Sanford, John Hawthorne, and Lara Buchak. 2015.
-{``Groupthink.''} \emph{Philosophical Studies} 172 (5): 1287--1309. doi:
-\href{https://doi.org/10.1007/s11098-014-0350-8}{10.1007/s11098-014-0350-8}.
+\bibitem[\citeproctext]{ref-PettigrewWeisberg2025}
+Pettigrew, Richard, and Jonathan Weisberg. forthcoming. {``Geometric
+Pooling: A User's Guide.''} \emph{British Journal for the Philosophy of
+Science}, forthcoming. \url{https://doi.org/10.1086/727000}.
+
+\bibitem[\citeproctext]{ref-Williamson2000}
+Williamson, Timothy. 2000. \emph{{Knowledge and its Limits}}. Oxford
+University Press.
+
+\bibitem[\citeproctext]{ref-Wright2024}
+Wright, Jack. forthcoming. {``The Value of Independence Between Experts:
+Epistemic Autonomy and Different Perspectives.''} \emph{Episteme},
+forthcoming. \url{https://doi.org/10.1017/epi.2024.20}.
+
+\bibitem[\citeproctext]{ref-Zhang2025}
+Zhang, Snow. Forthcoming. {``Coherent Combinations of Multiple Experts'
+Opinions: Another Impossibility Result.''} \emph{Theory and Decision},
+Forthcoming.
 
 \end{CSLReferences}
 
 
 
-\noindent Unpublished. Posted online in 2021.
+\noindent \vspace{2pt}
 
 
 \end{document}
