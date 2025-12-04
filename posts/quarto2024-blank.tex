@@ -1,0 +1,65 @@
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{}
+\cohead{
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
