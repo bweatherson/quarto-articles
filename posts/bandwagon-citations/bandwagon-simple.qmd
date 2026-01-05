@@ -1,0 +1,1667 @@
+---
+title: "Bandwagon Effects in Citation Data"
+abstract: |
+  Articles that reference highly cited articles tend to get more citations. This effect is dramatic if by highly cited articles we mean articles that are now highly cited. It's less dramatic, but still notable, if we mean articles that were highly cited at the time the original article was published. This should give us some pause if we use citation data for making professional decisions, such as decisions about who to hire or to fund. Comparisons of citations between authors who work in fields of differing popularity can easily be misleading.
+date: today
+draft: false
+execute:
+  echo: false
+  warning: false
+author:
+  - name: Anon 
+#    url: http://brian.weatherson.org
+#    affiliation: University of Michigan
+#    affiliation_url: https://umich.edu
+#    orcid_id: 0000-0002-0830-141X
+categories:
+  - history of analytic
+  - old version
+  - for submission
+format:
+    html:
+       css: ../trad_defn.css
+    docx:
+      prefer-html: true
+    pdf:
+      fig-format: pdf
+      fontsize: 12pt
+      linestretch: 1.3
+      output-file: "Bandwagon Effects in Citation Data"
+      geometry: "left=1in,
+                 right=1in,
+                 top=1in,
+                 bottom=1in,
+                 paperheight=11in,
+                 paperwidth=8.5in,
+                 includemp=TRUE,
+                 marginparwidth=0in,
+                 marginparsep=0in"
+      include-in-header:
+        - text: |
+            \setkomafont{descriptionlabel}{\normalfont\scshape\bfseries}
+            \usepackage{xurl}
+            \usepackage[hyphens]{url}
+            \def\UrlBreaks{\do\/\do-\do.\do=\do_}
+            \usepackage[hyphens]{url}
+            \def\UrlBreaks{\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9\do\/\do\-\do\.}
+            \cehead{
+              {{< meta title >}}
+              }
+            \cohead{
+              {{< meta title >}}
+              }
+      include-after-body: 
+        text: |
+          \noindent Draft for submission
+format-links: [html]
+bibliography: 
+  - /Users/weath/Documents/citations-2025/cslbib.yaml
+  - /Users/weath/Documents/quarto-articles/brian-quarto.bib
+nocite: MacFarlane2014
+---
+
+```{r}
+require(tidyverse)
+require(slider)
+require(stringr)
+require(knitr)
+require(lsa)
+require(wesanderson)
+
+load("/Users/weath/Documents/citations-2025/philo_bib_through_2024.RData")
+load("/Users/weath/Documents/citations-2025/philo_cite_through_2024.RData")
+
+citations <- philo_cite_through_2024 |>
+  rename(new = id, old = refs)
+articles <- philo_bib_through_2024 |>
+  select(id, year)
+```
+
+``` {r}
+#| cache: true
+
+library(tidyverse)
+
+# ============================================================================
+# ARTICLE STATISTICS: Calculate citation counts for all articles
+# ============================================================================
+
+# Count how many times each article is cited
+citation_counts <- citations |>
+  count(old, name = "n_citations") |>
+  rename(id = old)
+
+# Count how many articles each article references
+reference_counts <- citations |>
+  count(new, name = "n_references") |>
+  rename(id = new)
+
+# Identify highly cited articles (>= 100 citations)
+# Create this as a simple tibble, not a vector
+highly_cited_articles <- citation_counts |>
+  filter(n_citations >= 100) |>
+  select(id, n_citations)
+
+message(sprintf("Found %d highly cited articles (>= 100 citations)", 
+                nrow(highly_cited_articles)))
+
+# Show sample of IDs to verify we're getting both letter and number-starting IDs
+sample_ids <- highly_cited_articles |>
+  slice_head(n = 20) |>
+  pull(id)
+message("Sample IDs (first 20): ", paste(sample_ids, collapse = ", "))
+
+# Count how many highly cited articles each article references
+highly_cited_refs <- citations |>
+  semi_join(highly_cited_articles, by = c("old" = "id")) |>
+  count(new, name = "n_highly_cited_refs") |>
+  rename(id = new)
+
+# Create comprehensive article statistics
+article_stats <- articles |>
+  left_join(citation_counts, by = "id") |>
+  left_join(reference_counts, by = "id") |>
+  left_join(highly_cited_refs, by = "id") |>
+  replace_na(list(n_citations = 0, n_references = 0, n_highly_cited_refs = 0)) |>
+  mutate(
+    is_highly_cited = n_citations >= 100,
+    cites_highly_cited = n_highly_cited_refs > 0,
+    prop_refs_highly_cited = if_else(n_references > 0, 
+                                      n_highly_cited_refs / n_references, 
+                                      0)
+  )
+
+# ============================================================================
+# CORE ANALYSIS: Articles that cite highly-cited articles
+# ============================================================================
+
+# Filter to articles with at least one reference
+articles_with_refs <- article_stats |>
+  filter(n_references > 0)
+
+message(sprintf("Analyzing %d articles with at least 1 reference", 
+                nrow(articles_with_refs)))
+
+# Calculate average citations by year and number of highly-cited refs
+results_by_year_100 <- articles_with_refs |>
+  group_by(year, n_highly_cited_refs) |>
+  summarise(
+    n_articles = n(),
+    mean_citations = mean(n_citations),
+    median_citations = median(n_citations),
+    se_citations = sd(n_citations) / sqrt(n()),
+    .groups = "drop"
+  ) |>
+  filter(n_articles >= 5)  # Only keep groups with at least 5 articles
+
+# Store results for later use
+results_100 <- list(
+  by_year = results_by_year_100,
+  full_data = articles_with_refs,
+  highly_cited_ids = highly_cited_articles$id,  # Now explicitly extracting the id column
+  plot_data = results_by_year_100
+)
+
+# ============================================================================
+# COHORT ANALYSIS: Binary comparison (cites vs doesn't cite highly cited)
+# ============================================================================
+
+# Create binary variable for whether article cites any highly cited article
+cohort_data <- articles_with_refs |>
+  mutate(cites_highly_cited = n_highly_cited_refs > 0)
+
+# Compare within each year cohort
+cohort_comparison <- cohort_data |>
+  group_by(year, cites_highly_cited) |>
+  summarise(
+    n_articles = n(),
+    mean_citations = mean(n_citations),
+    median_citations = median(n_citations),
+    sd_citations = sd(n_citations),
+    .groups = "drop"
+  ) |>
+  pivot_wider(
+    names_from = cites_highly_cited,
+    values_from = c(n_articles, mean_citations, median_citations, sd_citations),
+    names_sep = "_"
+  ) |>
+  mutate(
+    diff_mean = mean_citations_TRUE - mean_citations_FALSE,
+    diff_median = median_citations_TRUE - median_citations_FALSE,
+    pct_citing = n_articles_TRUE / (n_articles_TRUE + n_articles_FALSE)
+  )
+
+cohort_results <- list(
+  cohort_comparison = cohort_comparison,
+  full_data = cohort_data,
+  plot_data = cohort_comparison
+)
+
+# ============================================================================
+# CONTROL FOR REFERENCE COUNT
+# ============================================================================
+
+# Binned analysis by total reference count
+control_data <- article_stats |>
+  filter(n_references > 0) |>
+  mutate(
+    ref_bin = cut(n_references, 
+                  breaks = c(1, 2, 3, 5, 9, 13, Inf),
+                  labels = c("1", "2", "3-4", "5-8", "9-12", "13+"),
+                  include.lowest = TRUE,
+                  right = FALSE),
+    cites_highly_cited = n_highly_cited_refs > 0
+  )
+
+binned_analysis <- control_data |>
+  group_by(year, ref_bin, cites_highly_cited) |>
+  summarise(
+    n_articles = n(),
+    mean_citations = mean(n_citations),
+    median_citations = median(n_citations),
+    .groups = "drop"
+  ) |>
+  filter(n_articles >= 5)
+
+control_results <- list(
+  binned_data = binned_analysis,
+  full_data = control_data,
+  plot_data = binned_analysis
+)
+
+# ============================================================================
+# COHORT COMPARISON: Binary (cites vs doesn't cite)
+# ============================================================================
+
+cohort_analysis <- function(citations, articles, cite_threshold = 100,
+                             min_year = NULL, max_year = NULL) {
+  
+  # Filter to specified year range if provided
+  if (!is.null(min_year) || !is.null(max_year)) {
+    articles <- articles %>%
+      filter(
+        if_else(is.null(min_year), TRUE, year >= min_year),
+        if_else(is.null(max_year), TRUE, year <= max_year)
+      )
+  }
+  
+  # Calculate citation counts
+  citation_counts <- citations %>%
+    count(old, name = "n_citations") %>%
+    rename(id = old)
+  
+  # Get reference counts for filtering
+  reference_counts <- citations %>%
+    count(new, name = "n_references") %>%
+    rename(id = new)
+  
+  articles_with_cites <- articles %>%
+    left_join(citation_counts, by = "id") %>%
+    left_join(reference_counts, by = "id") %>%
+    replace_na(list(n_citations = 0, n_references = 0)) %>%
+    filter(n_references > 0)  # Exclude articles with no references
+  
+  # Identify highly cited articles
+  highly_cited <- articles_with_cites %>%
+    filter(n_citations >= cite_threshold) %>%
+    pull(id)
+  
+  # Count highly cited references
+  citing_highly_cited <- citations %>%
+    filter(old %in% highly_cited) %>%
+    count(new, name = "n_highly_cited_refs") %>%
+    rename(id = new)
+  
+  # Create binary variable: cites any highly cited article
+  analysis_data <- articles_with_cites %>%
+    left_join(citing_highly_cited, by = "id") %>%
+    replace_na(list(n_highly_cited_refs = 0)) %>%
+    mutate(cites_highly_cited = n_highly_cited_refs > 0)
+  
+  # Compare within each year cohort
+  cohort_comparison <- analysis_data %>%
+    group_by(year, cites_highly_cited) %>%
+    summarise(
+      n_articles = n(),
+      mean_citations = mean(n_citations),
+      median_citations = median(n_citations),
+      sd_citations = sd(n_citations),
+      .groups = "drop"
+    ) %>%
+    pivot_wider(
+      names_from = cites_highly_cited,
+      values_from = c(n_articles, mean_citations, median_citations, sd_citations),
+      names_sep = "_"
+    ) %>%
+    mutate(
+      diff_mean = mean_citations_TRUE - mean_citations_FALSE,
+      diff_median = median_citations_TRUE - median_citations_FALSE,
+      pct_citing = n_articles_TRUE / (n_articles_TRUE + n_articles_FALSE)
+    )
+  
+  return(list(
+    cohort_comparison = cohort_comparison,
+    full_data = analysis_data,
+    plot_data = cohort_comparison  # Data used for plotting
+  ))
+}
+
+# ============================================================================
+# CONTROL FOR REFERENCE COUNT
+# ============================================================================
+
+control_for_reference_count <- function(citations, articles, cite_threshold = 100) {
+  
+  # Calculate citation counts
+  citation_counts <- citations %>%
+    count(old, name = "n_citations") %>%
+    rename(id = old)
+  
+  # Calculate total number of references each article has
+  reference_counts <- citations %>%
+    count(new, name = "n_references") %>%
+    rename(id = new)
+  
+  articles_with_cites <- articles %>%
+    left_join(citation_counts, by = "id") %>%
+    left_join(reference_counts, by = "id") %>%
+    replace_na(list(n_citations = 0, n_references = 0))
+  
+  # Identify highly cited articles
+  highly_cited <- articles_with_cites %>%
+    filter(n_citations >= cite_threshold) %>%
+    pull(id)
+  
+  # Count highly cited references
+  citing_highly_cited <- citations %>%
+    filter(old %in% highly_cited) %>%
+    count(new, name = "n_highly_cited_refs") %>%
+    rename(id = new)
+  
+  analysis_data <- articles_with_cites %>%
+    left_join(citing_highly_cited, by = "id") %>%
+    replace_na(list(n_highly_cited_refs = 0)) %>%
+    mutate(
+      year_factor = factor(year),
+      # Proportion of references that are to highly-cited articles
+      prop_highly_cited = if_else(n_references > 0, 
+                                   n_highly_cited_refs / n_references, 
+                                   0)
+    )
+  
+  # Model 1: Just highly-cited refs + year
+  model_1 <- lm(n_citations ~ n_highly_cited_refs + year_factor, 
+                data = analysis_data)
+  
+  # Model 2: Add total references as control
+  model_2 <- lm(n_citations ~ n_highly_cited_refs + n_references + year_factor, 
+                data = analysis_data)
+  
+  # Model 3: Use proportion instead of count
+  model_3 <- lm(n_citations ~ prop_highly_cited + n_references + year_factor, 
+                data = analysis_data)
+  
+  # Create binned analysis by total reference count
+  # Exclude articles with 0 references and use granular bins
+  binned_analysis <- analysis_data %>%
+    filter(n_references > 0) %>%  # Exclude articles with 0 references
+    mutate(
+      ref_bin = cut(n_references, 
+                    breaks = c(1, 2, 3, 5, 9, 13, Inf),
+                    labels = c("1", "2", "3-4", "5-8", "9-12", "13+"),
+                    include.lowest = TRUE,
+                    right = FALSE),
+      cites_highly_cited = n_highly_cited_refs > 0
+    ) %>%
+    group_by(year, ref_bin, cites_highly_cited) %>%
+    summarise(
+      n_articles = n(),
+      mean_citations = mean(n_citations),
+      median_citations = median(n_citations),
+      .groups = "drop"
+    ) %>%
+    filter(n_articles >= 5)
+  
+  return(list(
+    model_basic = model_1,
+    model_controlled = model_2,
+    model_proportion = model_3,
+    summary_basic = summary(model_1),
+    summary_controlled = summary(model_2),
+    summary_proportion = summary(model_3),
+    binned_data = binned_analysis,
+    full_data = analysis_data,
+    plot_data = binned_analysis  # Data used for plotting by reference bins
+  ))
+}
+
+# ============================================================================
+# TEMPORAL ANALYSIS: Highly-cited at time of publication
+# ============================================================================
+
+identify_temporal_highly_cited <- function(citations, articles, 
+                                           target_years = 2000:2015,
+                                           top_percentile = 0.3) {
+  
+  # For each target year, identify highly-cited articles as of the prior year
+  temporal_highly_cited <- map_dfr(target_years, function(target_year) {
+    
+    # Only look at citations up through the prior year
+    prior_year <- target_year - 1
+    
+    # Get articles published by prior year
+    eligible_articles <- articles %>%
+      filter(year <= prior_year) %>%
+      pull(id)
+    
+    # Count citations to these articles, only from articles published by prior year
+    citation_counts <- citations %>%
+      filter(old %in% eligible_articles) %>%
+      # Join to get publication year of citing article
+      left_join(articles %>% select(id, year), by = c("new" = "id")) %>%
+      filter(year <= prior_year) %>%
+      count(old, name = "n_citations") %>%
+      rename(id = old)
+    
+    # Join with article info
+    articles_with_cites <- articles %>%
+      filter(id %in% eligible_articles) %>%
+      left_join(citation_counts, by = "id") %>%
+      replace_na(list(n_citations = 0))
+    
+    # Find top percentile threshold (including ties)
+    threshold <- quantile(articles_with_cites$n_citations, 
+                          probs = 1 - top_percentile/100, 
+                          type = 1)
+    
+    # Get highly cited articles (including ties)
+    highly_cited_ids <- articles_with_cites %>%
+      filter(n_citations >= threshold, n_citations > 0) %>%
+      pull(id)
+    
+    tibble(
+      target_year = target_year,
+      highly_cited_id = highly_cited_ids,
+      citations_as_of = prior_year,
+      threshold = threshold
+    )
+  })
+  
+  return(temporal_highly_cited)
+}
+
+analyze_temporal_highly_cited <- function(citations, articles, 
+                                          target_years = 2000:2015,
+                                          top_percentile = 0.3) {
+  
+  # Identify what was highly cited at each point in time
+  temporal_hc <- identify_temporal_highly_cited(citations, articles, 
+                                                 target_years, top_percentile)
+  
+  # Get current citation counts
+  current_citations <- citations %>%
+    count(old, name = "n_citations") %>%
+    rename(id = old)
+  
+  # For each target year, analyze articles published that year
+  results <- map_dfr(target_years, function(target_year) {
+    
+    # Get the highly-cited list for this year
+    hc_for_year <- temporal_hc %>%
+      filter(target_year == !!target_year) %>%
+      pull(highly_cited_id)
+    
+    # Get articles published this year
+    articles_this_year <- articles %>%
+      filter(year == target_year)
+    
+    # Count how many highly-cited articles each one cites
+    citing_hc <- citations %>%
+      filter(old %in% hc_for_year, new %in% articles_this_year$id) %>%
+      count(new, name = "n_temporal_hc_refs") %>%
+      rename(id = new)
+    
+    # Get total reference count
+    total_refs <- citations %>%
+      filter(new %in% articles_this_year$id) %>%
+      count(new, name = "n_references") %>%
+      rename(id = new)
+    
+    # Combine everything and exclude articles with 0 references
+    articles_this_year %>%
+      left_join(current_citations, by = "id") %>%
+      left_join(citing_hc, by = "id") %>%
+      left_join(total_refs, by = "id") %>%
+      replace_na(list(n_citations = 0, n_temporal_hc_refs = 0, n_references = 0)) %>%
+      filter(n_references > 0) %>%  # Exclude articles with no references
+      mutate(
+        cites_temporal_hc = n_temporal_hc_refs > 0,
+        target_year = target_year,
+        n_hc_available = length(hc_for_year)
+      )
+  })
+  
+  return(list(
+    full_data = results,
+    temporal_hc_list = temporal_hc,
+    plot_data_full = results  # All article-level data for temporal analysis
+  ))
+}
+
+temporal_binary_comparison <- function(temporal_results) {
+  
+  comparison_data <- temporal_results$full_data %>%
+    group_by(year, cites_temporal_hc) %>%
+    summarise(
+      n_articles = n(),
+      mean_citations = mean(n_citations),
+      median_citations = median(n_citations),
+      sd_citations = sd(n_citations),
+      .groups = "drop"
+    ) %>%
+    pivot_wider(
+      names_from = cites_temporal_hc,
+      values_from = c(n_articles, mean_citations, median_citations, sd_citations),
+      names_sep = "_"
+    ) %>%
+    mutate(
+      diff_mean = mean_citations_TRUE - mean_citations_FALSE,
+      diff_median = median_citations_TRUE - median_citations_FALSE,
+      pct_citing = n_articles_TRUE / (n_articles_TRUE + n_articles_FALSE)
+    )
+  
+  return(comparison_data)
+}
+
+temporal_by_count <- function(temporal_results) {
+  
+  count_data <- temporal_results$full_data %>%
+    group_by(year, n_temporal_hc_refs) %>%
+    summarise(
+      n_articles = n(),
+      mean_citations = mean(n_citations),
+      median_citations = median(n_citations),
+      .groups = "drop"
+    ) %>%
+    filter(n_articles >= 5, n_temporal_hc_refs <= 10)
+  
+  return(count_data)
+}
+
+temporal_by_ref_bins <- function(temporal_results) {
+  
+  bin_data <- temporal_results$full_data %>%
+    filter(n_references > 0) %>%
+    mutate(
+      ref_bin = cut(n_references, 
+                    breaks = c(1, 2, 3, 5, 9, 13, Inf),
+                    labels = c("1", "2", "3-4", "5-8", "9-12", "13+"),
+                    include.lowest = TRUE,
+                    right = FALSE)
+    ) %>%
+    group_by(year, ref_bin, cites_temporal_hc) %>%
+    summarise(
+      n_articles = n(),
+      mean_citations = mean(n_citations),
+      median_citations = median(n_citations),
+      .groups = "drop"
+    ) %>%
+    filter(n_articles >= 3)
+  
+  return(bin_data)
+}
+
+# ============================================================================
+# VISUALIZATION FUNCTIONS
+# ============================================================================
+
+plot_citations_by_highly_cited_refs <- function(results, title_suffix = "", 
+                                                min_year = 2000, max_year = 2015,
+                                                bucket_years = NULL) {
+  
+  plot_data <- results$by_year %>%
+    filter(year >= min_year, year <= max_year) %>%
+    filter(n_highly_cited_refs <= 6)  # Focus on reasonable range
+  
+  # If bucketing years, create year groups
+  if (!is.null(bucket_years)) {
+    plot_data <- plot_data %>%
+      mutate(
+        year_bucket = cut(year, 
+                          breaks = bucket_years,
+                          include.lowest = TRUE,
+                          right = FALSE,
+                          dig.lab = 4)
+      ) %>%
+      group_by(year_bucket, n_highly_cited_refs) %>%
+      summarise(
+        mean_citations = weighted.mean(mean_citations, n_articles),
+        n_articles = sum(n_articles),
+        .groups = "drop"
+      )
+    
+    plot_data %>%
+      ggplot(aes(x = n_highly_cited_refs, y = mean_citations, 
+                 color = year_bucket)) +
+      geom_line(linewidth = 1) +
+      geom_point(aes(size = n_articles)) +
+      scale_size_continuous(range = c(1, 5)) +
+      labs(
+        title = paste("Average Citations by Number of Highly-Cited References", 
+                      title_suffix),
+        x = "Number of Highly-Cited Articles Referenced",
+        y = "Average Citations Received",
+        color = "Publication Years",
+        size = "N Articles"
+      ) +
+      theme_minimal() +
+      theme(legend.position = "right")
+  } else {
+    plot_data %>%
+      ggplot(aes(x = n_highly_cited_refs, y = mean_citations, 
+                 color = factor(year))) +
+      geom_line(alpha = 0.6) +
+      geom_point(aes(size = n_articles), alpha = 0.6) +
+      scale_size_continuous(range = c(1, 4)) +
+      labs(
+        title = paste("Average Citations by Number of Highly-Cited References", 
+                      title_suffix),
+        x = "Number of Highly-Cited Articles Referenced",
+        y = "Average Citations Received",
+        color = "Publication Year",
+        size = "N Articles"
+      ) +
+      theme_minimal() +
+      theme(legend.position = "right")
+  }
+}
+
+plot_cohort_comparison <- function(cohort_results, min_year = 1980, max_year = 2020) {
+  cohort_results$cohort_comparison %>%
+    filter(year >= min_year, year <= max_year) %>%
+    ggplot(aes(x = year)) +
+    geom_line(aes(y = mean_citations_TRUE, color = "Cites Highly-Cited")) +
+    geom_line(aes(y = mean_citations_FALSE, color = "Does Not Cite")) +
+    geom_ribbon(aes(ymin = mean_citations_FALSE, 
+                    ymax = mean_citations_TRUE),
+                alpha = 0.2) +
+    ylim(0, NA) +
+    labs(
+      title = "Average Citations: Articles That Cite vs Don't Cite Highly-Cited Work", 
+      x = "Publication Year",
+      y = "Average Citations",
+      color = ""
+    ) +
+    theme_minimal()
+}
+
+plot_by_reference_bins_detailed <- function(control_results, min_year = 2000, 
+                                             max_year = 2015, min_articles = 3) {
+  
+  filtered_data <- control_results$binned_data %>%
+    filter(year >= min_year, year <= max_year, n_articles >= min_articles)
+  
+  if (nrow(filtered_data) == 0) {
+    warning("No data to plot!")
+    return(NULL)
+  }
+  
+  # Ensure ref_bin is properly ordered as a factor
+  filtered_data <- filtered_data %>%
+    mutate(
+      ref_bin = factor(ref_bin, levels = c("1", "2", "3-4", "5-8", "9-12", "13+")),
+      cite_label = if_else(cites_highly_cited, 
+                           "Cites highly-cited", 
+                           "Doesn't cite highly-cited")
+    )
+  
+  filtered_data %>%
+    ggplot(aes(x = year, y = mean_citations, color = cite_label)) +
+    geom_line(linewidth = 0.8) +
+    geom_point(aes(size = n_articles), alpha = 0.6) +
+    facet_wrap(~ ref_bin, ncol = 3, scales = "free_y") +
+    scale_y_continuous(limits = c(0, NA)) +
+    scale_size_continuous(range = c(1, 4)) +
+    labs(
+      title = "Average Citations by Reference Count",
+      subtitle = "Comparing articles that cite vs don't cite highly-cited work (excludes articles with 0 references)",
+      x = "Publication Year",
+      y = "Average Citations",
+      color = "",
+      size = "N Articles"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "bottom")
+}
+
+plot_temporal_binary <- function(temporal_comparison) {
+  temporal_comparison %>%
+    ggplot(aes(x = year)) +
+    geom_line(aes(y = mean_citations_TRUE, color = "Cites temporally highly-cited")) +
+    geom_line(aes(y = mean_citations_FALSE, color = "Doesn't cite")) +
+    geom_ribbon(aes(ymin = mean_citations_FALSE, 
+                    ymax = mean_citations_TRUE),
+                alpha = 0.2) +
+    labs(
+      title = "Average Citations: Citing What Was Highly-Cited at Time of Publication",
+      subtitle = "Based on citation counts as of year prior to publication",
+      x = "Publication Year",
+      y = "Average Citations (current)",
+      color = ""
+    ) +
+    theme_minimal() +
+    theme(legend.position = "bottom")
+}
+
+plot_temporal_by_count <- function(temporal_count_data, bucket_years = NULL) {
+  
+  if (!is.null(bucket_years)) {
+    # Create year buckets
+    plot_data <- temporal_count_data %>%
+      mutate(
+        year_bucket = cut(year, 
+                          breaks = bucket_years,
+                          include.lowest = TRUE,
+                          right = FALSE,
+                          dig.lab = 4)
+      ) %>%
+      group_by(year_bucket, n_temporal_hc_refs) %>%
+      summarise(
+        mean_citations = weighted.mean(mean_citations, n_articles),
+        n_articles = sum(n_articles),
+        .groups = "drop"
+      )
+    
+    plot_data %>%
+      ggplot(aes(x = n_temporal_hc_refs, y = mean_citations, color = year_bucket)) +
+      geom_line(linewidth = 1) +
+      geom_point(aes(size = n_articles)) +
+      scale_size_continuous(range = c(1, 5)) +
+      labs(
+        title = "Average Citations by Number of Then-Highly-Cited References",
+        subtitle = "Highly-cited defined as of year before publication (4-year buckets, excludes 0 refs)",
+        x = "Number of Then-Highly-Cited Articles Referenced",
+        y = "Average Citations (current)",
+        color = "Publication Years",
+        size = "N Articles"
+      ) +
+      theme_minimal() +
+      theme(legend.position = "right")
+  } else {
+    # Individual years
+    temporal_count_data %>%
+      ggplot(aes(x = n_temporal_hc_refs, y = mean_citations, color = factor(year))) +
+      geom_line(alpha = 0.6) +
+      geom_point(aes(size = n_articles), alpha = 0.6) +
+      scale_size_continuous(range = c(1, 4)) +
+      labs(
+        title = "Average Citations by Number of Then-Highly-Cited References",
+        subtitle = "Highly-cited defined as of year before publication (excludes 0 refs)",
+        x = "Number of Then-Highly-Cited Articles Referenced",
+        y = "Average Citations (current)",
+        color = "Publication Year",
+        size = "N Articles"
+      ) +
+      theme_minimal() +
+      theme(legend.position = "right")
+  }
+}
+
+plot_temporal_by_ref_bins <- function(temporal_bin_data) {
+  temporal_bin_data %>%
+    mutate(
+      ref_bin = factor(ref_bin, levels = c("1", "2", "3-4", "5-8", "9-12", "13+")),
+      cite_label = if_else(cites_temporal_hc, 
+                           "Cites then-highly-cited", 
+                           "Doesn't cite")
+    ) %>%
+    ggplot(aes(x = year, y = mean_citations, color = cite_label)) +
+    geom_line(linewidth = 0.8) +
+    geom_point(aes(size = n_articles), alpha = 0.6) +
+    facet_wrap(~ ref_bin, ncol = 3, scales = "free_y") +
+    scale_y_continuous(limits = c(0, NA)) +
+    scale_size_continuous(range = c(1, 4)) +
+    labs(
+      title = "Average Citations by Reference Count (Temporal Analysis)",
+      subtitle = "Comparing articles that cited then-highly-cited vs didn't (excludes 0 references)",
+      x = "Publication Year",
+      y = "Average Citations (current)",
+      color = "",
+      size = "N Articles"
+    ) +
+    theme_minimal() +
+    theme(legend.position = "bottom")
+}
+
+# ============================================================================
+# EXAMPLE USAGE
+# ============================================================================
+
+# Note: article_stats, results_100, cohort_results, and control_results 
+# are already created above in the first code chunk
+
+# Run temporal analyses
+
+temporal_results_03 <- analyze_temporal_highly_cited(citations, articles,
+                                                      target_years = 2000:2015,
+                                                      top_percentile = 0.3)
+temporal_binary <- temporal_binary_comparison(temporal_results_03)
+temporal_counts <- temporal_by_count(temporal_results_03)
+temporal_bins <- temporal_by_ref_bins(temporal_results_03)
+
+# Access the tibbles:
+
+# 1. Article statistics (one row per article)
+# View(article_stats)
+
+# 2. Plot data tibbles:
+# View(results_100$plot_data)           # Data for by-count graph
+# View(cohort_results$plot_data)        # Data for binary comparison graph
+# View(control_results$plot_data)       # Data for reference bins graph
+# View(temporal_binary)                 # Data for temporal binary graph
+# View(temporal_counts)                 # Data for temporal by-count graph
+# View(temporal_bins)                   # Data for temporal reference bins graph
+
+# You can also access full article-level data:
+# View(results_100$full_data)           # All articles with their stats
+# View(temporal_results_03$full_data)   # All articles for temporal analysis
+
+# Create graphs
+
+# Binary cite vs doesn't cite (1980-2020)
+# plot_cohort_comparison(cohort_results, min_year = 1980, max_year = 2020)
+
+# CURRENT ANALYSIS (now-highly-cited) - 2000-2015
+# plot_citations_by_highly_cited_refs(results_100, "(threshold = 100, 4-year buckets)",
+#                                     min_year = 2000, max_year = 2015,
+#                                     bucket_years = c(2000, 2004, 2008, 2012, 2016))
+
+# Within reference-count bins - current analysis
+# plot_by_reference_bins_detailed(control_results, min_year = 2000, max_year = 2015, min_articles = 3)
+
+# TEMPORAL ANALYSIS (then-highly-cited) - 2000-2015
+# plot_temporal_binary(temporal_binary)
+
+# plot_temporal_by_count(temporal_counts, bucket_years = c(2000, 2004, 2008, 2012, 2016))
+
+# plot_temporal_by_ref_bins(temporal_bins)
+```
+
+```{r}
+# Calculate four key citation averages for articles published 2000-2015
+
+# Filter to target years
+target_articles <- article_stats |>
+  filter(year >= 2000, year <= 2015)
+
+# 1. Average citations for articles that cite now-highly-cited articles
+avg_cites_now_hc <- target_articles |>
+  filter(cites_highly_cited == TRUE) |>
+  summarise(avg_citations = mean(n_citations, na.rm = TRUE)) |>
+  pull(avg_citations)
+
+# 2. Average citations for articles that don't cite now-highly-cited articles  
+avg_no_cites_now_hc <- target_articles |>
+  filter(cites_highly_cited == FALSE) |>
+  summarise(avg_citations = mean(n_citations, na.rm = TRUE)) |>
+  pull(avg_citations)
+
+# 3. Average citations for articles that cite then-highly-cited articles
+# (Need to use temporal_results_03 which has the temporal highly-cited info)
+target_temporal <- temporal_results_03$full_data |>
+  filter(year >= 2000, year <= 2015)
+
+avg_cites_then_hc <- target_temporal |>
+  filter(cites_temporal_hc == TRUE) |>
+  summarise(avg_citations = mean(n_citations, na.rm = TRUE)) |>
+  pull(avg_citations)
+
+# 4. Average citations for articles that don't cite then-highly-cited articles
+avg_no_cites_then_hc <- target_temporal |>
+  filter(cites_temporal_hc == FALSE) |>
+  summarise(avg_citations = mean(n_citations, na.rm = TRUE)) |>
+  pull(avg_citations)
+
+# Print results
+# cat("Articles published 2000-2015:\n")
+# cat(sprintf("1. Avg citations (cites now-highly-cited): %.2f\n", avg_cites_now_hc))
+# cat(sprintf("2. Avg citations (doesn't cite now-highly-cited): %.2f\n", avg_no_cites_now_hc))
+# cat(sprintf("3. Avg citations (cites then-highly-cited): %.2f\n", avg_cites_then_hc))
+# cat(sprintf("4. Avg citations (doesn't cite then-highly-cited): %.2f\n", avg_no_cites_then_hc))
+```
+
+# Overview
+
+This paper concerns a striking fact about the way philosophy journal articles are cited in philosophy journals. Articles that reference highly cited articles get many more citations. As @fig-cohort-comparison-all-time shows, this effect can be rather large.
+
+```{r}
+#| label: fig-cohort-comparison-all-time
+
+plot_cohort_comparison(cohort_results, min_year = 1965, max_year = 2020)
+```
+
+The early years and the late years in that data are rather noisy. In the early years, because few of the articles we'll call 'highly cited' have even been published, one of the lines is an average of very few articles. In the late years, there hasn't been enough time to see stable citation patterns. So for this paper I'll largely focus on the years 2000 to 2015; those are papers that were published late enough to cite the articles now highly cited in philosophy, and also early enough to be frequently cited themselves. @fig-cohort-comparison-peak-years is a restriction of @fig-cohort-comparison-all-time to the period I'll focus on, i.e., 2000-2015. 
+
+```{r}
+#| label: fig-cohort-comparison-peak-years
+
+plot_cohort_comparison(cohort_results, min_year = 2000, max_year = 2015)
+```
+
+Across those years, articles that cite highly cited articles are themselves cited an average of `r round(avg_cites_now_hc,1)` times, while those that do not are cited an average of `r round(avg_no_cites_now_hc,1)` times. To be clear, this is how often they are cited in philosophy journals; we're not counting citations in journals in other disciplines, or in books, book chapters, edited volumes, theses, draft papers, handouts, or all the other things that one sees in, e.g., Google Scholar. If you've only ever looked at citations on Google Scholar, the absolute citation numbers here might look a little small. But what's striking is the ratio. It's not obvious that one of these numbers should be more than three times larger than the other.
+
+The point of this paper is to explore why this ratio is so large, and what it tells us about the nature of citation data. Given the uses to which citation data is put in professional settings, where they are often used as an important consideration in hiring, promotion, and funding decisions, this discrepancy might be worrying. One might think that it's only reasonable to use citations in these decisions if citations are a guide to quality. But it's implausible that simply citing something that a lot of other people cite makes the paper three times better. The easiest first interpretation of the data is that citation metrics are little more than a popularity contest, and like all popularity contests they are subject to bandwagon effects. If so, they shouldn't have any serious role to play in professional decisions.
+
+I'm going to argue for a moderate position between these extremes. Citation data are still useful, when used cautiously, but they are not a great measure of the quality of papers being cited. They are a much better measure of the _influence_ of those papers. Since it's plausible to give some weight to how influential an academic's work is in decisions about promotion and funding, it is reasonable to give some weight to citations in making those decisions.
+
+The primary argument for this will be empirical. Once we look more closely at the citation data, we'll see a few things that aren't consistent with the popularity contest story, and are better explained by the idea that citations measure influence.
+
+# The Optimist and the Pessimist
+
+In this section I'll set out three views about what citations measure, and present some initial evidence that citations track influence rather than quality. I'll start with two views that are opposed to mine in opposite directions, then end with the position I want to defend.
+
+The figure I'll call the _optimist_ says that citations are a measure of the quality of the cited work. The optimist doesn't think this is a perfect measure, but they think they are a pretty good first guide. Hence, they say, it's reasonable to give citation data a strong weight in professional decisions. They are, says the optimist, the best guide we have to the collective judgment about the quality of philosophical work, and it's always good to listen to as many voices as possible when trying to come to a decision about how good some work is.
+
+The pessimist, on the other hand, says that citations measure little more than popularity. They are no more suitable an input into professional decisions than judgments about how well-liked, or good-looking, the authors of papers are. In fact, they think, sometimes they are in fact reflective of who the citing author likes, or perhaps thinks is good-looking. So we should do away with them, and make professional decisions solely by careful study of published works.
+
+I plan to defend a glass half-full approach. Citations do measure something of professional importance, but it isn't _quality_, at least in the first instance. Rather, it is _influence_. Highly cited papers are more influential. 
+
+The main evidence for this comes from a surprising pattern in the data. If citations measure influence rather than quality or mere popularity, we should expect that papers which cite *currently* highly-cited work benefit more than papers which cited work that was *already* highly-cited at the time. This is because influence is built through networks of mutually-reinforcing work, while quality is intrinsic and popularity should peak when work is most visible. And, as we'll see, that's exactly what we do find.
+
+If citations measure influence, they can still be professionally important. Other things equal, it is better to assign resources to people who will make a difference rather than those who will not. (At least if we think the work has at least some merit.) So knowing that an academic's work is influential is important in making professional decisions.
+
+But data about influence needs to be treated with caution. Whether a work is influential turns on a host of contingent factors outside anyone's control. Most notably, most influential works become influential by being embedded in a larger literature, and the author who is so embedded rarely deserves credit for the existence of that larger literature. Nor does someone who works on topics on which no one else has anything interesting to say deserve to be receive less credit merely on that ground. Further, whether later academics are influenced by an academic's work can be affected by all sorts of biases and prejudices. So I wouldn't defend all the uses of citation data in professional settings that the optimist would defend. But nor would I dismiss them as mere popularity measures, like the pessimist would.
+
+There is one very striking data point in favour of the optimist's view. @tbl-most-cited shows the articles that are most cited in the database I'm using for this paper. I'll describe what that database is in more details in @sec-methodology, but the short version is that I looked at one hundred prominent, English-language, analytic philosophy journals. In those journals, I found every refernce to an article in one of those journals from the time to journal started being indexed by Web of Science through 2024. That produced `r nrow(citations)` citations in `r nrow(articles)` articles. The twenty most cited articles are displayed in @tbl-most-cited.
+
+```{r}
+#| label: tbl-most-cited
+#| tbl-cap: "Twenty most cited articles"
+
+# Table of twenty most cited articles
+
+top_twenty <- article_stats |>
+  arrange(desc(n_citations)) |>
+  head(20) |>
+  left_join(philo_bib_through_2024 |> select(id, title), by = "id") |>
+  mutate(
+    Reference = paste0("@", str_replace_all(id, ":", ""))
+  ) |>
+  select(Reference, Title = title, Citations = n_citations)
+
+kable(top_twenty)
+```
+
+Claims about philosophical quality are notoriously contentious, but hopefully most readers will agree that those papers are, collectively, pretty good. It would be very hard to find a set of twenty papers with no citations at all which are just as good.
+
+Still, there are reasons to push back against the optimist even here. If the question is whether citations measure quality or influence, this table is far from decisive. After all, these are also quite clearly very influential paper.
+
+And even the pessimist might raise some worries. The authors are all white and almost all male, and the papers are all from a quarter century ago. Is it really plausible that all the best work is so clustered?
+
+The optimist might make two points in reply. On the age of the papers, they might insist that citations need to be adjusted for the age of the paper before being used as a quality measure. After all, a paper from 1975 being cited fifty times in fifty years seems less striking than a paper from two years ago being cited fifty times in two years. On the demographics, they might concede that this was a problem, but that the discipline is getting somewhat better in appreciating work that isn't by white men. The data _somewhat_ bears out this claim. In @tbl-most-cited-2020s, I've listed the papers that are most cited in the database in articles published in the 2020s.
+
+```{r}
+#| label: tbl-most-cited-2020s
+#| tbl-cap: "Twenty most cited articles (citations from 2020-2024 only)"
+
+# Table of twenty most cited articles (citations from 2020-2024 only)
+
+# Calculate citations received in 2020-2024
+recent_citation_counts <- citations |>
+  left_join(articles |> select(id, year), by = c("new" = "id")) |>
+  filter(year >= 2020, year <= 2024) |>
+  count(old, name = "n_citations_2020_2024") |>
+  rename(id = old)
+
+top_twenty_recent <- recent_citation_counts |>
+  arrange(desc(n_citations_2020_2024)) |>
+  head(20) |>
+  left_join(philo_bib_through_2024 |> select(id, title), by = "id") |>
+  mutate(
+    Reference = paste0("@", str_replace_all(id, ":", ""))
+  ) |>
+  select(Reference, Title = title, Citations = n_citations_2020_2024)
+
+kable(top_twenty_recent)
+```
+
+I'll leave it to the reader to judge whether this is a sufficiently diverse group of authors to adequately respond to the pessimist's charge. For present purposes, I want to look at a different point, one that I think supports the story that citations measure influence rather than quality.
+
+Some papers appear on just one of @tbl-most-cited and @tbl-most-cited-2020s. I'll focus on two prominent such papers, Sally Haslanger's "Gender and Race", and Frank Jackson's "Epiphenomenal Qualia". @fig-haslanger and @fig-jackson show how often those papers are cited each year since their publication, as a proportion of all citations that year.^[The normalisation is crucial because the number of citations per year has exploded in the 2020s.]
+
+```{r}
+#| cache: TRUE
+
+# Function to plot citation frequency over time for a specific article
+# y-axis: citations per thousand total citations in that year
+
+plot_article_citation_frequency <- function(article_id, citations, articles, 
+                                           min_year = NULL, max_year = NULL) {
+  
+  # Calculate total citations per year (across all articles)
+  total_cites_per_year <- citations |>
+    left_join(articles |> select(id, year), by = c("new" = "id")) |>
+    filter(!is.na(year)) |>
+    count(year, name = "total_citations")
+  
+  # Calculate citations to this specific article per year
+  article_cites_per_year <- citations |>
+    filter(old == article_id) |>
+    left_join(articles |> select(id, year), by = c("new" = "id")) |>
+    filter(!is.na(year)) |>
+    count(year, name = "article_citations")
+  
+  # Combine and calculate per-thousand rate
+  plot_data <- total_cites_per_year |>
+    left_join(article_cites_per_year, by = "year") |>
+    replace_na(list(article_citations = 0)) |>
+    mutate(
+      citations_per_thousand = (article_citations / total_citations) * 1000
+    )
+  
+  # Filter years if specified
+  if (!is.null(min_year)) {
+    plot_data <- plot_data |> filter(year >= min_year)
+  }
+  if (!is.null(max_year)) {
+    plot_data <- plot_data |> filter(year <= max_year)
+  }
+  
+  # Create caption with markdown reference format
+  # Remove colons and add @ prefix
+  caption_ref <- paste0("@", str_replace_all(article_id, ":", ""))
+  
+  # Create the plot
+  plot_data |>
+    ggplot(aes(x = year, y = citations_per_thousand)) +
+    geom_line(linewidth = 1, color = "steelblue") +
+    geom_point(size = 2, color = "steelblue") +
+    labs(
+#      caption = caption_ref,
+      x = "Year",
+      y = "Citations per 1000 total citations"
+    ) +
+    theme_minimal()
+}
+
+# Example usage:
+# plot_article_citation_frequency("some_article_id", citations, articles)
+# plot_article_citation_frequency("some_article_id", citations, articles, 
+#                                 min_year = 2000, max_year = 2020)
+```
+
+```{r}
+#| label: fig-haslanger
+#| fig-cap: "Citation frequency for @WOS000085841900002"
+
+plot_article_citation_frequency("WOS:000085841900002", citations, articles, min_year = 2000, max_year = 2024)
+```
+
+```{r}
+#| label: fig-jackson
+#| fig-cap: "Citation frequency for @WOSA1982NH65300003"
+
+plot_article_citation_frequency("WOS:A1982NH65300003", citations, articles, min_year = 1982, max_year = 2024)
+```
+
+It's hard to make sense of changes in citation patterns like this on the strongest version of the optimist story. If citations measure quality, do we have to say that "Gender and Race" is three or four times better now than it was a few years ago, while "Epiphenomenal Qualia" is three or four times worse? That's barely a coherent claim. Even if we admit that the optimist just claims citations are a noisy measure, the ranges here indicate that there is quite a lot of noise indeed.
+
+A more plausible thing to say is that "Gender and Race" is much more influential than it used to be, while "Epiphenomenal Qualia" is considerably less influential than it used to be. On the 'influence' model of citations, one implication of @fig-haslanger and @fig-jackson is that no one paper is now as influential as "Epiphenonemal Qualia" was for two decades. That actually sounds plausible to me; it's a sign of how much more specialised philosophy has become.
+
+The pessimist can also use a feature of @tbl-most-cited and @tbl-most-cited-2020s to argue for their view. The range of subjects of those papers does not reflect the range of things philosophers write about. There is no history of philosophy, no aesthetics, and no philosophy of religion. There is very little philosophy of science, or political philosophy, and not much ethics.^[Precisely how much there is in each of these categories depends on just how one draws the subdiscipliniary boundaries. But however one draws them, these topics are under-represented in the tables relative to their contribution to philosophy.]
+
+There are two straightforward reasons for these facts. One is that journals play a different role in different subdisciplines, so a measure looking primarily at journals will not be as useful a measure across all of philosophy. But the bigger measure is that the norms on citations differ dramatically between different fields. Most notably, historians of philosophy cite other historians much less than, say, metaphysicians cite other metaphysicians. That's in part because so many citations in history papers are to primary sources, and in part because citation norms have changed dramatically in fields like metaphysics in recent years in the direction of much more expansive citations. The result is that comparing citations between individual philosophers across different fields will rarely be a useful measure of quality, or influence, or anything that might be professionally relevant. It just won't be a like for like comparison.
+
+# Methodology {#sec-methodology}
+
+The data I'm using comes from Web of Science (WoS), combining XML files (through 2021) and website downloads (2022-2024). I filtered the XML data to articles in journals categorized as Philosophy or History & Philosophy of Science, then hand-selected one hundred journals with the most inbound citations that were mostly English-language, broadly analytic (rather than continental), and not just history of science. The complete journal list appears in @tbl-list-of-journals in @sec-appendix.
+
+For these journals, I included all articles plus notes and reviews over 15 pages, regardless of WoS subject classification. This ensures complete coverage for interdisciplinary journals where WoS labels are unreliable.
+
+Two supplemental steps were needed. First, WoS doesn't index _The Journal of Philosophy_ from 1971-1974, so it leaves out many influential articles. I compiled a complete article list from JSTOR and manually searched for citations to these articles. Some data discontinuities around this period may stem from this dual methodology.
+
+Second, my XML data extends only through 2021. I downloaded 2022-2024 data from the WoS website, processing it with the bibliometrix package [@bibliometrix]. Cross-checking 2021 data showed differences under 1% for article counts and slightly over 1% for citations—close enough to combine the datasets reliably.
+
+In this data set, 318 articles have at least 100 citations. I'm calling these the 'highly cited' articles. Their temporal distribution is shown in @fig-when-highly-cited.
+
+```{r}
+#| label: fig-when-highly-cited
+#| fig-cap: "How many articles published each year have at least 100 citations."
+
+# Graph: Number of highly cited articles by publication year
+
+plot_data <- article_stats |>
+  filter(is_highly_cited == TRUE) |>
+  count(year, name = "n_highly_cited")
+
+plot_data |>
+  ggplot(aes(x = year, y = n_highly_cited)) +
+#  geom_line(linewidth = 1, color = "steelblue") +
+  geom_point(size = 3, color = "steelblue") +
+  labs(
+    title = "Number of Highly Cited Articles by Publication Year",
+    subtitle = "Articles with 100+ citations",
+    x = "Publication Year",
+    y = "Number of Highly Cited Articles"
+  ) +
+  theme_minimal()
+```
+
+I decided to focus on articles published between 2000 and 2015 because before 2000, there are too many highly cited articles that could not possibly be cited, and after 2015 the citation numbers are so low that the data is too noisy. The WoS data quality is much higher for journals that use bibliographies rather than those that use citations in footnotes. By 2000 most journals had switched over to using bibliographies, so we don't have quite as many worries about data quality as we do before then.
+
+In later sections I'm going to consider articles that were highly cited at various times. The articles with at least 100 citations make up about 0.32% of the published articles. When considering which articles were highly cited at various times, I'm going to look at the articles that are in the top 0.3% of articles then published by number of citations, including ties. (I'm using 0.3% rather than 0.32% because sometimes there are a lot of ties, so it often ends up around 0.32% anyway.) Citations have been expanding so quickly that getting into this category used to require many fewer citations than it does now. For example, as of 2000, an article with 29 citations was in the top 0.3% of articles by citations.
+
+# Citing the Highly Cited {#sec-cite-highly-cited}
+
+As noted earlier, from 2000-2015, it seemed to help one's citations a lot to cite an article that would eventually get 100 or more citations. In the next section, I'll come back to how much it helped to cite an article that was already highly cited. In this section I'll look at whether there are simple explanations for the difference noted earlier: articles which cite one of the highly cited get an average of `r round(avg_cites_now_hc,1)` citations, while those that do not get an average of `r round(avg_no_cites_now_hc,1)` citations.
+
+The first thing to check is whether this is just an effect of timing. Perhaps the articles that cite highly cited articles are from times that tend to have higher citations. @fig-pct-articles-citinghc suggests this is at least possible, since the percentage of articles that do cite highly cited articles changes considerably over the period we're looking at. 
+
+
+```{r}
+#| label: fig-pct-articles-citinghc
+#| fig-cap: "The proportion of articles each year citing highly cited articles"
+
+# Percentage of articles which cite a highly cited article (2000-2015)
+
+pct_articles_citing_hc <- article_stats |>
+  filter(year >= 2000, year <= 2015) |>
+  group_by(year) |>
+  summarise(
+    total_articles = n(),
+    articles_citing_hc = sum(cites_highly_cited),
+    pct_citing_hc = articles_citing_hc / total_articles,
+    .groups = "drop"
+  )
+
+pct_articles_citing_hc |>
+  ggplot(aes(x = year, y = pct_citing_hc)) +
+  geom_point(size = 3, color = "steelblue") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Percentage of Articles Citing Highly Cited Articles",
+    subtitle = "Articles published 2000-2015",
+    x = "Publication Year",
+    y = "Percentage of Articles"
+  ) +
+  ylim(0, NA) +
+  theme_minimal()
+```
+
+But if we were just looking at an artifact of publication time, we'd expect the articles that cite highly cited articles to be cited _less_ often, since the times when highly cited articles are more common cited tend to have fewer citations. We see this in @fig-citations-by-year.
+
+```{r}
+#| label: fig-citations-by-year
+#| fig-cap: "Average number of citations each year."
+
+# Graph: Average number of citations received by articles published each year (2000-2015)
+
+plot_data <- article_stats |>
+  filter(year >= 2000, year <= 2015) |>
+  group_by(year) |>
+  summarise(
+    avg_citations = mean(n_citations, na.rm = TRUE),
+    n_articles = n(),
+    .groups = "drop"
+  )
+
+plot_data |>
+  ggplot(aes(x = year, y = avg_citations)) +
+#  geom_line(linewidth = 1, color = "steelblue") +
+  geom_point(size = 3, color = "steelblue") +
+  labs(
+    title = "Average Citations Received by Articles",
+    subtitle = "Articles published 2000-2015",
+    x = "Publication Year",
+    y = "Average Number of Citations"
+  ) +
+  ylim(0, NA)  + 
+  theme_minimal()
+```
+
+I'll still check for temporal effects in what follows, but the initial evidence is that this doesn't explain the difference.
+
+A more plausible explanation is that articles which have more references to other articles tend to get cited more. This is shown in @fig-avg-cites-by-refs.
+
+```{r}
+#| label: fig-avg-cites-by-refs
+#| fig-cap: "Average number of citations for articles with different number of references."
+
+# Average citations vs number of references (0-15 refs, 2000-2015)
+
+avg_cites_by_refs <- article_stats |>
+  filter(year >= 2000, year <= 2015, n_references <= 15) |>
+  group_by(n_references) |>
+  summarise(
+    avg_citations = mean(n_citations, na.rm = TRUE),
+    n_articles = n(),
+    .groups = "drop"
+  )
+
+avg_cites_by_refs |>
+  ggplot(aes(x = n_references, y = avg_citations)) +
+#  geom_line(linewidth = 1, color = "steelblue") +
+  geom_point(aes(size = n_articles), color = "steelblue", alpha = 0.7) +
+  scale_size_continuous(range = c(2, 6)) +
+#  scale_x_continuous(breaks = 0:15) +
+  labs(
+    title = "Average Citations by Number of References",
+    subtitle = "Articles published 2000-2015 with 0-15 references",
+    x = "Number of References",
+    y = "Average Citations",
+    size = "N Articles"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "right")
+```
+
+This could explain the difference quite simple. Obviously articles that have more outgoing references are more likely to cite a highly cited article. They are more likely to cite any random collection of articles. And as @fig-avg-cites-by-refs shows, that means they will in general have more citations.
+
+There are two reasons for the pattern we see in @fig-avg-cites-by-refs. One is that you'd expect longer papers to have more citations. If we model editors as trying to maximise citations and constrained by a page budget, then the quantity they'll try to maximise is not the number of citations per article, but the number of citations per page. On this model, the effect seen in @fig-avg-cites-by-refs arises because number of citations is a reasonable proxy for length.
+
+But I doubt that explains everything going on here. Remember that both axes in @fig-avg-cites-by-refs measure citations in philosophy journals. Some of the papers represented in those large dots in the bottom left might be widely discussed, but not in philosophy journals. That could be because they are papers at the intersection of philosophy and some other field, and are primarily discussed in that other field. Or it could be because they are papers in history of philosophy which largely discuss primary sources or contemporary books. So it's not surprising that there is an effect here, and we should control for it before making any claims about the effect of citing highly cited articles in particular.
+
+What we see in @fig-avg-cites-by-refs-split is that citing highly cited articles makes a difference even if we control for number of references.
+
+```{r}
+#| label: fig-avg-cites-by-refs-split
+#| fig-cap: "Even controlling for number of references, citing a highly cited article matters."
+
+# Graph: Average citations vs number of references (0-15 refs, 2000-2015)
+# Separated by whether article cites highly cited articles
+
+avg_cites_by_refs_split <- article_stats |>
+  filter(year >= 2000, year <= 2015, n_references <= 15) |>
+  mutate(
+    cites_hc_label = if_else(cites_highly_cited, 
+                             "Cites highly cited", 
+                             "Doesn't cite highly cited")
+  ) |>
+  group_by(n_references, cites_hc_label) |>
+  summarise(
+    avg_citations = mean(n_citations, na.rm = TRUE),
+    n_articles = n(),
+    .groups = "drop"
+  )
+
+avg_cites_by_refs_split |>
+  ggplot(aes(x = n_references, y = avg_citations, color = cites_hc_label)) +
+  geom_line(linewidth = 1) +
+  geom_point(aes(size = n_articles), alpha = 0.7) +
+  scale_size_continuous(range = c(2, 6)) +
+#  scale_x_continuous(breaks = 0:15) +
+  labs(
+    title = "Average Citations by Number of References",
+    subtitle = "Articles published 2000-2015 with 0-15 references",
+    x = "Number of References",
+    y = "Average Citations",
+    color = "",
+    size = "N Articles"
+  ) +
+  theme_minimal() +
+  ylim(0, NA) +
+  theme(legend.position = "bottom")
+```
+
+```{r}
+# Calculate geometric mean of citation ratios by reference count
+
+# Create the pivoted data
+ratio_data <- avg_cites_by_refs_split |>
+  filter(n_references > 0) |>
+  select(n_references, cites_hc_label, avg_citations) |>
+  pivot_wider(
+    names_from = cites_hc_label,
+    values_from = avg_citations
+  ) |>
+  rename(
+    cites_hc = `Cites highly cited`,
+    no_cites_hc = `Doesn't cite highly cited`
+  ) |>
+  mutate(
+    ratio = cites_hc / no_cites_hc
+  )
+
+# Print the table
+# cat("=== Citation Ratios by Number of References ===\n")
+# print(ratio_data)
+
+# Calculate geometric mean of ratios
+geometric_mean <- exp(mean(log(ratio_data$ratio), na.rm = TRUE)) 
+
+# cat(sprintf("\nGeometric mean of ratios: %.3f\n", geometric_mean))
+```
+
+Among articles with *n* references, for *n* from 1 to 15, those that cite highly cited articles always have more citations. On average, the articles that do cite highly cited articles get `r sprintf("%.0f%%", (geometric_mean - 1) * 100)` more citations.^[That is, the geometric mean of the ratio between the two lines in @fig-avg-cites-by-refs-split is `r geometric_mean`.] I did a much longer analysis that controlled both for when articles was published and how many references they had, using somewhat arbitrary buckets to ensure I was always comparing sufficiently large numbers of articles, and the result turned out almost exactly the same. That is, citing a highly cited article was associated with an 84% increase in citations. Given the results were so similar, I won't go over all the details here, and instead just look at the graphs that don't control for publication date.
+
+This increase of `r sprintf("%.0f%%", (geometric_mean - 1) * 100)` is not small. Further, it's incredibly unlikely that by pure chance the 'Cites highly cited' line in @fig-avg-cites-by-refs-split would be higher than the 'Doesn't cite highly cited' line at all 15 data points. But this is still a considerably smaller effect than we saw at the start, when looking at the raw averages of citations for papers that do and don't cite highly cited papers. On the raw averages, citing a highly cited paper was correlated with an increase in citations of `r sprintf("%.0f%%", (avg_cites_now_hc/avg_no_cites_now_hc - 1) * 100)`. So controlling for the numner of references was important.
+
+Should we also control for where a paper is published? Perhaps it's just the case that papers published in journals like _Philosophical Review_ are both more likely to cite highly cited articles, and more likely to be cited? I'm not going to control for that for a couple of reasons. It's not that the presuppositions are wrong. In fact, _Philosophical Review_ articles are much more likely than the average article to cite highly cited articles, and are more likely to be cited. But there are two reasons to not control for publication venue.
+
+One reason is that controlling for the number of references to philosophy journals in a paper already does much of the work you might want when controlling for publication venue. In @fig-where-published, I've graphed two things. The smaller blue dots show, for each of the journals, the average number of references in each paper to other journals, and the percentage of papers that cite highly cited articles. The larger coral dots (with lines connecting them) show what percentage of articles with that many references cite highly cited articles.
+
+```{r}
+#| label: fig-where-published
+#| fig-cap: "References and citations for different journals."
+
+# Graph: Percentage citing HC vs average references
+# Comparing journal-level data with overall pattern by reference count
+# With Philosophy Compass labeled
+
+# First, get the journal-level data
+journal_plot_data <- article_stats |>
+  filter(year >= 2000, year <= 2015) |>
+  left_join(philo_bib_through_2024 |> select(id, journal), by = "id") |>
+  group_by(journal) |>
+  summarise(
+    avg_references = mean(n_references, na.rm = TRUE),
+    pct_citing_hc = (sum(cites_highly_cited) / n()) * 100,
+    .groups = "drop"
+  )
+
+# Second, get the overall pattern by reference count (0-12)
+overall_by_refs <- article_stats |>
+  filter(year >= 2000, year <= 2015, n_references <= 12) |>
+  group_by(n_references) |>
+  summarise(
+    pct_citing_hc = (sum(cites_highly_cited) / n()) * 100,
+    .groups = "drop"
+  )
+
+# Create the plot
+ggplot() +
+  geom_point(data = journal_plot_data, 
+             aes(x = avg_references, y = pct_citing_hc),
+             color = "steelblue", size = 3, alpha = 0.6) +
+  geom_point(data = overall_by_refs,
+             aes(x = n_references, y = pct_citing_hc),
+             color = "coral", size = 4, alpha = 0.8) +
+  geom_line(data = overall_by_refs,
+            aes(x = n_references, y = pct_citing_hc),
+            color = "coral", linewidth = 1, alpha = 0.6) +
+  geom_text(data = journal_plot_data |> filter(journal == "Philosophy Compass"),
+            aes(x = avg_references, y = pct_citing_hc, label = "Compass"),
+            hjust = -0.1, vjust = 0.5, size = 3.5) +
+  labs(
+    title = "Percentage Citing Highly Cited Articles vs Number of References",
+    subtitle = "Blue: by journal (2000-2015) | Orange: overall by reference count (0-12)",
+    x = "Average Number of References",
+    y = "% Citing Highly Cited Articles"
+  ) +
+  theme_minimal()
+```
+
+As you can see, the journals mostly cluster around the average. The one notable exception is _Philosophy Compass_, for reasons I don't quite understand. But in general, any connection between publication venue and percentage of papers that cite highly cited articles is already accounted for by controlling for the number of references.
+
+The other reason I don't want to control for venue is that when we use citation data in practice, we typically do not in fact control for venue. Nobody would give the following speech. "Yes, Professor X's publications are widely cited. But that's just because she only published in _Philosophical Review_ and _Mind_. Relative to the average papers in those journals, her papers do not stand out." It's clear what's wrong with this speech. The people who are impressed by Professor X's papers, and are using citation data to support their view, will say that it's because the papers are so good that they ended up in _Philosophical Review_ and _Mind_, and that's also why they were widely cited. It's not that they were widely cited merely because they were in those venues. If we controlled for publication venue, we'd be resembling a bit too closely the person who makes this speech, rather than the person impressed by Professor X.
+
+# Three Theoretical Accounts {#sec-three-accounts}
+
+So after taking account of possible alternative explanations, it seems plausible that citing a highly cited article leads to an increase in citations of around `r sprintf("%.0f%%", (geometric_mean - 1) * 100)`. What could explain this?
+
+The strongest form of the optimist story is that citing one of these papers is a sign of quality. It's hard to find this story plausible. Just citing "New Work for a Theory of Universals" or other papers like that is not in itself a sign that the paper is nearly twice as good as it would be otherwise. I certainly don't think my citation of "New Work" in this paper makes the paper twice as good. This doesn't show that citations are wholly independent of paper quality, just that there are patterns in the citation data that aren't explained by the quality of the paper being cited.
+
+The strongest form of the pessimist story is that citations are just a measure of something like popularity, and associating with the popular papers is a way of acquiring popularity. This isn't a priori implausible, and it would explain the data I've presented so far. But we'll see in @sec-then-now that there are other data points that it doesn't explain as well.
+
+The theory that citations track influence does just as good a job as the theory that citations track popularity at explaining the data in @sec-cite-highly-cited. This might not be immediately obvious, so let's work through an example. I'll focus on John MacFarlane's 2003 paper "Future Contingents and Relative Truth". This has 120 citations in the journals we're looking at, so it's one of the highly cited papers. But, like with most highly cited papers in philosophy, it took a few years for the citations to appear in large numbers. @fig-macfarlane shows its citation frequency since publication.
+
+```{r}
+#| label: fig-macfarlane
+#| fig-cap: "Citation frequency for @WOS000183846000001"
+
+plot_article_citation_frequency("WOS:000183846000001", citations, articles, min_year = 2003, max_year = 2024)
+```
+
+Through 2008, that's five years after publication, it had only ten citations. That's more than most papers, but not a sign that it would be as cited as it turned out to be over the five years after that.^[The drop after 2015 isn't because the subject matter of the paper was less discussed; it's rather that people started citing MacFarlane's 2014 book _Assessment Sensitivity_. At one time I thought looking at which papers had dramatic falls in citations would be an interesting guide to changing fashions in the field. But it turned out that most dramatic drops were because papers had been superseded by books, and that's what happened here. Why that reverses in the 2020s, and people more frequently cite papers that have been superseded by books, is itself interesting, but for another day.] What's relevant to our purposes is revealed in @tbl-macfarlane, which lists those ten papers, and shows how often they were cited in the hundred journals.
+
+```{r}
+#| label: tbl-macfarlane
+#| tbl-cap: "Articles published through 2008 which cite @WOS000183846000001"
+
+# Table of articles published in 2015 that cite WOS:000085841900002
+
+target_article <- "WOS:000183846000001"
+
+articles_2008_citing_target <- citations |>
+  filter(old == target_article) |>
+  select(id = new) |>
+  left_join(article_stats |> select(id, year, n_citations), by = "id") |>
+  filter(year <= 2008) |>
+  left_join(philo_bib_through_2024 |> select(id, title), by = "id") |>
+  mutate(
+    Reference = paste0("@", str_replace_all(id, ":", ""))
+  ) |>
+  select(Reference, Title = title, Citations = n_citations) |>
+  arrange(desc(Citations))
+
+kable(articles_2008_citing_target)
+```
+
+It shouldn't be controversial that "Future Contingents" was an influential paper. It was the first presentation in print of MacFarlane's distinctive version of relativism, which became one of the most discussed theories in philosophy. What is less clear is which claim we should believe about the relationship between "Future Contingents" and the papers in @tbl-macfarlane. Here are two prima facie plausible claims.
+
+1. One manifestation of the influence of "Future Contingents" is that it led to later discussions, by MacFarlane himself as well as by Lasersohn, Glanzberg, Brogaard and others, which in turn were extremely influential.
+2. One reason that "Future Contingents" was so influential is that a network of fascinating papers built up around it, with these early works by Lasersohn, Glanzberg and Brogaard near its center, and it was that network more than any one paper which was influential in the field.
+
+The explanation I like of the result in @sec-cite-highly-cited is that both these claims are true. We want to explain why papers which cite highly cited papers, like "Future Contingents", are cited more often than average. The influence story is that if these later papers, the ones in @tbl-macfarlane, had no been so influential, then "Future Contingents" would not have been as influential, and hence not as highly cited.
+
+That's a nice story; it brings out how philosophy is a collective enterprise and the big developments in the field come not from lone geniuses but from fruitful interactions. But how could we tell if is it true? What predictions does it make that differ from the raw popularity story? That's what we'll turn to in @sec-then-now.
+
+# Testing the Stories {#sec-then-now}
+
+So far I've discussed the citation records of papers that cite papers which are, as of 2024, highly cited. We could also look at the citation records of papers which cite papers that were, at the time those papers were published, highly cited. If citations are just tracking popularity, then we might expect these papers would also get a boost to their citation numbers. On the influence story, we'd expect that the effect would disappear, since these papers can't possibly influence how many citations the papers they cited already had.
+
+As noted earlier, I'll say that a paper is highly cited at a time if it's in the top 0.3% of papers published up to that time by citation count. (In case of ties, I'll include anything with as many cites as a paper in the top 0.3%.) The big test will be to look at papers that do and don't cite such a paper, as of their own publication time, and ask how often they are cited.
+
+The raw data, not controlled for any possible confounds, suggests that things are like the popularity story predicts. (Again, the data here is all about papers from 2000-2015.) Papers which cite papers that were at the time highly cited get an average of `r round(avg_cites_then_hc, 2)` citations, while those that do not get an average of `r round(avg_no_cites_then_hc, 2)`. The former number is `r sprintf("%.0f%%", (avg_cites_then_hc/avg_no_cites_then_hc - 1) * 100)` larger.
+
+But as before, the raw data is misleading. This could just be an artifact of the facts that articles that include more references are more widely cited, and that articles that include more references are more likely to cite articles from any arbitrary set. We should control for the number of references in the cited article. When we do that, we get @fig-then-high-cited.
+
+```{r}
+#| label: fig-then-high-cited
+#| fig-cap: "The relationship between references and citations for articles that do and do not cite then highly cited articles."
+
+# Graph: Average citations vs number of references (0-15 refs, 2000-2015)
+# Separated by whether article cites THEN-highly-cited articles
+
+avg_cites_by_refs_temporal <- temporal_results_03$full_data |>
+  filter(year >= 2000, year <= 2015, n_references <= 15) |>
+  mutate(
+    cites_temporal_label = if_else(cites_temporal_hc, 
+                                    "Cites then-highly cited", 
+                                    "Doesn't cite then-highly cited")
+  ) |>
+  group_by(n_references, cites_temporal_label) |>
+  summarise(
+    avg_citations = mean(n_citations, na.rm = TRUE),
+    n_articles = n(),
+    .groups = "drop"
+  )
+
+avg_cites_by_refs_temporal |>
+  ggplot(aes(x = n_references, y = avg_citations, color = cites_temporal_label)) +
+  geom_line(linewidth = 1) +
+  geom_point(aes(size = n_articles), alpha = 0.7) +
+  scale_size_continuous(range = c(2, 6)) +
+  labs(
+    title = "Average Citations by Number of References",
+    subtitle = "Articles published 2000-2015 with 0-15 references",
+    x = "Number of References",
+    y = "Average Citations",
+    color = "",
+    size = "N Articles"
+  ) +
+  theme_minimal() +
+  ylim(0, NA) +
+  theme(legend.position = "bottom")
+```
+
+```{r}
+#| cache: TRUE
+
+# Calculate geometric mean of citation ratios by reference count
+
+# Create the pivoted data
+ratio_data_temporal <- avg_cites_by_refs_temporal |>
+  filter(n_references > 0) |>
+  select(n_references, cites_temporal_label, avg_citations) |>
+  pivot_wider(
+    names_from = cites_temporal_label,
+    values_from = avg_citations
+  ) |>
+  rename(
+    cites_hc = `Cites then-highly cited`,
+    no_cites_hc = `Doesn't cite then-highly cited`
+  ) |>
+  mutate(
+    ratio = cites_hc / no_cites_hc
+  )
+
+# Print the table
+# cat("=== Citation Ratios by Number of References ===\n")
+# print(ratio_data)
+
+# Calculate geometric mean of ratios
+geometric_mean_temporal <- exp(mean(log(ratio_data_temporal$ratio), na.rm = TRUE)) 
+
+# cat(sprintf("\nGeometric mean of ratios: %.3f\n", geometric_mean))
+```
+
+The result is that there is still a clear benefit to citing articles that were, at the time, highly cited. It would be implausible to say that it's just a coincidence that the first fourteen data points in @fig-then-high-cited point in the same direction. But the effect is small. The difference between the data points in @fig-then-high-cited is, on average, just `r sprintf("%.0f%%", (geometric_mean_temporal - 1) * 100)`. I tried a few other ways of controlling for both publication year and the number of references and the result was always that the surplus was around 15-20%. That's not nothing, and we can be very confident the true value is greater than zero. So this set of data gives some support to the popularity story.
+
+But it looks like it gives more support to the influence story. When we say that there is a citation benefit to citing highly cited articles, that is only true if we mean citing articles that are *now* highly cited. And that means that the articles that accrue the extra citations probably made an impact in making those articles be highly cited.
+
+# Conclusion {#sec-conclusion}
+
+The results here should give some pause to those using citation data in professional decisions, especially those to do with hiring, promoting, or funding. Citations are far from an unbiased measure of the quality of philosophical work. For one thing, citation numbers tend to be very different in different fields of philosophy. For another, citations don't seem to be distributed evenly across demographic categories.
+
+Those facts probably aren't new to a lot of readers. What might be new is the data shown here about how citations tend to cluster in topics. One key way to get more citations is to write about something that will be a central philosophical topic in a few years time.
+
+That said, writing about something that will be a central topic might in itself be a virtue in philosophical work. Perhaps it is just a sign of predictive skill, of being able to skate to where the puck is going.
+
+
+```{r}
+# Find pairs of papers with diverging citation trajectories
+# Paper A: was in temporal HC group (top 0.2% cumulative as of year before), not now HC (< 100 citations)
+# Paper B: was not in temporal HC group, but is now HC (≥ 100 citations)
+# Both had same number of citations IN target_year (at least 5)
+
+target_year <- 2005
+
+# Calculate citations received IN target_year (not through target_year)
+citations_in_year <- citations |>
+  left_join(articles |> select(id, year), by = c("new" = "id")) |>
+  filter(year == target_year) |>  # Only citations IN this year
+  count(old, name = "cites_in_year") |>
+  rename(id = old)
+
+# For each year, calculate the top 0.2% threshold based on CUMULATIVE citations
+# For articles published before that year
+yearly_thresholds <- tibble(year = min(articles$year):max(articles$year)) |>
+  rowwise() |>
+  mutate(
+    threshold = {
+      # Get cumulative citations for articles published before this year
+      cites <- citations |>
+        left_join(articles |> select(id, pub_year = year), by = c("old" = "id")) |>
+        filter(pub_year < year) |>
+        left_join(articles |> select(id, cite_year = year), by = c("new" = "id")) |>
+        filter(cite_year < year) |>
+        count(old, name = "cumulative_cites")
+      
+      if (nrow(cites) > 0) {
+        quantile(cites$cumulative_cites, 0.998, na.rm = TRUE)
+      } else {
+        0
+      }
+    }
+  ) |>
+  ungroup()
+
+# Determine if each article was highly cited (top 0.2%) as of the year before target_year
+hc_as_of_year <- citations |>
+  left_join(articles |> select(id, year), by = c("new" = "id")) |>
+  filter(year <= (target_year - 1)) |>  # Cumulative citations up to year before target
+  count(old, name = "cites_before_target") |>
+  rename(id = old) |>
+  left_join(articles |> select(id, pub_year = year), by = "id") |>
+  left_join(yearly_thresholds |> filter(year == target_year) |> select(threshold), 
+            by = character()) |>
+  mutate(was_temporal_hc = cites_before_target >= threshold)
+
+# Create comparison dataset
+comparison_data <- article_stats |>
+  left_join(citations_in_year, by = "id") |>
+  left_join(hc_as_of_year |> select(id, was_temporal_hc, cites_before_target), by = "id") |>
+  replace_na(list(cites_in_year = 0, was_temporal_hc = FALSE, cites_before_target = 0)) |>
+  filter(year < target_year, cites_in_year >= 5) |>  # Filter for at least 5 cites IN target year
+  mutate(
+    is_now_hc = is_highly_cited
+  )
+
+# Find Paper A: was temporally HC (top 0.2%), not now HC
+paper_a_candidates <- comparison_data |>
+  filter(was_temporal_hc == TRUE, is_now_hc == FALSE)
+
+# Find Paper B: was not temporally HC (top 0.2%), is now HC
+paper_b_candidates <- comparison_data |>
+  filter(was_temporal_hc == FALSE, is_now_hc == TRUE)
+
+# Find matching pairs (same citations IN target_year)
+matching_pairs <- paper_a_candidates |>
+  inner_join(paper_b_candidates, 
+             by = "cites_in_year",
+             suffix = c("_A", "_B")) |>
+  left_join(philo_bib_through_2024 |> select(id, title, displayauth, journal), 
+            by = c("id_A" = "id")) |>
+  rename(title_A = title, author_A = displayauth, journal_A = journal) |>
+  left_join(philo_bib_through_2024 |> select(id, title, displayauth, journal), 
+            by = c("id_B" = "id")) |>
+  rename(title_B = title, author_B = displayauth, journal_B = journal) |>
+  arrange(desc(cites_in_year), desc(n_citations_B))
+
+# Get the threshold value for reporting
+threshold_value <- yearly_thresholds |> 
+  filter(year == target_year) |> 
+  pull(threshold)
+
+cat(sprintf("Target year: %d\n", target_year))
+cat(sprintf("Top 0.2%% cumulative threshold as of %d: %.1f citations\n", 
+            target_year - 1, threshold_value))
+cat(sprintf("Paper A candidates (was temporal HC top 0.2%%, not now HC, ≥5 cites in %d): %d\n", 
+            target_year, nrow(paper_a_candidates)))
+cat(sprintf("Paper B candidates (was not temporal HC top 0.2%%, now HC, ≥5 cites in %d): %d\n", 
+            target_year, nrow(paper_b_candidates)))
+cat(sprintf("Matching pairs: %d\n\n", nrow(matching_pairs)))
+
+if (nrow(matching_pairs) > 0) {
+  # Show the pairs
+  matching_pairs |>
+    select(
+      id_A, title_A, year_A, journal_A,
+      id_B, title_B, year_B, journal_B,
+      cites_in_year,
+      cites_through_2004_A = cites_before_target_A,
+      cites_through_2004_B = cites_before_target_B,
+      current_cites_A = n_citations_A,
+      current_cites_B = n_citations_B
+    ) |>
+    print(n = Inf)
+  
+  # Also make a nice table
+  matching_pairs |>
+    select(
+      id_A, title_A, year_A,
+      id_B, title_B, year_B,
+      cites_in_year,
+      current_cites_A = n_citations_A,
+      current_cites_B = n_citations_B
+    ) |>
+    head(20) |>
+    kable()
+} else {
+  cat("No matching pairs found. Try a different year.\n")
+}
+```
+
+# Statistics on Journals Used {#sec-appendix}
+
+```{r}
+#| label: tbl-list-of-journals
+#| tbl-cap: "Journals used in this paper"
+
+journal_summary <- philo_bib_through_2024 %>%
+  group_by(journal) %>%
+  summarise(
+    earliest_year = min(year, na.rm = TRUE),
+    latest_year = max(year, na.rm = TRUE),
+    n_articles = n()
+  )
+
+# Outbound citations: join articles to their journal, count refs per journal
+outbound_cites <- philo_cite_through_2024 %>%
+  left_join(philo_bib_through_2024 %>% select(id, journal), by = "id") %>%
+  group_by(journal) %>%
+  summarise(outbound_citations = n())
+
+# Inbound citations: join refs to their journal, count refs per journal
+inbound_cites <- philo_cite_through_2024 %>%
+  left_join(philo_bib_through_2024 %>% select(id, journal), by = c("refs" = "id")) %>%
+  group_by(journal) %>%
+  summarise(inbound_citations = n())
+
+# Combine all summaries
+journal_summary <- journal_summary %>%
+  left_join(outbound_cites, by = "journal") %>%
+  left_join(inbound_cites, by = "journal") %>%
+  replace_na(list(outbound_citations = 0, inbound_citations = 0)) |>
+  rename(
+    Journal = journal,
+    `First Year` = earliest_year,
+    `Last Year` = latest_year,
+    `Articles` = n_articles,
+    `Inbound Citations` = inbound_citations,
+    `Outbound Citations` = outbound_citations
+  )
+
+kable(journal_summary)
+```

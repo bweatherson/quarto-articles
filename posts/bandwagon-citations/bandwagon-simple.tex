@@ -1,0 +1,1542 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  12pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1in, right=1in, top=1in, bottom=1in, paperheight=11in,
+paperwidth=8.5in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Bandwagon Effects in Citation Data
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
+\setkomafont{descriptionlabel}{\normalfont\scshape\bfseries}
+\usepackage{xurl}
+\usepackage[hyphens]{url}
+\def\UrlBreaks{\do\/\do-\do.\do=\do_}
+\usepackage[hyphens]{url}
+\def\UrlBreaks{\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9\do\/\do\-\do\.}
+\cehead{
+  Bandwagon Effects in Citation Data
+  }
+\cohead{
+  Bandwagon Effects in Citation Data
+  }
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Bandwagon Effects in Citation Data},
+  pdfauthor={Anon},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Bandwagon Effects in Citation Data}
+\author{Anon}
+\date{2025}
+\begin{document}
+\maketitle
+\begin{abstract}
+Articles that reference highly cited articles tend to get more
+citations. This effect is dramatic if by highly cited articles we mean
+articles that are now highly cited. It's less dramatic, but still
+notable, if we mean articles that were highly cited at the time the
+original article was published. This should give us some pause if we use
+citation data for making professional decisions, such as decisions about
+who to hire or to fund. Comparisons of citations between authors who
+work in fields of differing popularity can easily be misleading.
+\end{abstract}
+
+
+\setstretch{1.3}
+\section{Overview}\label{overview}
+
+This paper concerns a striking fact about the way philosophy journal
+articles are cited in philosophy journals. Articles that reference
+highly cited articles get many more citations. As
+Figure~\ref{fig-cohort-comparison-all-time} shows, this effect can be
+rather large.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-cohort-comparison-all-time-1.pdf}}
+
+}
+
+\caption{\label{fig-cohort-comparison-all-time}}
+
+\end{figure}%
+
+The early years and the late years in that data are rather noisy. In the
+early years, because few of the articles we'll call `highly cited' have
+even been published, one of the lines is an average of very few
+articles. In the late years, there hasn't been enough time to see stable
+citation patterns. So for this paper I'll largely focus on the years
+2000 to 2015; those are papers that were published late enough to cite
+the articles now highly cited in philosophy, and also early enough to be
+frequently cited themselves.
+Figure~\ref{fig-cohort-comparison-peak-years} is a restriction of
+Figure~\ref{fig-cohort-comparison-all-time} to the period I'll focus on,
+i.e., 2000-2015.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-cohort-comparison-peak-years-1.pdf}}
+
+}
+
+\caption{\label{fig-cohort-comparison-peak-years}}
+
+\end{figure}%
+
+Across those years, articles that cite highly cited articles are
+themselves cited an average of 11.5 times, while those that do not are
+cited an average of 3.5 times. To be clear, this is how often they are
+cited in philosophy journals; we're not counting citations in journals
+in other disciplines, or in books, book chapters, edited volumes,
+theses, draft papers, handouts, or all the other things that one sees
+in, e.g., Google Scholar. If you've only ever looked at citations on
+Google Scholar, the absolute citation numbers here might look a little
+small. But what's striking is the ratio. It's not obvious that one of
+these numbers should be more than three times larger than the other.
+
+The point of this paper is to explore why this ratio is so large, and
+what it tells us about the nature of citation data. Given the uses to
+which citation data is put in professional settings, where they are
+often used as an important consideration in hiring, promotion, and
+funding decisions, this discrepancy might be worrying. One might think
+that it's only reasonable to use citations in these decisions if
+citations are a guide to quality. But it's implausible that simply
+citing something that a lot of other people cite makes the paper three
+times better. The easiest first interpretation of the data is that
+citation metrics are little more than a popularity contest, and like all
+popularity contests they are subject to bandwagon effects. If so, they
+shouldn't have any serious role to play in professional decisions.
+
+I'm going to argue for a moderate position between these extremes.
+Citation data are still useful, when used cautiously, but they are not a
+great measure of the quality of papers being cited. They are a much
+better measure of the \emph{influence} of those papers. Since it's
+plausible to give some weight to how influential an academic's work is
+in decisions about promotion and funding, it is reasonable to give some
+weight to citations in making those decisions.
+
+The primary argument for this will be empirical. Once we look more
+closely at the citation data, we'll see a few things that aren't
+consistent with the popularity contest story, and are better explained
+by the idea that citations measure influence.
+
+\section{The Optimist and the
+Pessimist}\label{the-optimist-and-the-pessimist}
+
+In this section I'll set out three views about what citations measure,
+and present some initial evidence that citations track influence rather
+than quality. I'll start with two views that are opposed to mine in
+opposite directions, then end with the position I want to defend.
+
+The figure I'll call the \emph{optimist} says that citations are a
+measure of the quality of the cited work. The optimist doesn't think
+this is a perfect measure, but they think they are a pretty good first
+guide. Hence, they say, it's reasonable to give citation data a strong
+weight in professional decisions. They are, says the optimist, the best
+guide we have to the collective judgment about the quality of
+philosophical work, and it's always good to listen to as many voices as
+possible when trying to come to a decision about how good some work is.
+
+The pessimist, on the other hand, says that citations measure little
+more than popularity. They are no more suitable an input into
+professional decisions than judgments about how well-liked, or
+good-looking, the authors of papers are. In fact, they think, sometimes
+they are in fact reflective of who the citing author likes, or perhaps
+thinks is good-looking. So we should do away with them, and make
+professional decisions solely by careful study of published works.
+
+I plan to defend a glass half-full approach. Citations do measure
+something of professional importance, but it isn't \emph{quality}, at
+least in the first instance. Rather, it is \emph{influence}. Highly
+cited papers are more influential.
+
+The main evidence for this comes from a surprising pattern in the data.
+If citations measure influence rather than quality or mere popularity,
+we should expect that papers which cite \emph{currently} highly-cited
+work benefit more than papers which cited work that was \emph{already}
+highly-cited at the time. This is because influence is built through
+networks of mutually-reinforcing work, while quality is intrinsic and
+popularity should peak when work is most visible. And, as we'll see,
+that's exactly what we do find.
+
+If citations measure influence, they can still be professionally
+important. Other things equal, it is better to assign resources to
+people who will make a difference rather than those who will not. (At
+least if we think the work has at least some merit.) So knowing that an
+academic's work is influential is important in making professional
+decisions.
+
+But data about influence needs to be treated with caution. Whether a
+work is influential turns on a host of contingent factors outside
+anyone's control. Most notably, most influential works become
+influential by being embedded in a larger literature, and the author who
+is so embedded rarely deserves credit for the existence of that larger
+literature. Nor does someone who works on topics on which no one else
+has anything interesting to say deserve to be receive less credit merely
+on that ground. Further, whether later academics are influenced by an
+academic's work can be affected by all sorts of biases and prejudices.
+So I wouldn't defend all the uses of citation data in professional
+settings that the optimist would defend. But nor would I dismiss them as
+mere popularity measures, like the pessimist would.
+
+There is one very striking data point in favour of the optimist's view.
+Table~\ref{tbl-most-cited} shows the articles that are most cited in the
+database I'm using for this paper. I'll describe what that database is
+in more details in Section~\ref{sec-methodology}, but the short version
+is that I looked at one hundred prominent, English-language, analytic
+philosophy journals. In those journals, I found every refernce to an
+article in one of those journals from the time to journal started being
+indexed by Web of Science through 2024. That produced 547290 citations
+in 126136 articles. The twenty most cited articles are displayed in
+Table~\ref{tbl-most-cited}.
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2532}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.6203}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1266}}@{}}
+
+\caption{\label{tbl-most-cited}Twenty most cited articles}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Reference
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Title
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Lewis (\citeproc{ref-WOSA1983RR51600001}{1983})
+& New Work for a Theory of Universals & 886 \\
+Nagel (\citeproc{ref-WOSA1974U469700001}{1974})
+& What is It Like To Be a Bat & 740 \\
+Frankfurt (\citeproc{ref-10.2307_2024717}{1971})
+& Freedom of the Will and the Concept of a Person & 643 \\
+Frankfurt (\citeproc{ref-WOSA1969Y444700002}{1969})
+& Alternate Possibilities and Moral Responsibility & 586 \\
+Lewis (\citeproc{ref-WOSA1996VY21200001}{1996})
+& Elusive Knowledge & 584 \\
+Machamer, Darden, and Craver (\citeproc{ref-WOS000087305900001}{2000})
+& Thinking About Mechanisms & 568 \\
+Clark and Chalmers (\citeproc{ref-WOS000073222300002}{1998})
+& The Extended Mind & 545 \\
+Jackson (\citeproc{ref-WOSA1982NH65300003}{1982})
+& Epiphenomenal Qualia & 536 \\
+Lewis (\citeproc{ref-10.2307_2025310}{1973})
+& Causation & 533 \\
+Kripke (\citeproc{ref-WOSA1975BF60000005}{1975})
+& Outline of a Theory of Truth & 504 \\
+Lewis (\citeproc{ref-WOSA1979HJ57600007}{1979c})
+& Scorekeeping in a Language Game & 478 \\
+Davidson (\citeproc{ref-WOSA1963CEU0700001}{1963})
+& Actions, Reasons, and Causes & 463 \\
+Lewis (\citeproc{ref-WOSA1979JC64200001}{1979a})
+& Attitudes De Dicto and De Se & 461 \\
+Goldman (\citeproc{ref-WOSA1976CP00100001}{1976})
+& Discrimination and Perceptual Knowledge & 458 \\
+Perry (\citeproc{ref-WOSA1979HE39600001}{1979})
+& The Problem of the Essential Indexical & 458 \\
+Anderson (\citeproc{ref-WOS000078432400003}{1999})
+& What is the Point of Equality? & 453 \\
+Singer (\citeproc{ref-WOSA1972Z066400001}{1972})
+& Famine, Affluence, and Morality & 450 \\
+Lewis (\citeproc{ref-WOSA1979JB14500003}{1979b})
+& Counterfactual Dependence and Time's Arrow & 439 \\
+Pryor (\citeproc{ref-WOS000165361800002}{2000})
+& The Skeptic and the Dogmatist & 435 \\
+Grice (\citeproc{ref-WOSA1957CGZ6000005}{1957})
+& Meaning & 396 \\
+
+\end{longtable}
+
+Claims about philosophical quality are notoriously contentious, but
+hopefully most readers will agree that those papers are, collectively,
+pretty good. It would be very hard to find a set of twenty papers with
+no citations at all which are just as good.
+
+Still, there are reasons to push back against the optimist even here. If
+the question is whether citations measure quality or influence, this
+table is far from decisive. After all, these are also quite clearly very
+influential paper.
+
+And even the pessimist might raise some worries. The authors are all
+white and almost all male, and the papers are all from a quarter century
+ago. Is it really plausible that all the best work is so clustered?
+
+The optimist might make two points in reply. On the age of the papers,
+they might insist that citations need to be adjusted for the age of the
+paper before being used as a quality measure. After all, a paper from
+1975 being cited fifty times in fifty years seems less striking than a
+paper from two years ago being cited fifty times in two years. On the
+demographics, they might concede that this was a problem, but that the
+discipline is getting somewhat better in appreciating work that isn't by
+white men. The data \emph{somewhat} bears out this claim. In
+Table~\ref{tbl-most-cited-2020s}, I've listed the papers that are most
+cited in the database in articles published in the 2020s.
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2128}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.6809}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1064}}@{}}
+
+\caption{\label{tbl-most-cited-2020s}Twenty most cited articles
+(citations from 2020-2024 only)}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Reference
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Title
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Lewis (\citeproc{ref-WOSA1983RR51600001}{1983})
+& New Work for a Theory of Universals & 327 \\
+Haslanger (\citeproc{ref-WOS000085841900002}{2000})
+& Gender and Race: (What) Are They? (What) Do We Want Them To Be? &
+204 \\
+Clark and Chalmers (\citeproc{ref-WOS000073222300002}{1998})
+& The Extended Mind & 186 \\
+Machamer, Darden, and Craver (\citeproc{ref-WOS000087305900001}{2000})
+& Thinking About Mechanisms & 182 \\
+Dotson (\citeproc{ref-WOS000289948200002}{2011})
+& Tracking Epistemic Violence, Tracking Practices of Silencing & 172 \\
+Nagel (\citeproc{ref-WOSA1974U469700001}{1974})
+& What is It Like To Be a Bat & 171 \\
+Schaffer (\citeproc{ref-WOS000272855000002}{2010})
+& Monism: The Priority of the Whole & 167 \\
+Lewis (\citeproc{ref-WOSA1996VY21200001}{1996})
+& Elusive Knowledge & 163 \\
+Davidson (\citeproc{ref-WOSA1963CEU0700001}{1963})
+& Actions, Reasons, and Causes & 159 \\
+Lewis (\citeproc{ref-WOSA1979HJ57600007}{1979c})
+& Scorekeeping in a Language Game & 157 \\
+Schaffer (\citeproc{ref-WOS000368189400004}{2016})
+& Grounding in the Image of Causation & 151 \\
+Lewis (\citeproc{ref-10.2307_2025310}{1973})
+& Causation & 146 \\
+Anderson (\citeproc{ref-WOS000078432400003}{1999})
+& What is the Point of Equality? & 144 \\
+Frankfurt (\citeproc{ref-WOSA1969Y444700002}{1969})
+& Alternate Possibilities and Moral Responsibility & 143 \\
+Pryor (\citeproc{ref-WOS000165361800002}{2000})
+& The Skeptic and the Dogmatist & 137 \\
+Wilson (\citeproc{ref-WOS000344393500001}{2014})
+& No Work for a Theory of Grounding & 137 \\
+Kripke (\citeproc{ref-WOSA1975BF60000005}{1975})
+& Outline of a Theory of Truth & 133 \\
+Hawthorne and Stanley (\citeproc{ref-WOS000262624000001}{2008})
+& Knowledge and Action & 132 \\
+Singer (\citeproc{ref-WOSA1972Z066400001}{1972})
+& Famine, Affluence, and Morality & 132 \\
+Joyce (\citeproc{ref-WOS000077956100002}{1998})
+& A Nonpragmatic Vindication of Probabilism & 131 \\
+
+\end{longtable}
+
+I'll leave it to the reader to judge whether this is a sufficiently
+diverse group of authors to adequately respond to the pessimist's
+charge. For present purposes, I want to look at a different point, one
+that I think supports the story that citations measure influence rather
+than quality.
+
+Some papers appear on just one of Table~\ref{tbl-most-cited} and
+Table~\ref{tbl-most-cited-2020s}. I'll focus on two prominent such
+papers, Sally Haslanger's ``Gender and Race'', and Frank Jackson's
+``Epiphenomenal Qualia''. Figure~\ref{fig-haslanger} and
+Figure~\ref{fig-jackson} show how often those papers are cited each year
+since their publication, as a proportion of all citations that
+year.\footnote{The normalisation is crucial because the number of
+  citations per year has exploded in the 2020s.}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-haslanger-1.pdf}}
+
+}
+
+\caption{\label{fig-haslanger}Citation frequency for Haslanger
+(\citeproc{ref-WOS000085841900002}{2000})}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-jackson-1.pdf}}
+
+}
+
+\caption{\label{fig-jackson}Citation frequency for Jackson
+(\citeproc{ref-WOSA1982NH65300003}{1982})}
+
+\end{figure}%
+
+It's hard to make sense of changes in citation patterns like this on the
+strongest version of the optimist story. If citations measure quality,
+do we have to say that ``Gender and Race'' is three or four times better
+now than it was a few years ago, while ``Epiphenomenal Qualia'' is three
+or four times worse? That's barely a coherent claim. Even if we admit
+that the optimist just claims citations are a noisy measure, the ranges
+here indicate that there is quite a lot of noise indeed.
+
+A more plausible thing to say is that ``Gender and Race'' is much more
+influential than it used to be, while ``Epiphenomenal Qualia'' is
+considerably less influential than it used to be. On the `influence'
+model of citations, one implication of Figure~\ref{fig-haslanger} and
+Figure~\ref{fig-jackson} is that no one paper is now as influential as
+``Epiphenonemal Qualia'' was for two decades. That actually sounds
+plausible to me; it's a sign of how much more specialised philosophy has
+become.
+
+The pessimist can also use a feature of Table~\ref{tbl-most-cited} and
+Table~\ref{tbl-most-cited-2020s} to argue for their view. The range of
+subjects of those papers does not reflect the range of things
+philosophers write about. There is no history of philosophy, no
+aesthetics, and no philosophy of religion. There is very little
+philosophy of science, or political philosophy, and not much
+ethics.\footnote{Precisely how much there is in each of these categories
+  depends on just how one draws the subdiscipliniary boundaries. But
+  however one draws them, these topics are under-represented in the
+  tables relative to their contribution to philosophy.}
+
+There are two straightforward reasons for these facts. One is that
+journals play a different role in different subdisciplines, so a measure
+looking primarily at journals will not be as useful a measure across all
+of philosophy. But the bigger measure is that the norms on citations
+differ dramatically between different fields. Most notably, historians
+of philosophy cite other historians much less than, say, metaphysicians
+cite other metaphysicians. That's in part because so many citations in
+history papers are to primary sources, and in part because citation
+norms have changed dramatically in fields like metaphysics in recent
+years in the direction of much more expansive citations. The result is
+that comparing citations between individual philosophers across
+different fields will rarely be a useful measure of quality, or
+influence, or anything that might be professionally relevant. It just
+won't be a like for like comparison.
+
+\section{Methodology}\label{sec-methodology}
+
+The data I'm using comes from Web of Science (WoS), combining XML files
+(through 2021) and website downloads (2022-2024). I filtered the XML
+data to articles in journals categorized as Philosophy or History \&
+Philosophy of Science, then hand-selected one hundred journals with the
+most inbound citations that were mostly English-language, broadly
+analytic (rather than continental), and not just history of science. The
+complete journal list appears in Table~\ref{tbl-list-of-journals} in
+Section~\ref{sec-appendix}.
+
+For these journals, I included all articles plus notes and reviews over
+15 pages, regardless of WoS subject classification. This ensures
+complete coverage for interdisciplinary journals where WoS labels are
+unreliable.
+
+Two supplemental steps were needed. First, WoS doesn't index \emph{The
+Journal of Philosophy} from 1971-1974, so it leaves out many influential
+articles. I compiled a complete article list from JSTOR and manually
+searched for citations to these articles. Some data discontinuities
+around this period may stem from this dual methodology.
+
+Second, my XML data extends only through 2021. I downloaded 2022-2024
+data from the WoS website, processing it with the bibliometrix package
+(\citeproc{ref-bibliometrix}{Aria and Cuccurullo 2017}). Cross-checking
+2021 data showed differences under 1\% for article counts and slightly
+over 1\% for citations---close enough to combine the datasets reliably.
+
+In this data set, 318 articles have at least 100 citations. I'm calling
+these the `highly cited' articles. Their temporal distribution is shown
+in Figure~\ref{fig-when-highly-cited}.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-when-highly-cited-1.pdf}}
+
+}
+
+\caption{\label{fig-when-highly-cited}How many articles published each
+year have at least 100 citations.}
+
+\end{figure}%
+
+I decided to focus on articles published between 2000 and 2015 because
+before 2000, there are too many highly cited articles that could not
+possibly be cited, and after 2015 the citation numbers are so low that
+the data is too noisy. The WoS data quality is much higher for journals
+that use bibliographies rather than those that use citations in
+footnotes. By 2000 most journals had switched over to using
+bibliographies, so we don't have quite as many worries about data
+quality as we do before then.
+
+In later sections I'm going to consider articles that were highly cited
+at various times. The articles with at least 100 citations make up about
+0.32\% of the published articles. When considering which articles were
+highly cited at various times, I'm going to look at the articles that
+are in the top 0.3\% of articles then published by number of citations,
+including ties. (I'm using 0.3\% rather than 0.32\% because sometimes
+there are a lot of ties, so it often ends up around 0.32\% anyway.)
+Citations have been expanding so quickly that getting into this category
+used to require many fewer citations than it does now. For example, as
+of 2000, an article with 29 citations was in the top 0.3\% of articles
+by citations.
+
+\section{Citing the Highly Cited}\label{sec-cite-highly-cited}
+
+As noted earlier, from 2000-2015, it seemed to help one's citations a
+lot to cite an article that would eventually get 100 or more citations.
+In the next section, I'll come back to how much it helped to cite an
+article that was already highly cited. In this section I'll look at
+whether there are simple explanations for the difference noted earlier:
+articles which cite one of the highly cited get an average of 11.5
+citations, while those that do not get an average of 3.5 citations.
+
+The first thing to check is whether this is just an effect of timing.
+Perhaps the articles that cite highly cited articles are from times that
+tend to have higher citations. Figure~\ref{fig-pct-articles-citinghc}
+suggests this is at least possible, since the percentage of articles
+that do cite highly cited articles changes considerably over the period
+we're looking at.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-pct-articles-citinghc-1.pdf}}
+
+}
+
+\caption{\label{fig-pct-articles-citinghc}The proportion of articles
+each year citing highly cited articles}
+
+\end{figure}%
+
+But if we were just looking at an artifact of publication time, we'd
+expect the articles that cite highly cited articles to be cited
+\emph{less} often, since the times when highly cited articles are more
+common cited tend to have fewer citations. We see this in
+Figure~\ref{fig-citations-by-year}.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-citations-by-year-1.pdf}}
+
+}
+
+\caption{\label{fig-citations-by-year}Average number of citations each
+year.}
+
+\end{figure}%
+
+I'll still check for temporal effects in what follows, but the initial
+evidence is that this doesn't explain the difference.
+
+A more plausible explanation is that articles which have more references
+to other articles tend to get cited more. This is shown in
+Figure~\ref{fig-avg-cites-by-refs}.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-avg-cites-by-refs-1.pdf}}
+
+}
+
+\caption{\label{fig-avg-cites-by-refs}Average number of citations for
+articles with different number of references.}
+
+\end{figure}%
+
+This could explain the difference quite simple. Obviously articles that
+have more outgoing references are more likely to cite a highly cited
+article. They are more likely to cite any random collection of articles.
+And as Figure~\ref{fig-avg-cites-by-refs} shows, that means they will in
+general have more citations.
+
+There are two reasons for the pattern we see in
+Figure~\ref{fig-avg-cites-by-refs}. One is that you'd expect longer
+papers to have more citations. If we model editors as trying to maximise
+citations and constrained by a page budget, then the quantity they'll
+try to maximise is not the number of citations per article, but the
+number of citations per page. On this model, the effect seen in
+Figure~\ref{fig-avg-cites-by-refs} arises because number of citations is
+a reasonable proxy for length.
+
+But I doubt that explains everything going on here. Remember that both
+axes in Figure~\ref{fig-avg-cites-by-refs} measure citations in
+philosophy journals. Some of the papers represented in those large dots
+in the bottom left might be widely discussed, but not in philosophy
+journals. That could be because they are papers at the intersection of
+philosophy and some other field, and are primarily discussed in that
+other field. Or it could be because they are papers in history of
+philosophy which largely discuss primary sources or contemporary books.
+So it's not surprising that there is an effect here, and we should
+control for it before making any claims about the effect of citing
+highly cited articles in particular.
+
+What we see in Figure~\ref{fig-avg-cites-by-refs-split} is that citing
+highly cited articles makes a difference even if we control for number
+of references.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-avg-cites-by-refs-split-1.pdf}}
+
+}
+
+\caption{\label{fig-avg-cites-by-refs-split}Even controlling for number
+of references, citing a highly cited article matters.}
+
+\end{figure}%
+
+Among articles with \emph{n} references, for \emph{n} from 1 to 15,
+those that cite highly cited articles always have more citations. On
+average, the articles that do cite highly cited articles get 84\% more
+citations.\footnote{That is, the geometric mean of the ratio between the
+  two lines in Figure~\ref{fig-avg-cites-by-refs-split} is 1.8398964.} I
+did a much longer analysis that controlled both for when articles was
+published and how many references they had, using somewhat arbitrary
+buckets to ensure I was always comparing sufficiently large numbers of
+articles, and the result turned out almost exactly the same. That is,
+citing a highly cited article was associated with an 84\% increase in
+citations. Given the results were so similar, I won't go over all the
+details here, and instead just look at the graphs that don't control for
+publication date.
+
+This increase of 84\% is not small. Further, it's incredibly unlikely
+that by pure chance the `Cites highly cited' line in
+Figure~\ref{fig-avg-cites-by-refs-split} would be higher than the
+`Doesn't cite highly cited' line at all 15 data points. But this is
+still a considerably smaller effect than we saw at the start, when
+looking at the raw averages of citations for papers that do and don't
+cite highly cited papers. On the raw averages, citing a highly cited
+paper was correlated with an increase in citations of 225\%. So
+controlling for the numner of references was important.
+
+Should we also control for where a paper is published? Perhaps it's just
+the case that papers published in journals like \emph{Philosophical
+Review} are both more likely to cite highly cited articles, and more
+likely to be cited? I'm not going to control for that for a couple of
+reasons. It's not that the presuppositions are wrong. In fact,
+\emph{Philosophical Review} articles are much more likely than the
+average article to cite highly cited articles, and are more likely to be
+cited. But there are two reasons to not control for publication venue.
+
+One reason is that controlling for the number of references to
+philosophy journals in a paper already does much of the work you might
+want when controlling for publication venue. In
+Figure~\ref{fig-where-published}, I've graphed two things. The smaller
+blue dots show, for each of the journals, the average number of
+references in each paper to other journals, and the percentage of papers
+that cite highly cited articles. The larger coral dots (with lines
+connecting them) show what percentage of articles with that many
+references cite highly cited articles.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-where-published-1.pdf}}
+
+}
+
+\caption{\label{fig-where-published}References and citations for
+different journals.}
+
+\end{figure}%
+
+As you can see, the journals mostly cluster around the average. The one
+notable exception is \emph{Philosophy Compass}, for reasons I don't
+quite understand. But in general, any connection between publication
+venue and percentage of papers that cite highly cited articles is
+already accounted for by controlling for the number of references.
+
+The other reason I don't want to control for venue is that when we use
+citation data in practice, we typically do not in fact control for
+venue. Nobody would give the following speech. ``Yes, Professor X's
+publications are widely cited. But that's just because she only
+published in \emph{Philosophical Review} and \emph{Mind}. Relative to
+the average papers in those journals, her papers do not stand out.''
+It's clear what's wrong with this speech. The people who are impressed
+by Professor X's papers, and are using citation data to support their
+view, will say that it's because the papers are so good that they ended
+up in \emph{Philosophical Review} and \emph{Mind}, and that's also why
+they were widely cited. It's not that they were widely cited merely
+because they were in those venues. If we controlled for publication
+venue, we'd be resembling a bit too closely the person who makes this
+speech, rather than the person impressed by Professor X.
+
+\section{Three Theoretical Accounts}\label{sec-three-accounts}
+
+So after taking account of possible alternative explanations, it seems
+plausible that citing a highly cited article leads to an increase in
+citations of around 84\%. What could explain this?
+
+The strongest form of the optimist story is that citing one of these
+papers is a sign of quality. It's hard to find this story plausible.
+Just citing ``New Work for a Theory of Universals'' or other papers like
+that is not in itself a sign that the paper is nearly twice as good as
+it would be otherwise. I certainly don't think my citation of ``New
+Work'' in this paper makes the paper twice as good. This doesn't show
+that citations are wholly independent of paper quality, just that there
+are patterns in the citation data that aren't explained by the quality
+of the paper being cited.
+
+The strongest form of the pessimist story is that citations are just a
+measure of something like popularity, and associating with the popular
+papers is a way of acquiring popularity. This isn't a priori
+implausible, and it would explain the data I've presented so far. But
+we'll see in Section~\ref{sec-then-now} that there are other data points
+that it doesn't explain as well.
+
+The theory that citations track influence does just as good a job as the
+theory that citations track popularity at explaining the data in
+Section~\ref{sec-cite-highly-cited}. This might not be immediately
+obvious, so let's work through an example. I'll focus on John
+MacFarlane's 2003 paper ``Future Contingents and Relative Truth''. This
+has 120 citations in the journals we're looking at, so it's one of the
+highly cited papers. But, like with most highly cited papers in
+philosophy, it took a few years for the citations to appear in large
+numbers. Figure~\ref{fig-macfarlane} shows its citation frequency since
+publication.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-macfarlane-1.pdf}}
+
+}
+
+\caption{\label{fig-macfarlane}Citation frequency for MacFarlane
+(\citeproc{ref-WOS000183846000001}{2003})}
+
+\end{figure}%
+
+Through 2008, that's five years after publication, it had only ten
+citations. That's more than most papers, but not a sign that it would be
+as cited as it turned out to be over the five years after
+that.\footnote{The drop after 2015 isn't because the subject matter of
+  the paper was less discussed; it's rather that people started citing
+  MacFarlane's 2014 book \emph{Assessment Sensitivity}. At one time I
+  thought looking at which papers had dramatic falls in citations would
+  be an interesting guide to changing fashions in the field. But it
+  turned out that most dramatic drops were because papers had been
+  superseded by books, and that's what happened here. Why that reverses
+  in the 2020s, and people more frequently cite papers that have been
+  superseded by books, is itself interesting, but for another day.}
+What's relevant to our purposes is revealed in
+Table~\ref{tbl-macfarlane}, which lists those ten papers, and shows how
+often they were cited in the hundred journals.
+
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1802}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7297}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0901}}@{}}
+
+\caption{\label{tbl-macfarlane}Articles published through 2008 which
+cite MacFarlane (\citeproc{ref-WOS000183846000001}{2003})}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Reference
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Title
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Citations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Lasersohn (\citeproc{ref-WOS000236414800001}{2005})
+& Context Dependence, Disagreement, and Predicates of Personal Taste &
+176 \\
+MacFarlane (\citeproc{ref-WOS000244463400002}{2007})
+& Relativism and Disagreement & 125 \\
+Glanzberg (\citeproc{ref-WOS000249408500001}{2007})
+& Context, Content, and Relativism & 98 \\
+Brogaard (\citeproc{ref-WOS000256690000001}{2008a})
+& Moral Contextualism and Moral Relativism & 43 \\
+Lasersohn (\citeproc{ref-WOS000270026100012}{2008})
+& Quantification and Perspective in Relativist Semantics & 20 \\
+Brogaard (\citeproc{ref-WOS000254095900009}{2008b})
+& Sea Battle Semantics & 10 \\
+Benbaji (\citeproc{ref-WOS000249651200003}{2007})
+& The Responsibility of Soldiers and the Ethics of Killing in War & 5 \\
+Zimmerman (\citeproc{ref-WOS000245134600001}{2007})
+& Against Relativism & 5 \\
+Shapiro (\citeproc{ref-WOS000239571000004}{2006})
+& The Rationale Behind Revision-Rule Semantics & 3 \\
+Dokic (\citeproc{ref-WOS000238113300003}{2006})
+& From Linguistic Contextualism To Situated Cognition: The Case of Ad
+Hoc Concepts & 2 \\
+
+\end{longtable}
+
+It shouldn't be controversial that ``Future Contingents'' was an
+influential paper. It was the first presentation in print of
+MacFarlane's distinctive version of relativism, which became one of the
+most discussed theories in philosophy. What is less clear is which claim
+we should believe about the relationship between ``Future Contingents''
+and the papers in Table~\ref{tbl-macfarlane}. Here are two prima facie
+plausible claims.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  One manifestation of the influence of ``Future Contingents'' is that
+  it led to later discussions, by MacFarlane himself as well as by
+  Lasersohn, Glanzberg, Brogaard and others, which in turn were
+  extremely influential.
+\item
+  One reason that ``Future Contingents'' was so influential is that a
+  network of fascinating papers built up around it, with these early
+  works by Lasersohn, Glanzberg and Brogaard near its center, and it was
+  that network more than any one paper which was influential in the
+  field.
+\end{enumerate}
+
+The explanation I like of the result in
+Section~\ref{sec-cite-highly-cited} is that both these claims are true.
+We want to explain why papers which cite highly cited papers, like
+``Future Contingents'', are cited more often than average. The influence
+story is that if these later papers, the ones in
+Table~\ref{tbl-macfarlane}, had no been so influential, then ``Future
+Contingents'' would not have been as influential, and hence not as
+highly cited.
+
+That's a nice story; it brings out how philosophy is a collective
+enterprise and the big developments in the field come not from lone
+geniuses but from fruitful interactions. But how could we tell if is it
+true? What predictions does it make that differ from the raw popularity
+story? That's what we'll turn to in Section~\ref{sec-then-now}.
+
+\section{Testing the Stories}\label{sec-then-now}
+
+So far I've discussed the citation records of papers that cite papers
+which are, as of 2024, highly cited. We could also look at the citation
+records of papers which cite papers that were, at the time those papers
+were published, highly cited. If citations are just tracking popularity,
+then we might expect these papers would also get a boost to their
+citation numbers. On the influence story, we'd expect that the effect
+would disappear, since these papers can't possibly influence how many
+citations the papers they cited already had.
+
+As noted earlier, I'll say that a paper is highly cited at a time if
+it's in the top 0.3\% of papers published up to that time by citation
+count. (In case of ties, I'll include anything with as many cites as a
+paper in the top 0.3\%.) The big test will be to look at papers that do
+and don't cite such a paper, as of their own publication time, and ask
+how often they are cited.
+
+The raw data, not controlled for any possible confounds, suggests that
+things are like the popularity story predicts. (Again, the data here is
+all about papers from 2000-2015.) Papers which cite papers that were at
+the time highly cited get an average of 10.85 citations, while those
+that do not get an average of 5.68. The former number is 91\% larger.
+
+But as before, the raw data is misleading. This could just be an
+artifact of the facts that articles that include more references are
+more widely cited, and that articles that include more references are
+more likely to cite articles from any arbitrary set. We should control
+for the number of references in the cited article. When we do that, we
+get Figure~\ref{fig-then-high-cited}.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{bandwagon-simple_files/figure-pdf/fig-then-high-cited-1.pdf}}
+
+}
+
+\caption{\label{fig-then-high-cited}The relationship between references
+and citations for articles that do and do not cite then highly cited
+articles.}
+
+\end{figure}%
+
+The result is that there is still a clear benefit to citing articles
+that were, at the time, highly cited. It would be implausible to say
+that it's just a coincidence that the first fourteen data points in
+Figure~\ref{fig-then-high-cited} point in the same direction. But the
+effect is small. The difference between the data points in
+Figure~\ref{fig-then-high-cited} is, on average, just 20\%. I tried a
+few other ways of controlling for both publication year and the number
+of references and the result was always that the surplus was around
+15-20\%. That's not nothing, and we can be very confident the true value
+is greater than zero. So this set of data gives some support to the
+popularity story.
+
+But it looks like it gives more support to the influence story. When we
+say that there is a citation benefit to citing highly cited articles,
+that is only true if we mean citing articles that are \emph{now} highly
+cited. And that means that the articles that accrue the extra citations
+probably made an impact in making those articles be highly cited.
+
+\section{Conclusion}\label{sec-conclusion}
+
+The results here should give some pause to those using citation data in
+professional decisions, especially those to do with hiring, promoting,
+or funding. Citations are far from an unbiased measure of the quality of
+philosophical work. For one thing, citation numbers tend to be very
+different in different fields of philosophy. For another, citations
+don't seem to be distributed evenly across demographic categories.
+
+Those facts probably aren't new to a lot of readers. What might be new
+is the data shown here about how citations tend to cluster in topics.
+One key way to get more citations is to write about something that will
+be a central philosophical topic in a few years time.
+
+That said, writing about something that will be a central topic might in
+itself be a virtue in philosophical work. Perhaps it is just a sign of
+predictive skill, of being able to skate to where the puck is going.
+
+\begin{verbatim}
+Target year: 2005
+\end{verbatim}
+
+\begin{verbatim}
+Top 0.2% cumulative threshold as of 2004: 68.5 citations
+\end{verbatim}
+
+\begin{verbatim}
+Paper A candidates (was temporal HC top 0.2%, not now HC, ≥5 cites in 2005): 0
+\end{verbatim}
+
+\begin{verbatim}
+Paper B candidates (was not temporal HC top 0.2%, now HC, ≥5 cites in 2005): 53
+\end{verbatim}
+
+\begin{verbatim}
+Matching pairs: 0
+\end{verbatim}
+
+\begin{verbatim}
+No matching pairs found. Try a different year.
+\end{verbatim}
+
+\section{Statistics on Journals Used}\label{sec-appendix}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.4274}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0940}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0855}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0769}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1624}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1538}}@{}}
+
+\caption{\label{tbl-list-of-journals}Journals used in this paper}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Journal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+First Year
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Last Year
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Articles
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Outbound Citations
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Inbound Citations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+American Philosophical Quarterly & 1964 & 2025 & 1841 & 7790 & 10817 \\
+Analysis & 1975 & 2025 & 2720 & 7498 & 15612 \\
+Analytic Philosophy & 2016 & 2025 & 194 & 2288 & 620 \\
+Archiv für Geschichte der Philosophie & 1975 & 2025 & 678 & 1648 &
+1083 \\
+Australasian Journal of Philosophy & 1975 & 2025 & 1751 & 10649 &
+14412 \\
+Biology and Philosophy & 1988 & 2025 & 1231 & 6252 & 5016 \\
+British Journal for the History of Philosophy & 2007 & 2025 & 851 & 2498
+& 1299 \\
+British Journal for the Philosophy of Science & 1956 & 2025 & 1631 &
+9449 & 13660 \\
+British Journal of Aesthetics & 1975 & 2025 & 1438 & 3565 & 3879 \\
+Bulletin of Symbolic Logic & 1997 & 2024 & 443 & 1326 & 1212 \\
+Canadian Journal of Philosophy & 1975 & 2023 & 1552 & 7777 & 6188 \\
+Croatian Journal of Philosophy & 2007 & 2024 & 376 & 1902 & 327 \\
+Dialogue & 1975 & 2024 & 1555 & 3703 & 1167 \\
+Economics and Philosophy & 1986 & 2025 & 596 & 2837 & 2608 \\
+Episteme & 2005 & 2024 & 586 & 5199 & 3708 \\
+Ergo & 2016 & 2025 & 394 & 5196 & 1137 \\
+Erkenntnis & 2000 & 2025 & 1851 & 18132 & 8474 \\
+Ethical Theory and Moral Practice & 2008 & 2024 & 902 & 5881 & 2586 \\
+Ethics & 1953 & 2025 & 1725 & 5902 & 16927 \\
+Ethics and Information Technology & 2001 & 2025 & 582 & 2050 & 1132 \\
+European Journal for Philosophy of Science & 2011 & 2025 & 578 & 6141 &
+1551 \\
+European Journal of Philosophy & 1998 & 2025 & 1014 & 6038 & 3380 \\
+Heythrop Journal & 1975 & 2024 & 1559 & 876 & 362 \\
+History and Philosophy of Logic & 1992 & 2025 & 531 & 1504 & 1010 \\
+Hypatia & 2009 & 2024 & 683 & 1557 & 2036 \\
+Inquiry & 1966 & 2025 & 1671 & 7559 & 5235 \\
+International Journal for Philosophy of Religion & 1975 & 2025 & 1154 &
+2207 & 1194 \\
+International Philosophical Quarterly & 1961 & 2023 & 1588 & 1467 &
+726 \\
+Journal of Aesthetics and Art Criticism & 1975 & 2025 & 1541 & 3759 &
+4035 \\
+Journal of Applied Philosophy & 2006 & 2025 & 690 & 3705 & 1521 \\
+Journal of Chinese Philosophy & 1973 & 2024 & 1278 & 1056 & 1003 \\
+Journal of Consciousness Studies & 2000 & 2025 & 1535 & 5004 & 3976 \\
+Journal of Indian Philosophy & 1975 & 2024 & 1107 & 1477 & 1579 \\
+Journal of Medical Ethics & 1975 & 2024 & 4347 & 5907 & 5443 \\
+Journal of Moral Philosophy & 2005 & 2024 & 392 & 2449 & 1118 \\
+Journal of Philosophical Logic & 1972 & 2025 & 1504 & 7863 & 10390 \\
+Journal of Philosophical Research & 2005 & 2024 & 463 & 2097 & 640 \\
+Journal of Philosophy & 1956 & 2024 & 2761 & 7299 & 39647 \\
+Journal of Political Philosophy & 1998 & 2023 & 609 & 2303 & 3206 \\
+Journal of Social Philosophy & 2008 & 2025 & 516 & 2274 & 1014 \\
+Journal of Symbolic Logic & 1966 & 2024 & 4363 & 6757 & 11016 \\
+Journal of Value Inquiry & 1980 & 2025 & 1371 & 2984 & 1620 \\
+Journal of the American Philosophical Association & 2015 & 2024 & 341 &
+2775 & 1162 \\
+Journal of the History of Ideas & 1956 & 2025 & 2219 & 1009 & 1733 \\
+Journal of the History of Philosophy & 1975 & 2024 & 1138 & 2801 &
+3196 \\
+Journal of the Philosophy of History & 2010 & 2025 & 288 & 640 & 206 \\
+Kant-Studien & 1975 & 2025 & 1141 & 1719 & 1783 \\
+Kantian Review & 2010 & 2024 & 338 & 1561 & 741 \\
+Kennedy Institute of Ethics Journal & 1995 & 2024 & 574 & 1234 & 1001 \\
+Law and Philosophy & 1982 & 2025 & 861 & 2642 & 1609 \\
+Linguistics and Philosophy & 1979 & 2025 & 883 & 5093 & 6776 \\
+Logique et Analyse & 2007 & 2021 & 340 & 1565 & 343 \\
+Metaphilosophy & 1975 & 2025 & 1570 & 4633 & 3091 \\
+Mind & 1956 & 2024 & 1980 & 8456 & 19732 \\
+Mind \& Language & 1994 & 2025 & 900 & 5884 & 6939 \\
+Minds and Machines & 1992 & 2025 & 768 & 3497 & 2132 \\
+Monist & 1963 & 2025 & 1985 & 4416 & 6844 \\
+Notre Dame Journal of Formal Logic & 2009 & 2024 & 486 & 1661 & 775 \\
+Noûs & 1975 & 2025 & 1493 & 12104 & 22269 \\
+Pacific Philosophical Quarterly & 1980 & 2025 & 1235 & 7693 & 7022 \\
+Philosophers' Imprint & 2010 & 2024 & 402 & 5179 & 3668 \\
+Philosophia & 1975 & 2024 & 2249 & 10036 & 3203 \\
+Philosophia Mathematica & 2008 & 2024 & 243 & 1614 & 968 \\
+Philosophical Explorations & 2008 & 2024 & 390 & 2857 & 1460 \\
+Philosophical Forum & 1971 & 2024 & 851 & 1727 & 652 \\
+Philosophical Investigations & 1983 & 2025 & 720 & 1099 & 660 \\
+Philosophical Papers & 2009 & 2023 & 234 & 1379 & 523 \\
+Philosophical Perspectives & 2007 & 2023 & 305 & 3382 & 3851 \\
+Philosophical Psychology & 1991 & 2025 & 1350 & 7450 & 4812 \\
+Philosophical Quarterly & 1975 & 2024 & 1450 & 8663 & 11561 \\
+Philosophical Review & 1956 & 2025 & 1036 & 5268 & 27275 \\
+Philosophical Studies & 1956 & 2025 & 5509 & 35467 & 41326 \\
+Philosophy & 1956 & 2024 & 1811 & 2453 & 3848 \\
+Philosophy \& Public Affairs & 1971 & 2025 & 735 & 2602 & 12647 \\
+Philosophy Compass & 2015 & 2025 & 662 & 8067 & 1905 \\
+Philosophy East and West & 1966 & 2025 & 1616 & 2015 & 1838 \\
+Philosophy and Phenomenological Research & 1956 & 2025 & 3291 & 15394 &
+23362 \\
+Philosophy and Rhetoric & 1975 & 2025 & 933 & 1203 & 909 \\
+Philosophy of Science & 1956 & 2025 & 3271 & 13047 & 25984 \\
+Philosophy of the Social Sciences & 1975 & 2025 & 1005 & 2594 & 1800 \\
+Phronesis & 1975 & 2025 & 785 & 1237 & 1711 \\
+Politics, Philosophy and Economics & 2008 & 2025 & 329 & 2082 & 906 \\
+Ratio & 1974 & 2025 & 1098 & 3819 & 3919 \\
+Res Philosophica & 2013 & 2024 & 360 & 2178 & 828 \\
+Review of Metaphysics & 1956 & 2024 & 1616 & 1501 & 2511 \\
+Review of Symbolic Logic & 2008 & 2024 & 578 & 3906 & 2942 \\
+Russell & 1981 & 2024 & 345 & 447 & 304 \\
+Social Epistemology & 2011 & 2025 & 504 & 2486 & 1336 \\
+Social Philosophy and Policy & 1983 & 2024 & 973 & 2110 & 2725 \\
+South African Journal of Philosophy & 1987 & 2024 & 794 & 1868 & 708 \\
+Southern Journal of Philosophy & 1976 & 2024 & 1984 & 5196 & 3264 \\
+Studia Logica & 2010 & 2024 & 734 & 2418 & 1128 \\
+Studies in History and Philosophy of Science & 1974 & 2025 & 1849 & 8980
+& 6526 \\
+Synthese & 1966 & 2025 & 7882 & 66386 & 35560 \\
+Theoria & 2007 & 2025 & 466 & 3951 & 841 \\
+Theory and Decision & 1970 & 2025 & 1949 & 2138 & 2352 \\
+Thought & 2016 & 2022 & 219 & 1537 & 554 \\
+Topoi & 1982 & 2025 & 1344 & 5698 & 2735 \\
+Transactions of the Charles S. Peirce Society & 1975 & 2024 & 1181 &
+1886 & 1583 \\
+Utilitas & 2009 & 2024 & 391 & 2481 & 1294 \\
+
+\end{longtable}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-WOS000078432400003}
+Anderson, Elizabeth S. 1999. {``What Is the Point of Equality?''}
+\emph{Ethics} 109 (2): 287--337. doi:
+\href{https://doi.org/10.1086/233897}{10.1086/233897}.
+
+\bibitem[\citeproctext]{ref-bibliometrix}
+Aria, Massimo, and Corrado Cuccurullo. 2017. {``Bibliometrix: An r-Tool
+for Comprehensive Science Mapping Analysis.''} \emph{Journal of
+Informetrics} 11 (4): 959--75. doi:
+\href{https://doi.org/10.1016/j.joi.2017.08.007}{10.1016/j.joi.2017.08.007}.
+
+\bibitem[\citeproctext]{ref-WOS000249651200003}
+Benbaji, Yitzhak. 2007. {``The Responsibility of Soldiers and the Ethics
+of Killing in War.''} \emph{Philosophical Quarterly} 57 (229): 558--72.
+doi:
+\href{https://doi.org/10.1111/j.1467-9213.2007.497.x}{10.1111/j.1467-9213.2007.497.x}.
+
+\bibitem[\citeproctext]{ref-WOS000256690000001}
+Brogaard, Berit. 2008a. {``Moral Contextualism and Moral Relativism.''}
+\emph{Philosophical Quarterly} 58 (232): 385--409. doi:
+\href{https://doi.org/10.1111/j.1467-9213.2007.543.x}{10.1111/j.1467-9213.2007.543.x}.
+
+\bibitem[\citeproctext]{ref-WOS000254095900009}
+---------. 2008b. {``Sea Battle Semantics.''} \emph{Philosophical
+Quarterly} 58 (231): 326--35. doi:
+\href{https://doi.org/10.1111/j.1467-9213.2007.515.x}{10.1111/j.1467-9213.2007.515.x}.
+
+\bibitem[\citeproctext]{ref-WOS000073222300002}
+Clark, Andy, and David J. Chalmers. 1998. {``The Extended Mind.''}
+\emph{Analysis} 58 (1): 7--19. doi:
+\href{https://doi.org/10.1111/1467-8284.00096}{10.1111/1467-8284.00096}.
+
+\bibitem[\citeproctext]{ref-WOSA1963CEU0700001}
+Davidson, Donald. 1963. {``Actions, Reasons, and Causes.''}
+\emph{Journal of Philosophy} 60 (23): 685--700. doi:
+\href{https://doi.org/10.2307/2023177}{10.2307/2023177}.
+
+\bibitem[\citeproctext]{ref-WOS000238113300003}
+Dokic, Jerome. 2006. {``From Linguistic Contextualism To Situated
+Cognition: The Case of Ad Hoc Concepts.''} \emph{Philosophical
+Psychology} 19 (3): 309--28. doi:
+\href{https://doi.org/10.1080/09515080600690102}{10.1080/09515080600690102}.
+
+\bibitem[\citeproctext]{ref-WOS000289948200002}
+Dotson, Kristie. 2011. {``Tracking Epistemic Violence, Tracking
+Practices of Silencing.''} \emph{Hypatia} 26 (2): 236--57. doi:
+\href{https://doi.org/10.1111/j.1527-2001.2011.01177.x}{10.1111/j.1527-2001.2011.01177.x}.
+
+\bibitem[\citeproctext]{ref-WOSA1969Y444700002}
+Frankfurt, Harry G. 1969. {``Alternate Possibilities and Moral
+Responsibility.''} \emph{Journal of Philosophy} 66 (23): 829--39. doi:
+\href{https://doi.org/10.2307/2023833}{10.2307/2023833}.
+
+\bibitem[\citeproctext]{ref-10.2307_2024717}
+---------. 1971. {``Freedom of the Will and the Concept of a Person.''}
+\emph{Journal of Philosophy} 68 (1): 5--20.
+
+\bibitem[\citeproctext]{ref-WOS000249408500001}
+Glanzberg, Michael. 2007. {``Context, Content, and Relativism.''}
+\emph{Philosophical Studies} 136 (1): 1--29. doi:
+\href{https://doi.org/10.1007/s11098-007-9145-5}{10.1007/s11098-007-9145-5}.
+
+\bibitem[\citeproctext]{ref-WOSA1976CP00100001}
+Goldman, Alvin I. 1976. {``Discrimination and Perceptual Knowledge.''}
+\emph{Journal of Philosophy} 73 (20): 771--91. doi:
+\href{https://doi.org/10.2307/2025679}{10.2307/2025679}.
+
+\bibitem[\citeproctext]{ref-WOSA1957CGZ6000005}
+Grice, H. P. 1957. {``Meaning.''} \emph{Philosophical Review} 66 (3):
+377--88. doi: \href{https://doi.org/10.2307/2182440}{10.2307/2182440}.
+
+\bibitem[\citeproctext]{ref-WOS000085841900002}
+Haslanger, Sally. 2000. {``Gender and Race: (What) Are They? (What) Do
+We Want Them To Be?''} \emph{Noûs} 34 (1): 31--55. doi:
+\href{https://doi.org/10.1111/0029-4624.00201}{10.1111/0029-4624.00201}.
+
+\bibitem[\citeproctext]{ref-WOS000262624000001}
+Hawthorne, John, and Jason Stanley. 2008. {``Knowledge and Action.''}
+\emph{Journal of Philosophy} 105 (10): 571--90. doi:
+\href{https://doi.org/10.5840/jphil20081051022}{10.5840/jphil20081051022}.
+
+\bibitem[\citeproctext]{ref-WOSA1982NH65300003}
+Jackson, Frank. 1982. {``Epiphenomenal Qualia.''} \emph{Philosophical
+Quarterly} 32 (127): 127--36. doi:
+\href{https://doi.org/10.2307/2960077}{10.2307/2960077}.
+
+\bibitem[\citeproctext]{ref-WOS000077956100002}
+Joyce, James M. 1998. {``A Nonpragmatic Vindication of Probabilism.''}
+\emph{Philosophy of Science} 65 (4): 575--603. doi:
+\href{https://doi.org/10.1086/392661}{10.1086/392661}.
+
+\bibitem[\citeproctext]{ref-WOSA1975BF60000005}
+Kripke, Saul. 1975. {``Outline of a Theory of Truth.''} \emph{Journal of
+Philosophy} 72 (19): 690--716. doi:
+\href{https://doi.org/10.2307/2024634}{10.2307/2024634}.
+
+\bibitem[\citeproctext]{ref-WOS000236414800001}
+Lasersohn, Peter. 2005. {``Context Dependence, Disagreement, and
+Predicates of Personal Taste.''} \emph{Linguistics and Philosophy} 28
+(6): 643--86. doi:
+\href{https://doi.org/10.1007/s10988-005-0596-x}{10.1007/s10988-005-0596-x}.
+
+\bibitem[\citeproctext]{ref-WOS000270026100012}
+---------. 2008. {``Quantification and Perspective in Relativist
+Semantics.''} \emph{Philosophical Perspectives} 22 (1): 305--37. doi:
+\href{https://doi.org/10.1111/j.1520-8583.2008.00150.x}{10.1111/j.1520-8583.2008.00150.x}.
+
+\bibitem[\citeproctext]{ref-10.2307_2025310}
+Lewis, David. 1973. {``Causation.''} \emph{Journal of Philosophy} 70
+(17): 556--67.
+
+\bibitem[\citeproctext]{ref-WOSA1979JC64200001}
+---------. 1979a. {``Attitudes De Dicto and De Se.''}
+\emph{Philosophical Review} 88 (4): 513--43. doi:
+\href{https://doi.org/10.2307/2184843}{10.2307/2184843}.
+
+\bibitem[\citeproctext]{ref-WOSA1979JB14500003}
+---------. 1979b. {``Counterfactual Dependence and Time's Arrow.''}
+\emph{Noûs} 13 (4): 455--76. doi:
+\href{https://doi.org/10.2307/2215339}{10.2307/2215339}.
+
+\bibitem[\citeproctext]{ref-WOSA1979HJ57600007}
+---------. 1979c. {``Scorekeeping in a Language Game.''} \emph{Journal
+of Philosophical Logic} 8 (3): 339--59.
+
+\bibitem[\citeproctext]{ref-WOSA1983RR51600001}
+---------. 1983. {``New Work for a Theory of Universals.''}
+\emph{Australasian Journal of Philosophy} 61 (4): 343--77. doi:
+\href{https://doi.org/10.1080/00048408312341131}{10.1080/00048408312341131}.
+
+\bibitem[\citeproctext]{ref-WOSA1996VY21200001}
+---------. 1996. {``Elusive Knowledge.''} \emph{Australasian Journal of
+Philosophy} 74 (4): 549--67. doi:
+\href{https://doi.org/10.1080/00048409612347521}{10.1080/00048409612347521}.
+
+\bibitem[\citeproctext]{ref-WOS000183846000001}
+MacFarlane, John. 2003. {``Future Contingents and Relative Truth.''}
+\emph{Philosophical Quarterly} 53 (212): 321--36. doi:
+\href{https://doi.org/10.1111/1467-9213.00315}{10.1111/1467-9213.00315}.
+
+\bibitem[\citeproctext]{ref-WOS000244463400002}
+---------. 2007. {``Relativism and Disagreement.''} \emph{Philosophical
+Studies} 132 (1): 17--31. doi:
+\href{https://doi.org/10.1007/s11098-006-9049-9}{10.1007/s11098-006-9049-9}.
+
+\bibitem[\citeproctext]{ref-WOS000087305900001}
+Machamer, Peter, Lindley Darden, and Carl F. Craver. 2000. {``Thinking
+About Mechanisms.''} \emph{Philosophy of Science} 67 (1): 1--25. doi:
+\href{https://doi.org/10.1086/392759}{10.1086/392759}.
+
+\bibitem[\citeproctext]{ref-WOSA1974U469700001}
+Nagel, Thomas. 1974. {``What Is It Like To Be a Bat.''}
+\emph{Philosophical Review} 83 (4): 435--50. doi:
+\href{https://doi.org/10.2307/2183914}{10.2307/2183914}.
+
+\bibitem[\citeproctext]{ref-WOSA1979HE39600001}
+Perry, John. 1979. {``The Problem of the Essential Indexical.''}
+\emph{Noûs} 13 (1): 3--21. doi:
+\href{https://doi.org/10.2307/2214792}{10.2307/2214792}.
+
+\bibitem[\citeproctext]{ref-WOS000165361800002}
+Pryor, James. 2000. {``The Skeptic and the Dogmatist.''} \emph{Noûs} 34
+(4): 517--49. doi:
+\href{https://doi.org/10.1111/0029-4624.00277}{10.1111/0029-4624.00277}.
+
+\bibitem[\citeproctext]{ref-WOS000272855000002}
+Schaffer, Jonathan. 2010. {``Monism: The Priority of the Whole.''}
+\emph{Philosophical Review} 119 (1): 31--76. doi:
+\href{https://doi.org/10.1215/00318108-2009-025}{10.1215/00318108-2009-025}.
+
+\bibitem[\citeproctext]{ref-WOS000368189400004}
+---------. 2016. {``Grounding in the Image of Causation.''}
+\emph{Philosophical Studies} 173 (1): 49--100. doi:
+\href{https://doi.org/10.1007/s11098-014-0438-1}{10.1007/s11098-014-0438-1}.
+
+\bibitem[\citeproctext]{ref-WOS000239571000004}
+Shapiro, Lionel. 2006. {``The Rationale Behind Revision-Rule
+Semantics.''} \emph{Philosophical Studies} 129 (3): 477--515. doi:
+\href{https://doi.org/10.1007/s11098-004-2497-1}{10.1007/s11098-004-2497-1}.
+
+\bibitem[\citeproctext]{ref-WOSA1972Z066400001}
+Singer, Peter. 1972. {``Famine, Affluence, and Morality.''}
+\emph{Philosophy \& Public Affairs} 1 (3): 229--43.
+
+\bibitem[\citeproctext]{ref-WOS000344393500001}
+Wilson, Jessica M. 2014. {``No Work for a Theory of Grounding.''}
+\emph{Inquiry} 57 (5-6): 535--79. doi:
+\href{https://doi.org/10.1080/0020174X.2014.907542}{10.1080/0020174X.2014.907542}.
+
+\bibitem[\citeproctext]{ref-WOS000245134600001}
+Zimmerman, Aaron Z. 2007. {``Against Relativism.''} \emph{Philosophical
+Studies} 133 (3): 313--48. doi:
+\href{https://doi.org/10.1007/s11098-005-4604-3}{10.1007/s11098-005-4604-3}.
+
+\end{CSLReferences}
+
+
+
+\noindent Draft for submission
+
+
+\end{document}
