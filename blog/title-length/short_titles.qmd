@@ -6,7 +6,7 @@ author:
     affiliation: University of Michigan
     affiliation_url: https://umich.edu
     orcid_id: 0000-0002-0830-141X
-date: today
+date: January 20, 2026
 execute:
   echo: false
   warning: false
@@ -20,11 +20,11 @@ resources:
 
 Want more citations? Cut your title.
 
-My analysis of 41,658 philosophy articles from recent years shows a clear pattern: shorter titles tend to get more citations. The effect is small but real. And it persists even after controlling for confounds.^[I used Claude Code heavily to draft the code for this post. Claude really doesn't like short titles, even when writing about short titles.]
+My analysis of 41,658 philosophy articles from recent years shows a clear pattern: shorter titles tend to get more citations. The effect is small but real. And it persists even after controlling for confounds.^[I used Claude Code heavily to draft the code for this post, and I've borrowed from its explanations of some of the graphs in my write up. Notably, Claude really doesn't like short titles, even when writing about short titles.]
 
 ## The Data
 
-I analyzed philosophy articles published between 2015 and 2024 across 100 prominent journals. These aren't just any citations—I'm tracking citations *within* this network of 100 journals.
+I analyzed philosophy articles published between 2015 and 2024 across 100 prominent journals. These aren't just any citations; I'm tracking citations *within* this network of 100 journals.
 
 The full sample consists of 41,658 articles. The citation network includes every instance where one article in my dataset cites another article also in the dataset. I analyzed articles published between 2015-2024, with citations measured through 2024.
 
@@ -157,10 +157,7 @@ Title length *has* been creeping up slightly (from 7.7 words in 2015 to 7.9 word
 
 Things get more complicated here. It's possible that shorter titles don't actually *cause* more citations. Perhaps articles with shorter titles simply tend to get published in more prestigious journals, and it's really the journal venue that's driving the citation advantage.
 
-I tested this hypothesis by running two distinct types of analysis:
-
-1. **Between-journal comparison**: Do journals that tend to favor shorter titles also tend to have higher overall citation rates?
-2. **Within-journal comparison**: Within each individual journal, do articles with shorter titles get more citations than articles with longer titles in that same journal?
+I tested this hypothesis by looking at whether the effect persists within journals.
 
 ```{r}
 #| label: fig-within-journal
@@ -184,7 +181,7 @@ ggplot(within_journal_length, aes(x = length_effect)) +
   )
 ```
 
-Here's another way to look at it—comparing the effect of longer versus shorter titles within the top journals by prestige:
+There's still an effect, though it's not as dramatic. Here's what happens if we isolate 20 prominent (i.e., highly cited in the dataset) journals:
  
 ```{r}
 #| label: fig-top-journals
@@ -241,11 +238,7 @@ ggplot(top_by_prestige, aes(x = length_effect, y = journal, fill = !long_advanta
   theme(legend.position = "bottom")
 ```
 
-The results reveal that both factors appear to matter:
-
-**Between journals**: Journals with shorter average titles do tend to have higher citation rates. Prestige matters.
-
-**Within journals**: Even when comparing articles *within the same journal*, shorter titles still perform better. This effect isn't uniform across all journals, there's considerable variation, but the overall pattern is consistent.
+The results reveal that both factors appear to matter. Even holding journal fixed, short articles tend to do better. So length is mattering alongside prestige.
 
 ```{r}
 #| label: model-effects
@@ -260,7 +253,7 @@ coef_length_year <- coef(model_length_year)["title_length_words"]
 coef_length_full <- coef(model_length_full)["title_length_words"]
 ```
 
-Here are the effect sizes from my regression models:
+I built three really basic regression models. The first just compared title length and citations, the second added a year variable, the third added a journal prestige variable. Here are the effect sizes from these models:
 
 - Raw correlation (title length vs citations): **`r round(coef_length_only, 3)`**
 - Controlling for year: **`r round(coef_length_year, 3)`**
@@ -274,9 +267,9 @@ There are at least two ways to interpret these findings:
 
 **The direct interpretation**: Writing shorter titles may actually help you get more citations. Brevity makes titles more memorable and attention-grabbing. Readers are more likely to remember and cite papers with punchy titles. Shorter titles are also easier to mention in conversation and informal discussion.
 
-**The indirect interpretation**: Shorter titles might help you get published in more prestigious journals, and it's really the journal venue that's driving most of the citation advantage. You can't just arbitrarily shorten your title and expect citation magic to happen—the journal selection effect is doing most of the work.
+**The indirect interpretation**: Shorter titles might help you get published in more prestigious journals, and it's really the journal venue that's driving most of the citation advantage. You can't just arbitrarily shorten your title and expect citation magic to happen. You also need to get the paper into _Phil Review_. But maybe shortening the title helps with that.
 
-**My interpretation**: The truth probably involves both mechanisms. Short titles might help you get published in better venues *and* help you get cited once published. The persistence of the within-journal effect suggests that title length itself has some direct impact on citations, independent of where the article appears. However, the venue effects are clearly substantial and perhaps even dominant.
+The truth probably involves both mechanisms. Short titles might help you get published in better venues *and* help you get cited once published. The persistence of the within-journal effect suggests that title length itself has some direct impact on citations, independent of where the article appears. However, the venue effects are clearly substantial and perhaps even dominant.
 
 ## Other Title Features (Bonus Findings)
 
@@ -303,7 +296,7 @@ top_features <- comparisons %>%
 kable(top_features)
 ```
 
-The colon effect is particularly striking. Philosophy loves the "Main Title: Explanatory Subtitle" format. But it might be hurting citation counts.
+The colon effect is particularly striking. Philosophy loves the "Main Title: Explanatory Subtitle" format. But it might be hurting citation counts. This might be something for future posts.
 
 ## Conclusion
 
