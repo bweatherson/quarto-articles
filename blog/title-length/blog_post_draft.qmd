@@ -1,0 +1,359 @@
+---
+title: "Short Title Good, Long Title Bad"
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+date: today
+execute:
+  echo: false
+  warning: false
+categories:
+  - citations
+format: html
+resources:
+  - results/*.csv
+  - results/*.RData
+---
+
+Want more citations? Cut your title.
+
+My analysis of 41,658 philosophy articles from recent years shows a clear pattern: shorter titles tend to get more citations. The effect is small but real. And it persists even after controlling for confounds.^[I used Claude Code heavily to draft the code for this post.]
+
+## The Data
+
+I analyzed philosophy articles published between 2015 and 2024 across 100 prominent journals. These aren't just any citations—I'm tracking citations *within* this network of 100 journals.
+
+The full sample consists of 41,658 articles. The citation network includes every instance where one article in my dataset cites another article also in the dataset. I analyzed articles published between 2015-2024, with citations measured through 2024.
+
+See Appendix A for the complete list of all 100 journals, including article counts and average citation rates.
+
+```{r}
+#| label: setup
+#| include: false
+
+library(dplyr)
+library(ggplot2)
+library(knitr)
+
+# Load data
+load("results/title_citation_results.RData")
+
+# Set plot theme
+theme_set(theme_minimal(base_size = 12))
+```
+
+## The Basic Finding
+
+Here's the relationship in its simplest form:
+
+```{r}
+#| label: fig-length-citations
+#| fig-cap: "Citations per year by title length (in words)"
+#| warning: false
+#| message: false
+ 
+library(patchwork)
+ 
+# Calculate stats for each individual title length (1-20 words)
+length_stats <- articles %>%
+  filter(title_length_words >= 1, title_length_words <= 20) %>%
+  group_by(title_length_words) %>%
+  summarise(
+    mean_cites = mean(citations_per_year),
+    se = sd(citations_per_year) / sqrt(n()),
+    n = n(),
+    .groups = "drop"
+  )
+ 
+# Main plot - citations by length
+p_top <- ggplot(length_stats, aes(x = title_length_words, y = mean_cites)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  geom_point(color = "steelblue", size = 2.5) +
+  geom_errorbar(aes(ymin = mean_cites - se, ymax = mean_cites + se),
+                width = 0.3, alpha = 0.5, color = "steelblue") +
+  labs(
+    y = "Mean Citations per Year",
+    title = "Shorter Titles Get More Citations"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank()
+  )
+ 
+# Sample size histogram
+p_bottom <- ggplot(length_stats, aes(x = title_length_words, y = n)) +
+  geom_col(fill = "gray60", alpha = 0.7) +
+#  geom_text(aes(label = scales::comma(n)),
+#            vjust = -0.5, size = 2.5, color = "gray30") +
+  labs(
+    x = "Title Length (words)",
+    y = "Number of\nArticles"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank()
+  )
+ 
+# Combine
+p_top / p_bottom + plot_layout(heights = c(3, 1))
+```
+
+Shorter titles correlate with more citations. The effect isn't huge. But it's there.
+
+The average title length in my sample is 7.9 words, with a range from 1 to over 30 words. Yes, some philosophy titles are sentences. The shortest titles (1-4 words) actually perform best, though 5-7 word titles also do quite well.
+
+## Not Just Changing Norms
+
+One concern you might have is whether this is just a spurious time trend. Perhaps titles have been getting longer over time, and citation rates have also been falling for unrelated reasons, and the two trends just happen to coincide?
+
+Nope. Look within each year:
+
+```{r}
+#| label: fig-year-by-year
+#| fig-cap: "Citation rates by title length category, shown by year"
+#| warning: false
+
+# Create length categories
+articles_by_year <- articles %>%
+  mutate(length_cat = case_when(
+    title_length_words <= 6 ~ "Short (≤6 words)",
+    title_length_words <= 9 ~ "Medium (7-9 words)",
+    TRUE ~ "Long (≥10 words)"
+  )) %>%
+  group_by(year, length_cat) %>%
+  summarise(
+    mean_cites = mean(citations_per_year),
+    se = sd(citations_per_year) / sqrt(n()),
+    .groups = "drop"
+  )
+
+ggplot(articles_by_year, aes(x = year, y = mean_cites, color = length_cat)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_x_continuous(breaks = c(2016,2020, 2024)) +
+  scale_color_manual(values = c("Short (≤6 words)" = "#2C7BB6",
+                                  "Medium (7-9 words)" = "#FDAE61",
+                                  "Long (≥10 words)" = "#D7191C")) +
+  labs(
+    x = "Publication Year",
+    y = "Mean Citations per Year",
+    color = "Title Length",
+    title = "Short Titles Outperform Long Titles Consistently Across Years"
+  ) +
+  theme(legend.position = "bottom")
+```
+
+Year after year, the pattern holds. Short titles outperform long titles. Medium titles sit in between. This isn't about evolving norms in title length. It's a real within-year effect.
+
+Title length *has* been creeping up slightly (from 7.7 words in 2015 to 7.9 words in 2024). But the citation advantage for shorter titles persists throughout.
+
+## The Journal Prestige Confound
+
+Things get more complicated here. It's possible that shorter titles don't actually *cause* more citations. Perhaps articles with shorter titles simply tend to get published in more prestigious journals, and it's really the journal venue that's driving the citation advantage.
+
+I tested this hypothesis by running two distinct types of analysis:
+
+1. **Between-journal comparison**: Do journals that tend to favor shorter titles also tend to have higher overall citation rates?
+2. **Within-journal comparison**: Within each individual journal, do articles with shorter titles get more citations than articles with longer titles in that same journal?
+
+```{r}
+#| label: fig-within-journal
+#| fig-cap: "Within-journal title length effects on citations"
+#| warning: false
+
+# Load within-journal results
+load("results/within_journal_results.RData")
+
+# Plot distribution of within-journal length effects
+ggplot(within_journal_length, aes(x = length_effect)) +
+  geom_histogram(bins = 30, fill = "steelblue", alpha = 0.8) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  geom_vline(xintercept = median(within_journal_length$length_effect, na.rm = TRUE),
+             linetype = "solid", color = "darkblue", linewidth = 1) +
+  labs(
+    x = "Effect of Title Length on Citations (within journal)",
+    y = "Number of Journals",
+    title = "Distribution of Within-Journal Length Effects",
+    subtitle = "Red dashed line = no effect; Blue solid line = median effect"
+  )
+```
+
+Here's another way to look at it—comparing the effect of longer versus shorter titles within the top journals by prestige:
+ 
+```{r}
+#| label: fig-top-journals
+#| fig-cap: "Within-journal title length effect for top 20 journals by prestige"
+#| warning: false
+
+# Calculate within-journal length effects
+# Define "long" as > median length for that journal
+within_journal_length <- articles %>%
+  group_by(journal) %>%
+  filter(n() >= 20) %>%  # Only journals with at least 20 articles
+  mutate(
+    journal_median_length = median(title_length_words),
+    is_long = title_length_words > journal_median_length
+  ) %>%
+  group_by(journal, is_long) %>%
+  summarise(
+    mean_cites = mean(citations_per_year),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  tidyr::pivot_wider(
+    names_from = is_long,
+    values_from = c(mean_cites, n)
+  ) %>%
+  mutate(
+    n_total = n_FALSE + n_TRUE,
+    length_effect = mean_cites_TRUE - mean_cites_FALSE,
+    long_advantage = mean_cites_TRUE > mean_cites_FALSE,
+    overall_mean = (mean_cites_TRUE * n_TRUE +
+                    mean_cites_FALSE * n_FALSE) / n_total
+  )
+
+# Get top 20 journals by prestige (mean citations)
+top_by_prestige <- within_journal_length %>%
+  arrange(desc(overall_mean)) %>%
+  head(20) %>%
+  mutate(journal = reorder(journal, length_effect))
+
+ggplot(top_by_prestige, aes(x = length_effect, y = journal, fill = !long_advantage)) +
+  geom_col(alpha = 0.7) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40") +
+  scale_fill_manual(
+    values = c("TRUE" = "coral", "FALSE" = "steelblue"),
+    labels = c("Longer Better", "Shorter Better")
+  ) +
+  labs(
+    title = "Within-Journal Title Length Effect",
+    subtitle = "Top 20 journals by mean citations",
+    x = "Length Effect (citations per year: longer - shorter)",
+    y = NULL,
+    fill = NULL
+  ) +
+  theme(legend.position = "bottom")
+```
+
+The results reveal that both factors appear to matter:
+
+**Between journals**: Journals with shorter average titles do tend to have higher citation rates. Prestige matters.
+
+**Within journals**: Even when comparing articles *within the same journal*, shorter titles still perform better. This effect isn't uniform across all journals, there's considerable variation, but the overall pattern is consistent.
+
+```{r}
+#| label: model-effects
+#| echo: false
+
+# Load confounds results to get model coefficients
+load("results/title_confounds_results.RData")
+
+# Extract coefficients for title length
+coef_length_only <- coef(model_length_only)["title_length_words"]
+coef_length_year <- coef(model_length_year)["title_length_words"]
+coef_length_full <- coef(model_length_full)["title_length_words"]
+```
+
+Here are the effect sizes from my regression models:
+
+- Raw correlation (title length vs citations): **`r round(coef_length_only, 3)`**
+- Controlling for year: **`r round(coef_length_year, 3)`**
+- Controlling for year + journal: **`r round(coef_length_full, 3)`**
+
+The effect does shrink substantially when I control for journal venue, but it doesn't disappear entirely. This suggests that both the direct effect of title length and the indirect effect through journal selection are playing a role.
+
+## Two Interpretations
+
+There are at least two ways to interpret these findings:
+
+**The direct interpretation**: Writing shorter titles may actually help you get more citations. Brevity makes titles more memorable and attention-grabbing. Readers are more likely to remember and cite papers with punchy titles. Shorter titles are also easier to mention in conversation and informal discussion.
+
+**The indirect interpretation**: Shorter titles might help you get published in more prestigious journals, and it's really the journal venue that's driving most of the citation advantage. You can't just arbitrarily shorten your title and expect citation magic to happen—the journal selection effect is doing most of the work.
+
+**My interpretation**: The truth probably involves both mechanisms. Short titles might help you get published in better venues *and* help you get cited once published. The persistence of the within-journal effect suggests that title length itself has some direct impact on citations, independent of where the article appears. However, the venue effects are clearly substantial and perhaps even dominant.
+
+## Other Title Features (Bonus Findings)
+
+While I was at it, I also tested several other title characteristics to see how they correlate with citation rates:
+
+```{r}
+#| label: tbl-features
+#| tbl-cap: "Title feature prevalence in high-cited vs low-cited articles"
+
+# Get top features by difference
+top_features <- comparisons %>%
+  arrange(desc(abs(difference))) %>%
+  head(10) %>%
+  mutate(
+    high_cited_pct = round(high_cited_pct, 1),
+    low_cited_pct = round(low_cited_pct, 1),
+    difference = round(difference, 1)
+  ) %>%
+  select(Feature = feature,
+         `High-Cited %` = high_cited_pct,
+         `Low-Cited %` = low_cited_pct,
+         `Difference` = difference)
+
+kable(top_features)
+```
+
+The colon effect is particularly striking. Philosophy loves the "Main Title: Explanatory Subtitle" format. But it might be hurting citation counts.
+
+## Conclusion
+
+If you want more citations, consider:
+
+1. Keep the title shorta;
+2. Skip the subtitle;
+3. Ditch the quotation marks; and
+4. Make it punchy.
+
+Will this guarantee citations? No. It's not that easy. But if you've got a choice between "Epistemic Justification and Normative Belief Attribution in Context-Dependent Frameworks" and "When Beliefs Need Reasons", consider the short version.
+
+
+---
+
+## Appendix A: Journal Statistics
+
+```{r}
+#| label: tbl-journals
+#| tbl-cap: "All 100 journals in the sample, ranked by average citations per year"
+
+# Create complete journal summary, sorted by average citations
+journal_stats_complete <- articles %>%
+  group_by(journal) %>%
+  summarise(
+    n_articles = n(),
+    mean_total_cites = round(mean(total_citations), 1),
+    mean_cites_per_year = round(mean(citations_per_year), 2)
+  ) %>%
+  arrange(desc(mean_cites_per_year)) %>%
+  select(
+    Journal = journal,
+    `Articles` = n_articles,
+    `Avg Total Citations` = mean_total_cites,
+    `Avg Cites/Year` = mean_cites_per_year
+  )
+
+kable(journal_stats_complete)
+```
+
+**Download data**: [All journal statistics (CSV)](results/journal_summary.csv) | [Full analysis results (CSV)](results/title_citation_data.csv)
+
+---
+
+## Methods Note
+
+**Citation normalization**: I measure citations-per-year rather than raw citation counts to account for article age. A paper published in 2024 has had much less time to accumulate citations than one published in 2015, so raw counts would be misleading.
+
+**Sample restrictions**: Only articles with titles were included in the analysis (this excluded less than 0.1% of articles). Only citations within my 100-journal network were counted—citations from or to articles outside this network aren't captured.
+
+**Statistical models**: I used linear regression with year and journal fixed effects. See [coefficient_comparison.csv](results/coefficient_comparison.csv) for detailed model comparisons.
+
+**Causation disclaimer**: This analysis is correlational. I cannot prove that shortening your title will *cause* more citations. But, you know, why not try?
