@@ -1,0 +1,586 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.8in, right=1.8in, top=1.5in, bottom=1.5in,
+includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  New Work for Dempster-Shafer Functions
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
+\newcommand{\nmodels}{\mathrel{\ooalign{$\models$\cr\raisebox{-0.001ex}{\hss$\mkern-1mu/\hss$}}}}
+\newcommand{\llbracket}{[\![}
+\newcommand{\rrbracket}{]\!]}
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[lines=2]{lettrine}
+\cehead{Draft of February 28, 2026}
+\DeclareSymbolFont{symbolsC}{U}{txsyc}{m}{n}
+\DeclareMathSymbol{\boxright}{\mathrel}{symbolsC}{128}
+\cehead{
+       Brian Weatherson
+       }
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={New Work for Dempster-Shafer Functions},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{New Work for Dempster-Shafer Functions}
+\author{Brian Weatherson}
+\date{2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+TBD
+\end{abstract}
+
+
+\setstretch{1.1}
+How many cousins does Sherlock Holmes have? Does he have an odd or even
+number of cousins? If you're like me, untutored intuition says that (1)
+is true, while there is no fact of the matter about (2) and (3).
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\tightlist
+\item
+  Holmes has either an odd or even number of cousins.
+\item
+  Holmes has an odd number of cousins.
+\item
+  Holmes has an even number of cousins.
+\end{enumerate}
+
+Intuition isn't the most reliable guide around here, and there are well
+known complications with trying to validate all these intuitions.
+Nevertheless, I'll argue these intuitions are correct. At least, I'll
+argue that the latter intuition is correct; for this paper I'll simply
+assume that (1) is true, and argue that there is no fact of the matter
+about (2) and (3).
+
+In doing so, I'll be arguing against the orthodox view represented by
+David Lewis (\citeproc{ref-Lewis1978b}{1978}). His view is that
+sentences like (2) and (3) have an implicit operator, roughly \emph{In
+the Holmes fiction}, and this operator is a normal necessity
+operator.\footnote{Lewis's account of that operator uses counterfactual
+  conditionals, but on the account of counterfactuals he endorses
+  (\citeproc{ref-Lewis1973a}{Lewis 1973}), \emph{If it were that A} is a
+  normal necessity operator, so we get back what I said in the text.} So
+just like \(\Box (A \vee B)\) can be true while \(\Box A\) and
+\(\Box B\) are both false, Lewis says that (1) can be true while (2) and
+(3) are both false.
+
+Recently, Kyle Blumberg and Ben Holguín
+(\citeproc{ref-BlumbergHolguin2025}{2025}) have argued that Lewis's
+account has implausible predictions about fictional claims embedded in
+attitude ascriptions. For instance, it implies that (4) is true.
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  I know whether Holmes has either an odd or even number of cousins.
+\end{enumerate}
+
+They argue that Lewis's view should be reject in favour of a `realist'
+alternative. On their view, the Holmes stories pick out a particular
+possible world, though it is unknowable which one. So one of (2) and (3)
+is true. I'll argue against that, and in favour of anti-realism about
+fictions. As I said, I'll argue that there's no fact of the matter about
+how many cousins Holmes has.
+
+What does it even mean to say there is `no fact of the matter', and is
+this even coherent? I'll answer these questions by appeal to
+\emph{possibility semantics}, as developed by Lloyd I. L. Humberstone
+(\citeproc{ref-Humberstone1981}{1981}). In possibility semantics, the
+role of possible worlds is played by \emph{possibilities}, which can be
+incomplete. Despite this incompleteness, the logic of truth preservation
+across possibilities is more or less classical.
+
+I'm going to argue that a story does not pick out a possible world, but
+instead a Humberstone-style possibility. Which one does a particular
+story pick out? It's coherent to be unsure about that. Even with the
+text in front of them, a reader might not know the extra-textual
+information that settles some facts in the story. In such a situation,
+their credences about what's true in a story might be distributed across
+various posisbilities.
+
+At this point we (at last) get to the Dempster-Shafer belief functions
+promised in the title. Measures on possibility frames do not always
+determine probability functions; rather, they might determine
+Dempster-Shafer belief functions. So, I'll conclude, it is rational for
+someone uncertain about what is true in a story to have credences that
+track one of these belief functions.
+
+This conclusion might seem surprising. There is a famous argument,
+originally due to James Joyce (\citeproc{ref-Joyce1998}{1998}), that any
+non-probabilistic credence function is accuracy dominated. This argument
+seems to rule out exactly the view I put forward in the last paragraph.
+That argument, however, assumes exactly the kind of realism that is
+implausible in the case of thoughts about fiction. Someone who rejects
+fictional realism can happily use Dempster-Shafer belief functions
+without worrying about being excessively inaccurate.
+
+Indeed, this last point generalises to any case where realism isn't
+clearly true. I'll suggest this opens up a response on behalf of the
+dogmatist to an important objection to dogmatism due to Roger White
+(\citeproc{ref-White2006}{2006}). (What I say here builds on what James
+Pryor (\citeproc{ref-Pryor2007}{2007}) says in an unpublished but widely
+discussed note.)
+
+So this paper lives at the intersection of possibility semantics,
+accuracy dominance arguments for probabilism, and theories of truth in
+fiction. The paper will work its way forward along this list of topics
+then back again. So Section~\ref{sec-humberstone} and
+Section~\ref{sec-classical} discuss possibility semantics. I'll start by
+setting out the details of them possibility semantics, and end by
+discussing the question, which will have become somewhat pressing by
+then, of whether the theory is really \emph{classical}.
+Section~\ref{sec-joyce} and Section~\ref{sec-realism} will discuss
+accuracy dominance arguments, first discussing why accuracy dominance
+arguments are so important, and then coming back to why the anti-realist
+can reject them. And in the middle, in Section~\ref{sec-fiction}, I'll
+endorse Blumberg and Holguìn's objections to Lewis's theory of truth in
+fiction, while rejecting their alternative in favour of an anti-realist
+model.
+
+\section{Possibility Semantics}\label{sec-humberstone}
+
+A Humberstone possibility frame (hereafter, just \emph{possibility
+frame}) is a triple \(\langle W, \leqslant, V\rangle\), where \(W\) is a
+set of possibilities, \(\leqslant\) is a \emph{refinement} relation on
+them, and \(V\) is a valuation function.
+
+Formally, possibilities are anything that can play the possibility role,
+but to picture these models it helps to have a more filled in picture of
+them. Humberstone both suggests that we start by thinking of them as
+sets of possible worlds, and that we shouldn't always think of them this
+way, because they should replace possible worlds. So I'll think of them,
+somewhat tendentiously in light of what's to come, as \emph{stories}. A
+possibility, like a story, is something which settles some facts, while
+possibly leaving others open.
+
+Following Humberstone, I'll write \(x \leqslant y\) to mean that \(y\)
+is a \textbf{refinement} of \(x\).\footnote{\(y \geqslant x\) will just
+  mean the same thing as \(x \leqslant y\).} To say \(y\) refines \(x\)
+is to say that \(y\) makes true everything that \(x\) makes true, and
+possibly some more things besides. If possibilities are sets of possible
+worlds, then \(y\) is a subset of \(x\). (This makes the notation
+confusing, which is why Holliday (\citeproc{ref-Holliday2025}{2025})
+prefers to write \(y \sqsubseteq x\) when \(y\) is a refinement of
+\(x\).) If possibilities are stories, then \(y\) is a refinement of
+\(x\) if \(y\) fills in part of what \(x\) leaves open. This is how
+I'll, intuitively, think of refinements.
+
+Finally, \(V\) is a \textbf{valuation} function. It tells us where the
+atomics are true. Formally, it is a function from \(\mathcal{P}\), the
+set of atomics, to \(\wp(W)\), , satisfying these two constraints:
+
+\begin{itemize}
+\tightlist
+\item
+  For all \(x\), if \(x \in V(p)\) and \(x \leqslant y\), then
+  \(y \in V(p)\). Intuitively, truth for atomics is \textbf{persistent}
+  across refinements.
+\item
+  For all \(x\), if
+  \(\forall y \geqslant x\;\, \exists z \geqslant y: z \in V(p)\), then
+  \(x \in V(p)\). This is what L. Humberstone
+  (\citeproc{ref-Humberstone2011}{2011, 900}) calls
+  \textbf{refinability}. It means that \(p\) only fails to be true at
+  \(x\) if there is some refinement of \(x\) where it is settled as
+  being untrue.
+\end{itemize}
+
+Humberstone then proposes the the following theory of truth at a
+possibility. (We'll treat \(\rightarrow\) as a defined connective, with
+\(A \rightarrow B =_{df} \neg A \vee B\).)
+
+\begin{align*}
+[\text{Vbls}] \quad & \mathcal{M} \models_x p_i \text{ iff } x \in V(p_i); \\
+[\neg] \quad & \mathcal{M} \models_x \neg A \text{ iff } \forall y \geqslant x, \, \mathcal{M} \nmodels_y  A; \\
+[\wedge] \quad & \mathcal{M} \models_x A \wedge B \text{ iff } \mathcal{M} \models_x A \text{ and } \mathcal{M} \models_x B; \\
+[\vee] \quad & \mathcal{M} \models_x A \vee B \text{ iff } \forall y \geqslant x \;\, \exists z \geqslant y : \mathcal{M} \models_z A \text{ or } \mathcal{M} \models_z B. \\
+[\rightarrow] \quad & \mathcal{M} \models_x A \rightarrow B \text{ iff } \mathcal{M} \models_x \neg(A \wedge \neg B)
+\end{align*}
+
+The first two clauses are familiar, and the third looks much like the
+intuitionist treatment of negation. The final clause amounts to treating
+\(\rightarrow\) as a defined connective. The surprising one is
+\([\vee]\). It says that a disjunction is true iff at any refinement, at
+least one of the disjuncts could become true. This is not the most
+obvious understanding of \(\vee\), but it allows Humberstone to prove
+three striking results.
+
+First, every sentence in the language is persistent. If
+\(\mathcal{M} \models_x A\) and \(x \leqslant y\), then
+\(\mathcal{M} \models_y A\). For any sentence, truth is always preserved
+when moving to a refinement.
+
+Second, refinability holds for all sentences in the language. Once we've
+added negation to the language, we can restate refinability as the
+condition that, for any \(A\), if \(\mathcal{M} \nmodels_x A\), there is
+some refinement \(y\) of \(x\) such that
+\(\mathcal{M} \models_y \neg A\). Intuitively, if a sentence is not
+true, then at some refinement its negation is true.
+
+The third point is the most important. Say that \(\Gamma \vDash_{pf} A\)
+iff at any point in any possibility frame where all the members of
+\(\Gamma\) are true, \(A\) is also true. And say that
+\(\Gamma \vdash_{CL} A\) if \(\Gamma\) classically entails \(A\). Then
+Humberstone shows that all of the canonical inference rules for
+\(\vdash_{CL}\) also hold for \(\vDash_{pf}\), and hence
+\(\vdash_{CL} = \vDash_{pf}\).
+
+It's useful to work through a couple of these. First, the negation
+introduction rule. One natural formulation of this is that if
+\(\Gamma \cup {A} \vdash_{CL} B\) and
+\(\Gamma \cup {A} \vdash_{CL} \neg B\), then
+\(\Gamma \vdash_{CL} \neg A\). Let's show that the same principle holds
+for \(\vDash_{pf}\).
+
+Take any model \(\mathcal{M}\) and any possibility \(x\) where all
+members of \(\Gamma\) are true. We need to show
+\(\mathcal{M} \models_x \neg A\), i.e., that for all \(y \geqslant x\),
+\(\mathcal{M} \nmodels_y A\). Suppose for reductio that for some
+\(y \geqslant x\), \(\mathcal{M} \models_y A\). Since all members of
+\(\Gamma\) are true at \(x\), and truth is persistent, all members of
+\(\Gamma\) are true at \(y\). So every member of \(\Gamma \cup \{A\}\)
+is true at \(y\). By our two assumptions, \(\mathcal{M} \models_y B\)
+and \(\mathcal{M} \models_y \neg B\). But
+\(\mathcal{M} \models_y \neg B\) means that for all \(z \geqslant y\),
+\(\mathcal{M} \nmodels_z B\). Taking \(z = y\) (since \(\leqslant\) is
+reflexive), we get \(\mathcal{M} \nmodels_y B\). Contradiction.
+
+Second, the rule for conditional introduction. This says that if
+\(\Gamma \cup {A} \vdash_{CL} B\) then
+\(\Gamma \vdash_{CL} A \rightarrow B\). As Williamson
+(\citeproc{ref-Williamson1994}{1994}) shows, the counterpart of this
+principle does not hold in supervaluational logic. But it does hold in
+possibility frames.
+
+Since \(A \rightarrow B\) is defined as \(\neg(A \wedge \neg B)\), we
+need to show that at any possibility \(x\) where all of \(\Gamma\) is
+true, \(\mathcal{M} \models_x \neg(A \wedge \neg B)\). By the clause for
+negation, this requires showing that for all \(y \geqslant x\),
+\(\mathcal{M} \nmodels_y A \wedge \neg B\). Suppose for reductio that
+for some \(y \geqslant x\), \(\mathcal{M} \models_y A \wedge \neg B\).
+By the clause for conjunction, \(\mathcal{M} \models_y A\) and
+\(\mathcal{M} \models_y \neg B\). By persistence, all members of
+\(\Gamma\) are true at \(y\). So all members of \(\Gamma \cup \{A\}\)
+are true at \(y\), and hence by assumption, \(\mathcal{M} \models_y B\).
+But \(\mathcal{M} \models_y \neg B\) means that for all
+\(z \geqslant y\), \(\mathcal{M} \nmodels_z B\). Taking \(z = y\), we
+get \(\mathcal{M} \nmodels_y B\). Contradiction.
+
+\section{Accuracy Dominance}\label{sec-joyce}
+
+\section{Fictional Anti-Realism}\label{sec-fiction}
+
+\section{Accuracy for Anti-Realists}\label{sec-realism}
+
+\section{Is This Still Classical Logic}\label{sec-classical}
+
+Test
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-BlumbergHolguin2025}
+Blumberg, Kyle, and Ben Holguín. 2025. {``Fictional Reality.''}
+\emph{Philosophical Review} 134 (2): 149--201. doi:
+\href{https://doi.org/10.1215/00318108-11676103}{10.1215/00318108-11676103}.
+
+\bibitem[\citeproctext]{ref-Holliday2025}
+Holliday, Wesley H. 2025. {``Possibility Frames and Forcing for Modal
+Logic.''} \emph{Australasian Journal of Logic} 22 (2): 44--288. doi:
+\href{https://doi.org/10.26686/ajl.v22i2.5680}{10.26686/ajl.v22i2.5680}.
+
+\bibitem[\citeproctext]{ref-Humberstone1981}
+Humberstone, I. L. 1981. {``From Worlds to Possibilities.''}
+\emph{Journal of Philosophical Logic} 10 (3): 313--39. doi:
+\href{https://doi.org/10.1007/BF00293423}{10.1007/BF00293423}.
+
+\bibitem[\citeproctext]{ref-Humberstone2011}
+Humberstone, Lloyd. 2011. \emph{The Connectives}. Cambridge, MA: MIT
+Press.
+
+\bibitem[\citeproctext]{ref-Joyce1998}
+Joyce, James M. 1998. {``A Non-Pragmatic Vindication of Probabilism.''}
+\emph{Philosophy of Science} 65 (4): 575--603. doi:
+\href{https://doi.org/10.1086/392661}{10.1086/392661}.
+
+\bibitem[\citeproctext]{ref-Lewis1973a}
+Lewis, David. 1973. \emph{Counterfactuals}. Oxford: Blackwell
+Publishers.
+
+\bibitem[\citeproctext]{ref-Lewis1978b}
+---------. 1978. {``Truth in Fiction.''} \emph{American Philosophical
+Quarterly} 15 (1): 37--46. Reprinted in his \emph{Philosophical Papers},
+Volume 1, Oxford: Oxford University Press, 1983, 261-275. References to
+reprint.
+
+\bibitem[\citeproctext]{ref-Pryor2007}
+Pryor, James. 2007. {``Uncertainty and Undermining.''}
+\url{https://www.jimpryor.net/research/papers/Uncertainty.pdf}.
+
+\bibitem[\citeproctext]{ref-White2006}
+White, Roger. 2006. {``Problems for Dogmatism.''} \emph{Philosophical
+Studies} 131 (3): 525--57. doi:
+\href{https://doi.org/10.1007/s11098-004-7487-9}{10.1007/s11098-004-7487-9}.
+
+\bibitem[\citeproctext]{ref-Williamson1994}
+Williamson, Timothy. 1994. \emph{{Vagueness}}. New York: Routledge.
+
+\end{CSLReferences}
+
+
+
+\noindent Draft for discussion.
+
+
+\end{document}
