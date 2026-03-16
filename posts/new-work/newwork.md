@@ -188,7 +188,8 @@ This is the
 - Include a pair of 3 by 2 tables, showing what possibility semantics preserves from classical logic, and what supervaluationism preserves, with one key difference
 - But what to say about the last row, with multiple conclusions
 - On the one hand, multiple conclusion logic is weird; cite Dummett, Wright, etc on how weird it is
-- On the other hand, that's really what folks have commonly 
+- On the other hand, that's really what folks have commonly assumed. It's a common part of accuracy based arguments that one or other complete state is true. Inferring that from zero premises is a multiple-conclusion argument.
+- So there is a sense in which this is a non-classical response to accuracy dominance. But I think it's a kind of non-classicality which we have reason to accept at least some of the time.
 
 ::: {.content-visible unless-format="html"}
 ## References {-}
