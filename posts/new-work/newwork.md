@@ -125,23 +125,70 @@ Second, refinability holds for all sentences in the language. Once we've added n
 
 The third point is the most important. Say that $\Gamma \vDash_{pf} A$ iff at any point in any possibility frame where all the members of $\Gamma$ are true, $A$ is also true. And say that $\Gamma \vdash_{CL} A$ if $\Gamma$ classically entails $A$. Then Humberstone shows that all of the canonical inference rules for $\vdash_{CL}$ also hold for $\vDash_{pf}$, and hence $\vdash_{CL}$ and $\vDash_{pf}$ exactly overlap.
 
-It's useful to work through a couple of these. First, the negation introduction rule. One natural formulation of this is that if $\Gamma \cup \{A\} \vdash_{CL} B$ and $\Gamma \cup \{A\} \vdash_{CL} \neg B$, then $\Gamma \vdash_{CL} \neg A$. Let's show that the same principle holds for $\vDash_{pf}$.
+It's useful to work through a couple of these. First, the disjunction elimination rule. One natural formulation^[There are other formulations which make weaker structural assumptions, but this one will do to ] of this is that if $\Gamma \cup \{A\} \vdash_{CL} C$, $\Delta \cup \{B\} \vdash_{CL} C$, and $\Phi \vdash_{CL} A \vee B$ then $\Gamma \cup \Delta \cup Phi \vdash_{CL} C$. Let's show that the same principle holds for $\vDash_{pf}$.
 
-Take any model $\mathcal{M}$ and any possibility $x$ where all members of $\Gamma$ are true. We need to show $\mathcal{M} \models_x \neg A$, i.e., that for all $y \geqslant x$, $\mathcal{M} \nmodels_y A$. Suppose for reductio that for some $y \geqslant x$, $\mathcal{M} \models_y A$. Since all members of $\Gamma$ are true at $x$, and truth is persistent, all members of $\Gamma$ are true at $y$. So every member of $\Gamma \cup \{A\}$ is true at $y$. By our two assumptions, $\mathcal{M} \models_y B$ and $\mathcal{M} \models_y \neg B$. But $\mathcal{M} \models_y \neg B$ means that for all $z \geqslant y$, $\mathcal{M} \nmodels_z B$. Taking $z = y$ (since $\leqslant$ is reflexive), we get $\mathcal{M} \nmodels_y B$. Contradiction.
+[Insert proof here]
 
 Second, the rule for conditional introduction. This says that if $\Gamma \cup \{A\} \vdash_{CL} B$ then $\Gamma \vdash_{CL} A \rightarrow B$. As @Williamson1994 shows, the counterpart of this principle does not hold in supervaluational logic. But it does hold in possibility frames.
 
 Since $A \rightarrow B$ is defined as $\neg(A \wedge \neg B)$, we need to show that at any possibility $x$ where all of $\Gamma$ is true, $\mathcal{M} \models_x \neg(A \wedge \neg B)$. By the clause for negation, this requires showing that for all $y \geqslant x$, $\mathcal{M} \nmodels_y A \wedge \neg B$. Suppose for reductio that for some $y \geqslant x$, $\mathcal{M} \models_y A \wedge \neg B$. By the clause for conjunction, $\mathcal{M} \models_y A$ and $\mathcal{M} \models_y \neg B$. By persistence, all members of $\Gamma$ are true at $y$. So all members of $\Gamma \cup \{A\}$ are true at $y$, and hence by assumption, $\mathcal{M} \models_y B$. But $\mathcal{M} \models_y \neg B$ means that for all $z \geqslant y$, $\mathcal{M} \nmodels_z B$. Taking $z = y$, we get $\mathcal{M} \nmodels_y B$. Contradiction.
 
+So despite the two ways in which the model looks non-classical, the fact that possibilities can be incomplete and the clause for negation looks like intuitionistic negation, we end up with a fairly classical system. All the sequents, and all the admissible rules on sequents, carry over from classical logic. We have a non-standard semantics for a very standard logic. Because of this, possibility frames have attracted some attention recently as an interesting alternative to possible worlds semantics. Humberstone's original application of them was to modal logic, and Wesley @Holliday2025 has written a thorough study of that application, differing in some key respects from Humberstone's original picture.^[The differences are largely about the relationship between the $R$-relation in modal semantics and $\leqslant$, so they aren't relevant to our story.] Matthew @HarrisonTrainer2019 has shown how to extent the semantics to first-order logic. Brian @Weatherson2026 applies possibility frame semantics to a puzzle about counterfactuals. And Fabrizio @Cariani2026 uses possibility frames to model the open future. This paper extends that list; I'm going to use them to provide a better way of talking about fictional truth. But because our focus will be on uncertainty about fiction, we need to review recent work on models for uncertainty.
+
 ## Accuracy Dominance {#sec-joyce}
+
+Over the twentieth century, there were several important pragmatic arguments for probabilism, the thesis that credences are coherent only if they are probabilistic. The most important of these were Dutch Book arguments and representation theorem arguments. These arguments were problematic in two respects. First, they were *pragmatic* arguments. Second, they were arguments *for probabilism*. The first problem was that these seemed to show at most that non-probabilistic credences were pragmatically sub-optimal, not that they violated a distinctive doxastic norm. The second problem was that these arguments didn't engage, at all, with non-probabilistic alternatives. It's worth pausing on this because it brings up something rather distinctive about the literature on probabilism.
+
+Most philosophical arguments engage at length, some would say inordinate length, with rival views. Pick up a work arguing for this or that functionalist thesis in philosophy of mind, and you expect to see extensive treatment of the flaws of non-functionalist rivals. And that's the normal case. Sometimes, a philosopher will put forward a purportedly sound deductive for a distinctive conclusion, as Frank @Jackson1982 did with the knowledge argument. Those arguments don't turns on comparative considerations weighing up, in this case, dualism vs physicalism. But in those cases, the arguments will be carefully crafted to be maximally compelling to people tempted by the opposing view.
+
+The arguments for probabilism have none of that. Some premises are suggested, and they are shown to entail probabilism. There is no consideration of which of these premises might be more compelling to someone tempted by this or that non-probabilist view. Indeed, in most of these papers there is no sense of which non-probabilistic view the author is most concerned to argue against. Or, in many cases, whether there is *any* non-probabilistic view that the author thinks is worth careful consideration.
+
+The risk of this approach is that the arguments will be question-begging. As Patrick @Maher1997 showed, that's exactly what happened. While there are many ways to not be a probabilist, the most widely discussed in the modern literature is that credences should be Dempster-Shafer belief functions (hereafter, simply *belief functions*). Maher showed that these arguments for probabilism were question-begging against the view that credences should be belief functions.
+
+David @Christensen1991 provided the first important attempt to deal with the first problem, i.e., that these arguments showed that non-probabilistic credences violated the wrong kind of norm. He argued that the non-probabilist was committed to valuing the same thing two different ways under different modes of presentation, and this was a genuinely doxastic incoherence. This does, I think, deal with the first problem, but the cost is that it makes the second problem worse. A key premise of Christensen's argument is that the value of a book of bets which can't both win is the sum of the values of each bet. And there is no reason for the belief functions theorist to accept that. The argument is just clearly question-begging against them.^[This premise is also rejected by some opponents of expected value maximisation, like Lara @BuchakRiskRationality.]
+
+This is the 
 
 ## Fictional Anti-Realism {#sec-fiction}
 
+- Agreement with Lewis and with BH - hidden operator
+- Agreement with BH against Lewis - the wonder cases are problems
+- Disagreement with BH - realism is literally incredible
+- First, appeal to intuition - especially about songs
+- Second, appeal to possibility of consistent but incompatible fanfics
+- Conclusion, what's true in a story is what's true in a *possibility*
+
 ## Accuracy for Anti-Realists {#sec-realism}
 
-## Is This Still Classical Logic {#sec-classical}
+- Start with 1/3 p, 1/3 ~p
+- Accuracy dominance says in any world, you'll be better with 1/2, 1/2
+- Illustrate with Brier score
+- But in a possibility, you're better with 1/3, 1/3
+- In general, any belief function is optimal wrt some possibility frame
+- Conclusion: The accuracy dominance argument assumes realism, and anti-realists can reject it. Belief functions are credence functions for anti-realists
+- Compare Horowitz's guessing framework. Even clearer that the realist assumption is being made.
+- Objection 1: This doesn't save Arthur Dempster and Glenn Shafer. Sure, it doesn't.
+- Objection 2: This rests on a strange way of understanding disjunction. Sure, but disjunction is strange. We shouldn't have a hundred times as many books and papers on conditionals as on disjunction. This is why possibilities are in the disjunction chapter of _The Connectives_.
+- Objection 3: This is only relevant to fiction, and to trivial questions about fiction.
+- First, it's not just trivial. Any hard question about a fiction should have a possibility that there is no fact of the matter, so some weight to a non-world possibility, so non-probabilistic credences.
+- Second, it's not just fiction. It's anything where realism might fail.
+- In low evidence situations, that might include *anything*. We might not be external world realists with no evidence.
+- That gives us a response to White on dogmatism
+- Objection 4. This doesn't explain the unreasonable effectiveness of probabilism
+- Reply. Probabilism given realism. In many cases, realism is a safe assumption. Compare Priest on how classical logic is the right logic for situations known to be consistent. I say the same thing, except for me it's situations known to be complete.
 
-Test
+## Is This Still Classical Logic? {#sec-classical}
+
+- What is a logic?
+- Option 1. A set of theorems. PF preserves the theorems
+- Option 2. A set of axioms plus rules for generating theorems. Still good, we get the axioms and we get modus ponens.
+- Option 3. A set of single-conclusion sequents. We get that, as shown in @sec-humberstone
+- Option 4. A set of basic sequents (i.e., $\Gamma \vdash A$ whenever $A \in \Gamma$) plus rules for generating more. We get that too, as also shown. This distinguishes possibility semantics from supervaluationism. The supervaluationist does not get, e.g., conditional proof, as Williamson showed.
+- Option 5. A set of multiple-conclusion sequents. We do not get that. Hence we don't get option 6; basic multiple conclusion sequents plus rules
+- Include a pair of 3 by 2 tables, showing what possibility semantics preserves from classical logic, and what supervaluationism preserves, with one key difference
+- But what to say about the last row, with multiple conclusions
+- On the one hand, multiple conclusion logic is weird; cite Dummett, Wright, etc on how weird it is
+- On the other hand, that's really what folks have commonly 
 
 ::: {.content-visible unless-format="html"}
 ## References {-}
