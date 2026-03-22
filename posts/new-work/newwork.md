@@ -66,7 +66,11 @@ format:
 draft: true
 ---
 
-How many cousins does Sherlock Holmes have? Does he have an odd or even number of cousins? If you're like me, untutored intuition says that (@holmesdisj) is true, while there is no fact of the matter about (@holmesodd) and (@holmeseven).
+Conventional wisdom these day is that credences should be probabilistic, and this is because of accuracy considerations. I'm going to argue that this conventional wisdom relies on an assumption that we have reason to reject. The assumption is that we should be *realists* about anything we have credences about, in the sense that there is a fact of the matter about anything we should have a credence about. If we drop this assumption, if we even drop a priori certainty in there being a fact of the matter, it could be coherent for credences to not be probabilistic. The right coherence constraint for someone who is unsure about realism is not probability, but Dempster-Shafer belief functions. This isn't what belief functions were designed for; there isn't much evidence that the people who designed them intended to question realism. But it is work, new work, that these belief functions can do.
+
+To motivate the idea that we should be uncertain about realism, I'll work through some questions about fiction. The particular questions aren't that important in themselves, in fact part of the point is that they aren't important, but they are questions where anti-realism seems plausible.
+
+For example, how many cousins does Sherlock Holmes have?^[The usual example, following @Lewis1978b, involves how many hairs Holmes has. I prefer this question because it makes clear the issue is not vagueness.] Does he have an odd or even number of cousins? If you're like me, untutored intuition says that (@holmesdisj) is true, while there is no fact of the matter about (@holmesodd) and (@holmeseven).
 
 (@holmesdisj) Holmes has either an odd or even number of cousins.
 (@holmesodd) Holmes has an odd number of cousins.
@@ -80,13 +84,13 @@ Recently, Kyle Blumberg and Ben Holguín [-@BlumbergHolguin2025] have argued tha
 
 (@holmesknow) I know whether Holmes has either an odd or even number of cousins.
 
-They argue that Lewis's view should be reject in favour of a 'realist' alternative. On their view, the Holmes stories pick out a particular possible world, though it is unknowable which one. So one of (@holmesodd) and (@holmeseven) is true. I'll argue against that, and in favour of anti-realism about fictions. As I said, I'll argue that there's no fact of the matter about how many cousins Holmes has.
+They argue that Lewis's view should be rejected in favour of their *fictional reality* view. On their view, the Holmes stories pick out a particular possible world, though it is unknowable which one. So one of (@holmesodd) and (@holmeseven) is true. This seems incredible; it's more plausible that there is no fact of the matter about how many cousins Holmes has.
 
 What does it even mean to say there is 'no fact of the matter', and is this even coherent? I'll answer these questions by appeal to _possibility semantics_, as developed by Lloyd @Humberstone1981. In possibility semantics, the role of possible worlds is played by _possibilities_, which can be incomplete. Despite this incompleteness, the logic of truth preservation across possibilities is more or less classical.
 
-I'm going to argue that a story does not pick out a possible world, but instead a Humberstone-style possibility. Which one does a particular story pick out? It's coherent to be unsure about that. Even with the text in front of them, a reader might not know the extra-textual information that settles some facts in the story. In such a situation, their credences about what's true in a story might be distributed across various posisbilities.
+I'm going to argue that a story does not pick out a possible world, but instead some Humberstone-style possibilities. Which ones does a particular story pick out? It's coherent to be unsure about that. Even with the text in front of them, a reader might not know the extra-textual information that settles some facts in the story. In such a situation, their credences about what's true in a story might be distributed across various posisbilities.
 
-At this point we (at last) get to the Dempster-Shafer belief functions promised in the title. Measures on possibility frames do not always determine probability functions; rather, they might determine Dempster-Shafer belief functions. So, I'll conclude, it is rational for someone uncertain about what is true in a story to have credences that track one of these belief functions.
+At this point we get (back) to belief functions. Measures on possibility frames do not always determine probability functions; rather, they might determine Dempster-Shafer belief functions. So, I'll conclude, it is rational for someone uncertain about what is true in a story to have credences that track one of these belief functions.
 
 This conclusion might seem surprising. There is a famous argument, originally due to James @Joyce1998, that any non-probabilistic credence function is accuracy dominated. This argument seems to rule out exactly the view I put forward in the last paragraph. That argument, however, assumes exactly the kind of realism that is implausible in the case of thoughts about fiction. Someone who rejects fictional realism can happily use Dempster-Shafer belief functions without worrying about being excessively inaccurate.
 
@@ -96,18 +100,18 @@ So this paper lives at the intersection of possibility semantics, accuracy domin
 
 ## Possibility Semantics {#sec-humberstone}
 
-A Humberstone possibility frame (hereafter, just _possibility frame_) is a triple $\langle W, \leqslant, V\rangle$, where $W$ is a set of possibilities, $\leqslant$ is a _refinement_ relation on them, and $V$ is a valuation function. 
+A Humberstone possibility frame (hereafter, just _possibility frame_) is a triple $\langle W, \leqslant, \mathbb{R}, f, V\rangle$, where $W$ is a set of possibilities, $\leqslant$ is a _refinement_ relation on them, $\mathbb{R}$ is a countable family of accesibility relations (with $R_i$ as the $i$'the member), $f$ is a selection function, and $V$ is a valuation function. I'll set aside $\mathbb{R}$ and $f$ until later, since they only play a role in interpreting modal statements and counterfactual conditionals respectively. I'll focus first on $W, \leqslant$ and $V$.
 
-Formally, possibilities are anything that can play the possibility role, but to picture these models it helps to have a more filled in picture of them. Humberstone both suggests that we start by thinking of them as sets of possible worlds, and that we shouldn't always think of them this way, because they should replace possible worlds. So I'll think of them, somewhat tendentiously in light of what's to come, as _stories_. A possibility, like a story, is something which settles some facts, while possibly leaving others open.
+One way to think about the possibilities in $W$, suggested by @Humberstone1981 and used extensively by Wesley @Holliday2025, is that they are sets of possible worlds. I prefer to think of them as _stories_, at least on the assumption that stories are incomplete.^[This assumption is part of what's at issue in the paper, but I'm not begging any questions here. Whether one pictures possibilities as stories or sets of worlds does not bear any argumentative weight.] A possibility, like a story, is something which settles some facts, while possibly leaving others open.
 
-Following Humberstone, I'll write $x \leqslant y$ to mean that $y$ is a **refinement** of $x$.^[$y \geqslant x$ will just mean the same thing as $x \leqslant y$.] To say $y$ refines $x$ is to say that $y$ makes true everything that $x$ makes true, and possibly some more things besides. If possibilities are sets of possible worlds, then $y$ is a subset of $x$. (This makes the notation confusing, which is why @Holliday2025 prefers to write $y \sqsubseteq x$ when $y$ is a refinement of $x$.) If possibilities are stories, then $y$ is a refinement of $x$ if $y$ fills in part of what $x$ leaves open. This is how I'll, intuitively, think of refinements.
+Following Humberstone, I'll write $x \leqslant y$ to mean that $y$ is a **refinement** of $x$.^[$y \geqslant x$ will just mean the same thing as $x \leqslant y$.] To say $y$ refines $x$ is to say that $y$ makes true everything that $x$ makes true, and possibly some more things besides. If possibilities are sets of possible worlds, then $y$ is a subset of $x$. (This makes the notation here confusing, which is why @Holliday2025 prefers to write $y \sqsubseteq x$ when $y$ is a refinement of $x$.) If possibilities are stories, then $y$ is a refinement of $x$ if $y$ fills in part of what $x$ leaves open. This is how I'll, intuitively, think of refinements.
 
 Finally, $V$ is a **valuation** function. It tells us where the atomics are true. Formally, it is a function from $\mathcal{P}$, the set of atomics, to $\wp(W)$, , satisfying these two constraints:
 
 - For all $x$, if $x \in V(p)$ and $x \leqslant y$, then $y \in V(p)$. Intuitively, truth for atomics is **persistent** across refinements.
 - For all $x$, if $\forall y \geqslant x\;\, \exists z \geqslant y: z \in V(p)$, then $x \in V(p)$. This is what @Humberstone2011 [900] calls **refinability**. It means that $p$ only fails to be true at $x$ if there is some refinement of $x$ where it is settled as being untrue.
 
-Humberstone then proposes the the following theory of truth at a possibility. (We'll treat $\rightarrow$ as a defined connective, with $A \rightarrow B =_{df} \neg A \vee B$.)
+Humberstone then proposes the the following theory of truth at a possibility for the language of propositional logic. (We'll treat $\rightarrow$ as a defined connective, with $A \rightarrow B =_{df} \neg A \vee B$.)
 
 \begin{align*}
 [\text{Vbls}] \quad & \mathcal{M} \models_x p_i \text{ iff } x \in V(p_i); \\
@@ -125,15 +129,73 @@ Second, refinability holds for all sentences in the language. Once we've added n
 
 The third point is the most important. Say that $\Gamma \vDash_{pf} A$ iff at any point in any possibility frame where all the members of $\Gamma$ are true, $A$ is also true. And say that $\Gamma \vdash_{CL} A$ if $\Gamma$ classically entails $A$. Then Humberstone shows that all of the canonical inference rules for $\vdash_{CL}$ also hold for $\vDash_{pf}$, and hence $\vdash_{CL}$ and $\vDash_{pf}$ exactly overlap.
 
-It's useful to work through a couple of these. First, the disjunction elimination rule. One natural formulation^[There are other formulations which make weaker structural assumptions, but this one will do to ] of this is that if $\Gamma \cup \{A\} \vdash_{CL} C$, $\Delta \cup \{B\} \vdash_{CL} C$, and $\Phi \vdash_{CL} A \vee B$ then $\Gamma \cup \Delta \cup Phi \vdash_{CL} C$. Let's show that the same principle holds for $\vDash_{pf}$.
+It's useful to work through one of these rules to show how the system works. Because it will play a role in what follows, I'll show that disjunction elimination holds just as one would expect. One natural formulation^[There are other formulations which make weaker structural assumptions, but this one will do to show that we're preserving classical logic.] of this is that if $\Gamma \cup \{A\} \vdash_{CL} C$, $\Delta \cup \{B\} \vdash_{CL} C$, and $\Phi \vdash_{CL} A \vee B$ then $\Gamma \cup \Delta \cup Phi \vdash_{CL} C$. Let's show that the same principle holds for $\vDash_{pf}$.
 
-[Insert proof here]
+Assume that $\Gamma \cup \{A\} \vDash_{pf} C$, $\Delta \cup \{B\} \vDash_{pf} C$, and $\Phi \vDash_{pf} A \vee B$. We want to show that $\Gamma \cup \Delta \cup \Phi \vDash_{pf} C$. So take any possibility $x$ where all members of $\Gamma \cup \Delta \cup \Phi$ are true, and suppose for reductio that $\mathcal{M} \nmodels_x C$. By refinability, there is some $y \geqslant x$ such that $\mathcal{M} \models_y \neg C$, i.e., for all $z \geqslant y$, $\mathcal{M} \nmodels_z C$. By persistence, all members of $\Gamma \cup \Delta \cup \Phi$ are true at $y$. Since all of $\Phi$ is true at $y$, we have $\mathcal{M} \models_y A \vee B$. By $[\vee]$, there is some $z \geqslant y$ such that $\mathcal{M} \models_z A$ or $\mathcal{M} \models_z B$. By persistence again, all members of $\Gamma \cup \Delta$ are true at $z$. If $\mathcal{M} \models_z A$, then all of $\Gamma \cup \{A\}$ are true at $z$, so $\mathcal{M} \models_z C$. If $\mathcal{M} \models_z B$, then all of $\Delta \cup \{B\}$ is true at $z$, so $\mathcal{M} \models_z C$. Either way, $\mathcal{M} \models_z C$. But $z \geqslant y$ and $\mathcal{M} \models_y \neg C$, so $\mathcal{M} \nmodels_z C$. Contradiction.
 
-Second, the rule for conditional introduction. This says that if $\Gamma \cup \{A\} \vdash_{CL} B$ then $\Gamma \vdash_{CL} A \rightarrow B$. As @Williamson1994 shows, the counterpart of this principle does not hold in supervaluational logic. But it does hold in possibility frames.
+Humberstone's system looks non-classical. It includes points that make true neither $A$ nor $\neg A$ for some $A$. It includes a rule for negation that looks more like intuitionistic negation than classical negation. But the system is still classical. All the sequents, and all the admissible rules on sequents, carry over from classical logic. We have a non-standard semantics for a very standard logic. 
 
-Since $A \rightarrow B$ is defined as $\neg(A \wedge \neg B)$, we need to show that at any possibility $x$ where all of $\Gamma$ is true, $\mathcal{M} \models_x \neg(A \wedge \neg B)$. By the clause for negation, this requires showing that for all $y \geqslant x$, $\mathcal{M} \nmodels_y A \wedge \neg B$. Suppose for reductio that for some $y \geqslant x$, $\mathcal{M} \models_y A \wedge \neg B$. By the clause for conjunction, $\mathcal{M} \models_y A$ and $\mathcal{M} \models_y \neg B$. By persistence, all members of $\Gamma$ are true at $y$. So all members of $\Gamma \cup \{A\}$ are true at $y$, and hence by assumption, $\mathcal{M} \models_y B$. But $\mathcal{M} \models_y \neg B$ means that for all $z \geqslant y$, $\mathcal{M} \nmodels_z B$. Taking $z = y$, we get $\mathcal{M} \nmodels_y B$. Contradiction.
+Possibility frames have attracted some attention recently as an interesting classical alternative to possible worlds semantics. Humberstone's original application of them was to modal logic, and Wesley @Holliday2025 has written a thorough study of that application, differing in some key respects from Humberstone's original picture.^[The differences are largely about the relationship between the $R$-relation in modal semantics and $\leqslant$, so they aren't relevant to our story.] Matthew @HarrisonTrainer2019 has shown how to extent the semantics to first-order logic. Brian @Weatherson2026 applies possibility frame semantics to a puzzle about counterfactuals. And Fabrizio @Cariani2026 uses possibility frames to model the open future. This paper extends that list; I'm going to use them to provide a better way of talking about fictional truth.
 
-So despite the two ways in which the model looks non-classical, the fact that possibilities can be incomplete and the clause for negation looks like intuitionistic negation, we end up with a fairly classical system. All the sequents, and all the admissible rules on sequents, carry over from classical logic. We have a non-standard semantics for a very standard logic. Because of this, possibility frames have attracted some attention recently as an interesting alternative to possible worlds semantics. Humberstone's original application of them was to modal logic, and Wesley @Holliday2025 has written a thorough study of that application, differing in some key respects from Humberstone's original picture.^[The differences are largely about the relationship between the $R$-relation in modal semantics and $\leqslant$, so they aren't relevant to our story.] Matthew @HarrisonTrainer2019 has shown how to extent the semantics to first-order logic. Brian @Weatherson2026 applies possibility frame semantics to a puzzle about counterfactuals. And Fabrizio @Cariani2026 uses possibility frames to model the open future. This paper extends that list; I'm going to use them to provide a better way of talking about fictional truth. But because our focus will be on uncertainty about fiction, we need to review recent work on models for uncertainty.
+Since many theories of fiction involve modals or counterfactuals, we need to say more about $\mathbb{R}$ and $f$. First we'll talk about modals.
+
+In order to make sure persistence and refinability hold in the modal part of the language, Humberstone puts some constraints on what can go into $\mathbb{R}$. (As noted above, Holliday prefers weaker constraints, but the difference won't be important here.) Any accessibility relation $R_i$ has to satisfy these constraints.^[The names are taken from Holliday; Humberstone uses less descriptive names.]
+
+**UpR**:
+:    If $x \leqslant x'$ and $x' R_i y$, then $x R_i y$.
+
+**RDown**:
+:    If $x R_i y$ and $y \leqslant y'$, then $x R_i y'$.
+
+**RRef++**:
+:    If $x R_i y$, then there exists $x' \geqslant x$ such that for all $x'' \geqslant x'$, $x'' R_i y$.
+
+**UpR** says that if a refinement of $x$ can access $y$, then $x$ itself can already access $y$: accessibility is not something that can be gained by adding detail to the source. **RDown** is a converse of this; it says that accessibility cannot be lost by adding detail to the target. **RRef++** says that if $x$ can access $y$, there is some refinement $x'$ of $x$ where it is settled that $x'$ can access *y*. This last access can't be overturned by further refinement of $x'$.
+
+Given these constraints, the truth condition for the box operator is:
+
+\begin{align*}
+[\Box_i] \quad & \mathcal{M} \models_x \Box_i A \text{ iff } \forall y \, (x R_i y \Rightarrow \mathcal{M} \models_y A)
+\end{align*}
+
+This should be familiar: $\Box_i A$ is true at $x$ iff $A$ is true at every $R_i$-accessible possibility.
+
+Humberstone treats $\Diamond$ as a defined connective, $\Diamond_i A$ just means $\neg \Box_i \neg A$, and I'll do the same. It is easy to show that if $R_i$ satisfies these three constraints, then even after adding $\Box_i$ and $\Diamond_i$ to the language, all sentences will satisfy persistence and refinability.
+
+@Weatherson2026 describes a theory of counterfactuals in possibility semantics that validates conditional excluded middle. That's what we're going to need, but unfortunately that semantics doesn't guarantee persistence and refinability. Here is a modified version of his semantics that does.
+
+We posit a selection function $f$ as in the semantics for counterfactuals suggested by @Stalnaker1968. We assume that the selection function follows the these constraints.
+
+**Conditional Excluded Middle**
+:   Either $f(A, x) = \emptyset$, or $\exists y: f(A, x) = \{z : z \geqslant y\}$.
+
+**Truth**
+:   $f(A, x) \subseteq A$
+
+**Centering**
+:   $x \in f(A, x)$ whenever $x \in A$
+
+**Nearness**
+:   If $f(A, x) \subseteq B$ and $f(B, x) \subseteq A$, then $f(A, x) = f(B, x)$
+
+**UpR for $f$**
+:    If $x \leqslant x'$ and $y \in f(A, x')$, then $y \in f(A, x)$
+
+**RDown for $f$**
+:    If $y \in f(A, x)$ and $y \leqslant y'$, then $y' \in f(A, x)$
+
+**RRef++ for $f$**
+:    If $y \in f(A, x)$, then there exists $x' \geqslant x$ such that for all $x'' \geqslant x'$, $y \in f(A, x'')$
+
+Then the truth condition for counterfactuals is:
+
+\begin{align*}
+[\boxright] \quad & \mathcal{M} \models_x A \boxright B \text{ iff } \forall y \in f(A, x) \, \mathcal{M} \models_y B 
+\end{align*}
+
+I'll say that $f(A, x)$ are the nearest $A$-worlds; it will become clear why this is a reasonable locution.
+
+**Conditional Excluded Middle** says that there are no nearest $A$-worlds, or they are all and only the refinements of some particular world. So it can't be true that neither $B$ nor $\neg B$ is 
 
 ## Accuracy Dominance {#sec-joyce}
 
