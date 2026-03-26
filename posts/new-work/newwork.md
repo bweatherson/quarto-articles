@@ -150,15 +150,13 @@ In order to make sure persistence and refinability hold in the modal part of the
 **RRef++**:
 :    If $x R_i y$, then there exists $x' \geqslant x$ such that for all $x'' \geqslant x'$, $x'' R_i y$.
 
-**UpR** says that if a refinement of $x$ can access $y$, then $x$ itself can already access $y$: accessibility is not something that can be gained by adding detail to the source. **RDown** is a converse of this; it says that accessibility cannot be lost by adding detail to the target. **RRef++** says that if $x$ can access $y$, there is some refinement $x'$ of $x$ where it is settled that $x'$ can access *y*. This last access can't be overturned by further refinement of $x'$.
-
-Given these constraints, the truth condition for the box operator is:
+**UpR** says that accessibility is never gained by refinement; if $x$ can access $y$, so can any coarsening of $x$. **RDown** is the converse: if $x$ can access $y$, it can access every refinement of $y$. To understand **RRef++**, it helps to have one new concept. Say that $a$ determinately accesses $b$ if for any refinement $c$ of $a$, $cR_ib$. Then **RRef++** says that if $x$ accesses $y$, some refinement of $x$ determinately accesses $y$. Finally, we add a familiar truth condition for $\Box_i$:
 
 \begin{align*}
 [\Box_i] \quad & \mathcal{M} \models_x \Box_i A \text{ iff } \forall y \, (x R_i y \Rightarrow \mathcal{M} \models_y A)
 \end{align*}
 
-This should be familiar: $\Box_i A$ is true at $x$ iff $A$ is true at every $R_i$-accessible possibility.
+In words, $\Box_i A$ is true at $x$ iff $A$ is true at every $R_i$-accessible possibility.
 
 Humberstone treats $\Diamond$ as a defined connective, $\Diamond_i A$ just means $\neg \Box_i \neg A$, and I'll do the same. It is easy to show that if $R_i$ satisfies these three constraints, then even after adding $\Box_i$ and $\Diamond_i$ to the language, all sentences will satisfy persistence and refinability.
 
