@@ -139,7 +139,7 @@ Possibility frames have attracted some attention recently as an interesting clas
 
 Since many theories of fiction involve modals or counterfactuals, we need to say more about $\mathbb{R}$ and $f$. First we'll talk about modals.
 
-In order to make sure persistence and refinability hold in the modal part of the language, Humberstone puts some constraints on what can go into $\mathbb{R}$. (As noted above, Holliday prefers weaker constraints, but the difference won't be important here.) Any accessibility relation $R_i$ has to satisfy these constraints.^[The names are taken from Holliday; Humberstone uses less descriptive names.]
+In order to make sure persistence and refinability hold in the modal part of the language, Humberstone puts some constraints on what can go into $\mathbb{R}$. (As noted above, Holliday prefers weaker constraints, but the difference won't be important here.) Any accessibility relation $R_i$ has to satisfy these constraints.^[The names are taken from Holliday; Humberstone uses less descriptive names. The ++ in **RRef++ is because Holliday considers two weaker refinement conditions.]
 
 **UpR**:
 :    If $x \leqslant x'$ and $x' R_i y$, then $x R_i y$.
@@ -176,14 +176,14 @@ We posit a selection function $f$ as in the semantics for counterfactuals sugges
 **Nearness**
 :   If $f(A, x) \subseteq B$ and $f(B, x) \subseteq A$, then $f(A, x) = f(B, x)$
 
-**UpR for $f$**
+**Upf**
 :    If $x \leqslant x'$ and $y \in f(A, x')$, then $y \in f(A, x)$
 
-**RDown for $f$**
+**fDown**
 :    If $y \in f(A, x)$ and $y \leqslant y'$, then $y' \in f(A, x)$
 
-**RRef++ for $f$**
-:    If $y \in f(A, x)$, then there exists $x' \geqslant x$ such that for all $x'' \geqslant x'$, $y \in f(A, x'')$
+**fRef+++**
+:    If $y' \in f(A, x)$, then there exists $x' \geqslant x$ such that for all $z: z \in f(A, x')$ iff $z \geqslant y'$.
 
 Then the truth condition for counterfactuals is:
 
@@ -191,11 +191,11 @@ Then the truth condition for counterfactuals is:
 [\boxright] \quad & \mathcal{M} \models_x A \boxright B \text{ iff } \forall y \in f(A, x) \, \mathcal{M} \models_y B 
 \end{align*}
 
-I'll say that $f(A, x)$ are the nearest $A$-worlds; it will become clear why this is a reasonable locution.
+I'll say that $f(A, x)$ are the nearest $A$-worlds to $x$; it will become clear why this is a reasonable locution.
 
-**Conditional Excluded Middle** says that there are no nearest $A$-worlds, or they are all and only the refinements of some particular possibility. So it can't be that neither $B$ nor $\neg B$ holds throughout the nearest $A$-possibilities: if there is a nearest $A$-possibility $y$, then by refinability for $B$, either $\mathcal{M} \models_y B$ (in which case persistence gives $\mathcal{M} \models_z B$ for all $z \geqslant y$, so $A \boxright B$ is true), or there is some $y' \geqslant y$ with $\mathcal{M} \models_{y'} \neg B$ (in which case persistence gives $\mathcal{M} \models_z \neg B$ for all $z \geqslant y'$, and since $\{z : z \geqslant y'\} \subseteq \{z : z \geqslant y\} = f(A, x)$, there is a nearest $A$-possibility where $\neg B$ holds). This validates Conditional Excluded Middle for counterfactuals: $\mathcal{M} \models_x (A \boxright B) \vee (A \boxright \neg B)$.
+**Conditional Excluded Middle** says that there are no nearest $A$-worlds, or they are all and only the refinements of some particular possibility. It plays a central role in the proof that CEM, $(A \boxright B) \vee (A \boxright \neg B)$ is true at all points.  Given that regular excluded middle holds everywhere, to prove this it suffices to prove that if $\neg(A \boxright B)$ is true at $x$, so is $A \boxright \neg B$. So assume that $\neg(A \boxright B)$ is true at $x$. If $f(A, x)$ is empty, it follows trivially that $A \boxright \neg B$ holds. Assume that's not the case, so $f(A, x)$ is non-empty. For $A \boxright \neg B$ to fail to hold at $x$, $B$ must be true at some point in $f(A, x)$. Call some such point $y'$. By **fRef+++**, there is some $x' \geqslant x$ such that $f(A, x')$ consists of all and only refinements of $y'$. Since $B$ is true at $y'$, and is persistent, it follows that $B$ is true everywhere in $f(A, x')$. Hence $A \boxright B$ is true at $x'$, contradicting the assumption that $\neg(A \boxright B)$ is true at its coarsening, $x$.
 
-The other principles are more straightforward. **Truth** says that the nearest $A$-worlds have to actually make $A$ true. **Centering** says that if $A$ is true at $x$, then $x$ is one of the nearest $A$-worlds. This system doesn't quite have Strong Centering, since there could be other nearby $A$-worlds, but it is close. The nearest $A$-worlds to an $A$-world can only be coarsenings or refinements of it. **Nearness** says that if the nearest $A$-worlds are all $B$-worlds, and the nearest $B$-worlds are all $A$-worlds, then the nearest $A$-worlds just are the nearest $B$-worlds. That has to be true if $f$ is really measuring nearness. Finally, the last three clauses ensure that if we define $R_A$ such that $xR_Ay$ iff $y \in f(A, x)$, then $R_A$ is an acceptable accessibility relation. This in turn guarantees that the language is still persistent and refinable, even with $\boxright$ added.
+The other principles are more straightforward. **Truth** says that the nearest $A$-worlds have to actually make $A$ true. **Centering** says that if $A$ is true at $x$, then $x$ is one of the nearest $A$-worlds. This system doesn't quite have Strong Centering, since there could be other nearby $A$-worlds, but it is close. The nearest $A$-worlds to an $A$-world can only be coarsenings or refinements of it. **Nearness** says that if the nearest $A$-worlds are all $B$-worlds, and the nearest $B$-worlds are all $A$-worlds, then the nearest $A$-worlds just are the nearest $B$-worlds. That has to be true if $f$ is really measuring nearness. The last three clauses ensure that if we define $R_A$ such that $xR_Ay$ iff $y \in f(A, x)$, then $R_A$ is an acceptable accessibility relation. This in turn guarantees that the language is still persistent and refinable, even with $\boxright$ added. Though note that **fRef+++** is stronger than we need for merely that purpose; the stronger rule is needed for the proof of CEM.^[The name follows Holliday's convention, though he was more interested in weakening Humberstone's original refinement condition.]
 
 ## Accuracy Dominance {#sec-joyce}
 
