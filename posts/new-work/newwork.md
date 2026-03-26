@@ -2,7 +2,7 @@
 title: "New Work for Dempster-Shafer Functions"
 abstract: |
  TBD
-date: March 15 2026
+date: today
 author:
   - name: Brian Weatherson 
     url: http://brian.weatherson.org
@@ -135,7 +135,7 @@ Assume that $\Gamma \cup \{A\} \vDash_{pf} C$, $\Delta \cup \{B\} \vDash_{pf} C$
 
 Humberstone's system looks non-classical. It includes points that make true neither $A$ nor $\neg A$ for some $A$. It includes a rule for negation that looks more like intuitionistic negation than classical negation. But the system is still classical. All the sequents, and all the admissible rules on sequents, carry over from classical logic. We have a non-standard semantics for a very standard logic. 
 
-Possibility frames have attracted some attention recently as an interesting classical alternative to possible worlds semantics. Humberstone's original application of them was to modal logic, and Wesley @Holliday2025 has written a thorough study of that application, differing in some key respects from Humberstone's original picture.^[The differences are largely about the relationship between the $R$-relation in modal semantics and $\leqslant$, so they aren't relevant to our story.] Matthew @HarrisonTrainer2019 has shown how to extent the semantics to first-order logic. Brian @Weatherson2026 applies possibility frame semantics to a puzzle about counterfactuals. And Fabrizio @Cariani2026 uses possibility frames to model the open future. This paper extends that list; I'm going to use them to provide a better way of talking about fictional truth.
+Possibility frames have attracted some attention recently as an interesting classical alternative to possible worlds semantics. Humberstone's original application of them was to modal logic, and Wesley @Holliday2025 has written a thorough study of that application, differing in some key respects from Humberstone's original picture.^[The differences are largely about the relationship between the $R$-relation in modal semantics and $\leqslant$, so they aren't relevant to our story.] Matthew @HarrisonTrainor2019 has shown how to extent the semantics to first-order logic. Brian @WeathersonHoPF applies possibility frame semantics to a puzzle about counterfactuals. And Fabrizio @CarianiUnpub uses possibility frames to model the open future. This paper extends that list; I'm going to use them to provide a better way of talking about fictional truth.
 
 Since many theories of fiction involve modals or counterfactuals, we need to say more about $\mathbb{R}$ and $f$. First we'll talk about modals.
 
@@ -160,7 +160,7 @@ In words, $\Box_i A$ is true at $x$ iff $A$ is true at every $R_i$-accessible po
 
 Humberstone treats $\Diamond$ as a defined connective, $\Diamond_i A$ just means $\neg \Box_i \neg A$, and I'll do the same. It is easy to show that if $R_i$ satisfies these three constraints, then even after adding $\Box_i$ and $\Diamond_i$ to the language, all sentences will satisfy persistence and refinability.
 
-@Weatherson2026 describes a theory of counterfactuals in possibility semantics that validates conditional excluded middle. That's what we're going to need, but unfortunately that semantics doesn't guarantee persistence and refinability. Here is a modified version of his semantics that does.
+@WeathersonHoPF describes a theory of counterfactuals in possibility semantics that validates conditional excluded middle. That's what we're going to need, but unfortunately that semantics doesn't guarantee persistence and refinability. Here is a modified version of his semantics that does.
 
 We posit a selection function $f$ as in the semantics for counterfactuals suggested by @Stalnaker1968. We assume that the selection function follows the these constraints.
 
@@ -207,7 +207,7 @@ The arguments for probabilism have none of that. Some premises are suggested, an
 
 The risk of this approach is that the arguments will be question-begging. As Patrick @Maher1997 showed, that's exactly what happened. While there are many ways to not be a probabilist, the most widely discussed in the modern literature is that credences should be Dempster-Shafer belief functions (hereafter, simply *belief functions*). Maher showed that these arguments for probabilism were question-begging against the view that credences should be belief functions.
 
-David @Christensen1991 provided the first important attempt to deal with the first problem, i.e., that these arguments showed that non-probabilistic credences violated the wrong kind of norm. He argued that the non-probabilist was committed to valuing the same thing two different ways under different modes of presentation, and this was a genuinely doxastic incoherence. This does, I think, deal with the first problem, but the cost is that it makes the second problem worse. A key premise of Christensen's argument is that the value of a book of bets which can't both win is the sum of the values of each bet. And there is no reason for the belief functions theorist to accept that. The argument is just clearly question-begging against them.^[This premise is also rejected by some opponents of expected value maximisation, like Lara @BuchakRiskRationality.]
+David @Christensen1996 provided the first important attempt to deal with the first problem, i.e., that these arguments showed that non-probabilistic credences violated the wrong kind of norm. He argued that the non-probabilist was committed to valuing the same thing two different ways under different modes of presentation, and this was a genuinely doxastic incoherence. This does, I think, deal with the first problem, but the cost is that it makes the second problem worse. A key premise of Christensen's argument is that the value of a book of bets which can't both win is the sum of the values of each bet. And there is no reason for the belief functions theorist to accept that. The argument is just clearly question-begging against them.^[This premise is also rejected by some opponents of expected value maximisation, like Lara @BuchakRisk.]
 
 This is the 
 
