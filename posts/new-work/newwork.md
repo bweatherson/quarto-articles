@@ -82,7 +82,7 @@ In doing so, I'll be arguing against the orthodox view represented by David @Lew
 
 Recently, Kyle Blumberg and Ben Holguín [-@BlumbergHolguin2025] have argued that Lewis's account has implausible predictions about fictional claims embedded in attitude ascriptions. For instance, it implies that (@holmesknow) is true.
 
-(@holmesknow) I know whether Holmes has either an odd or even number of cousins.
+(@holmesknow) I know whether Holmes has an even number of cousins.
 
 They argue that Lewis's view should be rejected in favour of their *fictional reality* view. On their view, the Holmes stories pick out a particular possible world, though it is unknowable which one. So one of (@holmesodd) and (@holmeseven) is true. This seems incredible; it's more plausible that there is no fact of the matter about how many cousins Holmes has.
 
@@ -213,12 +213,40 @@ This is the
 
 ## Fictional Anti-Realism {#sec-fiction}
 
+Let's turn now to fiction. I assume, as is standard, that sentences like *Holmes is a detective* really express claims like *In the relevant fiction, Holmes is a detective*. Moreover, the operator *In the relevant fiction* is, at least when the fiction is consistent, a normal modal operator. Following @BlumbergHolguin2025, I'll write it as $\Box_f$.
+
+For @Lewis1978b, this is really box-like. In particular, it can be true both that $\Box_f p$ and $\Box_f \neg p$. Indeed, when $p$ is the claim that Holmes has an even number of cousins, that's precisely what Lewis does say. (He says it about hairs, but I'm sure he'd say the same thing about cousins.) The alternative, that there is some hidden fact of the matter is, he says "absurd" [@Lewis1978b 42].
+
+But as @BlumbergHolguin2025 point out, Lewis's view runs into problems. First, note that when we knowledge ascriptions involving fiction, the $\Box_f$ typically takes narrow scope with respect to knowledge claims. (@knowdetective) is true, but it would be false if $\Box_f$ took wide scope with respect to 'know'.
+
+(@knowdetective) I know that Holmes is a detective.
+
+This holds not just when the knowledge claim involves a 'that' clause, but when it involves an embedded question. For instance, both (@knowwhdetective) and (@knowwhgladiator) are true, because I know Holmes is a detective, and not a gladiator.
+
+(@knowwhdetective) I know whether Holmes is a detective.
+(@knowwhgladiator) I know whether Holmes is a gladiator.
+
+He'd probably have been a good gladiator, but he wasn't one. Blumberg and Holguin ($\sectionmark$ 7.1) argue that (@knowwhgladiator) should be interpreted as *I know whether, in the fiction, Holmes is a gladiator*. That's true because *I know whether p* is true both when I know *p* and when I know $\neg$*p*. On that analysis, we should get that (@holmesknow), repeated here, is true.
+
+(4) I know whether Holmes has an even number of cousins.
+
+After all, I know by reading Lewis that it's not true that, in the fiction, Holmes has an even number of cousins. That's just like the fact that it's not true, in the fiction, that he's a gladiator. So (@knowwhgladiator) and (@holmesknow) should have the same truth value. But intuitively, they do not.
+
+One might object to this argument that it rests on a contentious assumption about the interaction of $\Box_f$ and wh-clauses. Blumberg and Holguìn assume that 'whether Holmes has an even number of cousins' is the complement of 'I know', just like a that clause can be the complement of 'I know'. That could be doubted. You might read (@holmesknow) as something more like: *I know, in the fiction, whether Holmes has an even number of cousins*. On this view, we assume *whether p* denotes the true member of {*p*, $\neg$*p*}. So on the Lewisian view, it will be non-denoting in this instance, since it is neither true in the fiction that *p* nor true in the fiction that $\neg$*p*. That's good insofar as it makes (@holmesknow) no longer true, which was the original objection. But it does make (@holmesknow) contain a large non-denoting expression. And it doesn't seem like it does. After all, the same reasoning would imply that 
+
+
+
 - Agreement with Lewis and with BH - hidden operator
 - Agreement with BH against Lewis - the wonder cases are problems
 - Disagreement with BH - realism is literally incredible
 - First, appeal to intuition - especially about songs
 - Second, appeal to possibility of consistent but incompatible fanfics
 - Conclusion, what's true in a story is what's true in a *possibility*
+- Surprising conclusion: You can never know there is no fact of the matter. This follows from the Humberstone semantics. And it also seems to be supported by the data
+- Objection: Can't wonder whether it's true that Holmes has odd number of cousins. Reply: You can, this isn't standard non-bivalence.
+- Objection: You can't even state the view. Reply 1: You can state it in the meta-language. Reply 2: You can state it using rigidifiers (see appendix)
+- Objection: Strange view of disjunction. Reply: Disjunction is strange
+- Objection: Who cares about silly questions? Reply: We all wonder what becomes of the broken-hearted. Also, it's a model for anti-realism in general.
 
 ## Accuracy for Anti-Realists {#sec-realism}
 
