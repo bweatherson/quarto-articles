@@ -281,6 +281,33 @@ One might object to this argument that it rests on a contentious assumption abou
 - On the other hand, that's really what folks have commonly assumed. It's a common part of accuracy based arguments that one or other complete state is true. Inferring that from zero premises is a multiple-conclusion argument.
 - So there is a sense in which this is a non-classical response to accuracy dominance. But I think it's a kind of non-classicality which we have reason to accept at least some of the time.
 
+## Appendix
+
+### Modal Logic
+
+Basic principles
+Suffice for persistence and refinability
+Motivation by canonical properties
+What is the canonical model
+Can't be if Box A in x, then A in y, because of x = Box A v Box B, y = {~A, ~B}
+If it's if Box A1 v .. v Box An in x, then one of A1, ..., An in y, get Humberstone's condition
+	But that's too strong. Surely x is Box A v Box B, y = A v B, we have xRy
+Better to say that if Box A1 v .. v Box An in x, then A1 v ... v An in y.
+	That gets more like Holliday's refinement condition
+
+### Conditional Logic
+
+Got this already, cut and paste from section 1
+
+### Rigidifiers
+
+Got to write this, including engaging with Fabrizio's view
+
+### Fourth Thing
+
+Maybe if the modal part goes too far, move it to fourth part
+
+
 ::: {.content-visible unless-format="html"}
 ## References {-}
 :::
