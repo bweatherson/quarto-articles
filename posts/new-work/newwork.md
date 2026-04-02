@@ -82,7 +82,7 @@ In doing so, I'll be arguing against the orthodox view represented by David @Lew
 
 Recently, Kyle Blumberg and Ben Holguín [-@BlumbergHolguin2025] have argued that Lewis's account has implausible predictions about fictional claims embedded in attitude ascriptions. For instance, it implies that (@holmesknow) is true.
 
-(@holmesknow) I know whether Holmes has either an odd or even number of cousins.
+(@holmesknow) I know whether Holmes has an even number of cousins.
 
 They argue that Lewis's view should be rejected in favour of their *fictional reality* view. On their view, the Holmes stories pick out a particular possible world, though it is unknowable which one. So one of (@holmesodd) and (@holmeseven) is true. This seems incredible; it's more plausible that there is no fact of the matter about how many cousins Holmes has.
 
@@ -139,7 +139,7 @@ Possibility frames have attracted some attention recently as an interesting clas
 
 Since many theories of fiction involve modals or counterfactuals, we need to say more about $\mathbb{R}$ and $f$. First we'll talk about modals.
 
-In order to make sure persistence and refinability hold in the modal part of the language, Humberstone puts some constraints on what can go into $\mathbb{R}$. (As noted above, Holliday prefers weaker constraints, but the difference won't be important here.) Any accessibility relation $R_i$ has to satisfy these constraints.^[The names are taken from Holliday; Humberstone uses less descriptive names.]
+In order to make sure persistence and refinability hold in the modal part of the language, Humberstone puts some constraints on what can go into $\mathbb{R}$. (As noted above, Holliday prefers weaker constraints, but the difference won't be important here.) Any accessibility relation $R_i$ has to satisfy these constraints.^[The names are taken from Holliday; Humberstone uses less descriptive names. The ++ in **RRef++ is because Holliday considers two weaker refinement conditions.]
 
 **UpR**:
 :    If $x \leqslant x'$ and $x' R_i y$, then $x R_i y$.
@@ -150,15 +150,13 @@ In order to make sure persistence and refinability hold in the modal part of the
 **RRef++**:
 :    If $x R_i y$, then there exists $x' \geqslant x$ such that for all $x'' \geqslant x'$, $x'' R_i y$.
 
-**UpR** says that if a refinement of $x$ can access $y$, then $x$ itself can already access $y$: accessibility is not something that can be gained by adding detail to the source. **RDown** is a converse of this; it says that accessibility cannot be lost by adding detail to the target. **RRef++** says that if $x$ can access $y$, there is some refinement $x'$ of $x$ where it is settled that $x'$ can access *y*. This last access can't be overturned by further refinement of $x'$.
-
-Given these constraints, the truth condition for the box operator is:
+**UpR** says that accessibility is never gained by refinement; if $x$ can access $y$, so can any coarsening of $x$. **RDown** is the converse: if $x$ can access $y$, it can access every refinement of $y$. To understand **RRef++**, it helps to have one new concept. Say that $a$ determinately accesses $b$ if for any refinement $c$ of $a$, $cR_ib$. Then **RRef++** says that if $x$ accesses $y$, some refinement of $x$ determinately accesses $y$. Finally, we add a familiar truth condition for $\Box_i$:
 
 \begin{align*}
 [\Box_i] \quad & \mathcal{M} \models_x \Box_i A \text{ iff } \forall y \, (x R_i y \Rightarrow \mathcal{M} \models_y A)
 \end{align*}
 
-This should be familiar: $\Box_i A$ is true at $x$ iff $A$ is true at every $R_i$-accessible possibility.
+In words, $\Box_i A$ is true at $x$ iff $A$ is true at every $R_i$-accessible possibility.
 
 Humberstone treats $\Diamond$ as a defined connective, $\Diamond_i A$ just means $\neg \Box_i \neg A$, and I'll do the same. It is easy to show that if $R_i$ satisfies these three constraints, then even after adding $\Box_i$ and $\Diamond_i$ to the language, all sentences will satisfy persistence and refinability.
 
@@ -178,14 +176,14 @@ We posit a selection function $f$ as in the semantics for counterfactuals sugges
 **Nearness**
 :   If $f(A, x) \subseteq B$ and $f(B, x) \subseteq A$, then $f(A, x) = f(B, x)$
 
-**UpR for $f$**
+**Upf**
 :    If $x \leqslant x'$ and $y \in f(A, x')$, then $y \in f(A, x)$
 
-**RDown for $f$**
+**fDown**
 :    If $y \in f(A, x)$ and $y \leqslant y'$, then $y' \in f(A, x)$
 
-**RRef++ for $f$**
-:    If $y \in f(A, x)$, then there exists $x' \geqslant x$ such that for all $x'' \geqslant x'$, $y \in f(A, x'')$
+**fRef+++**
+:    If $y' \in f(A, x)$, then there exists $x' \geqslant x$ such that for all $z: z \in f(A, x')$ iff $z \geqslant y'$.
 
 Then the truth condition for counterfactuals is:
 
@@ -193,11 +191,11 @@ Then the truth condition for counterfactuals is:
 [\boxright] \quad & \mathcal{M} \models_x A \boxright B \text{ iff } \forall y \in f(A, x) \, \mathcal{M} \models_y B 
 \end{align*}
 
-I'll say that $f(A, x)$ are the nearest $A$-worlds; it will become clear why this is a reasonable locution.
+I'll say that $f(A, x)$ are the nearest $A$-worlds to $x$; it will become clear why this is a reasonable locution.
 
-**Conditional Excluded Middle** says that there are no nearest $A$-worlds, or they are all and only the refinements of some particular possibility. So it can't be that neither $B$ nor $\neg B$ holds throughout the nearest $A$-possibilities: if there is a nearest $A$-possibility $y$, then by refinability for $B$, either $\mathcal{M} \models_y B$ (in which case persistence gives $\mathcal{M} \models_z B$ for all $z \geqslant y$, so $A \boxright B$ is true), or there is some $y' \geqslant y$ with $\mathcal{M} \models_{y'} \neg B$ (in which case persistence gives $\mathcal{M} \models_z \neg B$ for all $z \geqslant y'$, and since $\{z : z \geqslant y'\} \subseteq \{z : z \geqslant y\} = f(A, x)$, there is a nearest $A$-possibility where $\neg B$ holds). This validates Conditional Excluded Middle for counterfactuals: $\mathcal{M} \models_x (A \boxright B) \vee (A \boxright \neg B)$.
+**Conditional Excluded Middle** says that there are no nearest $A$-worlds, or they are all and only the refinements of some particular possibility. It plays a central role in the proof that CEM, $(A \boxright B) \vee (A \boxright \neg B)$ is true at all points.  Given that regular excluded middle holds everywhere, to prove this it suffices to prove that if $\neg(A \boxright B)$ is true at $x$, so is $A \boxright \neg B$. So assume that $\neg(A \boxright B)$ is true at $x$. If $f(A, x)$ is empty, it follows trivially that $A \boxright \neg B$ holds. Assume that's not the case, so $f(A, x)$ is non-empty. For $A \boxright \neg B$ to fail to hold at $x$, $B$ must be true at some point in $f(A, x)$. Call some such point $y'$. By **fRef+++**, there is some $x' \geqslant x$ such that $f(A, x')$ consists of all and only refinements of $y'$. Since $B$ is true at $y'$, and is persistent, it follows that $B$ is true everywhere in $f(A, x')$. Hence $A \boxright B$ is true at $x'$, contradicting the assumption that $\neg(A \boxright B)$ is true at its coarsening, $x$.
 
-The other principles are more straightforward. **Truth** says that the nearest $A$-worlds have to actually make $A$ true. **Centering** says that if $A$ is true at $x$, then $x$ is one of the nearest $A$-worlds. This system doesn't quite have Strong Centering, since there could be other nearby $A$-worlds, but it is close. The nearest $A$-worlds to an $A$-world can only be coarsenings or refinements of it. **Nearness** says that if the nearest $A$-worlds are all $B$-worlds, and the nearest $B$-worlds are all $A$-worlds, then the nearest $A$-worlds just are the nearest $B$-worlds. That has to be true if $f$ is really measuring nearness. Finally, the last three clauses ensure that if we define $R_A$ such that $xR_Ay$ iff $y \in f(A, x)$, then $R_A$ is an acceptable accessibility relation. This in turn guarantees that the language is still persistent and refinable, even with $\boxright$ added.
+The other principles are more straightforward. **Truth** says that the nearest $A$-worlds have to actually make $A$ true. **Centering** says that if $A$ is true at $x$, then $x$ is one of the nearest $A$-worlds. This system doesn't quite have Strong Centering, since there could be other nearby $A$-worlds, but it is close. The nearest $A$-worlds to an $A$-world can only be coarsenings or refinements of it. **Nearness** says that if the nearest $A$-worlds are all $B$-worlds, and the nearest $B$-worlds are all $A$-worlds, then the nearest $A$-worlds just are the nearest $B$-worlds. That has to be true if $f$ is really measuring nearness. The last three clauses ensure that if we define $R_A$ such that $xR_Ay$ iff $y \in f(A, x)$, then $R_A$ is an acceptable accessibility relation. This in turn guarantees that the language is still persistent and refinable, even with $\boxright$ added. Though note that **fRef+++** is stronger than we need for merely that purpose; the stronger rule is needed for the proof of CEM.^[The name follows Holliday's convention, though he was more interested in weakening Humberstone's original refinement condition.]
 
 ## Accuracy Dominance {#sec-joyce}
 
@@ -215,12 +213,40 @@ This is the
 
 ## Fictional Anti-Realism {#sec-fiction}
 
+Let's turn now to fiction. I assume, as is standard, that sentences like *Holmes is a detective* really express claims like *In the relevant fiction, Holmes is a detective*. Moreover, the operator *In the relevant fiction* is, at least when the fiction is consistent, a normal modal operator. Following @BlumbergHolguin2025, I'll write it as $\Box_f$.
+
+For @Lewis1978b, this is really box-like. In particular, it can be true both that $\Box_f p$ and $\Box_f \neg p$. Indeed, when $p$ is the claim that Holmes has an even number of cousins, that's precisely what Lewis does say. (He says it about hairs, but I'm sure he'd say the same thing about cousins.) The alternative, that there is some hidden fact of the matter is, he says "absurd" [@Lewis1978b 42].
+
+But as @BlumbergHolguin2025 point out, Lewis's view runs into problems. First, note that when we knowledge ascriptions involving fiction, the $\Box_f$ typically takes narrow scope with respect to knowledge claims. (@knowdetective) is true, but it would be false if $\Box_f$ took wide scope with respect to 'know'.
+
+(@knowdetective) I know that Holmes is a detective.
+
+This holds not just when the knowledge claim involves a 'that' clause, but when it involves an embedded question. For instance, both (@knowwhdetective) and (@knowwhgladiator) are true, because I know Holmes is a detective, and not a gladiator.
+
+(@knowwhdetective) I know whether Holmes is a detective.
+(@knowwhgladiator) I know whether Holmes is a gladiator.
+
+He'd probably have been a good gladiator, but he wasn't one. Blumberg and Holguin ($\sectionmark$ 7.1) argue that (@knowwhgladiator) should be interpreted as *I know whether, in the fiction, Holmes is a gladiator*. That's true because *I know whether p* is true both when I know *p* and when I know $\neg$*p*. On that analysis, we should get that (@holmesknow), repeated here, is true.
+
+(4) I know whether Holmes has an even number of cousins.
+
+After all, I know by reading Lewis that it's not true that, in the fiction, Holmes has an even number of cousins. That's just like the fact that it's not true, in the fiction, that he's a gladiator. So (@knowwhgladiator) and (@holmesknow) should have the same truth value. But intuitively, they do not.
+
+One might object to this argument that it rests on a contentious assumption about the interaction of $\Box_f$ and wh-clauses. Blumberg and Holguìn assume that 'whether Holmes has an even number of cousins' is the complement of 'I know', just like a that clause can be the complement of 'I know'. That could be doubted. You might read (@holmesknow) as something more like: *I know, in the fiction, whether Holmes has an even number of cousins*. On this view, we assume *whether p* denotes the true member of {*p*, $\neg$*p*}. So on the Lewisian view, it will be non-denoting in this instance, since it is neither true in the fiction that *p* nor true in the fiction that $\neg$*p*. That's good insofar as it makes (@holmesknow) no longer true, which was the original objection. But it does make (@holmesknow) contain a large non-denoting expression. And it doesn't seem like it does. After all, the same reasoning would imply that 
+
+
+
 - Agreement with Lewis and with BH - hidden operator
 - Agreement with BH against Lewis - the wonder cases are problems
 - Disagreement with BH - realism is literally incredible
 - First, appeal to intuition - especially about songs
 - Second, appeal to possibility of consistent but incompatible fanfics
 - Conclusion, what's true in a story is what's true in a *possibility*
+- Surprising conclusion: You can never know there is no fact of the matter. This follows from the Humberstone semantics. And it also seems to be supported by the data
+- Objection: Can't wonder whether it's true that Holmes has odd number of cousins. Reply: You can, this isn't standard non-bivalence.
+- Objection: You can't even state the view. Reply 1: You can state it in the meta-language. Reply 2: You can state it using rigidifiers (see appendix)
+- Objection: Strange view of disjunction. Reply: Disjunction is strange
+- Objection: Who cares about silly questions? Reply: We all wonder what becomes of the broken-hearted. Also, it's a model for anti-realism in general.
 
 ## Accuracy for Anti-Realists {#sec-realism}
 
@@ -254,6 +280,33 @@ This is the
 - On the one hand, multiple conclusion logic is weird; cite Dummett, Wright, etc on how weird it is
 - On the other hand, that's really what folks have commonly assumed. It's a common part of accuracy based arguments that one or other complete state is true. Inferring that from zero premises is a multiple-conclusion argument.
 - So there is a sense in which this is a non-classical response to accuracy dominance. But I think it's a kind of non-classicality which we have reason to accept at least some of the time.
+
+## Appendix
+
+### Modal Logic
+
+Basic principles
+Suffice for persistence and refinability
+Motivation by canonical properties
+What is the canonical model
+Can't be if Box A in x, then A in y, because of x = Box A v Box B, y = {~A, ~B}
+If it's if Box A1 v .. v Box An in x, then one of A1, ..., An in y, get Humberstone's condition
+	But that's too strong. Surely x is Box A v Box B, y = A v B, we have xRy
+Better to say that if Box A1 v .. v Box An in x, then A1 v ... v An in y.
+	That gets more like Holliday's refinement condition
+
+### Conditional Logic
+
+Got this already, cut and paste from section 1
+
+### Rigidifiers
+
+Got to write this, including engaging with Fabrizio's view
+
+### Fourth Thing
+
+Maybe if the modal part goes too far, move it to fourth part
+
 
 ::: {.content-visible unless-format="html"}
 ## References {-}
