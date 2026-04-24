@@ -59,4 +59,92 @@ Already we can ask three separate questions about whether a logic agrees with CL
 
 These questions don't always get the same answers. To take a famous example, consider the logic I'll call **TRADITIONAL SUPERVALUATIONISM** (hereafter **TSV**). There are a bunch of precisifications, a sentence is true iff it is super-true, i.e., true on all precisifications and false iff it is super-false, and validity is super-truth preservation. If we're talking about **TSV**, the answers to questions 1 and 2 are *Yes*, while the answer to question 3 is *No*. To see that note that $\emptyset \vDash_{CL} {p, \neg p}$, while $\emptyset \nvDash_{TSV} {p, \neg p}$.
 
-But, as @Williamson1994 [Ch. 5] shows, if you expand **TSV** to include a determinately operator $\mathbf{D}$, then **TSV** disagrees with classical logic on an important point. The problem is that while $A\vDash_{TSV} \mathbf{D}A$, it's 
+But, as @Williamson1994 [Ch. 5] shows, if you expand **TSV** to include a determinately operator $\mathbf{D}$, then **TSV** disagrees with classical logic on an important point. The problem is that $A\vDash_{TSV} \mathbf{D}A$, but $\nvDash_{TSV} A \rightarrow \mathbf{D}A$. So the classical rule $\rightarrow-\text{intro}$ is not acceptable in **TSV**.
+
+If we're working in **SET-FMLA**, then **CL** and **TSV** agree on their outputs, i.e., on which sequents are valid, but not on the process for generating sequents. They do not agree on the introduction and elimination rules which go with each connective. @tbl-six-questions summarises the agreements and disagreements.
+
+|   |   Output  |  Process  |
+|---:|:-------:|:------:|
+| **FMLA** | &#10004;| &#10004;|
+| **SET-FMLA** | &#10004; | &#10008; |
+| **SET-SET** | &#10008; | &#10008; |
+
+: Agreements and disagreements between **CL** and **TSV** {#tbl-six-questions}
+
+There are 6 binary questions here, so at first glance it looks like there are 64 ways to answer these agreement questions. But given the relationships between the rows and columns, this isn't right.
+
+For one thing, ticks are always above, and to the left of, the crosses. They are above because agreeing with classical logic on lower rows, which cover more points of agreement, entails agreeing on higher rows. And agreeing on the process entails agreeing on the outcome, though as we saw with **TSV** and **CL**, the reverse need not hold.
+
+So we can summarise any table like this with a pair of numbers: $\langle x, y\rangle$, where $x$ is the number of ticks in the first column, and $y$ the number of ticks in the second. Moreover, since agreement on process entails agreement on outcome, we know $x \geqslant y$. And, of course, each of $x$ and $y$ is in $\{1, 2, 3, 4\}$. So there are 10 possible distributions of ticks and crosses on a table like this.
+
+For example, the level of agreement between **TSV** and **CL**, in this language, is $\langle 2, 1\rangle$. And there are 9 other agreement levels, i.e., distributions of ticks and crosses, which are in principle possible.
+
+Two of these distributions are not particularly interesting. If we did a table for a logic everyone agrees is non-classical, say **Intuitionistic Logic** (hereafter, IL), then the table would be all crosses.
+
+|   |   Output  |  Process  |
+|---:|:-------:|:------:|
+| **FMLA** | &#10008;| &#10008;|
+| **SET-FMLA** | &#10008; | &#10008; |
+| **SET-SET** | &#10008; | &#10008; |
+
+: Agreements and disagreements between **CL** and **IL** {#tbl-six-questions}
+
+That is, the level of agreement between **CL** and **IL** is $\langle 0,0\rangle$. On the other hand, the level of agreement between **CL** and itself is $\langle 3, 3\rangle$. That leaves 8 other levels.
+
+And this leads (at long last) to the main questions I'm interested in here.
+
+::: {.callout-tip icon=false}
+
+## Main Questions
+
+1. Which other agreement levels are really possible?
+2. For the levels which are possible, what are some reasonably natural logics that are at that level.
+
+:::
+
+Let's work through some of the levels in order.
+
+# $\langle 1, 0\rangle$
+
+Here's a slightly odd logic that is at level $\langle 1, 0\rangle$. I'll call it **Classicized Intuitionistic Logic**, or **CIL**.
+
+Start with the $\land \neg$ fragment of **IL**. Note that this has the same theorems as the $\land \neg$ fragment of **CL**. (This wouldn't be true if we started in predicate logic, and first-order **CIL** is a little trickier to theorise about.) Then introduce $\vee$ and $\rightarrow$ by definition as follows.
+
+$$
+A \vee B =_{df} \neg(\neg A \wedge \neg B)
+$$
+
+$$
+A \rightarrow B =_{df} \neg(A \wedge \neg B)
+$$
+
+Since **CIL** agrees with **CL** on the parts that are not a matter of stipulation (because **CL** and **IL** have the same theorems on that fragment), and agrees with **CL** (against **IL**) on those matters of stipulation, it turns out that **CIL** has the same theorems as **CL**. That is, the top left cell of its agreement table is a tick.
+
+But that's where the agreement stops. We know that it doesn't agree with **CL** on theorems, because $\neg \neg A \nvDash_{CIL} A$. It also doesn't agree with **CL** on process, even if we stay in **FMLA**.
+
+The only rule for the **FMLA** version of propositional **CL** is modus ponens. So the claim I'm making is that there are are sentences $A, B$ such that $A$ and $A \rightarrow B$ are **CIL** theorems, but $B$ is not. We know that this can't happen if $A$ and $B$ are in the language of propositional logic. But just like Williamson showed the limits of agreement between **TSV** and **CL** by looking at an expanded language, we will also generate a problem by expanding the language slightly.
+
+In particular, we'll add back in an intuitionist disjunction. So as to avoid confusion with $\vee$, which in **CIL** is a defined connective, we'll notate it as $O$. So $AOB$ is the sentence which is true at a point in an intuitionistic model iff either $A$ or $B$ is true at that point. It's not strictly necessary, but it makes the example easier to also introduce $\top$ for an arbitrary theorem. Then note that this is a theorem of **CIL**.
+
+$$
+T \rightarrow pO\neg p
+$$
+
+If you trace through the stipulative definition of $\rightarrow$, this becomes $\neg \neg (pO\neg p)$, which is a theorem of **IL**. But while the antecedent of that is a theorem, the consequent is not. So if we're in **FMLA**, then **CIL** doesn't even agree with the only rule of both propositional **CL** and propositional **IL**, namely modus ponens.
+
+# $\langle 1, 1\rangle$
+
+I don't have a great example for this, but I do have an example that technically works. I call it **Resource Sensitive Classical Logic**, or **RSCL**. It's going to be an odd, and not particularly well-behaved, kind of linear logic.
+
+A sequent $\Gamma \vDash A$ is valid in **RSCL** iff $\Gamma \vDash A$ is valid in **CL**, and for no $\Upsilon \subset \Gamma$ is $\Upsilon \vDash A$ is valid in **CL**. (It's important here that $\Upsilon$ is a *proper* subset of $\Gamma$. We give the same definition of validity in **SET-SET**, with $A$ replaced by $\Delta$ throughout.) Finally, $A$ is a theorem of **RSCL** iff $\emptyset \vDash_{RSCL} A$.
+
+Since $\emptyset$ has no proper subsets, it is clear that **CL** and **RSCL** have the same theorems. When the language is expanded, the same principles apply. A sequent is **RSCL**-valid in the logic that goes with the expanded language iff it is valid in the suitable expansion of **CL**, and this validity disappears if you remove any premise. Given that definition, if $A$ and $A \rightarrow B$ are theorems in **RSCL**, $B$ will be as well. Hence **RSCL** agrees with **CL** both in terms of theorems, and in terms of propositional rules. Hence it is at least at agreement level $\langle 1, 1\rangle$.
+
+But that's where the agreement stops, since $A, B \nvDash_{RSCL} A$, while the matching sequent is clearly valid in **CL**, and indeed in any preservationist logic.
+
+# $\langle 2, 0\rangle$
+
+I really don't have any idea what a logic at this agreement level would look like. It would have to be very strange, and it would be pushing what we even call a logic; even more than **CIL** and **RSCL** did. Call this logic **X** for now, let's see how hard it is to solve for it.
+
+Since $A, A \rightarrow B \vDash_{CL} B$, and **X** agrees with **CL** on theorems, it follows that $A, A \rightarrow B \vDash_{X} B$. But for the top right cell of the agreement table between **X** and **CL** to be a cross, **X** has to not satisfy modus ponens. So (in some expanded language), there has to be some theorems $A$ and $A \rightarrow B$ such that $B$ is a non-theorem. But also, $B$ is entailed, in this very logic, by those theorems. This is pushing the definition of what theorem-hood could be, perhaps to breaking point.
+
