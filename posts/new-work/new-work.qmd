@@ -1,3 +1,72 @@
+---
+title: "New Work for Dempster-Shafer Functions"
+abstract: |
+ TBD
+date: today
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - epistemology
+  - games and decisions
+  - logic
+  - language
+  - vagueness
+engine: knitr
+execute:
+  echo: false
+  warning: false
+citation: false
+format:
+  html:
+    css: ../trad_defn.css
+    include-in-header:
+      - text: |
+          <script>
+          MathJax = {
+            tex: {
+              macros: {
+                llbracket: "⟦",
+                rrbracket: "⟧",
+                nmodels: "\\not\\models",
+                boxright: "\\mathrel{\\Box\\!\\!\\to}"
+              }
+            }
+          };
+          </script>
+  pdf:
+    output-file: "New Work for Dempster-Shafer"
+    keep-tex: true
+    geometry: "left=1.8in,
+                 right=1.8in,
+                 top=1.5in,
+                 bottom=1.5in,
+                 includemp=TRUE,
+                 marginparwidth=0in,
+                 marginparsep=0in"
+    include-in-header:
+      - text: |
+          \newcommand{\nmodels}{\mathrel{\ooalign{$\models$\cr\raisebox{-0.001ex}{\hss$\mkern-1mu/\hss$}}}}
+          \newcommand{\llbracket}{[\![}
+          \newcommand{\rrbracket}{]\!]}
+          \setlength\heavyrulewidth{0ex}
+          \setlength\lightrulewidth{0ex}
+          \usepackage[lines=2]{lettrine}
+          \cehead{Draft of February 28, 2026}
+          \DeclareSymbolFont{symbolsC}{U}{txsyc}{m}{n}
+          \DeclareMathSymbol{\boxright}{\mathrel}{symbolsC}{128}
+          \cehead{
+                 Brian Weatherson
+                 }
+    include-after-body: 
+        text: |
+          \noindent Draft for discussion.
+draft: true
+---
+
 Eleanor Rigby, we are told, picked up the rice in a church where a wedding had been. Have you ever thought about that wedding? Who were the happy couple? What were their names? Did they stay together for years, eventually bounce grandchildren on their knees? The song says enough to make it possible to raise these questions, but not to answer them.
 
 _Eleanor Rigby_, the song, is special in many respects, but this is not one of them. Works of fiction typically raise questions they do not answer. Mostly these questions are not worth even trying to answer, though in some cases at least trying to answer them feels important to engaging with the fiction. (_Blade Runner_ is a famous example of this.) Still, even the silly questions can be philosophically interesting. For while it's not important what the answers to those questions are, it is somewhat important what an answer to the questions looks like.
@@ -26,7 +95,7 @@ For Lewis, there are many worlds which have an equally good claim to be the worl
 
 Third, Lewis thinks that this 'in the fiction' operator can be understood in terms of counterfactuals. Roughly, what's true in the fiction is what would be true were the text of the story told as known truth.
 
-In this paper, I'll accept the first of Lewis's claims (that there is an operator), reject the second (that it has a non-functional logic), and mostly set aside the third. In 'Fictional Reality', [@BlumbergHolguin2025], Kyle Blumberg and Ben Holguìn run a series of arguments against this second assumption of Lewis's. I'll briefly mention a handful that I find most compelling.
+In this paper, I'll accept the first of Lewis's claims (that there is an operator), reject the second (that it has a non-functional logic), and mostly set aside the third. In 'Fictional Reality', [@BlumbergHolguin2025], Kyle Blumberg and Ben Holguín run a series of arguments against this second assumption of Lewis's. I'll briefly mention a handful that I find most compelling.
 
 For many questions that seem to be left open by a fiction, it makes sense to wonder about them. This can range from questions that are central to how one understands a fiction, like _Is Decker a replicant?_, to trivial questions like _Do The Couple have grandchildren?_. But on Lewis's picture, there isn't anything to wonder about. We know that it's not true that, in the fiction, that they have grandchildren, and it's also not true that, in the fiction, they do not have grandchildren. Intuitively, (@CoupleWhether) is true, but there isn't any sensible way to insert an _In the fiction_ operator that makes it true on Lewis's theory.
 
@@ -41,19 +110,19 @@ For Lewis, once we know all there is to know about the fiction, all worlds are s
 
 (@CoupleLikelyChildren) The Couple might have had five grandchildren, and they might have had ten, but given the social norms at the time, and in the generation following, it's more likely they had five.
 
-Blumberg and Holguìn infer from facts like these that there is a fact of the matter about any question raised by the fiction. As they note, this strikes many people as absurd. I'm one of those people, so I'd like to set out a theory in which there need not be any such facts, without falling into the traps besetting Lewis's theory.
+Blumberg and Holguín infer from facts like these that there is a fact of the matter about any question raised by the fiction. As they note, this strikes many people as absurd. I'm one of those people, so I'd like to set out a theory in which there need not be any such facts, without falling into the traps besetting Lewis's theory.
 
 One might wonder whether we need such detail on trivial questions like the future of The Couple. This concern is in part a function of my choosing a trivial question; many questions more natural questions about fictions have the same shape. Who hasn't wondered what becomes of the broken hearted? More generally, the logical and epistemological issues that this topic raises have implications far beyond fiction. Any time we can coherently wonder about something without being certain whether there is a fact of the matter, the same issues will arise. Our subject is nothing less than the epistemology of the not clearly factual.
 
 We can have graded uncertainty about questions where we aren't sure there is a fact of the matter. This raises questions about the rational constraints on this uncertainty. There are several familiar arguments that all uncertainty should, ultimately, be probabilistic. I'll argue that these arguments rest on an assumption that all the questions we're uncertain about are (certainly) about matters of fact. When there might be no fact of the matter, it is rational for one's uncertainty to be represented not by a probability function, but by a Dempster-Shafer belief function. (This is the 'New Work' for these functions the title promised.)
 
-This paper has a snake-like structure. In sections [1](#sec-sec1) and [5](#sec-sec5) I discuss _possibility frames_. This is a system, introduced by Lloyd @Humberstone1981 and recently discussed in detail by Wesley @Holliday2025, which lets us preserve something like classical logic while allowing that there might not be a fact of the matter about some questions. I'll introduce the theory in section [1](#sec-sec1), and return to the slightly vexed question of whether this is really _classical_ logic in section [5](#sec-sec5). In sections [2](#sec-sec2) and [4](#sec-sec4) I'll discuss Dempster-Shafer functions. In section [2](#sec-sec2) I'll set out what they are, and the standard arguments against using them. In section [4](#sec-sec4) I'll come back to why these arguments aren't compelling when the subject matter might be non-factual. In the middle, I'll come back to Blumberg and Holguìn's arguments about fiction, and defend the position already sketched, that while their objections to Lewis are successful, their proposed remedy is implausible and should be rejected.
+This paper has a snake-like structure. In sections [1](#sec-sec1) and [5](#sec-sec5) I discuss _possibility frames_. This is a system, introduced by Lloyd @Humberstone1981a and recently discussed in detail by Wesley @Holliday2025, which lets us preserve something like classical logic while allowing that there might not be a fact of the matter about some questions. I'll introduce the theory in section [1](#sec-sec1), and return to the slightly vexed question of whether this is really _classical_ logic in section [5](#sec-sec5). In sections [2](#sec-sec2) and [4](#sec-sec4) I'll discuss Dempster-Shafer functions. In section [2](#sec-sec2) I'll set out what they are, and the standard arguments against using them. In section [4](#sec-sec4) I'll come back to why these arguments aren't compelling when the subject matter might be non-factual. In the middle, I'll come back to Blumberg and Holguìn's arguments about fiction, and defend the position already sketched, that while their objections to Lewis are successful, their proposed remedy is implausible and should be rejected.
 
 # Possibility Frames {#sec-sec1}
 
-A Humberstone possibility frame (hereafter, just _possibility frame_) is a triple $\langle W, \leqslant, \mathbb{R}, f, V\rangle$, where $W$ is a set of possibilities, $\leqslant$ is a _refinement_ relation on them, $\mathbb{R}$ is a countable family of accesibility relations (with $R_i$ as the $i$'the member), and $V$ is a valuation function.^[One might expand frames even further, e.g., by adding a selection function that enters into the semantics for counterfactuals. Counterfactuals will be sitting just under the surface at many points in this paper, but to keep things focussed I'll defer discussion of counterfactuals to another day.] 
+A Humberstone possibility frame (hereafter, just _possibility frame_) is a triple $\langle W, \leqslant, \mathbb{R}, V\rangle$, where $W$ is a set of possibilities, $\leqslant$ is a _refinement_ relation on them, $\mathbb{R}$ is a countable family of accesibility relations (with $R_i$ as the $i$'the member), and $V$ is a valuation function.^[One might expand frames even further, e.g., by adding a selection function that enters into the semantics for counterfactuals. Counterfactuals will be sitting just under the surface at many points in this paper, but to keep things focussed I'll defer discussion of counterfactuals to another day.] 
 
-One way to think about the possibilities in $W$, suggested by @Humberstone1981 and used extensively by Wesley @Holliday2025, is that they are sets of possible worlds. I prefer to think of them as _stories_, at least on the assumption that stories are incomplete. A possibility, like a story, is something which settles some facts, while possibly leaving others open.
+One way to think about the possibilities in $W$, suggested by @Humberstone1981a and used extensively by @Holliday2025, is that they are sets of possible worlds. I prefer to think of them as _stories_, at least on the assumption that stories are incomplete. A possibility, like a story, is something which settles some facts, while possibly leaving others open.
 
 Following Humberstone, I'll write $x \leqslant y$ to mean that $y$ is a **refinement** of $x$.^[$y \geqslant x$ will just mean the same thing as $x \leqslant y$.] To say $y$ refines $x$ is to say that $y$ makes true everything that $x$ makes true, and possibly some more things besides. If possibilities are sets of possible worlds, then $y$ is a subset of $x$. (This makes the notation here confusing, which is why @Holliday2025 prefers to write $y \sqsubseteq x$ when $y$ is a refinement of $x$.) If possibilities are stories, then $y$ is a refinement of $x$ if $y$ fills in part of what $x$ leaves open. This is how I'll, intuitively, think of refinements.
 
@@ -76,17 +145,17 @@ The first two clauses are familiar, and the third looks much like the intuitioni
 
 First, every sentence in the language is persistent. If $\mathcal{M} \models_x A$ and $x \leqslant y$, then $\mathcal{M} \models_y A$. For any sentence, truth is always preserved when moving to a refinement. 
 
-Second, refinability holds for all sentences in the language. Once we've added negation to the language, we can restate refinability as the condition that, for any $A$, if $\mathcal{M} \nmodels_x A$, there is some refinement $y$ of $x$ such that $\mathcal{M} \models_y \neg A$. Intuitively, if a sentence is not true, then at some refinement its negation is true.
+Second, refinability holds for all sentences in the language. Once we've added negation to the language, we can restate refinability as the condition that, for any $A,$ if $\mathcal{M} \nmodels_x A$, there is some refinement $y$ of $x$ such that $\mathcal{M} \models_y \neg A$. Intuitively, if a sentence is not true, then at some refinement its negation is true.
 
 Third, if we define validity on possibility frames, written as $\vDash_{pf}$, as truth preservation, then we get a very classical theory. It's not just that, within this language, $\vdash_{CL}$ and $\vDash_{pf}$ exactly overlap. It's also that, in any expanded language, as long as persistence and refinability hold, the introduction and elimination rules for $\vdash_{CL}$ also hold for $\vDash_{pf}$.
 
-It's useful to work through one of these rules to show how the system works. Because it will play a role in what follows, I'll show that disjunction elimination holds for $\vDash_{pf}. One natural formulation^[There are other formulations which make weaker structural assumptions, but this one will do to show that we're preserving classical logic.] of disjunction elimination says that $\Gamma \cup \{A\} \vdash_{CL} C$, $\Delta \cup \{B\} \vdash_{CL} C$, and $\Phi \vdash_{CL} A \vee B$ together imply $\Gamma \cup \Delta \cup Phi \vdash_{CL} C$. Let's show that the same principle holds for $\vDash_{pf}$.
+It's useful to work through one of these rules to show how the system works. Because it will play a role in what follows, I'll show that disjunction elimination holds for $\vDash_{pf}$. One natural formulation^[There are other formulations which make weaker structural assumptions, but this one will do to show that we're preserving classical logic.] of disjunction elimination says that $\Gamma \cup \{A\} \vdash_{CL} C$, $\Delta \cup \{B\} \vdash_{CL} C$, and $\Phi \vdash_{CL} A \vee B$ together imply $\Gamma \cup \Delta \cup Phi \vdash_{CL} C$. Let's show that the same principle holds for $\vDash_{pf}$.
 
-Assume that $\Gamma \cup \{A\} \vDash_{pf} C$, $\Delta \cup \{B\} \vDash_{pf} C$, and $\Phi \vDash_{pf} A \vee B$, and assume for reduction that for some possibility $x$ where all members of $\Gamma \cup \Delta \cup \Phi$ are true,  $\mathcal{M} \nmodels_x C$. By refinability, there is some $y \geqslant x$ such that $\mathcal{M} \models_y \neg C$, i.e., for all $z \geqslant y$, $\mathcal{M} \nmodels_z C$. By persistence, all members of $\Gamma \cup \Delta \cup \Phi$ are true at $y$. Since all of $\Phi$ is true at $y$, we have $\mathcal{M} \models_y A \vee B$. By $[\vee]$, there is some $z \geqslant y$ such that $\mathcal{M} \models_z A$ or $\mathcal{M} \models_z B$. By persistence again, all members of $\Gamma \cup \Delta$ are true at $z$. If $\mathcal{M} \models_z A$, then all of $\Gamma \cup \{A\}$ are true at $z$, so $\mathcal{M} \models_z C$. If $\mathcal{M} \models_z B$, then all of $\Delta \cup \{B\}$ is true at $z$, so $\mathcal{M} \models_z C$. Either way, $\mathcal{M} \models_z C$. But $z \geqslant y$ and $\mathcal{M} \models_y \neg C$, so $\mathcal{M} \nmodels_z C$. Contradiction.
+Assume that $\Gamma \cup \{A\} \vDash_{pf} C$, $\Delta \cup \{B\} \vDash_{pf} C$, and $\Phi \vDash_{pf} A \vee B$, and assume for reduction that for some possibility $x$ where all members of $\Gamma \cup \Delta \cup \Phi$ are true,  $\mathcal{M} \nmodels_x C$. By refinability, there is some $y \geqslant x$ such that $\mathcal{M} \models_y \neg C$, i.e., for all $z \geqslant y,$ $\mathcal{M} \nmodels_z C$. By persistence, all members of $\Gamma \cup \Delta \cup \Phi$ are true at $y$. Since all of $\Phi$ is true at $y$, we have $\mathcal{M} \models_y A \vee B$. By $[\vee]$, there is some $z \geqslant y$ such that $\mathcal{M} \models_z A$ or $\mathcal{M} \models_z B$. By persistence again, all members of $\Gamma \cup \Delta$ are true at $z$. If $\mathcal{M} \models_z A$, then all of $\Gamma \cup \{A\}$ are true at $z$, so $\mathcal{M} \models_z C$. If $\mathcal{M} \models_z B$, then all of $\Delta \cup \{B\}$ is true at $z$, so $\mathcal{M} \models_z C$. Either way, $\mathcal{M} \models_z C$. But $z \geqslant y$ and $\mathcal{M} \models_y \neg C$, so $\mathcal{M} \nmodels_z C$. Contradiction.
 
 Humberstone's system looks non-classical. It includes points that make true neither $A$ nor $\neg A$ for some $A$. It includes a rule for negation that looks more like intuitionistic negation than classical negation. But looks are misleading; the system is still classical. All the sequents, and all the admissible rules on sequents, carry over from classical logic. We have a non-standard semantics for a very standard logic. 
 
-Possibility frames have attracted some attention recently as an interesting classical alternative to possible worlds semantics. Wesley @Holliday2025 studied the use of possibility frames in modal logic, differing from Humberstone about what the relationship between $\leq$ and $\mathbb{R}$ should be; we'll have more to say about this presently. Matthew @HarrisonTrainor2019 has shown how to extent the semantics to first-order logic. Brian @WeathersonHoPF applies possibility frame semantics to a puzzle about counterfactuals. And Fabrizio @CarianiUnpub uses possibility frames to model the open future. This paper extends that list; I'm going to use them to provide a better way of talking about fictional truth.
+Possibility frames have attracted some attention recently as an interesting classical alternative to possible worlds semantics. We've already mentioned @Holliday2025, and his work will come up extensively in what follows. Matthew @HarrisonTrainor2019 has shown how to extent the semantics to first-order logic. Brian @WeathersonHoPF applies possibility frame semantics to a puzzle about counterfactuals. And Fabrizio @CarianiUnpub uses possibility frames to model the open future. This paper extends that list; I'm going to use them to provide a better way of talking about fictional truth.
 
 Since we need modal operators, we need to say more about $\mathbb{R}$. First we'll talk about modals. We start a familiar truth condition for $\Box_i$:
 
@@ -105,28 +174,42 @@ It is easy to show that if each $R_i$ satisfies **R-Win**, then even after addin
 
 One important consequence of **R-Win** is that each $R_i$ is carried downwards along refinement. That is, if $x R_i y$ and $y \leqslant y'$, then $x R_i y'$. More colloquially, if *a* can access *b*, *a* can access any refinement of *b*. This will be important when we get to epistemic modality.
 
-@Holliday2025 [\sectionmark 6.3] notes that one upside of adding **R-Win** is that it means we get back _some_ familiar results from the traditional possible worlds semantics for modal logic. A possibility frame validates $\Box_i \Phi \rightarrow \Phi$ iff $R_i$ is reflexive; it validates \Box_i \Phi \rightarrow \Box_i_ \Box_i_ \Phi$ iff $R_i$ is transitive; and it validates $\Diamond_i \top$ iff $R_i$ is serial. What's more important here, and what Holliday also notes, is that we don't get the same parallel for all axioms. 
+@Holliday2025 [§6.3] notes that one upside of adding **R-Win** is that it means we get back _some_ familiar results from the traditional possible worlds semantics for modal logic. A possibility frame validates $\Box_i \Phi \rightarrow \Phi$ iff $R_i$ is reflexive; it validates $\Box_i \Phi \rightarrow \Box_i \Box_i \Phi$ iff $R_i$ is transitive; and it validates $\Diamond_i \top$ iff $R_i$ is serial. What's more important here, and what Holliday also notes, is that we don't get the same parallel for all axioms. 
 
-In possible world semantics, the frame condition for $\Box_i \Phi \vee \Box_i \neg \Phi$, or equivalently, $\Diamond_i \Phi \rightarrow \Box_i \Phi$, is that each point accesses at most one point. That is, $\forall x, y, z ((xRy \wedge xRz) \rightarrow y = z$. But in a possibility frame semantics, @Holliday2025 [229] shows that what it takes to validate $\Diamond_i \Phi \rightarrow \Box_i \Phi$ is (@FunctionalConstraint):
+In possible world semantics, the frame condition for $\Box_i \Phi \vee \Box_i \neg \Phi$, or equivalently, $\Diamond_i \Phi \rightarrow \Box_i \Phi$, is that each point accesses at most one point. That is, $\forall x, y, z ((xRy \wedge xRz) \rightarrow y = z)$. But in a possibility frame semantics, @Holliday2025 [229] shows that what it takes to validate $\Diamond_i \Phi \rightarrow \Box_i \Phi$ is (@FunctionalConstraint):
 
-(@FunctionalConstraint) $\forall x, y (xR_iy \rightarrow \exists x^\prime \geq x \forall z (x^\prime \geq z \rightarrow \exists x^{\prime\prime} (x^{\prime\prime} \geq y \wedge x^{\prime\prime} \geq z))
+(@FunctionalConstraint) $\forall x, y (xR_iy \rightarrow \exists x^\prime \geq x \forall z (x^\prime \geq z \rightarrow \exists x^{\prime\prime} (x^{\prime\prime} \geq y \wedge x^{\prime\prime} \geq z)))$
 
-In @fig-simple-frame, I've displayed a simple frame that validates $\Box_i \Phi \vee \Box_i \neg \Phi$ without being functional. The solid lines represet $R$-accessibility; the dotted lines represent refinements. From $x_1$ all the $y_i$ are accessible. So neither $\Box p$ nor $\Box \neg p$ are true at $x_1$. But the disjunction $\Box p \vee \Box \neg p$ is true, since every refinement chain coming out of $x_1$ eventually validates either $\Box p$ (on the chain going to $x_2$) or $\Box \neg p$ (on the chain going to $x_3$).^[A similar construction shows that we can add a counterfactual that validates Conditional Excluded Middle without assuming that for each possibility $x$ and possibly true proposition $\Phi$, there is a unique nearest possibility where $\Phi$ is true.]
 
-```{tikz}
+
+In @fig-simple-frame, I've displayed a simple frame that validates $\Box_i \Phi \vee \Box_i \neg \Phi$ without being functional. The solid lines represet $R$-accessibility; the dotted lines represent refinements. From $x_1$ all the $y_i$ are accessible. So neither $\Box p$ nor $\Box \neg p$ are true at $x_1.$ But the disjunction $\Box p \vee \Box \neg p$ is true, since every refinement chain coming out of $x_1$ eventually validates either $\Box p$ (on the chain going to $x_2$) or $\Box \neg p$ (on the chain going to $x_3$).^[A similar construction shows that we can add a counterfactual that validates Conditional Excluded Middle without assuming that for each possibility $x$ and possibly true proposition $\Phi$, there is a unique nearest possibility where $\Phi$ is true.]
+
+```{r}
+#| echo: FALSE
+#| output: FALSE
+if (knitr::is_latex_output()) {
+  knitr::opts_chunk$set(dev = 'tikz')
+}
+options(tinytex.engine = "xelatex")
+font_opts <- list(extra.preamble = c("\\usepackage{fontspec}",
+                                     "\\setmainfont{Scala Sans Pro}"))
+```
+
+```{r engine='tikz', engine.opts=font_opts}
 #| label: fig-simple-frame
-#| fig-cap: "Possibility frame with refinement and accessibility relations"
-#| fig-align: center
-#| fig-ext: svg
-#| additional-preamble: |
-#|   \usetikzlibrary{arrows.meta, positioning, calc}
+#| fig.cap: "Possibility frame with refinement (dashed, $\\geq$) and $R$-accessibility (solid arrows) relations"
+#| fig.ext: 'jpg'
+#| fig.align: center
+#| cache: FALSE
+#| echo: FALSE
 
+\usetikzlibrary{arrows.meta, positioning, calc}
 \begin{tikzpicture}[
-    >={Stealth[length=2mm]},
+    >=stealth,
     node distance=2cm,
     poss/.style={circle, draw, inner sep=1.5pt, minimum size=6mm, font=\small},
     Rarrow/.style={->, thick},
-    refine/.style={dashed, thick, -}, % refinement edges (no arrowhead)
+    refine/.style={dashed, thick, -},
 ]
 
 % x-possibilities on the left
@@ -136,7 +219,7 @@ In @fig-simple-frame, I've displayed a simple frame that validates $\Box_i \Phi 
 
 % y-possibilities on the right
 \node[poss] (y1) at (6, 2.5) {$y_1$};
-\node[poss, label=right:{\small $p$}] (y2) at (4.8, 0) {$y_2$};
+\node[poss, label=below:{\small $p$}] (y2) at (4.8, 0) {$y_2$};
 \node[poss] (y3) at (7.2, 0) {$y_3$};
 
 % Refinement relations (dashed, no arrowheads)
@@ -145,19 +228,13 @@ In @fig-simple-frame, I've displayed a simple frame that validates $\Box_i \Phi 
 \draw[refine] (y1) -- (y2);
 \draw[refine] (y1) -- (y3);
 
-% R-relations (solid arrows)
+% R-relations (solid arrows).  The bends keep the bottom-row arrows from
+% slicing through intermediate nodes — tweak the `bend` numbers to taste.
 \draw[Rarrow] (x1) -- (y1);
 \draw[Rarrow] (x1) to[bend left=10] (y2);
 \draw[Rarrow] (x1) to[bend left=20] (y3);
-\draw[Rarrow] (x2) -- (y2);
-\draw[Rarrow] (x3) -- (y3);
-
-% Legend
-\node[anchor=west, font=\small] at (-1.5, -1.8) {%
-    \begin{tikzpicture}[baseline]
-        \draw[Rarrow] (0,0.4) -- (0.6,0.4); \node[anchor=west] at (0.7,0.4) {$R$};
-        \draw[refine] (2,0.4) -- (2.6,0.4); \node[anchor=west] at (2.7,0.4) {$\geq$};
-    \end{tikzpicture}};
+\draw[Rarrow] (x2) to[bend right=20] (y2);
+\draw[Rarrow] (x3) to[bend right=35] (y3);
 
 \end{tikzpicture}
 ```
@@ -169,19 +246,25 @@ Orthodox opinion in philosophy is that if a thinker's uncertainty can be measure
 1. $\sum_{x \in \mathcal{F}} m(\{x\}) = 1$
 2. $Bel(A) = \sum_{x \in A} m(\{x\})$
 
-The most widely endorsed alternative to probabilism is that $Bel$ only needs to satisfy the slightly weaker constraints of *Dempster-Shafer belief functions* [@Dempster1966; @Shafer1977]. I'll call these _belief functions_ from here on. Belief functions are such that there is a mass function $m$ from non-empty subsets of $\mathcal{F}$ to non-negative reals such that:
+The most widely endorsed alternative to probabilism is that $Bel$ only needs to satisfy the slightly weaker constraints of *Dempster-Shafer belief functions* [@Dempster1967; @Shafer1976]. I'll call these _belief functions_ from here on. Belief functions are such that there is a mass function $m$ from non-empty subsets of $\mathcal{F}$ to non-negative reals such that:
 
 1. $\sum_{X \subseteq \mathcal{F}} m(A) = 1$
 2. $Bel(A) = \sum_{X \subseteq A} m(X)$
 
-If $m$ only assigns positive mass to singletons, then $Bel$ will be a probability function, so all belief functions are probability functions. But the converse is not true. The simplest case is where there are just two possibilities: $a, b$, and $m$ assigns mass 1/3 to each of $\{a\}, \{b\}$, and $\{a, b\}$. Then $Bel\{a\} = Bel\{b\} = \frac{1}{3}$, while $\Bel(\{a, b\} = 1$. We could state the rules on belief functions axiomatically, but this more semantic presentation is both more intuitive, and connects more smoothly to the applications we'll be interested in.
+If $m$ only assigns positive mass to singletons, then $Bel$ will be a probability function, so all belief functions are probability functions. But the converse is not true. The simplest case is where there are just two possibilities: $a, b$, and $m$ assigns mass ⅓ to each of $\{a\}, \{b\}$, and $\{a, b\}$. Then $Bel\{a\} = Bel\{b\} = \frac{1}{3}$, while $Bel(\{a, b\}) = 1$. We could state the rules on belief functions axiomatically, but this more semantic presentation is both more intuitive, and connects more smoothly to the applications we'll be interested in.
 
 What motivates the more restrictive orthodox view, that $Bel$ has to be probabilistic? In the twentieth century, the primary motivations were largely pragmatic: Dutch Book arguments, and arguments from the representation of preferences over gambles. There were two problems with these arguments. One was that they were pragmatic, and hence the wrong kind of thing to ground a purely epistemic constraint. The other, as Patrick @Maher1997 pointed out, was that they were question-begging against the most important opponent, the proponent of belief functions. David @Christensen1996 solved the first problem by developing 'depragmatised' Dutch Book arguments, but this (a) made the other problem worse, and (b) did not generalise to provide constraints on updating degree of beliefs.
 
 So these days the key argument for orthodoxy is some kind of accuracy based argument. The canonical such argument, due to James @Joyce1998, says that if $Bel$ is not a probability function, then for any plausible measure of the accuracy of one's degrees of belief, there is some alternative $Bel^\prime$ which is guaranteed to be more accuracte. 
 
-The _guarantee_ here is broadly modal. It means that $Bel^\prime$ is more accurate than $Bel$ in every possible world, where worlds are understood to be sets of sentences which are complete (every sentence is either true or false) and closed under classical entailment. These assumptions are load-bearing. J. Robert G. @Williams2012 shows that if we drop replace classical entailment with intuitionistic entailment then the constraint is not that $Bel$ is a probability function, but that it's a certain kind of intuitionistic probability function. Here we want to look at what happens if we keep the idea that we're using classical entailment, but drop the assumption of completeness.
+The _guarantee_ here is broadly modal. It means that $Bel^\prime$ is more accurate than $Bel$ in every possible world, where worlds are understood to be sets of sentences which are complete (every sentence is either true or false) and closed under classical entailment. These assumptions are load-bearing. J. Robert G. @Williams2016prob shows that if we drop replace classical entailment with intuitionistic entailment then the constraint is not that $Bel$ is a probability function, but that it's a certain kind of intuitionistic probability function. Here we want to look at what happens if we keep the idea that we're using classical entailment, but drop the assumption of completeness.
 
 In particular, consider what happens if the thinker knows they are in some possibility in a possibility frame, but does not know which one. For example, consider someone who knows that they are in one of the $x_i$ in @fig-simple-frame, and thinks each is equally likely. To make this more vivid, let $p$ be that The Couple have grandchildren, and $R$ be the accessibility relation for the modal operator _In the Eleanor Rigby fiction_. So $x_2$ is a possibility where it's true in _Eleanor Rigby_ that The Couple have grandchildren, $x_3$ is a possibility where they do not, and $x_1$ is where there is no fact of the matter about whether they do.
 
+# Fictional Reality {#sec-sec3}
 
+# Uncertainty about the Non-Factual {#sec-sec4}
+
+# What is Classical Logic? {#sec-sec5}
+
+Hello sunshine.
