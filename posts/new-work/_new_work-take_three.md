@@ -101,19 +101,20 @@ That alone isn't enough to guarantee that boxed sentences are persistent and ref
 **R-Win**
 :    $xR_iy \leftrightarrow \forall y' \geqslant y \exists x' \geqslant x \forall x'' \geqslant x' \exists y'' \geqslant y': x''R_iy''$
 
-It is easy to show that if each $R_i$ satisfies **R-Win**, then even after adding $\Box_i$ and $\Diamond_i$ to the language, all sentences will satisfy persistence and refinability. **R-Win** has several consequences; the one that will be most important here is that each $R_i$ is carried downwards along refinement. That is, if $x R_i y$ and $y \leqslant y'$, then $x R_i y'$. More colloquially, if *a* can access *b*, *a* can access any refinement of *b*. This will be important when we get to epistemic modality.
+It is easy to show that if each $R_i$ satisfies **R-Win**, then even after adding $\Box_i$ and $\Diamond_i$ to the language, all sentences will satisfy persistence and refinability. It is a little stronger than what's needed for these conditions, but the extra strength turns out to be a helpful simplification. 
 
-@Holliday2025 [\sectionmark 6.3] notes that one upside of adding **R-Win** is that it means we get back _some_ familiar results from the traditional possible worlds semantics for modal logic. A possibility frame validates $\Box_i \Phi \rightarrow \Phi$ iff $R_i$ is reflexive; it validates \Box_i \Phi \rightarrow \Box_i_ \Box_i_ \Phi$ iff $R_i$ is transitive. What's more important here, and what Holliday also notes, is that we don't get the same parallel for all axioms. 
+One important consequence of **R-Win** is that each $R_i$ is carried downwards along refinement. That is, if $x R_i y$ and $y \leqslant y'$, then $x R_i y'$. More colloquially, if *a* can access *b*, *a* can access any refinement of *b*. This will be important when we get to epistemic modality.
+
+@Holliday2025 [\sectionmark 6.3] notes that one upside of adding **R-Win** is that it means we get back _some_ familiar results from the traditional possible worlds semantics for modal logic. A possibility frame validates $\Box_i \Phi \rightarrow \Phi$ iff $R_i$ is reflexive; it validates \Box_i \Phi \rightarrow \Box_i_ \Box_i_ \Phi$ iff $R_i$ is transitive; and it validates $\Diamond_i \top$ iff $R_i$ is serial. What's more important here, and what Holliday also notes, is that we don't get the same parallel for all axioms. 
 
 In possible world semantics, the frame condition for $\Box_i \Phi \vee \Box_i \neg \Phi$, or equivalently, $\Diamond_i \Phi \rightarrow \Box_i \Phi$, is that each point accesses at most one point. That is, $\forall x, y, z ((xRy \wedge xRz) \rightarrow y = z$. But in a possibility frame semantics, @Holliday2025 [229] shows that what it takes to validate $\Diamond_i \Phi \rightarrow \Box_i \Phi$ is (@FunctionalConstraint):
 
-@Holliday2025 [\sectionmark 6.3]
-
 (@FunctionalConstraint) $\forall x, y (xR_iy \rightarrow \exists x^\prime \geq x \forall z (x^\prime \geq z \rightarrow \exists x^{\prime\prime} (x^{\prime\prime} \geq y \wedge x^{\prime\prime} \geq z))
 
+In @fig-simple-frame, I've displayed a simple frame that validates $\Box_i \Phi \vee \Box_i \neg \Phi$ without being functional. The solid lines represet $R$-accessibility; the dotted lines represent refinements. From $x_1$ all the $y_i$ are accessible. So neither $\Box p$ nor $\Box \neg p$ are true at $x_1$. But the disjunction $\Box p \vee \Box \neg p$ is true, since every refinement chain coming out of $x_1$ eventually validates either $\Box p$ (on the chain going to $x_2$) or $\Box \neg p$ (on the chain going to $x_3$).^[A similar construction shows that we can add a counterfactual that validates Conditional Excluded Middle without assuming that for each possibility $x$ and possibly true proposition $\Phi$, there is a unique nearest possibility where $\Phi$ is true.]
 
 ```{tikz}
-#| label: fig-frame
+#| label: fig-simple-frame
 #| fig-cap: "Possibility frame with refinement and accessibility relations"
 #| fig-align: center
 #| fig-ext: svg
@@ -161,82 +162,26 @@ In possible world semantics, the frame condition for $\Box_i \Phi \vee \Box_i \n
 \end{tikzpicture}
 ```
 
+# Dempster-Shafer Functions {#sec-sec2}
 
-----
+Orthodox opinion in philosophy is that if a thinker's uncertainty can be measured numerically, so there is some function $Bel$ from propositions to numbers representing the agent's degree of belief in each proposition, $Bel$ must be a probability function. This view is usually called _probabilism_. Assume, for simplicity for now, that there is a finite set $\mathcal{F}$ of maximally specific relevant possibilities, and each proposition the thinker has an attitude towards is a subset of $\mathcal{F}$. Saying that $Bel$ is a probability function is equivalent to saying there is some mass function $m$ from singletons of members of $\mathcal{F}$ to non-negative reals such that:
+
+1. $\sum_{x \in \mathcal{F}} m(\{x\}) = 1$
+2. $Bel(A) = \sum_{x \in A} m(\{x\})$
+
+The most widely endorsed alternative to probabilism is that $Bel$ only needs to satisfy the slightly weaker constraints of *Dempster-Shafer belief functions* [@Dempster1966; @Shafer1977]. I'll call these _belief functions_ from here on. Belief functions are such that there is a mass function $m$ from non-empty subsets of $\mathcal{F}$ to non-negative reals such that:
+
+1. $\sum_{X \subseteq \mathcal{F}} m(A) = 1$
+2. $Bel(A) = \sum_{X \subseteq A} m(X)$
+
+If $m$ only assigns positive mass to singletons, then $Bel$ will be a probability function, so all belief functions are probability functions. But the converse is not true. The simplest case is where there are just two possibilities: $a, b$, and $m$ assigns mass 1/3 to each of $\{a\}, \{b\}$, and $\{a, b\}$. Then $Bel\{a\} = Bel\{b\} = \frac{1}{3}$, while $\Bel(\{a, b\} = 1$. We could state the rules on belief functions axiomatically, but this more semantic presentation is both more intuitive, and connects more smoothly to the applications we'll be interested in.
+
+What motivates the more restrictive orthodox view, that $Bel$ has to be probabilistic? In the twentieth century, the primary motivations were largely pragmatic: Dutch Book arguments, and arguments from the representation of preferences over gambles. There were two problems with these arguments. One was that they were pragmatic, and hence the wrong kind of thing to ground a purely epistemic constraint. The other, as Patrick @Maher1997 pointed out, was that they were question-begging against the most important opponent, the proponent of belief functions. David @Christensen1996 solved the first problem by developing 'depragmatised' Dutch Book arguments, but this (a) made the other problem worse, and (b) did not generalise to provide constraints on updating degree of beliefs.
+
+So these days the key argument for orthodoxy is some kind of accuracy based argument. The canonical such argument, due to James @Joyce1998, says that if $Bel$ is not a probability function, then for any plausible measure of the accuracy of one's degrees of belief, there is some alternative $Bel^\prime$ which is guaranteed to be more accuracte. 
+
+The _guarantee_ here is broadly modal. It means that $Bel^\prime$ is more accurate than $Bel$ in every possible world, where worlds are understood to be sets of sentences which are complete (every sentence is either true or false) and closed under classical entailment. These assumptions are load-bearing. J. Robert G. @Williams2012 shows that if we drop replace classical entailment with intuitionistic entailment then the constraint is not that $Bel$ is a probability function, but that it's a certain kind of intuitionistic probability function. Here we want to look at what happens if we keep the idea that we're using classical entailment, but drop the assumption of completeness.
+
+In particular, consider what happens if the thinker knows they are in some possibility in a possibility frame, but does not know which one. For example, consider someone who knows that they are in one of the $x_i$ in @fig-simple-frame, and thinks each is equally likely. To make this more vivid, let $p$ be that The Couple have grandchildren, and $R$ be the accessibility relation for the modal operator _In the Eleanor Rigby fiction_. So $x_2$ is a possibility where it's true in _Eleanor Rigby_ that The Couple have grandchildren, $x_3$ is a possibility where they do not, and $x_1$ is where there is no fact of the matter about whether they do.
 
 
-
-
-
-
-
-The principle **R-Win** is not immediately intuitive, and we might wonder why it should be imposed. One argument could be that it simply works; the model requires persistence and refinability, and this gets us persistence and refinability. This isn't particularly convincing for two reasons. One is that it feels rather ad hoc; like this is a puncture and **R-Win** is the patch. The other, as @Holliday2025 [$\sectionmark$2.30] demonstrates, you don't need anything this strong to get persistence and refinability. In particular, you don't need anything that entails **R-Down**.
-
-A more convincing argument comes from thinking of possibilities as sets of possible worlds. Holliday develops a kind of model he calls the "powerset possibilization" of a familiar possible worlds model, where we assume that model has its own family of accessibility relations. In these models, every possibility just is a set of worlds, and the truths at the possibilities are those things true throughout the set. In these models, $xR_iy$ holds just in case $\forall w' \in y \exists w \in x: wRw'$. Given that definition of $R_i$, it is easy to prove that **R-Win** holds. If we do think possibilities are just sets of possible worlds, this seems like a very good reason to accept **R-Win**. But I'd rather have possibilities as more fundamental than possible worlds, and possibly do without the assumption that possibilities are maximally refinable.
-
-The motivation for **R-Win** I prefer starts with the idea of possibilities as stories. Say a possibility $x$ is a finite set of propositions. These propositions will include modal operators, and we assume each such operator comes with an attached logic. Say $C(x)$ is the set of propositions entailed by the propositions in $x$. We're going to build a model where the truths at $x$ are the propositions in $C(x)$, and $y \geqslant x$ iff $C(y) \supseteq C(x)$. Say that $xR_iy$ iff whenever $\Box_i A_1 \vee \dots \vee \Box A_n \in C(x)$, then $A_1 \vee \dots \vee A_n \in C(y)$. It's common to build accessibility relations between sets of propositions like this using a version of this construction, but restricted to the case $n=1$; we need the more general version here because a disjunction can be in $C(x)$ without any disjunct being in $C(x)$. It takes some work to go through the details, but it turns out that this model satisfies all the constraints listed so far, including **R-Win**. The proof isn't important to the argument of this paper, and is left as an exercise for the interested reader. 
-
-@Humberstone1981 adds a somewhat stronger condition than **R-Win**, but for reasons @Holliday2025 [Appendix B.1] goes over, this is too strong for what we need. This condition says that if $xR_iy$, then there is some successor $x'$ of $x$ such that every successor $x''$ of $x'$ can access $y$. This fails in some powerset possibilizations, and it fails in the model described in the previous paragraph, so it's hard to motivate it.
-------
-
-
-
-
-In order to make sure persistence and refinability hold in the modal part of the language, we need constraints on $\mathbb{R}$. Holliday recommends the following constraint.
-(As noted above, Holliday prefers weaker constraints, but the difference won't be important here.) Any accessibility relation $R_i$ has to satisfy these constraints.^[The names are taken from Holliday; Humberstone uses less descriptive names. The ++ in **RRef++ is because Holliday considers two weaker refinement conditions.]
-
-**UpR**:
-:    If $x \leqslant x'$ and $x' R_i y$, then $x R_i y$.
-
-**RDown**:
-:    If $x R_i y$ and $y \leqslant y'$, then $x R_i y'$.
-
-**RRef++**:
-:    If $x R_i y$, then there exists $x' \geqslant x$ such that for all $x'' \geqslant x'$, $x'' R_i y$.
-
-**UpR** says that accessibility is never gained by refinement; if $x$ can access $y$, so can any coarsening of $x$. **RDown** is the converse: if $x$ can access $y$, it can access every refinement of $y$. To understand **RRef++**, it helps to have one new concept. Say that $a$ determinately accesses $b$ if for any refinement $c$ of $a$, $cR_ib$. Then **RRef++** says that if $x$ accesses $y$, some refinement of $x$ determinately accesses $y$. Finally, we add a familiar truth condition for $\Box_i$:
-
-\begin{align*}
-[\Box_i] \quad & \mathcal{M} \models_x \Box_i A \text{ iff } \forall y \, (x R_i y \Rightarrow \mathcal{M} \models_y A)
-\end{align*}
-
-In words, $\Box_i A$ is true at $x$ iff $A$ is true at every $R_i$-accessible possibility.
-
-Humberstone treats $\Diamond$ as a defined connective, $\Diamond_i A$ just means $\neg \Box_i \neg A$, and I'll do the same. It is easy to show that if $R_i$ satisfies these three constraints, then even after adding $\Box_i$ and $\Diamond_i$ to the language, all sentences will satisfy persistence and refinability.
-
-@WeathersonHoPF describes a theory of counterfactuals in possibility semantics that validates conditional excluded middle. That's what we're going to need, but unfortunately that semantics doesn't guarantee persistence and refinability. Here is a modified version of his semantics that does.
-
-We posit a selection function $f$ as in the semantics for counterfactuals suggested by @Stalnaker1968. We assume that the selection function follows the these constraints.
-
-**Conditional Excluded Middle**
-:   Either $f(A, x) = \emptyset$, or $\exists y: f(A, x) = \{z : z \geqslant y\}$.
-
-**Truth**
-:   $f(A, x) \subseteq A$
-
-**Centering**
-:   $x \in f(A, x)$ whenever $x \in A$
-
-**Nearness**
-:   If $f(A, x) \subseteq B$ and $f(B, x) \subseteq A$, then $f(A, x) = f(B, x)$
-
-**Upf**
-:    If $x \leqslant x'$ and $y \in f(A, x')$, then $y \in f(A, x)$
-
-**fDown**
-:    If $y \in f(A, x)$ and $y \leqslant y'$, then $y' \in f(A, x)$
-
-**fRef+++**
-:    If $y' \in f(A, x)$, then there exists $x' \geqslant x$ such that for all $z: z \in f(A, x')$ iff $z \geqslant y'$.
-
-Then the truth condition for counterfactuals is:
-
-\begin{align*}
-[\boxright] \quad & \mathcal{M} \models_x A \boxright B \text{ iff } \forall y \in f(A, x) \, \mathcal{M} \models_y B 
-\end{align*}
-
-I'll say that $f(A, x)$ are the nearest $A$-worlds to $x$; it will become clear why this is a reasonable locution.
-
-**Conditional Excluded Middle** says that there are no nearest $A$-worlds, or they are all and only the refinements of some particular possibility. It plays a central role in the proof that CEM, $(A \boxright B) \vee (A \boxright \neg B)$ is true at all points.  Given that regular excluded middle holds everywhere, to prove this it suffices to prove that if $\neg(A \boxright B)$ is true at $x$, so is $A \boxright \neg B$. So assume that $\neg(A \boxright B)$ is true at $x$. If $f(A, x)$ is empty, it follows trivially that $A \boxright \neg B$ holds. Assume that's not the case, so $f(A, x)$ is non-empty. For $A \boxright \neg B$ to fail to hold at $x$, $B$ must be true at some point in $f(A, x)$. Call some such point $y'$. By **fRef+++**, there is some $x' \geqslant x$ such that $f(A, x')$ consists of all and only refinements of $y'$. Since $B$ is true at $y'$, and is persistent, it follows that $B$ is true everywhere in $f(A, x')$. Hence $A \boxright B$ is true at $x'$, contradicting the assumption that $\neg(A \boxright B)$ is true at its coarsening, $x$.
-
-The other principles are more straightforward. **Truth** says that the nearest $A$-worlds have to actually make $A$ true. **Centering** says that if $A$ is true at $x$, then $x$ is one of the nearest $A$-worlds. This system doesn't quite have Strong Centering, since there could be other nearby $A$-worlds, but it is close. The nearest $A$-worlds to an $A$-world can only be coarsenings or refinements of it. **Nearness** says that if the nearest $A$-worlds are all $B$-worlds, and the nearest $B$-worlds are all $A$-worlds, then the nearest $A$-worlds just are the nearest $B$-worlds. That has to be true if $f$ is really measuring nearness. The last three clauses ensure that if we define $R_A$ such that $xR_Ay$ iff $y \in f(A, x)$, then $R_A$ is an acceptable accessibility relation. This in turn guarantees that the language is still persistent and refinable, even with $\boxright$ added. Though note that **fRef+++** is stronger than we need for merely that purpose; the stronger rule is needed for the proof of CEM.^[The name follows Holliday's convention, though he was more interested in weakening Humberstone's original refinement condition.]
