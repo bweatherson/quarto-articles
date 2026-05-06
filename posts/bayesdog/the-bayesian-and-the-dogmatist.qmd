@@ -26,6 +26,51 @@ journal:
 image: ../../images/AdobeStock_744872005.jpeg
 format:
   html: default
+  typst:
+    citeproc: true
+    mainfont: "EB Garamond"
+    mathfont: "EB Garamond Math"
+    date-format: "YYYY"
+    abstract-title: ""
+    papersize: us-letter
+    margin-geometry:
+      outer:
+        far: 5mm
+        width: 1in
+        separation: 0.25in
+      inner:
+        far: 5mm
+        width: 1in
+        separation: 0in
+      clearance: 8pt
+    include-in-header:
+      text: |
+        // Headings: semibold instead of bold
+        #show heading: set text(weight: "semibold")
+
+        // Heading block spacing
+        #show heading.where(level: 1): set block(above: 2em, below: 1em)
+        #show heading.where(level: 2): set block(above: 1.5em, below: 0.75em)
+        #show heading.where(level: 3): set block(above: 1.2em, below: 0.5em)
+
+        // Title in italics instead of bold (best-effort show rule)
+        #show heading.where(level: 0): set text(weight: "regular", style: "italic")
+
+        // Running heads: title on odd pages (right), author on even pages (left); page 1 bare
+        #set page(header: context {
+          let pn = counter(page).get().first()
+          if pn > 1 {
+            if calc.odd(pn) {
+              align(right)[_The Bayesian and the Dogmatist_]
+            } else {
+              align(left)[Brian Weatherson]
+            }
+          }
+        })
+    include-after-body:
+      text: |
+        #v(1em)
+        Published in _{{< meta citation.container-title >}}_, 2007, pp. {{< meta citation.page >}}.
   pdf:
     output-file: "The Bayesian and the Dogmatist"
     reference-location: document
@@ -64,13 +109,17 @@ Many epistemologists will write papers responding to 'the sceptic'. I think this
 3.  If you can't discriminate our situation from *S*, you can't know you're not in *S*.
 4.  So you can't know you're not in *S*.
 
-<!-- -->
+```{=typst}
+#set enum(start: 1)
+```
 
 1.  Someone in *S* has the same evidence as you do.
 2.  What you can know supervenes on what your evidence is.
 3.  So, you can't know you are not in *S*.
 
-<!-- -->
+```{=typst}
+#set enum(start: 1)
+```
 
 1.  There is no non-circular argument to the conclusion that you aren't in *S*.
 2.  If you were able to know you're not in *S*, you would be able to produce a non-circular argument that concluded that you aren't in *S*.
