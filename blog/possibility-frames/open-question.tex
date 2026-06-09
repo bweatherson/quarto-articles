@@ -1,0 +1,400 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[ItalicFont=EB Garamond Italic,BoldFont=EB Garamond
+Bold]{EB Garamond Math}
+  \setsansfont[]{EB Garamond}
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={A Question about Humberstone Frames},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{A Question about Humberstone Frames}
+\author{Brian Weatherson}
+\date{2026-06-09}
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent A solution to a question Wesley Holliday asked about
+Humberstone frames.
+\end{abstract}
+
+
+\setstretch{1.1}
+This post concerns \textbf{Problem 8.13} in Holliday
+(\citeproc{ref-Holliday2025}{2025}), which asks, roughly, whether the
+argument of §2.5 of that paper can be extended to what he calls
+\emph{Humberstone frames}. The answer is yes, as I'll show here.
+
+This is a blog post, not a paper, so I won't repeat any definitions that
+are already in Holliday's paper, or for that matter in Humberstone
+(\citeproc{ref-Humberstone1981a}{1981}). The only thing I will note is
+that I'm following Humberstone, and not Holliday, in using \(x \leq y\)
+to mean that \(y\) is a refinement of \(x\). Relatedly, \(x \geq y\)
+just means \(y \leq x\).
+
+The frame we'll use consists of (a) all finite binary strings, plus (b)
+a `code' for each binary string. When \(y\) is a code, I'll write
+\([y]\) for the string that \(y\) is the code of, and when \(x\) is a
+string, I'll write \(c(x)\) for the code for \(x\). The refinement
+relation \(x \leq y\) holds in one of two cases:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \(x=y\)
+\item
+  \(x\) and \(y\) are strings, and \(x\) is an initial segment of \(y\).
+\end{enumerate}
+
+That is, strings are refined by adding to them, and codes have no
+non-trivial refinements. We then introduce a bunch of accessibility
+relations: \(R_i\), which determine modal operators \(\Box_i\), and
+hence by definition \(\diamond_i\).
+
+\begin{description}
+\tightlist
+\item[Universal \(R_\forall\)]
+\(xR_{\forall}y\) whenever \(x\) and \(y\) are points in the model.
+\item[String-to-code \(R_{\rightarrow}\)]
+\(xR_{\rightarrow}y\) iff \(x\) is a string, \(y\) is a code, and one of
+\(x\) and \([y]\) is an initial segment of the other. I'm imagining the
+strings on the left, and the codes on the right, hence the left-to-right
+arrow.
+\item[Code-to-string \(R_{\leftarrow}\)]
+\(xR_{\leftarrow}y\) iff \(x\) is a code, \(y\) is a string, and \([x]\)
+is an initial segment of \(y\). Note this is not the same definition as
+for \(R_{\rightarrow}\), since here we insist on which is the initial
+segment.
+\item[Code-zero-remove: \(R_{-}\)]
+\(xR_{-}y\) iff \(x\) and \(y\) are codes, and \([x]\) ends with a 0,
+and \([y]\) is \([x]\) minus that trailing 0.
+\item[Code-shortening: \(R_{\subsetneq}\)]
+\(xR_{\subsetneq}y\) iff \(x\) and \(y\) are distinct codes, and \([y]\)
+is an initial segment of \([x]\)
+\end{description}
+
+Call the following proposition \(\alpha\)
+
+\[
+\diamond_{-}(\Box_{\leftarrow} p \wedge \neg \diamond_{\subsetneq}\Box_{\leftarrow} p)
+\]
+
+Let's build up where this will be true. (Note that I'm following
+Holliday's own construction \emph{really closely} here.)
+
+\begin{itemize}
+\tightlist
+\item
+  \(\Box_{\leftarrow} p\) is true at the code \(x\) iff \(p\) is true at
+  \([x]\).
+\item
+  So \(\diamond_{\subsetneq}\Box_{\leftarrow} p\) is true at \(x\) if
+  \(p\) is true at some proper initial segment of \([x]\).
+\item
+  So \(\neg \diamond_{\subsetneq}\Box_{\leftarrow} p\) is true at \(x\)
+  if \(p\) is not true at any proper initial segment of \([x]\).
+\item
+  So
+  \(\Box_{\leftarrow} p \wedge \neg \diamond_{\subsetneq}\Box_{\leftarrow} p\)
+  is true at \(x\) if \(p\) is true at \([x]\), but not at any
+  shortening of \([x]\). That is, if you were working down the tree of
+  strings, \([x]\) is the first point you'd get to where \(p\) is true.
+  Call a string like this an \emph{initial point} for \(p\).
+\item
+  So
+  \(\diamond_{-}(\Box_{\leftarrow} p \wedge \neg \diamond_{\subsetneq}\Box_{\leftarrow} p)\)
+  is true at the code \(x\) if \([x]\) is \(y\frown \langle0\rangle\),
+  where \(y\) is an \emph{initial point} for \(p\).
+\end{itemize}
+
+Now consider any initial point \(x\) for \(p\). Since \(p\) is
+persistent, \(p\) will be true at \(x\frown \langle0\rangle\), call this
+\(x_0\), and at \(x\frown \langle1\rangle\), call this \(x_1\). Since,
+as we just showed, \(\alpha\) is true at \(c(x_0)\), and
+\(x_0R_{\rightarrow}c(x_0)\), it follows that
+\(\diamond_{\rightarrow} \alpha\) is true at \(x_0\). But
+\(\diamond_{\rightarrow} \alpha\) will not be true at \(x_1\), or at any
+of its refinements. At \(c(x_1)\), \(\alpha\) fails because this is not
+the code for a sequence ending in 0. And at the code for any shortening
+or extension of \(x_1\), \(\alpha\) fails because that's not the code of
+a string one element longer than an \emph{initial} point for \(p\).
+
+That means that if \(p\) is true at some string, it is true at some
+initial point, and hence both \(p \wedge \diamond_{\rightarrow} \alpha\)
+and \(p \wedge \neg \diamond_{\rightarrow} \alpha\). If
+\(\diamond_{\forall}(p \wedge \diamond_{\rightarrow} \top)\) is true
+(anywhere), then \(p\) is true at some string. (It can't be that \(p\)
+is simply true at codes, because \(\diamond_{\rightarrow} \top\) is not
+true at any code.) So
+\(\diamond_{\forall}(p \wedge \diamond_{\rightarrow} \alpha)\) and
+\(\diamond_{\forall}(p \wedge \neg \diamond_{\rightarrow} \alpha)\) will
+both be true everywhere. Hence at all points, we'll have this instance
+of (Split):
+
+\begin{equation}\protect\phantomsection\label{eq-split}{
+\diamond_{\forall}(p \wedge \diamond_{\rightarrow} \top) \rightarrow [\diamond_{\forall}(p \wedge \diamond_{\rightarrow} \alpha) \wedge \diamond_{\forall}(p \wedge \neg \diamond_{\rightarrow} \alpha)] 
+}\end{equation}
+
+It just remains to show that all the \(R\)-relations satisfy all the
+conditions for Humberstone-frames. This is trivial for \(R_\forall\),
+because it always holds, and for \(R_{\subsetneq}\) and \(R_{-}\)
+because they just relate points that don't stand in any non-trivial
+refinement relations. The only questions are for \(R_{\rightarrow}\) and
+\(R_{\leftarrow}\). Let's go through the three-conditions on
+Humberstone-frames, using Holliday's names for them.
+
+First \textbf{upR}, i.e.,
+\(x \leq x^{\prime} \wedge x^{\prime}Ry \rightarrow xRy\). This can't
+fail for \(R_{\leftarrow}\), because the left-hand side has no
+non-trivial coarsenings. For \(R_{\rightarrow}\),
+\(x^{\prime}R_{\rightarrow}y\) means either \(x^\prime\) is an initial
+segment of \([y]\), or \([y]\) is an initial segment of \(x^\prime\). If
+the former, then clearly \(x\), which is an initial segment of
+\(x^\prime\), is also an initial segment of \([y]\), so
+\(xR_{\rightarrow}y\). If the latter, imagine working through all the
+coarsenings, i.e., shortenings, of \(x^\prime\) sequentially by starting
+with \(x^\prime\) and removing one element at a time. At first we'll
+have sequences that are, like \(x^\prime\), extensions of \([y]\), then
+we'll get to \([y]\) itself, then we'll have shortenings of \([y]\). At
+every stage, we'll have something that is either an extension of
+\([y]\), or a shortening of it, so \(xR_{\rightarrow}y\) will hold.
+
+Now \textbf{Rdown}, i.e.,
+\(xRy \wedge y \leq y^\prime \rightarrow xRy^\prime\). In this case,
+this is trivial for \(R_{\rightarrow}\), since when
+\(xR_{\rightarrow}y\), \(y\) has no non-trivial refinements. For
+\(R_{\leftarrow}\), \(xR_{\leftarrow}y\) means that \(y\) is an
+extension of \([x]\), so any extension of \(y\) will be an extension of
+\([x]\), as required.
+
+Now \textbf{R-ref++}, i.e.,
+\(xRy \rightarrow \exists x^\prime \geq x \forall x^{\prime\prime} \geq x^\prime: x^{\prime\prime}Ry\).
+Again, this is trivial for \(R_{\leftarrow}\), since whenever
+\(xR_{\leftarrow}y\), \(x\) has no non-trivial refinements. The only
+tricky case is \(R_{\rightarrow}\). So assume \(xR_{\rightarrow}y\).
+Again there are two cases to consider. One is where \(x\) is an initial
+segment of \([y]\). In that case it we can set \(x^\prime\) to be
+\([y]\). The other is where \([y]\) is an initial segment of \(x\). In
+that case, we can just set \(x^\prime\) to be \(x\) itself. Either way,
+there is a witness for the consequent of \textbf{R-ref++}.
+
+The result is that Equation~\ref{eq-split} will be valid on the frame.
+Here we follow Holliday to complete the proof. There is no class of
+Kripke frames where Equation~\ref{eq-split} is valid on the frames
+without
+\(\neg \diamond_{\forall}(p \wedge \diamond_{\rightarrow} \top)\) being
+valid on the frames. Quick proof: if that were not the case, so there
+was a frame where
+\(\diamond_{\forall}(p \wedge \diamond_{\rightarrow} \top)\) could be
+true, there would be a model on that frame where \(p\) was only true at
+one point, so there could not be witnesses for both
+\(\diamond_{\forall}(p \wedge \diamond_{\rightarrow} \alpha)\) and
+\(\diamond_{\forall}(p \wedge \neg \diamond_{\rightarrow} \alpha)\). So
+there is a class of Humberstone frames (in fact a singleton class),
+which determines a logic not determinable by any class of Kripke frames.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Holliday2025}
+Holliday, Wesley H. 2025. {``Possibility Frames and Forcing for Modal
+Logic.''} \emph{Australasian Journal of Logic} 22 (2): 44--288. doi:
+\href{https://doi.org/10.26686/ajl.v22i2.5680}{10.26686/ajl.v22i2.5680}.
+
+\bibitem[\citeproctext]{ref-Humberstone1981a}
+Humberstone, Lloyd. 1981. {``From Worlds to Possibilities.''}
+\emph{Journal of Philosophical Logic} 10 (3): 313--39. doi:
+\href{https://doi.org/10.1007/BF00293423}{10.1007/BF00293423}.
+
+\end{CSLReferences}
+
+
+
+
+\end{document}
