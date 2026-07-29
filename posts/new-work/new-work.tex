@@ -164,6 +164,7 @@ includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
  {\endquotation}
 \newfontfamily\tfont{EB Garamond}
 \addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
 \addtokomafont{title}{\normalfont\itshape}
 \let\footnoterule\relax
 
@@ -211,7 +212,7 @@ includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
 \usepackage[lines=2]{lettrine}
 \cehead{Draft of February 28, 2026}
 \DeclareSymbolFont{symbolsC}{U}{txsyc}{m}{n}
-\DeclareMathSymbol{\boxright}{\mathrel}{symbolsC}{128}
+\DeclareMathSymbol{\Boxright}{\mathrel}{symbolsC}{128}
 \cehead{
        Brian Weatherson
        }
@@ -260,6 +261,10 @@ includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
 \hypersetup{
   pdftitle={New Work for Dempster-Shafer Functions},
   pdfauthor={Brian Weatherson},
@@ -315,7 +320,7 @@ already mentioned; we'll leave that question to one side.
 What we will focus on is whether these questions must have answers. Is
 there a fact about what The Husband's name is? A fairly orthodox theory,
 developed in most detail by David Lewis
-(\citeproc{ref-Lewis1976b}{1976}), says that there is not. Lewis's
+(\citeproc{ref-Lewis1978b}{1978}), says that there is not. Lewis's
 theory has three parts. First, sentences like (1) and (2), have an
 implicit operator in them.
 
@@ -325,7 +330,7 @@ implicit operator in them.
 \item
   The Husband's name is Vincent.
 \item
-  The Husband's has a name.
+  The Husband has a name.
 \end{enumerate}
 
 We should understand these as saying
@@ -337,16 +342,17 @@ We should understand these as saying
 \item
   In the fiction, The Husband's name is Vincent.
 \item
-  In the fiction, The Husband's has a name.
+  In the fiction, The Husband has a name.
 \end{enumerate}
 
 Second, the logic of this operator is that of a box in a normal modal
-logic which is not \emph{functional} in the sense described by Standefer
-(\citeproc{ref-Standefer2018}{2018}). In particular, it does not include
-(5) as an axiom.\footnote{Standefer is interested primarily in the logic
-  which also has \(\Diamond \top\) as an axiom. The designation of these
-  logics as `functional' makes sense in a possible worlds framework, but
-  is somewhat misleading in the possibility frame setting of this paper.}
+logic which is not \emph{functional} in the sense described by Shawn
+Standefer (\citeproc{ref-Standefer2018}{2018}). In particular, it does
+not include (5) as an axiom.\footnote{Standefer is interested primarily
+  in the logic which also has \(\Diamond \top\) as an axiom. The
+  designation of these logics as `functional' makes sense in a possible
+  worlds framework, but is somewhat misleading in the possibility frame
+  setting of this paper.}
 
 \begin{enumerate}
 \def\labelenumi{(\arabic{enumi})}
@@ -381,18 +387,17 @@ truth.
 
 In this paper, I'll accept the first of Lewis's claims (that there is an
 operator), reject the second (that it has a non-functional logic), and
-mostly set aside the third. In `Fictional Reality',
-(\citeproc{ref-BlumbergHolguin2025}{Blumberg and Holguı́n 2025}), Kyle
-Blumberg and Ben Holguín run a series of arguments against this second
-assumption of Lewis's. I'll briefly mention a handful that I find most
-compelling.
+mostly set aside the third. In `Fictional Reality', , Kyle Blumberg and
+Ben Holguín (\citeproc{ref-BlumbergHolguin2025}{2025}) run a series of
+arguments against this second assumption of Lewis's. I'll briefly
+mention a handful that I find most compelling.
 
 For many questions that seem to be left open by a fiction, it makes
 sense to wonder about them. This can range from questions that are
-central to how one understands a fiction, like \emph{Is Decker a
+central to how one understands a fiction, like \emph{Is Deckard a
 replicant?}, to trivial questions like \emph{Do The Couple have
 grandchildren?}. But on Lewis's picture, there isn't anything to wonder
-about. We know that it's not true that, in the fiction, that they have
+about. We know that it's not true that, in the fiction, they have
 grandchildren, and it's also not true that, in the fiction, they do not
 have grandchildren. Intuitively, (9) is true, but there isn't any
 sensible way to insert an \emph{In the fiction} operator that makes it
@@ -443,9 +448,9 @@ falling into the traps besetting Lewis's theory.
 
 One might wonder whether we need such detail on trivial questions like
 the future of The Couple. This concern is in part a function of my
-choosing a trivial question; many questions more natural questions about
-fictions have the same shape. Who hasn't wondered what becomes of the
-broken hearted? More generally, the logical and epistemological issues
+choosing a trivial question; many more natural questions about fictions
+have the same shape. Who hasn't wondered what becomes of the
+broken-hearted? More generally, the logical and epistemological issues
 that this topic raises have implications far beyond fiction. Any time we
 can coherently wonder about something without being certain whether
 there is a fact of the matter, the same issues will arise. Our subject
@@ -462,33 +467,31 @@ represented not by a probability function, but by a Dempster-Shafer
 belief function. (This is the `New Work' for these functions the title
 promised.)
 
-This paper has a snake-like structure. In sections
-\hyperref[sec-sec1]{1} and \hyperref[sec-sec5]{5} I discuss
-\emph{possibility frames}. This is a system, introduced by Lloyd
-Humberstone (\citeproc{ref-Humberstone1981a}{1981}) and recently
-discussed in detail by Wesley Holliday
+This paper has a snake-like structure. In sections \ref{sec-sec1} and
+\ref{sec-sec5} I discuss \emph{possibility frames}. This is a system,
+introduced by Lloyd Humberstone (\citeproc{ref-Humberstone1981a}{1981})
+and recently discussed in detail by Wesley Holliday
 (\citeproc{ref-Holliday2025}{2025}), which lets us preserve something
 like classical logic while allowing that there might not be a fact of
 the matter about some questions. I'll introduce the theory in section
-\hyperref[sec-sec1]{1}, and return to the slightly vexed question of
-whether this is really \emph{classical} logic in section
-\hyperref[sec-sec5]{5}. In sections \hyperref[sec-sec2]{2} and
-\hyperref[sec-sec4]{4} I'll discuss Dempster-Shafer functions. In
-section \hyperref[sec-sec2]{2} I'll set out what they are, and the
-standard arguments against using them. In section \hyperref[sec-sec4]{4}
-I'll come back to why these arguments aren't compelling when the subject
+\ref{sec-sec1}, and return to the slightly vexed question of whether
+this is really \emph{classical} logic in section \ref{sec-sec5}. In
+sections \ref{sec-sec2} and \ref{sec-sec4} I'll discuss Dempster-Shafer
+functions. In section \ref{sec-sec2} I'll set out what they are, and the
+standard arguments against using them. In section \ref{sec-sec4} I'll
+come back to why these arguments aren't compelling when the subject
 matter might be non-factual. In the middle, I'll come back to Blumberg
-and Holguìn's arguments about fiction, and defend the position already
+and Holguín's arguments about fiction, and defend the position already
 sketched, that while their objections to Lewis are successful, their
 proposed remedy is implausible and should be rejected.
 
 \section{Possibility Frames}\label{sec-sec1}
 
 A Humberstone possibility frame (hereafter, just \emph{possibility
-frame}) is a triple \(\langle W, \leqslant, \mathbb{R}, V\rangle\),
+frame}) is a triple \(\langle W, {\leqslant}, \mathbb{R}, V\rangle\),
 where \(W\) is a set of possibilities, \(\leqslant\) is a
 \emph{refinement} relation on them, \(\mathbb{R}\) is a countable family
-of accesibility relations (with \(R_i\) as the \(i\)'the member), and
+of accessibility relations (with \(R_i\) as the \(i\)'th member), and
 \(V\) is a valuation function.\footnote{One might expand frames even
   further, e.g., by adding a selection function that enters into the
   semantics for counterfactuals. Counterfactuals will be sitting just
@@ -517,7 +520,7 @@ I'll, intuitively, think of refinements.
 
 \(V\) is a \textbf{valuation} function. It tells us where the atomics
 are true. Formally, it is a function from \(\mathcal{P}\), the set of
-atomics, to \(\wp(W)\), , satisfying these two constraints:
+atomics, to \(\wp(W)\), satisfying these two constraints:
 
 \begin{itemize}
 \tightlist
@@ -586,7 +589,7 @@ that the same principle holds for \(\vDash_{pf}\).
 
 Assume that \(\Gamma \cup \{A\} \vDash_{pf} C\),
 \(\Delta \cup \{B\} \vDash_{pf} C\), and \(\Phi \vDash_{pf} A \vee B\),
-and assume for reduction that for some possibility \(x\) where all
+and assume for reductio that for some possibility \(x\) where all
 members of \(\Gamma \cup \Delta \cup \Phi\) are true,
 \(\mathcal{M} \nmodels_x C\). By refinability, there is some
 \(y \geqslant x\) such that \(\mathcal{M} \models_y \neg C\), i.e., for
@@ -617,7 +620,7 @@ Possibility frames have attracted some attention recently as an
 interesting classical alternative to possible worlds semantics. We've
 already mentioned Holliday (\citeproc{ref-Holliday2025}{2025}), and his
 work will come up extensively in what follows. Matthew Harrison-Trainor
-(\citeproc{ref-HarrisonTrainor2019}{2019}) has shown how to extent the
+(\citeproc{ref-HarrisonTrainor2019}{2019}) has shown how to extend the
 semantics to first-order logic. Brian Weatherson
 (\citeproc{ref-WeathersonHoPF}{2026}) applies possibility frame
 semantics to a puzzle about counterfactuals. And Fabrizio Cariani
@@ -626,8 +629,8 @@ open future. This paper extends that list; I'm going to use them to
 provide a better way of talking about fictional truth.
 
 Since we need modal operators, we need to say more about \(\mathbb{R}\).
-First we'll talk about modals. We start a familiar truth condition for
-\(\Box_i\):
+First we'll talk about modals. We start with a familiar truth condition
+for \(\Box_i\):
 
 \begin{align*}
 [\Box_i] \quad & \mathcal{M} \models_x \Box_i A \text{ iff } \forall y \, (x R_i y \Rightarrow \mathcal{M} \models_y A)
@@ -690,10 +693,10 @@ possibility frame semantics, Holliday (\citeproc{ref-Holliday2025}{2025,
 
 In Figure~\ref{fig-simple-frame}, I've displayed a simple frame that
 validates \(\Box_i \Phi \vee \Box_i \neg \Phi\) without being
-functional. The solid lines represet \(R\)-accessibility; the dotted
+functional. The solid lines represent \(R\)-accessibility; the dotted
 lines represent refinements. From \(x_1\) all the \(y_i\) are
 accessible. So neither \(\Box p\) nor \(\Box \neg p\) are true at
-\(x_1.\) But the disjunction \(\Box p \vee \Box \neg p\) is true, since
+\(x_1\). But the disjunction \(\Box p \vee \Box \neg p\) is true, since
 every refinement chain coming out of \(x_1\) eventually validates either
 \(\Box p\) (on the chain going to \(x_2\)) or \(\Box \neg p\) (on the
 chain going to \(x_3\)).\footnote{A similar construction shows that we
@@ -711,7 +714,8 @@ chain going to \(x_3\)).\footnote{A similar construction shows that we
 }
 
 \caption{\label{fig-simple-frame}Possibility frame with refinement
-(dashed, \(\geq\)) and \(R\)-accessibility (solid arrows) relations}
+(dashed, \(\geqslant\)) and \(R\)-accessibility (solid arrows)
+relations}
 
 \end{figure}%
 
@@ -757,14 +761,14 @@ reals such that:
 \end{enumerate}
 
 If \(m\) only assigns positive mass to singletons, then \(Bel\) will be
-a probability function, so all belief functions are probability
+a probability function, so all probability functions are belief
 functions. But the converse is not true. The simplest case is where
-there are just two possibilities: \(a, b\), and \(m\) assigns mass ⅓ to
-each of \(\{a\}, \{b\}\), and \(\{a, b\}\). Then
-\(Bel\{a\} = Bel\{b\} = \frac{1}{3}\), while \(Bel(\{a, b\}) = 1\). We
-could state the rules on belief functions axiomatically, but this more
-semantic presentation is both more intuitive, and connects more smoothly
-to the applications we'll be interested in.
+there are just two possibilities: \(a, b\), and \(m\) assigns mass
+\(\frac{1}{3}\) to each of \(\{a\}, \{b\}\), and \(\{a, b\}\). Then
+\(Bel(\{a\}) = Bel(\{b\}) = \frac{1}{3}\), while \(Bel(\{a, b\}) = 1\).
+We could state the rules on belief functions axiomatically, but this
+more semantic presentation is both more intuitive, and connects more
+smoothly to the applications we'll be interested in.
 
 What motivates the more restrictive orthodox view, that \(Bel\) has to
 be probabilistic? In the twentieth century, the primary motivations were
@@ -785,14 +789,14 @@ based argument. The canonical such argument, due to James Joyce
 (\citeproc{ref-Joyce1998}{1998}), says that if \(Bel\) is not a
 probability function, then for any plausible measure of the accuracy of
 one's degrees of belief, there is some alternative \(Bel^\prime\) which
-is guaranteed to be more accuracte.
+is guaranteed to be more accurate.
 
 The \emph{guarantee} here is broadly modal. It means that \(Bel^\prime\)
 is more accurate than \(Bel\) in every possible world, where worlds are
 understood to be sets of sentences which are complete (every sentence is
 either true or false) and closed under classical entailment. These
 assumptions are load-bearing. J. Robert G. Williams
-(\citeproc{ref-Williams2016prob}{2016}) shows that if we drop replace
+(\citeproc{ref-Williams2016prob}{2016}) shows that if we replace
 classical entailment with intuitionistic entailment then the constraint
 is not that \(Bel\) is a probability function, but that it's a certain
 kind of intuitionistic probability function. Here we want to look at
@@ -802,15 +806,232 @@ but drop the assumption of completeness.
 In particular, consider what happens if the thinker knows they are in
 some possibility in a possibility frame, but does not know which one.
 For example, consider someone who knows that they are in one of the
-\(x_i\) in Figure~\ref{fig-simple-frame}, and thinks each is equally
-likely. To make this more vivid, let \(p\) be that The Couple have
-grandchildren, and \(R\) be the accessibility relation for the modal
-operator \emph{In the Eleanor Rigby fiction}. So \(x_2\) is a
-possibility where it's true in \emph{Eleanor Rigby} that The Couple have
-grandchildren, \(x_3\) is a possibility where they do not, and \(x_1\)
-is where there is no fact of the matter about whether they do.
+\(x_i\) in Figure~\ref{fig-simple-frame}. To connect it to the earlier
+discussion, let the \(R\) relation be accessibility for \(\Box_{ER}\),
+the operator meaning \emph{It's true in Eleanor Rigby that}, and let
+\(p\) be that The Couple has grandchildren. Then \(\Box_{ER} p\) is true
+at \(x_2\), \(\neg \Box_{ER} p\) is true at \(x_3\), as is (almost
+equivalently) \(\Box_{ER} \neg p\), while none of these are true at
+\(x_1\). (Though both \(\Box_{ER} p \vee \neg \Box_{ER} p\) and
+\(\Box_{ER} p \vee \Box_{ER} \neg p\) are true at \(x_1\).)
+
+Now imagine the thinker has
+\(Bel(\Box_{ER} p) = Bel(\neg \Box_{ER} p) = \frac{1}{3}\). At any
+possible \emph{world}, the function \(Bel^\prime\), which has
+\(Bel^\prime(\Box_{ER} p) = Bel^\prime(\neg \Box_{ER} p) = \frac{1}{2}\),
+is guaranteed to be more accurate. But at \(x_1\), \(Bel\) is more
+accurate than \(Bel^\prime\). After all, both \(\Box_{ER} p\) and
+\(\neg \Box_{ER} p\) fail to be true, so it's more accurate to have
+lower credences in them. And \(Bel\) is lower than \(Bel^\prime\) on
+each proposition.
+
+I conclude that an assumption that's needed to make the
+accuracy-dominance argument for probabilism work is that every question
+the thinker is uncertain about is guaranteed to be factual. That is, it
+only works if the thinker is certain they are not in possibilities like
+\(x_1\) where there is no fact of the matter about whether
+\(\Box_{ER} p\) is true. (Or that they are in \(y_1\), where there is no
+fact of the matter about whether \(p\) is true; but usually we have more
+evidence we are not in such sparse possibilities as \(y_1\).)
+
+There are two very natural responses the proponent of accuracy dominance
+arguments might make here. One is to simply accept this result, and say
+that their argument was only meant to apply to questions known to be
+factual. That's still a lot of questions, and if we have to qualify our
+probabilism when thinking about the non-factual, well there's still a
+lot of factual questions about which probabilism is correct. If that's
+the next move, the obvious next question is just how wide the realm of
+the factual is known to be, but I'll set that aside here. An alternative
+response is to argue that this restriction to the factual is no
+restriction at all, since all questions which can be sensibly asked are
+known to have factual answers. In the next section, I'll argue that
+questions about fiction show this isn't right.
 
 \section{Fictional Reality}\label{sec-sec3}
+
+Let's go back to (3), repeated here.
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  In the fiction, The Husband's name is Vincent.
+\end{enumerate}
+
+We can wonder about whether this is true. Intuitively, it is more likely
+that his name is Vincent than that it's Vaibhav. We could get even
+clearer about just how likely it is to be Vincent by looking up
+frequency of names for newly married men around where and when the story
+is set. (That's not to say we can specify those details; but it seems
+clear the story is set somewhere in the UK, probably Liverpool or
+Greater London, not long before 1966.)
+
+If all questions we can wonder about are factual, there seem to be two
+live options. One, defended by Lewis (\citeproc{ref-Lewis1978b}{1978}),
+is that we know (3) is false. In the introduction I surveyed some
+arguments from Blumberg and Holguı́n
+(\citeproc{ref-BlumbergHolguin2025}{2025}) against that view. Here's one
+more argument I didn't mention there. If we know (3) is false, then
+everything I said in the last paragraph is false. It's not true that his
+name is more likely Vincent than Vaibhav, or that the story is probably
+set in Liverpool or Greater London. That is, at least, seriously
+revisionary.
+
+Blumberg and Holguín conclude from this that there is an unknown fact of
+the matter about whether (3) is true. As they note, this view is widely
+held to be ``absurd''. That's for the excellent reason that it is, in
+fact, absurd! How could Paul McCartney writing a few lines settle all
+the questions we could ask about the characters, from what grade Father
+McKenzie got in his last high school English exam, to how many eggs The
+Wife ate in her lifetime? What could ground those facts? Those intuitive
+arguments seem compelling to me, but rather than rest on them, I'll note
+that their view has fairly revisionary consequences for how we think
+about the relationship between fictions.
+
+These days, the bulk of fictions produced are fan fictions (or
+\emph{fanfics}); stories produced by fans recycling characters from
+established works. Sometimes these don't bother with consistency with
+the underlying source material, as if the writer had put Julius Caesar
+into the Korean War. But a large body of fanfics are, or at least
+attempt to be, `canon-compliant'. That is, they aim to write stories
+which do not contradict any truths in the source material. If Blumberg
+and Holguín are right, then no two fanfics which contradict each other
+can be canon-compliant. Since the source settles all questions, at most
+one of the disagreeing fanfics can agree with the source.
+
+This doesn't just affect fanfics; the same issue comes up with sequels.
+It is usually taken to be a constraint on sequels that they should agree
+with what was true in the prequel, or if not explain the divergence. If
+Blumberg and Holguín are correct, approximately no sequels satisfy this
+constraint. If we take \emph{A Study in Scarlet} to be a self-contained
+fiction, then it is incredibly unlikely that the protagonist of it will
+one day solve a murder in Dartmoor, have a fight to the death above the
+Reichenbach Falls, protect a woman whose stepfather tries to murder her
+by passing a snake through a heating vent, and so on. On their view,
+there is a fact at the end of \emph{A Study in Scarlet} about which (if
+any) of these things Holmes will one day do, and it seems improbable he
+will do all of them. So it's not just Watson's war wound which changes
+from one thing to another over the Holmes stories, it's Holmes's entire
+life trajectory.
+
+Perhaps we could deny the assumption that \emph{A Study in Scarlet} is
+self-contained; what's true in a book which has a sequel is determined
+by what happens in later books. That too, however, would be revisionary.
+We don't think that the later descriptions of where the wound is get to
+be correct solely in virtue of being later.
+
+It's implausible that all fictions are complete in the sense that
+Blumberg and Holguín suggest, and assuming that they are requires making
+massive changes to how we think about the relationship between fictions.
+So we should try something else. My suggestion is that the logic of
+\emph{In the fiction} is a modal logic where the underlying semantics is
+a possibility frame. For the reasons Blumberg and Holguín give, it's
+plausible that this logic is functional, i.e., it satisfies
+\(\Diamond \Phi \rightarrow \Box \Phi\). But as long as we use
+possibility frames, this does not require that there is a particular
+world that the fiction picks out.
+
+Blumberg and Holguín are aware of the option that one could deny that
+the fiction is complete in this way, and they offer a series of
+objections to it. The most pressing is that if the fiction is
+incomplete, then (14) will be true, when \emph{p} is replaced by any
+claim that lacks a truth value in the fiction.
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{13}
+\tightlist
+\item
+  I know whether \(p\) is true, but I don't know whether \(p\).
+\end{enumerate}
+
+That would be very bad, but fortunately it isn't a consequence of the
+view that the fiction is incomplete. For (14) to be true, it would not
+merely have to be the case that some claims in the fiction lack truth
+values. It would also have to be the case that it is known that \(p\) is
+one such proposition about which the fiction is incomplete. This isn't
+just an aspect of the objection based on (14); all of Blumberg and
+Holguín's objections make this further assumption.
+
+Somewhat surprisingly, if we represent incompleteness with possibility
+frames, then it is never knowable that the fiction is incomplete with
+respect to \(p\). So this further assumption of the objection isn't
+correct, and the view defended here is not committed to implausible
+claims like (14). To see why this is so, we need to return to a point I
+flagged earlier about the nature of epistemic modality in possibility
+frames.
+
+Assume that \emph{S knows} is a normal modal operator, so there is some
+relation \(R_k\) such that \emph{S knows that} \(\Phi\) is true at \(x\)
+iff for all \(y\) such that \(xR_ky\), \(\Phi\) is true at \(y\). Since
+knowledge is factive, this \(R_k\) will have to be reflexive.\footnote{This
+  isn't quite as obvious a point as it is in the possible worlds
+  framework. But as noted above, Holliday proves that if we assume
+  \textbf{R-Win}, then all and only reflexive frames validate
+  \(\Box \Phi \rightarrow \Phi\).} If, as is standard, we assume that
+\(xRy\) and \(y \geq y^\prime\) imply that \(xRy^\prime\), it follows
+that whenever \(x \geq x^\prime\), then \(xR_kx^\prime\). By
+refinability, if neither \(\Phi\) nor \(\neg \Phi\) are true at \(x\),
+then there are successor points to \(x\) where \(\Phi\) is true, and
+where \(\neg \Phi\) is true. Crucially, this means it won't be the case
+that \emph{It is not true that} \(\Phi\) holds at all points \(y\) such
+that \(xR_ky\). So it won't be \emph{known} that \(\Phi\) is not true.
+
+A special case of this is where \(\Phi\) is \(\Box_{ER}p\), for some
+claim \(p\) that is intuitively unsettled by the text of \emph{Eleanor
+Rigby}. There might be no fact of the matter about whether, in
+\emph{Eleanor Rigby}, \emph{p} is true; but we can never know that. So,
+among other things, (14) is never true, defanging the objection.
+
+This might seem like a rather Pyrrhic victory, however. There are
+several reasons we might worry about a view that says the fiction is
+incomplete, but we can never know where it is incomplete. Here are three
+immediate worries. First, this move looks ad hoc. Second, it looks
+implausible, given how sparse \emph{Eleanor Rigby} is. Third, we might
+worry that once we go down this route, it will be impossible to say what
+is different about the possibility frame view as compared to Blumberg
+and Holguín's fictional reality view. Let's take these in turn.
+
+It's certainly true that if we simply stipulated that the fictional
+can't be known to be incomplete in a respect, that would be implausibly
+ad hoc. But that isn't what happened. The lack of knowledge follows from
+general principles relating \(\geq\) and \(\Box_{ER}\), which
+Humberstone and Holliday defend on independent grounds. It's a
+surprising consequence of those principles, but the principles weren't
+engineered to get this result.
+
+The implausibility worry is more pressing. I would have thought offhand
+that it's obviously true, and hence known, that \emph{Eleanor Rigby} is
+incomplete in several respects. If we think possibility frames are the
+best way to represent incompleteness, and they say this incompleteness
+is unknowable, then maybe that's some argument against this intuition,
+but hardly a strong one. The best response, I feel, is that (14) seems
+obviously bad, but if there was a knowable incompleteness it would be
+true, so maybe we should live with all incompleteness being unknowable.
+
+There are two different worries about expressibility, and I'll just
+address one here.
+
+One worry, which Cariani (\citeproc{ref-CarianiUnpub}{2025}) addresses
+at length, is that we can't add to the language a way of saying anything
+is incomplete without messing up the persistence and refinability
+conditions. If you could say, truly, that \(p\) is incomplete, that
+would have to be true on all refinements, which it plainly can't be
+given refinability. As Cariani notes, there are various ways to finesse
+this using indexicals. Roughly, you can have something in the language
+which means that \(p\) is \emph{actually} incomplete. The details here
+are messy, but ultimately manageable. But they don't, I think, help with
+the deeper worry about inexpressibility.
+
+That worry is that we want some way of saying we are pretty sure that
+there is no fact of the matter about whether The Couple have
+grandchildren. In the next section, I'll address this concern. The short
+version is that while we can't know there is no fact of the matter about
+\(\Box_{ER}p\), we can rationally have arbitrarily low credence in both
+\(\Box_{ER}p\) and \(\neg \Box_{ER}p\). What's distinctive about realms
+featuring incompleteness is that these pairs of low credences can be
+rational.
 
 \section{Uncertainty about the Non-Factual}\label{sec-sec4}
 
@@ -865,12 +1086,11 @@ Joyce, James M. 1998. {``A Non-Pragmatic Vindication of Probabilism.''}
 \emph{Philosophy of Science} 65 (4): 575--603. doi:
 \href{https://doi.org/10.1086/392661}{10.1086/392661}.
 
-\bibitem[\citeproctext]{ref-Lewis1976b}
-Lewis, David. 1976. {``Probabilities of Conditionals and Conditional
-Probabilities.''} \emph{Philosophical Review} 85 (3): 297--315. doi:
-\href{https://doi.org/10.2307/2184045}{10.2307/2184045}. Reprinted in
-his \emph{Philosophical Papers}, Volume 2, Oxford: Oxford University
-Press, 1986, 133-152. References to reprint.
+\bibitem[\citeproctext]{ref-Lewis1978b}
+Lewis, David. 1978. {``Truth in Fiction.''} \emph{American Philosophical
+Quarterly} 15 (1): 37--46. Reprinted in his \emph{Philosophical Papers},
+Volume 1, Oxford: Oxford University Press, 1983, 261-275. References to
+reprint.
 
 \bibitem[\citeproctext]{ref-Maher1997}
 Maher, Patrick. 1997. {``Depragmatised Dutch Book Arguments.''}
