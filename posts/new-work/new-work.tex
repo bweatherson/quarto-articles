@@ -207,6 +207,9 @@ includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
 \newcommand{\nmodels}{\mathrel{\ooalign{$\models$\cr\raisebox{-0.001ex}{\hss$\mkern-1mu/\hss$}}}}
 \newcommand{\llbracket}{[\![}
 \newcommand{\rrbracket}{]\!]}
+\usepackage{pifont}
+\newcommand{\tick}{\text{\ding{51}}}
+\newcommand{\cross}{\text{\ding{55}}}
 \setlength\heavyrulewidth{0ex}
 \setlength\lightrulewidth{0ex}
 \usepackage[lines=2]{lettrine}
@@ -278,7 +281,23 @@ includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
 \begin{document}
 \maketitle
 \begin{abstract}
-TBD
+Works of fiction typically raise questions they do not answer. I argue
+that some of these questions have no answers. There is no fact of the
+matter about just when some character was born, or what their heart rate
+was at any given moment. This seems intuitive, almost obvious, but there
+are arguments against it. Kyle Blumberg and Ben Holguín have recently
+argued that the way Lewis captures this intuition leads to problems. I
+show that we avoid the problems if we model fictions using Humberstone's
+possibility frames. That modelling choice has a striking consequence for
+the theory of credence. Uncertainty about fictions, and uncertainty
+about any topic where there might not be a fact of the matter, need not
+be probabilistic. The accuracy-dominance argument for probabilism
+presupposes bivalence; it requires that every question has an answer.
+The considerations behind the accuracy-dominance argument are still
+sound; it's just that without bivalence, they don't lead to probabilism.
+Rather, they imply that credences should be modelled by Dempster-Shafer
+belief functions. This is so even if the logic of the fiction, and of
+our talk about the fiction, is resolutely classical.
 \end{abstract}
 
 
@@ -297,7 +316,11 @@ engaging with the fiction. (\emph{Blade Runner} is a famous example of
 this.) Still, even the silly questions can be philosophically
 interesting. For while it's not important what the answers to those
 questions are, it is somewhat important what an answer to the questions
-looks like.
+looks like. That's because thinking about questions about fictions that
+may not have answers serves as an exemplar for modelling uncertainty
+about any realm where there might not be a fact of the matter. That's
+our ultimate subject, and we'll get there by looking in some detail at
+the fictional case.
 
 What's true in a fiction is sometimes settled by the words of the song.
 In realistic fictions, others are settled by what would have to be true
@@ -387,7 +410,7 @@ truth.
 
 In this paper, I'll accept the first of Lewis's claims (that there is an
 operator), reject the second (that it has a non-functional logic), and
-mostly set aside the third. In `Fictional Reality', , Kyle Blumberg and
+mostly set aside the third. In `Fictional Reality', Kyle Blumberg and
 Ben Holguín (\citeproc{ref-BlumbergHolguin2025}{2025}) run a series of
 arguments against this second assumption of Lewis's. I'll briefly
 mention a handful that I find most compelling.
@@ -488,7 +511,7 @@ proposed remedy is implausible and should be rejected.
 \section{Possibility Frames}\label{sec-sec1}
 
 A Humberstone possibility frame (hereafter, just \emph{possibility
-frame}) is a triple \(\langle W, {\leqslant}, \mathbb{R}, V\rangle\),
+frame}) is a quadruple \(\langle W, {\leqslant}, \mathbb{R}, V\rangle\),
 where \(W\) is a set of possibilities, \(\leqslant\) is a
 \emph{refinement} relation on them, \(\mathbb{R}\) is a countable family
 of accessibility relations (with \(R_i\) as the \(i\)'th member), and
@@ -584,8 +607,8 @@ formulation\footnote{There are other formulations which make weaker
   preserving classical logic.} of disjunction elimination says that
 \(\Gamma \cup \{A\} \vdash_{CL} C\),
 \(\Delta \cup \{B\} \vdash_{CL} C\), and \(\Phi \vdash_{CL} A \vee B\)
-together imply \(\Gamma \cup \Delta \cup Phi \vdash_{CL} C\). Let's show
-that the same principle holds for \(\vDash_{pf}\).
+together imply \(\Gamma \cup \Delta \cup \Phi \vdash_{CL} C\). Let's
+show that the same principle holds for \(\vDash_{pf}\).
 
 Assume that \(\Gamma \cup \{A\} \vDash_{pf} C\),
 \(\Delta \cup \{B\} \vDash_{pf} C\), and \(\Phi \vDash_{pf} A \vee B\),
@@ -643,7 +666,7 @@ and I'll do the same.
 
 That alone isn't enough to guarantee that boxed sentences are persistent
 and refinable. There are a few ways to constrain how \(\mathbb{R}\) and
-\(\leq\) relate to get that guarantee; I'll use one suggested by
+\(\leqslant\) relate to get that guarantee; I'll use one suggested by
 Holliday. He calls this constraint \textbf{R-Win}.
 
 \begin{description}
@@ -688,12 +711,12 @@ possibility frame semantics, Holliday (\citeproc{ref-Holliday2025}{2025,
 \setcounter{enumi}{12}
 \tightlist
 \item
-  \(\forall x, y (xR_iy \rightarrow \exists x^\prime \geq x \forall z (x^\prime \geq z \rightarrow \exists x^{\prime\prime} (x^{\prime\prime} \geq y \wedge x^{\prime\prime} \geq z)))\)
+  \(\forall x, y (xR_iy \rightarrow \exists x^\prime \geqslant x \forall z (x^\prime \geq z \rightarrow \exists x^{\prime\prime} (x^{\prime\prime} \geq y \wedge x^{\prime\prime} \geqslant z)))\)
 \end{enumerate}
 
 In Figure~\ref{fig-simple-frame}, I've displayed a simple frame that
 validates \(\Box_i \Phi \vee \Box_i \neg \Phi\) without being
-functional. The solid lines represent \(R\)-accessibility; the dotted
+functional. The solid lines represent \(R\)-accessibility; the dashed
 lines represent refinements. From \(x_1\) all the \(y_i\) are
 accessible. So neither \(\Box p\) nor \(\Box \neg p\) are true at
 \(x_1\). But the disjunction \(\Box p \vee \Box \neg p\) is true, since
@@ -755,7 +778,7 @@ reals such that:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \(\sum_{X \subseteq \mathcal{F}} m(A) = 1\)
+  \(\sum_{X \subseteq \mathcal{F}} m(X) = 1\)
 \item
   \(Bel(A) = \sum_{X \subseteq A} m(X)\)
 \end{enumerate}
@@ -768,7 +791,8 @@ there are just two possibilities: \(a, b\), and \(m\) assigns mass
 \(Bel(\{a\}) = Bel(\{b\}) = \frac{1}{3}\), while \(Bel(\{a, b\}) = 1\).
 We could state the rules on belief functions axiomatically, but this
 more semantic presentation is both more intuitive, and connects more
-smoothly to the applications we'll be interested in.
+smoothly to the application in section \ref{sec-sec4}, where the mass
+function will be put to work.
 
 What motivates the more restrictive orthodox view, that \(Bel\) has to
 be probabilistic? In the twentieth century, the primary motivations were
@@ -782,7 +806,7 @@ proponent of belief functions. David Christensen
 (\citeproc{ref-Christensen1996}{1996}) solved the first problem by
 developing `depragmatised' Dutch Book arguments, but this (a) made the
 other problem worse, and (b) did not generalise to provide constraints
-on updating degree of beliefs.
+on updating degrees of belief.
 
 So these days the key argument for orthodoxy is some kind of accuracy
 based argument. The canonical such argument, due to James Joyce
@@ -970,13 +994,14 @@ knowledge is factive, this \(R_k\) will have to be reflexive.\footnote{This
   framework. But as noted above, Holliday proves that if we assume
   \textbf{R-Win}, then all and only reflexive frames validate
   \(\Box \Phi \rightarrow \Phi\).} If, as is standard, we assume that
-\(xRy\) and \(y \geq y^\prime\) imply that \(xRy^\prime\), it follows
-that whenever \(x \geq x^\prime\), then \(xR_kx^\prime\). By
-refinability, if neither \(\Phi\) nor \(\neg \Phi\) are true at \(x\),
-then there are successor points to \(x\) where \(\Phi\) is true, and
-where \(\neg \Phi\) is true. Crucially, this means it won't be the case
-that \emph{It is not true that} \(\Phi\) holds at all points \(y\) such
-that \(xR_ky\). So it won't be \emph{known} that \(\Phi\) is not true.
+\(xRy\) and \(y^\prime \geqslant y\) imply that \(xRy^\prime\), it
+follows that whenever \(x^\prime \geqslant x\), then \(xR_kx^\prime\).
+By refinability, if neither \(\Phi\) nor \(\neg \Phi\) are true at
+\(x\), then there are successor points to \(x\) where \(\Phi\) is true,
+and where \(\neg \Phi\) is true. Crucially, this means it won't be the
+case that \emph{It is not true that} \(\Phi\) holds at all points \(y\)
+such that \(xR_ky\). So it won't be \emph{known} that \(\Phi\) is not
+true.
 
 A special case of this is where \(\Phi\) is \(\Box_{ER}p\), for some
 claim \(p\) that is intuitively unsettled by the text of \emph{Eleanor
@@ -996,7 +1021,7 @@ and Holguín's fictional reality view. Let's take these in turn.
 It's certainly true that if we simply stipulated that the fictional
 can't be known to be incomplete in a respect, that would be implausibly
 ad hoc. But that isn't what happened. The lack of knowledge follows from
-general principles relating \(\geq\) and \(\Box_{ER}\), which
+general principles relating \(\geqslant\) and \(\Box_{ER}\), which
 Humberstone and Holliday defend on independent grounds. It's a
 surprising consequence of those principles, but the principles weren't
 engineered to get this result.
@@ -1035,9 +1060,527 @@ rational.
 
 \section{Uncertainty about the Non-Factual}\label{sec-sec4}
 
+Think back to Figure~\ref{fig-simple-frame}, our model for uncertainty
+about \emph{Eleanor Rigby}. There are six possibilities in the frame,
+and four of them are complete. Since we know that Eleanor Rigby is a
+fictional character, and \(y_1, y_2\) and \(y_3\) are possibilities
+where she is real, we know that none of those possibilities represent
+reality. But the other three, \(x_1\), \(x_2\) and \(x_3\), are all
+candidates for being reality. From the outside, we might think that any
+assignment of credences to those three possibilities which sum to 1 will
+be coherent. This is a fairly strong assumption, and I'll come back to
+it presently; first, let's think about what happens if it is true.
+
+If we again let \(p\) be that The Couple has grandchildren, then
+\(Cr(p)\) will be \(Cr(\{x_2\})\), and \(Cr(\neg p)\) will be
+\(Cr(\{x_3\})\). Since \(Cr(\{x_1\})\) could be positive, it is possible
+that \(Cr(p) + Cr(\neg p) < 1\). Indeed, by expressing credences in
+\(p\) and \(\neg p\) which are both low, we can express confidence that
+we are in \(x_1\), i.e., that there is no fact of the matter about
+\(p\). In this case, we really can whistle something we can't say. Even
+if we can't say directly that there is (probably) no fact of the matter
+about \(p\), we can express confidence that there is no such fact
+indirectly, via our credences in \(p\) and \(\neg p\).
+
+This all assumed that credences in \(x_1\), \(x_2\) and \(x_3\) should
+sum to 1, and that it is permissible for credence in \(x_1\) to be
+positive. Both claims are contentious, and they push us in opposite
+directions. The arguments of Section~\ref{sec-sec3} are, in effect,
+arguments that \(x_1\) might be actual, and hence that it is reasonable
+to give it positive credence. Indeed, those arguments suggest it should
+be given a rather large credence. As noted earlier, the best argument
+against non-probabilistic credences is that they are accuracy dominated.
+If there is guaranteed to be a fact of the matter about whether \(p\),
+then the credence which assigns \(\frac{1}{3}\) to each of \(p\) and
+\(\neg p\) will, in both possibilities, be overall less accurate than
+the credence which assigns \(\frac{1}{2}\) to each. But if it is
+possible that neither \(p\) nor \(\neg p\) is true, then the former
+credence will be more accurate than the latter in that possibility. So
+the standard argument against non-probabilistic credences won't go
+through.
+
+Still, we might ask whether there is some other way to show that this
+credence is accuracy dominated. And further, once we've left the realm
+of probabilities, we might wonder why I've insisted that the `outside'
+credences in \(x_1\), \(x_2\) and \(x_3\) sum to 1. The answer to both
+challenges comes from a result in Predd et al.
+(\citeproc{ref-Predd2009}{2009}), building on earlier work by Finetti
+(\citeproc{ref-DeFinetti1974}{1974}) and Lindley
+(\citeproc{ref-Lindley1982}{1982}).
+
+Take a non-empty sample space \(\Omega\) and a finite list
+\(E_1, \ldots, E_n\) of subsets of it, which we call events. A
+\emph{forecast} is a vector \(f \in
+[0,1]^n\), one number per event. It is \emph{coherent} just in case
+there is a probability measure \(\mu\) over \(\Omega\) with
+\(f_i = \mu(E_i)\) for each \(i\). We do not assume that these events
+form an algebra, and we do not assume that \(\Omega\) is finite, though
+we do assume that the list is finite.
+
+De Finetti provided a geometrical characterisation of coherence. For
+each \(\omega \in \Omega\), let \(v_\omega\) record the truth values of
+the events at \(\omega\), assigning 1 to each \(E_i\) containing
+\(\omega\) and 0 to the rest. These are the possibly perfectly accurate
+forecasts. Let \(V\) be the set of these possibly perfectly accurate
+forecasts. Then \(f\) is coherent if and only if it lies in the convex
+hull of \(V\). That is, it is coherent iff it is a weighted average of
+the possibly perfectly accurate forecasts, with the weights all being
+non-negative and summing to one.
+
+What's relevant to us is a further result in Predd et al.~Score a
+forecast at \(\omega\) using any additive strictly proper scoring rule.
+Then a forecast is strongly dominated if some other forecast scores
+better at every point of \(\Omega\). It is weakly dominated if some
+other forecast scores at least as well everywhere, and better somewhere.
+A coherent forecast is not weakly dominated; an incoherent one is
+strongly dominated, and indeed strongly dominated by something
+coherent.\footnote{The last point is not, I think, philosophically
+  significant. It's bad to have accuracy dominated credences; it doesn't
+  matter whether the dominating credences are coherent. When a game
+  theorist deletes a strategy because it is dominated, they don't do any
+  further checks about whether the dominating strategy is coherent, or
+  undominated, or otherwise playable. That seems like the right
+  approach; being dominated is a decisive consideration against doing
+  something, no matter what other properties the dominating strategy
+  has.} The coherent forecasts just are the ones that are not accuracy
+dominated.\footnote{It is essential that the scoring rule be
+  \emph{strictly} proper. Without it, as Predd et al.
+  (\citeproc{ref-Predd2009}{2009}) show, we can have incoherent
+  credences that are only weakly dominated. On how far propriety and
+  additivity can be relaxed see Pruss (\citeproc{ref-Pruss2024}{2024}),
+  and on infinite agendas see Kelley (\citeproc{ref-Kelley2023}{2023}).}
+
+Now imagine that instead of just caring about whether The Couple have
+grandchildren, we are interested in some longer list \(E_1, \dots, E_n\)
+of questions about \emph{Eleanor Rigby}. Imagine that instead of
+Figure~\ref{fig-simple-frame}, we have a much larger frame, one that
+includes on the right-hand side all the ways these questions might, or
+might not, be resolved. (The `might not' here is because we want
+possibilities like \(y_1\) that leave some questions open.) I'm still
+working with the assumption that possibilities like \(x_1\), which leave
+some questions open, are genuine possibilities; they might be actual.
+I'll also assume that all the items on the agenda are stateable
+propositions. That is, they all are sets of possibilities which satisfy
+persistence and refinability.
+
+For any item \(A\) on the agenda, it is true at a possibility \(x\) iff
+it is true at all the refinements of \(x\); that follows from
+persistence and refinability. So if \(x\) is actual, the perfectly
+accurate credence assigns 1 to \(A\) when \(x\)'s refinements settle
+\(A\), and 0 otherwise. Now the key step is that the coherent credences,
+the ones that are not accuracy dominated, are all and only those in the
+convex hull of these possibly perfectly accurate credences. So a
+coherent credal state distributes non-negative weights \(w_x\) (which
+sum to 1) over the possibilities and sets \(Bel(A)\) to the total weight
+on possibilities where \(A\) is true.
+
+Given these weights, we can construct a mass function \(m\). For each
+possibility \(x\), let \(T_x\) be the conjunction of all the truths at
+\(x\). Then for any proposition \(A\), let \(m(A)\) be the sum of
+\(w_x\) across the possibilities \(x\) such that \(T_x\) is equivalent
+to \(A\). Normally there will be at most one such possibility. But it is
+coherent for a frame to contain two possibilities at which exactly the
+same things are true, so we need to define \(m(A)\) as a sum to capture
+that. Either way, since the weights are non-negative and sum to 1, and
+the masses are sums of weights within cells of a partition, the masses
+are also non-negative and sum to 1. That's what they need to be in order
+to be a mass function. Given \(m\), we can define
+\(Bel(A) = \sum_{X \vDash A} m(X)\), where \(X\) ranges over
+propositions. That is, \(Bel\) will be a Dempster-Shafer function, and
+\(m\) its mass function.\footnote{This way of constructing \(Bel\) via
+  \(m\) mirrors the original construction of Dempster-Shafer functions
+  in Dempster (\citeproc{ref-Dempster1967}{1967}).} This gives the mass
+function of section \ref{sec-sec2} an interpretation it lacked when I
+first introduced it. We started there with a simple belief function,
+where \(m\) assigns mass 1/3 to each of \(\{a\}\), \(\{b\}\) and
+\(\{a, b\}\). Once that mass is turned into a belief function, it
+represents the credences of a thinker who is (roughly speaking) equally
+confident in Figure~\ref{fig-simple-frame} that actuality is \(x_1\),
+\(x_2\) or \(x_3\). The key thing is that as long as any mass is
+assigned to \(\{a, b\}\), i.e., any credence is given to \(x_1\) being
+actual, then the resulting credences will be non-probabilistic.
+
+That said, given a class of possible refinements, not any old belief
+function can be defined on them. There can be propositions definable on
+a model which are not equivalent to \(T_x\) for any possibility \(x\) in
+the model. For instance, in Figure~\ref{fig-simple-frame}, there is no
+possibility \(x\) such that \(T_x\) is equivalent to the proposition
+\(\{x_2, y_2\}\). So while these constructions show (a) that some
+non-probabilistic credences are coherent, and (b) only credences that
+correspond to Dempster-Shafer functions are coherent, given a particular
+possibility frame, we can't derive the further result that any
+Dempster-Shafer function definable over the propositions in it could be
+immune to accuracy dominance.
+
+Several objections deserve brief attention. First, someone might say:
+``This doesn't actually save Dempster and Shafer themselves. Their work
+wasn't framed in anti-realist terms.'' That's correct, and I don't claim
+otherwise. This is \emph{new work} for Dempster-Shafer functions. These
+functions are useful for anti-realists, but anti-realism is not what
+originally motivated their development. The point is that anti-realists
+have good reason to work with belief functions, not that this was always
+the intended application.
+
+Second, the approach seems to rest on an unusual account of disjunction.
+How can it be that \(p\) is not true, and \(\neg p\) is not true, yet
+their disjunction is true? This does seem strange from a classical
+perspective. But I'd argue that disjunction \emph{is} strange, and we've
+underinvested in understanding it. It's curious that the philosophical
+literature contains roughly one hundred times as many papers and books
+on conditionals as on disjunction. If disjunction is philosophically
+important, as it must be if it's central to how possibilities are
+structured, we should think more carefully about it.\footnote{Humberstone's
+  encyclopedic \emph{The Connectives} has just as much on disjunction as
+  on conditionals, and an important section of the disjunction chapter
+  discusses possibilities. I'm following this chapter both in taking
+  disjunction to be more complicated than it first looks, and to be
+  closely connected to possibilities.} Saying that a philosophical view
+is wrong because it fails given a simple Boolean account of disjunction
+is no more plausible than saying that a view fails because it is
+inconsistent with treating conditionals as material implication.
+
+Third, one might protest that this is all rather specific to fiction,
+and in particular to trivial questions about fiction like whether The
+Couple has grandchildren. But it covers much more than that. For one
+thing, there are fairly substantive questions about particular fictions,
+ones which are central to how we understand that fiction, where we
+should at least take seriously the possibility that there is no fact of
+the matter.
+
+But more importantly, if this framework is viable, it has implications
+well beyond fiction. In any situation where we want to model
+uncertainty, while leaving open the possibility that there is no fact of
+the matter, the framework could have uses. Here are two cases that seem
+especially promising.
+
+What credences should an agent have in various propositions about the
+external world when they have absolutely no evidence whatsoever? If we
+think they should be certain that realism is correct for all external
+world propositions, i.e., they should be certain that any proposition
+statable about the external world is either true or has a true negation,
+then a familiar problem arises. Let \(E\) be the actual evidence that a
+normal person has, and \(H\) some proposition about the future they know
+that is not part of their evidence.\footnote{Obviously if Williamson
+  (\citeproc{ref-Williamson1998}{1998}) is right and all one's knowledge
+  is evidence, this is impossible. It doesn't seem plausible to me that
+  propositions about the future are part of my evidence, so I'm happy
+  rejecting this. See Goldman (\citeproc{ref-Goldman2009}{2009}) for
+  more reasons for being sceptical that evidence and knowledge are quite
+  so tightly linked.} Since this person knows \(H\), they know (or at
+least could know) \(\neg E \vee H\). But all their evidence tells
+against this; it is conclusive evidence for the negation of one
+disjunct. So they must have known it a priori. This is weird since it is
+contingent. This structure has been used in many arguments in
+epistemology in recent times, most notably as the core of the objection
+Roger White (\citeproc{ref-White2006}{2006}) makes to the form of
+dogmatism defended by James Pryor (\citeproc{ref-Pryor2000}{2000}).
+
+The framework here offers a distinctive kind of response to this case.
+Perhaps a priori, we should be unsure whether there is even a fact of
+the matter about \(E\) and about \(H\). We should give much of our
+credence to a thin possibility where none of \(E, H, \neg E, \neg H\)
+are determined to be true, and all of them could be true at refinements
+of the possibility. On learning \(E\), we don't just move credence
+around between fully realised worlds, we move credence from this
+incomplete possibility to the ones where \(E\) is true. (And, among
+them, primarily to ones where \(H\) is true.) This lets us retain the
+intuitively plausible claims that knowledge of \(H\) is grounded in
+\(E\), but that we did not have a priori justification to believe
+contingencies like \(\neg E \vee H\).
+
+(David Jehle and Brian Weatherson (\citeproc{ref-JehleWeatherson}{2012})
+aim to resolve this problem using intuitionistic probability. That
+response requires taking on more non-classical commitments than the
+response here. Martin Martin Smith
+(\citeproc{ref-MartinSmith2017}{2017}) has argued that Jehle and
+Weatherson's approach should be rejected because it requires making more
+anti-realist assumptions than even the intuitionist should accept.)
+
+Another application of the framework is to moral anti-realism and moral
+uncertainty. Michael Michael Smith
+(\citeproc{ref-MichaelSmith2002}{2002}) has argued that some
+anti-realists can't capture moral uncertainty. This framework isn't
+going to particularly help solve the problem Smith raises for the
+committed anti-realist; on this framework, credence is credence of
+truth, so if you're committed to moral claims not having truth-values,
+you can't assign them any positive credence. But while the framework
+can't help the committed anti-realist, it can still be useful. One might
+worry that the reasons Smith offers will create problems even for
+someone who isn't sure whether realism or anti-realism is correct, and
+mean that this person can't sensibly have credences representing their
+moral uncertainty. What the framework shows is that it is possible to
+coherently have credences in moral propositions while leaving open that
+some moral claims might be neither true nor false. So while the
+framework has trivial cases involving The Couple as its cleanest
+applications, its potential applications are much much wider.
+
+Finally, someone will ask: ``If all this is true, and not all credences
+have to be probabilistic, why is probabilism so unreasonably effective?
+Why does it work so well in thinking about everything from markets to
+weather forecasts to sporting events?'' The answer is that probabilism
+is unreasonably effective \emph{given realism}. In domains where we can
+safely assume that a complete truth exists, probabilism works. The
+accuracy dominance argument is perfectly sound. This mirrors a point
+Graham Priest (\citeproc{ref-Priest1991}{1991}) has made about logic:
+classical logic is the correct logic for reasoning about situations that
+are known to be consistent. I say much the same: probabilism is the
+correct credence framework for situations that are known to be complete.
+But when completeness is not guaranteed, then it is permissible, perhaps
+mandatory, to use non-probabilistic belief functions. Once we're in an
+environment where realism is up for grabs, the accuracy dominance
+argument does not rule out non-probabilistic belief functions (provided
+they are really Dempster-Shafer belief functions).
+
 \section{What is Classical Logic?}\label{sec-sec5}
 
-Hello sunshine.
+I've argued that (a) we should model uncertainty about fictions using
+possibility frames rather than just structures built from possible
+worlds, and (b) if we do that, the right constraints on credences (to
+ensure that they are not accuracy dominated) are given by
+Dempster-Shafer belief functions rather than probabilities. You might
+worry this isn't a particularly novel response. Williams
+(\citeproc{ref-Williams2012grad}{2012}) already showed that if the
+underlying logic is non-classical, then the accuracy dominance argument
+motivates different constraints to classical probabilism. Indeed, he
+shows that if the underlying logic is supervaluational, the right
+constraints are given by Dempster-Shafer functions. So is the argument
+here just a special case of the familiar result that accuracy dominance
+arguments have distinct consequences in non-classical settings?
+
+The answer to this question turns on the terminological question
+\emph{What is classical logic?} To say this question is terminological
+is not to say it's uninteresting. We could treat it as a relatively
+boring question, answered either by stipulation or a survey of language
+users. But we need not do this. If we answer it by thinking about what
+we take to be essential to classical logic, then it turns out to reveal
+both some interesting distinctions, and some useful features of the
+possibility frames approach.
+
+Humberstone (\citeproc{ref-Humberstone2011}{2011}) distinguishes three
+ways of thinking about logics. First, we could identify a logic with its
+theorems, what Humberstone calls the FMLA approach. Second, we could
+identify a logic with its valid single-conclusion sequents, what
+Humberstone calls the SET-FMLA approach. Finally, we could identify a
+logic with its multi-conclusion sequents, what Humberstone calls the
+SET-SET approach. We get three more ways of thinking about logics by
+starting with these three categories (theorems, single-conclusion
+sequents, and multi-conclusion sequents) and asking what rules the logic
+licenses for generating new outputs (theorems or sequents) from familiar
+ones. The result is six ways of asking whether a logic might or might
+not be classical, as represented in Table~\ref{tbl-classical-open}.
+
+\begin{longtable}[]{@{}rcc@{}}
+\caption{Six respects in which a logic might agree with classical
+logic}\label{tbl-classical-open}\tabularnewline
+\toprule\noalign{}
+& Output & Process \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Output & Process \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{FMLA} & ? & ? \\
+\textbf{SET-FMLA} & ? & ? \\
+\textbf{SET-SET} & ? & ? \\
+\end{longtable}
+
+In that table, the left-hand column represents whether a logic has the
+same results as classical logic, the same theorems or axioms, and the
+right-hand column represents whether it permits the same rules to get
+there. The `Output' column just cares about statements within a
+particular language. For simplicity, I'll here just focus on the
+language of propositional logic. The `Process' column, however,
+considers how the logic does when the language is expanded.
+
+For a famous example of this, consider the argument against
+supervaluationism in Williamson (\citeproc{ref-Williamson1994}{1994}).
+He notes that supervaluationism rejects several important rules of
+classical logic, such as \(\vee\)-elimination. There are two important
+things to note about this argument. First, it is within the SET-FMLA
+framework. It can't be in FMLA, because nothing like
+\(\vee\)-elimination is a rule there. (Typically, the only rule is modus
+ponens; everything else in propositional logic is done with axioms.) And
+it can't be SET-SET because there we wouldn't have to even think about
+processes. After all, supervaluationism rejects the classically valid
+sequent \(\emptyset \vDash p, \neg p\). What's distinctive about
+supervaluationism is that within SET-FMLA, we keep the classical
+outcomes, but reject some classical processes. The second point is that
+we have to expand the language, Williamson adds a \(D\) operator, to see
+the problem. This is necessary because within the original language, we
+know that the processes produce all and only the correct outcomes.
+
+We can summarise these results about supervaluationism using the kind of
+table we've already introduced. In Table~\ref{tbl-sv} the ways in which
+supervaluationism agrees and disagrees with classical logic are
+summarised.
+
+\begin{longtable}[]{@{}rcc@{}}
+\caption{Agreements and disagreements between classical logic and
+supervaluationism}\label{tbl-sv}\tabularnewline
+\toprule\noalign{}
+& Output & Process \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Output & Process \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{FMLA} & \(\tick\) & \(\tick\) \\
+\textbf{SET-FMLA} & \(\tick\) & \(\cross\) \\
+\textbf{SET-SET} & \(\cross\) & \(\cross\) \\
+\end{longtable}
+
+The \(\cross\) on the right of the second row is the core of
+Williamson's objection, and it does seem like a potent objection to
+describing supervaluationism as \emph{classical}.
+
+There are ten possible distributions of ticks and crosses to that
+table.\footnote{This count assumes that the processes are sound and
+  complete with respect to the outputs, that \(A\) is a theorem in
+  classical FMLA iff \(\emptyset \vDash A\) is valid, and
+  \(\Gamma \vDash \Delta\) is valid iff for some finite subset
+  \(\Upsilon\) of \(\Delta\), \(\Gamma \vDash A\), where \(A\) is the
+  disjunction of the members of \(\Upsilon\).} Classical logic itself
+has ticks in all six cells; a paradigmatic non-classical logic like
+intuitionistic logic has crosses in all six cells. It's an interesting
+question to ask how many of the other eight combinations are satisfied
+by reasonably natural logics. In several cases, I suspect the results
+will be far from natural, but there are some interesting cases.
+
+For instance, consider the logic (call it \(L\)) that you get by
+starting with intuitionistic (propositional) logic, and restricting
+attention to just the fragment of the language where the only
+connectives are \(\neg\) and \(\wedge\). Then introduce \(\vee\) and
+\(\rightarrow\) by stipulation:
+\(A \vee B =_{df} \neg(\neg A \wedge \neg B)\),
+\(A \rightarrow B =_{df} \neg(A \wedge \neg B)\). The theorems of \(L\)
+are all and only the classical theorems. But \(L\) disagrees with
+classical logic on some sequents, e.g., classical logic endorses
+\(\neg \neg A \vDash A\). And given some expansions of the language,
+\(L\) violates modus ponens. So the relationship between \(L\) and
+classical logic is shown by Table~\ref{tbl-l}.
+
+\begin{longtable}[]{@{}rcc@{}}
+\caption{Agreements and disagreements between classical logic and
+\(L\)}\label{tbl-l}\tabularnewline
+\toprule\noalign{}
+& Output & Process \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Output & Process \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{FMLA} & \(\tick\) & \(\cross\) \\
+\textbf{SET-FMLA} & \(\cross\) & \(\cross\) \\
+\textbf{SET-SET} & \(\cross\) & \(\cross\) \\
+\end{longtable}
+
+The logic of truth-preservation on possibility frames, call it \(PF\),
+is much more classical than this. As Humberstone
+(\citeproc{ref-Humberstone1981a}{1981}) shows, no matter how we expand
+the language, all of the sequent-to-sequent rules of classical logic
+hold. Of course, it disagrees with classical logic once we allow
+multiple conclusions; like supervaluationism, \(PF\) does not validate
+\(\emptyset \vDash p, \neg p\). So the agreements and disagreements are
+summarised by Table~\ref{tbl-pf}.
+
+\begin{longtable}[]{@{}rcc@{}}
+\caption{Agreements and disagreements between classical logic and
+\(PF\)}\label{tbl-pf}\tabularnewline
+\toprule\noalign{}
+& Output & Process \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Output & Process \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{FMLA} & \(\tick\) & \(\tick\) \\
+\textbf{SET-FMLA} & \(\tick\) & \(\tick\) \\
+\textbf{SET-SET} & \(\cross\) & \(\cross\) \\
+\end{longtable}
+
+The key difference between supervaluationism and \(PF\) is on the
+SET-FMLA row; \(PF\) does, and supervaluationism does not, respect all
+classical processes. This seems significant. Think back to why
+Williamson's results about \(\vee\)-elimination were dialectically
+important. It was common knowledge that supervaluationism did not agree
+with classical logic in SET-SET. It doesn't take much to see that it
+doesn't validate \(\emptyset \vDash p, \neg p\). Arguably, that was part
+of the point. Still, it was thought to be a way of preserving classical
+logic without bivalence. The failure of \(\vee\)-elimination threatens
+that. This line of reasoning only makes sense if what's really necessary
+for a logic being classical is that it has ticks on the top four cells
+of tables like Table~\ref{tbl-pf}. And that's exactly what \(PF\) does.
+
+This is one reason for identifying classical \emph{logic} with its
+outputs and processes in SET-FMLA. There are other familiar reasons. You
+rarely see multiple conclusion logics in introductory, or even
+intermediate, textbooks. You practically never see multiple conclusion
+arguments used in philosophy outside logic. It would be a very strange
+metaphysics paper that included an argument with P1, P2, P3, followed by
+C1 and C2 meaning that at least one of C1 and C2 are correct.
+
+A natural formulation of current practice is that classical \emph{logic}
+is identified with something in SET-FMLA, while the standard, one could
+say classical, \emph{semantics} for that logic is bivalent. So for a
+logic to agree with both classical logic and semantics, it has to have
+ticks in at least one (and probably both) of the cells on the bottom row
+of Table~\ref{tbl-pf}. Of course, \(PF\) does not have that; it is not a
+classical semantics. But because it has ticks in the four cells above
+that, it is a classical logic. That is, it is a non-classical semantics
+for a classical logic.
+
+If we agree with this way of speaking, it is easy to say what is
+distinctive about the possibility frames approach to uncertainty. It was
+already known that we needed to assume classical logic to get an
+accuracy dominance argument for probabilism. Indeed, Williams
+(\citeproc{ref-Williams2012grad}{2012}) showed just how strong the
+agreement with classical logic needed to be; the pattern we see in
+Table~\ref{tbl-sv} wasn't enough. What's new here is that even a system
+that has the same introduction and elimination rules as classical logic
+is still not strong enough to ground the accuracy dominance argument.
+That argument really needs classical semantics. That is, it needs
+bivalence.
+
+\section{Overview}\label{overview}
+
+Fictional works, like \emph{Eleanor Rigby}, typically raise questions
+that they don't answer. I've argued that some of these questions really
+don't have an answer. It's not that it is indeterminate what the answer
+is, or (as Blumberg and Holguín argue) that we are ignorant of the true
+answer. There is no fact of the matter about how to fill in the story in
+some respects. Using possibility frames lets us see how this can be the
+case even if the logic of \emph{true in fiction F} is functional in the
+sense that it validates \(\Diamond A \rightarrow \Box A\).
+
+Once we are in a realm where there is no fact of the matter about some
+questions, the accuracy-dominance argument for probabilism no longer
+goes through. That argument presupposes that if one credence function is
+more accurate than another given that \(A\) is true, and given that
+\(\neg A\) is true, then it is more accurate full stop. Without a
+background assumption of bivalence, there is a missing step here. And
+when we are discussing uncertainty in a realm where there might not be a
+fact of the matter about some questions, that assumption shouldn't be
+granted.
+
+But this doesn't mean anything goes for credences once we drop
+bivalence. Assuming we are at some point in a possibility frame, then
+the accuracy-dominance argument still gives us a substantive conclusion:
+the credences that are not accuracy-dominated are Dempster-Shafer belief
+functions. That's the new work I've suggested for these functions: they
+are the right way to represent how a rational agent is uncertain about a
+subject matter where they aren't sure the world is complete.
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
@@ -1062,6 +1605,14 @@ Multi-Valued Mapping.''} \emph{Annals of Mathematical Statistics} 38:
 325--39. doi:
 \href{https://doi.org/10.1214/aoms/1177698950}{10.1214/aoms/1177698950}.
 
+\bibitem[\citeproctext]{ref-DeFinetti1974}
+Finetti, Bruno de. 1974. \emph{Theory of Probability}. New York: Wiley.
+
+\bibitem[\citeproctext]{ref-Goldman2009}
+Goldman, Alvin. 2009. {``Williamson on Knowledge and Evidence.''} In
+\emph{{Williamson on Knowledge}}, 73--91. Oxford: Oxford University
+Press.
+
 \bibitem[\citeproctext]{ref-HarrisonTrainor2019}
 Harrison-Trainor, Matthew. 2019. {``First-Order Possibility Models and
 Finitary Completeness Proofs.''} \emph{Review of Symbolic Logic} 12 (4):
@@ -1081,10 +1632,22 @@ Humberstone, Lloyd. 1981. {``From Worlds to Possibilities.''}
 \bibitem[\citeproctext]{ref-Humberstone2011}
 ---------. 2011. \emph{The Connectives}. Cambridge, MA: MIT Press.
 
+\bibitem[\citeproctext]{ref-JehleWeatherson}
+Jehle, David, and Brian Weatherson. 2012. {``Dogmatism, Probability and
+Logical Uncertainty.''} In \emph{New Waves in Philosophical Logic},
+edited by Greg Restall and Gillian Russell, 95--111. Bassingstoke:
+Palgrave Macmillan.
+
 \bibitem[\citeproctext]{ref-Joyce1998}
 Joyce, James M. 1998. {``A Non-Pragmatic Vindication of Probabilism.''}
 \emph{Philosophy of Science} 65 (4): 575--603. doi:
 \href{https://doi.org/10.1086/392661}{10.1086/392661}.
+
+\bibitem[\citeproctext]{ref-Kelley2023}
+Kelley, Mikayla. 2023. {``On Accuracy and Coherence with Infinite
+Opinion Sets.''} \emph{Philosophy of Science} 90 (1): 92--128. doi:
+\href{https://doi.org/10.1017/psa.2021.37}{10.1017/psa.2021.37}.
+Preprint at arXiv:2007.14490.
 
 \bibitem[\citeproctext]{ref-Lewis1978b}
 Lewis, David. 1978. {``Truth in Fiction.''} \emph{American Philosophical
@@ -1092,14 +1655,52 @@ Quarterly} 15 (1): 37--46. Reprinted in his \emph{Philosophical Papers},
 Volume 1, Oxford: Oxford University Press, 1983, 261-275. References to
 reprint.
 
+\bibitem[\citeproctext]{ref-Lindley1982}
+Lindley, D. V. 1982. {``Scoring Rules and the Inevitability of
+Probability.''} \emph{International Statistical Review} 50: 1--26.
+
 \bibitem[\citeproctext]{ref-Maher1997}
 Maher, Patrick. 1997. {``Depragmatised Dutch Book Arguments.''}
 \emph{Philosophy of Science} 64 (2): 291--305. doi:
 \href{https://doi.org/10.1086/392552}{10.1086/392552}.
 
+\bibitem[\citeproctext]{ref-Predd2009}
+Predd, Joel B., Robert Seiringer, Elliott H. Lieb, Daniel N. Osherson,
+H. Vincent Poor, and Sanjeev R. Kulkarni. 2009. {``Probabilistic
+Coherence and Proper Scoring Rules.''} \emph{IEEE Transactions on
+Information Theory} 55 (10): 4786--92. doi:
+\href{https://doi.org/10.1109/TIT.2009.2027573}{10.1109/TIT.2009.2027573}.
+Preprint at arXiv:0710.3183.
+
+\bibitem[\citeproctext]{ref-Priest1991}
+Priest, Graham. 1991. {``Minimally Inconsistent {LP}.''} \emph{Studia
+Logica} 50 (2): 321--31. doi:
+\href{https://doi.org/10.1007/BF00370190}{10.1007/BF00370190}.
+
+\bibitem[\citeproctext]{ref-Pruss2024}
+Pruss, Alexander R. 2024. {``Necessary and Sufficient Conditions for
+Domination Results for Proper Scoring Rules.''} \emph{Review of Symbolic
+Logic} 17 (1): 132--43. doi:
+\href{https://doi.org/10.1017/S1755020323000035}{10.1017/S1755020323000035}.
+
+\bibitem[\citeproctext]{ref-Pryor2000}
+Pryor, James. 2000. {``The Sceptic and the Dogmatist.''} \emph{No{û}s}
+34 (4): 517--49. doi:
+\href{https://doi.org/10.1111/0029-4624.00277}{10.1111/0029-4624.00277}.
+
 \bibitem[\citeproctext]{ref-Shafer1976}
 Shafer, Glenn. 1976. \emph{A Mathematical Theory of Evidence}.
 Princeton: Princeton University Press.
+
+\bibitem[\citeproctext]{ref-MartinSmith2017}
+Smith, Martin. 2017. {``Intuitionistic Probability and the {B}ayesian
+Objection to Dogmatism.''} \emph{Synthese} 194 (10): 3997--4009. doi:
+\href{https://doi.org/10.1007/s11229-016-1120-2}{10.1007/s11229-016-1120-2}.
+
+\bibitem[\citeproctext]{ref-MichaelSmith2002}
+Smith, Michael. 2002. {``Evaluation, Uncertainty and Motivation.''}
+\emph{Ethical Theory and Moral Practice} 5 (3): 305--20. doi:
+\href{https://doi.org/10.1023/A:1019675327207}{10.1023/A:1019675327207}.
 
 \bibitem[\citeproctext]{ref-Standefer2018}
 Standefer, Shawn. 2018. {``Proof Theory for Functional Modal Logic.''}
@@ -1110,12 +1711,29 @@ Standefer, Shawn. 2018. {``Proof Theory for Functional Modal Logic.''}
 Weatherson, Brian. 2026. {``Humberstone on Possibility Frames.''}
 \url{https://brian.weatherson.org/quarto/posts/possibility-frames/HoPF.html}.
 
+\bibitem[\citeproctext]{ref-White2006}
+White, Roger. 2006. {``Problems for Dogmatism.''} \emph{Philosophical
+Studies} 131 (3): 525--57. doi:
+\href{https://doi.org/10.1007/s11098-004-7487-9}{10.1007/s11098-004-7487-9}.
+
+\bibitem[\citeproctext]{ref-Williams2012grad}
+Williams, J. Robert G. 2012. {``Gradational Accuracy and Nonclassical
+Semantics.''} \emph{Review of Symbolic Logic} 5 (4): 513--37. doi:
+\href{https://doi.org/10.1017/S1755020312000214}{10.1017/S1755020312000214}.
+
 \bibitem[\citeproctext]{ref-Williams2016prob}
-Williams, J. Robert G. 2016. {``Probability and Nonclassical Logic.''}
-In \emph{The Oxford Handbook of Probability and Philosophy}, edited by
-Alan Hájek and Christopher Hitchcock, 248--76. Oxford University Press.
-doi:
+---------. 2016. {``Probability and Nonclassical Logic.''} In \emph{The
+Oxford Handbook of Probability and Philosophy}, edited by Alan Hájek and
+Christopher Hitchcock, 248--76. Oxford University Press. doi:
 \href{https://doi.org/10.1093/oxfordhb/9780199607617.013.12}{10.1093/oxfordhb/9780199607617.013.12}.
+
+\bibitem[\citeproctext]{ref-Williamson1994}
+Williamson, Timothy. 1994. \emph{{Vagueness}}. New York: Routledge.
+
+\bibitem[\citeproctext]{ref-Williamson1998}
+---------. 1998. {``Conditionalizing on Knowledge.''} \emph{The British
+Journal for the Philosophy of Science} 49 (1): 89--121. doi:
+\href{https://doi.org/10.1093/bjps/49.1.89}{10.1093/bjps/49.1.89}.
 
 \end{CSLReferences}
 
