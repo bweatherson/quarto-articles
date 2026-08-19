@@ -8,13 +8,31 @@ I've long been sceptical of that line of argument, and instead more interested i
 2. What we know can be taken for granted in decision making.
 3. What we know is independent of which decision we are facing.
 
-Then the intuition is that for some things we know, and some bets that win if the known thing is true, it is irrational to take the bet. The argument for interest-relativity is that something has to give, and the least costly thing to give up is the decision-invariance of knowledge. What we know depends on, what decision we're making.
+Then the intuition is that for some things we know, and some bets that win if the known thing is true, it is irrational to take the bet. The argument for interest-relativity is that something has to give, and the least costly thing to give up is the decision-invariance of knowledge. What we know depends on what decision we're making.
 
-[Do I add in the Red-Blue game here, or is this enough?]
+This argument doesn't rely on intuitions about what is or is not knowledge. It does rely on intuitions about rational action, but I think these are fairly widely shared. And it does rely on various principles, which arguably rest in turn on theoretical intuitions. But it doesn't have a role for intuitions about cases of knowledge.
 
-This argument doesn't rely on intuitions about what is or is not knowledge. It does rely on intuitions about rational action, but I think these are fairly widely shared. And it does rely on various principles, which arguably rest in turn on theoretical intuitions. But it doesn't have a role for intuitions about cases.
+The book is structured around a version of this argument, focussing on the kind of bets involved in a game I call the Red-Blue game. Here's how the game works. Two sentences are displayed to the player, one in red, the other in blue. The player has to pick a colour and a truth-value. They win iff the sentence with the colour they pick has the truth-value they pick. So if they say "Red-True", they win iff the red sentence is true. 'Winning' here means getting a non-trivial but not huge reward; in the book I make it $50. The players know these rules of the game and don't know anything else relevant about the game. Now consider an instance of the game with these sentences.
 
-The book is structured around a version of this argument, focussing on the kind of bets involved in a game I call the Red-Blue game. Because of this structure, the natural alternatives to the interest-relative view are denials of the other parts of the tetralemma. The sceptic denies that we know a lot. What I call the epistemicist view denies the intuitions about rational betting action. (I call it this because all the motivations for it are downstream of work by Timothy @Williamson2000.) And the orthodox view, not rejecting any of these, is forced to deny that knowledge can be taken for granted.
+Red
+:     Two plus two equals four.
+
+Blue
+:    The Battle of Hastings was in 1066.
+
+For people with normal levels of historical expertise, the only rational play here is Red-True. Or, at least, that's the intuition I want to rest on, and it's one that has been _fairly_ widely shared by people I speak to. Now here's a sceptical argument. If the player knew that the Battle of Hastings was in 1066, they would know Blue-True is a winning move, while they'd only know that Red-True wins if two plus two equals four. So Blue-True would, in a sense, weakly dominate Red-True. So it's at least _permissible_ to play Blue-True. But it's not permissible to play Blue-True, so the player does not know that the Battle of Hastings was in 1066. By varying the blue sentence, we can similarly argue that the player knows very little, contradicting the claim 'we know a lot'.
+
+The solution I prefer is that once this game comes up, what the player knows changes. They did know when the Battle of Hastings was, and they will know it tomorrow, but they don't know it now. That's the canonical instance of interest-relativity in the book. This is still, I think, basically the same argument as in earlier arguments for interest-relativity, but focussing on this case has several distinctive features.
+
+I've already mentioned one of these features. The book does not rest on an intuition that the player loses knowledge. To be honest, even after all these years, I still find that counter-intuitive. It rests on an argument that the player loses knowledge, which in turn rests on intuitions about rational play, and principles connecting knowledge and rational play.
+
+Another obvious consquence is that the view has nothing to do with high _stakes_. I didn't put more at stake than $50. I don't think the intuitions change much if you lower the payouts a fair bit from that. I say, here agreeing with @schroeder20xx, that what matters are the odds the player faces, not the stakes.
+
+What if the player did not in fact face this choice, but is idly planning about what to do should it come up? This might strike you as a little over the top, 
+
+
+
+Because of this structure, the natural alternatives to the interest-relative view are denials of the other parts of the tetralemma. The sceptic denies that we know a lot. What I call the epistemicist view denies the intuitions about rational betting action. (I call it this because all the motivations for it are downstream of work by Timothy @Williamson2000.) And the orthodox view, not rejecting any of these, is forced to deny that knowledge can be taken for granted.
 
 If this is the motivation for interest-relativity, then a few other things quickly follow. One is that interest-relativity has nothing in particular to do with *high stakes*; what matters are the odds the decider faces. Another is that there is no tension, either in what they say or in motivation, between interest-relativity and contextualism. As a result, the theory I put forward is carefully neutral on contextualism. A third, perhaps less obvious consequence, is that interest-relativity has nothing much to do with *practical* interests. After all, we can 
 
