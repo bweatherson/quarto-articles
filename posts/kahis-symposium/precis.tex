@@ -1,0 +1,506 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Précis of Knowledge: A Human Interest Story
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
+\usepackage{amsfonts}
+\usepackage{lettrine}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  pdftitle={Précis of Knowledge: A Human Interest Story},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Précis of \emph{Knowledge: A Human Interest Story}}
+\author{Brian Weatherson}
+\date{2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+A précis of \emph{Knowledge: A Human Interest Story} for a
+\emph{Philosophical Studies} symposium on the book.
+\end{abstract}
+
+
+\setstretch{1.1}
+My original plan for \emph{Knowledge: A Human Interest Story} was to
+concatenate my various writings on interest-relativity over the years.
+That plan failed, because it turned out I'd changed my mind on too many
+things. The result is, I hope, better than the original plan; the
+presentation of a coherent theory built out of the not always consistent
+ideas in those earlier papers.
+
+Like many people, I started thinking about interest-relativity because
+of work by Jeremy Fantl and Matthew McGrath
+(\citeproc{ref-FantlMcGrath2002}{2002}). In that paper, and in the
+literature that followed, there were two big arguments for
+interest-relativity. One was an argument from cases. Those arguments
+made interest-relativity appear to be both similar to, and also a
+competitor to, contextualism. The cases that motivated it were similar,
+and a lot of the development of the argument was designed to show that
+interest-relative theories provided a better explanation of the
+intuitions about cases than contextualism.
+
+I've long been sceptical of that line of argument, and instead more
+interested in a different line that, I think, was always present. That
+line starts with the clash between three principles and an intuition
+about rational action. The three principles are:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  We know a lot.
+\item
+  What we know can be taken for granted in decision making.
+\item
+  What we know is independent of which decision we are facing.
+\end{enumerate}
+
+Then the intuition is that for some things we know, and some bets that
+win if the known thing is true, it is irrational to take the bet. The
+argument for interest-relativity is that something has to give, and the
+least costly thing to give up is the decision-invariance of knowledge.
+What we know depends on what decision we're making.
+
+This argument doesn't rely on intuitions about what is or is not
+knowledge. It does rely on intuitions about rational action, but I think
+these are fairly widely shared. And it does rely on various principles,
+which arguably rest in turn on theoretical intuitions. But it doesn't
+have a role for intuitions about cases of knowledge.
+
+The book is structured around a version of this argument, focussing on
+the kind of bets involved in a game I call the Red-Blue game. Here's how
+the game works. Two sentences are displayed to the player, one in red,
+the other in blue. The player has to pick a colour and a truth-value.
+They win iff the sentence with the colour they pick has the truth-value
+they pick. So if they say ``Red-True'', they win iff the red sentence is
+true. `Winning' here means getting a non-trivial but not huge reward; in
+the book I make it \$50. The players know these rules of the game and
+don't know anything else relevant about the game. Now consider an
+instance of the game with these sentences.
+
+\begin{description}
+\tightlist
+\item[Red]
+Two plus two equals four.
+\item[Blue]
+The Battle of Agincourt was in 1415.
+\end{description}
+
+For people with normal levels of historical expertise, the only rational
+play here is Red-True. Or, at least, that's the intuition I want to rest
+on, and it's one that has been \emph{fairly} widely shared by people I
+speak to. Now here's a sceptical argument. If the player knew that the
+Battle of Agincourt was in 1415, they would know Blue-True is a winning
+move, while they'd only know that Red-True wins if two plus two equals
+four. So Blue-True would, in a sense, weakly dominate Red-True. So it's
+at least \emph{permissible} to play Blue-True. But it's not permissible
+to play Blue-True, so the player does not know that the Battle of
+Agincourt was in 1415. By varying the blue sentence, we can similarly
+argue that the player knows very little, contradicting the claim `we
+know a lot'.
+
+The solution I prefer is that once this game comes up, what the player
+knows changes. They may have known when the Battle of Agincourt was, and
+they may know it tomorrow, but they don't know it now. That's the
+canonical instance of interest-relativity in the book. This is still, I
+think, basically the same argument as in earlier arguments for
+interest-relativity, but focussing on this case has several distinctive
+features.
+
+I've already mentioned one of these features. The book does not rest on
+an intuition that the player loses knowledge. To be honest, even after
+all these years, I still find that counter-intuitive. It rests on an
+argument that the player loses knowledge, which in turn rests on
+intuitions about rational play, and principles connecting knowledge and
+rational play.
+
+Another obvious consequence is that the view has nothing to do with high
+\emph{stakes}. I didn't put more at stake than \$50. I don't think the
+intuitions change much if you lower the payouts a fair bit from that. I
+say, here agreeing with Schroeder (\citeproc{ref-Schroeder2012}{2012}),
+that what matters are the odds the player faces, not the stakes.
+
+What if the player did not in fact face this choice, but is idly
+planning about what to do should it come up? This might strike you as a
+little over the top, but I've spent quite a bit of time wondering about
+this in the course of the book. I say the argument that they don't know
+when the Battle was still goes through. Just being interested in a
+question can change what one knows. That's because knowing something
+requires being properly willing to treat it as well supported enough to
+use it, should it be relevant, in any inquiry you are engaged
+in.\footnote{The `well supported enough to use' locution does some work
+  in the presentation in KAHIS; it's meant to be compatible with not
+  using a piece of knowledge for reasons other than it's lack of
+  evidential support. I now think it would be better to make the
+  distinction I make in the Replies (later in this symposium) between
+  finding out inquiries, and checking inquiries, and say that anything
+  you know can, if relevant, be used in any finding out inquiry. But
+  that's not what I said in KAHIS.}
+
+In earlier work, I understood questions about what one should be willing
+to use as being settled by the \emph{outputs} of the inquiry. The above
+argument inferred that one should not start inquiry with knowledge of
+the Battle's date from the fact that this would lead to the wrong
+conclusion: Play Blue-True! I used to think that was what made it wrong
+to use the Battle's date. This extra step is, I now think, a mistake.
+Knowledge is not a constraint on where one ends inquiry, but on where
+one starts it. The relevant constraint is that for someone inquiring
+into \emph{Q?}, and \emph{p} is relevant in the right way to that
+question, they know \emph{p} only if the questions \emph{Q?} and
+\emph{If p, Q?} are in a deep sense the same question, and they are
+answered in the same way. If \emph{p} is not something relevant to
+anything one is currently inquiring into, the constraint is that there
+is some possible inquiry where one would use \emph{p} as the first step.
+This move avoids some very implausible consequences of what I'd
+previously said about knowledge of practically (and theoretically)
+irrelevant propositions.
+
+I've spoken liberally about questions here, but the last few points that
+are distinctive to the book turn on being a bit more careful about what
+a question is. In earlier work I'd equated, sometimes explicitly,
+sometimes implicitly, the following two questions:
+
+\begin{itemize}
+\tightlist
+\item
+  Which live option maximises expected utility?
+\item
+  What should I do?
+\end{itemize}
+
+But these are not the same question, and some of the challenges for an
+interest-relative view turn on getting clear on the difference between
+them. Here are four important differences.
+
+First, if two options have the same expected utility, I still might have
+to decide which to do. I want a can of Coke, there are two on the shelf.
+It would do just as well to take either, but I have to actually take
+one. Knowing the answer to the utility question, they have the same
+utility, doesn't settle what my arm should do.
+
+Second, if two options have \emph{really similar} expected utility, I
+shouldn't always take the one with higher expected utility. It might be
+more trouble than it's worth to calculate which has higher utility, and
+I might be (faultlessly) unreliable at choosing the higher expected
+utility without calculating. Maybe it would be less work by some
+miniscule amount to pick up the left can rather than the right can. It
+could, I say, still be practically rational to act like the cans are
+equally good, and choose arbitrarily. In chapter 6, I show that some
+objections to interest-relative accounts, which work as long as we
+equate these questions, no longer work if we separate them.
+
+Third, it's not obvious how to use the expected utility framework to
+model mathematical uncertainty. But mathematical uncertainty might be
+something we want the interest-relative story to capture. If I'm playing
+the red-blue game, and the blue sentence is \emph{67 plus 58 equals
+125}, my intuition is that only Red-True is rational to choose. I'm just
+more likely to make an error about this calculation than about two plus
+two. But working this into an expected utility model raises extra
+complications.
+
+Fourth, an expected utility comparison needs a probability function, and
+the usual picture is that the probability in question is
+\emph{evidential} probability. This raises problems if there are
+propositions that, if known, are part of one's evidence, and whether
+they are known is interest-relative. For instance, imagine that there is
+a Ford outside my window, in fact a Mustang with a distinctive shape,
+and I'm looking straight at it. I'm asked to play the red-blue game with
+the blue sentence being \emph{There is a Ford outside my window}. I
+think in that context I don't know there is a Ford outside, so it's not
+part of my evidence there is a Ford outside. This makes the very notion
+of expected utility complicated. In chapter 8, I suggest a way of
+dealing with that complication.
+
+The last new point in the book which I'll mention here concerns
+double-checking. The argument from the red-blue game to
+interest-relativity requires some principles linking knowledge and
+action. It has been argued, quite plausibly, that these principles are
+inconsistent with the rationality of double checking something one
+already knows. After all, if one knows \emph{p}, then checking \emph{p}
+seems worse than just reasoning from one's knowledge that \emph{p} must
+be true. I argue, in chapter 5, this isn't right. There are many goals
+to inquiry. One possible goal is forming a more \emph{sensitive} belief
+about some subject. Even if one knows \emph{p}, then an inquiry that
+aims to maximise sensitivity should not simply reason from \emph{p} to
+the truth of \emph{p}. This is, I hope, an independently interesting
+claim about inquiry, but the role it plays here is to defend principles
+connecting knowledge and action from counterexamples involving
+double-checking.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-FantlMcGrath2002}
+Fantl, Jeremy, and Matthew McGrath. 2002. {``Evidence, Pragmatics, and
+Justification.''} \emph{Philosophical Review} 111 (1): 67--94. doi:
+\href{https://doi.org/10.2307/3182570}{10.2307/3182570}.
+
+\bibitem[\citeproctext]{ref-Schroeder2012}
+Schroeder, Mark. 2012. {``Stakes, Withholding and Pragmatic Encroachment
+on Knowledge.''} \emph{Philosophical Studies} 160 (2): 265--85. doi:
+\href{https://doi.org/10.1007/s11098-011-9718-1}{10.1007/s11098-011-9718-1}.
+
+\end{CSLReferences}
+
+
+
+\noindent Draft.
+
+
+\end{document}
