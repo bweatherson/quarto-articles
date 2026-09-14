@@ -67,3 +67,14 @@
 \renewcommand{\textsc}[1]{{\scfont #1}}
 
 \renewcommand{\LettrineTextFont}{\scfont}
+% Number theorem-like environments straight through (Theorem 1, Theorem 2, ...)
+% rather than by section (1.1, 1.2, ...), which is Quarto's LaTeX default.
+% Guarded, since Quarto only defines a counter for environments the document uses.
+\makeatletter
+\AtBeginDocument{%
+  \@for\bw@thm:={theorem,lemma,corollary,proposition,conjecture,definition,%
+                 example,exercise,refremark,refsolution}\do{%
+    \@ifundefined{c@\bw@thm}{}{\expandafter\counterwithout\expandafter{\bw@thm}{section}}%
+  }%
+}
+\makeatother
