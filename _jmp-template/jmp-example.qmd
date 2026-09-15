@@ -1,0 +1,139 @@
+---
+title: "Waking Up Twice: A Test Article for the JMP Quarto Format"
+shorttitle: "Waking Up Twice"
+author:
+  - name: Ada Example
+    orcid: 0000-0002-1825-0097
+    email: ada@example.edu
+    affiliations:
+      - department: Department of Philosophy
+        name: University of Somewhere
+  - name: Bertrand Placeholder
+    email: bp@example.org
+    affiliations:
+      - name: Institute for Formal Things
+abstract: |
+  This is a test article for the Quarto wrapper around the *Journal of
+  Mathematical Philosophy* LaTeX class. It exercises theorems, a restated
+  proposition in an appendix, equations, a figure, a table, citations, and
+  back matter. It says nothing about Sleeping Beauty that has not been said.
+keywords: [Sleeping Beauty, self-locating belief, Quarto]
+lang: en-US
+bibliography: references.bib
+hyphenation: [Kerne-berg, Batz-orig]
+
+# Submission vs production. Leave `anonymous` out (or true) for review;
+# set it to false, and fill in `jmp`, for the accepted version.
+anonymous: true
+jmp:
+  issue: "Vol. 1, No. 1"
+  year: 2026
+  doi: 10.00000/jmp.0000
+  # copyright-holders and short-authors are built from `author` unless set:
+  # copyright-holders: "Ada Example and Bertrand Placeholder"
+  # short-authors: "Example \\& Placeholder"
+
+format:
+  jmp-pdf: default
+---
+
+# Introduction {#sec-intro}
+
+The Sleeping Beauty problem has been with us for a while [@haugerud2001, 34].
+@renner-alvi2023 [119] thinks it is still open, and so do others
+[see @batzorig2019, ch. 2; @tanaka2025]. @Sec-model sets out a model, and
+@sec-results states the main results. The longer proofs are in
+@sec-proofs.^[A footnote, placed after the punctuation, as the guide asks.]
+
+Here is a quotation long enough to be set as a block:
+
+> [The thirder] is committed to the claim that an agent can lower her
+> credence in a proposition without acquiring any evidence against it,
+> merely by coming to occupy one of several centered worlds compatible with
+> what she already believed. ... Whether that is a reductio or a discovery is
+> precisely what is at issue. [@renner-alvi2023, 119]
+
+And an inline one: "a case in which learning nothing is not the same as
+learning that nothing has happened" [@haugerud2001, 34].
+
+# The model {#sec-model}
+
+::: {#def-vigil}
+## Vigil
+A *Vigil* is a triple $\langle W, \mathrm{Cr}, \tau \rangle$ in which $W$ is
+a finite set of centered worlds, $\mathrm{Cr}$ a probability measure on
+$\mathcal{P}(W)$, and $\tau \colon W \to \mathbb{N}$ assigns to each world
+the number of times the agent is woken in it.
+:::
+
+The update rule we care about is
+$$
+\mathrm{Cr}^{+}(A) = \frac{\sum_{w \in A} \tau(w)\,\mathrm{Cr}(\{w\})}
+                          {\sum_{w \in W} \tau(w)\,\mathrm{Cr}(\{w\})},
+$$ {#eq-proportional}
+where $\mathrm{Cr}^{+}$ is the credence on waking. @Fig-credence plots what
+@eq-proportional says about heads as the number of tails wakings grows.
+
+![Credence in heads under @eq-proportional, by the number of wakings if the coin lands tails.](credence.pdf){#fig-credence width=70%}
+
+# Results {#sec-results}
+
+::: {#lem-weights}
+Each waking in a Vigil in which $\tau$ is constant on $T$ has the same weight.
+:::
+
+::: {#prp-thirder}
+## Thirder
+Let $\langle W, \mathrm{Cr}, \tau\rangle$ be a Vigil in which $\tau$ takes
+exactly the values $1$ and $2$. If credence on waking is proportional to
+$\tau$, credence in heads is $1/3$.
+:::
+
+::: {.proof}
+By @lem-weights the three wakings are equiprobable, and exactly one of them
+is in $H$.
+:::
+
+::: {#thm-convergence}
+Let $\langle W, \mathrm{Cr}, \tau \rangle$ be a Vigil with $\tau(w) \leq k$
+for every $w \in W$. Then iterated proportional updating converges, and its
+limit is independent of $\mathrm{Cr}$.
+:::
+
+@thm-convergence is proved in @sec-proofs. @Tbl-credences compares the rules,
+and @Prp-thirder is the familiar thirder verdict.
+
+::: {#tbl-credences}
+
+| Rule          | Prior | On waking | After learning it is Monday |
+|:--------------|:-----:|:---------:|:---------------------------:|
+| Halfer        | $1/2$ | $1/2$     | $2/3$                       |
+| Thirder       | $1/2$ | $1/3$     | $1/2$                       |
+| Double halfer | $1/2$ | $1/2$     | $1/2$                       |
+
+Credence in heads under three rules.
+
+:::
+
+# Conclusion
+
+That is all.
+
+::: {.acknowledgements}
+We thank the Kerneberg reading group.
+:::
+
+::: {.funding}
+Supported by an imaginary grant.
+:::
+
+# Proofs {#sec-proofs .appendix}
+
+::: {.restate ref="thm-convergence"}
+:::
+
+::: {.proof}
+Since $\tau$ is bounded by $k$ and $W$ is finite, the map
+$\mathrm{Cr} \mapsto \mathrm{Cr}^{+}$ defined by @eq-proportional is a
+continuous self-map of the simplex, and the rest is Banach.
+:::
