@@ -58,7 +58,7 @@ $$
 \mathcal{I}_S(c, w) = \frac{1}{|S|}\sum_{s \in S}(c(s) - v_w(s))^2
 $$ {#eq-brier}
 
-Write $\mathrm{At}(\mathcal{F})$ for the set of atoms of $\mathcal{F}$, and $\top$ for the maximal element of $\mathcal{F}$, i.e., the union of its atoms. So if $\mathcal{F}$ has four atoms, $\mathrm{At}(\mathcal{F}) \cup \{\top\}$ is $\{\{w_1\}, \{w_2\}, \{w_3\}, \{w_4\}, \{w_1, w_2, w_3, w_4\}\}$. The following lemma will come in useful.
+Write $\mathrm{At}(\mathcal{F})$ for the set of atoms of $\mathcal{F}$, and $\top$ for the maximal element of $\mathcal{F}$, i.e., the union of its atoms. We'll be interested in $\mathrm{At}(\mathcal{F}) \cup \{\top\}$, the union of the set of singletons with the top element. The following lemma, involving that set, will come in useful.
 
 ::: {#lem-quarter}
 If $c$ is finitely additive on $\mathcal{F}$, and $\mathcal{F}$ has at least two atoms, then for any world $w$,
@@ -68,7 +68,7 @@ $$
 $$ {#eq-quarter}
 :::
 
-That is, if you sum how inaccurate $c$ is across the atoms, and the full set, the result is four times the inaccuracy of $c$ across the full algebra. Note that the 4 does not depend on how many atoms $\mathcal{F}$ has.
+That is, if you sum how inaccurate $c$ is across the atoms, and the full set, the result is four times the inaccuracy of $c$ across the full algebra. Note that the 4 does not depend on how many atoms $\mathcal{F}$ has, as long as it is at least two.
 
 ::: {.proof}
 Write $x_i = c_i - v_w(\{w_i\})$. By finite additivity, for any $s \in \mathcal{F}$, $c(s) - v_w(s) = \sum_{i : w_i \in s} x_i$. Each atom is in $2^{n-1}$ elements of $\mathcal{F}$, and each pair of distinct atoms is in $2^{n-2}$ elements. So
@@ -94,7 +94,12 @@ We'll use @lem-quarter to prove the main result. Say that a credence function is
 Every merely finitely additive credence function over $W$ is eventually dominated by some countably additive credence function, if we measure inaccuracy by the Brier score.
 :::
 
-Let $c$ be the merely finitely additive credence function in question, defined over an algebra whose atoms are $\{w_1\}, \dots, \{w_n\}, \dots$. We'll assume, without loss of generality, that it is known that the $w_i$ contain actuality somewhere, so $c(W) = 1$. (If this isn't true, simply add another atom for 'None of the above'.) Let $\varepsilon = 1 - \sum_{i \in \mathbb{N}}c_i$. From a countable perspective, $\varepsilon$ is the **shortfall** in $c$: it is how far the sum of the credences in the atoms falls short of the credence in their disjunction. This term will do some work in what follows. If $c$ is merely finitely additive, then $\varepsilon > 0$.
+Let $c$ be the merely finitely additive credence function in question, defined over an algebra whose atoms are $\{w_1\}, \dots, \{w_n\}, \dots$. We'll assume, without loss of generality, that it is known that the $w_i$ contain actuality somewhere, so $c(W) = 1$. (If this isn't true, simply add another atom for 'None of the above'.) Let $\varepsilon = 1 - \sum_{i \in \mathbb{N}}c_i$. From a countable perspective, $\varepsilon$ is the **shortfall** in $c$: it is how far the sum of the credences in the atoms falls short of the credence in their disjunction. This term will do some work in what follows.
+
+::: {#lem-shortfall}
+If $c$ is merely finitely additive, then $\varepsilon > 0$. (This follows immediately from the definition of being merely finitely additive.)
+:::
+
 
 We can now prove @thm-main.
 
@@ -146,3 +151,5 @@ So $2\sum_{i=1}^j c_i \delta_i + \sum_{i=1}^j \delta_i^2 + \Delta^2 < \Delta\var
 4. Do the permutations play any role in the proof, and if not, what role do they play in the argument?
 5. If we bump the sufficient condition for comparative accuracy (being eventually more accurate, @def-eventual) from a conditional to a biconditional, we violate truth-directedness. (Proof, it treats all credences that assign 0 to each atom the same.) Is this a reason to not make it a biconditional, or to weaken truth-directedness? (This is related to Kelley's discussion of Zhang.)
 6. How does this all relate to the arguments that are raised in the papers cited in the introduction?
+
+## References {-}

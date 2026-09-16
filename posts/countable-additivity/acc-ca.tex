@@ -252,12 +252,12 @@ marginparsep=0in]{geometry}
 \floatname{codelisting}{Listing}
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \usepackage{amsthm}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\theoremstyle{plain}
-\newtheorem{lemma}{Lemma}[section]
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
 \theoremstyle{remark}
 \AtBeginDocument{\renewcommand*{\proofname}{Proof}}
 \newtheorem*{remark}{Remark}
@@ -471,10 +471,10 @@ propositions \(S\), define the Brier inaccuracy measure
 
 Write \(\mathrm{At}(\mathcal{F})\) for the set of atoms of
 \(\mathcal{F}\), and \(\top\) for the maximal element of
-\(\mathcal{F}\), i.e., the union of its atoms. So if \(\mathcal{F}\) has
-four atoms, \(\mathrm{At}(\mathcal{F}) \cup \{\top\}\) is
-\(\{\{w_1\}, \{w_2\}, \{w_3\}, \{w_4\}, \{w_1, w_2, w_3, w_4\}\}\). The
-following lemma will come in useful.
+\(\mathcal{F}\), i.e., the union of its atoms. We'll be interested in
+\(\mathrm{At}(\mathcal{F}) \cup \{\top\}\), the union of the set of
+singletons with the top element. The following lemma, involving that
+set, will come in useful.
 
 \begin{lemma}[]\protect\hypertarget{lem-quarter}{}\label{lem-quarter}
 
@@ -490,7 +490,7 @@ has at least two atoms, then for any world \(w\),
 That is, if you sum how inaccurate \(c\) is across the atoms, and the
 full set, the result is four times the inaccuracy of \(c\) across the
 full algebra. Note that the 4 does not depend on how many atoms
-\(\mathcal{F}\) has.
+\(\mathcal{F}\) has, as long as it is at least two.
 
 \begin{proof}
 Write \(x_i = c_i - v_w(\{w_i\})\). By finite additivity, for any
@@ -543,7 +543,15 @@ for `None of the above'.) Let
 perspective, \(\varepsilon\) is the \textbf{shortfall} in \(c\): it is
 how far the sum of the credences in the atoms falls short of the
 credence in their disjunction. This term will do some work in what
-follows. If \(c\) is merely finitely additive, then \(\varepsilon > 0\).
+follows.
+
+\begin{lemma}[]\protect\hypertarget{lem-shortfall}{}\label{lem-shortfall}
+
+If \(c\) is merely finitely additive, then \(\varepsilon > 0\). (This
+follows immediately from the definition of being merely finitely
+additive.)
+
+\end{lemma}
 
 We can now prove Theorem~\ref{thm-main}.
 
@@ -610,7 +618,7 @@ To ensure this is true, it suffices to assign values to the \(\delta_i\)
 as follows.
 
 First, whenever \(c_i \geqslant \varepsilon/4\), \(\delta_i = 0\). By
-\textbf{?@lem-shortfall}, \(\varepsilon/4\) is positive, and since at
+Lemma~\ref{lem-shortfall}, \(\varepsilon/4\) is positive, and since at
 most finitely many of the \(c_i\) can be greater than any positive
 value, there are still infinitely many of the \(\delta_i\) to have
 positive value. The effect of this is that
@@ -671,6 +679,9 @@ That is, \(c^+\) eventually dominates \(c\).
   How does this all relate to the arguments that are raised in the
   papers cited in the introduction?
 \end{enumerate}
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
