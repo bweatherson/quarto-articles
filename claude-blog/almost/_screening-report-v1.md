@@ -1,0 +1,122 @@
+# Screening Report: "Almost"
+
+**Paper title:** Almost (section 1 titled "Near-misses")
+**Word count:** ~7,200 excluding references (42 references)
+**Thesis summary:** "Almost φ" is true iff φ is false and an actual process was carrying the world toward φ and stopped short by a margin measured not as distance from φ but as the smallest intervention on that process that would have carried it to φ in the normal course (the "approach account"). This is offered against both the world-similarity and scalar semantics of "almost," and is claimed to explain directionality, the three readings of "almost killed," and McKenzie and Newkirk's at-a-distance cases, and to bear on the safety condition on knowledge, the law of attempts, and near-miss regret.
+
+**Decision:** DESK REJECT
+
+## Deal-Breakers
+
+**Criterion 4 / "could the author have seen it": the paper's own concessions and examples undercut the thesis.**
+
+(a) The headline is that near-misses are "facts about the actual course of events: about how far along it got." But the scalar section says "there is no requirement that anyone was on the way; the process may be nothing more than the counting," and the resting-ball section says of a ball placed by hand an inch from the hole that "the scale is there whether or not the ball travelled along it." For every stative and scalar use, then, no actual history is required; the account is a directed-scale account with a type-level story about why scales are oriented. What remains process-based is the eventive class, and for that class the process idea is already in Nouwen ("Travis' efforts") and in McKenzie and Newkirk's inertial projection, which the paper adopts as (D). The genuinely new element is the intervention metric in (C), and that is left unspecified (see below).
+
+(b) Section 3 argues at length that you did not almost win the lottery with a ticket one digit off. Section 6 then identifies "could easily have happened" with "almost happened" and applies the account to safety. Put together: nothing was approaching your winning, so you did not almost win, so you could not easily have won, so your belief that you would lose is safe. That is the wrong verdict on the paradigm case safety theorists built the condition to handle, and the same problem hits the modal account of luck (the lottery winner is not "in a process that approached" anything, yet is paradigmatically lucky). The paper discusses the lottery for a full paragraph and safety for a full paragraph and does not connect them. This is the sharpest example of a decisive flaw visible from the text.
+
+**Criterion 1: the contribution is not stated precisely enough to be evaluated.** "Process," "toward φ," "small," and "in the process's own terms" are undefined, and the verdicts are secured case by case: a funding refusal is "one decision going the other way," so small; "finding the clerk" in *Rizzo* is "the whole of what remained," so not small; a loaded die roll has "no process to intervene on," but John's roll for the pot does. (D) is categorical when ruling out the impossible and graded when explaining the Everest list, and as stated it predicts "I almost climbed Everest, but I couldn't raise the money" is false (most attempts do not reach the summit "in the normal course"), which is the datum it was meant to accommodate.
+
+**Criterion 6: the manuscript is unfinished.** Every internal cross-reference is unresolved ("(sec-two?)", "(sec-evidence?)", etc.); the account's conditions are labelled (A)–(D) and then the text says "(E) is the polar component"; one citation is garbled mid-sentence ("colder or warmer P. Amaral and Del Prete (2010)"); Nouwen page cites (6–7, 10) do not match the reference list's pagination (162–73).
+
+## Key Strengths
+
+- The question is broad and the opening paragraph makes it broad: near-misses matter for relief, guilt, attempts, and safety, and the paper is right that "what is it for something to almost happen?" would exist as a problem with no recent literature at all.
+- The assembly of psychological evidence (Kahneman and Varey; Gerstenberg and Tenenbaum's wall; Covey and Zhang; Doan, Denison and Friedman) into a single case that the linguistic semantics of "almost" has missed something is a real prospective contribution, and the wall experiment as a wedge between Nouwen's degree-based closeness and an intervention measure is sharp.
+- The reading of the "almost killed" ambiguity as three interruption points on one path rather than three scopes is elegant and independent of the rest.
+- The attempts section maps Holmes's proximity test and the MPC's substantial-step test onto Kahneman and Varey's propensity/disposition distinction, and the point that the two tests come apart where "almost" and "tried" come apart is one a legal philosopher could use.
+
+## Key Weaknesses
+
+- **The core notion of a process "directed toward φ" does the work and is never explained.** Where the paper does supply an operationalization (Gerstenberg and Tenenbaum's minimal-impulse model), it gives the wrong verdict on the paper's own cases: a small perturbation to a tumbling lottery ball or a loaded die roll would have produced the other outcome. The paper needs "toward" to mean something like Kahneman and Varey's "cues of rapid progress through a causal script," but that is epistemic and perspectival, which the paper explicitly resists in the expectation reply.
+- **Methodological double standard.** All of the evidence in section 3 is agreement-rating data. When Gerstenberg and Tenenbaum's expectation effect goes the wrong way, the paper says "the experiments measured agreement rather than truth." Either that move is available to the similarity and scalar theorists against everything in section 3, or the paper owes a principle for which agreement data are semantic.
+- **The safety/luck application misfires on the lottery** (above), and the regret application ends by declining the question it set: "whether the regret is fitting is a further question."
+- **The at-a-distance reply is unstable.** (f) and (g) differ only in whose decision ended the project; "a single decision going the other way" is small on any process containing a decision node, so (C) is trivially satisfiable and the gradient has to be carried by a (D) that is stated as categorical.
+- **Literature gaps in the applied sections.** (D) is borrowed from progressive semantics with no citation to Dowty's or Landman's or Portner's treatment of inertia; the observation that Lewis's 1979 weights mimic "perturb and run forward" is standard (Bennett, Elga, Maudlin, Kment) and is presented as the paper's own; the safety section engages no lottery literature (Hawthorne, Williamson on lotteries); the attempts section cites Yaffe without engaging him and omits Duff.
+
+## Critical Issues for Revision
+
+1. State the account so it can be evaluated: what a process is, how it is recovered from the prejacent (contextual parameter, event argument, lexical), what the metric on interventions is, what fixes "small," and how the whole composes with quantifiers, adjectives, and PPs. Show it handles Penka's "almost every plant is dry," which is raised against the similarity picture and never solved.
+2. Decide whether (D) is categorical or graded and rework the Everest and Doan et al. discussions so they pull the same way.
+3. Confront the lottery/safety collision directly: either drop the identification of "could easily" with "almost," or argue that safety theorists are wrong about lotteries.
+4. Restate the thesis honestly in light of the stative concession: process-based for eventives, directed-scale for statives, and say what the process story adds over Nouwen and McKenzie and Newkirk for the eventive class.
+5. Give a principle for when agreement data bear on truth conditions, and apply it uniformly.
+
+---
+
+# Notes for the author
+
+## 1. The objection a good referee will press hardest
+
+The account rests on two undefined notions: a process that is "directed toward φ" (B) and an intervention that is "small in the process's own terms" (C). Neither is explained, and the paper's verdicts depend on choosing them differently in structurally similar cases.
+
+Consider the cases side by side. A lottery ball tumbles and comes to rest on 4; a tiny perturbation would have left it on 3. Verdict: no process approached your winning. A loaded die rolls and shows 2; a tiny perturbation would have shown 6. Verdict: "no process to intervene on." A ball is thrown toward a target and stops short; a slightly harder throw would have reached it. Verdict: almost reached. A funder declines an application; a decision the other way sends the climber to Nepal. Verdict: (C) satisfied, the intervention is small. Four men drive around looking for a payroll clerk; had he walked out of the bank they would have robbed him. Verdict: not small, "the whole of what remained." A ball is placed by hand an inch from the hole. Verdict: "almost in the hole" is true, because the scale is there anyway.
+
+What principle sorts these? Not physical size of perturbation: the paper's own preferred operationalization, Gerstenberg and Tenenbaum's minimal-impulse model, says the lottery ball and the die are near-misses. Not "there was a process": the die was rolling and the balls were falling. The paper needs "toward φ" to mean that the process displayed progress toward φ specifically, which is Kahneman and Varey's "propensity" read off "event cues." But that notion is epistemic (it is what an observer learns from cues), and the paper's expectation reply insists "almost" is a fact about the history that "does not vary with the shooter's reputation." You cannot have it both ways. And "small in the process's own terms" is not a metric; it is a placeholder. A decision is always "one decision," so any project abandoned at a decision node has a small intervention, and the funding case and the couch case are then distinguished only by the paper's say-so that one is a project and the other is not.
+
+Does the paper have the materials to answer? Partly. For physical trajectories, the physics-engine model gives a real measure, and for those cases the account is genuinely testable and does better than Nouwen. For decisions, projects, deliberation, and stochastic devices, the paper has only Kahneman and Varey's cue-based propensity, and adopting it commits the account to a perspectival semantics the paper elsewhere rejects. The honest version of the paper either restricts the thesis to cases with a monotone progress variable, or embraces the perspectival reading and rewrites the expectation section.
+
+## 2. Problem paper or literature paper?
+
+The opening paragraph is a problem paper. The second paragraph onward is a literature paper: "Philosophy has a ready answer, and so does formal semantics... A rival tradition... The two traditions have argued for twenty years... the current state of the art is a hybrid." Then: "I will argue that both traditions have looked in the wrong place." That is "X argues P, Y argues Q, I argue R" in so many words. Section 2 ("Two pictures of closeness") is 900 words of exposition of Sadock, Morzycki, Rapp and von Stechow, Hitzeman, Penka, Amaral and Del Prete, Greenberg and Ronen, Nouwen, and McKenzie and Newkirk. Section 5 is organized around McKenzie and Newkirk's list, Gerstenberg and Tenenbaum's expectation result, and Kilbourn-Cerón's exhaustification, in that order. The conclusion's payoff sentence lists what "turn[s] out" about the two pictures, the "almost killed" ambiguity, and the at-a-distance readings, three of which are literature landmarks.
+
+The problem is real and the recent work could be the occasion rather than the subject. To make it so, the evidence section (3) should lead, framed as "here is what near-misses are like," and the two pictures should appear where they fail, not as the paper's opening frame. Section 2 could be cut by two-thirds.
+
+## 3. Generalist appeal
+
+The problem passes the generalist test. A philosopher of law, an ethicist writing about moral luck, or an epistemologist working on safety would find "what is it for something to almost happen?" interesting without caring about Penka or Nouwen. That is why the paper is not a specialist-only paper on its face.
+
+The final section does not earn the claim; it gestures at it. Each application is a few hundred words and each stops just before the point where it would have to argue.
+
+Strongest: attempts. It makes a discriminating claim (proximity tests track propensity, risk-based penal-lottery views track disposition, the runner cases show they diverge, so a theory of attempts must choose), it reads *Rizzo* through the account, and it explains why impossible attempts are hard. It is underdeveloped (Yaffe is cited but not engaged; Duff is absent), but a legal philosopher would get something from it.
+
+Weakest: regret, relief and luck. It announces "a different verdict, and a discriminating one" and then says "whether the regret is fitting is a further question." The claim that "the natural philosophical response has been to treat near-miss regret as a bias" is unsupported (no philosopher is cited). The Tees/Crane analysis is right but two sentences long. The slot-machine paragraph rests on "the outcome was fixed independently of the display," which is true of modern RNG machines and not of the mechanical reels of Reid's 1986 study.
+
+The safety application is the most ambitious and, as it stands, the most damaging: it identifies "could easily" with "almost" and thereby inherits the lottery verdict of section 3, which is the opposite of what safety theorists want (see 4b). Sainsbury is well used, but the claim that method-relativized safety is "what safety theorists have in practice been reaching for" is asserted, not argued, and no post-Sainsbury safety literature is engaged.
+
+## 4. Where the paper's own examples and concessions undercut it
+
+(a) **Statives and the resting ball.** The paper concedes that "almost in the hole" is true of a ball placed by hand, "because the scale is there whether or not the ball travelled along it." This is the similarity/scalar theorist's whole point conceded for the stative class. Once the direction of a scale is supplied by a type-level process ("the path a putt would follow") rather than any actual history, the thesis that "almost" is "about the actual history" is false for statives, and the paper's claim to explain scalar orientation ("scales are oriented because the processes that traverse them are") is a type-level story indistinguishable in its predictions from stipulating oriented scales. Note also that "the glass is almost empty" is true of a glass at ten percent that is being *filled*: the token process runs away from φ and the sentence is fine. So the direction cannot be inherited from "whichever process is carrying the actual state toward φ," as section 3 says; it comes from the predicate.
+
+(b) **Lottery ticket and safety.** Section 3: "on any account that requires a process approaching the outcome, the answer is no," you did not almost win. Section 6: "what could easily have happened is what almost happened." So you could not easily have won, so the belief that you would lose is safe, so you know your ticket will lose. Safety theorists take the opposite verdict as a fixed point. Either the identification fails, in which case the safety application collapses, or the paper is committed to an unadvertised and very controversial claim about lotteries. The same holds for Pritchard's account of luck: on the paper's gloss ("to have been lucky is to have been in a process that approached harm and stopped short") the lottery winner is not lucky. The paper also cites Dessalles's "sitting next to a lottery winner doesn't necessarily provide a feeling of near-miss," which is about a different case (proximity to a winner, not a one-digit-off ticket) and does not support the verdict it is used for.
+
+(c) **"Almost exactly."** The explanation is that "almost" modifies a scale of precision "from coarse to fine, on which 3:02 and 2:58 lie at the same point." No process approached exactness; the time went through three and out the other side. This is another case in which "almost" is true with no actual approach, and the paper treats it as a success. A semanticist will also ask what "the near side of exactness" means and how the composition works; the sentence as written is a metaphor.
+
+(d) **At a distance.** (D) is stated as a truth condition ("the process would, in the normal course, have reached φ"). At (f), it is false: most funded Everest expeditions do not summit. So the account as stated predicts M&N's (f) is false, which is the datum the reply was meant to accommodate. The paper rescues it by treating (D) as graded ("what falls is the robustness of the continuation"). But two sections earlier (D) is what "rules out the impossible," sharply, and the paper cites Doan et al. precisely for the claim that "almost" is sensitive to the possible/impossible boundary rather than to probability. A graded (D) that tracks probability of completion is the opposite of what Doan et al. found. And the (f)/(g) distinction is not principled: both are single decisions; the paper's reclassification of (g) as a deliberative near-miss is available for (f) too ("I almost went to Nepal").
+
+(e) **Expectation.** "The experiments measured agreement rather than truth" is a sentence that, if accepted, dissolves section 3. Kahneman and Varey's 97 percent "very peculiar," the 77 percent rejection of "the die almost showed six," Gerstenberg and Tenenbaum's r = .94: all agreement data. If low expectation raising agreement is pragmatic, why is the wall lowering agreement semantic? The paper has no answer and does not raise the question.
+
+(f) **The loaded die.** The paper says the die roll is false for "almost showed six" because "there is no process to intervene on." There was: the roll. The paper needs to say why the roll is not an approach to six, and the only available answer is that it displayed no cue of heading there, which is perspectival (see 1). The John's-pot contrast makes it worse: the same roll is the "last step" of a process with a direction when the sentence is about John, and no process at all when it is about the die. Same event, two verdicts, and the difference is what the speaker is attending to.
+
+## 5. Claims that are false, overstated, or unsupported
+
+- "Direction is not a property of scales or of contexts. It is a property of processes" (section 3, Direction). Overstated. The paper itself concedes Penka's entailment derivation handles the count cases, and "almost 100 people came" never means 103 regardless of any process. Two sources of direction, not one.
+- "The law punishes the man who came within a step of a crime and not the man who merely planned one" (opening). Conspiracy law punishes agreement plus an overt act; the sentence is rhetorically convenient and legally loose.
+- "The natural philosophical response has been to treat near-miss regret as a bias" (section 6). No philosopher is cited.
+- "A safety condition stated in terms of perturbations of the actual belief-forming process is what safety theorists have in practice been reaching for" (section 6). Asserted, not argued; no safety literature after Sainsbury 1997 beyond the two Pritchard and one Williamson citations.
+- The claim that Lewis's 1979 weights are "a path notion in similarity clothing" is presented as the paper's observation. It is standard (Bennett 2003, Elga 2001, Maudlin 2007, Kment 2014) and should be cited as such.
+- "The account predicts that a predicate will have as many readings as its process has recognizable stages, which is what the cross-categorial data suggest (Morzycki 2001)" (section 4). Morzycki's cross-categorial data are about which categories "almost" attaches to, not about counts of readings per predicate. The citation does not support the claim.
+- "Nothing in the machine was carrying it toward three cherries... since the outcome was fixed independently of the display" (section 6). True of RNG machines; not of the mechanical reel machines that Reid's 1986 near-miss study concerned, where the reels are the process.
+- "Sadock noticed that 'it is almost zero degrees' can be said of a temperature just above zero or just below" is cited to Amaral and Del Prete, not to Sadock, and the sentence is garbled. Check the source.
+- The pickpocket: "the intuition that he should not be punished for attempted theft is stubborn." Most people and most jurisdictions have the opposite intuition; the paper concedes this in the next clause.
+
+## 6. Is the account precise enough to evaluate?
+
+No. "Small intervention on the process, in the process's own terms" hides all of the work. A formal semanticist would demand at least the following.
+
+- A type for "almost" and a compositional rule. The literature the paper engages (Morzycki, Penka, Rapp and von Stechow, Kilbourn-Cerón) is compositional; the paper gives truth conditions for "almost φ" at a context and never says what φ is (proposition? predicate? degree?), how "almost" combines with "every" (Penka's plant case is raised and never solved), with gradable adjectives, or with PPs.
+- How the process is recovered from the prejacent. Is it a contextual parameter, an event argument of the verb, a lexical property of the predicate? For "almost 100 people came," the paper says the process "may be nothing more than the counting," which is nobody's process. For "the Pope is almost in Rome," it is a journey. For "the ball is almost in the hole," it is a putt that did not occur. This is three different mechanisms under one clause.
+- A metric on interventions and a threshold. "Least intervention" presupposes an ordering of interventions; "small" presupposes a standard. Gradable-adjective semantics offers models (comparison classes, contextual standards); the paper uses none. For physical cases, Gerstenberg and Tenenbaum's impulse measure could be adopted explicitly. For decisions, the paper has nothing, and "one decision" is not a size.
+- The status of (D) and its source. (D) is the progressive's inertia condition; the paper should cite and choose among Dowty's inertia worlds, Landman's stage-based continuations, Portner's circumstantial modal base, and say whether (D) is categorical (as the impossibility section requires) or graded (as the Everest section requires).
+- Testable divergence from McKenzie and Newkirk. The paper says M&N count missing conditions "with no regard to how the event unfolded." Give a case where two events have the same missing conditions and differ in unfolding, and show the accounts diverge. The wall experiment is against Nouwen, not against M&N.
+- The disjunctive (B). As stated, (B) is "an actual process toward φ, or an actual value on a directed scale." That is a hybrid of a process account and a scalar account, and the paper criticizes M&N for hybridity.
+
+## 7. Where to tighten; what reads as filler
+
+- Section 2 should be cut by two-thirds; most of its content is not used later. The Rapp and von Stechow "visibility parameter" sentence and the Greenberg and Ronen sentence do no work.
+- The "almost" and "approximately" section is a digression; the "almost exactly" paragraph creates a problem (4c) rather than solving one.
+- The polar-component objection section is a reply to an objection nobody would make in that form, and the Kilbourn-Cerón compatibility sentence is a "compatible with" claim of the kind that does not earn space.
+- The regret section should either argue that Tees's regret is fitting or be cut to the Tees/slot-machine contrast, which is the only part that does work.
+- The conclusion restates the introduction. Replace it with the one-paragraph honest statement of what the account covers (eventives with a monotone progress variable) and what it borrows.
+- The manuscript needs a production pass: resolve every cross-reference, fix "(E)," fix the Amaral and Del Prete citation, and reconcile Nouwen's page numbers with the reference list.
+
+The idea is good and the problem is worth a generalist journal. But the paper sends the reader to the lottery case and to safety in consecutive sections without noticing they contradict each other, and it states its central condition in words that let it decide every case by hand. Those are things the author could have seen, and a referee will.
