@@ -15,3 +15,11 @@ Arrhenius, "Population Ethics: A Challenge to the Project of Normative Ethics?",
 - Informal conditions are phrased with "better than"; fn 10 says the exact statements (Arrhenius 2000b, 2011 p. 2, forthcoming) use "at least as good as" and are "logically slightly weaker".
 - Consequence for the paper: §1 hedge about the book replaced with the fact of the 2026 restatement; footnote after Theorem 1 notes V also satisfies the strict ("better than") forms — NE witness must be raised to 2 (ΔT = 2x−3−2y ≥ 1); checked numerically (30k trials, 0 failures), NOT Lean-verified; footnote says so.
 - Chapter also cites Cowie 2022 (Noûs) on error theory; not used.
+
+## Thomas 2018 read in full (2026-10-03)
+
+- §§1–3 and fn 4 as already used. §4 contains a "toy model" (p. 15): integer levels, sufficiency level S, rank by #(very good) − #(very bad), ties by total. Resembles Qizilbash 2005, Knapp 2007, Parfit 2016 (his fn 35). Purpose: show QC and NE fail only at the threshold, so vagueness of S makes the failures borderline.
+- Numerically checked (S=5): his model satisfies ED, GNEP, WNS, WQA* and rejects RC; fails NE at both thresholds (x−1 = −S−1 and x = S+1 with y ∈ [−S, S−2]).
+- Capacity view = Thomas's model with (i) misery weighted by welfare, threshold at 0, and (ii) first layer capped at 0. The cap is what removes the NE violation and what makes V accept RC. This is a resemblance a referee would spot; now stated in §3 (new paragraph before Theorem 1) and echoed at the end of §5. Honest statement: V was found by the LP search, resemblance noticed afterwards.
+- Bib: Knapp2007 (doi 10.5840/jpr20073243), Qizilbash2005 (doi 10.1017/S0266267104000410) added, Crossref-checked. 33 entries.
+- Nothing in §4–5 on vagueness bears on the paper's claims otherwise; Thomas's vagueness strategy is a different response (make violations borderline) from V's (no violations).
