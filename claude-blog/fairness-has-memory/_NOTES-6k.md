@@ -36,9 +36,41 @@ Made 7 October 2026 for the AI Philosophy Competition (6,000-word ceiling, bibli
 - 90 FR 60864: final rule, published 29 Dec 2025, effective 27 Feb 2026 (federalregister.gov).
 - Vong: "the option he does not consider" checked against the thesis text (`vongthesis.txt`, diachronic weakening / strengthening only), not against the 2015 paper directly.
 
-## Not verified this round
+## TO DO BEFORE SUBMISSION (stable checklist; update as items are done)
 
-Hersch & Rowe 2024 (sec. 4, sec. 5 quotations; secs. 1, 3 classification) and 2025 p. 3; Wasserman 1996 p. 30 n. 1 (no longer cited) and p. 47 (now paraphrased); Elster 1988 for the NBA draft.
+Status key: [ ] open, [x] done. Deadline 31 Oct 2026, 11:59pm AoE.
+
+### A. Sources to verify against the texts (none of these were re-read for the 6k version)
+
+- [ ] **Hersch & Rowe 2024**: (i) sec. 5 quotation "we lose something that matters for fairness"; (ii) sec. 4 quotation "who arrives into the lottery pool early and is continuously unlucky"; (iii) that secs. 1 and 3 classify the visa lotteries as *scarcity* rather than *bottleneck* and endorse the lottery for that reason (the 6k version now agrees with their verdict and disputes their reason, so the reason attributed must be exactly theirs); (iv) that they separate "bottleneck" cases where queues belong from one-shot "scarcity" cases where lotteries do.
+- [ ] **Hersch & Rowe 2025**, p. 3: "who completed the chore last time matters to who has a claim to avoid it this time".
+- [ ] **Vong 2015**: pp. 479–480 ("satisfied by a lottery that gives claimants appropriate, fair chances of benefiting" is no longer quoted; "cannot be lost due to the results of a procedurally fair lottery" is); p. 483 ("a new case of scarce benefit distribution"); pp. 477–479 (rejects losing-weakens and winning-strengthens views); and the negative claim that nowhere in the paper does he consider the option that losing leaves more of the claim outstanding for later units. Checked so far only against the DPhil thesis text (`scratchpad/vongthesis.txt`), not the 2015 paper. Also that his own cases (dialysis, organs) are ones where winners leave the pool, as §4 now says.
+- [ ] **Wasserman 1996**: the paraphrase "claimants cannot eat chances" (the title is "Let Them Eat Chances"; the p. 47 wording is no longer quoted). Nothing else from Wasserman is now used.
+- [ ] **John & Millum 2020**: that they hold a queue can be fairer than a lottery, and under what conditions (the paper says "exactly to the extent that exit is foreseeable", which is the paper's view, attributed to them only as "a queue can be fairer than a lottery").
+- [ ] **Elster 1988**: that the NBA draft incentive problem is discussed there ("cf." only); bib year and volume (Tanner Lectures vol. 9).
+- [ ] **Feldblyum Le Blevennec 2023**: that the weighted diachronic lottery protects the *winner's* standing when new claimants arrive.
+- [ ] One-clause characterisations: Leshno 2022 and Arnosti & Shi 2020 ("grounds of efficiency rather than of what applicants are owed"); Igarashi 2024 and Aleksandrov & Walsh 2020 ("concerns envy, not claims"; "an allocation of indivisible items that cannot be envy-free in one round can be over many"); Wintein & Heilmann 2018 and Balinski & Young 2001 (divisor methods have a sequential form).
+- [ ] **Broome 1990** page numbers: 90–92 (definition of a claim); 92–93 (declines to say which reasons are claims: this is verified in the text at `scratchpad/broome-fairness.txt` lines c. 340–370 but the printed page needs confirming); 95 (maxims; verified verbatim); 97–98 (surrogate passage; verified verbatim). Decide whether the bib entry's year should be 1990 (PAS 91, 1990–91) rather than 1991; it currently renders as "Broome 1991a", which does not match the key or the in-text intention.
+- [ ] **Agency pages**: Nevada bonus points (squared; lowest random number is the entry; URL in fn 1); New Mexico quotation with capitalised "NOT" (fn 2); Arizona ("one random number per unsuccessful year"; no citation given); Colorado ("most licences to whoever has the most preference points, chance only breaking ties"; no citation given). The long version cited Colorado and Arizona pages in a footnote that was cut; restore a short footnote if words allow.
+- [ ] **Figures**: "some 85,000 H-1B visas" (65,000 + 20,000 advanced-degree exemption) and "up to 55,000 Diversity Visas".
+- [x] Broome 1984 p. 48 (verbatim, `broome-spr.txt`). [x] Broome 1984b pp. 628–629 (verbatim, `broome-uf.txt`). [x] Broome 1990 p. 95 maxims (verbatim). [x] 90 FR 60864 is the final rule, 29 Dec 2025, effective 27 Feb 2026.
+
+### B. Numbers
+
+- [ ] Reproduce the fixed-population figures (3.5, 2.1, 1.3, 0 left with nothing at N = T = 10 under κ = 0, 1, 2, 10) and the bottleneck wait figures ("about one in seventy waits forty periods or more"; "expected wait is nine") from code kept in this folder. The v3 screener reproduced 3.48 / 2.13 / 1.35 / 0.0 and the one-in-seventy figure independently, but those scripts are not here. `simulations-6k.py` covers only the churn table.
+- [x] Churn table reproduced from `simulations-6k.py` (seed 2026, 200 reps); output in `simulations-6k.out`.
+
+### C. Text
+
+- [ ] The priority argument in §5.2 (owed vs tolerated; "a rule may not buy an improvement of the second kind with a harm of the first"; floor owed per claimant so class size irrelevant) was written after the third screening and has not had a cold read.
+- [ ] The §5.3 sentence on housing and transplant lists ("a queue is fairer than a lottery, as John and Millum say, exactly to the extent that exit is foreseeable") likewise.
+- [ ] Decide whether to keep "Nor is there an obligation to correct one's ancestors' shortfalls … the lottery did no wrong" (§6) now that the household-pooling sentence is gone.
+- [ ] Final word count in Word (Brian's count 7 Oct: 6,597 all up, 657 of it bibliography, so c. 5,940 counted).
+- [ ] `categories: claude` in the YAML: harmless for docx/pdf output, but remove if any submitted artefact exposes it.
+
+### D. Long version (`fairness-has-memory.qmd`), if it is ever used
+
+Carry over: the bottleneck/visa reversal (§5.4, abstract, §1, §6 visa example, §7 visa fee, conclusion); the Broome 1990 "agreement" misattribution (§2); Wyoming (§1, fn 3); the κ-rule wording (§5.2 and Appendix are consistent with the code but the prose "any negative value set to zero" is ambiguous); "surpluses are clipped in only about one claimant-period in thirty" → one in twenty at 200 reps; Colorado "chance only breaking ties" → "most"; the Hersch & Rowe reply (§5.4).
 
 ## Screenings
 
