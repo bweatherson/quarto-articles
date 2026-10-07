@@ -1,0 +1,1116 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Claude
+  }
+\cohead{
+  Fairness Has Memory
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
+% Number theorem-like environments straight through (Theorem 1, Theorem 2, ...)
+% rather than by section (1.1, 1.2, ...), which is Quarto's LaTeX default.
+% Guarded, since Quarto only defines a counter for environments the document uses.
+\makeatletter
+\AtBeginDocument{%
+  \@for\bw@thm:={theorem,lemma,corollary,proposition,conjecture,definition,%
+                 example,exercise,refremark,refsolution}\do{%
+    \@ifundefined{c@\bw@thm}{}{\expandafter\counterwithout\expandafter{\bw@thm}{section}}%
+  }%
+}
+\makeatother
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  pdftitle={Fairness Has Memory},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Fairness Has Memory}
+\author{}
+\date{2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+When a scarce, indivisible good is allocated by lottery among people
+with equal claims, the standard theory of fairness says the lottery is
+the fairest thing available. When the same good is allocated the same
+way year after year to largely the same people, the theory has nothing
+further to say: each lottery is fair, so the sequence is fair. I argue
+that this is a mistake. A sequence of individually fair lotteries can be
+an unfair allocation, and where claimants stay in the pool after being
+served, fairness requires that their chances in later rounds depend on
+the history of their unsatisfied claims. The argument uses only premises
+the standard theory already accepts: that a divisible good must be
+divided in proportion to claims, and that a lottery is a second-best
+surrogate for division. Over a sequence, the good becomes divisible. I
+then show what memory should track, in units of the good where later
+units are as good as earlier ones and in waiting where they are not, and
+how heavily it may press: only as hard as leaves no claimant's expected
+share, over whatever stay she turns out to have, below what her claim
+warrants. Where the good recurs, rules that forget and rules that
+remember lexically are unfair in opposite directions; where winners
+leave the pool and some will leave unserved, the lottery that forgets is
+what fairness requires.
+\end{abstract}
+
+
+\setstretch{1.1}
+\section{Two lotteries}\label{sec-intro}
+
+Every year Nevada and New Mexico each have more people who want to hunt
+bighorn sheep than they have sheep to spare, so each holds a lottery.
+Nevada remembers: an unsuccessful applicant earns a bonus point, her
+points are squared to fix how many random numbers are drawn for her the
+next year, and her lowest number is her entry, so ten years of losing
+gives her a hundred and one draws against a newcomer's one.\footnote{Nevada
+  Department of Wildlife, ``Bonus Point Program,''
+  https://www.ndow.org/blog/bonus-point-program/.} New Mexico forgets:
+``New Mexico does NOT grant preference to applicants who were
+unsuccessful in previous drawings.''\footnote{New Mexico Department of
+  Game and Fish, ``How the New Mexico Draw Works,''
+  https://wildlife.dgf.nm.gov/hunting/applications-and-draw-information/how-new-mexico-draw-works/.}
+A hunter passed over for ten years enters the eleventh draw with the
+chances of a first-time entrant.
+
+Many institutions side with Nevada, though they disagree about how.
+Arizona adds one random number per unsuccessful year; Colorado gives
+most licences to whoever has the most preference points, chance only
+breaking ties. Others forget, among them the lotteries that allocate
+some 85,000 H-1B visas and up to 55,000 Diversity Visas a year. A worker
+not selected in three successive years enters the fourth draw as a
+newcomer, even under the rule in force since February 2026, which
+weights H-1B registrations by the wage of the job offered.\footnote{Department
+  of Homeland Security, ``Weighted Selection Process for Registrants and
+  Petitioners Seeking To File Cap-Subject H-1B Petitions,'' 90
+  \emph{Federal Register} 60864 (2025).}
+
+The theory of fair allocation has not connected this disagreement to the
+theory of claims, and where it touches it, it sides with New Mexico. The
+best-developed account, John Broome's (\citeproc{ref-Broome1984}{1984a},
+\citeproc{ref-Broome1990}{1991a}, \citeproc{ref-Broome1991}{1991b}),
+holds that fairness requires claims to be satisfied in proportion to
+their strength, and that when the good is indivisible and claims are
+equal, an equal lottery is the fairest available procedure. It evaluates
+a lottery on its own, and on its own each year's New Mexico draw is
+impeccable. Broome's critics, who locate the fairness of lotteries in
+what they express or exclude rather than in the chances they distribute
+(\citeproc{ref-Wasserman1996}{Wasserman 1996};
+\citeproc{ref-Stone2007}{Stone 2007}, \citeproc{ref-Stone2011}{2011};
+\citeproc{ref-Spiekermann2022}{Spiekermann 2022}), reach the same
+verdict: an impartial procedure is fair whatever last year's did. The
+wider literature takes the single lottery as its unit
+(\citeproc{ref-Sher1980}{Sher 1980};
+\citeproc{ref-KornhauserSager1988}{Kornhauser and Sager 1988};
+\citeproc{ref-Elster1989}{Elster 1989};
+\citeproc{ref-Duxbury1999}{Duxbury 1999};
+\citeproc{ref-Saunders2008}{Saunders 2008};
+\citeproc{ref-Stone2008}{Stone 2008}). The nearest things to my thesis
+are two remarks by Hersch and Rowe: that if goods are indexed to times
+``we lose something that matters for fairness''
+(\citeproc{ref-HerschRowe2024}{2024, sec. 5}), and that for recurring
+chores ``who completed the chore last time matters to who has a claim to
+avoid it this time'' (\citeproc{ref-HerschRowe2025}{2025, 3}).
+
+I will argue for three claims. \emph{Non-separability}: the fairness of
+a sequence of allocations is not a function of the fairness of its
+members as the standard theory assesses them. \emph{Memory}: when units
+of a good are allocated repeatedly among claimants who remain in the
+pool after receiving one, fairness requires that each claimant's chances
+in later rounds depend on her history of unsatisfied claims.
+\emph{Currency and weight}: what memory tracks is a claimant's shortfall
+from her fair share, in units of the good where a later unit is as good
+to her as an earlier one and in waiting where it is not; and it may
+press that shortfall only as hard as leaves no claimant's expected
+share, over whatever stay she turns out to have, below what her claim
+warrants. Where the good recurs, rules that forget fail the first
+requirement and rules that let history decide fail the second; where
+winners leave and some leave unserved, the constraint selects the rule
+that forgets.
+
+\section{Claims, chances, and division}\label{sec-broome}
+
+A claim, in Broome's sense, is a duty owed to the candidate herself that
+she should have the good, as distinct from other reasons for giving it
+to her, such as that doing so would be useful
+(\citeproc{ref-Broome1990}{Broome 1991a, 90--92}). Fairness requires
+that ``equal claims require equal satisfaction,'' that ``stronger claims
+require more satisfaction than weaker ones,'' and that ``weaker claims
+must not simply be overridden by stronger ones''
+(\citeproc{ref-Broome1990}{Broome 1991a, 95}).
+
+Two features of the theory carry my argument. The first I will call the
+\emph{Division Principle}. Where a good is divisible, proportional
+satisfaction is achievable and required: if two people have equal claims
+to a quantity of food, the food ``should be divided,'' even when giving
+it all to one of them would do more good
+(\citeproc{ref-Broome1990}{Broome 1991a, 95}). Broome states it most
+generally in a passage that already divides a good across time:
+
+\begin{quote}
+The good, for instance, of avoiding military service could be divided by
+conscripting everyone for a short time rather than a few people for a
+long time. If people's claims to a good are equal, then fairness
+requires that the good should be divided between them if it can be. That
+is the only way to treat them with perfect equality.
+(\citeproc{ref-Broome1984}{Broome 1984a, 48})
+\end{quote}
+
+The second is the account of lotteries as a second best. When the good
+is indivisible and scarce, a lottery gives ``a sort of partial equality
+in satisfaction'': ``each person can be given a sort of surrogate
+satisfaction. By holding a lottery, each can be given an equal chance of
+getting the good. This is not a perfect fairness, but it meets the
+requirement of fairness to some extent''
+(\citeproc{ref-Broome1990}{Broome 1991a, 97--98}). Two things follow.
+Where division is available, it is required. Where it is not, the
+surrogate is not merely permitted but owed: a claimant who cannot be
+given her portion must be given her chance.
+
+What duty does Nevada owe anyone to let her shoot a sheep? Broome
+declines to say which reasons are claims, beyond granting that some are
+(\citeproc{ref-Broome1990}{Broome 1991a, 92--93}). The claims in my
+cases arise from the allocator's undertaking: a body that announces it
+will allocate a public resource fairly among eligible applicants thereby
+owes each of them fair treatment, and what fair treatment requires is
+not the agency's to stipulate. New Mexico's announcement that it grants
+no preference to past losers describes its procedure; it does not settle
+whether the procedure is fair, any more than announcing that a cake will
+be raffled slice by slice would. Nor does the undertaking turn every
+reason for allocating a visa into a claim: the wage of an H-1B job is a
+reason of usefulness, and the 2026 reform made the lottery more
+responsive to usefulness, not to claims.
+
+\section{The divisibility argument}\label{sec-division}
+
+Consider a good that comes in indivisible units, one per period,
+allocated by one agency among claimants with equal claims, where
+receiving a unit does not remove a claimant from the pool: a tag a year,
+a night off the rota a week. Suppose for now that the same \(N\)
+claimants are present for \(T\) periods. Within any one period the
+standard verdict is correct: one unit, \(N\) equal claims, no way to
+divide, so hold an equal lottery. But the units are indivisible and the
+sequence is not. Over \(T\) periods it is possible to give each claimant
+\(T/N\) units, or as near as the integers allow. Call the procedure that
+does so \emph{rotation}: draw a random order once and cycle through it.
+Rotation is, in the sequence, what dividing the food is in the single
+case. The Division Principle says that ``if people's claims to a good
+are equal, then fairness requires that the good should be divided
+between them if it can be.'' The sequence can be divided. So fairness
+requires rotation, or whatever comes as close to it as circumstances
+allow.
+
+Compare New Mexico's procedure, a fresh equal lottery every period: the
+\emph{forgetting} rule. Over \(T\) periods it does not divide the
+sequence; it raffles it. With ten claimants and ten periods it leaves,
+on average, three and a half of the ten with nothing while two or three
+others receive two or more units.\footnote{The expected number with
+  nothing is \(N(1-1/N)^T\). The simulation code behind every figure in
+  this paper accompanies it.} Rotation leaves nobody with nothing. The
+forgetting rule does over the sequence exactly what the theory forbids
+in the single case: it takes a divisible good and gives it out by lot.
+
+As a reductio: suppose someone proposed to allocate a cake among ten
+people with equal claims by cutting it into ten slices and raffling each
+slice separately. Each raffle, taken by itself, is what the theory
+recommends for an indivisible good. Nobody thinks this is a fair way to
+allocate a cake; the theory itself says the cake should be divided, and
+dividing it means giving everyone a slice, not a chance at each slice.
+The only difference between the cake and the tags is that the slices are
+allocated at once and the tags a year apart; a cake handed out over ten
+days is still a divisible cake.
+
+Two consequences follow. The first is non-separability. The standard
+theory assesses a lottery by the claims present when it is held, taking
+them to be fixed by need, desert and the like, not by what earlier
+lotteries did. Call a rule \emph{locally fair} at a period if its
+procedure at that period, so assessed, is fair. The forgetting rule is
+locally fair at every period; rotation at none after the first, since
+given the history one claimant is certain to receive the unit. Yet
+rotation is the fair allocation of the sequence and the forgetting rule
+is not. So fairness, so assessed, is not separable across occasions. The
+same result can be put another way, and from
+Section~\ref{sec-extinction} on I will put it so: if claims carry
+history, so that a claimant who has received less than her share has a
+stronger claim to the next unit, then rotation \emph{is} locally fair at
+every period and fairness is separable after all. Non-separability with
+respect to history-blind claims and memory in claims are one thesis in
+two vocabularies; what is not available is history-blind claims
+\emph{and} separable fairness.
+
+The second consequence is memory. Any rule that divides the sequence
+must give units to those who have received fewer, which requires knowing
+who has received fewer.
+
+The argument does assume something a careful opponent will press. The
+Division Principle applies to a good that ``could be divided,'' and the
+tags a hunter draws in different years are not portions of one tag. What
+licenses treating them so is \emph{Fungibility}: units allocated in
+different periods are portions of one divisible good, for a claimant, to
+the extent that her claim is to a unit of that kind and a later unit
+would satisfy it as an earlier one would. The hunter's claim is to a
+sheep tag, not to the 2027 tag. Fungibility is a matter of degree, since
+delay is nearly always some cost, and it fails outright when a later
+unit is much worse for the claimant: the housing applicant who will be
+evicted first, the visa applicant whose sponsor will not wait. Then the
+claim is largely a claim to timeliness. But timeliness is divisible:
+delay can be shared out as units cannot, so the argument changes
+currency. Fairness requires that the \emph{waiting} be divided in
+proportion to claims, where the constraint of
+Section~\ref{sec-proportion} allows it
+(Section~\ref{sec-bottleneck}).\footnote{With unequal claims the problem
+  is apportionment, and the divisor methods that solve it have a
+  sequential form, which is a rule with memory
+  (\citeproc{ref-WinteinHeilmann2018}{Wintein and Heilmann 2018};
+  \citeproc{ref-BalinskiYoung2001}{Balinski and Young 2001}).
+  ``Repeated'' fair division in computer science
+  (\citeproc{ref-Igarashi2024}{Igarashi et al. 2024};
+  \citeproc{ref-AleksandrovWalsh2020}{Aleksandrov and Walsh 2020}) rests
+  on a related observation about envy-freeness over many rounds; it
+  concerns envy, not claims.}
+
+\section{The extinction objection}\label{sec-extinction}
+
+The argument seems to run into a doctrine Broome states in the same
+year. Once a fair lottery has given Michael the dialysis machine, it
+would be absurd to hold another on the ground that lotteries are fair:
+``once Michael has won the first lottery he has a perfect claim to the
+treatment, and Maggie has none. Consequently it is not at all fair to
+hold a second lottery'' (\citeproc{ref-Broome1984b}{Broome 1984b,
+628--29}). Call this the \emph{extinction thesis}: losing a fair lottery
+extinguishes the loser's claim. Vong (\citeproc{ref-Vong2015}{2015})
+keeps the thesis in one form: a \emph{procedural} claim, once satisfied
+by a fair lottery, is satisfied, while a \emph{benefit} claim ``cannot
+be lost due to the results of a procedurally fair lottery''
+(pp.~479--480); so when new units arrive the losers are ``a new case of
+scarce benefit distribution'' and get a fresh fair lottery (p.~483). On
+either form the persistent loser is owed nothing but a fresh lottery
+among all who remain, which is the forgetting rule; and the one lottery
+with memory in the literature
+(\citeproc{ref-FeldblyumLeBlevennec2023}{Feldblyum Le Blevennec 2023})
+protects the \emph{winner's} standing when new claimants arrive.
+
+The reply distinguishes three structures the objection runs together. A
+\emph{re-run}: the same claimants, the same unit, a second lottery
+because the first went the wrong way for someone. Broome is right that
+this is absurd, and the reason is that there is nothing left to divide.
+An \emph{interrupted allocation}, Vong's case: one unit, and new
+claimants arriving before it is handed over; here too there is one unit.
+And \emph{recurrence}: a new unit each period, among overlapping
+claimants. Here the extinction thesis is true and irrelevant. Maggie's
+claim to the 2026 tag was extinguished when she lost; it is someone
+else's. But there is a 2027 tag, and the Division Principle says the two
+together are a divisible good, so the 2027 tag goes, or is more likely
+to go, to someone who did not get the 2026 one. Maggie's claim to the
+2027 tag is not the ghost of her claim to the 2026 tag. It is a claim to
+a unit that exists, and it has more force than a past winner's for the
+same reason that, when a cake is being divided, someone who has had no
+slice has more of her claim outstanding than someone who has had one.
+Where the currency is waiting and everyone will be served, the same
+holds with waiting in place of slices.
+
+So the extinction thesis and the memory thesis are about different
+goods. To bite, Broome's objection needs a stronger thesis: that losing
+a fair lottery for one unit extinguishes any bearing the loss might have
+on later units. That is what the cake refutes. Someone who raffled each
+slice could say of each raffle that the losers' claims to that slice had
+been fairly extinguished, and it would still be true that the cake had
+not been divided. Vong's form fails for a related reason: a procedural
+claim is satisfied by a fresh equal lottery only if a fresh equal
+lottery is the fair procedure, and over recurring units the Division
+Principle says it is not. Vong rejects views on which losing weakens a
+claim and on which winning strengthens it (pp.~477--479); the option he
+does not consider is that losing leaves more of the claim outstanding
+for \emph{later} units, and his objections, which turn on new claimants
+for a single unit, do not touch it. (For his own cases, dialysis and
+organs, where winners leave the pool, his verdict turns out to be right;
+see Section~\ref{sec-bottleneck}.)
+
+A residual worry makes the surrogate character of chances do real work.
+If the 2026 lottery gave Maggie surrogate satisfaction, is extra weight
+in 2027 not satisfying her twice? A chance is not a portion of the good;
+it is what one gives when a portion cannot be given. If an equal chance
+of a slice were a kind of equal slice, the raffle of the cake would be a
+division of the cake, and the theory could not say, as it does, that the
+cake should be divided instead. What memory counts is units received,
+not chances. Wasserman's point that claimants cannot eat chances
+(\citeproc{ref-Wasserman1996}{1996}) is, on this view, the beginning of
+an argument for memory rather than an objection to lotteries.
+
+\section{What memory tracks}\label{sec-proportion}
+
+Sort the institutions by structure. In \emph{recurrence} a claimant who
+receives a unit stays in the pool: tags, permits, chores. In a
+\emph{bottleneck} she leaves: a visa, a flat, a kidney. Structure is
+fixed by whether winners leave and currency by Fungibility, and in
+practice the two run together: the claimant who leaves on being served
+was waiting for one unit and cared when it came.
+
+\subsection{Shortfall in units}\label{shortfall-in-units}
+
+In recurrence the argument of Section~\ref{sec-division} fixes what
+memory tracks: the difference between the share of the units a claimant
+should have received by now and the number she has received. Call this
+her \emph{shortfall}. With equal claims and one unit per period, a
+claimant present for \(r\) periods who has received \(w\) units has
+shortfall \(r/N - w\). Shortfall is neither the number of losses nor
+time waited: points-for-losses systems reset on a win, so a claimant who
+has won once in twenty years is treated as a newcomer, and they count a
+loss among two hundred applicants as a loss among two; time waited
+tracks shortfall only if the numbers of units and claimants are
+constant.
+
+Consider the rules that press shortfall with a weight \(\kappa \geq 0\):
+each claimant's chance is proportional to
+\(\max(0,\, 1 + \kappa \cdot \text{shortfall})\). At \(\kappa = 0\) this
+is the forgetting rule. At \(\kappa = 1\) a claimant's expected
+shortfall shrinks by a factor of \(1 - 1/N\) each period, so it is
+corrected over roughly the time the practice takes to hand out one round
+of shares. A past winner's weight falls below a newcomer's, and reaches
+zero once her surplus reaches \(1/\kappa\); she is then excluded until
+the others catch up, but never taxed, which is the extinction thesis
+built in. As \(\kappa\) grows the rule approaches giving each unit to
+whoever is furthest behind. In a fixed population everyone starts level,
+so by symmetry each has the same chance of every unit whatever
+\(\kappa\) is, and dispersion falls as \(\kappa\) rises. With ten
+claimants and ten periods the expected number left with nothing falls
+from 3.5 under the forgetting rule to 2.1 at \(\kappa = 1\), 1.3 at
+\(\kappa = 2\) and 0 at \(\kappa = 10\). In a fixed population the
+Division Principle says: press as hard as you can, and rotate.
+
+\subsection{Newcomers and the surrogate
+constraint}\label{newcomers-and-the-surrogate-constraint}
+
+Once claimants come and go, a real objection to memory appears. In the
+year she first applies, a newcomer has a claim exactly as strong as
+anyone else's. Under any rule with memory she is given a smaller chance
+than an incumbent who has lost before. So the rule gives unequal chances
+to equal claims, which is what the standard theory says unfairness
+\emph{is}.
+
+The answer also fixes how heavily memory may press. Division of the
+sequence is available only to a claimant who stays long enough for it to
+be completed. A claimant who leaves after three periods cannot be given
+three-tenths of a tag; for her the sequence is as indivisible as the
+unit. If the allocator knew who would leave, it would owe such claimants
+the surrogate outright: a chance, each period, proportional to their
+claim. Not knowing, it owes the surrogate to everyone, in the only form
+in which it can be given without knowing tenures in advance: that no
+claimant's expected share, over whatever tenure she turns out to have,
+fall short of proportionality to her claims. Call this the
+\emph{surrogate constraint}. It is a floor, not a consideration to be
+weighed against the dispersion that memory reduces, because the two
+stand differently to the claimants. The chance is what a claimant who
+will not stay for the division is \emph{owed}: for her there is nothing
+to divide, the chance is all fairness can give, and a rule that gives
+her less partly overrides her claim. Dispersion of shortfall among those
+who stay is unfairness that fairness \emph{tolerates} because the units
+cannot be divided within a period, and reducing it is an improvement in
+degree. A rule may not buy an improvement of the second kind with a harm
+of the first; and since the floor is owed to each claimant who may
+leave, not to a class, how many such claimants there are does not bear
+on whether it is owed. Within the floor, those who stay are owed as much
+division as can be had. So fairness requires the rule that presses
+shortfall as hard as the surrogate constraint allows.
+
+Suppose claimants leave with a fixed probability each period,
+independently of their history, with a mean tenure of ten, and the pool
+is kept at ten by replacement (Table~\ref{tbl-churn}).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1515}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1515}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1212}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1818}}@{}}
+\caption{Ten claimants with equal claims, one unit per period, each
+leaving with probability 0.1 per period and replaced; 200 runs of 1,500
+periods. A newcomer's chance in her first period (with
+history-independent exit, also the expected share of claimants whose
+tenure turns out to be one period) and expected shares at longer
+tenures, as multiples of the proportional value \(1/N\) per period;
+standard errors are below .005 in the first column and at most .02
+elsewhere. Dispersion is the standard deviation, in units, of a
+claimant's shortfall when she leaves.}\label{tbl-churn}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Rule
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Newcomer's chance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Expected share, tenure 10
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tenure 30
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Dispersion of realized shortfall
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Rule
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Newcomer's chance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Expected share, tenure 10
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tenure 30
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Dispersion of realized shortfall
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Forgetting (\(\kappa = 0\)) & 1.00 & 0.99 & 0.97 & 0.95 \\
+Shortfall, \(\kappa = 1\) & 1.01 & 1.00 & 1.01 & 0.59 \\
+Shortfall, \(\kappa = 2\) & 0.97 & 0.98 & 1.00 & 0.49 \\
+Shortfall, \(\kappa = 10\) & 0.56 & 0.94 & 0.98 & 0.41 \\
+Points for losses, linear (Arizona) & 0.26 & 0.95 & 1.17 & 0.70 \\
+Points for losses, squared (Nevada) & 0.08 & 0.99 & 1.20 & 0.58 \\
+Queue / preference points (Colorado) & 0.00 & 1.01 & 1.26 & 0.47 \\
+\end{longtable}
+
+Under the forgetting rule expected share is proportional at every
+tenure, 1.00 by construction (the cells are simulated); its only defect
+is the dispersion of realized shortfalls, which is largest. (Dispersion
+of shortfall is the right summary of the residual unfairness, since
+shortfall is what the Division Principle measures; the number left with
+nothing is its tail.) At \(\kappa = 1\) the newcomer's chance is
+proportional to within a per cent, because a past winner's weight
+reaches zero in only about one claimant-period in twenty; expected share
+at every tenure is proportional to within the simulation's noise; and
+dispersion falls by two-fifths. At \(\kappa = 2\) the newcomer's chance
+is 97 per cent of what her claim warrants, a small but real breach; at
+\(\kappa = 10\) it is little more than half.
+
+The rules in use breach the constraint outright. Linear points give a
+newcomer a quarter of the chance her claim warrants and a claimant who
+stays thirty periods 17 per cent more than her share; squared points cut
+the newcomer to a twelfth; a queue gives her nothing, and anyone who
+leaves within a few periods leaves with nothing. These rules reduce
+dispersion, some by more than the moderate shortfall rules, but by
+transferring expected share from claimants whose tenure turns out short
+to those whose tenure turns out long, which is to deny the short-stayers
+the surrogate they are owed.
+
+So, in recurrence, the third claim is established. Memory is required:
+the forgetting rule is dominated at no cost in anyone's expected share.
+But to remember lexically is to let an incumbent's accumulated claim
+override a newcomer's present one. When the pool turns over, fairness
+requires a rule that raises chances with shortfall at a rate that
+corrects it over roughly the period in which the practice would
+ordinarily deliver a share; the region around \(\kappa = 1\) has this
+property, and the rules in use lie well outside it. Such a rule removes
+some two-fifths of the dispersion the forgetting rule produces, and a
+residual lottery remains; the residual is exactly the surrogate the
+short-stayers are owed. Only where the pool is fixed is it zero, and
+there the rule is rotation.
+
+\subsection{Bottlenecks and waiting}\label{sec-bottleneck}
+
+In a bottleneck nobody accumulates more than one unit; what varies is
+time waited. Fungibility fails, because each claimant's claim is to one
+unit and to having it soon; what is divisible is the waiting. Under the
+forgetting rule, waiting is raffled: with a pool of ten kept full by
+arrivals and one unit per period, some are served at once and about one
+in seventy waits forty periods or more, though everyone's expected wait
+is nine. A queue serves everyone at nine. Time, unlike a flat, is
+divisible, so the Division Principle applies to the waiting and says:
+equalize it. This is why John and Millum
+(\citeproc{ref-JohnMillum2020}{2020}) are right that a queue can be
+fairer than a lottery, and why Hersch and Rowe
+(\citeproc{ref-HerschRowe2024}{2024}) are right to separate
+``bottleneck'' cases, where queues belong, from one-shot ``scarcity''
+cases, where lotteries do; between them lies recurrence, where a queue
+gives a short-stayer none of her accruing share.
+
+The surrogate constraint carries over, and here it cuts the other way.
+Where claimants may leave unserved, by dying or losing eligibility, and
+the allocator cannot tell who, those to whom the division is not
+available are owed the surrogate: an equal chance, each period, at the
+unit. A pure queue denies it outright. But so, to a degree, does any
+rule that weights by time waited. In recurrence the newcomer's floor
+could be met because past winners hold a surplus and can be pushed below
+her; in a bottleneck nobody holds a surplus, since winners leave, so
+every unit of chance given to a long waiter is taken from someone whose
+claim is still wholly outstanding, the newcomer among them. With exits
+unforeseeable and uncorrelated with waiting, the only rule under which
+no tenure class's expected treatment falls below the equal chance is the
+forgetting rule. So the result is two-sided in a second way. Where
+everyone will be served, the waiting is divisible and fairness requires
+a queue; where some will leave unserved and the allocator cannot tell
+who, fairness requires the lottery that forgets. Memory is required in
+the one structure and forbidden in the other, and the difference is
+whether there are surplus-holders to pay for it. Housing lists and
+transplant lists, where some always leave unserved, fall on the second
+side: a queue is fairer than a lottery, as John and Millum say, exactly
+to the extent that exit is foreseeable. (Where an exit is foreseeable
+and imminent the claim is urgent and the rule must be weighted for it,
+as transplant allocation is; that is a difference in claims, not a
+memory of history.)\footnote{Dynamic-allocation economics reaches
+  related conclusions by another route (\citeproc{ref-Leshno2022}{Leshno
+  2022}; \citeproc{ref-ArnostiShi2020}{Arnosti and Shi 2020}), but on
+  grounds of efficiency rather than of what applicants are owed.}
+
+The verdict for the visa lotteries follows, and it is not the one the
+opening cases suggest. They are bottlenecks with attrition: a selected
+worker leaves the pool, and an unselected one may lose her sponsor or
+her status in ways the allocator cannot foresee. So the lottery that
+forgets is the fair rule, and Hersch and Rowe's
+(\citeproc{ref-HerschRowe2024}{2024, secs. 1, 3}) endorsement of it is
+right, though not for their reason, that the case is scarcity rather
+than bottleneck; it is right because the surrogate owed to those who
+will leave unserved cannot be paid by anyone else. What is wrong with
+the rule in force since 2026 is not that it forgets but that it weights
+by the wage of the job, a reason of usefulness rather than a claim. And
+their remark that a periodic lottery in a bottleneck is unfair because a
+person ``who arrives into the lottery pool early and is continuously
+unlucky'' may wait far longer than a lucky newcomer (sec.~4) is true
+only where everyone will be served.
+
+\section{How far does memory reach?}\label{sec-reach}
+
+If Nevada must remember Maggie's 2026 loss in 2027, must it remember her
+loss in the housing lottery? In Arizona's draw? Her mother's? A view
+that cannot stop somewhere principled collapses into a demand that luck
+be equalized, a different and far more contested thesis. Three bounds,
+besides the bound in weight that Section~\ref{sec-proportion}
+established, follow from the argument that generates the claim.
+
+\emph{Memory is bound to the practice.} The corrective claim arises
+because a particular agency's allocation of a particular good left
+residual unfairness; it is a claim on the division of \emph{those}
+units, addressed to \emph{that} agency. The good matters because the
+2027 tag can divide the sequence of tags only because it is a tag; a
+flat is not a portion of what the hunter has a claim to. Goods are
+individuated by claims, not names: a Nevada tag and an Arizona tag are
+different goods, because a claim to hunt in one state is not satisfied
+by a tag for the other, whereas two draws run by one agency for the same
+tag are one good, so an allocator cannot shed its obligation by
+splitting a practice in two. The agency matters because a division is
+something an agent does with what it has; another allocator has none of
+its units to give. This distinguishes the thesis from luck
+egalitarianism (\citeproc{ref-Dworkin1981}{Dworkin 1981};
+\citeproc{ref-Cohen1989}{Cohen 1989}; \citeproc{ref-Temkin1993}{Temkin
+1993}), whose currency is compensation, so that a shortfall in one good
+can be made up in another; mine concerns the fair division of one good
+by the agency dividing it, in that good's currency, and says nothing
+about whether the persistent loser is worse off overall.
+
+\emph{Memory is bound to the claim.} The corrective claim is a
+strengthened claim to the good, not a credit. Someone who applied
+unsuccessfully for ten years and then gave up hunting is owed nothing;
+there is no tag she has a claim to. Memory is not compensation, since
+the lottery did no wrong. Two boundary questions have determinate
+answers. \emph{Transition}: when a forgetting practice adopts memory,
+losses under the old rule count, since the shortfall existed whether or
+not the rule tracked it; a rectificatory view would say the opposite.
+\emph{Regress}: the 2028 allocation need not correct the 2027
+allocation's failure to correct fully, because shortfall is a state, not
+a stack of debts; at each period there is one quantity, and correcting
+it is the whole of what is owed.
+
+\emph{Memory is bound to the claimant.} The claimant is by default the
+person, because claims are owed to someone; New Mexico cannot make its
+persistent losers vanish by declaring that its claimants are ``this
+year's applicants.'' Nor is there an obligation to correct one's
+ancestors' shortfalls, which would be claims of rectification; the
+lottery did no wrong.
+
+\section{Objections}\label{sec-objections}
+
+\emph{Losing on purpose.} The objection that memory rewards losing is
+familiar: the NBA's draft lottery rewarded losing and was flattened for
+that reason (cf. \citeproc{ref-Elster1988}{Elster 1988}). In the cases
+that motivate this paper, losing is not under the claimant's control:
+she cannot make herself lose, only apply, and applying without a genuine
+claim is the problem of verifying claims, which every allocation faces.
+Where losing is controllable, as in a league, the objection shows that
+fairness is in tension with incentive, which is a reason to weigh
+fairness against other things, not evidence that fairness requires
+forgetting. What must be conceded is that memory raises the value of a
+manufactured claim: a speculative entrant gains a ticket that grows. The
+response is to attach memory to participation that costs something, as a
+practice does when it requires a paid licence to apply. That is a
+constraint on implementing fairness, not evidence that fairness has no
+memory.
+
+\emph{Equality, not fairness.} Someone might grant the verdict on the
+outcomes and deny that fairness is what condemns them: what is bad about
+the forgetting rule is inequality, or that some are badly off, matters
+for a theory of equality or priority (\citeproc{ref-Parfit2000}{Parfit
+2000}). Suppose the persistent loser is, all things considered, no worse
+off than the repeat winner. Her complaint survives: this agency,
+dividing this good among people with equal claims, has given her less
+than her share. That complaint is comparative, concerns the good in
+question, and is addressed to the allocator, the marks of a fairness
+complaint in Broome's sense; a priority view could not explain why it
+lapses when she stops claiming the good.
+
+\emph{Ex ante.} The last objection comes from the view, descending from
+Diamond's (\citeproc{ref-Diamond1967}{1967}) reply to Harsanyi
+(\citeproc{ref-Harsanyi1955}{1955}) (\citeproc{ref-Frick2015}{Frick
+2015}; \citeproc{ref-OtsukaVoorhoeve2009}{Otsuka and Voorhoeve 2009}),
+that the fairness of a procedure is a matter of the prospects it gives
+people at the time of choice. On that view the forgetting rule and
+rotation are equally fair, since at the outset each claimant has the
+same prospects under both; the forgetting rule's defect, as the first
+row of Table~\ref{tbl-churn} showed, is entirely ex post. First reply:
+the ex ante view must say when the ex ante is. If it is the beginning of
+the practice, the view cannot prefer the forgetting rule to rotation,
+since they are ex ante identical, and the Division Principle settles
+what it leaves open. If it is the beginning of each period, the view is
+asserting separability with respect to history-blind claims, which is
+what the cake refutes. Second, the ex ante view was developed for
+one-shot cases, where an outcome cannot be undone and prospects are all
+a procedure can distribute. In recurrence what was a prospect becomes a
+fact the next allocation can attend to.
+
+\section{Conclusion}\label{sec-conclusion}
+
+Fairness has memory where the good recurs. What the memory tracks is a
+claimant's shortfall from her share of the good being divided; it is
+owed by the agency dividing the good, for as long as she has a claim to
+it; and it may be pressed only as hard as leaves no claimant's expected
+share, over whatever stay she turns out to have, below what her claim
+warrants. Where winners leave and some will leave unserved, the same
+constraint forbids memory, because there is no one whose surplus can pay
+for it. The result was visible in the example Broome chose to illustrate
+the Division Principle: military service, divided by conscripting
+everyone for a short time. Everyone's short time is a rotation. The
+lottery is what one does when one cannot rotate, and one can rotate more
+often than the lottery's defenders have noticed.
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-AleksandrovWalsh2020}
+Aleksandrov, Martin, and Toby Walsh. 2020. {``Online Fair Division: A
+Survey.''} In \emph{Proceedings of the AAAI Conference on Artificial
+Intelligence}, 34:13557--62. 9. doi:
+\href{https://doi.org/10.1609/aaai.v34i09.7081}{10.1609/aaai.v34i09.7081}.
+
+\bibitem[\citeproctext]{ref-ArnostiShi2020}
+Arnosti, Nick, and Peng Shi. 2020. {``Design of Lotteries and Wait-Lists
+for Affordable Housing Allocation.''} \emph{Management Science} 66 (6):
+2291--2307. doi:
+\href{https://doi.org/10.1287/mnsc.2019.3311}{10.1287/mnsc.2019.3311}.
+
+\bibitem[\citeproctext]{ref-BalinskiYoung2001}
+Balinski, Michel L., and H. Peyton Young. 2001. \emph{Fair
+Representation: Meeting the Ideal of One Man, One Vote}. 2nd ed.
+Washington, DC: Brookings Institution Press. First edition Yale
+University Press, 1982.
+
+\bibitem[\citeproctext]{ref-Broome1984}
+Broome, John. 1984a. {``Selecting People Randomly.''} \emph{Ethics} 95
+(1): 38--55. doi: \href{https://doi.org/10.1086/292596}{10.1086/292596}.
+
+\bibitem[\citeproctext]{ref-Broome1984b}
+---------. 1984b. {``Uncertainty and Fairness.''} \emph{The Economic
+Journal} 94 (375): 624--32. doi:
+\href{https://doi.org/10.2307/2232707}{10.2307/2232707}.
+
+\bibitem[\citeproctext]{ref-Broome1990}
+---------. 1991a. {``Fairness.''} \emph{Proceedings of the Aristotelian
+Society} 91: 87--101. doi:
+\href{https://doi.org/10.1093/aristotelian/91.1.87}{10.1093/aristotelian/91.1.87}.
+
+\bibitem[\citeproctext]{ref-Broome1991}
+---------. 1991b. \emph{Weighing Goods: Equality, Uncertainty and Time}.
+Oxford: Blackwell.
+
+\bibitem[\citeproctext]{ref-Cohen1989}
+Cohen, G. A. 1989. {``On the Currency of Egalitarian Justice.''}
+\emph{Ethics} 99 (4): 906--44. doi:
+\href{https://doi.org/10.1086/293126}{10.1086/293126}.
+
+\bibitem[\citeproctext]{ref-Diamond1967}
+Diamond, Peter A. 1967. {``Cardinal Welfare, Individualistic Ethics, and
+Interpersonal Comparison of Utility: Comment.''} \emph{Journal of
+Political Economy} 75 (5): 765--66. doi:
+\href{https://doi.org/10.1086/259353}{10.1086/259353}.
+
+\bibitem[\citeproctext]{ref-Duxbury1999}
+Duxbury, Neil. 1999. \emph{Random Justice: On Lotteries and Legal
+Decision-Making}. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Dworkin1981}
+Dworkin, Ronald. 1981. {``What Is Equality? Part 2: Equality of
+Resources.''} \emph{Philosophy \& Public Affairs} 10 (4): 283--345.
+
+\bibitem[\citeproctext]{ref-Elster1988}
+Elster, Jon. 1988. {``Taming Chance: Randomization in Individual and
+Social Decisions.''} In \emph{The Tanner Lectures on Human Values},
+edited by Sterling M. McMurrin, 9:105--80. Salt Lake City: University of
+Utah Press.
+
+\bibitem[\citeproctext]{ref-Elster1989}
+---------. 1989. \emph{Solomonic Judgements: Studies in the Limitations
+of Rationality}. Cambridge: Cambridge University Press.
+
+\bibitem[\citeproctext]{ref-FeldblyumLeBlevennec2023}
+Feldblyum Le Blevennec, Marie Kerguelen. 2023. {``Fairness and Chance in
+Diachronic Lotteries: A Response to Vong.''} \emph{Journal of Ethics and
+Social Philosophy} 26 (1): 192--203. doi:
+\href{https://doi.org/10.26556/jesp.v26i1.2190}{10.26556/jesp.v26i1.2190}.
+
+\bibitem[\citeproctext]{ref-Frick2015}
+Frick, Johann. 2015. {``Contractualism and Social Risk.''}
+\emph{Philosophy \& Public Affairs} 43 (3): 175--223. doi:
+\href{https://doi.org/10.1111/papa.12058}{10.1111/papa.12058}.
+
+\bibitem[\citeproctext]{ref-Harsanyi1955}
+Harsanyi, John C. 1955. {``Cardinal Welfare, Individualistic Ethics, and
+Interpersonal Comparisons of Utility.''} \emph{Journal of Political
+Economy} 63 (4): 309--21. doi:
+\href{https://doi.org/10.1086/257678}{10.1086/257678}.
+
+\bibitem[\citeproctext]{ref-HerschRowe2024}
+Hersch, Gil, and Thomas Rowe. 2024. {``Lotteries, Queues, and
+Bottlenecks.''} In \emph{Oxford Studies in Political Philosophy}, edited
+by David Sobel and Steven Wall, 10:186--210. Oxford University Press.
+doi:
+\href{https://doi.org/10.1093/oso/9780198909460.003.0008}{10.1093/oso/9780198909460.003.0008}.
+
+\bibitem[\citeproctext]{ref-HerschRowe2025}
+---------. 2025. {``Allocative Fairness.''} \emph{Philosophy Compass} 20
+(5): e70042. doi:
+\href{https://doi.org/10.1111/phc3.70042}{10.1111/phc3.70042}.
+
+\bibitem[\citeproctext]{ref-Igarashi2024}
+Igarashi, Ayumi, Martin Lackner, Oliviero Nardi, and Arianna Novaro.
+2024. {``Repeated Fair Allocation of Indivisible Items.''} In
+\emph{Proceedings of the AAAI Conference on Artificial Intelligence},
+38:9781--89. 9. doi:
+\href{https://doi.org/10.1609/aaai.v38i9.28837}{10.1609/aaai.v38i9.28837}.
+
+\bibitem[\citeproctext]{ref-JohnMillum2020}
+John, Tyler M., and Joseph Millum. 2020. {``First Come, First Served?''}
+\emph{Ethics} 130 (2): 179--207. doi:
+\href{https://doi.org/10.1086/705763}{10.1086/705763}.
+
+\bibitem[\citeproctext]{ref-KornhauserSager1988}
+Kornhauser, Lewis A., and Lawrence G. Sager. 1988. {``Just Lotteries.''}
+\emph{Social Science Information} 27 (4): 483--516. doi:
+\href{https://doi.org/10.1177/053901888027004001}{10.1177/053901888027004001}.
+
+\bibitem[\citeproctext]{ref-Leshno2022}
+Leshno, Jacob D. 2022. {``Dynamic Matching in Overloaded Waiting
+Lists.''} \emph{American Economic Review} 112 (12): 3876--3910. doi:
+\href{https://doi.org/10.1257/aer.20201111}{10.1257/aer.20201111}.
+
+\bibitem[\citeproctext]{ref-OtsukaVoorhoeve2009}
+Otsuka, Michael, and Alex Voorhoeve. 2009. {``Why It Matters That Some
+Are Worse Off Than Others: An Argument Against the Priority View.''}
+\emph{Philosophy \& Public Affairs} 37 (2): 171--99. doi:
+\href{https://doi.org/10.1111/j.1088-4963.2009.01154.x}{10.1111/j.1088-4963.2009.01154.x}.
+
+\bibitem[\citeproctext]{ref-Parfit2000}
+Parfit, Derek. 2000. {``Equality or Priority?''} In \emph{The Ideal of
+Equality}, edited by Matthew Clayton and Andrew Williams, 81--125.
+Basingstoke: Macmillan.
+
+\bibitem[\citeproctext]{ref-Saunders2008}
+Saunders, Ben. 2008. {``The Equality of Lotteries.''} \emph{Philosophy}
+83 (3): 359--72. doi:
+\href{https://doi.org/10.1017/S0031819108000727}{10.1017/S0031819108000727}.
+
+\bibitem[\citeproctext]{ref-Sher1980}
+Sher, George. 1980. {``What Makes a Lottery Fair?''} \emph{No{û}s} 14
+(2): 203--16. doi:
+\href{https://doi.org/10.2307/2214861}{10.2307/2214861}.
+
+\bibitem[\citeproctext]{ref-Spiekermann2022}
+Spiekermann, Kai. 2022. {``Good Reasons for Losers: Lottery
+Justification and Social Risk.''} \emph{Economics and Philosophy} 38
+(1): 108--31. doi:
+\href{https://doi.org/10.1017/S0266267121000043}{10.1017/S0266267121000043}.
+
+\bibitem[\citeproctext]{ref-Stone2007}
+Stone, Peter. 2007. {``Why Lotteries Are Just.''} \emph{Journal of
+Political Philosophy} 15 (3): 276--95. doi:
+\href{https://doi.org/10.1111/j.1467-9760.2006.00274.x}{10.1111/j.1467-9760.2006.00274.x}.
+
+\bibitem[\citeproctext]{ref-Stone2008}
+---------. 2008. {``On Fair Lotteries.''} \emph{Social Theory and
+Practice} 34 (4): 573--90. doi:
+\href{https://doi.org/10.5840/soctheorpract200834431}{10.5840/soctheorpract200834431}.
+
+\bibitem[\citeproctext]{ref-Stone2011}
+---------. 2011. \emph{The Luck of the Draw: The Role of Lotteries in
+Decision Making}. New York: Oxford University Press. doi:
+\href{https://doi.org/10.1093/acprof:oso/9780199756100.001.0001}{10.1093/acprof:oso/9780199756100.001.0001}.
+
+\bibitem[\citeproctext]{ref-Temkin1993}
+Temkin, Larry S. 1993. \emph{Inequality}. New York: Oxford University
+Press.
+
+\bibitem[\citeproctext]{ref-Vong2015}
+Vong, Gerard. 2015. {``Fairness, Benefiting by Lottery and the Chancy
+Satisfaction of Moral Claims.''} \emph{Utilitas} 27 (4): 470--86. doi:
+\href{https://doi.org/10.1017/S0953820815000357}{10.1017/S0953820815000357}.
+
+\bibitem[\citeproctext]{ref-Wasserman1996}
+Wasserman, David. 1996. {``Let Them Eat Chances: Probability and
+Distributive Justice.''} \emph{Economics and Philosophy} 12 (1): 29--49.
+doi:
+\href{https://doi.org/10.1017/S0266267100003709}{10.1017/S0266267100003709}.
+
+\bibitem[\citeproctext]{ref-WinteinHeilmann2018}
+Wintein, Stefan, and Conrad Heilmann. 2018. {``Dividing the Indivisible:
+Apportionment and Philosophical Theories of Fairness.''} \emph{Politics,
+Philosophy \& Economics} 17 (1): 51--74. doi:
+\href{https://doi.org/10.1177/1470594X17715248}{10.1177/1470594X17715248}.
+
+\end{CSLReferences}
+
+
+
+
+\end{document}
