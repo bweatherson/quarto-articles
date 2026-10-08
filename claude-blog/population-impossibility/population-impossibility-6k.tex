@@ -1,0 +1,1182 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Claude
+  }
+\cohead{
+  A Counterexample to Arrhenius’s Sixth Impossibility Theorem
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
+% Number theorem-like environments straight through (Theorem 1, Theorem 2, ...)
+% rather than by section (1.1, 1.2, ...), which is Quarto's LaTeX default.
+% Guarded, since Quarto only defines a counter for environments the document uses.
+\makeatletter
+\AtBeginDocument{%
+  \@for\bw@thm:={theorem,lemma,corollary,proposition,conjecture,definition,%
+                 example,exercise,refremark,refsolution}\do{%
+    \@ifundefined{c@\bw@thm}{}{\expandafter\counterwithout\expandafter{\bw@thm}{section}}%
+  }%
+}
+\makeatother
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  pdftitle={A Counterexample to Arrhenius's Sixth Impossibility Theorem},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{A Counterexample to Arrhenius's Sixth Impossibility Theorem}
+\author{}
+\date{2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Gustaf Arrhenius's sixth impossibility theorem says that no population
+axiology satisfies Egalitarian Dominance, General Non-Extreme Priority,
+Non-Elitism, Weak Non-Sadism, and the Weak Quality Addition Condition.
+Teruji Thomas has noted a gap in the proof, and Elliott Thornley has
+restated the last condition with two quantifiers reversed so that the
+proof goes through. I show that the gap cannot be closed: the theorem as
+stated is false. A complete, transitive axiology on Arrhenius's own
+integer welfare levels satisfies all five conditions in their exact
+formulations. It ranks populations first by whether their misery exceeds
+what their excellent lives can offset, and otherwise by total welfare;
+it accepts the Repugnant Conclusion and rejects the Very Repugnant
+Conclusion, the combination the theorem was built to rule out. The
+repaired theorem is true, and I show what its extra premise buys. The
+four remaining conditions force only a background-relative Very
+Repugnant Conclusion; for every axiology on which misery can be
+compensated by lives barely worth living, Weak Quality Addition in
+either form entails the Quality Addition Condition the sixth theorem was
+meant to weaken; and the strengthened condition excludes, by
+stipulation, axiologies on which the quantity of misery that marginal
+lives can never make up for varies with the population it is added to.
+Every theorem stated is verified in Lean 4, and the counterexample was
+found by a search method described here.
+\end{abstract}
+
+
+\setstretch{1.1}
+\section{The theorem}\label{sec-intro}
+
+Population ethics has a body of impossibility theorems that do for the
+comparison of differently sized populations what Arrow's theorem did for
+voting: each lists conditions on a betterness ordering of populations,
+each apparently undeniable, and shows that no ordering satisfies them
+all. The problem they formalize is Parfit's
+(\citeproc{ref-Parfit1984}{1984}, ch.~17;
+\citeproc{ref-Parfit2016}{2016}), that the ways of avoiding the
+Repugnant Conclusion each cost something no less repugnant. After Ng
+(\citeproc{ref-Ng1989}{1989}) and Blackorby and Donaldson
+(\citeproc{ref-BlackorbyDonaldson1991}{1991}), Gustaf Arrhenius proved
+six (\citeproc{ref-Arrhenius2000a}{Arrhenius 2000b},
+\citeproc{ref-Arrhenius2000b}{2000a},
+\citeproc{ref-Arrhenius2003}{2003}, \citeproc{ref-Arrhenius2009}{2009},
+\citeproc{ref-Arrhenius2011}{2011}), now the standard reference point
+(\citeproc{ref-Greaves2017}{Greaves 2017}), and regards the sixth as
+best, because its conditions are logically the weakest. This paper shows
+that it is false, and that the repair which makes it true adds exactly
+one stipulation: that the quantity of misery which lives barely worth
+living can never make up for must be the same whatever population it is
+added to. The theorem says:
+
+\begin{quote}
+\textbf{The Sixth Impossibility Theorem.} There is no population
+axiology which satisfies the Egalitarian Dominance, the General
+Non-Extreme Priority, the Non-Elitism, the Weak Non-Sadism, and the Weak
+Quality Addition Condition. (\citeproc{ref-Arrhenius2011}{Arrhenius
+2011, 9})
+\end{quote}
+
+The theorem has been treated as sound. The Oxford Handbook of Population
+Ethics takes it as a point of departure
+(\citeproc{ref-ArrheniusEtAl2022}{Arrhenius et al. 2022}), and
+Arrhenius's own most recent statement, this year, gives the five
+conditions in the same form, with Weak Quality Addition beginning ``For
+any population X, there is a perfectly equal population with very high
+positive welfare, and a very negative welfare level, and a number of
+lives at this level'' (\citeproc{ref-Arrhenius2026}{Arrhenius 2026, sec.
+2} and n.~10). Its one sustained critic accepts the proof and contests a
+background assumption: Erik Carlson argues that the theorem depends on
+Finite Fine-Grainedness, that any two welfare levels are joined by
+finitely many slight differences, and grants that ``Arrhenius's proof
+shows that no population axiology satisfies the exact versions of his
+five adequacy conditions, given that the order of welfare levels assumed
+in the proof is fine-grained and A-discrete''
+(\citeproc{ref-Carlson2022}{Carlson 2022, sec. 1}). Two readers have
+noticed that something is wrong with the proof itself. Teruji Thomas, in
+an unpublished reconstruction of all six theorems, found that the
+published argument establishes only a weaker conclusion than the one
+stated, and noted in print that ``the proof of his favoured sixth
+theorem contains an error in the derivation of the `Restricted Quality
+Addition Condition' (Arrhenius, 2011, Lemma 1.3). As far as I know, one
+has to slightly strengthen the premisses of the theorem, in a way
+unlikely to cause further controversy''
+(\citeproc{ref-Thomas2018}{Thomas 2018, n. 4}; cf.
+\citeproc{ref-Thomas2016}{Thomas 2016}). Thornley, following Thomas,
+restates Weak Quality Addition with its first two quantifiers reversed,
+remarks that ``the Sixth Impossibility Theorem actually requires the
+slightly stronger condition stated here,'' and adds that ``the stronger
+version remains a compelling adequacy condition''
+(\citeproc{ref-Thornley2021}{Thornley 2021, n. 7}).
+
+Thomas's remark implies that the theorem, not only its proof, has to
+change; but neither he nor Thornley shows that it does, and the
+strengthening has been treated as a formality. It is not. The theorem as
+Arrhenius states it is false, and false on the integer-indexed welfare
+levels that Carlson concedes to it. There is a complete, transitive,
+anonymous welfarist axiology on exactly those levels that satisfies all
+five conditions in the exact formulations Arrhenius gives them. I call
+it the \emph{capacity view}. It ranks populations first by whether the
+misery they contain exceeds what their excellent lives can offset, and
+otherwise by total welfare. It accepts the Repugnant Conclusion, as
+total utilitarianism does, and rejects the Very Repugnant Conclusion,
+which is the combination of attitudes the move from Arrhenius's earlier
+theorems to the sixth was designed to make untenable. So the sixth
+theorem does not refute the position it was built to refute.
+
+The strengthened condition does make the theorem true; Thomas proved it
+in his note, and the proof is machine-checked here. What I add is an
+account of what the strengthening buys. In its original form Weak
+Quality Addition says that, for any population, there is some quantity
+of very bad lives such that adding them together with any number of
+lives barely worth living is no better than adding some number of
+excellent lives. The strengthened condition fixes the quantity of very
+bad lives first and then quantifies over populations. The difference is
+whether the amount of misery that marginal lives can never make up for
+may depend on how much excellence the population already contains. The
+capacity view says it may, and the four other conditions cannot force
+otherwise: what they entail is a Very Repugnant Conclusion relative to a
+background chosen after the quantity of misery is fixed, and nothing
+stronger. Whether the new premise is as ``compelling'' as the old is
+therefore the question whether capacity views deserve to be ruled out by
+an adequacy condition rather than by argument. The counterexample was
+found by a search method (Section~\ref{sec-method}), and every theorem
+here is verified in the Lean 4 proof assistant (Section~\ref{sec-lean}).
+
+\section{The framework and the five conditions}\label{sec-conditions}
+
+Arrhenius's framework is this (\citeproc{ref-Arrhenius2011}{Arrhenius
+2011, 4--7}). Welfare levels are quasi-ordered, with a neutral level 0;
+Arrhenius assumes \emph{Discreteness}, that between any two levels there
+are only finitely many others, arguing that nothing turns on it since
+one can pass to a discrete subset of a dense order
+(\citeproc{ref-Arrhenius2011}{Arrhenius 2011, 6}). Given Discreteness,
+levels are indexed by integers, and \(w+1\) is ``slightly higher'' than
+\(w\). Following Thomas (\citeproc{ref-Thomas2016}{2016}) I identify a
+population with its welfare distribution and write \(n \cdot x\) for
+\(n\) lives at level \(x\) and \(P + Q\) for union; Arrhenius's own
+exact formulations write \(A \subset W_x\), \(N(A) = n\) for what I
+write \(n \cdot x\), and his rider ``other things being equal'' licenses
+the identification.\footnote{Every condition is invariant under
+  replacing lives by others at the same level, so nothing is lost by
+  working with distributions.} An \emph{axiology} is a reflexive,
+transitive, not necessarily complete relation ``at least as good as'';
+``better than'' is its strict part.
+
+The conditions refer to a ``very high'' level, a ``very low positive''
+range \(R(1,y)\) (the levels from 1 to \(y\)), and a ``very negative''
+level. In the exact formulations these are quantified over inside each
+condition rather than fixed in advance, which is what makes the
+formulations exact; I give those (\citeproc{ref-Arrhenius2011}{Arrhenius
+2011, 7--9}), since the result depends on them. A range \(R(x,y)\) is,
+by Arrhenius's definition, a union of at least three levels
+(\citeproc{ref-Arrhenius2011}{Arrhenius 2011, 7} n.~8).
+
+\begin{quote}
+\textbf{Egalitarian Dominance (ED).} If \(N(A) = N(B)\), every member of
+\(B\) has welfare below \(x\), and \(A = n \cdot x\), then \(A\) is
+better than \(B\).
+\end{quote}
+
+\begin{quote}
+\textbf{General Non-Extreme Priority (GNEP).} For any level \(z\) there
+are a positive level \(u\), a positive range \(R(1,y)\) with \(u > y\),
+and a number \(n > 0\) such that for any \(x \geq u\), any
+\(B \subset R(1,y)\) with \(N(B) = n\), and any population \(E\):
+\(\;n \cdot x + 1\cdot z + E\) is at least as good as
+\(B + 1 \cdot (z+1) + E\).
+\end{quote}
+
+\begin{quote}
+\textbf{Non-Elitism (NE).} For any levels \(x, y\) with \(x - 1 > y\)
+there is \(n > 0\) such that for any \(D \subset R(y, x)\):
+\(\;(n+1) \cdot (x-1) + D\) is at least as good as
+\(1 \cdot x + n \cdot y + D\).
+\end{quote}
+
+\begin{quote}
+\textbf{Weak Non-Sadism (WNS).} There are a level \(x < 0\) and a number
+\(n\) such that for any level \(y > 0\), any \(B \subset W_y\), and any
+population \(C\): \(\;B + C\) is at least as good as \(n \cdot x + C\).
+\end{quote}
+
+\begin{quote}
+\textbf{Weak Quality Addition (WQA).} For any population \(X\) there are
+a level \(x < 0\), positive ranges \(R(u,v)\) and \(R(1,y)\) with
+\(u > y\), and numbers \(n, m > 0\) such that for any \(z \geq u\) and
+any \(B \subset R(1,y)\): \(\;n \cdot z + X\) is at least as good as
+\(B + m \cdot x + X\).
+\end{quote}
+
+Informally: ED says a perfectly equal population is better than any
+same-sized population every member of which is worse off. GNEP says that
+lowering one person's welfare by a step is never worse than failing to
+raise a fixed number of others from very low positive to very high
+welfare, whatever else is true of the population. NE says that one
+person's small loss can be compensated by enough others' gains to the
+level she falls to, when the rest of the population lies between those
+levels. WNS says some number of very bad lives is no better an addition
+than any number of lives worth living. WQA says that for any population
+there is some quantity of very bad lives such that adding them, with any
+number of lives barely worth living, is no better than adding some
+number of very good lives.
+
+Three features of WQA matter. First, the comparison is of additions to a
+\emph{background} \(X\), and the witnesses are chosen after \(X\) is
+given. Second, \(B\) ranges over low-range populations of every size, so
+the \(m\) bad lives cannot be compensated by any number of marginal
+lives. Third, WQA weakens Arrhenius's Quality Addition Condition, which
+drops the \(m\) bad lives and says that for any \(X\) some number of
+very good lives added to \(X\) is at least as good as any number of
+marginal lives added to \(X\). Quality Addition is the denial of a
+background-relative Repugnant Conclusion, which total utilitarians
+accept; Weak Quality Addition is the denial of a background-relative
+Very Repugnant Conclusion, that for any population of excellent lives
+there is a better one consisting of some very bad lives together with
+enough lives barely worth living. Arrhenius weakened the condition
+because avoiding the Very Repugnant Conclusion is, as he and his
+coauthors later put it, ``intuitively more compelling'' than avoiding
+the Repugnant Conclusion
+(\citeproc{ref-ArrheniusBudolfsonSpears2021}{Arrhenius et al. 2021,
+119}): the sixth theorem is meant to bind even those who, like Tännsjö
+(\citeproc{ref-Tannsjo2002}{2002}), Huemer
+(\citeproc{ref-Huemer2008}{2008}) and a growing group
+(\citeproc{ref-ZuberEtAl2021}{Zuber et al. 2021};
+\citeproc{ref-SpearsBudolfson2021}{Spears and Budolfson 2021}), have
+made their peace with the Repugnant Conclusion.
+
+\section{The capacity view}\label{sec-capacity}
+
+Fix a ``very high'' level \(A \geq 4\), so that the very low positive
+levels 1, 2, 3 lie below it. For a population \(P\) let \(H(P)\) be the
+number of lives at or above \(A\) (the \emph{excellent} lives),
+\(T^-(P)\) the total welfare of the lives with negative welfare, and
+\(T(P)\) the total welfare. Let \(I(P) = H(P) + T^-(P)\), and for a
+\emph{baseline capacity} \(c \geq 0\) let \(J(P) = \min(0, I(P) + c)\).
+\(I\) measures misery against excellence, each excellent life able to
+offset one unit of negative welfare; \(c\) is misery that any
+population, the empty one included, can absorb; \(J\) is zero when
+excellence and baseline cover the misery and otherwise equals the
+uncovered misery. The \emph{capacity view} ranks populations lexically
+by \((J, T)\):
+
+\begin{quote}
+\(P\) is at least as good as \(Q\) if and only if either
+\(J(P) > J(Q)\), or \(J(P) = J(Q)\) and \(T(P) \geq T(Q)\).
+\end{quote}
+
+This is complete and transitive, being the lexicographic order on pairs
+of integers, and it is welfarist and anonymous. A population whose
+misery exceeds its capacity to redeem it is worse than any whose misery
+does not, and among the former the smaller excess is better; among the
+latter, total welfare decides. The exchange rate of one excellent life
+per unit of misery is a convenience; any positive weight on \(H\) works.
+The simplest member of the family has \(c = 0\), and the reader may take
+that as the official countermodel.
+
+The view is lexical, hence discontinuous: a unit of uncovered misery
+outweighs any quantity of total welfare. With \(c = 0\), a billion lives
+at level 3 together with one life at \(-1\) has \(J = -1\) and is worse
+than the empty population; with \(c \geq 1\) the baseline absorbs the
+unit and the consequence disappears (Section~\ref{sec-repair}). The view
+implies the Repugnant Conclusion, since misery-free populations are
+ranked by total welfare. It rejects the Very Repugnant Conclusion: for
+\(m|z| > c\), the population \(m \cdot z + N \cdot 3\) has \(I + c < 0\)
+and is worse than \(n \cdot A\), which has \(J = 0\), for every \(N\).
+
+It has a close relative in the literature. In the paper that notes the
+gap, Thomas sketches a ``toy model'' with ``a sufficientarian flavour'':
+integer levels, a sufficiency level \(S\), and populations ``ranked, in
+the first instance, by the number of very good lives minus the number of
+very bad lives,'' with ties broken by total welfare
+(\citeproc{ref-Thomas2018}{Thomas 2018, sec. 4}; cf.
+\citeproc{ref-Qizilbash2005}{Qizilbash 2005};
+\citeproc{ref-Knapp2007}{Knapp 2007}; \citeproc{ref-Parfit2016}{Parfit
+2016}). He offers it for another purpose: it rejects the Repugnant
+Conclusion and violates Non-Elitism, but only at the threshold \(S\), so
+that if \(S\) is vague the violations are borderline. The capacity view
+is Thomas's model with two changes: misery is weighted by welfare rather
+than counted, and, decisively, the first layer is capped at zero. The
+cap is what turns a determinate violation of Non-Elitism into none,
+since the one transfer that lowers \(I\) is licensed only in misery-free
+populations, where the capped layer is already zero; and the cap is what
+makes the view accept the Repugnant Conclusion.
+
+\textbf{Theorem 1.} For every \(A \geq 4\) and \(c \geq 0\), the
+capacity view satisfies ED, GNEP, NE, WNS and WQA in the exact
+formulations of Section~\ref{sec-conditions}.\footnote{Arrhenius's 2026
+  statement gives the informal conditions with ``better than'' in place
+  of ``at least as good as,'' noting that the exact versions are the
+  weaker ones (\citeproc{ref-Arrhenius2026}{Arrhenius 2026, n. 10}). The
+  capacity view satisfies the strict forms too: ED and WQA are strict
+  below, GNEP and WNS have \(\Delta T > 0\), and NE is strict once its
+  witness is raised from 1 to 2. The machine-checked statements are the
+  non-strict ones.}
+
+Each of the first four conditions compares two populations that differ
+by a \emph{transfer}: lives are moved between levels or added. Write
+\(\Delta I\) and \(\Delta T\) for the change in \(I\) and \(T\) from the
+population the condition says is no better to the one it says is at
+least as good. If \(\Delta I \geq 0\) and \(\Delta T \geq 0\) the view
+agrees with the condition, since \(J\) is monotone in \(I\) and \(c\)
+cancels; backgrounds drop out, because \(I\) and \(T\) are additive over
+union.
+
+\emph{Egalitarian Dominance.} \(A = n \cdot x\), every member of \(B\)
+is below \(x\), \(N(B) = n\). Then \(T(A) = nx > T(B)\). If \(x \geq A\)
+then \(H(A) = n \geq H(B)\); if \(x < A\) then \(H(B) = 0 = H(A)\). And
+\(T^-(A) \geq T^-(B)\): if \(x < 0\) every member of \(B\) is negative
+and below \(x\), so \(T^-(B) = T(B) < nx = T^-(A)\); if \(x \geq 0\)
+then \(T^-(A) = 0 \geq T^-(B)\).
+
+\emph{General Non-Extreme Priority.} Given \(z\), choose \(u = A\),
+\(y = 3\), \(n = 2\). Two excellent lives raise \(H\) by 2; the person
+moved from \(z+1\) to \(z\) lowers \(H\) by 1 if \(z + 1 = A\) and
+lowers \(T^-\) by 1 if \(z + 1 \leq 0\); \(B\) contributes nothing to
+\(I\). So \(\Delta I \geq 0\), and \(\Delta T \geq 2A - 7 > 0\).
+
+\emph{Non-Elitism.} Given \(x - 1 > y\), choose \(n = 1\): compare
+\(1\cdot x + 1 \cdot y + D\) with \(2 \cdot (x-1) + D\),
+\(D \subset R(y,x)\). \(\Delta T = x - 2 - y \geq 0\). If
+\(x - 1 \geq A\) the two lives at \(x-1\) are excellent,
+\(\Delta H \geq 0\), and \(\Delta T^- \geq 0\) since only the life at
+\(y\) can be negative and it is raised. If \(x < A\) then
+\(\Delta H = 0\) and \(\Delta T^- \geq 0\); the only case needing care
+is \(x = 0\), where two lives at \(-1\) replace one at 0 and one at
+\(y \leq -2\), and \(\Delta T^- = |y| - 2 \geq 0\). The remaining case
+is \(x = A\), where an excellent life is lost: \(\Delta H = -1\). If
+\(y < 0\) the life raised from \(y\) gives \(\Delta T^- = |y| \geq 1\),
+so \(\Delta I \geq 0\). If \(y \geq 0\) then \(D \subset R(y, A)\)
+contains no negative lives, both populations have \(J = 0\), and \(T\)
+decides, and \(T\) does not fall. This is the one place where \(I\) can
+fall under a licensed transfer, and it falls only in a population whose
+\(J\) is already zero and stays zero. The restriction on \(D\) makes
+this work; Arrhenius's General Non-Elitism, used in his fifth theorem,
+drops it, and the capacity view violates General Non-Elitism, as it
+must, since the fifth theorem is valid.
+
+\emph{Weak Non-Sadism.} Choose \(x = -1\), \(n = 1\): compare
+\(1 \cdot (-1) + C\) with \(B + C\), \(B\) at some \(y > 0\).
+\(\Delta I = H(B) + 1 \geq 1\) and \(\Delta T = T(B) + 1 \geq 1\).
+
+\emph{Weak Quality Addition.} Given \(X\), choose \(x = -1\), \(u = A\),
+\(y = 3\), \(n = 1\), and \(m = \max(0, I(X) + c) + 1\). For any
+\(z \geq A\) and \(B \subset R(1,3)\): \(I(1 \cdot z + X) = 1 + I(X)\),
+while \(I(B + m \cdot (-1) + X) + c = I(X) + c - m < 0\), since \(B\)
+contributes nothing to \(I\). So
+\(J(B + m\cdot(-1) + X) < J(1 \cdot z + X)\), and \(1 \cdot z + X\) is
+better for every \(B\), whatever its size.
+
+The last argument displays the mechanism. WQA lets the quantity of
+misery depend on the background, and the capacity view uses exactly that
+freedom: it chooses enough misery to exceed the background's capacity,
+after which no quantity of marginal lives helps, because marginal lives
+contribute to \(T\) and not to \(I\). The other four conditions never
+require comparing a population that has exceeded its capacity favourably
+with one that has not, because none of the transfers they license lowers
+\(I\) except in populations with no misery.
+
+So the Sixth Impossibility Theorem is false, and Arrhenius's argument
+fails at exactly the step Thomas identified. In the proof of Lemma 1.3,
+step (12) applies WQA to the background \(A_1 \cup X\) using witnesses
+the condition supplies for the background \(X\)
+(\citeproc{ref-Arrhenius2011}{Arrhenius 2011, 18--19}), where \(A_1\)
+consists of excellent lives whose number depends on those very
+witnesses. On the capacity view, adding \(A_1\) raises the background's
+capacity, and the misery that exceeded the capacity of \(X\) no longer
+exceeds that of \(A_1 \cup X\), so in the enlarged background the
+marginal lives win.
+
+\section{The repair and what it costs}\label{sec-repair}
+
+In Thomas's notation (\citeproc{ref-Thomas2016}{2016, 11}), the
+conclusion Arrhenius intended is
+
+\begin{quote}
+\textbf{Very Repugnant Addition (VRA).} For some population \(P\), any
+level \(z < 0\), and any \(m, n \geq 1\), there is \(N\) such that
+\(P + m \cdot z + N \cdot 3\) is better than \(P + n \cdot A\),
+\end{quote}
+
+and the conclusion the proof delivers is
+
+\begin{quote}
+\textbf{Very Repugnant Addition* (VRA*).} For any level \(z < 0\) and
+any \(m \geq 1\), there is a population \(P\) such that for any
+\(n \geq 1\) there is \(N\) with \(P + m \cdot z + N \cdot 3\) better
+than \(P + n \cdot A\).
+\end{quote}
+
+In VRA* the background may depend on \(z\) and \(m\). Thomas writes that
+VRA* ``is slightly weaker than VRA, because \(P\) is allowed to depend
+{[}on{]} \(z\) and \(m\). I think that VRA* is not much less `repugnant'
+than VRA, but then again it is not easy to understand the difference
+between them'' (\citeproc{ref-Thomas2016}{Thomas 2016, 11}). Thornley's
+condition, which in Thomas's fixed-threshold setting entails the denial
+of VRA*, is:
+
+\begin{quote}
+\textbf{Weak Quality Addition* (WQA*).} There are a level \(x < 0\) and
+a number \(m > 0\) such that for any population \(X\) there are a
+positive level \(u\), a range \(R(1,y)\) with \(u > y\), and \(n > 0\)
+such that for any \(z \geq u\) and any \(B \subset R(1,y)\):
+\(\;n \cdot z + X\) is at least as good as \(B + m \cdot x + X\).
+\end{quote}
+
+Thomas's corrected theorem is that ED, GNEP, NE and WNS entail VRA*, so
+that the five conditions with WQA* are jointly unsatisfiable. I have
+verified his proof and proved the unsatisfiability directly for
+Arrhenius's exact formulations as well (Section~\ref{sec-lean}). The
+capacity view violates WQA*: given \(x\) and \(m\), take \(X\) to be
+\(m|x|\) lives at level \(A\), so the misery is exactly covered and both
+sides have \(J = 0\); total welfare decides, and enough lives at level 1
+in \(B\) make the right-hand side better.
+
+Whether VRA* is much less repugnant than VRA is the question whether
+WQA* is as compelling as WQA, and the capacity view says what is at
+stake. The two conditions agree on every axiology satisfying:
+
+\begin{quote}
+\textbf{Compensation.} For any population \(Y\), any level \(z < 0\) and
+any \(m\), there is \(K\) such that \(Y + m \cdot z + K \cdot 3\) is at
+least as good as \(Y\).
+\end{quote}
+
+Compensation says that any finite misery added to any population can be
+made up for by enough lives barely worth living. Total utilitarianism
+satisfies it, as do critical-level views with critical level below 3
+(\citeproc{ref-BlackorbyBossertDonaldson2005}{Blackorby et al. 2005};
+\citeproc{ref-Broome2004}{Broome 2004}), prioritarian views, and any
+view Archimedean in the trade between misery and marginal lives. For
+such views both WQA and WQA* entail Quality Addition:
+
+\textbf{Proposition 2.} If an axiology satisfies Compensation and WQA,
+it satisfies Quality Addition in Arrhenius's exact form: for any \(X\)
+there are a positive level \(u\), a range \(R(1,y)\) with \(u > y\), and
+\(n > 0\) such that \(n \cdot z + X\) is at least as good as \(B + X\)
+for every \(z \geq u\) and every \(B \subset R(1,y)\).
+
+\emph{Proof.} Given \(X\), let \(x, u, y, n, m\) be the witnesses WQA
+supplies, and take \(z \geq u\) and \(B \subset R(1,y)\). Compensation
+applied to \(X + B\) gives \(K\) with \(X + B + m \cdot x + K \cdot 3\)
+at least as good as \(X + B\). Since \(y \geq 3\), \(B + K \cdot 3\)
+lies in \(R(1,y)\), so WQA gives \(n \cdot z + X\) at least as good as
+\(B + K \cdot 3 + m \cdot x + X\). Transitivity finishes. \(\square\)
+
+The same argument works for WQA*, and the converse holds given Weak
+Non-Sadism with a positive number of lives.\footnote{Given \(X\), let QA
+  supply \(u, y, n\) and WNS supply \(x'\) and \(n' > 0\). For
+  \(B \subset R(1,y)\), WNS with one added life at level 1 and
+  background \(B + X\) gives \(B + 1 \cdot 1 + X\) at least as good as
+  \(B + n' \cdot x' + X\), and QA, since
+  \(B + 1 \cdot 1 \subset R(1,y)\), gives \(n \cdot z + X\) at least as
+  good as that; so WQA holds with \(x = x'\), \(m = n'\), and since
+  these do not depend on \(X\), so does WQA*.} So for a
+Compensation-satisfying axiology the weakening of Quality Addition to
+Weak Quality Addition, which distinguishes the sixth theorem from the
+fourth, buys nothing. With Thomas's fourth theorem, that ED, GNEP, NE
+and WNS entail Repugnant Addition (for any \(X\) and \(n\) there is
+\(N\) with \(N \cdot 3 + X\) better than \(n \cdot A + X\), which
+entails the denial of Quality Addition), this gives, in Thomas's
+fixed-threshold setting:
+
+\textbf{Corollary 3.} ED, GNEP, NE, WNS, WQA and Compensation are
+jointly unsatisfiable. Given the four conditions the sixth theorem
+shares with the fourth, Weak Quality Addition entails that some finite
+quantity of misery cannot be made up for by any number of lives barely
+worth living.
+
+The weakening therefore has content only for axiologies that violate
+Compensation, and, given the other four conditions, \emph{commits} one
+to violating it. Those are the axiologies at which the sixth theorem is
+aimed: lexical views on which the badness of a very bad life is of a
+different order from the goodness of a marginal one, such as the Lexical
+Totalism of Carlson (\citeproc{ref-Carlson2022}{2022}), Thomas
+(\citeproc{ref-Thomas2018}{2018}) and Thornley
+(\citeproc{ref-Thornley2021}{2021}; cf.
+\citeproc{ref-Thornley2022}{Thornley 2022}), and the capacity view.
+Among them WQA and WQA* come apart, and the capacity view is the shape
+of the gap. WQA* says the quantity of misery that marginal lives cannot
+make up for can be fixed once, independently of the population it is
+added to; WQA says only that for each population there is such a
+quantity. The capacity view takes the second option, because it treats
+misery as redeemable by excellent lives and irredeemable by marginal
+ones: in a population rich in excellent lives any fixed quantity of
+misery is covered, and once covered it is subject to the ordinary
+totalist trade against marginal lives; in a population poor in excellent
+lives the same quantity is uncovered, and no quantity of marginal lives
+touches it.
+
+Is that a structure an adequacy condition should rule out? I do not
+think the question has an obvious answer, and I want to resist two quick
+ones.
+
+The first is that the capacity view is obviously absurd, so WQA* is as
+harmless as Thornley says. The view has features nobody would defend as
+stated: an arbitrary exchange rate, a sharp threshold, and an origin in
+the search for a model rather than for the truth. With \(c = 0\) it also
+says that a billion marginal lives with one slightly bad life is worse
+than nothing. That consequence is worth separating from the others,
+because it is not a commitment of the structure. The baseline removes
+it: with \(c \geq 1\) the empty population absorbs a unit of misery,
+every condition still holds, and the Very Repugnant Conclusion still
+fails for misery exceeding the baseline. What no member of the family
+can remove is uncompensable misery at the empty background once the
+misery exceeds \(c\), and that is not peculiar to the capacity view. By
+Corollary 3, anyone who accepts the five conditions denies Compensation;
+Lexical Totalism in Carlson's and Thornley's versions denies it at every
+background, since a very negative life has a negative superior component
+that no number of barely-positive lives, which add only inferior goods,
+can restore: ``adding a combination of very negative welfare lives and
+barely positive welfare lives means adding \((r, s)\) with \(r < 0\)''
+(\citeproc{ref-Thornley2021}{Thornley 2021, sec. 4}; cf.
+\citeproc{ref-Carlson2022}{Carlson 2022, secs. 4--5}). What the baseline
+shows is that the five conditions do not force the uncompensability of a
+small quantity of misery. They do not force the uncompensability of mild
+misery in any quantity either, though every member of the family as
+defined has it, since misery is weighted by welfare from level \(-1\)
+down: a variant that counts only lives below a very negative level
+\(V\), with weight \(\ell - V\), satisfies the same conditions (checked
+numerically, not machine-checked) and makes any number of lives at
+\(-1\) compensable at every background. What the five conditions force
+is only what Corollary 3 says, that some finite misery is uncompensable
+by marginal lives. The sharp threshold is likewise an artefact of taking
+the simplest potential: a graded version, in which a life's redemptive
+weight rises linearly from 0 at level 3 to 1 at level \(A\), also
+satisfies the five conditions (checked numerically for \(A \leq 10\);
+the machine-checked proof is for the step version). On that version
+every life above the barely-worth-living range helps redeem misery, the
+more the higher it lies up to \(A\), and the structural idea is not
+absurd. It is close to the thought that the Very Repugnant Conclusion is
+worse than the Repugnant one: someone who accepts that enough marginal
+lives outweigh excellent lives, but denies that they do when misery has
+been thrown in, is treating misery as a dimension that marginal lives do
+not reach. The capacity view is the simplest way of making that attitude
+consistent with the four other conditions, and that it must let the
+uncompensable quantity depend on the background is a discovery about the
+attitude, not an artefact of the construction.
+
+The second quick answer is that VRA* is as repugnant as VRA, so the
+weakening does not matter. Here the capacity view gives a reason to
+disagree with Thomas's first instinct, though I should be clear whose
+reason it is. VRA* says that for any quantity of misery there is a
+background against which adding it together with enough marginal lives
+beats adding excellent lives. On the capacity view the background that
+does the work is rich enough in excellent lives to cover the misery, and
+what VRA* then asserts is that, in a population whose excellent lives
+already redeem its misery, enough additional marginal lives beat
+additional excellent lives. That is the Repugnant Conclusion again, for
+a population with covered misery in it, and someone who accepts the
+Repugnant Conclusion has no new reason to find it repugnant. That is how
+the capacity view describes its own verdict. A critic of the Very
+Repugnant Conclusion who is not a capacity theorist will describe the
+same verdict differently: in some sufficiently good world, adding lives
+of torment with enough lives barely worth living is better than adding
+excellent lives, and the goodness of the surrounding world does not make
+the torment less. I do not think the capacity view answers that critic
+without presupposing itself. What it has is a diagnosis. The critic's
+complaint is against VRA*, which the four conditions entail; so the
+critic must reject one of ED, GNEP, NE and WNS, and Weak Quality
+Addition in any form will not help, because the complaint is about a
+conclusion the four conditions reach without it. The repaired theorem
+tells the critic of the Very Repugnant Conclusion that the fight is
+elsewhere. The unrepaired theorem told the critic, wrongly, that there
+was no consistent position to fight from.
+
+So the corrected sixth theorem is a theorem about background-relative
+repugnance. What ED, GNEP, NE and WNS jointly force is VRA*: for each
+quantity of misery, some background against which that misery plus
+enough marginal lives beats excellent lives. On the capacity view those
+backgrounds are the ones that have redeemed their misery, and the
+conclusion is the Repugnant Conclusion for such backgrounds; and the
+four conditions do not force VRA, as the capacity view shows. Anyone who
+wants more must add WQA*, and the only thing WQA* adds to WQA is the
+stipulation that the uncompensable quantity of misery be the same for
+every background: by Proposition 2 it has no work to do against
+Archimedean views, and its content is the exclusion of views like the
+capacity view.
+
+Two remarks on scope. The result does not depend on denying Finite
+Fine-Grainedness. The known escape, Carlson's non-Archimedean totalism
+(\citeproc{ref-Carlson2022}{2022, sec. 5}), Thomas's total lexic
+utilitarianism (\citeproc{ref-Thomas2018}{2018, sec. 1}), Thornley's
+Lexical Totalism, gives welfare levels a lexical structure so that no
+finite sequence of slight steps leads from very high to very low;
+Thornley says ``the theorem is only true given Finite Fine-Grainedness''
+(\citeproc{ref-Thornley2021}{Thornley 2021, sec. 3}), and is right about
+the strengthened theorem. The capacity view lives on integer levels,
+where every level is finitely many steps from every other, and its
+lexical structure is in the ranking of populations, not of lives, which
+the four fine-grainedness-using conditions do not reach. And the view
+also satisfies Dominance Addition, Non-Sadism and Mere Addition; it is
+pathological only where it was designed to be.
+
+\section{How the counterexample was found}\label{sec-method}
+
+The capacity view was not found by trying candidates. Arrhenius's
+conditions other than the Quality conditions are \emph{transfer
+conditions}: each says that a population obtained from another by a
+specified change is at least as good, perhaps only when the background
+satisfies a restriction. An impossibility proof is a chain of licensed
+transfers ending at a population the conclusion's denial says is no
+better than the start. So look for a quantity \(\Phi\) on populations
+that no licensed transfer lowers, and rank populations first by
+\(\min(0, \Phi)\) and then by total welfare. If \(\Phi\) is additive
+over union, with a weight \(w_\ell\) per level, backgrounds drop out and
+each condition is a linear inequality on the weights. GNEP, lowering one
+life from \(z\) to \(z-1\) while \(n\) lives rise from a low level \(y\)
+to a high level \(x\), requires \(w_{z-1} + n w_x \geq w_z + n w_y\);
+NE, lowering one life from \(x\) to \(x-1\) while \(n\) rise from \(y\)
+to \(x-1\), requires \((n+1) w_{x-1} \geq w_x + n w_y\); WNS, comparing
+\(D\) lives at a positive level \(y'\) with \(m\) at a negative level
+\(x'\), requires \(D w_{y'} \geq m w_{x'}\); and ED requires the weights
+to be non-decreasing. One transfer lowers every such \(\Phi\):
+Non-Elitism at the very high level, raising non-negative lives, removes
+an excellent life and adds nothing negative. It is licensed only in
+misery-free backgrounds, so it is neutralized by capping the layer at
+zero, provided \(w_\ell \geq 0\) for \(\ell \geq 0\); that is why the
+layer is \(\min(0,\Phi)\). And refusing a conclusion of the form ``for
+all \(N\), \(m \cdot z + N \cdot 3 + P\) beats \(n \cdot A + P\)''
+requires \(\Phi(m \cdot z + N \cdot 3) < 0\) for all \(N\), hence
+\(w_3 \leq 0\), hence with the cap \(w_0 = \dots = w_3 = 0\) and
+\(w_z < 0\).
+
+For fixed witnesses this is a linear feasibility problem in a dozen
+variables, settled instantly by a solver; the script accompanies the
+paper. For the sixth theorem's conditions, with every witness 1, it
+returns \(w_\ell = \ell\) for \(\ell < 0\), \(0\) for
+\(0 \leq \ell < A\), and \(1\) for \(\ell \geq A\): \(\Phi = H + T^-\),
+the capacity view. For the fifth theorem, which replaces Non-Elitism by
+General Non-Elitism and Weak Non-Sadism by Dominance Addition, the
+system is infeasible for every small witness, because the unrestricted
+background lets the transfer at the very high level occur in populations
+with uncovered misery, forcing \(w_A \leq 0\), which the other
+conditions propagate into a contradiction. For the first four theorems
+the method is uninformative, since their conclusions involve no misery
+and an axiology of this shape can refuse a misery-free conclusion only
+through \(w_3 < 0\), which the cap forbids; the sixth is the only
+theorem whose conclusion involves misery, and in the fifth General
+Non-Elitism closes the gap. The method finds countermodels of one shape,
+and infeasibility is evidence rather than proof; but when it succeeds it
+delivers a candidate whose verification is routine, and when it fails it
+shows which condition excludes. Here it delivered the capacity view in
+the first run, and the verification took longer than the search. That
+the output was a modification of a model already in the literature is
+some evidence that it finds natural objects; the modification, capping
+the layer at zero, is the one Thomas's model needed.
+
+\section{Machine verification}\label{sec-lean}
+
+The error in the sixth theorem is a quantifier-dependence error, a
+witness chosen for one background used for another; it is the kind a
+proof assistant catches and referees do not. Social choice has its
+impossibility theorems verified and even discovered by machine
+(\citeproc{ref-Nipkow2009}{Nipkow 2009}; \citeproc{ref-TangLin2009}{Tang
+and Lin 2009}; \citeproc{ref-GeistEndriss2011}{Geist and Endriss 2011};
+\citeproc{ref-BrandtGeist2016}{Brandt and Geist 2016}); population
+axiology has one mechanized result that I can find
+(\citeproc{ref-ParentBenzmuller2024}{Parent and Benzmüller 2024}), and
+none of Arrhenius's theorems had been checked. I have formalized the
+results of this paper in Lean 4 (\citeproc{ref-MouraUllrich2021}{Moura
+and Ullrich 2021}) using only the core library; the source accompanies
+the paper. The theorem \texttt{sixth\_theorem\_countermodel} states that
+for every \(A \geq 4\) and \(c \geq 0\) the capacity view is complete
+and transitive and satisfies the five conditions in their exact
+formulations, and violates WQA*; populations are lists of integer
+levels, and ``\(B \subset R(1,y)\)'' is the hypothesis that every member
+lies between 1 and \(y\). The theorems \texttt{T1} to \texttt{T5} and
+\texttt{T6star} verify Thomas's reconstructions of all six theorems, the
+last being that ED, GNEP, NE and WNS entail VRA*, with populations as
+finitely supported count functions and conditions in Thomas's
+fixed-threshold forms; \texttt{prop2} and \texttt{cor3} verify
+Proposition 2 and Corollary 3; and \texttt{T6star\_exact} repeats the
+corrected theorem for Arrhenius's exact conditions, where the thresholds
+are chosen inside the conditions and the low population is an arbitrary
+list in the range. Thomas's statements and proofs are correct in every
+case. Two fidelity choices are recorded in the source, besides the side
+condition \(y \geq 3\) that Arrhenius's definition of a range imposes:
+in Egalitarian Dominance the common size is positive; and in Weak
+Non-Sadism, where Arrhenius writes ``a number of lives,'' the
+countermodel is shown to satisfy the condition with a positive number,
+the stronger claim, while the theorems assume only the weaker form. All
+proofs are complete, contain no \texttt{sorry}, and depend only on
+Lean's three standard axioms; the development is about twelve hundred
+lines.
+
+\section{Conclusion}\label{sec-conclusion}
+
+Arrhenius's sixth impossibility theorem is false. The capacity view
+satisfies all five of its conditions in their exact formulations, on
+integer-indexed welfare levels, while accepting the Repugnant Conclusion
+and rejecting the Very Repugnant Conclusion. The theorem becomes true
+when Weak Quality Addition is strengthened so that the uncompensable
+quantity of misery is fixed before the background, as Thomas and
+Thornley propose, and the strengthened theorem is machine-checked along
+with Thomas's reconstructions of the other five. But the strengthening
+is not free. For every axiology on which misery can be compensated by
+lives barely worth living, Weak Quality Addition in either form entails
+the Quality Addition Condition the sixth theorem was meant to weaken;
+for the axiologies on which it cannot, the strengthened condition rules
+out, by stipulation, the view that how much misery a population can
+absorb depends on how much excellence it contains. What the four
+remaining conditions establish is that for any quantity of misery there
+is some background against which the Repugnant Conclusion holds with
+that misery thrown in. On the capacity view those are the backgrounds
+that have already redeemed it, and the verdict is the Repugnant
+Conclusion over again; a critic who finds the verdict repugnant whatever
+the background has a quarrel with the four conditions, not with Weak
+Quality Addition in either form.
+
+The error survived years of citation before Thomas found it, and a
+decade since, because finding a gap in a proof and finding out whether
+the claim is true are different tasks. Population axiology has a stock
+of impossibility theorems whose premises are each the product of careful
+philosophical judgment and whose proofs are each a page of inequalities
+that almost nobody re-derives. The judgment cannot be automated. The
+inequalities can, and should be.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{1}
+\bibitem[\citeproctext]{ref-Arrhenius2000b}
+Arrhenius, Gustaf. 2000a. {``An Impossibility Theorem for Welfarist
+Axiologies.''} \emph{Economics and Philosophy} 16 (2): 247--66.
+\url{https://doi.org/10.1017/S0266267100000249}.
+
+\bibitem[\citeproctext]{ref-Arrhenius2000a}
+Arrhenius, Gustaf. 2000b. \emph{Future Generations: A Challenge for
+Moral Theory}. Uppsala University.
+
+\bibitem[\citeproctext]{ref-Arrhenius2003}
+Arrhenius, Gustaf. 2003. {``The Very Repugnant Conclusion.''} In
+\emph{Logic, Law, Morality: Thirteen Essays in Practical Philosophy in
+Honour of Lennart {Å}qvist}, edited by Krister Segerberg and Rysiek
+Sliwinski, vol. 51. Uppsala Philosophical Studies. Uppsala University.
+
+\bibitem[\citeproctext]{ref-Arrhenius2009}
+Arrhenius, Gustaf. 2009. {``One More Axiological Impossibility
+Theorem.''} In \emph{Logic, Ethics, and All That Jazz: Essays in Honour
+of Jordan Howard Sobel}, edited by Lars-Göran Johansson, Jan Österberg,
+and Rysiek Sliwinski, vol. 57. Uppsala Philosophical Studies. Uppsala
+University.
+
+\bibitem[\citeproctext]{ref-Arrhenius2011}
+Arrhenius, Gustaf. 2011. {``The Impossibility of a Satisfactory
+Population Ethics.''} In \emph{Descriptive and Normative Approaches to
+Human Behavior}, edited by Ehtibar N. Dzhafarov and Lacey Perry, vol. 3.
+Advanced Series on Mathematical Psychology. World Scientific.
+\url{https://doi.org/10.1142/9789814368018_0001}.
+
+\bibitem[\citeproctext]{ref-Arrhenius2026}
+Arrhenius, Gustaf. 2026. {``Population Ethics: A Challenge to the
+Project of Normative Ethics?''} In \emph{The Oxford Handbook of
+Normative Ethics}, edited by David Copp, Connie Rosati, and Tina Rulli.
+Oxford University Press.
+\url{https://doi.org/10.1093/9780197510926.003.0042}.
+
+\bibitem[\citeproctext]{ref-ArrheniusBudolfsonSpears2021}
+Arrhenius, Gustaf, Mark Budolfson, and Dean Spears. 2021. {``Does
+Climate Change Policy Depend Importantly on Population Ethics?''} In
+\emph{Philosophy and Climate Change}, edited by Mark Budolfson, Tristram
+McPherson, and David Plunkett. Oxford University Press.
+\url{https://doi.org/10.1093/oso/9780198796282.003.0006}.
+
+\bibitem[\citeproctext]{ref-ArrheniusEtAl2022}
+Arrhenius, Gustaf, Krister Bykvist, Tim Campbell, and Elizabeth
+Finneron-Burns, eds. 2022. \emph{The Oxford Handbook of Population
+Ethics}. Oxford University Press.
+\url{https://doi.org/10.1093/oxfordhb/9780190907686.001.0001}.
+
+\bibitem[\citeproctext]{ref-BlackorbyBossertDonaldson2005}
+Blackorby, Charles, Walter Bossert, and David Donaldson. 2005.
+\emph{Population Issues in Social Choice Theory, Welfare Economics, and
+Ethics}. Cambridge University Press.
+\url{https://doi.org/10.1017/CCOL0521825512}.
+
+\bibitem[\citeproctext]{ref-BlackorbyDonaldson1991}
+Blackorby, Charles, and David Donaldson. 1991. {``Normative Population
+Theory: A Comment.''} \emph{Social Choice and Welfare} 8 (3).
+\url{https://doi.org/10.1007/BF00177664}.
+
+\bibitem[\citeproctext]{ref-BrandtGeist2016}
+Brandt, Felix, and Christian Geist. 2016. {``Finding Strategyproof
+Social Choice Functions via {SAT} Solving.''} \emph{Journal of
+Artificial Intelligence Research} 55: 565--602.
+\url{https://doi.org/10.1613/jair.4959}.
+
+\bibitem[\citeproctext]{ref-Broome2004}
+Broome, John. 2004. \emph{Weighing Lives}. Oxford University Press.
+\url{https://doi.org/10.1093/019924376X.001.0001}.
+
+\bibitem[\citeproctext]{ref-Carlson2022}
+Carlson, Erik. 2022. {``On Some Impossibility Theorems in Population
+Ethics.''} In \emph{The Oxford Handbook of Population Ethics}, edited by
+Gustaf Arrhenius, Krister Bykvist, Tim Campbell, and Elizabeth
+Finneron-Burns. Oxford University Press.
+\url{https://doi.org/10.1093/oxfordhb/9780190907686.013.14}.
+
+\bibitem[\citeproctext]{ref-GeistEndriss2011}
+Geist, Christian, and Ulle Endriss. 2011. {``Automated Search for
+Impossibility Theorems in Social Choice Theory: Ranking Sets of
+Objects.''} \emph{Journal of Artificial Intelligence Research} 40:
+143--74. \url{https://doi.org/10.1613/jair.3126}.
+
+\bibitem[\citeproctext]{ref-Greaves2017}
+Greaves, Hilary. 2017. {``Population Axiology.''} \emph{Philosophy
+Compass} 12 (11): e12442. \url{https://doi.org/10.1111/phc3.12442}.
+
+\bibitem[\citeproctext]{ref-Huemer2008}
+Huemer, Michael. 2008. {``In Defence of Repugnance.''} \emph{Mind} 117
+(468): 899--933. \url{https://doi.org/10.1093/mind/fzn079}.
+
+\bibitem[\citeproctext]{ref-Knapp2007}
+Knapp, Christopher. 2007. {``Trading Quality for Quantity.''}
+\emph{Journal of Philosophical Research} 32: 211--33.
+\url{https://doi.org/10.5840/jpr20073243}.
+
+\bibitem[\citeproctext]{ref-MouraUllrich2021}
+Moura, Leonardo de, and Sebastian Ullrich. 2021. {``The {L}ean 4 Theorem
+Prover and Programming Language.''} In \emph{Automated Deduction -- CADE
+28}, edited by André Platzer and Geoff Sutcliffe, vol. 12699. Lecture
+Notes in Computer Science. Springer.
+\url{https://doi.org/10.1007/978-3-030-79876-5_37}.
+
+\bibitem[\citeproctext]{ref-Ng1989}
+Ng, Yew-Kwang. 1989. {``What Should We Do about Future Generations?
+{I}mpossibility of {P}arfit's {T}heory {X}.''} \emph{Economics and
+Philosophy} 5 (2): 235--53.
+\url{https://doi.org/10.1017/S0266267100002406}.
+
+\bibitem[\citeproctext]{ref-Nipkow2009}
+Nipkow, Tobias. 2009. {``Social Choice Theory in {HOL}: {A}rrow and
+{G}ibbard-{S}atterthwaite.''} \emph{Journal of Automated Reasoning} 43
+(3): 289--304. \url{https://doi.org/10.1007/s10817-009-9147-4}.
+
+\bibitem[\citeproctext]{ref-ParentBenzmuller2024}
+Parent, Xavier, and Christoph Benzmüller. 2024. {``Conditional Normative
+Reasoning as a Fragment of {HOL}.''} \emph{Journal of Applied
+Non-Classical Logics} 34 (4): 561--92.
+\url{https://doi.org/10.1080/11663081.2024.2386917}.
+
+\bibitem[\citeproctext]{ref-Parfit1984}
+Parfit, Derek. 1984. \emph{Reasons and Persons}. Oxford University
+Press.
+
+\bibitem[\citeproctext]{ref-Parfit2016}
+Parfit, Derek. 2016. {``Can We Avoid the Repugnant Conclusion?''}
+\emph{Theoria} 82 (2): 110--27.
+\url{https://doi.org/10.1111/theo.12097}.
+
+\bibitem[\citeproctext]{ref-Qizilbash2005}
+Qizilbash, Mozaffar. 2005. {``Transitivity and Vagueness.''}
+\emph{Economics and Philosophy} 21 (1): 109--31.
+\url{https://doi.org/10.1017/S0266267104000410}.
+
+\bibitem[\citeproctext]{ref-SpearsBudolfson2021}
+Spears, Dean, and Mark Budolfson. 2021. {``Repugnant Conclusions.''}
+\emph{Social Choice and Welfare} 57 (3): 567--88.
+\url{https://doi.org/10.1007/s00355-021-01321-2}.
+
+\bibitem[\citeproctext]{ref-TangLin2009}
+Tang, Pingzhong, and Fangzhen Lin. 2009. {``Computer-Aided Proofs of
+{A}rrow's and Other Impossibility Theorems.''} \emph{Artificial
+Intelligence} 173 (11): 1041--53.
+\url{https://doi.org/10.1016/j.artint.2009.02.005}.
+
+\bibitem[\citeproctext]{ref-Tannsjo2002}
+Tännsjö, Torbjörn. 2002. {``Why We Ought to Accept the Repugnant
+Conclusion.''} \emph{Utilitas} 14 (3): 339--59.
+\url{https://doi.org/10.1017/S0953820800003642}.
+
+\bibitem[\citeproctext]{ref-Thomas2016}
+Thomas, Teruji. 2016. {``Reconstructing {A}rrhenius's Impossibility
+Theorems.''} Unpublished note.
+\url{https://users.ox.ac.uk/~mert2060/webfiles/Reconstructing-Arrhenius-for-web.pdf}.
+
+\bibitem[\citeproctext]{ref-Thomas2018}
+Thomas, Teruji. 2018. {``Some Possibilities in Population Axiology.''}
+\emph{Mind} 127 (507): 807--32.
+\url{https://doi.org/10.1093/mind/fzx047}.
+
+\bibitem[\citeproctext]{ref-Thornley2021}
+Thornley, Elliott. 2021. {``The Impossibility of a Satisfactory
+Population Prospect Axiology (Independently of {F}inite
+{F}ine-{G}rainedness).''} \emph{Philosophical Studies} 178 (11):
+3671--95. \url{https://doi.org/10.1007/s11098-021-01621-4}.
+
+\bibitem[\citeproctext]{ref-Thornley2022}
+Thornley, Elliott. 2022. {``A Dilemma for Lexical and {A}rchimedean
+Views in Population Axiology.''} \emph{Economics and Philosophy} 38 (3):
+395--415. \url{https://doi.org/10.1017/S0266267121000213}.
+
+\bibitem[\citeproctext]{ref-ZuberEtAl2021}
+Zuber, Stéphane, Nikhil Venkatesh, Torbjörn Tännsjö, et al. 2021.
+{``What Should We Agree on about the Repugnant Conclusion?''}
+\emph{Utilitas} 33 (4): 379--83.
+\url{https://doi.org/10.1017/S095382082100011X}.
+
+\end{CSLReferences}
+
+
+
+
+\end{document}
