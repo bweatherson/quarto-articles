@@ -1,0 +1,132 @@
+---
+title: "Exhaustion and Closure"
+abstract: |
+  Inquirers often conclude that a list of candidate answers is complete because people have looked hard and nothing else has turned up. I argue that this inference has a ceiling that no amount of looking can raise. If an unconceived alternative lies in a blind spot that the searchers share, additional searchers who share it add nothing, so the support that search failure gives to completeness approaches a limit fixed by the probability of a shared blind spot, not by the effort spent. The data of search cannot reveal that probability. They can show a list to be incomplete, by recapture, but they cannot show it to be complete, because the likelihood of any pattern of finds is nearly flat in the number of unseen alternatives that are hard to find. What certifies completeness is closure: a rule that generates the options and provably exhausts them. Closure does not remove the blind spot; it relocates it into the premises of the closure result, where it is again a question about what the inquirers could not conceive. The no-alternatives argument for untested theories, the taxonomies with which philosophy papers begin, and the diagnostic "nothing else fits" are all assessed by asking what closes the space, and how that was checked, rather than how hard anyone looked.
+bibliography: exhaustion-closure.bib
+format:
+  html: default
+  pdf:
+    output-file: "Exhaustion-and-Closure"
+---
+
+# The inference {#sec-inference}
+
+A physician says that nothing but pulmonary embolism fits the findings. A physicist says that, although the theory has not been tested, no one has found a rival, and that this is some evidence for it. A philosopher begins a paper by saying that there are three positions on the question, and argues that only the third survives. In each case a list of options is declared complete, and the declaration is supported by the fact that people have looked and nothing else turned up. The physicist's version has been defended with a probabilistic model of the inference [@DawidHartmannSprenger2015], and its target is the claim that is made, with more or less ceremony, whenever a theory is said to be "the only game in town."
+
+How much does such a fact support completeness? My answer has three parts.
+
+*Ceiling.* The support that search failure gives to completeness approaches a limit as search effort grows, and the limit is set by the probability that an unseen alternative lies in a blind spot shared by the searchers. Adding searchers who share the blind spot does not raise it. Adding searchers who lack it does.
+
+*Asymmetry.* The data a search produces can show that a list is incomplete and cannot show that it is complete. A hard-to-find alternative leaves almost no trace in the pattern of finds, so the data are nearly as probable with any number of such alternatives as with none. A premise bounding how findable an alternative would be is needed, and no search supplies it.
+
+*Closure.* What certifies completeness is not exhaustion of the searchers' efforts but closure of the space: a rule that generates the options and provably covers them, as a logical partition does, or an enumeration by atomic number, or a uniqueness theorem. Closure does not abolish the blind spot. It relocates it into the premises of the closure result, whose assessment is again a matter of what the inquirers could not have conceived.
+
+The closest neighbours are Stanford's problem of unconceived alternatives [@Stanford2006], Dawid, Hartmann and Sprenger's model of the no-alternatives argument [@DawidHartmannSprenger2015], and the literature on correlated votes and correlated software failures [@Ladha1992; @DietrichSpiekermann2013; @EckhardtLee1985]. I say in @sec-prior what I take from each and what I add. In brief: Stanford argues that shared conceptual resources make unconceived alternatives a standing danger, and I give that danger a form in which its effect on a particular inference can be computed. The formal structure is known from the correlated-votes and common-cause-failure literatures, and I do not claim it. The claims about asymmetry and closure are the ones I take to be new.
+
+# A model of looking {#sec-model}
+
+Let there be a question and a candidate list $L$ of answers that searchers have conceived. Suppose that either $L$ is complete (no further answer that would matter exists) or there is a further answer $h$ that none of $m$ searchers has so far conceived. For the second case I distinguish two ways in which $h$ can be missed. With probability $\beta$, $h$ is *dark*: it lies outside what the searchers' shared concepts, methods and background assumptions allow them to conceive, and none of them will find it however long they look. With probability $1-\beta$ it is *findable*, and each searcher conceives it with probability $q$, independently of the others. Then the probability that all $m$ miss $h$ is
+
+$$
+\mu(m) \;=\; \beta + (1-\beta)(1-q)^m ,
+$$
+
+which falls with $m$ toward $\beta$, not toward zero.
+
+This is the beta-factor model of common-cause failure in redundant engineered systems, in which adding a further independent component to a system improves reliability only until the probability of a failure common to all components dominates. It is also the structure of Ladha's [-@Ladha1992] and Dietrich and Spiekermann's [-@DietrichSpiekermann2013] treatments of the Condorcet jury theorem under correlated competence: the group's accuracy does not tend to one as its size grows when the voters' errors have a common cause. What is different here is the target. A jury is answering a question that has a determinate answer and whose votes are checkable against it. A search is asked whether there is something it has not conceived, and that is the thing that cannot be checked from where it stands.
+
+Let $\pi_0$ be the prior probability that $L$ is complete. After $m$ searchers find nothing further, Bayes' theorem gives
+
+$$
+P(\text{complete}\mid \text{nothing found}) \;=\; \frac{\pi_0}{\pi_0 + (1-\pi_0)\,\mu(m)} ,
+$$
+
+and as $m\to\infty$ this tends to $\pi_0/(\pi_0+(1-\pi_0)\beta)$. If $\beta=0$ it tends to one. If $\beta>0$ it does not.^[The assumption of at most one further alternative is for simplicity. With $k$ further alternatives, each dark with probability $\beta$ independently and with prior $\pi_k$, the limit is $\pi_0/(\pi_0+\sum_{k\ge 1}\pi_k\beta^k)$, which is below one whenever $\beta>0$ and some $\pi_k>0$. Making the alternatives' darkness positively correlated lowers the limit.] @tbl-ceiling takes $\pi_0=0.5$ and $q=0.1$, so that a single searcher has a one-in-ten chance of conceiving a findable alternative.
+
+| Searchers $m$ | $\beta=0$ | $\beta=0.2$ | $\beta=0.5$ |
+|:--|--:|--:|--:|
+| 1 | 0.53 | 0.52 | 0.51 |
+| 10 | 0.74 | 0.68 | 0.60 |
+| 50 | 0.995 | 0.83 | 0.67 |
+| 200 | 1.00 | 0.83 | 0.67 |
+| limit | 1.00 | 0.83 | 0.67 |
+
+: Probability that the list is complete, given that $m$ searchers found nothing further. {#tbl-ceiling}
+
+With no shared blind spot, fifty searchers are nearly decisive. With a one-in-five chance of one, two hundred searchers leave the probability at 0.83, and the same is true of two thousand. The difference between the columns is not made up by effort.
+
+What $\beta$ measures needs care. It is not the difficulty of the problem in the sense of how long it takes to see the answer; difficulty in that sense is what $q$ captures. It is the probability that the alternative is invisible from where the searchers stand, because conceiving it requires a concept, a method or a possibility they do not have, or because their shared assumptions rule it out before it is entertained. Stanford's case studies are of this kind. The theories of inheritance that nineteenth-century biologists failed to conceive were not harder versions of the ones they considered; they required a different kind of entity [@Stanford2006]. If that is right, $\beta$ is a property of the relation between a community's resources and the alternative, and it is positive wherever a community's resources are limited in ways it cannot survey.
+
+# What the data cannot say {#sec-data}
+
+One might hope that the searchers' reports themselves reveal $\beta$. They do not, and the reason generalises.
+
+Suppose that each searcher reports the alternatives she conceived, so that for each alternative that anyone conceived we know how many searchers did. This is the data structure of capture–recapture studies in ecology, where the same question arises: from the pattern of how many individuals were seen once, twice, and so on, what can be said about how many were never seen? The answer in the statistical literature is asymmetric. Estimators of Chao's type give a *lower bound* on the number of unseen classes: a large number of alternatives conceived by exactly one searcher, relative to those conceived by exactly two, is evidence that many were conceived by none [@Chao1984]. No corresponding upper bound is available unless the detection probabilities are bounded away from zero [@BungeFitzpatrick1993; @MaoLindsay2007].
+
+The reason is easy to see in the present setting. Add to a model $K$ further alternatives, each findable with a tiny probability $\varepsilon$ per searcher. The probability that none of $m$ searchers conceives any of them is $(1-\varepsilon)^{mK}$, which is as close to one as we like for small enough $\varepsilon$. So the probability of the observed pattern of finds is, to any desired accuracy, the same whether there are no such alternatives or $K$ of them. The likelihood function is flat in the number of hard-to-find alternatives. A search that comes up empty therefore supports completeness only through a premise that rules out very low findability, and that premise is not itself supported by the empty search.
+
+Two consequences follow. First, the data can raise the probability of incompleteness without limit (many singletons, a late discovery that falsifies a "complete" list) but cannot lower it below the level fixed by the premise. Second, shared blind spots and mere difficulty are indistinguishable in the data. Two searchers who both fail to conceive $h$ may have failed because $h$ is hard or because $h$ is invisible to both, and nothing in their reports distinguishes the cases until someone conceives it. The only evidence about $\beta$ that searches produce is therefore one-sided: each time an alternative previously invisible to a community is conceived, that is a datum for $\beta>0$; no event is a datum for $\beta=0$.
+
+# How completeness is actually certified {#sec-closure}
+
+If exhaustion has a ceiling, how is anything shown to be complete? In the cases where completeness really is established, I claim, the work is done by closure, and the force of the establishing is exactly as great as the force of the closure's premises.
+
+Here are three kinds of closure.
+
+*Logical partition.* If the question is whether $p$, the options $p$ and not-$p$ are exhaustive, and the same holds for any partition of a possibility space by a defined property. A trilemma at the opening of a philosophy paper is complete in this way when it comes from a partition by form: the thesis that determinism is compatible with free will, or is not; if not, free will exists or it does not. It is not complete in this way when it comes from a survey: three positions have been defended, and no one has defended a fourth. The first has the logical form of a partition. The second is exhaustion, and its ceiling is the ceiling above. Philosophers have often found the fourth option in a place the survey did not look, usually by rejecting a presupposition of the partition, which is where we should expect to find it.
+
+*Enumeration by structure.* Mendeleev's table had gaps, and confident predictions were made on the strength of them, but the reasons for confidence were not that chemists had looked for the missing elements and found none. The ordering by weight left it unclear how many gaps there were. When Moseley showed that the elements are ordered by an integer, the nuclear charge, the question of how many elements could lie between hydrogen and uranium became a question about integers, and the vacancies became a definite list [@Moseley1913; @Moseley1914]. The search for the missing elements then had a target, and a search that had covered everything up to the final vacancy could properly be said to be finished. Completeness came from the integer ordering, not from the failure of anyone to find a thirty-fourth element in the gap.
+
+*Uniqueness theorems.* In four dimensions, Lovelock's theorem says that the only symmetric, divergence-free tensor built from the metric and its first two derivatives that can appear on the left of a second-order field equation is the Einstein tensor plus a multiple of the metric [@Lovelock1971]. Coleman and Mandula showed that, under their assumptions, the symmetries of the S-matrix can combine spacetime and internal symmetries only in a trivial way [@ColemanMandula1967]. Bell's theorem shows that no theory satisfying a stated set of conditions reproduces the quantum predictions [@Bell1964]. Each of these closes a space: the options within the framework are exhausted by a proof.
+
+In each of the three cases the closure transfers the question. If $F$ is the claim that the framework's premises hold in the relevant respects, closure gives $P(\text{complete}\mid F)=1$, and
+
+$$
+P(\text{complete}) \;=\; P(F) + P(\neg F)\,P(\text{complete}\mid\neg F) .
+$$
+
+The last factor is again an exhaustion question, with its ceiling. A closure certificate is no better than the probability of $F$, and that is no easier to estimate than the original probability that something was missed. Where the dark alternatives were, in the original search, concepts the searchers lacked, they are now premises the theorem's authors did not think to question. The history of these results has a standard form. Lovelock's theorem is silent about Gauss–Bonnet terms in higher dimensions, and about a dynamical scalar field of the kind that Horndeski's [-@Horndeski1974] second-order scalar–tensor theory supplies. Coleman and Mandula's assumptions are escaped by supersymmetry, which relaxes the grading they took for granted. Bell's conditions are the source of every response to his theorem: the loopholes, the denials of measurement independence, the theories that give up locality in a way the theorem's conditions did not cover. A uniqueness theorem is useful because it concentrates the question of completeness in a short list of premises, each of which can be examined. It does not dissolve the question.
+
+I do not say that closure is worthless, since concentration is a great gain. A short list of premises can be tested separately and the history of each consulted. The partition by form has the further advantage that its premises are often just definitions, and a definition cannot be a hidden empirical assumption. But the gain is a gain in tractability, and not in certainty, and it is a mistake to treat a closure result as if it had the ceiling-free character of a proof from no premises.
+
+The same relocation explains why the logical partition is least vulnerable and the survey most. The partition's premise is that the property by which it divides is determinate, and philosophical partitions fail by the indeterminacy of that property; the survey's premise is that the searchers' resources reach everything. What a "no alternatives" claim needs, in order to be informative, is therefore a statement of what closes the space, in whatever form, so that someone can ask whether the closure holds.
+
+# What bears on the shared blind spot {#sec-record}
+
+If $\beta$ cannot be estimated from the search, what can it be estimated from? Three things.
+
+*The record of conversions.* Stanford's induction takes the history of science to show that past communities repeatedly failed to conceive alternatives later accepted, and infers that the present community is probably in the same position [@Stanford2006]. In the present framework, each historical case is a conversion of a dark alternative, and the fraction of eventually accepted alternatives that were dark to an earlier community is a lower bound on $\beta$ for that community. The record can be quantitative in this sense. But applying it to the present requires the premise that the present community's resources are no better placed than the past one's, which is the premise that Stanford's critics reject, and that Stanford's defenders support from the continuing failure of foresight. Neither side has a datum for the present case that is not itself a judgment about $\beta$. The structure is the same as in @sec-data: the record can show that $\beta$ was positive; it cannot show that it is zero now.
+
+*Searchers from elsewhere.* The exhaustion ceiling is a ceiling for searchers with common resources. A searcher from a distant discipline, a different tradition or an earlier training who conceives an alternative the community has not is a conversion of exactly the kind that matters, and the likelihood that she would do so is much higher than for a further member of the community. It follows that what a community should count is not the number of its searchers but the number of independent families of search, in a sense I now make precise.
+
+*Diversity of search.* Suppose the searchers fall into families, within each of which the shared blind spot has probability $c$, and across which blind spots are independent. Then the probability that everyone misses $h$ is the product over families of $c+(1-c)(1-q)^{m_f}$. With $c=0.5$ and $q=0.1$, twenty searchers in a single family miss $h$ with probability 0.56; four families of five miss it with probability 0.40; twenty families of one with probability 0.36. The first searcher in a new family is worth more than the twentieth in an old one. This is the design principle that Littlewood and Miller [-@LittlewoodMiller1989] drew for software written by independently developed versions, under the name "forced diversity", after the experiments of Knight and Leveson [-@KnightLeveson1986] had shown that independently written versions failed together far more often than independence predicts. The lesson transfers, together with its caveat: diversity helps only to the extent that the families' blind spots really are independent, and that is a premise about the families, not a consequence of their being different people.
+
+# Objections {#sec-obj}
+
+*"This is just a reminder that the posterior depends on a prior."* It is, in part. The ceiling is $\pi_0/(\pi_0+(1-\pi_0)\beta)$, which is a function of priors. The point is where the dependence comes from. The impression left by an extended search is that its failure is itself the evidence for completeness, and that more searching would give more. On the model, the evidence is bounded by a quantity that the search does not bear on. Dawid, Hartmann and Sprenger's model contains a parameter for the difficulty of finding alternatives, which they say should be estimated from the track record of searches in comparable fields [@DawidHartmannSprenger2015]. That parameter can absorb the shared blind spot. My claim is that it should be split, because it contains one component that responds to effort and one that does not, and that the difference determines whether the empty search can ever settle the matter.
+
+*"Only alternatives that would matter count, and the dark ones are poor."* Let $\alpha$ be the probability that a dark alternative would, if conceived, be as well supported as the theory in question. The relevant limit replaces $\beta$ by $\alpha\beta$ and remains below one if $\alpha\beta>0$. The estimate of $\alpha$ faces a selection problem: the alternatives available for inspection to estimate it are the conceived ones, which are the ones that the community's resources made conceivable.
+
+*"Searching changes what is conceivable."* The model is static, and the actual process is not. Inquirers learn from their failures and from each other, and a dark alternative can become findable when a concept is introduced. That is why conversions occur. The model is a model of the inference at a time, and the claim is that an inference made at a time from an empty search to completeness is bounded by the community's resources at that time. A dynamic version would have $\beta$ declining as the stock of shared concepts grows, and it would show that the rational response to a high $\beta$ is to invest in conceptual resources and not only in further search. I think that is right, and it is the same point as the diversity result.
+
+*"Practical reasoning does not require completeness."* It does not. One can prefer the best conceived option without believing that no better exists. The claim concerns what the failure of search supports as a matter of credence about completeness, and in particular what the no-alternatives argument asks of it, since its conclusion is that the theory is more likely to be true because the list of alternatives is complete.
+
+*"Isn't this the catch-all problem?"* It is related. The Bayesian cannot assign a likelihood to the catch-all hypothesis, the disjunction of everything not yet conceived [@Shimony1970; @Salmon1990]. The question here is different: not how to treat the catch-all in a calculation, but what could raise or lower the probability that it is empty. The answer is that exhaustive search can lower it only down to a floor set by $\beta$, and that closure can lower it further only by relocating the question.
+
+# Relation to prior work {#sec-prior}
+
+*Stanford* argues that the history of science shows a recurrent failure to conceive alternatives, that this failure is explained by the limits of the conceptual resources in a community, and that it undermines the inference to the truth of our best theories [@Stanford2006]. My account takes his diagnosis as its premise. It adds a form in which the effect of the diagnosis on a particular inference can be computed, and the observation that the data of search cannot discriminate between his hypothesis and its denial. Stanford's later work on the conservatism that institutions produce [@Stanford2019] bears on how large $\beta$ should be taken to be. Ruhmkorff [-@Ruhmkorff2011] and Jellema [-@Jellema2024] consider whether the problem can be reduced by collective search or estimated probabilistically. I side with Jellema that a probabilistic estimate of the dark mass from searching alone is not available, and the model in @sec-data says why.
+
+*Dawid, Hartmann and Sprenger* model the no-alternatives argument with a variable for the number of alternatives and a variable for the difficulty of the search, and show that finding no alternatives confirms the theory under conditions they state [@DawidHartmannSprenger2015]. My model is a refinement of theirs: the difficulty variable corresponds to the combination of $q$ and $\beta$ here. The addition is the separation of the effort-sensitive component from the effort-insensitive one, with the consequence that the number of searchers is the wrong variable. Menon [-@Menon2019] argues that the argument yields negligible confirmation, and Oriti [-@Oriti2017] that its premises are almost never met in practice because of the sociology of communities. The first conclusion is stronger than mine and the second is closer to it; neither gives the ceiling or the closure result.
+
+*Correlated judgments.* Ladha [-@Ladha1992] and Dietrich and Spiekermann [-@DietrichSpiekermann2013] show for votes what the beta-factor formula shows here for conceiving; Eckhardt and Lee [-@EckhardtLee1985] and Littlewood and Miller [-@LittlewoodMiller1989] show it for software versions. The formal result in @sec-model is a member of this family, and I claim only its application. The disanalogy noted there, that the alternative cannot be checked from where the searchers stand, is what makes the asymmetry of @sec-data follow.
+
+*Species richness.* The statistics of unseen classes supply the lower bounds and the absence of upper bounds [@Chao1984; @BungeFitzpatrick1993; @MaoLindsay2007]. Loe and Jensen [-@LoeJensen2015] apply capture–recapture to the completeness of literature searches, and note, as one would expect, that dependence between sources makes the estimate a lower bound. I know of no application to the space of hypotheses, and none that connects the dependence problem to the no-alternatives argument.
+
+*Eliminative induction.* Eliminative induction requires the options to be exhausted, and the work on it is explicit that this is a substantive requirement [@Earman1992; @Norton1995]. Norton's account of Einstein's route to general relativity [-@Norton1995] is an example of closure in my sense: the space was bounded by principles, within which the field equations were forced. What I add is the claim that the principles carry the blind spot, and that this is why the inference is exactly as strong as they are.
+
+# What to ask {#sec-conclusion}
+
+When someone says that no alternatives have been found, the question that matters is not how many people looked or for how long. It is whether the options are generated by a rule, and what the rule assumes. If there is a rule, the question moves to its premises, which can be examined one by one and against the history of similar premises. If there is no rule, the claim has a ceiling that is set by the probability that the alternatives are invisible to everyone looking, and the ceiling is not reached by looking harder, but by looking differently: by asking people who do not share the premises, or by finding the premises themselves and testing them.
+
+I have argued that the no-alternatives inference has this structure, and I take the structure to be general. The physician who says that nothing but embolism fits is working inside a closure, the differential for the presenting findings, whose premises are the findings and the diagnostic categories; the practice of asking what else it could be, with someone who trained differently, is the forced diversity of the previous section. The philosopher who surveys three positions is working without closure, and the proper response to the survey is to ask whether the question has a presupposition they all share.

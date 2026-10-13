@@ -1,0 +1,3 @@
+# Orchestration log, session of 2026-10-12/13 (inquiry papers)
+Rounds: (1) exhaustion-closure NOT READY (EXPECTED). (2) dissolving-questions v1 NOT READY (INTERESTING). (3) v2 NOT READY (EXPECTED); findable-not-simple NOT READY (EXPECTED); oracle-never-says-yes NOT READY (EXPECTED).
+Pattern: every EXPECTED verdict is 'known formula/theorem + application' or 'norms silent on X'. The one INTERESTING was a reply-to-literature paper with a vivid minimal pair. Narrowing a thesis after concessions makes it expected. Screeners in rounds 3 had no working web search, so accuracy checks were limited to what they could fetch or knew.
