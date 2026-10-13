@@ -85,3 +85,70 @@ The final text has not been screened by a fourth fresh reader.
 ## Anonymity
 
 No author field. Nothing in the text identifies the model or the custodian. The `categories` field still carries `claude` for the blog's own indexing; remove for submission. `_test-build-6k.pdf` is a pandoc build with author-date citations (13 pp.), not a Quarto render.
+
+
+---
+# Added 2026-10-13: priority check against repeated / perpetual / dynamic fair-division literature
+(Reader-agent summaries; Cavallo is secondary only. Full source check is in `_source-check-report.md`. The paper itself has NOT been changed.)
+
+## Bottom line
+- **Closest antecedent: Lackner 2020, then Lackner & Maly 2023.** Memory-weighted rules (weights rise with accumulated dissatisfaction), a max(0, shortfall) weight (Perpetual Quota), and the explicit claim that history-dependence is necessary for fairness over time are all there. Do not claim priority for memory-weighting as such. Cite Lackner prominently.
+- **Closest in setting: Freeman, Zahedi & Conitzer 2017**: the same n agents compete for indivisible units each round; the rule weights agents by 1/accrued reward.
+- **Not found in any source read**: Broome's claims-based framing; rotation as the way equal claims get equal satisfaction; a surrogate constraint (bound on accumulated chance); the recurring-scarcity vs bottleneck/queue distinction; the argument that a sequence of individually fair lotteries is itself unfair. Those are what remains the paper's own.
+- **Counter-evidence to address**: Benade et al. 2018 (a memoryless uniform lottery is asymptotically optimal for worst-case cumulative envy) and Lackner & Maly 2023 Thm 2 / Prop 4 (limits on loss-based weights).
+- Cavallo was not read. Igarashi et al. (AAAI 2024) was read in an earlier pass (see below).
+
+## 1. Lackner, "Perpetual Voting: Fairness in Long-Term Decision Making", AAAI-34 (2020), 2103-2110 (read in full)
+- Setting: fixed voters; each round a fresh set of alternatives and approval ballots; one resolute choice per round, online, unknown horizon.
+- Rules: weighted approval, choose the alternative with the highest total weight of approvers, weights start at 1. AV (no memory); Perpetual Unit-Cost (+1 per dissatisfied voter); Reset; PAV (1/(sat+1)); Equality (n^-sat); Consensus (raise all weights by 1, satisfied voters pay n, ignore non-positive weights); Nash; and **Perpetual Quota**: alpha_{k+1}(v) = max(0, qu_{k+1}(v) - sat_k(v)) (p. 2106), where the quota is the cumulative proportional share. Benchmark lottery: Random Serial Dictatorship.
+- Results: Prop 1/Thm 1 (simple proportionality: AV, Equality, Reset, Unit-Cost fail; PAV, Consensus, Nash, Quota satisfy); Thm 2 (independence of unanimous decisions); Props 3, Thms 3-4 (dry-spell bounds: 2n-2 for Reset; at least (n^2+3n)/4 for Consensus); Prop 4 (perpetual lower quota cannot always be met). In simulations Perpetual Quota best on lower quota and RSD worse than most perpetual rules.
+- Fairness notions: proportionality, independence of unanimous decisions, bounded dry spells, perpetual lower quota (entitlement-based, nearest to claims). No Broome, no desert.
+- Newcomers: "important to ensure that fairness guarantees also hold for newcomers, but that abstainers do not have an unfair advantage neither"; notes a free-rider problem.
+- Quotes: "Perpetual voting rules depend on the history of previous decisions; only due to this dependency we can achieve fairness over time." (p. 2104). "repeated applications do yield fairness properties that can be seen as proportionality in the long run" (about probabilistic rules, p. 2103). "Perpetual Quota aims at granting each voter a satisfaction as close as possible to their quota" (p. 2106). "for settings with short decision sequences, we believe that probabilistic voting rules are not a suitable alternative to perpetual voting rules." (p. 2109).
+- Priority verdict: closer than the thesis would like. Still the paper's own: the Broome claims-based justification, chance as surrogate satisfaction, the explicit surrogate constraint, the kappa rule with the "1 +" baseline, recurring scarcity vs bottleneck, the claim that a sequence of fair lotteries is unfair. Setting differs (majority/minority approval decisions, deterministic choice, not one indivisible unit among fixed claimants). Cite as the principal technical antecedent.
+
+## 2. Lackner & Maly, "Proportional Decisions in Perpetual Voting", AAAI-37 (2023), 5722-5729 (read in full)
+- Same setting. Win-based rules (only satisfied voters' weights change, alpha' = g(alpha), 0 < g(x) <= x) and loss-based rules (only unsatisfied voters' weights change, alpha' = f(alpha), f(x) >= x; Unit-Cost is f(x) = x+1). Also Perpetual Consensus and a new Perpetual Phragmen (load balancing).
+- Results: Thm 2: no loss-based rule satisfies simple proportionality. Thm 3: a win-based rule satisfies it iff x*G(x) < (y+1)*G(y) for all integers x, y >= 0. Prop 4: win-based and loss-based rules have unbounded dry spells. Thm 6: win-based rules fail lower and upper quota for closed groups. Thm 7: Consensus satisfies upper quota, fails lower quota. Prop 5: Phragmen has a tight dry-spell guarantee of 2n-1. Props 8-10, Cor 11: perpetual priceability implies lower quota; Phragmen satisfies it; it is incompatible with upper quota.
+- Quotes: "voters that have been previously neglected receive a higher weight, voters that are satisfied with previous outcomes receive a lower weight." (p. 5723). "If a group of colleagues has to regularly agree on a meeting time, it is not acceptable if always the same colleague has to compromise." (p. 5722). "a long winning streak can be followed by an arbitrarily long dry spell." (p. 5726).
+- Verdict: not close in motivation. Best source of formal limits on memory-weighted rules. Thm 2 and Prop 4 warn against a pure loss-count weight such as 1 + kappa x (number of losses). The paper's rule measures shortfall against an equal-share expectation, so it is not loss-based in their sense; say so. Cite with Lackner 2020.
+
+## 3. Freeman, Zahedi & Conitzer, "Fair and Efficient Social Choice in Dynamic Settings", IJCAI 2017, 4580-4587 (read the longer 16-page version; note the title is "Fair *and Efficient*..."; the 8-page IJCAI PDF not obtained, so theorem numbers may differ)
+- Setting: n fixed agents; one alternative chosen per round, online; non-negative integer valuations per round. The application: n computer applications compete for m < n indivisible power boosts per round, at most one per application, 497 rounds of Spark data. The nearest setting to the paper's of anything read.
+- Rules: GREEDY (maximise Nash welfare of accrued utilities each round) and Proportional Fair (weight w_i = 1/accrued reward; choose the alternative maximising the weighted sum of valuations; zero-accrued agents handled with infinitesimals). Thms 1-2: select-all and select-one versions choose the same alternatives. Thm 3: PF is characterised by four axioms. GREEDY and PF reach about 80% of the offline optimum.
+- Quotes: "In life, it is often difficult to make a completely fair decision in a single-shot context; often, every option will leave some agents unhappy. Fortunately, we can often address this over time" (p. 1). "When we make multiple decisions over time, we could simply maximize the Nash welfare in each round separately. But it is easy to see that this can lead to dominated outcomes." (p. 1). "assigning each agent a weight wi ... equal to the inverse of her accrued reward at the start of each round" (Sec. 3.1).
+- Verdict: a genuine prior memory rule for repeated allocation of indivisible units to the same agents. Distinguish on: the weight 1/u is unbounded as u -> 0 (no surrogate constraint); it approximates Nash welfare rather than being a claims theory; no lotteries.
+
+## 4. Benade, Kazachkov, Procaccia & Psomas, "How to Make Envy Vanish over Time", EC 2018, 593-610 (read body, theorem statements, discussion)
+- Setting: n fixed agents; T items arrive online, allocated irrevocably; values in [0,1], adversarial, revealed before allocation; Sec. 3 batches.
+- Results: Thm 2.1: uniform random allocation has E[Envy_T] in O(sqrt(T log T / n)); a deterministic potential-function algorithm gets O(sqrt(T log n / n)) (Thm 2.6); Thm 2.13: lower bound about (T/n)^(r/2) for any r < 1, so random allocation is asymptotically optimal up to logs; Thm 3.3, 3.8 for batches; Example 2.5: "allocate to the most envious agent" gives linear envy.
+- Quotes: "Surprisingly, though, we show that the random allocation algorithm is asymptotically optimal (up to logarithmic factors)." (Sec. 1.1). "simple deterministic algorithms are not able to provide any useful bounds." (Sec. 2.2). "A possible concern is that low envy, in and of itself, is not sufficient to lead to intuitively fair outcomes" (Sec. 4).
+- Verdict: not an antecedent but a necessary foil. A referee could cite Thms 2.1 and 2.13 against "forgetting is unfair". The paper should say its claim concerns each claimant's realised outcomes over a finite run, not a worst-case envy rate. The sqrt(T/n) drift is evidence that repeated lotteries accumulate disparities.
+
+## 5. Guo, Conitzer & Reeves, "Competitive Repeated Allocation without Payments", WINE 2009, 244-255 (read intro, model, main sections; skimmed proofs)
+- One item per period, two agents (later n), infinite horizon with discounting; i.i.d. private valuations; incentive-compatible, no payments; goal is expected social welfare. Mechanism: an "artificial payment system" on promised long-run utilities; bidding high makes an agent less likely to win later. Competitive ratios 0.94 (high/low), 0.85 (general), >= 0.75 (n agents).
+- Fairness: none; "fair state" means only equal promised utilities. The fair coin appears only as a low-welfare benchmark.
+- Quotes: "if an agent strongly prefers to obtain the item in the current period, the mechanism can ensure that she is less likely to obtain it in future periods. In a sense, this is an artificial form of payment." "each agent effectively has a limited budget (corresponding to a limited amount of future utility that can be given up)".
+- Verdict: remote. At most one sentence in related work (the limited-budget remark is a faint analogue of a surrogate constraint in an incentive setting).
+
+## 6. Caragiannis & Narang, "Repeatedly Matching Items to Agents Fairly and Efficiently" (arXiv 2207.01589; published version unverified, possibly TCS 981 (2024) and an AAMAS 2023 abstract)
+- n agents, n items, T rounds; each round a perfect matching; an item's value depends on how many times the agent used it before. Results: NP-hard to maximise social welfare even for T = 3; polynomial for monotone non-decreasing valuations; EF1 exists for identical valuations and, in polynomial time, when T mod n is in {0, 1, 2, n-1}; new notion swapEF. Algorithms give each agent floor(T/n) copies of each item, then round-robin for the remainder.
+- Quote: "This can make solutions that were fair when the agents were allocated the items once, no longer fair." (p. 1)
+- Verdict: distant (values depend on past receipt, no scarce unit). Only a rotation flavour when T is a multiple of n. One sentence at most.
+
+## 7. Cavallo, "Efficiency and Redistribution in Dynamic Mechanism Design", EC 2008, 220-229: NOT READ (PDF blocked; secondary summary only)
+- Per the secondary summary: Markov private types, one decision per period (e.g. a mobile health clinic allocated weekly among five neighbourhoods), dynamic Groves/VCG, Gittins index, history-independent transfers. Efficiency, incentives and money; fairness only in passing. Not an antecedent. Do not cite on this basis without reading it.
+
+## 8. Others
+- Casella, "Storable Votes" (GEB 2005): abstract and introduction only. A stock of stored votes accumulates, but as the agent's own saving for intense preferences, not compensation for past losses.
+- Seen but not read: Zeng & Psomas, "Fairness-efficiency tradeoffs in dynamic fair division" (EC 2020); Lackner, Maly & Rey (IJCAI 2021); Bulteau et al., "Justified Representation for Perpetual Voting" (IEEE Access 2021).
+
+## 9. Igarashi, Lackner, Nardi & Novaro (AAAI 2024), from the earlier pass
+- Offline: fixed agents N and items I allocated k times; additive static utilities; "overall" vs "per-round" EF, EF1, PROP, PROP[1,1], PO. Prop 4: if k is a multiple of n, EF overall is always possible, by rotating bundles. Thm 6: EF + PO overall is impossible in general for n > 2. Related work says Guo et al. and Cavallo "focus on a repeated setting, where a single item must be allocated in every round. We work in an offline setting."
+- The paper's sentence "rests on a related observation about envy-freeness over many rounds" is fair for Igarashi (two agents, two rounds, one good, given to each in turn: envy-free overall, not per round). It is not fair for Aleksandrov & Walsh, a survey of online fair division whose theme is uncertainty about arrivals; re-cite A&W as "cf." for the online setting or drop it.
+
+## Suggested handling in the paper (not applied)
+1. Add Lackner 2020 and Lackner & Maly 2023 as the principal technical antecedents (history-dependent per-round rules); add Freeman et al. 2017 as the closest same-setting memory rule; add Benade et al. 2018 as the foil and answer it.
+2. Put the paper's novelty where it actually is: the Broome-based claims argument that a fair-lottery sequence is itself unfair, rotation as the way equal claims get equal satisfaction, the surrogate constraint, and recurring scarcity vs bottleneck.
+3. State why the kappa shortfall rule is not "loss-based" in the Lackner-Maly sense.
+4. The unread items (Cavallo, Zeng & Psomas, Lackner-Maly-Rey, Bulteau et al.) should be read before the paper claims no antecedent for any part of the shortfall rule.
