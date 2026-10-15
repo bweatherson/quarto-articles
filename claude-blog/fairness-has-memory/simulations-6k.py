@@ -42,3 +42,26 @@ N=10; q=0.1; reps=int(sys.argv[1]) if len(sys.argv)>1 else 200
 for rule in ('M','S1','S2','S10','A','V','Q'):
     o=churn(rule,N,1500,q,reps)
     print(f"{rule:>4} | newcomer {o['newcomer'][0]:.3f}±{o['newcomer'][1]:.3f} | " + ' | '.join(f"L{L} {o[f'L{L}'][0]:.3f}±{o[f'L{L}'][1]:.3f} (n={o[f'L{L}'][2]})" for L in (1,10,30)) + f" | sd {o['sd'][0]:.3f}±{o['sd'][1]:.3f} | clip {o['clip']:.4f}", flush=True)
+
+# ---- Fixed population (Section 5.1): expected number of claimants left with nothing, N = T = 10
+def fixed_pop(rule, N, T, reps):
+    tot = 0
+    for r in range(reps):
+        w = np.zeros(N); rounds = np.zeros(N); losses = np.zeros(N)
+        for t in range(T):
+            wt = weights(rule, N, w, rounds, losses)
+            if wt.sum() == 0: wt = np.ones(N)
+            i = rng.choice(N, p=wt / wt.sum()); w[i] += 1; rounds += 1; losses += 1; losses[i] = 0
+        tot += int((w == 0).sum())
+    return tot / reps
+print("fixed population N=T=10, expected number with nothing:")
+print(f"  closed form, forgetting: N(1-1/N)^T = {N*(1-1/N)**10:.3f}")
+for rule in ('M','S1','S2','S10'):
+    print(f"  {rule:>3}: {fixed_pop(rule, N, 10, 200000 if reps>=200 else 20000):.3f}")
+
+# ---- Bottleneck (Section 5.3): pool of N kept full, one unit per period, forgetting rule.
+# A claimant's wait W = number of periods before she is served = number of others served ahead of her;
+# each period she is passed over with probability 1-1/N, so P(W >= k) = (1-1/N)^k and E[W] = N-1.
+print("bottleneck, forgetting rule, N=10:")
+print(f"  expected wait E[W] = N-1 = {N-1}; P(W >= 40) = (1-1/N)^40 = {(1-1/N)**40:.4f} = 1/{1/(1-1/N)**40:.1f}")
+print(f"  a queue serves every arrival after the N-1 = {N-1} ahead of her: wait {N-1} for everyone")
