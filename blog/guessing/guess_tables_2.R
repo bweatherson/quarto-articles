@@ -13,7 +13,7 @@ options(pillar.sigfig = 4)   # enough digits to separate close probabilities
 # With s = 3 and c = 0.4 * s, equal teams draw ~31% of the time.
 # Ties on points are broken at random.
 
-sim_seasons <- function(m, d, n = 2e6, s = 3, c = 0.4 * s, seed = 1) {
+sim_seasons <- function(m, d, n = 2e5, s = 3, c = 0.4 * s, seed = 1) {
   set.seed(seed)
   k <- length(m)
   q <- matrix(rnorm(n * k, mean = rep(m, each = n), sd = rep(d, each = n)), n, k)
@@ -80,9 +80,11 @@ expected_correct_pairs <- function(guess, place) {
 # A clearly best, F clearly worst. C is squeezed between B and D,
 # and E is 1.5 of C's standard deviations below C's mean.
 m <- c(A = 5.7, B = 3.2, C = 3.0, D = 2.8, E = 0.75, F = -1.75)
+m <- c(A = 4.5, B = 3.2, C = 3.0, D = 2.8)
 d <- c(A = 0.3, B = 0.3, C = 1.5, D = 0.3, E = 0.3, F = 0.3)
+d <- c(A = 0.3, B = 0.3, C = 1.5, D = 0.3)
 
-place <- sim_seasons(m, d, n = 2e6, s = 3, seed = 31)
+place <- sim_seasons(m, d, n = 2e5, s = 3, seed = 31)
 
 tables <- table_probs(place)
 means_table <- str_c(names(sort(m, decreasing = TRUE)), collapse = "-")
@@ -93,8 +95,9 @@ print(pairwise_probs(place), digits = 3)
 print(place_probs(place), digits = 3)   # P1 column = P(win league)
 
 tables |>
-  slice_head(n = 3) |>
+  slice_head(n = 24) |>
   bind_rows(tables |> filter(table == means_table)) |>
   distinct() |>
   mutate(correct_pairs = map_dbl(table, expected_correct_pairs, place = place)) |>
+  arrange(desc(correct_pairs)) |>
   print()
