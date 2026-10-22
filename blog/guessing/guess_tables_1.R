@@ -32,7 +32,7 @@ sim_tables <- function(m, d, n = 1e6, c = 0.4, seed = 1) {
 m <- c(A = 3, B = 2.8, C = 2.9, D = 1, E = 0, F = -1)
 d <- c(A = 0.3, B = 0.3, C = 1.0, D = 0.3, E = 0.3, F = 0.3)
 
-res <- sim_tables(m, d, n = 2e6)
+res <- sim_tables(m, d, n = 2e5)
 
 means_table <- str_c(names(sort(m, decreasing = TRUE)), collapse = "-")
 
