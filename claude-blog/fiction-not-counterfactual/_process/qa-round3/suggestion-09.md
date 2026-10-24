@@ -1,0 +1,13 @@
+**Lewis's standard analysis gets (D) wrong, so "Lewis's answer stands" needs the priors, which are the Reality Principle for credence; name them and add the standard analysis to the table.**
+
+**The gap (§3).** The table compares the PRP with the story state, but never runs Lewis's standard analysis (B&H §5; the draft's Fic_f = P-Fic_f). On that analysis a bare claim is true at a world only if every P-Fic world satisfies it. The A-story leaves the coin open, so "the coin landed heads" holds at no world, and (D)'s counterfactual is false wherever it selects: credence 0, not .5. The standard analysis gets (A) right, because its consequent concerns the selected world; (B), because its consequent is unsettled; and (C), because the special settles its consequent. It misses (D), which is unsettled but judged at even odds. Both the PRP and the story state get the .5 from π_w, the chance conditioned on P_A(w); the standard analysis has no such term.
+
+**The priors (§4, §5).** So the attitude layer does real work, and it is a Reality principle: π_w encodes w's regularities and chances, the default Walton and Lewis say a reader supposes. The draft calls the priors shared with B&H, but B&H's credence is uniform over the surety set DoxS (174–75, n. 38), an indifference posit they say lacks a direct argument. The chance–selection link is the draft's own bridge.
+
+**Two omissions (§1, §3).** (i) B&H n. 51 records that Lewis (1978) and Walton (1990: 145) proposed counterfactual Reality Principles. The test refutes those as truth-conditions too. What survives is Reality as a constraint on credence. (ii) §1 credits Lewis with truths that grow as the story does. That holds of the standard analysis, since adding principal truths shrinks P-Fic. It fails for a counterfactual principle: by §3's own logic, s(A,@) and s(B,@) disagree about the coin about half the time, so a bare claim can be true in A and false in B.
+
+**What to do.**
+- Add a standard-analysis row with (B) and (D) both 0; the data split them, which is what separates the views.
+- In §4, state π_w as Reality for credence. Chances fix it where there are chances. For silly questions such as hair parity there is no chance, so say what the prior is, and whether a mutual-belief restriction (from memory; check) confines background to what author and audience share.
+- Cite Walton's silly-question doctrine (from memory; check) for the incompleteness in §4, and source "what the work settles", now B&H's black box (§4).
+- In §7, replace "Lewis's answer stands" with three claims: no fictional truth about the hairs; Lewis's counterfactual Reality principle refuted; the attitudes need a Reality prior.

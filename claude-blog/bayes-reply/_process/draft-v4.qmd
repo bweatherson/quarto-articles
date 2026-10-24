@@ -1,0 +1,233 @@
+---
+title: "Bayes at the Edge"
+abstract: |
+  The accuracy defence of Bayesian conditionalization says it does best, by the lights of accuracy, among rules that respond only to what one learns. Externalists who hold that inexact knowledge needs a margin for error face a problem: such agents can learn something without learning that it is what they learned, and then other rules do better. Meehan and Zhang argue that conditionalization can be restored. Among rules whose output depends only on the prior and what is learned, it has the highest expected accuracy summed over every possible way of learning. I argue that the restoration fails for the agents who motivate it. If every way an agent has of learning about a magnitude leaves a margin for error around the truth, the truth is never at the edge of what she learns. Conditionalization is then accuracy-dominated, under the standard strictly proper scores, by a rule that responds only to what she learns. Meehan and Zhang's sum escapes this result only by counting learning in which the truth does sit at the edge. Statisticians call the condition it needs coarsening at random, and margins rule it out. What accuracy recommends instead is certainty that is not knowledge. For inexact knowers, what makes conditionalization rational is not its accuracy.
+date: 23 October 2026
+categories:
+  - epistemology
+  - formal epistemology
+  - claude
+bibliography: bayes-at-the-edge.bib
+format:
+  html: default
+  pdf:
+    output-file: "Bayes at the Edge"
+---
+
+# The problem {#sec-intro}
+
+Bayesian conditionalization says that when one learns *p*, and nothing stronger, one should adopt one's prior conditional on *p*. Its best-known defence is accuracy-theoretic. @GreavesWallace2006 showed that if the propositions one might learn form a partition, then conditionalizing has the highest expected accuracy among plans that respond only to what one learns. @BriggsPettigrew2020 turned this into a dominance argument [corrected by @Nielsen2021]. Both results presuppose that whenever one learns *p*, one is in a position to tell that *p* is what one learned.
+
+Externalists deny this. On @Williamson2000's view, inexact knowledge requires a margin for error. Suppose the hand of an unmarked clock points at 17 and you cannot discriminate neighbouring positions. Then the most you know by looking is that it points somewhere from 16 to 18. Had it pointed at 18, you would have known only that it pointed somewhere from 17 to 19. Since 18 is compatible with what you know, you do not know that 16-to-18 is what you know.
+
+When learning is opaque in this way, the accuracy arguments turn against conditionalization. Among plans that respond only to what is learned, the one with highest expected accuracy conditionalizes on the proposition that one has learned *p*, not on *p* itself [@Schoenfield2017]. On the clock, that plan makes one certain of the hand's exact position. An externalist who wants both conditionalization and "a substantive connection between the epistemic rationality of updating rules and their accuracy" [@MeehanZhang2025, p. 287] appears to be stuck [@Schultheis2025].
+
+@MeehanZhang2025 offer a way out. They require that the credence a rule recommends depend only on the prior and the proposition learned, not on the learning situation that produced it: *global evidential constancy*. They then evaluate rules not by expected accuracy in the agent's actual situation but by *total* expected accuracy, summed over every learning situation compatible with the prior. Their main result (Fact 10, p. 330) is that among globally evidentially constant rules, conditionalization uniquely maximizes total expected accuracy. Bayes is back.
+
+I argue that Bayes is back only for learners who lack the feature that made the problem. The central claim is a dominance result. Suppose every way an agent has of learning about a magnitude leaves a margin for error around the truth, as on Williamson's clock and in Meehan and Zhang's examples of Olivia and right-handed Dana. Then whatever she learns, the truth lies in its interior, never next to a possibility it excludes. In that case, for the logarithmic score and every additive strictly proper score, some globally evidentially constant rule is at least as accurate as conditionalization at every combination of learning situation and state possible for her. It is strictly more accurate whenever what she learns has an edge (@sec-dominance). Informally: knowing that you cannot tell neighbouring cases apart is information about where, within what you know, the truth lies. Conditionalization throws that information away, and pays for it at every possibility you leave open.
+
+Meehan and Zhang's sum favours conditionalization because their measure weights learning a proposition equally at every state where it is true, edge included. Statisticians call this condition *coarsening at random* (@sec-edge). Meehan and Zhang locate the issue in this very condition. In their words, the question is "whether the (total) expected accuracy of an updating rule should be evaluated in a way that satisfies extensionality" (p. 339). For margin externalists the answer is forced: it should not.
+
+I take up their replies in @sec-whose. In @sec-recommend I ask what accuracy recommends instead, and find that it recommends certainty that is not knowledge. The conclusion (@sec-conclusion) is that, for inexact knowers, what makes conditionalization rational is not its accuracy.[^antecedents]
+
+[^antecedents]: Several pieces have antecedents:
+
+    - Kenny Easwaran observed, in a comment on @Pettigrew2025, that Meehan and Zhang's total amounts to expected accuracy when each learning situation is equally likely [@Easwaran2025].
+    - Likelihood-weighted rules that maximize expected accuracy under uncertainty about how one learns are in @Gallow2021, @IsaacsRussell2023 and @EaswaranNielsen2025.
+    - Meehan and Zhang themselves prove that a single deterministic learning situation is extensional only if it is transparent (Fact 12, p. 338). They also grant that a likelihood-sensitive weighting yields a different optimum (pp. 337–338).
+    - @Salow2018 contrasts evidence centred on the truth with evidence centred on a best guess, arguing that the former permits inquiries biased in one's favour.
+    - @Dorst2020 gives a dominance argument, concerning credence in a single proposition, against certain clock models.
+
+    What is new here:
+
+    - a dominance result that holds across every learning situation with margins around the truth, with its converse;
+    - the observation that for such learners a non-extensional weighting is not an option but forced;
+    - the argument of @sec-whose and @sec-recommend.
+
+# Margins around the truth {#sec-margins}
+
+I use Meehan and Zhang's framework.
+
+- A *prior space* is a finite set of states *S* with a regular prior π.
+- A *learning situation* is a function *E* taking each state *s* to the strongest proposition *E*(*s*) one learns there. Learning is factive, so *s* ∈ *E*(*s*).
+- An *updating rule* returns, for each prior space, learning situation and state, the credence to adopt.
+- A rule is *globally evidentially constant* if that credence depends only on the prior space and *E*(*s*). Equivalently (their Fact 5, p. 316), it is a function from propositions to credences, *f*(*p*). Conditionalization, *b*(*p*) = π(· | *p*), is one such rule.
+
+Margins come from measurement. An instrument, or an eye, reports a value *a* when the true value is *v*. On the view @Williamson2013 offers and @Weatherson2013 defends, the strongest thing one then knows is that the value lies within *e* + *m* of *a*, where *e* = |*a* − *v*| is the error and *m* > 0 is the margin that safety requires. Every value within *m* of *v* is within *e* + *m* of *a*. So the region is centred on the appearance but always leaves a margin of *m* around the truth.
+
+Others centre what one learns on a best guess and allow no slack beyond the error [@Stalnaker2009; @CohenComesana2013; @Salow2018]. For Salow, talk of margins is talk of "the maximum distance between my best guess and the actual hand", and the truth may lie anywhere within that distance of the guess, edge included.
+
+The argument below concerns views of the first kind. Meehan and Zhang's framework is officially neutral between accounts of when one learns the same proposition (p. 317), but their examples are of the first kind. Olivia "knows that, if the butter weighs *x* oz., then she will learn by weighing it in her hand that it weighs (*x* ± 1) oz., but nothing more precise" (p. 294), "a variant of the austere clock from Williamson" (p. 294, n. 6).
+
+To fit this into the framework, take the states to be values of a magnitude, ordered on a line or round a circle, at increments no larger than the margin. Two states are *neighbours* if they are adjacent. Meehan and Zhang cite as "one influential externalist view of evidence" (p. 290, n. 4) the identification of what one learns with what one comes to know. With that identification, Williamson's margin principle says that the strongest proposition learned at *s* contains *s*'s neighbours. Call a learning situation *two-sided* if, for every *s*, *E*(*s*) contains *s* and its neighbours. Margins may be wider than one step and may vary from state to state; only the immediate neighbours matter here.
+
+For a proposition *p*, let its *interior* be the set of states of *p* whose neighbours all lie in *p*. Let its *rim* be the rest of *p*: the states of *p* that sit next to a state *p* excludes.
+
+**Observation.** If *E* is two-sided and *E*(*s*) = *p*, then *s* is in the interior of *p*.
+
+The proof is short. If *s* were on the rim, one of its neighbours would lie outside *p*, but a two-sided *E*(*s*) contains all of *s*'s neighbours. @Williamson2014 [p. 980] proves the special case for his clock: "R(w) is known only at w". Here *R*(*w*) is the interval of width 2*h* + 1 centred on *w*.
+
+Two examples. Olivia learns that the butter weighs from 16 to 18 oz. only if it weighs 17. Dana weighs butter of 15, 16 or 17 oz. with her right hand, and her prior is (0.2, 0.6, 0.2) (pp. 300–301); she learns {15, 16} only at 15.
+
+One caveat: the margin must have positive width relative to the prior. If the grid is refined while the margin stays one step wide, the rim's probability, and with it everything below, shrinks to zero. Williamson's margins are fixed in physical units, so refining the grid widens them in steps.
+
+# Conditionalization is dominated {#sec-dominance}
+
+An accuracy measure assigns a score *A*(*c*, *s*) to credence function *c* at state *s*. Meehan and Zhang use three:
+
+- the Brier score, which sums over every proposition the squared distance between credence and truth value;
+- an additive logarithmic score, which also sums over every proposition (p. 339);
+- the simple logarithmic score ln *c*(*s*), which is not additive (p. 302, n. 14).
+
+The first two are additive, continuous and strictly proper in the sense of @Predd2009.
+
+**Proposition.** Let *A* be the simple logarithmic score, or any additive, continuous, strictly proper score over all propositions, and let π be regular. There is a globally evidentially constant rule *f*~*A*~ with the following property. For every two-sided learning situation *E* and every state *s*,
+
+> *A*(*f*~*A*~(*E*(*s*)), *s*) ≥ *A*(π(· | *E*(*s*)), *s*),
+
+with strict inequality whenever *E*(*s*) has a nonempty rim. On a connected scale, that is whenever anything short of the whole space is learned.
+
+Conversely, a globally evidentially constant rule is undominated across two-sided learning iff it concentrates its credence on the interior of every proposition with a nonempty interior.
+
+*Proof.* By the Observation, a two-sided learner who learns *p* is at an interior state of *p*, and every interior state is one at which some two-sided situation delivers *p* (let *E* deliver *p* there and the whole space elsewhere). So both claims concern how credences fare at the interior states of each *p*.
+
+Take any credence *c* that gives the rim of *p* positive probability. Consider first the simple log score. For interior *s*, *c*(*s* | int *p*) = *c*(*s*)/*c*(int *p*) > *c*(*s*). On the other hand, a credence concentrated on the interior cannot be beaten at every interior state, since the log score is strictly proper there.
+
+For additive scores, treat a credence function over *S* as a forecast for the events *X* ∩ int *p*, for *X* ⊆ *S*. The space of possibilities is the interior of *p*. At an interior state, *X* ∩ int *p* is true iff *X* is, so the forecast's penalty there, in Predd et al.'s sense, is just its score. A credence that gives the rim positive probability is incoherent relative to this space: no probability on the interior agrees with it. By their Theorem 1(b), which covers bounded and unbounded scores, it is strongly dominated at every interior state by a coherent forecast, that is, by a credence concentrated on the interior. By their Theorem 1(a), a credence concentrated on the interior is not weakly dominated there.
+
+So let *f*~*A*~(*p*) be such a dominating credence for *c* = π(· | *p*), for each *p* with nonempty interior and rim. For the Brier score, it is the Euclidean projection of π(· | *p*), which adds the rim's probability equally to each interior state. For the simple log score, it is π(· | int *p*). For every other *p*, let *f*~*A*~(*p*) = π(· | *p*). ∎
+
+Three remarks.
+
+1. *Global evidential constancy and followability.* Each *f*~*A*~ responds only to what is learned, so it satisfies evidential constancy and non-contrastiveness. Followability does not separate it from conditionalization. Meehan and Zhang show that in cases like Olivia's and Dana's only constant rules are "luminous" (p. 306). Conditionalization is therefore no more luminous than *f*~*A*~. A rule that tells you to conditionalize on what you learned asks no less of your capacity to tell what you learned than one that tells you to discount its rim.
+
+2. *Examples.*
+   - Suppose Olivia's prior is uniform. When the butter weighs 17 she learns [16, 18], and conditionalization gives each weight credence 1/3. The dominating rules make her certain of 17, and she is right, since [16, 18] is learned only at 17.
+   - At 15, Dana's conditionalized credence (0.25, 0.75, 0) has Brier score −2.25. That is worse even than the −2.08 of keeping her prior (p. 302, Table 1). The dominating rule scores 0.
+
+3. *Uniformity.* Meehan and Zhang show that for every globally evidentially constant rule some problem favours another: "There is no rule that rules them all" (p. 327). Their Fact 7 (p. 324) says no such rule does at least as well as conditionalization in every problem. Its proof uses, for each *p*, the transparent problem of learning whether *p*. There *p* is learned at every state where it is true, rim included. Restrict attention to two-sided problems and the situation reverses: a single rule does at least as well as conditionalization in all of them.
+
+So, for every strictly proper score of these kinds, conditionalization is suboptimal under every weighting of two-sided learning situations that gives weight to learning some proposition with a rim, whatever the weights mean.
+
+The result is a mirror image of @BriggsPettigrew2020. For partitional learning, every rule but conditionalization is dominated. For two-sided learning, conditionalization is. It differs from @Dorst2020, whose dominance argument concerns credence in a single proposition. It also differs from @Schoenfield2017, whose meta-conditionalization responds to the learning situation and not just to what is learned.
+
+## Graded margins
+
+Real discrimination is graded: psychometric functions slope, and "cannot tell apart" is a threshold set at some level of performance. If learning is stochastic, the truth occasionally falls on the rim of what is learned, and pointwise dominance fails. A rule certain of the interior is infinitely wrong under the log score in those rare cases.
+
+What remains is a comparison of expected accuracy. Meehan and Zhang's Lemma 1 (p. 344) is stated for weights on learning situations. Read the weights as probabilities, so that λ~*p*~(*s*) is the probability of learning *p* at *s*. Then the lemma says that the globally evidentially constant rule with highest expected accuracy gives each state of *p* credence proportional to π(*s*)λ~*p*~(*s*). Conditionalization is optimal only if λ~*p*~ is flat across *p*.
+
+When the probability of learning *p* falls off toward its edge, the optimal rule raises the centre and lowers the rim, as in the "cosine" dial of @EaswaranNielsen2025 [p. 1129]. The graded case changes the verdict from dominance to expected inferiority. It does not change its direction.
+
+# How Bayes comes back {#sec-edge}
+
+Why, then, does Meehan and Zhang's total favour conditionalization? Let λ weight learning situations, and let λ~*p*~(*s*) be the total weight of situations in which *p* is learned at *s*. Their Lemma 1 says that the best rule conditionalizes on the fact that *p* was learned, with λ~*p*~(*s*) as the likelihood. This is Easwaran's observation: the total is "basically equivalent to assuming you are equally likely to be using it in any of these situations" [@Easwaran2025]. Conditionalization on *p* itself is best iff λ~*p*~(*s*) is the same at every state of *p*, which is Meehan and Zhang's *extensionality* (Fact 11, p. 337; Lemma 2, p. 345).
+
+Statisticians call the condition *coarsening at random*: data are coarsened at random when the probability of observing a set is the same at every point of the set [@HeitjanRubin1991]. @Gill1997 showed that under this condition, and only under it, conditioning on the observed set agrees with conditioning on the fact that it was observed. @GrunwaldHalpern2003 [Theorem 3.1] restate the result for updating. As @GillGrunwald2008 [p. 2410] put it, the condition "precisely characterizes when one can ignore the distinction between the fact that an event has been observed, and the fact that an event has happened". Monty Hall is the standard illustration, as Meehan and Zhang note in discussing Pearl's lesson that "we must also consider what information could have been reported" (p. 311, n. 21). Extensionality is coarsening at random, and Fact 11 is an instance of the statistical characterization.
+
+Meehan and Zhang's own measure weights every factive learning situation equally, and so is coarsened at random. In Easwaran's gloss, which proposition one learns is "chosen uniformly at random from the set of all propositions true at the world" [@Easwaran2025]. The total credits each proposition as if it were learned equally often at each of its states, rim included.[^perm]
+
+[^perm]: Any weighting unchanged by permutations of the states is extensional. If *s* and *s*′ both lie in *p*, the transposition of *s* and *s*′ maps the situations delivering *p* at *s* one-to-one onto those delivering *p* at *s*′, preserving weight. The counting measure is permutation-invariant because it treats *S* as an unstructured set. Margins are defined by adjacency, and a weighting that respects adjacency need not be permutation-invariant.
+
+For a two-sided learner, extensionality is not merely contestable but impossible. The argument has three steps:
+
+1. Extensionality requires the weight on learning *p* to be the same at every state of *p*.
+2. By the Observation, two-sided situations deliver *p* only at its interior, so a weighting confined to them puts no weight on learning *p* at its rim.
+3. Such a weighting is therefore extensional only if no proposition with a rim gets positive weight. On a connected scale, that means nothing is learned but the whole space.
+
+Meehan and Zhang's Fact 12 is the special case of a single deterministic situation. In the statistical idiom, margins around the truth guarantee that coarsening is not at random.
+
+Coarsening at random can be restored with mixtures, but only by adding learning that is exact at an edge. On Dana's scale, mix her right-hand situation with gauges that err in one direction only, weighted as follows. The columns give what is learned at 15, 16 and 17.
+
+| Weight | At 15 | At 16 | At 17 | |
+|:---:|:---:|:---:|:---:|:---|
+| 2/7 | {15} | *S* | *S* | |
+| 1/7 | {15, 16} | *S* | {16, 17} | Dana's right hand |
+| 1/7 | *S* | {15, 16} | {16, 17} | |
+| 1/7 | *S* | *S* | {17} | |
+| 2/7 | *S* | {16, 17} | *S* | |
+
+Now {15, 16} has weight 1/7 at each of its states, {16, 17} has 2/7 at each, and *S* has 4/7 at each. The mixture is coarsened at random, and conditionalization is again optimal. The work is done by the situations that deliver {15, 16} or {16, 17} at 16: gauges with no margin on the side facing the excluded value, which a two-sided learner never uses. Even then the proportions must be exactly right. @GrunwaldHalpern2003 [§4] show that, for overlapping observations, coarsening at random holds only in special cases.
+
+The same pattern runs through models in which conditionalization has looked accuracy-friendly despite opacity:
+
+- @Carr2021's clock weights world–evidence pairs evenly.
+- Isaacs and Russell's clock lets the guess fall equally often one step either side of the truth.
+- Easwaran and Nielsen's uniform-error clock is conditionalization-friendly because "for every signal, every world that gives it a non-zero probability gives it the same probability" [@EaswaranNielsen2025, p. 1120; cf. @IsaacsRussell2023, Theorem 4].
+
+In each, the truth is as likely to be at the edge of what is conditioned on as in its middle. That requires the absence of slack but is not secured by it: Easwaran and Nielsen's clock with likelihoods 1/4, 1/2, 1/4 has no slack and is still not coarsened at random.
+
+Coarsening at random also suffices for the other attractions of conditionalization. The expected posterior then equals the prior, and expected accuracy is at least that of not updating [@Good1967]. So the predictable biases of conditionalizing on opaque evidence described by @Salow2018, @AhmedSalow2019 and @Das2023 all require that coarsening at random fail, though they do not follow from its failure.
+
+# Whose accuracy? {#sec-whose}
+
+Meehan and Zhang anticipate the obvious complaint: "[B]y stipulation, Dana knows her learning situation", and other rules do better in it, so why should she care how conditionalization fares elsewhere (p. 333)? They distinguish two versions.
+
+The first holds that "the rational updating rule just is the rule that recommends the most accurate updating plan in every updating problem" (p. 334). They reply that this rejects global evidential constancy and with it conditionalization. It is the "radical response" of @Gallow2021, @IsaacsRussell2023 and @Schultheis2025 (pp. 288, 307), and they mean to show that it is "not the only option" (p. 334).
+
+The second version questions the equal weighting. That, they say, brings the dispute "close to the bedrock of normative explanations" (p. 337).
+
+The Proposition changes the first version. The complaint is no longer that different problems call for different plans. It is that, for an agent who knows her learning is two-sided, a single globally evidentially constant rule beats conditionalization in every problem she could be in. What is left is whether one rule must serve agents who know different things about how they learn. Here the view defended in this paper is contrastive in Meehan and Zhang's sense. Right-handed Dana should adopt a rule that a Dana who uses only her left hand should not. The left hand "can tell … whether or not it weighs 17 oz." (p. 320), so learning with it is partitional and Greaves and Wallace's argument applies.
+
+By Meehan and Zhang's Fact 6 (p. 320), the view therefore violates their idempotence condition, and their own sequence shows how. Dana weighs first with her left hand and then with her right (p. 321). At 15 the left hand delivers {15, 16}, and she should be one-quarter confident of 15. The right hand then delivers {15, 16} again. If she responds to what the right hand delivered, as the Proposition recommends for right-hand learning, she becomes certain of 15. So on learning the same proposition a second time she goes from one-quarter confidence to certainty. That is the pattern Meehan and Zhang hold against meta-conditionalization (p. 321).
+
+I accept the verdict, and note what endorses it. Responding to the right hand's reading dominates staying put: it is certain of the truth wherever the right hand delivers {15, 16}. What forbids the move is the requirement that credence be a function of what one has learned, taken together, whatever hand it came from. At the second weighing Dana knows only that the butter weighs 15 or 16. Certainty of 15 outruns her knowledge. So the dispute over idempotence is the dispute of @sec-recommend. Accuracy favours certainty that is not knowledge, and a knowledge norm forbids it.
+
+Two of Meehan and Zhang's footnotes bear on this.
+
+- In n. 29 (p. 321) they say that Dana cannot exploit her knowledge of the right hand's structure. Although she learns {15, 16}, "she does not learn that that is what she learns". For a Dana who uses only her right hand, the Proposition shows she does not need to. A rule that responds to {15, 16} alone does the work. A Dana with two hands needs a rule indexed to the hand.
+- In n. 21 (p. 311) they deny that the standard Monty Hall problem is a counterexample to non-contrastiveness. Once the state space is refined so that Monty's protocol is part of what is learned, conditionalization gives the standard answer. For opaque versions, where no such refinement is available, they say it is "less obvious that the standard solution still applies". The present cases are opaque, and the Proposition shows that the standard lesson does apply: what Dana could have learned at 16 is why learning {15, 16} at 15 is informative.
+
+The second version leads to the strongest reply available to Meehan and Zhang. Total expected accuracy is meant to be "part of an objective measure of how accurate the updating rule is in general for any agent, irrespective of their uncertainties about their evidential situations" (p. 330, n. 35). Read this way, extensionality is the evaluative counterpart of global evidential constancy. If a rule's output may depend only on the prior and *p*, its grade may depend only on how the prior, given *p*, expects that output to fare. That is just what the total computes. For globally evidentially constant rules it is a weighted sum, over propositions *p*, of the accuracy that π(· | *p*) expects of the rule's response to *p* (their proof of Fact 10, pp. 332–333).
+
+The reply is coherent, but consider what it vindicates. It shows that conditionalization is the best support function: the best way to score hypotheses against a proposition, for an assessor who abstracts from how the proposition was learned. That vindicates evidential probability as a measure. It does not vindicate the choice that an agent who knows her margins should make. Right-handed Dana can see that the rule so vindicated is dominated for her by another that meets every constraint Meehan and Zhang impose on rules.
+
+Pettigrew's gloss on the result puts the point exactly: "the negative expected effects of being exposed to certain evidence functions and conditionalizing on them are counterbalanced by the positive expected effects of doing this when exposed to other evidence functions". He adds that it "relies on you thinking each evidence function is equally likely" [@Pettigrew2025]. For a two-sided learner, the counterbalancing is done by learners at the edge.
+
+Two further points. An agent who is certain only that her learning is two-sided, with margins of unknown and varying width, is still covered by the Proposition, which assumes nothing more. If she gives some credence to learning that is exact at an edge, the comparison becomes one of expected accuracy. Conditionalization is then optimal only if her credences happen to be coarsened at random, and credences tied to how she actually learns have no reason to be.
+
+Meehan and Zhang also suggest that Bayesianism may be a theory of "high-level" rationality that abstracts from "individual psychological dispositions and environmental conditions" (p. 338). If so, the Proposition says which abstraction the high level requires: from whether one's knowledge has margins around the truth, the feature the problem began with (p. 294).
+
+# What accuracy recommends {#sec-recommend}
+
+If conditionalization is dominated, what does accuracy recommend? By the converse in @sec-dominance, the undominated globally evidentially constant rules for two-sided learning are those that give the rim no credence at all. For an agent who knows exactly how she learns, the verdict is starker. Olivia learns each proposition at only one state, so her only undominated response is certainty of that state: Schoenfield's meta-conditionalization, now as a dominance verdict.
+
+These certainties are true, but they are not knowledge. Every certainty conditionalization produces in a two-sided learner is entailed by what she knows. The dominating rules produce certainty in something stronger. On Williamson's understanding of discrimination, which is "shorthand for talk of how much the subject can know" [@Williamson2014, p. 980 n. 2], such certainty is false at some state she cannot discriminate from her own.
+
+On Williamson's clock the point is sharper. Certainty that the hand is at *w* is certainty of what holds only where *R*(*w*) is known. Williamson shows that the evidential probability of knowing *R*(*w*) is 1/(2*h* + 1) at *w* and at most that everywhere, so the bound is itself known [@Williamson2014, pp. 980–981]. The certainty that accuracy rewards is in something the agent knows her evidence makes improbable.
+
+What would a knowledge-first theorist require instead? Two things:
+
+- credence 1 in exactly what one knows;
+- no credence in a proposition above a known upper bound on its evidential probability.
+
+Both follow from conformity to evidential probability, and both are weaker. On Williamson's clock with a uniform prior, they leave exactly conditionalization. Each of the 2*h* + 1 open positions has a known evidential probability of at most 1/(2*h* + 1). The same holds for Dana at 15, whose known ceilings are 0.25 and 0.75. In the paradigm cases, then, the knowledge norm fixes conditionalization by itself, and accuracy has nothing left to choose. (With other priors some slack can remain, and accuracy then pushes inward again.)
+
+Suppose instead we impose only the first requirement, that credence never be certain of what is not known. Then accuracy recommends nothing. Let the score be concave and strictly proper, as the Brier and log scores are, and let *f* be any rule satisfying the requirement. Then *f*(*p*) gives the rim positive credence, so by the converse some *g* dominates it at the interior. For 0 < *t* < 1 the mixture (1 − *t*)*g* + *tf*(*p*) still satisfies the requirement. By concavity it is strictly more accurate than *f*(*p*) at every interior state, so every rule that satisfies the requirement is dominated by another that does. On the clock these rules form a chain with no top, ascending toward the forbidden certainty. Conditionalization is at the bottom of it.[^ho]
+
+[^ho]: Higher-order principles do not favour conditionalization either. On Williamson's clock, conditionalization produces Dorst's "effacing" evidence about whether the hand is at an even position [@Dorst2020], and Dorst takes this as a reason to reject such models.
+
+So accuracy, applied to agents with margins around the truth, rewards confidence in truths about their own epistemic state, such as that they know *R*(*w*). Anti-luminosity keeps such truths out of their evidence, and their evidence marks them as improbable. Where conditionalization is selected, the knowledge norm selects it. Accuracy does not.
+
+# Conclusion {#sec-conclusion}
+
+The externalist Bayesian wanted three things:
+
+- conditionalization on what one learns;
+- the opacity that margins around the truth produce;
+- an explanation, in terms of accuracy measured by strictly proper scores, of why conditionalization is rational.
+
+For inexact knowledge she cannot have all three.
+
+The knowledge-first externalist keeps conditionalization on what she knows, margins and all. Rational credence is evidential probability, the prior conditioned on one's knowledge [@Williamson2000; @Das2022]. This is the first of the externalist responses Meehan and Zhang describe (p. 288). @sec-recommend gives her more than a fallback. Its two requirements fix conditionalization in the paradigm cases, and it shows why accuracy is the wrong standard here: accuracy rewards certainty that is not knowledge, about matters her evidence marks as improbable. For her, the Proposition is an argument that accuracy does not explain updating for inexact knowers.
+
+The accuracy-first theorist instead updates by prior times likelihood on signals she responds to but need not know she has [@Gallow2021; @IsaacsRussell2023; @EaswaranNielsen2025]. She need not give up margins: Easwaran and Nielsen make no claims about how signals relate to knowledge (p. 1122). What she gives up is credence as evidential probability, and with it conditionalization on worldly propositions except where learning is coarsened at random. A best guess one can always identify, as in @Salow2018, is the special case in which learning becomes partitional and the original arguments apply.
+
+An externalist could instead reject strict propriety, an option Meehan and Zhang mention (p. 296, nn. 10–11). The Proposition assumes it.
+
+Meehan and Zhang's bridge principle tries to keep both conditionalization on what is learned and an accuracy-based account of it. It succeeds for a support function that is impartial among ways of learning. That impartiality is coarsening at random: indifference to the structure that makes inexact learning opaque. Their theorem is correct, and it shows something real. Averaged over every way of learning, the selection effects that hurt conditionalization cancel. But they cancel because the average includes learners who can learn a proposition at its edge. For learners whose knowledge always leaves a margin around the truth, nothing cancels. Bayes is back only where the truth can sit at the edge of what one knows.
+
+# References {.unnumbered}
+
+::: {#refs}
+:::

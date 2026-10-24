@@ -1,0 +1,13 @@
+**Write §3 out as an explicit fragment. As defined, f: is a flat, trivalent (homogeneity) operator: that puts you in B&H's §7.2 target, and your credence rows don't follow from your clauses.**
+
+*Where:* §3, "Support and rejection" to "The table falls out"; §6, reply 1.
+
+*The problem.* s⊕f is a union of per-world images, so (t∪u)⊕f = t⊕f ∪ u⊕f. Support and rejection of f:φ are therefore closed under subsets and unions. So f:φ is flat: a trivalent proposition, 1 at w if Fic_w ⊆ |φ|, 0 if Fic_w ∩ |φ| = ∅, # otherwise (Fic_w is the support of w's image). The state and the measure do no work. "Negation swaps support and rejection" is Strong Kleene negation. "Scopelessness is a theorem" is the homogeneity fact that "the kids aren't asleep" does not mean "not all the kids are asleep" (Križ 2015; from memory, check). Respectable, but not "the logic of information-sensitive discourse": Yalcin's and Veltman's modals are not flat.
+
+1. *You are committed to TRIVALENCE.* B&H (171) argue that every trivalent account makes (25a) true: "I know whether p is true, but I don't know whether p". The draft never mentions this. You need a transparent truth predicate, f:(φ is true) ≡ f:φ, and should say so.
+
+2. *The clauses don't generate the table.* At every world of a JAG viewer's D_S, f:h is #, and nothing in that value yields credence .5. Your entries instead take φ and f separately, evaluating φ at D_S⊕f. That is coherent if f is an index parameter each verb applies to its own state. But then the f: operator explains nothing in the table. Say which mechanism does the explaining, and derive (15b) compositionally.
+
+3. *The logic is unstated.* Give clauses for ∧, ∨ (split or global? They diverge when someone is unsure what the work settles), ∀ and ∃, and a consequence relation. FEM fails only under support-preservation. It is never rejected, so strict–tolerant consequence validates it. B&H's mixed readings (43) need assignments, and an account of what a character variable denotes across s⊕f. With those, the Higginbotham pair comes out equivalent. But f: then fails to commute with ∃. "There is a number n such that, in the canon, Holmes had n hairs" is gappy, while its internal counterpart is supported; B&H predict both true. Embrace or block that prediction. Embraced, it may be a second datum that separates the views.
+
+*What to do.* Replace items 1–3 under "Support and rejection" with a boxed fragment (index, shift, clauses, consequence; about 200 words). Call it homogeneity, cite Križ, and reply to (25). To make room, cut §3's "Precursors" paragraph, which repeats §1, and the "One of you is right" objection, on which you rest nothing.

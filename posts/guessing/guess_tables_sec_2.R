@@ -68,6 +68,17 @@ place_probs <- function(place) {
     pivot_wider(names_from = place, values_from = prob, names_prefix = "P")
 }
 
+# P(each other team finishes second | `winner` finishes first)
+second_given_winner <- function(place, winner = "A") {
+  won <- place[, winner] == 1
+  others <- setdiff(colnames(place), winner)
+  tibble(team = others,
+         prob = map_dbl(others, \(tm) mean(place[won, tm] == 2)),
+         seasons = sum(won)) |>
+    mutate(se = sqrt(prob * (1 - prob) / seasons)) |>
+    arrange(desc(prob))
+}
+
 # Expected number of the 15 pairs a guessed table gets right
 expected_correct_pairs <- function(guess, place) {
   teams <- str_split_1(guess, "-")
@@ -77,27 +88,29 @@ expected_correct_pairs <- function(guess, place) {
 }
 
 # ---- The example -------------------------------------------------------
-# A clearly best, F clearly worst. C is squeezed between B and D,
-# and E is 1.5 of C's standard deviations below C's mean.
-m <- c(A = 5.7, B = 3.2, C = 3.0, D = 2.8, E = 0.75, F = -1.75)
-m <- c(A = 4.5, B = 3.2, C = 3.0, D = 2.8)
-d <- c(A = 0.3, B = 0.3, C = 1.5, D = 0.3, E = 0.3, F = 0.3)
-d <- c(A = 0.3, B = 0.3, C = 1.5, D = 0.3)
+# The next two lines were original version; found a simpler one
+# m <- c(A = 4, B = 1.22, C = 1.15, D = 1.0, E = 0.9, F = 0.8)
+# d <- c(A = 2, B = 4, C = 2, D = 2, E = 2, F = 2)
+m <- c(A = 4, B = 2.5, C = 1.1, D = 1.0)
+d <- c(A = 1, B = 4, C = 2, D = 3)
 
 place <- sim_seasons(m, d, n = 2e5, s = 3, seed = 31)
 
 tables <- table_probs(place)
 means_table <- str_c(names(sort(m, decreasing = TRUE)), collapse = "-")
 
-print(tables |> slice_head(n = 6))
-print(tables |> filter(table == means_table))
-print(pairwise_probs(place), digits = 3)
-print(place_probs(place), digits = 3)   # P1 column = P(win league)
+# ---- Outputs (saved as values, so they open in the data viewer) --------
+top_tables       <- tables |> slice_head(n = 6)
+means_table_prob <- tables |> filter(table == means_table)
+pairwise         <- pairwise_probs(place)
+places           <- place_probs(place)          # P1 column = P(win league)
+second_given_A   <- second_given_winner(place, "A")
 
-tables |>
+correct_pairs <- tables |>
   slice_head(n = 24) |>
-  bind_rows(tables |> filter(table == means_table)) |>
+  bind_rows(means_table_prob) |>
   distinct() |>
   mutate(correct_pairs = map_dbl(table, expected_correct_pairs, place = place)) |>
-  arrange(desc(correct_pairs)) |>
-  print()
+  arrange(desc(correct_pairs))
+
+# View(second_given_A), View(pairwise), etc.

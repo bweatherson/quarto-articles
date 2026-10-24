@@ -1,0 +1,11 @@
+# Screening brief (v7)
+
+You are screening a philosophy paper as a generalist journal editor would screen a new submission.
+
+1. Read /mnt/user-data/outputs/fiction-paper/screening/CLAUDE.md. It is the project's standard (verdicts, calibration notes, screening criteria, report format). Follow it, including its default stance of skepticism, with ONE modification made by the project owner for this paper:
+   - The project owner has instructed: "I don't think you should worry about it seeming like a reply. There are so few original papers under 6000 words in the journals these days; I think a lot of papers will be replies. Just ask whether it is a good reply."
+   - So do not fail the paper merely because it is a reply to one recent paper (criteria 1-2 as they concern reply format). Ask instead whether it is a GOOD reply: does it make a substantive, correct contribution against the central parts of the target's case, rather than a peripheral part? Is it something a good journal would publish as a reply/discussion? All other criteria (no obvious unanswered objections, clarity, literature, accuracy, generalist interest of the question) apply as written.
+2. The paper: /mnt/user-data/outputs/fiction-paper/screening/paper-v7.1.qmd (Quarto markdown; bibliography fiction-without-hidden-facts.bib in the same folder).
+3. The target: Blumberg and Holguín, "Fictional Reality", Philosophical Review 134(2), 2025, pp. 149-201. Full text: /mnt/user-data/outputs/fiction-paper/research/texts/bh2025-published.txt (page numbers on their own lines). Other source texts available for checking quotations: research/texts/ (lewis1978.pdf [scanned; use page images], lewis1976.pdf [scanned], ww2021-published.txt, woodward2011a.txt, khoo2026.txt, khoo2022.txt, 31b474e9-ayt004.txt = McGonigal 2013, b7e92624-ayt050.txt = Caplan 2014, 5f2b2249-ayae036.txt = Lee 2024) and research/texts/oa/ (schaffer2004, vonfintel1997, macfarlane2003, badura-berto, moss2013, kriz2019-pmc).
+4. You have not seen this paper being written. Judge it as written. Do not browse the web. Do not use any messaging, email, scheduling, trigger, reminder, artifact or widget tools.
+5. Write your report, in the format CLAUDE.md specifies, to the output file named in your instructions. Then reply with the verdict line and a two-sentence summary of your main reason.

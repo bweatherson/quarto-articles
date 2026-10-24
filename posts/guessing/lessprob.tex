@@ -1,0 +1,1015 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Guessing the Less Probable
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
+% Number theorem-like environments straight through (Theorem 1, Theorem 2, ...)
+% rather than by section (1.1, 1.2, ...), which is Quarto's LaTeX default.
+% Guarded, since Quarto only defines a counter for environments the document uses.
+\makeatletter
+\AtBeginDocument{%
+  \@for\bw@thm:={theorem,lemma,corollary,proposition,conjecture,definition,%
+                 example,exercise,refremark,refsolution}\do{%
+    \@ifundefined{c@\bw@thm}{}{\expandafter\counterwithout\expandafter{\bw@thm}{section}}%
+  }%
+}
+\makeatother
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  pdftitle={Guessing the Less Probable},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Guessing the Less Probable}
+\author{Brian Weatherson}
+\date{2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+A common assumption in recent work on guessing is that it is best to
+guess the most probable answer to the question asked. This note presents
+three cases where this assumption looks improbable.
+\end{abstract}
+
+
+\setstretch{1.1}
+There has been a flurry of recent interest in \emph{guessing}. Most of
+this work has taken for granted something like the following principle:
+
+\begin{description}
+\tightlist
+\item[Guess the Most Probable]
+If one is asked \emph{Q\textsuperscript{?}}, and responds by guessing a
+complete answer, that answer is appropriate iff it is the most probable
+answer, given one's credences, to the question
+\end{description}
+
+Something like \textbf{Guess the Most Probable} is a consequence of
+views defended by Sophie Horowitz
+(\citeproc{ref-Horowitz2019}{2019}),\footnote{Horowitz only commits to
+  this for cases where there are only two possible answers, but doesn't
+  give any indication that the principle won't generalise further.}
+Kevin Dorst and Matthew Mandelkern
+(\citeproc{ref-DorstMandelkern2022}{2022}), Ben Holguín
+(\citeproc{ref-Holguin2022}{2022}), Mattias Skipper
+(\citeproc{ref-Skipper2023}{2023}), Richard Teague
+(\citeproc{ref-Teague2024}{2024}), and Niels Linnemann and Feraz Azhar
+(\citeproc{ref-LinnemannAzhar2025}{2025}). A puzzle that Helena Fang
+(\citeproc{ref-Fang2026}{2026}) raises for a generalisation of
+\textbf{Guess the Most Probable} might make one suspect that there will
+be problem cases for it. The point of this note is to build on Fang's
+idea and describe three cases where \textbf{Guess the Most Probable}
+fails. In all cases, some guesses which are not the most probable are
+permitted, and indeed in all three the most probable guess has some
+notable shortcomings.\footnote{This is not to say that it is
+  impermissible; the cases are hard, and any answer might seem
+  defective. But in all cases the most probable answer seems weird
+  enough that it permits alternative answers.}
+
+\section{Guess the Order}\label{sec-order}
+
+At the start of every Premier League season, the \emph{Guardian Football
+Weekly} asks each of its panellists to guess the order that the 20 teams
+will finish in. This is obviously absurd; there are 20! possible orders,
+and while some can be ruled out fairly comprehensively, there are too
+many reasonable ones to guess any with any confidence. But guess they
+do, and it is a useful framing device for talking about the upcoming
+season.
+
+Inspired by that, I started looking at guessing the order of finishers
+in somewhat smaller competitions. So consider a simple four-team league,
+where each team plays each other once, not twice as in the Premier
+League. You're probably familiar with these competitions; they are the
+standard form of the group stage at major international tournaments. We
+have four teams, imaginatively called A, B, C and D, and our expert is
+asked to guess the order that they'll finish in.
+
+Our expert has to deal with two kinds of uncertainty.
+
+First, she doesn't know exactly how good each team is. She knows each
+team has an underlying quality, and for each team she has a distribution
+over their possible quality values, but she could be wrong. We'll
+simplify greatly; in each case the probability distribution is a normal
+distribution with identifiable mean and variance. Crucially, she is very
+unsure about one of the teams, namely C. For that team, her estimate of
+their quality has a very high variance, while she is fairly confident
+about the other three.
+
+Second, soccer games are just random. You may remember Saudi Arabia
+beating Argentina in the 2022 World Cup. That was not because Saudi
+Arabia was the better team; sometimes the better team loses. The closer
+the teams are in quality, the more likely an upset is. But even for
+quite large quality differences, like Saudi Arabia and Argentina, the
+upset is possible.
+
+Here's the model this paper uses for this kind of guessing.\footnote{AI
+  acknowledgment: I used Claude Opus 5.5 to build this model, having
+  explained to it the kind of tournament that I wanted. Once it was
+  done, it came up unprompted with some summary statistics about the
+  model which in turn I use below.}
+
+Each team \(i\) has a real quality \(q_i\). In each tournament
+simulation, the qualities are drawn from the normal distributions with
+means and standard deviations described in Table~\ref{tbl-quality}. In
+any game, we start with the difference \(d\) between the two team
+qualities (remember quality is held fixed across a tournament). If the
+home team\footnote{`Home team' here is just the first listed team. We
+  are not assuming any home field advantage.} is better, \(d\) is
+positive; if they are worse \(d\) is negative. Then we add a noise
+parameter drawn from \(\mathcal{N}(0, 1)\) and tripled. If the absolute
+value of the result is less than 1.2, the game is a draw. Otherwise, if
+the result is positive the home team wins, and if it is negative the
+away team wins.
+
+\newpage
+
+{
+
+\begin{longtable}[]{@{}lrr@{}}
+
+\caption{\label{tbl-quality}The expert's credences about team quality}
+
+\tabularnewline
+
+\toprule\noalign{}
+Team & Mean & Standard deviation \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+A & 4.0 & 0.2 \\
+B & 3.0 & 0.2 \\
+C & 2.0 & 1.6 \\
+D & 1.6 & 0.2 \\
+
+\end{longtable}
+
+}
+
+To see what the probabilities were for various outcomes, we then
+simulated the season two million times. As in regular soccer, a team got
+three points for a win, and one point for a draw. After three games, we
+used a randomiser to split teams on equal points.\footnote{We could have
+  tried to simulate not just results but scores, then used tie-breaking
+  procedures, but this was getting complicated enough.} And we measured
+how often each of the 24 possible permutations of the teams came up over
+those runs.
+
+Now this model obviously leaves out a lot. It doesn't allow for team
+quality changing over time, due to injuries. It doesn't allow for teams
+matching up particularly well or badly against other teams. But it's
+complicated enough to serve as an illustration.
+
+Assume our expert knows her own mind, so she knows the numbers in
+Table~\ref{tbl-quality}. And she knows how team quality relates to win
+probabilities, via noise parameters. She has just as many computational
+resources as we do, so she can build all the tables you'll see here. And
+she is asked, just like the podcast panellists, to guess the order in
+which teams will finish in this group.
+
+If she gives a complete answer, and really that's what panellists are
+supposed to do, and \textbf{Guess the Most Probable} is correct, then
+there is only one permissible answer. It's ABDC. The numbers are shown
+in Table~\ref{tbl-rank-frequency}.
+
+{
+
+\begin{longtable}[]{@{}rlr@{}}
+
+\caption{\label{tbl-rank-frequency}The six most probable finishing
+orders}
+
+\tabularnewline
+
+\toprule\noalign{}
+Rank & Order & Probability \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & ABDC & 0.136 \\
+2 & ABCD & 0.128 \\
+3 & ACBD & 0.093 \\
+4 & BADC & 0.082 \\
+5 & BACD & 0.079 \\
+6 & ADBC & 0.072 \\
+
+\end{longtable}
+
+}
+
+But that's a surprising guess for at least two reasons.
+
+First, she thinks that B is probably better than C. The mean of B's
+quality distribution is higher than the mean of C's. It's completely
+reasonable to rank teams in a task like this by your mean estimate of
+their quality. (I suspect that's more or less what people really do when
+asked to produce these rankings.)
+
+Second, there are some statistics where our expert will, probably, do
+better if she guesses ABCD than if she guesses ABDC. This is not really
+a coincidence given the first point. There are six pairs of teams in the
+tournament, and we can ask for each pair who finished higher in any
+tournament run. For each pair, we can also ask whether the actual order
+of those two teams matches the order the expert predicted for them. It
+turns out, as shown in Table~\ref{tbl-pair-match}, that in expectation
+she matches more pairs by guessing ABCD than guessing ABDC. Indeed, ABCD
+does better on this measure than any other order.
+
+{
+
+\begin{longtable}[]{@{}lrrr@{}}
+
+\caption{\label{tbl-pair-match}Expected number of pairs in the right
+order, and of teams in the right place, for the six most probable
+finishing orders}
+
+\tabularnewline
+
+\toprule\noalign{}
+Order & Probability & Expected pairs & Expected places \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ABDC & 0.136 & 4.054 & 1.537 \\
+ABCD & 0.128 & 4.182 & 1.563 \\
+ACBD & 0.093 & 3.913 & 1.420 \\
+BADC & 0.082 & 3.737 & 1.224 \\
+BACD & 0.079 & 3.866 & 1.249 \\
+ADBC & 0.072 & 3.606 & 1.305 \\
+
+\end{longtable}
+
+}
+
+The point of this last consideration is not that it raises extra
+questions over and above what the finishing order is. To guess ABCD is,
+inter alia, to guess that B will finish above C. All that we need to
+make ABCD a sensible guess is that the guesser cares about these extra
+things that she commits herself to when she guesses an order.
+
+There is a natural way to make this verdict fit with the picture that
+Dorst and Mandelkern give. At one point in their paper, they are
+interested in how the guesser might trade off between more and less
+specific guesses. (For example, when asked to guess who will win the
+group, when is it best to say A, and when is it best to say something
+less committal like A or B?) They use a standard epistemic utility model
+to model these decisions, where one of the factors is how accurate the
+guess is. Let \(v_A(g, w)\) be the accuracy value of guess \(g\) in
+world \(w\). Dorst and Mandelkern make the natural assumption that
+\(v_A(g, w) = 1\) if \(g\) is true in \(w\), and 0 otherwise. They also
+note that you might want a more complicated assumption if you care about
+verisimilitude or partial truth.
+
+That last point is enough to explain why ABCD may be a permissible guess
+even though ABDC is more probable. Say \(v_A(g, w)\) is the number of
+pairs whose finishing order is the same in \(g\) and \(w\). (So if \(g\)
+is completely correct in \(w\), \(v_A(g, w) = 6\); if it just gets one
+pair flipped around, it's 5, and so on.) Then the guess with the highest
+expected accuracy, by this accuracy measure, will be ABCD. The expected
+pairs column in Table~\ref{tbl-pair-match} just is the expected accuracy
+score by this measure.
+
+This does not show that ABCD is the only permissible guess. To guess
+ABDC is, inter alia, to guess that C will finish fourth, and a guesser
+might reasonably care about correctly predicting who finishes
+fourth.\footnote{In some tournaments, only the fourth place team is
+  automatically eliminated, so this is a particularly salient
+  prediction.} More generally, another natural setting for \(v_A(g, w)\)
+sets it equal to how many teams finish in the same position in \(g\) and
+\(w\). If we do that, the expected places column in
+Table~\ref{tbl-pair-match} shows that ABDC has the highest expected
+accuracy, and by some distance. What's driving this, primarily, is that
+because C's quality is so uncertain, the guesser thinks that C is most
+likely to finish last. So there are advantages to ABDC beyond the fact
+that it is the most probable guess.\footnote{It is not true in general
+  that the most probable guess will do best by this metric.} The core
+claim I want to make is not that ABCD is obviously the best guess rather
+than ABDC, but that it is permissible. It is permissible to rank teams
+by their mean expected quality, or to prefer an ordering where every
+team is more than 50\% likely to finish above each of the teams one
+guesses will finish below it. As long as ABCD is one of the permissible
+guesses, that is enough to refute \textbf{Guess the Most Probable},
+which says that only ABDC is.
+
+The general claim of this section, of this paper really, is that when
+asked to make a \emph{structured} guess, it is generally reasonable to
+have some kind of more complicated value function than just 1 for true
+and 0 for false. What's distinctive about structured guesses, like
+guessing which order the teams will finish in, is that they commit the
+guesser to answers to related questions. The guesser might, qua guesser,
+care about these extra answers being correct. And if they do, they have
+a reason purely within accuracy considerations to guess ABCD.
+
+You might worry this will overgeneralise. Why does this have anything to
+do with structure? Imagine someone asked to guess where James Bond is,
+and they guess Vienna. Here is a parallel to the arguments of the last
+two paragraphs. By guessing Vienna, they commit to Bond being within 50
+miles of Vienna, so their guess should get some accuracy points if he is
+in Bratislava. And they commit to Bond being in Austria, so they should
+get some accuracy points if he is in Salzburg. So even for unstructured
+questions like \emph{Where is James Bond?}, there could be a reason to
+use something other than a 0/1 accuracy score, and hence reason to make
+some guess other than the most probable.
+
+To respond to this worry, we need a tighter notion of commitment. It's
+true that Bond being in Bratislava or in Salzburg is, in different ways,
+like his being in Vienna. But the inferences from \emph{Bond is in
+Vienna} to \emph{Bond is near Vienna} or \emph{Bond is in Austria}
+involve a change of subject-matter. The core idea I'm using here is
+taken from Yablo (\citeproc{ref-Yablo2014}{2014}); see Fine
+(\citeproc{ref-Fine2016}{2016}) and Berto
+(\citeproc{ref-Berto2022}{2022}) for related work. The inference from a
+conjunction to a conjunct, or from a ranking to a pair-ordering, does
+not involve changing the subject. If you guess a conjunction, the
+conjuncts are quite literally parts of the guess. So roughly (and see
+the references from two sentences ago), the idea is that by guessing
+\(g\), you are committed to guessing anything that \(g\) entails whose
+subject-matter is part of \(g\)'s. That's why the structured guesses
+allow for guessing the less probable; the relevant accuracy measure
+won't be the simple 0/1 measure.
+
+Finally, a housekeeping note. Dorst and Mandelkern
+(\citeproc{ref-DorstMandelkern2022}{2022}, fn. 15) list two reasons for
+thinking that the accuracy value might be something other than 0 or 1:
+verisimilitude or partial truth. The argument of the last few paragraphs
+is that partial truth really is important, but verisimilitude, i.e.,
+closeness to the truth, is not. Guessing Bond is in Vienna when he's in
+Bratislava is close; it's less than 50 miles away! But for the
+\emph{Where is James Bond?} question, I've endorsed the claim that
+guesses should just be judged true or false, and the right (complete)
+guess is the most probable one. The examples that I do think make it
+reasonable for the guesser to have a more complicated value function are
+what they are calling partial truth cases. Not coincidentally, they cite
+Yablo as a place to look for more detail on partial truth, so the kinds
+of cases I'm using are pretty close to what they were considering.
+
+\section{Follow Up Guesses}\label{sec-follow}
+
+The next case is largely a variant on a case developed by Richard Teague
+(\citeproc{ref-Teague2024}{2024}); what I want to stress is the problem
+it raises for \textbf{Guess the Most Probable}.
+
+Having settled the ABCD group, the expert is now thinking about the EFGH
+group. The means and standard deviations of her credences about team
+qualities in that group are given in Table~\ref{tbl-quality-sec-2}. Note
+that the variance is now really high; she is very unsure about all these
+teams.
+
+{
+
+\begin{longtable}[]{@{}lrr@{}}
+
+\caption{\label{tbl-quality-sec-2}The expert's credences about team
+quality in the EFGH group}
+
+\tabularnewline
+
+\toprule\noalign{}
+Team & Mean & Standard deviation \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+E & 4.0 & 1 \\
+F & 2.5 & 4 \\
+G & 1.1 & 2 \\
+H & 1.0 & 3 \\
+
+\end{longtable}
+
+}
+
+On a podcast previewing the tournament, they get to this group, and the
+following exchange occurs:
+
+\begin{quote}
+Host: Who will win this group?\\
+Expert: E. These teams are hard to judge, but they are very likely the
+best team.\\
+Host: Makes sense. Who will finish second?\\
+Expert: {[}panics{]}
+\end{quote}
+
+The reason that the expert panics at this point is that it is really
+unclear how she is supposed to answer. To see this, look at her
+credences for which team will finish in which position in
+Table~\ref{tbl-place-prob-sec-2}.
+
+{
+
+\begin{longtable}[]{@{}lrrrr@{}}
+
+\caption{\label{tbl-place-prob-sec-2}The expert's credences about where
+each team will finish}
+
+\tabularnewline
+
+\toprule\noalign{}
+Team & First & Second & Third & Fourth \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+E & 0.443 & 0.355 & 0.158 & 0.043 \\
+F & 0.313 & 0.219 & 0.214 & 0.254 \\
+G & 0.102 & 0.223 & 0.345 & 0.331 \\
+H & 0.142 & 0.203 & 0.283 & 0.372 \\
+
+\end{longtable}
+
+}
+
+If \textbf{Guess the Most Probable} is correct, then she should answer
+E. That's the team with the highest probability of finishing second. But
+that would be a real violation of the conversational norms in this
+situation. Or, at least, I think it would be a pretty big breach. So
+\textbf{Guess the Most Probable} is wrong.
+
+To be sure, if this was the only problem with \textbf{Guess the Most
+Probable}, then it would be fairly easy to fix it to capture what the
+authors listed in the introduction want. The claim to fall back on is
+that the most probable option should be guessed when one is giving a
+complete answer to a question that is discourse-initial. It's arguably
+the earlier guess that's the problem here.
+
+If the fix is so easy, why did I include the case? Three reasons. First,
+even if the fix is easy, it's worth making. Second, although intuitions
+may vary here, I think there's something a bit funny about answering
+\emph{E} if the first question is \emph{Who will finish second?}. I'm
+not sure about that intuition, and I don't have a great story about how
+to capture it, but it seems like an interesting puzzle. Third, the more
+interesting (to me) puzzle is about what the expert should say in the
+actual conversation. There are a few moves available.
+
+She could just say the most probable team to finish second, i.e., E.
+That sounds terrible to me, but given the complications involved in the
+other answers, maybe that's the right thing to say.
+
+She could say the team that's most likely to finish second consistent
+with her earlier answers. That, as Table~\ref{tbl-place-prob-sec-2}
+shows, is G. In some ways that's the simplest fix to \textbf{Guess the
+Most Probable}; say that in guesses that appear some way into a
+discourse, there is a requirement of consistency with past guesses.
+
+This answer is not obviously optimal for similar reasons to why guessing
+ABDC was not obviously optimal. For one thing, F has the higher mean
+quality. For another, F has the highest probability, of the teams not
+yet listed, of finishing in the top two. For yet another, and this I
+think is most crucial, F has the highest probability of finishing second
+conditional on the previous guess being correct. The probabilities of
+each team finishing second given the earlier guess are given in
+Table~\ref{tbl-conditional-second}, and F is clearly highest.
+
+{
+
+\begin{longtable}[]{@{}lr@{}}
+
+\caption{\label{tbl-conditional-second}Probability of finishing second,
+given that E wins the group}
+
+\tabularnewline
+
+\toprule\noalign{}
+Team & Probability \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+F & 0.373 \\
+G & 0.332 \\
+H & 0.295 \\
+
+\end{longtable}
+
+}
+
+So the third option is to guess F. One motivation for this is the idea
+that when asked to make a series of guesses, one is being asked to
+develop a coherent story. One should maximise not the probability of the
+next step, but the probability of the whole story given the possible
+continuations of it. That means guessing the option with the highest
+conditional probability, or if it is a structured guess the highest
+expected accuracy.\footnote{Fang (\citeproc{ref-Fang2026}{2026}, fn. 36)
+  briefly discusses this idea, and dismisses it as changing the
+  question. I am somewhat more optimistic that it can work.} That seems
+like a plausible story of what we're doing with sequential guesses, and
+it gets what I think is the intuitive answer here.
+
+There is a fourth option, which isn't quite inconsistent with the
+previous ones. If sequential guessing is a matter of developing a story
+piece-by-piece, then guessers might want the option to eventually revise
+their previous guesses. After a while, a sequence of guesses might lead
+to too implausible a story. The point is not just that the story you end
+up with is absolutely implausible; sometimes the best guess will be very
+improbable. (Think of the pundits asked to choose which of 20! orderings
+of Premier League teams will be the right one.) Rather, the point is
+that sometimes when you see the full set of questions you are being
+asked, you can make a much more plausible set of guesses by retracting
+some earlier guesses.
+
+It doesn't matter for this example, but one thing in general that the
+expert could do at the panic stage is to retract their earlier guess.
+That isn't really consistent with the norms of panel discussions in mass
+media, but might be consistent with the norms of guessing in less loaded
+contexts. They could say ``Oh, you want me to guess the top two in that
+order; in that case I'd say\ldots{}'', or ``Oh, you're going to ask for
+a full ranking; in that case I'd say\ldots{}''. The view that guesses
+should maximise conditional accuracy value, conditional on the previous
+guesses, leads to some very implausible outcomes if you don't add in a
+retraction option, so this fourth option might be best thought of as a
+complement to the third, rather than an alternative.
+
+I don't have a good answer here to what the expert should do; apart from
+noting that the case suggests that \textbf{Guess the Most Probable}
+needs to be at least amended, I'm mostly presenting it as a puzzle for
+further research.
+
+\section{Guesses with Incoming Information}\label{sec-incoming}
+
+The last case is basically an application of some points Sarah Moss
+(\citeproc{ref-Moss2015sp}{2015}) made about disjunctions and
+context-sensitivity. Let's leave soccer and return to a case beloved in
+the guessing literature: horse racing.
+
+There is a big race tomorrow with thirteen runners. Three of them, N, O
+and P, are very good; the other ten are not. The expert has views on two
+questions: how well each horse runs in different conditions, and what
+the conditions are likely to be. The latter is important. There is a big
+storm moving towards the racetrack. It will reach us overnight. While
+the storm is large, it is concentrated, so it's possible it will pass
+just north of here, but it's also possible it will hit us hard. If it
+passes by, the track will be dry and fast; if it hits, the track will be
+a slow muddy mess. Horse N is good in all conditions, but O and P have
+preferred conditions. O is a flat-track bully, able to sprint away on
+dry, fast tracks. P is a mudlark, able to churn through mud better than
+most. So the expert's credences about the race results are highly
+dependent on what happens overnight with the storm. In
+Table~\ref{tbl-dry} and Table~\ref{tbl-wet}, I've listed her credences
+as to who will win conditional on a dry track, and conditional on a wet
+track.
+
+\begin{table}
+
+\caption{\label{tbl-going}The expert's win probabilities, conditional on
+the state of the track}
+
+\begin{minipage}[t]{0.50\linewidth}
+
+\subcaption{\label{tbl-dry}Dry track}
+
+\centering{
+
+\begin{tabular}{lr}
+\toprule
+Horse & Win probability\\
+\midrule
+N & 0.35\\
+O & 0.45\\
+P & 0.10\\
+Others, each & 0.01\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\subcaption{\label{tbl-wet}Wet track}
+
+\centering{
+
+\begin{tabular}{lr}
+\toprule
+Horse & Win probability\\
+\midrule
+N & 0.35\\
+O & 0.10\\
+P & 0.45\\
+Others, each & 0.01\\
+\bottomrule
+\end{tabular}
+
+}
+
+\end{minipage}%
+
+\end{table}%
+
+The expert thinks it is 50/50 which kind of track we get; the weather
+forecasts are very uncertain about the trajectory of the storm. So the
+highest win probability belongs to N, at 0.35. But guessing that N will
+win has some downsides. Notably, it violates a reflection principle for
+guessing. If the expert guesses N, she knows that whatever happens
+overnight, in the morning she'll want to change that guess. This feels
+like something we should avoid, if possible. And the expert has an easy
+way out. Instead of guessing N, she can say (1).
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\tightlist
+\item
+  If it is dry, O will win, or if it is wet, P will win.
+\end{enumerate}
+
+She could rephrase this as (2).
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  It will be either dry or wet, so either O or P will win.
+\end{enumerate}
+
+Finally, and this is where I'm borrowing most heavily from Moss, she
+might be in a situation where it is common ground that there is a
+substantial probability both that the storm will hit and that it will
+pass us by, that this fact is relevant to the win probabilities, and
+that O is a flat-track specialist while P is a mudlark. Then it seems
+she can say (3) as a way of expressing what she would say more
+explicitly as (2) or (1).
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Either O or P will win.
+\end{enumerate}
+
+If, in that context, (3) is a reasonable guess, then we have a
+counterexample to what Dorst and Mandelkern call \textbf{Filtering}, and
+what Holguín calls \textbf{cogency}. This is a disjunctive guess that's
+permissible, despite there being another guess you could generate by
+swapping one of its disjuncts for a more probable complete answer,
+namely N.
+
+Of course, it isn't a counterexample to \textbf{Guess the Most Probable}
+because it isn't a complete guess. But we can fix that. Let's say a new
+forecast comes in and it's now 55\% likely to be a wet track. Again, the
+expert is asked to predict the race, and they say (4).
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  I think it will be a wet track, so P.
+\end{enumerate}
+
+That all seems reasonable to me. It's a less probable guess than N, but
+it spells out the reason, and it is not known to be a reflection
+violation. In a context where it is obvious that you would only guess P
+if you thought it would be a wet track, and the wet track is 55\%
+likely, I think you can even get (5) to come out appropriate.
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  I think P; he's the best in the mud.
+\end{enumerate}
+
+And that is a violation of \textbf{Guess the Most Probable}. Now I don't
+want to lean too heavily on the intuitions here; I don't think it's
+nearly as clear that \emph{P} is a good guess here as that \emph{ABCD}
+is a good guess to the ordering question in Section~\ref{sec-order}. All
+I do want to say is that (a) it isn't obviously a bad guess, and (b) the
+fact that \textbf{Guess the Most Probable} leads to guesses that one
+knows one will want to retract should count against it.
+
+\section{Conclusion}\label{conclusion}
+
+When presented with a question, and asked to guess, guessers can
+reasonably have many more goals than saying the thing that most likely
+is the true answer to that question. They might try to truly answer as
+many parts of the questions as they can; that was the consideration
+behind the main example in Section~\ref{sec-order}. They might try to
+craft a coherent story given their prior guesses; that was the
+consideration behind the main example in Section~\ref{sec-follow}. They
+might try to make guesses that they have some chance of standing behind
+when new information comes in; that was the consideration behind the
+main example in Section~\ref{sec-incoming}. By looking at cases like
+these, we get a much richer picture of what people are trying to do with
+guesses.
+
+\subsection*{References}\label{references}
+\addcontentsline{toc}{subsection}{References}
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Berto2022}
+Berto, Francesco. 2022. \emph{Topics of Thought: The Logic of Knowledge,
+Belief, Imagination}. Oxford: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-DorstMandelkern2022}
+Dorst, Kevin, and Matthew Mandelkern. 2022. {``Good Guesses.''}
+\emph{Philosophy and Phenomenological Research} 105 (3): 581--618. doi:
+\href{https://doi.org/10.1111/phpr.12831}{10.1111/phpr.12831}.
+
+\bibitem[\citeproctext]{ref-Fang2026}
+Fang, Helena. 2026. {``Guessing and Its Limits.''} \emph{Philosophy and
+Phenomenological Research} 112 (3): 563--77. doi:
+\href{https://doi.org/10.1111/phpr.70101}{10.1111/phpr.70101}.
+
+\bibitem[\citeproctext]{ref-Fine2016}
+Fine, Kit. 2016. {``Angellic Content.''} \emph{Journal of Philosophical
+Logic} 45 (2): 199--226. doi:
+\href{https://doi.org/10.1007/s10992-015-9371-9}{10.1007/s10992-015-9371-9}.
+
+\bibitem[\citeproctext]{ref-Holguin2022}
+Holguín, Ben. 2022. {``Thinking, Guessing, and Believing.''}
+\emph{Philosophers' Imprint} 22 (6). doi:
+\href{https://doi.org/10.3998/phimp.2123}{10.3998/phimp.2123}.
+
+\bibitem[\citeproctext]{ref-Horowitz2019}
+Horowitz, Sophie. 2019. {``Accuracy and Educated Guesses.''} In
+\emph{Oxford Studies in Epistemology}, edited by Tamar Szabó Gendler and
+John Hawthorne. Vol. 6. Oxford University Press.
+
+\bibitem[\citeproctext]{ref-LinnemannAzhar2025}
+Linnemann, Niels, and Feraz Azhar. 2025. {``Better Guesses.''}
+\emph{Philosophy and Phenomenological Research} 110 (2): 661--86. doi:
+\href{https://doi.org/10.1111/phpr.13118}{10.1111/phpr.13118}.
+
+\bibitem[\citeproctext]{ref-Moss2015sp}
+Moss, Sarah. 2015. {``On the Semantics and Pragmatics of Epistemic
+Vocabulary.''} \emph{Semantics and Pragmatics} 8 (5): 1--81. doi:
+\href{https://doi.org/10.3765/sp.8.5}{10.3765/sp.8.5}.
+
+\bibitem[\citeproctext]{ref-Skipper2023}
+Skipper, Mattias. 2023. {``Good Guesses as Accuracy-Specificity
+Tradeoffs.''} \emph{Philosophical Studies} 180 (7): 2025--50. doi:
+\href{https://doi.org/10.1007/s11098-022-01915-1}{10.1007/s11098-022-01915-1}.
+
+\bibitem[\citeproctext]{ref-Teague2024}
+Teague, Richard. 2024. {``A Puzzle about Guessing and Inquiry.''}
+\emph{Analysis} 84 (2): 327--36.
+
+\bibitem[\citeproctext]{ref-Yablo2014}
+Yablo, Stephen. 2014. \emph{Aboutness}. Princeton: Princeton University
+Press.
+
+\end{CSLReferences}
+
+
+
+
+\end{document}

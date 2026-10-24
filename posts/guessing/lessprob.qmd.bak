@@ -1,0 +1,176 @@
+---
+title: "Guessing the Less Probable"
+abstract: |
+ A common assumption in recent work on guessing is that it is best to guess the most probable answer to the question asked. This note presents three cases where this assumption looks improbable.
+date: October 23 2025
+author:
+  - name: Brian Weatherson 
+    url: http://brian.weatherson.org
+    affiliation: University of Michigan
+    affiliation_url: https://umich.edu
+    orcid_id: 0000-0002-0830-141X
+categories:
+  - epistemology
+  - games and decisions
+execute:
+  echo: false
+  warning: false
+format:
+  html:
+    css: ../trad_defn.css
+  pdf:
+    output-file: "Guessing the Less Probable"
+image: "../images/overhead-football.jpeg"
+bibliography: guessing.bib
+---
+
+There has been a flurry of recent interest in *guessing*. Most of this work has taken for granted something like the following principle:
+
+Guess the Most Probable
+:    If one is asked _Q^?^_, and responds by guessing a complete answer, that answer is appropriate iff it is the most probable answer, given your credences, to the question.
+
+Something like **Guess the Most Probable** is a consequence of views defended by Sophie @Horowitz2019,^[Horowitz only commits to this for cases where there are only two possible answers, but doesn't give any indication that the principle won't generalise further.] Kevin Dorst and Matthew Mandelkern [-@DorstMandelkern2022], Ben @Holguin2022, Matthias @Skipper2023, Richard @Teague2024, and Niels Linnemann and Feraz Azhar [-@LinnemannAzhar2025]. A puzzle that Helena @Fang2026 raises for a generalisation of **Guess the Most Probable** might make one suspect that there will be problem cases for it. The point of this note is to build on Fang's idea and describe three cases where **Guess the Most Probable** fails. In all cases, some guesses which are not the most probable are permitted, and indeed in all three the most probable guess seems defective in notable ways.^[This is not to say that it is impermissible; the cases are hard, and any answer might seem defective. But in all cases the most probable answer seems weird enough that it permits alternative answers.]
+
+# Guess the Order {#sec-order}
+
+At the start of every Premier League season, the _Guardian Football Weekly_ asks each of its panelists to guess the order that the 20 teams will finish in. This is obviously absurd; there are 20! combinations, and while some can be ruled out fairly comprehensively, there are too many reasonable ones to guess any with any confidence. But guess they do, and it is a useful framing device for talking about the upcoming seasons.
+
+Inspired by that, I started looking at guessing the order of finishers in somewhat smaller competitions. So consider a simple four team league, where each team plays each other once, not twice as in the Premier League. You're probably familiar with these competitions; they are the standard form of the group stage at major international tournaments. We have four teams, imaginatively called A, B, C and D, and our expert is asked to guess the order that they'll finish in.
+
+Our expert has to deal with two kinds of uncertainty. 
+
+First, she doesn't know exactly how good each team is. She knows each team has an underlying quality, and for each team she has a distribution over their possible quality values, but she could be wrong. We'll simplify greatly; in each case the probability distribution is a normal distribution with identifiable mean and variance. Crucially, she is very unsure about one of the teams, in this case C. For C, the variance in her view about the quality is much higher than for the other teams.
+
+Second, soccer games are just random. You may remember Saudi Arabia beating Argentina in the 2022 World Cup. That was not because Saudi Arabia was the better team; sometimes the better team loses. The closer the teams are in quality, the more likely an upset is. But even for quite large quality differences, like Saudi Arabia and Argentina, the upset is possible.
+
+Here's how I modelled that.^[AI acknowledgment: I used Claude Opus 5.5 to build this model, having explained to it the kind of tournament that I wanted. Once it was done, it came up unprompted with some summary statistics about the model which in turn I use below.]
+
+Each team $i$ has a real quality $q_i$. In each tournament simulation, the qualities are drawn from the normal distributions with means and standard deviations described in @tbl-quality. In any game, we start with the difference $d$ between the two team qualities (remember quality is held fixed across a tournament). If the home team^[`Home team' here is just the first listed team. We are not assuming any home field advantage.] is better, $d$ is positive; if they are worse $d$ is negative. Then we add a noise parameter drawn from $\mathcal{N}(0, 1)$ and tripled. If the absolute value of that is less than 1.2, the game is a draw. Otherwise, if it's positive the home team wins, and if it's negative the away team wins. The value of 1.2 was picked to get a reasonable number of draws; otherwise it is arbitrary.
+
+[Insert tbl-quality here]
+
+To see what the probabilities were for various outcomes, we then simulated the season two million times. As in regular soccer, a team got three points for a win, and one point for a draw. After three games, we used a randomiser to split teams on equal points.^[We could have tried to simulate not just results but scores, then used tie-breaking procedures, but this was getting complicated enough.] And we measured how often each of the 24 possible permutations of the teams came up over those runs.
+
+Now this model obviously leaves out a lot. It doesn't allow for team quality changing over time, due to injuries. It doesn't allow for teams matching up particularly well or badly against other teams. But it's complicated enough to serve as an illustration.
+
+Assume our expert knows her own mind, so she knows the numbers in @tbl-quality. And she knows how team quality relates to win probabilities, via noise parameters. She has just as many computational resources as we do, so she can build all the tables you'll see here. And she is asked, just like the podcast panelists, to guess the order in which teams will finish in this group.
+
+If she gives a complete answer, and really that's what panelists are supposed to do, and **Guess the Most Probable** is correct, then there is only one permissible answer. It's ACBD. The numbers are shown in @tbl-rank-frequency.
+
+[Insert tbl-rank-frequency]
+
+But that's a surprising guess for at least three reasons.
+
+First, she thinks that B is probably better than C. The mean of B's quality distribution is higher than the mean of C's. It's completely reasonable to rank teams in a task like this by your mean estimate of their quality. (I suspect that's more or less what people really do when asked to produce these rankings.)
+
+Second, there are some statistics where our expert will, probably, do better if she guesses ABCD than if she guesses ACBD. This is not really a coincidence given the first point. There are six pairs of teams in the tournament, and we can ask for each pair who finished higher in any tournament run. We can also ask whether the actual order of the teams matches the expert's prediction of their order. It turns out, as shown in @tbl-pair-match, that in expectation she matches more pairs by guessing ABCD than guessing ACBD.
+
+[Insert tbl-pair-match]
+
+Third, she might be interested in the four questions _Who will finish in place i?_ for $i \in \{1, 2, 3, 4\}$. As @tbl-finishing-place shows, she will on average answer more of those questions correctly by guessing ABCD than by guessing ACBD.
+
+[Insert tbl-finishing-place]
+
+The point of these last two considerations is not that they are extra questions over and above what the finishing order is. To guess ABCD is, inter alia, to guess that B will finish second, and that B will finish above C. All that we need to make ABCD a sensible guess is that guesser cares about these extra things that she commits herself to when she guesses an order.
+
+There is a natural way to make this verdict fit with the picture that Dorst and Mandelkern give. At one point in their paper, they are interested in how the guesser might trade off between more and less specific guesses. (For example, when asked to guess who will win the group, when it is best to say _A_, and when it is best to say something less committal like _A or B_.) They use a standard epistemic utility model to model these decisions, where one of the factors is how accurate the guess is. Let $v_A(g, w)$ be the accuracy value of guess $g$ in world $w$. Dorst and Mandelkern make the natural assumption that $v_A(g, w) = 1$ if $g$ is true in $w$, and 0 otherwise. They also note that you might want a more complicated assumption if you care about "verisimilitude".
+
+That last point is enough to explain why it may be better to guess ABCD than ACDB. Say $v_A(g, w)$ is the number of pairs whose finishing order is the same in $g$ and $w$. (So if $g$ is completely correct in $w$, $v_A(g, w) = 6$; if it just gets one pair flipped around, it's 5, and so on.) Then the guess with the highest expected accuracy, by this accuracy measure, will be ABCD. The expected pairs column in @tbl-pair-match just is the expected accuracy score by this measure. Or if $v_A(g, w)$ measures how many teams finish in the same position in $g$ and $w$, then we can read off @tbl-finishing-place that ABCD will have the highest accuracy.
+
+The general claim of this section, of this paper really, is that when asked to make a _structured_ guess, it is generally reasonable to have some kind of more complicated value function than just 1 for true and 0 for false. What's distinctive about structured guesses, like guessing which order the teams will finish in, is that they commit the guesser to answers to related questions. The guesser might, qua guesser, care about these extra answers being correct. And if they do, they have a reason purely within accuracy considerations to guess ABCD.
+
+You might worry this will overgeneralise. Why does this have anything to do with structure? Imagine someone asked to guess where James Bond is, and they guess Vienna. Here is a parallel to the arguments of the last two paragraphs. By guessing Vienna, they commit to Bond being within 50 miles of Vienna, so their guess should get some accuracy points if he is in Bratislava. And they commit to Bond being in Austria, so they should get some accuracy points if he is in Salzburg. So even for unstructured questions like _Where is James Bond?_, there could be a reason to use something other than a 0/1 accuracy score, and hence reason to make some guess other than the most probable.
+
+To respond to this worry, we need a tighter notion of commitment. It's true that Bond being in Bratislava or in Salzburg is, in different ways, like his being in Vienna. But the inferences from _Bond is in Vienna_ to _Bond is near Vienna_ or _Bond is in Austria_ involve a change of subject-matter. The core idea I'm using here is taken from @Yablo2014; see @Fine2016 and @Berto2022 for related work. The inference from a conjunction to a conjunct, or from a ranking to a pair-ordering, does not involve changing the subject. If you guess a conjunction, the conjuncts are quite literally parts of the guess. So roughly (and see the references from two sentences ago), the idea is that by guessing $g$, you are committed to guessing anything that $g$ entails with the same subject-matter. That's why the structured guesses allow for guessing the less probable; the relevant accuracy measure won't be the simple 0/1 measure.
+
+Finally, a small terminological point. I wouldn't call this a verisimilitude consideration, because I think verisimilitude covers anything to do with closeness to the truth. Guessing Bond is in Vienna when he's in Bratislava is close; it's less than 50 miles away! What matters is something more like containment; the point of the expected pairs column in @tbl-pair-match is not that it measures how close the guess is expected to be to reality, but how many parts of the guess are expected to be literally correct. While Dorst and Mandelkern use "verisimilitude" to introduce this consideration, the fact that they immediately cite Yablo as a source suggests that this is at most a disagreement about how to use the term, not about which considerations are relevant to appropriate guessing.
+
+# Follow Up Guesses {#sec-follow}
+
+The next case is largely a variant on a case developed by Richard @Teague2024; what I want to stress is the problem it raises for **Guess the Most Probable**.
+
+Having settled the ABCD group, the expert is now thinking about the EFGH group. The means and standard deviations of her credences about team qualities in that group are given in @tbl-quality-sec-2. Note that the variance is now really high; she is very unsure about all these teams.
+
+[Insert @tbl-quality-sec-2 here]
+
+On a podcast previewing the tournament, they get to this group, and the following exchange occurs:
+
+> Host: Who will win this group?
+> Expert: E. These teams are hard to judge, but they are very likely the best team.
+> Host: Makes sense. Who will finish second?
+> Expert: [panics]
+
+The reason that the expert panics at this point is that it is really unclear how she is supposed to answer. To see this, look at her credences for which team will finish in which position in @tbl-place-prob-sec-2.
+
+[Insert @tbl-place-prob-sec-2 here]
+
+If **Guess the Most Probable** is correct, then she should answer E. That's the team with the highest probability of finishing second. But that would be a real violation of the conversational norms in this situation. Or, at least, I think it would be a pretty big breach. So **Guess the Most Probable** is wrong.
+
+To be sure, if this was the only problem with **Guess the Most Probable**, then it would be fairly easy to fix it to capture what the authors listed in the introduction want. The claim to fall back on is that the most probable option should be guessed when one is giving a complete answer to a question that is discourse-initial. It's arguably the earlier guess that's the problem here.
+
+If the fix is so easy, why did I include the case? Three reasons. First, even if the fix is easy, it's worth making. Second, although intuitions may vary here, I think there's something a bit funny about answering _E_ if the first question is _Who will finish second?_. I'm not sure about that intuition, and I don't have a great story about how to capture it, but it seems like an interesting puzzle. Third, the more interesting (to me) puzzle is about what the expert should say in the actual conversation. There are a few moves available.
+
+She could just say the most probable team to finish second, i.e., E. That sounds terrible to me, but given the complications involved in the other answers, maybe that's the right thing to say.
+
+She could say the team that's most likely to finish second consistent with her earlier answers. That, as @tbl-place-prob-sec-2 shows, is G. In some ways that's the simplest fix to **Guess the Most Probable**; say that in guesses that appear some way into a discourse, there is a requirement of consistency with past guesses.
+
+This answer is unsatisfying for similar reasons to why guessing ACBD was unsatisfying. For one thing, F has the higher mean quality. For another, F has the highest probability, of the teams not yet listed, of finishing at least second. For yet another, and this I think is most crucial, F has the highest probability of finishing second conditional on the previous guesses being correct. The probabilities of each team finishing second given the earlier guess are given in @tbl-conditional-second, and F is clearly highest.
+
+[Insert @tbl-conditional-second here]
+
+The philosophical picture here is that when asked to make a series of guesses, one is being asked to develop a coherent story. One should maximise not the probability of the next step, but the probability of the whole story given the possible continuations of it. That means guessing the option with the highest conditional probability, or if it is a structure guess the highest expected accuracy.^[@Fang2026 [fn. 36] briefly discusses this idea, and dismisses it as changing the question. I am somewhat more optimistic that it can work.] That seems like a plausible story of what we're doing with sequential guesses, and it gets what I think is the intuitive answer here.
+
+There is a fourth option, which isn't quite inconsistent with the previous versions. If sequential guessing is a matter of developing a story piece-by-piece, then guessers might want the option to eventually revise their previous guesses. After a while, a sequence of guesses might lead to too implausible a story. The point is not just that the story you end up with is absolutely implausible; sometimes the best guess will be very improbable. (Think of the pundits asked to choose which of 20! orderings of Premier League teams will be the right one.) Rather, the point is that sometimes when you see the full set of questions you are being asked, you can make a much more plausible set of guesses by retracting some earlier guesses.
+
+It doesn't matter for this example, but one thing in general that expert could do at the panic stage is to retract their earlier guess. That isn't really consistent with the norms of panel discussions in mass media, but might be consistent with the norms of guessing in less loaded contexts. They could say "Oh, you want me to guess the top two in that order; in that case I'd say...", or "Oh, you're going to ask for a full ranking; in that case I'd say...". The view that guesses should maximise conditional accuracy value, conditional on the previous guesses, leads to some very implausible outcomes if you don't add in a retraction option, so this fourth option might be best thought of as a complement to the third, rather than an alternative.
+
+I don't have a good answer here to what the expert should do; apart from noting it suggests that **Guess the Most Probable** needs to be at least amended, I'm mostly presenting it as a puzzle for further research.
+
+# Guesses with Incoming Information {#sec-incoming}
+
+The last case is basically an application of some points Sarah @Moss2015sp made about disjunctions and context-sensitivity. Let's leave soccer and return to a case beloved in the guessing literature: horse racing. 
+
+There is a big race tomorrow with thirteen runners. Three of them, N, O and P are very good; the other ten are not. The expert has views on two questions: how well each horse runs in different conditions, and what the conditions are likely to be. The latter is important. There is a big storm moving towards the racetrack. It will reach us overnight. While the storm is large, it is concentrated, so it's possible it will pass just north of here, but it's also possible it will hit us hard. If it passes by, the track will be dry and fast; if it hits the track will be a slow muddy mess. Horse N is good in all conditions, but O and P have preferred conditions. O is a flat-track bully; able to sprint away on dry, fast tracks. P is a mudlark; able to churn through mud better than most. So the expert's credences about the race results are highly dependent on what happens overnight with the storm. In @tbl-dry and @tbl-wet, I've listed her credences as to who will win conditional on a dry track, and conditional on a wet track.
+
+| Horse |  Win Probability |
+|:----:|:------:|
+|  N   |  0.35 |
+|  O   | 0.45  |
+|  P   | 0.1   |
+| Others | 0.01 each |
+
+: Win probabilities given dry track {#tbl-dry}
+
+| Horse |  Win Probability |
+|:----:|:------:|
+|  N   |  0.35 |
+|  O   | 0.1  |
+|  P   | 0.45   |
+| Others | 0.01 each |
+
+: Win probabilities given wet track {#tbl-wet}
+
+The expert thinks it is 50/50 which kind of track we get; the weather forecasts are very uncertain about the trajectory of the storm. So the highest win probability belongs to N, at 0.35. But guessing that N will win has some downsides. Notably, it violates a reflection principle for guessing. If the expert guesses N, she knows that whatever happens overnight, in the morning she'll want to change that guess. This feels like something we should avoid, if possible. And the expert has an easy way out. Instead of guessing N, she can say (@explicit-disj).
+
+(@explicit-disj) If it is dry, O will win, or if it is wet, P will win.
+
+She could rephrase this as (@front-disj).
+
+(@front-disj) It will be either dry or wet, so either O or P will win.
+
+Finally, and this is where I'm borrowing most heavily from Moss, she might be in a situation where it is common ground that there is a substantial probability both that the storm will hit and that it will pass us by, that this fact is relevant to the win probabilities, and that O is a flat-track specialist while P is a mudlark, it seems she can say (@plain-disj) as a way of expressing what she would say more explicitly as (@front-disj) or (@explicit-disj).
+
+(@plain-disj) Either O or P will win.
+
+If, in that context, (@plain-disj) is a reasonable guess, then we have a counterexample to what Dorst and Mandelkern call **Filtering**, and what Holguín calls ???. This is a disjunctive guess that's permissible, despite there being another guess you could generate by switching a disjunct with higher probability.
+
+Of course, it isn't a counterexample to **Guess the Most Probable** because it isn't a complete guess. But we can fix that. Let's say a new forecast comes in and it's now 55% likely to be a wet track. Again, the expert is asked to predict the race, and they say (@explicit-wet)
+
+(@explicit-wet) I think it will be a wet track, so P.
+
+That all seems reasonable to me. It's a less probable guess than guessing N, but it spells out the reason, and it is not known to be a reflection violation. In context where it is obvious that you would only guess P if you thought it would be a wet track, and the wet track is 55% likely, I think you can even get (@plain-wet) to come out appropriate.
+
+(@plain-wet) I think P; he's the best in the mud.
+
+And that is a violation of **Guess the Most Probable**. Now I don't want to lean too heavily on the intuitions here; I don't think it's nearly as clear that _P_ is a good guess here as that _ABCD_ is a good guess to the ordering question in @sec-order. All I do want to say is that (a) it isn't obviously a bad guess, and (b) the fact that **Guess the Most Probable** leads to guesses that one knows one will want to retract should count against it.
+

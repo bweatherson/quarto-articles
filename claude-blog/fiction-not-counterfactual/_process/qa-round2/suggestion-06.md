@@ -1,0 +1,13 @@
+**The Holmes canon contains a reversal, so §5's "pure addition" premise needs a definition the paper does not give.**
+
+**Where.** §5, "Monotonic growth" ("Pure addition, a later story consistent with everything before it, looks harmless"); the residue section's consistency assumption; §7's "grows monotonically on every view"; n. 147.
+
+**What is missing.** The paper's own example has a case it never mentions. "The Final Problem" (*Strand*, December 1893) sends Holmes over the Reichenbach Falls, and Watson takes him to be dead. "The Empty House" (*Strand*, October 1903) reveals that Holmes survived. Doyle had wanted to end the series (publication dates from memory; check). By B&H's gloss on principality, which counts what the author intended to be true, "Holmes died" was a principal truth from 1893 to 1903, and the 1903 story removes it. That is the non-monotone change B&H describe at 192. Note 17's unreliable narrators do not help, since Doyle, not Watson, changed course.
+
+**Why it matters.** The Ann–Carl argument needs growth that keeps principal truths. "Consistent" must then mean one of two things. Consistent with the depicted facts: "The Empty House" is a pure addition (the bodies were never recovered; from memory; check), but the authorial-intention clause the paper uses in §2 has to go. Consistent with every principal truth at the time: then the Holmes canon is revision, and §5 and §7 should say the growth argument covers additions only. The text takes both readings silently.
+
+**What to do.** (1) Define consistency in §5 and say which reading the canon fits. (2) Give the reversal a short paragraph as the paper's revision case, beside the Gilligan example. (3) Use *The Hound of the Baskervilles* (*Strand*, 1901–02, set before the Falls; from memory; check) as the pure-addition case for the time-indexing horn: published while readers took Holmes to be dead, but placed earlier in fictional time. The paper assumes fictional time and publication order coincide; this shows they can come apart.
+
+The addition is about 150 words; the draft is about 5,000 of 6,000, so no cut is needed. Or cut n. 147, which presents the Holmes canon as the consistent case.
+
+**Smaller fixes.** (a) §1 and §5 call the 1890 Holmes "stories." In 1890 there were two novels, *A Study in Scarlet* (1887) and *The Sign of the Four* (*Lippincott's*, February 1890). The short-story series began in the *Strand* in July 1891. Ann reads a finished pair; the thought experiment survives, but the text should say so. (b) n. 149: "a decade before he met Watson" overstates a gap the canon never dates. "Some years before" is safe; Baring-Gould puts the case about seven years earlier (from memory; check).
