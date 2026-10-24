@@ -20,7 +20,25 @@ format:
   html:
     css: ../trad_defn.css
   pdf:
-    output-file: "Guessing the Less Probable"
+    output-file: "Guessing the Less Probable (LaTeX)"
+#    include-in-header:
+#      file: lessprob-header.tex   # private copy of ../quarto2024.tex for testing
+  typst:
+    output-file: "Guessing the Less Probable (Typst)"
+    template-partials:
+      - typst/typst-template.typ   # fonts, headings, quotes, title block
+      - typst/page.typ             # page size, margins, running heads
+    section-numbering: "1.1"
+    date-format: "YYYY"
+    keep-typ: true
+    # local copy of ../../chicago-with-note.csl: some Quarto versions write the
+    # "../../" path into Typst with a backslash, which Typst rejects
+    csl: chicago-with-note.csl
+    # If the maths still isn't in Garamond, Typst can't see the font (it only sees
+    # fonts installed in Font Book, not ones inside TeX). Uncomment and put in the
+    # folder that `kpsewhich Garamond-Math.otf` prints:
+    # font-paths:
+    #   - /path/to/folder/containing/Garamond-Math.otf
 image: "../images/overhead-football.jpeg"
 bibliography: guessing.bib
 draft: true
@@ -29,7 +47,7 @@ draft: true
 There has been a flurry of recent interest in *guessing*. Most of this work has taken for granted something like the following principle:
 
 Guess the Most Probable
-:    If one is asked _Q^?^_, and responds by guessing a complete answer, that answer is appropriate iff it is the most probable answer, given one's credences, to the question
+:    If one is asked _Q^?^_, and responds by guessing a complete answer, that answer is appropriate iff it is the most probable answer, given one's credences, to the question.
 
 Something like **Guess the Most Probable** is a consequence of views defended by Sophie @Horowitz2019,^[Horowitz only commits to this for cases where there are only two possible answers, but doesn't give any indication that the principle won't generalise further.] Kevin Dorst and Matthew Mandelkern [-@DorstMandelkern2022], Ben @Holguin2022, Mattias @Skipper2023, Richard @Teague2024, and Niels Linnemann and Feraz Azhar [-@LinnemannAzhar2025]. A puzzle that Helena @Fang2026 raises for a generalisation of **Guess the Most Probable** might make one suspect that there will be problem cases for it. The point of this note is to build on Fang's idea and describe three cases where **Guess the Most Probable** fails. In all cases, some guesses which are not the most probable are permitted, and indeed in all three the most probable guess has some notable shortcomings.^[This is not to say that it is impermissible; the cases are hard, and any answer might seem defective. But in all cases the most probable answer seems weird enough that it permits alternative answers.]
 
@@ -113,7 +131,7 @@ Inspired by that, I started looking at guessing the order of finishers in somewh
 
 Our expert has to deal with two kinds of uncertainty. 
 
-First, she doesn't know exactly how good each team is. She knows each team has an underlying quality, and for each team she has a distribution over their possible quality values, but she could be wrong. We'll simplify greatly; in each case the probability distribution is a normal distribution with identifiable mean and variance. Crucially, she is very unsure about one of the teams, namely C. For that team, her estimate of their quality has a very high variance, while she is fairly confident about the other three.
+First, she doesn't know exactly how good each team is. She knows each team has an underlying quality, and for each team she has a distribution over their possible quality values, but she could be wrong. We'll simplify greatly; in each case the probability distribution is a normal distribution with identifiable mean and variance. Crucially, she is very unsure about one of the teams, namely C. For that team, her credence about their quality has a very high variance, while she is fairly confident about the other three.
 
 Second, soccer games are just random. You may remember Saudi Arabia beating Argentina in the 2022 World Cup. That was not because Saudi Arabia was the better team; sometimes the better team loses. The closer the teams are in quality, the more likely an upset is. But even for quite large quality differences, like Saudi Arabia and Argentina, the upset is possible.
 
@@ -121,13 +139,11 @@ Here's the model this paper uses for this kind of guessing.^[AI acknowledgment: 
 
 Each team $i$ has a real quality $q_i$. In each tournament simulation, the qualities are drawn from the normal distributions with means and standard deviations described in @tbl-quality. In any game, we start with the difference $d$ between the two team qualities (remember quality is held fixed across a tournament). If the home team^['Home team' here is just the first listed team. We are not assuming any home field advantage.] is better, $d$ is positive; if they are worse $d$ is negative. Then we add a noise parameter drawn from $\mathcal{N}(0, 1)$ and tripled. If the absolute value of the result is less than 1.2, the game is a draw. Otherwise, if the result is positive the home team wins, and if it is negative the away team wins.
 
-\newpage
-
 ```{r}
 #| label: tbl-quality
 #| tbl-cap: "The expert's credences about team quality"
 tibble(Team = names(m_order), Mean = m_order, `Standard deviation` = d_order) |>
-  kable(digits = 1, booktabs = TRUE)
+  kable(digits = 2, booktabs = TRUE)
 ```
 
 To see what the probabilities were for various outcomes, we then simulated the season two million times. As in regular soccer, a team got three points for a win, and one point for a draw. After three games, we used a randomiser to split teams on equal points.^[We could have tried to simulate not just results but scores, then used tie-breaking procedures, but this was getting complicated enough.] And we measured how often each of the 24 possible permutations of the teams came up over those runs.
@@ -147,11 +163,11 @@ options_order |>
   kable(digits = 3, booktabs = TRUE)
 ```
 
-But that's a surprising guess for at least two reasons.
+But that's a surprising guess for at least three reasons.
 
-First, she thinks that B is probably better than C. The mean of B's quality distribution is higher than the mean of C's. It's completely reasonable to rank teams in a task like this by your mean estimate of their quality. (I suspect that's more or less what people really do when asked to produce these rankings.)
+First, she thinks that C is probably better than D. The mean of C's quality distribution is higher than the mean of D's. It's completely reasonable to rank teams in a task like this by your mean estimate of their quality. (I suspect that's more or less what people really do when asked to produce these rankings.)
 
-Second, there are some statistics where our expert will, probably, do better if she guesses ABCD than if she guesses ABDC. This is not really a coincidence given the first point. There are six pairs of teams in the tournament, and we can ask for each pair who finished higher in any tournament run. For each pair, we can also ask whether the actual order of those two teams matches the order the expert predicted for them. It turns out, as shown in @tbl-pair-match, that in expectation she matches more pairs by guessing ABCD than guessing ABDC. Indeed, ABCD does better on this measure than any other order.
+Second, our expert will do better at predicting the relative finishing positions of pairs of teams if she guesses ABCD than if she guesses ABDC. There are six pairs of teams in the tournament, and we can ask for each pair who finished higher in any tournament run. For each pair, we can also ask whether the actual order of those two teams matches the order the expert predicted for them. It turns out, as shown in @tbl-pair-match, that in expectation she matches more pairs by guessing ABCD than guessing ABDC. Indeed, ABCD does better on this measure than any other order.
 
 ```{r}
 #| label: tbl-pair-match
@@ -163,22 +179,90 @@ options_order |>
   kable(digits = 3, booktabs = TRUE)
 ```
 
-The point of this last consideration is not that it raises extra questions over and above what the finishing order is. To guess ABCD is, inter alia, to guess that B will finish above C. All that we need to make ABCD a sensible guess is that the guesser cares about these extra things that she commits herself to when she guesses an order.
+The point here is not that thinking about relative finishing positions of pairs raises extra questions over and above the question of what the finishing order will be. To guess ABCD is, inter alia, to guess that C will finish above D. All that we need to make ABCD a sensible guess is that the guesser cares about these extra things that she commits herself to when she guesses an order.
 
 There is a natural way to make this verdict fit with the picture that Dorst and Mandelkern give. At one point in their paper, they are interested in how the guesser might trade off between more and less specific guesses. (For example, when asked to guess who will win the group, when is it best to say A, and when is it best to say something less committal like A or B?) They use a standard epistemic utility model to model these decisions, where one of the factors is how accurate the guess is. Let $v_A(g, w)$ be the accuracy value of guess $g$ in world $w$. Dorst and Mandelkern make the natural assumption that $v_A(g, w) = 1$ if $g$ is true in $w$, and 0 otherwise. They also note that you might want a more complicated assumption if you care about verisimilitude or partial truth.
 
-That last point is enough to explain why ABCD may be a permissible guess even though ABDC is more probable. Say $v_A(g, w)$ is the number of pairs whose finishing order is the same in $g$ and $w$. (So if $g$ is completely correct in $w$, $v_A(g, w) = 6$; if it just gets one pair flipped around, it's 5, and so on.) Then the guess with the highest expected accuracy, by this accuracy measure, will be ABCD. The expected pairs column in @tbl-pair-match just is the expected accuracy score by this measure. In this case, and indeed in any model with this structure no matter which numbers we put in @tbl-pair-match, the guess which orders the teams by their mean quality will be a Condorcet winner. One team will be guessed to finish higher than another iff the probability that they finish higher is above 0.5.
+That provides a natural explanation for why ABCD may be a permissible guess even though ABDC is more probable. Say $v_A(g, w)$ is the number of pairs whose finishing order is the same in $g$ and $w$. (So if $g$ is completely correct in $w$, $v_A(g, w) = 6$; if it just gets one pair flipped around, it's 5, and so on.) Then the guess with the highest expected accuracy, by this accuracy measure, will be ABCD. The expected pairs column in @tbl-pair-match just is the expected accuracy score by this measure. In this case the guess which orders the teams by their mean quality will be a Condorcet winner. That is, one team will be guessed to finish higher than another iff the probability that it finishes higher is above 0.5.
 
-Finally, although it is very close, guessing ABCD also maximises the expected number of finishing positions one guesses correctly. Another natural setting for $v_A(g, w)$ sets it equal to how many teams finish in the same position in $g$ and $w$. If we do that, the expected places column in @tbl-pair-match shows that ABCD has, by a whisker, the highest expected accuracy.
+Third, although it is very close, we can rerun the second argument if the guesser cares not about the relative positions of teams, but their absolute finishing position. Another natural setting for $v_A(g, w)$ sets it equal to how many teams finish in the same position in $g$ and $w$. That's the right metric for a guesser who really wants to correctly guess who will finish first, and who will finish second, and so on. If we do that, the expected places column in @tbl-pair-match shows that ABCD has, by a whisker, the highest expected accuracy. Like with the pairs, the absolute finishing positions of the teams isn't another thing to guess above their order; guessing ABCD just is a way to guess that C will finish third.
 
+So there are several reasons to guess ABCD. There is still one reason to guess ABDC; it is the most probable. And I don't deny that it is, for that reason, a permissible guess. What I do deny is that it is the only permissible complete guess. It is permissible to rank teams by their mean quality, or to prefer the Condorcet ordering, or to maximise the expected number of finishing positions one correctly predicts, even if that means making a guess with a slightly lower probability of being perfectly correct. As long as ABCD is one of the permissible guesses, that is enough to refute **Guess the Most Probable**, which says that only ABDC is.
 
-So there are several reasons to guess ABCD. There is still one reason to guess ABDC; it is the most probable. And I don't deny that it is, for that reason, a permissible guess. What I do deny is that it is the only permissible complete guess. It is permissible to rank teams by their mean expected quality, or to prefer the Condorcet ordering, or the maximise the expected number of finishing positions one correctly predicts, even if that means making a guess with a slightly lower probability of being perfectly correct. As long as ABCD is one of the permissible guesses, that is enough to refute **Guess the Most Probable**, which says that only ABDC is.^[In this case ABCD is the second-most probable guess; I couldn't find a model where it was best on both of the measures listed in @tbl-pair-match and was lower than second most probable. But it isn't hard to find models where it is best on one or other of these metrics and is ranked much lower by overall probability.]
+In the case I've described so far ABCD is the second-most probable guess; I couldn't find a model where it was best on both of the measures listed in @tbl-pair-match and was lower than second-most probable. You might wonder whether this suggests that **Guess the Most Probable** is at least close to true. If the argument about pairs is correct, and it is always permissible to guess the Condorcet ranking, then it is permissible to guess really improbable orderings. Imagine our expert was asked to provide a best guess about the finishing order of the group with teams E, F, G and H, where the means and standard deviations of her credences about their quality are given in table @tbl-high-variance.
+
+```{r}
+#| label: sim-high-variance
+#| cache: true
+# The second group: E and H are well known, F and G are very uncertain
+m_hv <- c(E = 1.4, F = 1.3, G = 1.2, H = 1.1)
+d_hv <- c(E = 0.2, F = 2,   G = 2,   H = 0.2)
+
+place_hv <- sim_seasons(m_hv, d_hv, n = 2e6, s = 3, seed = 31)
+
+# All 24 possible orders, so an order that never came up still gets a row
+perms <- function(x) {
+  if (length(x) <= 1) return(list(x))
+  unlist(lapply(seq_along(x), \(i) lapply(perms(x[-i]), \(p) c(x[i], p))),
+         recursive = FALSE)
+}
+all_orders_hv <- map_chr(perms(names(m_hv)), str_c, collapse = "")
+
+# Who finished first and second in each simulated season
+first_hv  <- names(m_hv)[max.col(place_hv == 1)]
+second_hv <- names(m_hv)[max.col(place_hv == 2)]
+
+# Probability that a guessed order gets the top two right,
+# either in either order (ordered = FALSE) or in the right order (TRUE)
+top_two_prob <- function(guess, ordered) {
+  t <- str_split_1(guess, "")
+  exact <- first_hv == t[1] & second_hv == t[2]
+  if (ordered) mean(exact) else mean(exact | (first_hv == t[2] & second_hv == t[1]))
+}
+
+# Five statistics for every order, and each order's rank on each of them
+options_hv <- tibble(table = all_orders_hv) |>
+  left_join(table_probs(place_hv) |> select(table, prob), by = "table") |>
+  mutate(prob           = coalesce(prob, 0),
+         correct_pairs  = map_dbl(table, expected_correct_pairs,  place = place_hv),
+         correct_places = map_dbl(table, expected_correct_places, place = place_hv),
+         top_two_set    = map_dbl(table, top_two_prob, ordered = FALSE),
+         top_two_order  = map_dbl(table, top_two_prob, ordered = TRUE)) |>
+  mutate(across(c(prob, correct_pairs, correct_places, top_two_set, top_two_order),
+                \(x) min_rank(desc(x)), .names = "rank_{.col}")) |>
+  arrange(rank_prob)
+
+# Keep only the small summary, so the cache stays small
+rm(place_hv, first_hv, second_hv)
+```
+
+```{r}
+#| label: tbl-high-variance
+#| tbl-cap: "The expert's credences about team quality for the second group"
+tibble(Team = names(m_hv), Mean = m_hv, `Standard deviation` = d_hv) |>
+  kable(digits = 2, booktabs = TRUE)
+```
+
+As @tbl-high-variance-orders shows, guessing that they will finish EFGH maximises the expected number of pairs one expects to order correctly. It's also the Condorcet order: whenever $x$ is more than 50% likely to finish about $y$, it is guessed to finish above $y$. But it is not the most probable order. In fact, it is the twenty-first most probable order out of twenty-four. The second-best guess by expected pairs guessed correctly is the twenty-second most probable order. Once we start caring about claims embedded within a guess, the best guess might be a long way down the probability ranking.
+
+```{r}
+#| label: tbl-high-variance-orders
+#| tbl-cap: "Statistics for the second group, showing the orders that finish in the top three on some interesting statistic or other."
+options_hv |>
+  filter(if_any(starts_with("rank_"), \(r) r <= 3)) |>
+  # short headers keep the table narrow enough for Pandoc to size columns itself
+  select(Order = table, Rank = rank_prob, Probability = prob,
+         `Expected pairs` = correct_pairs, `Expected places` = correct_places)  |>
+  kable(digits = 3, booktabs = TRUE)
+```
+
+That said, this second group is hard, and there are good reasons to not guess EFGH. It does not maximise the probability that one will guess the group winner correctly. It does maximise the probability that one will guess who the top two teams are correctly, which is often important in tournaments, but in that respect it's tied with more probable guesses. While it often correctly guesses the identity of the top two, it is much more rare that it guesses their order, i.e., who is first and who is second, which is also important for tournaments. Just like it is the twenty-first most likely order, it ranks twenty-first, out of twenty four, in the number of teams it is expected to correctly guess the position of. I still think that all things considered, EFGH is a reasonable guess, but there are many reasons for guessing other orders.
 
 The general claim of this section, of this paper really, is that when asked to make a _structured_ guess, it is generally reasonable to have some kind of more complicated value function than just 1 for true and 0 for false. What's distinctive about structured guesses, like guessing which order the teams will finish in, is that they commit the guesser to answers to related questions. The guesser might, qua guesser, care about these extra answers being correct. And if they do, they have a reason purely within accuracy considerations to guess ABCD.
 
-You might worry this will overgeneralise. Why does this have anything to do with structure? Imagine someone asked to guess where James Bond is, and they guess Vienna. Here is a parallel to the arguments of the last two paragraphs. By guessing Vienna, they commit to Bond being within 50 miles of Vienna, so their guess should get some accuracy points if he is in Bratislava. And they commit to Bond being in Austria, so they should get some accuracy points if he is in Salzburg. So even for unstructured questions like _Where is James Bond?_, there could be a reason to use something other than a 0/1 accuracy score, and hence reason to make some guess other than the most probable.
+You might worry this will overgeneralise. Why does this have anything to do with structure? Imagine someone asked to guess where James Bond is, and they guess Vienna. Here is a parallel to the earlier arguments about commitment. By guessing Vienna, they commit to Bond being within 50 miles of Vienna, so their guess should get some accuracy points if he is in Bratislava. And they commit to Bond being in Austria, so they should get some accuracy points if he is in Salzburg. So even for unstructured questions like _Where is James Bond?_, there could be a reason to use something other than a 0/1 accuracy score, and hence reason to make some guess other than the most probable.
 
-To respond to this worry, we need a tighter notion of commitment. It's true that Bond being in Bratislava or in Salzburg is, in different ways, like his being in Vienna. But the inferences from _Bond is in Vienna_ to _Bond is near Vienna_ or _Bond is in Austria_ involve a change of subject-matter. The core idea I'm using here is taken from @Yablo2014; see @Fine2016 and @Berto2022 for related work. The inference from a conjunction to a conjunct, or from a ranking to a pair-ordering, does not involve changing the subject. If you guess a conjunction, the conjuncts are quite literally parts of the guess. So roughly (and see the references from two sentences ago), the idea is that by guessing $g$, you are committed to guessing anything that $g$ entails whose subject-matter is part of $g$'s. That's why the structured guesses allow for guessing the less probable; the relevant accuracy measure won't be the simple 0/1 measure.
+To respond to this worry, we need a tighter notion of commitment. It's true that Bond being in Bratislava or in Salzburg is, in different ways, like his being in Vienna. But the inferences from _Bond is in Vienna_ to _Bond is near Vienna_ or _Bond is in Austria_ involve a change of subject-matter. The core idea I'm using here is taken from @Yablo2014; see @Fine2016 and @Berto2022 for related work. The inference from a conjunction to a conjunct, or from a ranking to a pair-ordering, does not involve changing the subject. If you guess a conjunction, the conjuncts are quite literally parts of the guess. So roughly (and see the earlier references for a less rough version), the idea is that by guessing $g$, you are committed to guessing anything that $g$ entails whose subject-matter is part of $g$'s. That's why the structured guesses allow for guessing the less probable; the relevant accuracy measure won't be the simple 0/1 measure.
 
 Finally, a housekeeping note. Dorst and Mandelkern [-@DorstMandelkern2022, fn. 15] list two reasons for thinking that the accuracy value might be something other than 0 or 1: verisimilitude or partial truth. The argument of the last few paragraphs is that partial truth really is important, but verisimilitude, i.e., closeness to the truth, is not. Guessing Bond is in Vienna when he's in Bratislava is close; it's less than 50 miles away! But for the _Where is James Bond?_ question, I've endorsed the claim that guesses should just be judged true or false, and the right (complete) guess is the most probable one. The examples that I do think make it reasonable for the guesser to have a more complicated value function are what they are calling partial truth cases. Not coincidentally, they cite Yablo as a place to look for more detail on partial truth, so the kinds of cases I'm using are pretty close to what they were considering.
 
@@ -208,14 +292,14 @@ second_given_winner <- function(place, winner) {
 ```{r}
 #| label: sim-sec-follow
 #| cache: true
-m_follow <- c(E = 4, F = 2.5, G = 1.1, H = 1.0)
-d_follow <- c(E = 1, F = 4,   G = 2,   H = 3)
+m_follow <- c(J = 4, K = 2.5, L = 1.1, M = 1.0)
+d_follow <- c(J = 1, K = 4,   L = 2,   M = 3)
 
 place_follow <- sim_seasons(m_follow, d_follow, n = 2e6, s = 3, seed = 31)
 
 # Keep only the small summaries, so the cache stays small
 places_follow <- place_probs(place_follow)
-second_given_E <- second_given_winner(place_follow, "E")
+second_given_J <- second_given_winner(place_follow, "J")
 rm(place_follow)
 ```
 
@@ -223,11 +307,11 @@ rm(place_follow)
 
 The next case is largely a variant on a case developed by Richard @Teague2024; what I want to stress is the problem it raises for **Guess the Most Probable**.
 
-Having settled the ABCD group, the expert is now thinking about the EFGH group. The means and standard deviations of her credences about team qualities in that group are given in @tbl-quality-sec-2. Note that the variance is now really high; she is very unsure about all these teams.
+Having settled the ABCD and EFGH groups, the expert is now thinking about the JKLM group. The means and standard deviations of her credences about team qualities in that group are given in @tbl-quality-sec-2. Note that the variance is now really high; she is very unsure about all these teams.
 
 ```{r}
 #| label: tbl-quality-sec-2
-#| tbl-cap: "The expert's credences about team quality in the EFGH group"
+#| tbl-cap: "The expert's credences about team quality in the JKLM group"
 tibble(Team = names(m_follow), Mean = m_follow, `Standard deviation` = d_follow) |>
   kable(digits = 1, booktabs = TRUE)
 ```
@@ -235,7 +319,7 @@ tibble(Team = names(m_follow), Mean = m_follow, `Standard deviation` = d_follow)
 On a podcast previewing the tournament, they get to this group, and the following exchange occurs:
 
 > Host: Who will win this group?    
-> Expert: E. These teams are hard to judge, but they are very likely the best team.    
+> Expert: J. These teams are hard to judge, but J is likely best.    
 > Host: Makes sense. Who will finish second?    
 > Expert: [panics]
 
@@ -249,27 +333,27 @@ places_follow |>
   kable(digits = 3, booktabs = TRUE)
 ```
 
-If **Guess the Most Probable** is correct, then she should answer E. That's the team with the highest probability of finishing second. But that would be a real violation of the conversational norms in this situation. Or, at least, I think it would be a pretty big breach. So **Guess the Most Probable** is wrong.
+If **Guess the Most Probable** is correct, then she should answer J. That's the team with the highest probability of finishing second. But that would be a real violation of the conversational norms in this situation. Or, at least, I think it would be a pretty big breach. So **Guess the Most Probable** is wrong.
 
 To be sure, if this was the only problem with **Guess the Most Probable**, then it would be fairly easy to fix it to capture what the authors listed in the introduction want. The claim to fall back on is that the most probable option should be guessed when one is giving a complete answer to a question that is discourse-initial. It's arguably the earlier guess that's the problem here.
 
-If the fix is so easy, why did I include the case? Three reasons. First, even if the fix is easy, it's worth making. Second, although intuitions may vary here, I think there's something a bit funny about answering _E_ if the first question is _Who will finish second?_. I'm not sure about that intuition, and I don't have a great story about how to capture it, but it seems like an interesting puzzle. Third, the more interesting (to me) puzzle is about what the expert should say in the actual conversation. There are a few moves available.
+If the fix is so easy, why did I include the case? Three reasons. First, even if the fix is easy, it's worth making. Second, although intuitions may vary here, I think there's something a bit funny about answering _J_ if the first question is _Who will finish second?_. I'm not sure about that intuition, and I don't have a great story about how to capture it, but it seems like an interesting puzzle. Third, the more interesting (to me) puzzle is about what the expert should say in the actual conversation. There are a few moves available.
 
-She could just say the most probable team to finish second, i.e., E. That sounds terrible to me, but given the complications involved in the other answers, maybe that's the right thing to say.
+She could just say the most probable team to finish second, i.e., J. That sounds terrible to me, but given the complications involved in the other answers, maybe that's the right thing to say.
 
-She could say the team that's most likely to finish second consistent with her earlier answers. That, as @tbl-place-prob-sec-2 shows, is G. In some ways that's the simplest fix to **Guess the Most Probable**; say that in guesses that appear some way into a discourse, there is a requirement of consistency with past guesses.
+She could say the team that's most likely to finish second consistent with her earlier answers. That, as @tbl-place-prob-sec-2 shows, is L. In some ways that's the simplest fix to **Guess the Most Probable**; say that in guesses that appear some way into a discourse, there is a requirement of consistency with past guesses.
 
-This answer is not obviously optimal for similar reasons to why guessing ABDC was not obviously optimal. For one thing, F has the higher mean quality. For another, F has the highest probability, of the teams not yet listed, of finishing in the top two. For yet another, and this I think is most crucial, F has the highest probability of finishing second conditional on the previous guess being correct. The probabilities of each team finishing second given the earlier guess are given in @tbl-conditional-second, and F is clearly highest.
+This answer is not obviously optimal for similar reasons to why guessing ABDC was not obviously optimal. For one thing, K has the higher mean quality. For another, K has the highest probability, of the teams not yet listed, of finishing in the top two. For yet another, and this I think is most crucial, K has the highest probability of finishing second conditional on the previous guess being correct. The probabilities of each team finishing second given the earlier guess are given in @tbl-conditional-second, and K is clearly highest.
 
 ```{r}
 #| label: tbl-conditional-second
-#| tbl-cap: "Probability of finishing second, given that E wins the group"
-second_given_E |>
+#| tbl-cap: "Probability of finishing second, given that J wins the group"
+second_given_J |>
   select(Team = team, Probability = prob) |>
   kable(digits = 3, booktabs = TRUE)
 ```
 
-So the third option is to guess F. One motivation for this is the idea that when asked to make a series of guesses, one is being asked to develop a coherent story. One should maximise not the probability of the next step, but the probability of the whole story given the possible continuations of it. That means guessing the option with the highest conditional probability, or if it is a structured guess the highest expected accuracy.^[@Fang2026 [fn. 36] briefly discusses this idea, and dismisses it as changing the question. I am somewhat more optimistic that it can work.] That seems like a plausible story of what we're doing with sequential guesses, and it gets what I think is the intuitive answer here.
+So the third option is to guess K. One motivation for this is the idea that when asked to make a series of guesses, one is being asked to develop a coherent story. One should maximise not the probability of the next step, but the probability of the whole story given the possible continuations of it. That means guessing the option with the highest conditional probability, or, if it is a structured guess, the highest expected accuracy.^[@Fang2026 [fn. 36] briefly discusses this idea, and dismisses it as changing the question. I am somewhat more optimistic that it can work.] That seems like a plausible story of what we're doing with sequential guesses, and it gets what I think is the intuitive answer here.
 
 There is a fourth option, which isn't quite inconsistent with the previous ones. If sequential guessing is a matter of developing a story piece-by-piece, then guessers might want the option to eventually revise their previous guesses. After a while, a sequence of guesses might lead to too implausible a story. The point is not just that the story you end up with is absolutely implausible; sometimes the best guess will be very improbable. (Think of the pundits asked to choose which of 20! orderings of Premier League teams will be the right one.) Rather, the point is that sometimes when you see the full set of questions you are being asked, you can make a much more plausible set of guesses by retracting some earlier guesses.
 
@@ -333,7 +417,7 @@ And that is a violation of **Guess the Most Probable**. Now I don't want to lean
 
 # Conclusion
 
-When presented with a question, and asked to guess, guessers can reasonably have many more goals than saying the thing that most likely is the true answer to that question. They might try to truly answer as many parts of the questions as they can; that was the consideration behind the main example in @sec-order. They might try to craft a coherent story given their prior guesses; that was the consideration behind the main example in @sec-follow. They might try to make guesses that they have some chance of standing behind when new information comes in; that was the consideration behind the main example in @sec-incoming. By looking at cases like these, we get a much richer picture of what people are trying to do with guesses.
+When presented with a question, and asked to guess, guessers can reasonably have many more goals than saying the thing that most likely is the true answer to that question. They might try to truly answer as many parts of the question as they can; that was the consideration behind the main example in @sec-order. They might try to craft a coherent story given their prior guesses; that was the consideration behind the main example in @sec-follow. They might try to make guesses that they have some chance of standing behind when new information comes in; that was the consideration behind the main example in @sec-incoming. By looking at cases like these, we get a much richer picture of what people are trying to do with guesses.
 
 ::: {.content-visible when-format="pdf"}
 ## References {-}

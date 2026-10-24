@@ -293,7 +293,7 @@ this work has taken for granted something like the following principle:
 \item[Guess the Most Probable]
 If one is asked \emph{Q\textsuperscript{?}}, and responds by guessing a
 complete answer, that answer is appropriate iff it is the most probable
-answer, given one's credences, to the question
+answer, given one's credences, to the question.
 \end{description}
 
 Something like \textbf{Guess the Most Probable} is a consequence of
@@ -343,9 +343,9 @@ team has an underlying quality, and for each team she has a distribution
 over their possible quality values, but she could be wrong. We'll
 simplify greatly; in each case the probability distribution is a normal
 distribution with identifiable mean and variance. Crucially, she is very
-unsure about one of the teams, namely C. For that team, her estimate of
-their quality has a very high variance, while she is fairly confident
-about the other three.
+unsure about one of the teams, namely C. For that team, her credence
+about their quality has a very high variance, while she is fairly
+confident about the other three.
 
 Second, soccer games are just random. You may remember Saudi Arabia
 beating Argentina in the 2022 World Cup. That was not because Saudi
@@ -373,8 +373,6 @@ value of the result is less than 1.2, the game is a draw. Otherwise, if
 the result is positive the home team wins, and if it is negative the
 away team wins.
 
-\newpage
-
 {
 
 \begin{longtable}[]{@{}lrr@{}}
@@ -389,10 +387,10 @@ Team & Mean & Standard deviation \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-A & 4.0 & 0.2 \\
-B & 3.0 & 0.2 \\
-C & 2.0 & 1.6 \\
-D & 1.6 & 0.2 \\
+A & 4.00 & 0.2 \\
+B & 3.00 & 0.2 \\
+C & 2.00 & 1.6 \\
+D & 1.55 & 0.2 \\
 
 \end{longtable}
 
@@ -450,23 +448,23 @@ Rank & Order & Probability \\
 
 }
 
-But that's a surprising guess for at least two reasons.
+But that's a surprising guess for at least three reasons.
 
-First, she thinks that B is probably better than C. The mean of B's
-quality distribution is higher than the mean of C's. It's completely
+First, she thinks that C is probably better than D. The mean of C's
+quality distribution is higher than the mean of D's. It's completely
 reasonable to rank teams in a task like this by your mean estimate of
 their quality. (I suspect that's more or less what people really do when
 asked to produce these rankings.)
 
-Second, there are some statistics where our expert will, probably, do
-better if she guesses ABCD than if she guesses ABDC. This is not really
-a coincidence given the first point. There are six pairs of teams in the
-tournament, and we can ask for each pair who finished higher in any
-tournament run. For each pair, we can also ask whether the actual order
-of those two teams matches the order the expert predicted for them. It
-turns out, as shown in Table~\ref{tbl-pair-match}, that in expectation
-she matches more pairs by guessing ABCD than guessing ABDC. Indeed, ABCD
-does better on this measure than any other order.
+Second, our expert will do better at predicting the relative finishing
+positions of pairs of teams if she guesses ABCD than if she guesses
+ABDC. There are six pairs of teams in the tournament, and we can ask for
+each pair who finished higher in any tournament run. For each pair, we
+can also ask whether the actual order of those two teams matches the
+order the expert predicted for them. It turns out, as shown in
+Table~\ref{tbl-pair-match}, that in expectation she matches more pairs
+by guessing ABCD than guessing ABDC. Indeed, ABCD does better on this
+measure than any other order.
 
 {
 
@@ -495,11 +493,12 @@ ADBC & 0.072 & 3.606 & 1.305 \\
 
 }
 
-The point of this last consideration is not that it raises extra
-questions over and above what the finishing order is. To guess ABCD is,
-inter alia, to guess that B will finish above C. All that we need to
-make ABCD a sensible guess is that the guesser cares about these extra
-things that she commits herself to when she guesses an order.
+The point here is not that thinking about relative finishing positions
+of pairs raises extra questions over and above the question of what the
+finishing order will be. To guess ABCD is, inter alia, to guess that C
+will finish above D. All that we need to make ABCD a sensible guess is
+that the guesser cares about these extra things that she commits herself
+to when she guesses an order.
 
 There is a natural way to make this verdict fit with the picture that
 Dorst and Mandelkern give. At one point in their paper, they are
@@ -514,36 +513,128 @@ world \(w\). Dorst and Mandelkern make the natural assumption that
 note that you might want a more complicated assumption if you care about
 verisimilitude or partial truth.
 
-That last point is enough to explain why ABCD may be a permissible guess
-even though ABDC is more probable. Say \(v_A(g, w)\) is the number of
-pairs whose finishing order is the same in \(g\) and \(w\). (So if \(g\)
-is completely correct in \(w\), \(v_A(g, w) = 6\); if it just gets one
-pair flipped around, it's 5, and so on.) Then the guess with the highest
-expected accuracy, by this accuracy measure, will be ABCD. The expected
-pairs column in Table~\ref{tbl-pair-match} just is the expected accuracy
-score by this measure.
+That provides a natural explanation for why ABCD may be a permissible
+guess even though ABDC is more probable. Say \(v_A(g, w)\) is the number
+of pairs whose finishing order is the same in \(g\) and \(w\). (So if
+\(g\) is completely correct in \(w\), \(v_A(g, w) = 6\); if it just gets
+one pair flipped around, it's 5, and so on.) Then the guess with the
+highest expected accuracy, by this accuracy measure, will be ABCD. The
+expected pairs column in Table~\ref{tbl-pair-match} just is the expected
+accuracy score by this measure. In this case the guess which orders the
+teams by their mean quality will be a Condorcet winner. That is, one
+team will be guessed to finish higher than another iff the probability
+that it finishes higher is above 0.5.
 
-This does not show that ABCD is the only permissible guess. To guess
-ABDC is, inter alia, to guess that C will finish fourth, and a guesser
-might reasonably care about correctly predicting who finishes
-fourth.\footnote{In some tournaments, only the fourth place team is
-  automatically eliminated, so this is a particularly salient
-  prediction.} More generally, another natural setting for \(v_A(g, w)\)
+Third, although it is very close, we can rerun the second argument if
+the guesser cares not about the relative positions of teams, but their
+absolute finishing position. Another natural setting for \(v_A(g, w)\)
 sets it equal to how many teams finish in the same position in \(g\) and
-\(w\). If we do that, the expected places column in
-Table~\ref{tbl-pair-match} shows that ABDC has the highest expected
-accuracy, and by some distance. What's driving this, primarily, is that
-because C's quality is so uncertain, the guesser thinks that C is most
-likely to finish last. So there are advantages to ABDC beyond the fact
-that it is the most probable guess.\footnote{It is not true in general
-  that the most probable guess will do best by this metric.} The core
-claim I want to make is not that ABCD is obviously the best guess rather
-than ABDC, but that it is permissible. It is permissible to rank teams
-by their mean expected quality, or to prefer an ordering where every
-team is more than 50\% likely to finish above each of the teams one
-guesses will finish below it. As long as ABCD is one of the permissible
-guesses, that is enough to refute \textbf{Guess the Most Probable},
-which says that only ABDC is.
+\(w\). That's the right metric for a guesser who really wants to
+correctly guess who will finish first, and who will finish second, and
+so on. If we do that, the expected places column in
+Table~\ref{tbl-pair-match} shows that ABCD has, by a whisker, the
+highest expected accuracy. Like with the pairs, the absolute finishing
+positions of the teams isn't another thing to guess above their order;
+guessing ABCD just is a way to guess that C will finish third.
+
+So there are several reasons to guess ABCD. There is still one reason to
+guess ABDC; it is the most probable. And I don't deny that it is, for
+that reason, a permissible guess. What I do deny is that it is the only
+permissible complete guess. It is permissible to rank teams by their
+mean quality, or to prefer the Condorcet ordering, or to maximise the
+expected number of finishing positions one correctly predicts, even if
+that means making a guess with a slightly lower probability of being
+perfectly correct. As long as ABCD is one of the permissible guesses,
+that is enough to refute \textbf{Guess the Most Probable}, which says
+that only ABDC is.
+
+In the case I've described so far ABCD is the second-most probable
+guess; I couldn't find a model where it was best on both of the measures
+listed in Table~\ref{tbl-pair-match} and was lower than second-most
+probable. You might wonder whether this suggests that \textbf{Guess the
+Most Probable} is at least close to true. If the argument about pairs is
+correct, and it is always permissible to guess the Condorcet ranking,
+then it is permissible to guess really improbable orderings. Imagine our
+expert was asked to provide a best guess about the finishing order of
+the group with teams E, F, G and H, where the means and standard
+deviations of her credences about their quality are given in table
+Table~\ref{tbl-high-variance}.
+
+{
+
+\begin{longtable}[]{@{}lrr@{}}
+
+\caption{\label{tbl-high-variance}The expert's credences about team
+quality for the second group}
+
+\tabularnewline
+
+\toprule\noalign{}
+Team & Mean & Standard deviation \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+E & 1.4 & 0.2 \\
+F & 1.3 & 2.0 \\
+G & 1.2 & 2.0 \\
+H & 1.1 & 0.2 \\
+
+\end{longtable}
+
+}
+
+As Table~\ref{tbl-high-variance-orders} shows, guessing that they will
+finish EFGH maximises the expected number of pairs one expects to order
+correctly. It's also the Condorcet order: whenever \(x\) is more than
+50\% likely to finish about \(y\), it is guessed to finish above \(y\).
+But it is not the most probable order. In fact, it is the twenty-first
+most probable order out of twenty-four. The second-best guess by
+expected pairs guessed correctly is the twenty-second most probable
+order. Once we start caring about claims embedded within a guess, the
+best guess might be a long way down the probability ranking.
+
+{
+
+\begin{longtable}[]{@{}lrrrr@{}}
+
+\caption{\label{tbl-high-variance-orders}Statistics for the second
+group, showing the orders that finish in the top three on some
+interesting statistic or other.}
+
+\tabularnewline
+
+\toprule\noalign{}
+Order & Rank & Probability & Expected pairs & Expected places \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+FEHG & 1 & 0.066 & 3.085 & 1.180 \\
+GEHF & 2 & 0.062 & 3.013 & 1.150 \\
+FHEG & 3 & 0.059 & 2.987 & 1.134 \\
+FEGH & 7 & 0.046 & 3.112 & 1.046 \\
+EFHG & 8 & 0.045 & 3.111 & 1.045 \\
+GEFH & 11 & 0.044 & 3.064 & 1.030 \\
+EFGH & 21 & 0.030 & 3.138 & 0.911 \\
+EGFH & 22 & 0.029 & 3.115 & 0.906 \\
+
+\end{longtable}
+
+}
+
+That said, this second group is hard, and there are good reasons to not
+guess EFGH. It does not maximise the probability that one will guess the
+group winner correctly. It does maximise the probability that one will
+guess who the top two teams are correctly, which is often important in
+tournaments, but in that respect it's tied with more probable guesses.
+While it often correctly guesses the identity of the top two, it is much
+more rare that it guesses their order, i.e., who is first and who is
+second, which is also important for tournaments. Just like it is the
+twenty-first most likely order, it ranks twenty-first, out of twenty
+four, in the number of teams it is expected to correctly guess the
+position of. I still think that all things considered, EFGH is a
+reasonable guess, but there are many reasons for guessing other orders.
 
 The general claim of this section, of this paper really, is that when
 asked to make a \emph{structured} guess, it is generally reasonable to
@@ -556,8 +647,8 @@ a reason purely within accuracy considerations to guess ABCD.
 
 You might worry this will overgeneralise. Why does this have anything to
 do with structure? Imagine someone asked to guess where James Bond is,
-and they guess Vienna. Here is a parallel to the arguments of the last
-two paragraphs. By guessing Vienna, they commit to Bond being within 50
+and they guess Vienna. Here is a parallel to the earlier arguments about
+commitment. By guessing Vienna, they commit to Bond being within 50
 miles of Vienna, so their guess should get some accuracy points if he is
 in Bratislava. And they commit to Bond being in Austria, so they should
 get some accuracy points if he is in Salzburg. So even for unstructured
@@ -576,11 +667,11 @@ taken from Yablo (\citeproc{ref-Yablo2014}{2014}); see Fine
 conjunction to a conjunct, or from a ranking to a pair-ordering, does
 not involve changing the subject. If you guess a conjunction, the
 conjuncts are quite literally parts of the guess. So roughly (and see
-the references from two sentences ago), the idea is that by guessing
-\(g\), you are committed to guessing anything that \(g\) entails whose
-subject-matter is part of \(g\)'s. That's why the structured guesses
-allow for guessing the less probable; the relevant accuracy measure
-won't be the simple 0/1 measure.
+the earlier references for a less rough version), the idea is that by
+guessing \(g\), you are committed to guessing anything that \(g\)
+entails whose subject-matter is part of \(g\)'s. That's why the
+structured guesses allow for guessing the less probable; the relevant
+accuracy measure won't be the simple 0/1 measure.
 
 Finally, a housekeeping note. Dorst and Mandelkern
 (\citeproc{ref-DorstMandelkern2022}{2022}, fn. 15) list two reasons for
@@ -603,18 +694,18 @@ The next case is largely a variant on a case developed by Richard Teague
 (\citeproc{ref-Teague2024}{2024}); what I want to stress is the problem
 it raises for \textbf{Guess the Most Probable}.
 
-Having settled the ABCD group, the expert is now thinking about the EFGH
-group. The means and standard deviations of her credences about team
-qualities in that group are given in Table~\ref{tbl-quality-sec-2}. Note
-that the variance is now really high; she is very unsure about all these
-teams.
+Having settled the ABCD and EFGH groups, the expert is now thinking
+about the JKLM group. The means and standard deviations of her credences
+about team qualities in that group are given in
+Table~\ref{tbl-quality-sec-2}. Note that the variance is now really
+high; she is very unsure about all these teams.
 
 {
 
 \begin{longtable}[]{@{}lrr@{}}
 
 \caption{\label{tbl-quality-sec-2}The expert's credences about team
-quality in the EFGH group}
+quality in the JKLM group}
 
 \tabularnewline
 
@@ -624,10 +715,10 @@ Team & Mean & Standard deviation \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-E & 4.0 & 1 \\
-F & 2.5 & 4 \\
-G & 1.1 & 2 \\
-H & 1.0 & 3 \\
+J & 4.0 & 1 \\
+K & 2.5 & 4 \\
+L & 1.1 & 2 \\
+M & 1.0 & 3 \\
 
 \end{longtable}
 
@@ -638,8 +729,7 @@ following exchange occurs:
 
 \begin{quote}
 Host: Who will win this group?\\
-Expert: E. These teams are hard to judge, but they are very likely the
-best team.\\
+Expert: J. These teams are hard to judge, but J is likely best.\\
 Host: Makes sense. Who will finish second?\\
 Expert: {[}panics{]}
 \end{quote}
@@ -664,17 +754,17 @@ Team & First & Second & Third & Fourth \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-E & 0.443 & 0.355 & 0.158 & 0.043 \\
-F & 0.313 & 0.219 & 0.214 & 0.254 \\
-G & 0.102 & 0.223 & 0.345 & 0.331 \\
-H & 0.142 & 0.203 & 0.283 & 0.372 \\
+J & 0.443 & 0.355 & 0.158 & 0.043 \\
+K & 0.313 & 0.219 & 0.214 & 0.254 \\
+L & 0.102 & 0.223 & 0.345 & 0.331 \\
+M & 0.142 & 0.203 & 0.283 & 0.372 \\
 
 \end{longtable}
 
 }
 
 If \textbf{Guess the Most Probable} is correct, then she should answer
-E. That's the team with the highest probability of finishing second. But
+J. That's the team with the highest probability of finishing second. But
 that would be a real violation of the conversational norms in this
 situation. Or, at least, I think it would be a pretty big breach. So
 \textbf{Guess the Most Probable} is wrong.
@@ -689,37 +779,37 @@ the earlier guess that's the problem here.
 If the fix is so easy, why did I include the case? Three reasons. First,
 even if the fix is easy, it's worth making. Second, although intuitions
 may vary here, I think there's something a bit funny about answering
-\emph{E} if the first question is \emph{Who will finish second?}. I'm
+\emph{J} if the first question is \emph{Who will finish second?}. I'm
 not sure about that intuition, and I don't have a great story about how
 to capture it, but it seems like an interesting puzzle. Third, the more
 interesting (to me) puzzle is about what the expert should say in the
 actual conversation. There are a few moves available.
 
-She could just say the most probable team to finish second, i.e., E.
+She could just say the most probable team to finish second, i.e., J.
 That sounds terrible to me, but given the complications involved in the
 other answers, maybe that's the right thing to say.
 
 She could say the team that's most likely to finish second consistent
 with her earlier answers. That, as Table~\ref{tbl-place-prob-sec-2}
-shows, is G. In some ways that's the simplest fix to \textbf{Guess the
+shows, is L. In some ways that's the simplest fix to \textbf{Guess the
 Most Probable}; say that in guesses that appear some way into a
 discourse, there is a requirement of consistency with past guesses.
 
 This answer is not obviously optimal for similar reasons to why guessing
-ABDC was not obviously optimal. For one thing, F has the higher mean
-quality. For another, F has the highest probability, of the teams not
+ABDC was not obviously optimal. For one thing, K has the higher mean
+quality. For another, K has the highest probability, of the teams not
 yet listed, of finishing in the top two. For yet another, and this I
-think is most crucial, F has the highest probability of finishing second
+think is most crucial, K has the highest probability of finishing second
 conditional on the previous guess being correct. The probabilities of
 each team finishing second given the earlier guess are given in
-Table~\ref{tbl-conditional-second}, and F is clearly highest.
+Table~\ref{tbl-conditional-second}, and K is clearly highest.
 
 {
 
 \begin{longtable}[]{@{}lr@{}}
 
 \caption{\label{tbl-conditional-second}Probability of finishing second,
-given that E wins the group}
+given that J wins the group}
 
 \tabularnewline
 
@@ -729,20 +819,20 @@ Team & Probability \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-F & 0.373 \\
-G & 0.332 \\
-H & 0.295 \\
+K & 0.373 \\
+L & 0.332 \\
+M & 0.295 \\
 
 \end{longtable}
 
 }
 
-So the third option is to guess F. One motivation for this is the idea
+So the third option is to guess K. One motivation for this is the idea
 that when asked to make a series of guesses, one is being asked to
 develop a coherent story. One should maximise not the probability of the
 next step, but the probability of the whole story given the possible
 continuations of it. That means guessing the option with the highest
-conditional probability, or if it is a structured guess the highest
+conditional probability, or, if it is a structured guess, the highest
 expected accuracy.\footnote{Fang (\citeproc{ref-Fang2026}{2026}, fn. 36)
   briefly discusses this idea, and dismisses it as changing the
   question. I am somewhat more optimistic that it can work.} That seems
@@ -940,7 +1030,7 @@ knows one will want to retract should count against it.
 When presented with a question, and asked to guess, guessers can
 reasonably have many more goals than saying the thing that most likely
 is the true answer to that question. They might try to truly answer as
-many parts of the questions as they can; that was the consideration
+many parts of the question as they can; that was the consideration
 behind the main example in Section~\ref{sec-order}. They might try to
 craft a coherent story given their prior guesses; that was the
 consideration behind the main example in Section~\ref{sec-follow}. They
@@ -1001,7 +1091,8 @@ Tradeoffs.''} \emph{Philosophical Studies} 180 (7): 2025--50. doi:
 
 \bibitem[\citeproctext]{ref-Teague2024}
 Teague, Richard. 2024. {``A Puzzle about Guessing and Inquiry.''}
-\emph{Analysis} 84 (2): 327--36.
+\emph{Analysis} 84 (2): 327--36. doi:
+\href{https://doi.org/10.1093/analys/anad057}{10.1093/analys/anad057}.
 
 \bibitem[\citeproctext]{ref-Yablo2014}
 Yablo, Stephen. 2014. \emph{Aboutness}. Princeton: Princeton University
