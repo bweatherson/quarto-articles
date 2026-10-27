@@ -1,0 +1,105 @@
+---
+title: "Methodology Report: *Fairness Has Memory*"
+date: 26 October 2026
+format:
+  html: default
+  pdf: default
+---
+
+<!-- DRAFT. Items marked [FILL] need the custodian's figures. The report describes the process up to the seventh screening (22 October 2026); if the essay changes again before submission, §4 and §8 need a final line each. -->
+
+## 1. Summary
+
+The essay was written by an AI model working in an agentic environment, with a single human custodian whose role was confined to choosing among the model's proposals, issuing process instructions, supplying source documents on request, and giving generic feedback. The design idea was to reproduce, with models in every seat, the stages a human-written philosophy article passes through on its way to print: a conversation with an adviser about what to write; reading; drafting; research assistants who check sources; a question period after a talk; an editor's desk review; full review with the formal work rederived; and revision with resubmission. Each stage was run by a fresh model context that had not seen the drafting, so that the paper was never graded by the process that produced it.
+
+The essay went through two drafts at full length, a cut to the 6,000-word ceiling, one source-checking round, one simulated question period with ten participants, and seven independent screenings of the short version (plus two of the long one). Three of the seven short-version screenings returned a verdict of "not ready", and each of the seven produced substantive changes to the paper. The rule the essay recommends, the statement of its central constraint, and its opening example all changed as a result of this machinery rather than of human intervention.
+
+## 2. Models and roles
+
+| Role | Model | Notes |
+|---|---|---|
+| Author (research, drafting, every revision, bibliography, simulation code) | Claude Fable 5.1 | One long-running session, 30 Sept – 22 Oct 2026, with context compaction; a persistent notes file carried the record across compactions. |
+| Desk-review screeners (long version ×2; short version v1–v5, v7) | Claude Fable 5.1, fresh context each time | Spawned as subagents with no access to the drafting transcript. |
+| Desk-review screener (short version v6) | Claude Opus [FILL: version], fresh context | Run when the author model's usage budget was exhausted. |
+| Question-period participants (ten) | Claude Opus ×4, Claude Sonnet ×3, Claude Haiku ×3 [FILL: versions] | Each given a character brief; run in parallel; none saw the others' contributions or the notes. A separate Opus session triaged the ten and wrote a report for the author model. |
+| Source checkers (four reader agents) | [FILL: model used for the 13–14 October source-check round] | Checked quotations and page references against PDFs; ran a priority search for antecedents in computational social choice. |
+| Custodian | Human | See §6. |
+
+Environment: a Claude Code-style agentic harness with file read/write, a Unix shell, Python (NumPy) for simulation, web search and page fetch, the Crossref API for bibliographic verification, and, through the custodian's desktop, a Chrome browser for pages the container could not reach and a folder on the custodian's machine for exchanging files. Subagents were spawned from the author's session with a written brief and returned a written report; the author never saw a screener's working, only its report.
+
+## 3. How the topic was chosen
+
+The opening instruction was open-ended: write a good philosophy paper. No area, question, position or literature was specified. The author model proposed several candidate topics in its first reply (among them this one, a semantics of "almost", euphemism, explaining a joke, and deadlines), each with a paragraph on why it might carry a paper. The custodian selected the fairness topic from that list. Nothing about the thesis, the examples, or the literature came with the selection.
+
+For the record of candidates: three other topics from the model's own lists were also attempted as separate essays over the following weeks. "Almost" was abandoned after six screenings returned "not ready"; deadlines after two; a paper on gambles with undefined expected value passed screening but was judged, by both the custodian and the model, the weaker entry. The custodian's later remark that the open-ended prompt had produced the best paper and the steered ones the worst was recorded as a methodological lesson.
+
+## 4. The stages, in order
+
+**4.1 Reading and priority check (30 September).** Before drafting, the author model read in full the works it expected to engage with and kept a research file recording, for each, what it said and how close it came to the intended thesis. The two closest predecessors found at this stage were a three-sentence passage in a recent survey of allocative fairness that states the divisibility-over-time idea for recurring chores and credits it to Elster, and a 2015 exchange on "diachronic" lotteries for a single interrupted allocation. Both are named in the essay with a statement of what it adds.
+
+**4.2 Long draft and two screenings (30 September).** A first draft of about 10,300 words and a revision of about 11,600 words were each screened by a fresh context against a written standard (§5). Both passed to the stage that, at a journal, would be full review.
+
+**4.3 Cut to 6,000 words and three screenings (7 October).** The short version lost the institutional survey, most of the critics' literature, a sensitivity analysis and an appendix. Three fresh screenings followed, each on the text as it then stood. The second of these found that the long version's verdict on "bottleneck" allocations (visas, housing, organs) contradicted the paper's own constraint; the verdict was reversed, which is the essay's present two-sided result. The third found that the argument for the constraint's priority undermined itself and that four sentences still stated the superseded verdict; all were fixed.
+
+**4.4 Source-checking round (13–14 October).** Four reader agents of a lower-cost model were given the paper, the notes and the PDFs they asked for, and checked every quotation and page reference, and every claim about what a cited work does or does not say. They found a misquotation, several wrong page numbers, one misattributed sentence, one example the paper attributed to an author who had used a different one, and a sentence that overstated an opponent. They also ran a priority search and identified a line of work in computational social choice ("perpetual voting") as the paper's nearest technical antecedent. All corrections were applied; the antecedents were read in full by the author model before anything was written about them.
+
+**4.5 Fourth screening (15 October).** On the corrected text, with the new priority paragraph. Passed, with four revision items (the ground given for the constraint's priority was mis-aimed; an exit assumption was load-bearing but only stipulated; one objection was stated in a vocabulary the paper had abandoned; one attribution was wrong in scope). All applied.
+
+**4.6 Question period (21 October).** Ten participants, each a fresh context with a distinct character and discipline (a specialist in the theory of claims; a theorist of the opposing "sanitizing" account of lotteries; a computational social-choice researcher; an applied economist who designs wildlife draws; an ex ante contractualist; a transplant ethicist; a decision theorist; a public-law philosopher; a hostile area editor; a cognitive scientist of chance judgements), were each asked for the single change that would most improve the paper, within 450 words, with a stated cut to pay for it, and without browsing. A separate session triaged the ten contributions, checked their arithmetic, reran two simulation checks of its own, and reported to the author model with a recommendation on each. The author model then decided each item and logged the decision and its reason. Nine of ten were accepted in whole or in part. The two largest changes were: a replacement of the paper's lottery rule by a "centred" variant, with a conservation argument and closed-form variances that turned a table of simulations into stated propositions (from the social-choice participant); and the discovery, by two participants independently and then verified by the triage session against the state regulation, that the paper's opening example was a once-in-a-lifetime draw and so fell on the wrong side of the paper's own distinction. The opening example was changed to a species with re-entry. Two components were declined with reasons recorded (a per-period version of the constraint that no rule in the family meets; an arithmetic that treats two kinds of claim as commensurable, which the paper denies), and one whole suggestion was drafted and then cut for space.
+
+**4.7 Fifth, sixth and seventh screenings (21–22 October).** Each on the revised text, each by a fresh context, each returning "not ready", and each for the same joint of the argument: the weight half of the third thesis. The fifth found that the constraint was stated as a lexical floor and then applied as a tolerance, and that the floor was verified on average over entry states but stated per claimant. The sixth found that the author's repair (a distinction between transfers a rule designs and transfers forced by the non-negativity of chances) was a relabelling of the same weighing. The seventh found that the next repair (a means/by-product test) separated kinds of rule but could not fix the weight within a kind. The current text states the constraint as fixing the kind of rule and lets the unit of the good fix the weight; §8 records that this statement has not yet been read by a fresh screener. [FILL if an eighth screening is run.]
+
+## 5. The screening standard
+
+The screeners worked from a written standard kept in the project directory, modelled on the desk-review stage of a generalist philosophy journal and drafted by the author model with the custodian's generic approval. Its features that mattered most here:
+
+- Four verdicts: not ready; pass; pass with a referral to a reader with formal competence; strong. The screener must name, in one sentence, the positive contribution that justifies anything above "not ready"; competence, clarity and literature coverage are treated as entry conditions, not merits.
+- The central test is whether the author could have seen the decisive flaw. A paper that raises a problem and defers it, or whose own examples or tables undercut its thesis, fails on that ground. Problems only an expert in the sub-area would find are what review is for and are not grounds to fail.
+- Accuracy is a criterion in its own right: every quotation verbatim, every attribution one the cited author would accept, every claim about a source checked against the source. The screener is told which source texts are available locally and asked to report what it could and could not verify.
+- A priority section: for each idea presented as the paper's own, the nearest antecedent must be named and what is added stated.
+- The screening is of the paper as written, by a reader who has not seen it produced, on the exact text as it then stands.
+
+For this essay each screener was also told the hard word limit and asked to pair every recommended addition with a cut; was given the simulation code and asked to reproduce every number; and, from the fifth screening on, was told that earlier screenings had found a specific problem with §5 (without being shown the reports) and asked to decide whether the current text had answered it or renamed it. The screening reports are kept with the paper and will be supplied on request.
+
+## 6. Human involvement
+
+Everything the custodian contributed is listed here, classified against the competition's permitted and prohibited lists. The notes file logged each item when it occurred.
+
+| Date | What the custodian did | Classification |
+|---|---|---|
+| 30 Sept | Asked for a good philosophy paper, with no further specification; selected the fairness topic from the model's list. | Topic choice. |
+| 30 Sept – 7 Oct | Asked for honest assessment rather than praise; asked that the paper read as the model's own work rather than in the custodian's style. | Methodological instruction. |
+| 7 Oct | Asked for a version within the competition's 6,000-word limit. | Formatting / methodological. |
+| 7–15 Oct | Asked for further independent screenings ("run one more referee"); asked the model to write a list of source-checking questions that a cheaper model could run; arranged that run and passed its report back with the words "see what you can use and what else you'd like to have". | Methodological; selection of process. |
+| 15 Oct | Supplied PDFs the model asked for (Lackner 2020; Lackner & Maly 2023; Freeman, Zahedi & Conitzer 2017; Benade et al. 2018; the Tanner Lectures text of Elster 1988; two scanned pages of Balinski & Young 2001; the table of contents of Elster 1989). Stated, with reasons, that a Broome paper delivered in 1990 should be dated to its 1991 publication. | Source materials; bibliographic correction. |
+| 21 Oct | Arranged the question-period round in a separate session and passed its report back, with two instructions: that a suggestion not worth the words it would cost should be declined, and that the author model should not defer to the participants where it judged it knew better. | Methodological; generic. |
+| 21–22 Oct | Asked for the fixes to be made within the word limit; asked for an Opus screening when the Fable budget was exhausted; asked for a Fable screening the next morning. | Methodological. |
+| 22 Oct | Repaired a file-synchronisation error between two machines; asked the model to check the merged files. | Formatting. |
+| Throughout | Checked word counts in Word; decided which of several essays in progress to put forward. | Formatting; selection among outputs. |
+
+The custodian supplied no thesis, premise, distinction, example, counterexample, objection, outline or text, and did not steer toward any human-authored argument. Two items deserve a sentence each because they are the nearest the record comes to the line. First, the custodian's selection among the model's topic proposals, and later among whole essays, is selection in the permitted sense, but it was informed by the custodian's view of what would make a good paper; it supplied no content. Second, when the custodian noted the Broome dating issue, the reasoning given (that the volume spans two years and the delivered date is earlier than the published one) is bibliographic, not philosophical, and the model had already reached the same conclusion from the registry record.
+
+[FILL: state whether, and when, the custodian read drafts of the essay; the custodian did not edit the text. If feedback on §5.2 is given after 26 October, record it verbatim here and classify it.]
+
+## 7. Automated checks and verification
+
+- **Simulation.** Every number in the essay's table and prose is produced by one script (`simulations-6k.py`, seed fixed) that accompanies the essay; the recorded output is kept with it. Three screeners reran the script and confirmed the output line for line; two also wrote independent long-run checks of their own and reported where their figures differed from the paper's rounding.
+- **Closed forms.** The two variance formulas and the conservation claim in §5.2 were derived independently by three screeners, who reported the derivations and the regime in which the formulas hold.
+- **Quotations and page references.** Checked by the author model against local plain-text extractions of the sources at drafting; rechecked by the source-checking agents against PDFs; rechecked by every screener, each of which appended a table of what it had verified, what it could verify only second-hand, and what it could not reach. Two sources (one book chapter and one journal article) remain verified only through a separate reader's report of the PDF; the report says so.
+- **Bibliography.** Every entry with a DOI was matched against the Crossref registry by script; conference papers without DOIs were matched against the proceedings pages; one entry (a Tanner Lecture) was corrected for pagination and editor against the lecture's official PDF.
+- **Institutional facts.** Each screener was asked to spot-check the hunting-draw rules, the river-permit lottery and the state regulation cited in the essay against the agencies' own pages, and to report what it could not confirm; one secondary-source dependence (a waiting-period table) is noted in the project file.
+- **Word count.** A script emulating Word's count was run after every edit; the final figure was confirmed against the generated .docx.
+
+## 8. What the process changed, and what it did not
+
+It is worth being plain about what the machinery produced, since the methodology is the thing being described. The divisibility argument that is the essay's core, and the reply to the extinction thesis, were in the first draft and were never seriously challenged after the second screening. Everything about the third thesis — what memory should track, how hard it may press, and the reversal in bottleneck cases — was reshaped by the process: the bottleneck verdict reversed by one screener; the constraint's ground rewritten after another; the lottery rule replaced and the table turned into propositions after the question period; the statement of the weight rebuilt three times after three consecutive "not ready" verdicts. The opening example was replaced because two question-period participants knew a fact about wildlife regulations that the author did not. Four misquotations or misattributions were caught by readers, none by the author.
+
+What the process did not do is converge quickly on the weight statement. Three fresh readers in succession each found the previous repair to be the same weighing under a new name, and each was right. The current statement is the first that derives the weight from the theory's own currency rather than from a percentage read off a table, and it is the one part of the essay that no fresh reader had seen at the time this report was drafted. [FILL: outcome of any final screening.]
+
+## 9. Resource use
+
+Author session: one continuous Claude Fable 5.1 session over three weeks, with repeated context compaction; token total not separately metered [FILL: estimate]. Screenings: approximately 220,000 to 300,000 tokens each for the seven short-version screenings (recorded per run: v4 276k; v5 220k; v6 276k; v7 211k; v1–v3 not recorded). Question period: ten participants at under 450 words of output each plus a triage session [FILL: from the separate session's record]. Source-checking round: [FILL]. Estimated spend: [FILL].
+
+## 10. Records
+
+The project directory contains the essay, its bibliography, the simulation script and output, a notes file recording every stage, every source read and every human instruction as it occurred, the source-checking report, the question-period report with the ten raw contributions, and all nine screening reports. Chat transcripts of the author session and of the separate sessions are held by the custodian and can be supplied on request.

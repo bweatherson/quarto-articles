@@ -436,7 +436,7 @@ Second, soccer games are just random. You may remember Saudi Arabia beating Arge
 
 Here's the model this paper uses for this kind of guessing.#footnote[AI acknowledgment: I used Claude Opus 5.5 to build this model, having explained to it the kind of tournament that I wanted. Once it was done, it came up unprompted with some summary statistics about the model which in turn I use below.]
 
-Each team $i$ has a real quality $q_i$. In each tournament simulation, the qualities are drawn from the normal distributions with means and standard deviations described in #ref(<tbl-quality>, supplement: [Table]). In any game, we start with the difference $d$ between the two team qualities (remember quality is held fixed across a tournament). If the home team#footnote['Home team' here is just the first listed team. We are not assuming any home field advantage.] is better, $d$ is positive; if they are worse $d$ is negative. Then we add a noise parameter drawn from $cal(N)\(0\,1\)$ and tripled. If the absolute value of the result is less than 1.2, the game is a draw. Otherwise, if the result is positive the home team wins, and if it is negative the away team wins.
+Each team $i$ has a real quality $q_i$. In each tournament simulation, the qualities are drawn from the normal distributions with means and standard deviations described in #ref(<tbl-quality>, supplement: [Table]). In any game, we start with the difference $d$ between the two team qualities (remember quality is held fixed across a tournament). If the home team#footnote['Home team' here is just the first listed team. We are not assuming any home field advantage.] is better, $d$ is positive; if they are worse $d$ is negative. Then we add a noise parameter drawn from $cal(N)\(0\,1\)$. If the absolute value of the result is less than 0.4, the game is a draw. Otherwise, if the result is positive the home team wins, and if it is negative the away team wins.
 
 #figure([
 #table(
@@ -444,10 +444,10 @@ Each team $i$ has a real quality $q_i$. In each tournament simulation, the quali
   align: (left,right,right,),
   table.header([Team], [Mean], [Standard deviation],),
   table.hline(),
-  [A], [4.00], [0.2],
-  [B], [3.00], [0.2],
-  [C], [2.00], [1.6],
-  [D], [1.55], [0.2],
+  [A], [1.3], [0.1],
+  [B], [1.0], [0.1],
+  [C], [0.7], [0.6],
+  [D], [0.5], [0.1],
 )
 ], caption: figure.caption(
 position: top, 
@@ -474,12 +474,12 @@ If she gives a complete answer, and really that's what panellists are supposed t
   align: (right,left,right,),
   table.header([Rank], [Order], [Probability],),
   table.hline(),
-  [1], [ABDC], [0.136],
-  [2], [ABCD], [0.128],
-  [3], [ACBD], [0.093],
-  [4], [BADC], [0.082],
-  [5], [BACD], [0.079],
-  [6], [ADBC], [0.072],
+  [1], [ABDC], [0.128],
+  [2], [ABCD], [0.120],
+  [3], [ACBD], [0.091],
+  [4], [BADC], [0.081],
+  [5], [BACD], [0.078],
+  [6], [CABD], [0.069],
 )
 ], caption: figure.caption(
 position: top, 
@@ -504,12 +504,12 @@ Second, our expert will do better at predicting the relative finishing positions
   align: (left,right,right,right,),
   table.header([Order], [Probability], [Expected pairs], [Expected places],),
   table.hline(),
-  [ABDC], [0.136], [4.054], [1.537],
-  [ABCD], [0.128], [4.182], [1.563],
-  [ACBD], [0.093], [3.913], [1.420],
-  [BADC], [0.082], [3.737], [1.224],
-  [BACD], [0.079], [3.866], [1.249],
-  [ADBC], [0.072], [3.606], [1.305],
+  [ABDC], [0.128], [3.969], [1.486],
+  [ABCD], [0.120], [4.132], [1.526],
+  [ACBD], [0.091], [3.898], [1.402],
+  [BADC], [0.081], [3.685], [1.219],
+  [BACD], [0.078], [3.848], [1.260],
+  [CABD], [0.069], [3.447], [1.199],
 )
 ], caption: figure.caption(
 position: top, 
@@ -540,10 +540,10 @@ In the case I've described so far ABCD is the second-most probable guess; I coul
   align: (left,right,right,),
   table.header([Team], [Mean], [Standard deviation],),
   table.hline(),
-  [E], [1.4], [0.2],
-  [F], [1.3], [2.0],
-  [G], [1.2], [2.0],
-  [H], [1.1], [0.2],
+  [E], [0.40], [0.1],
+  [F], [0.35], [0.8],
+  [G], [0.30], [0.8],
+  [H], [0.25], [0.1],
 )
 ], caption: figure.caption(
 position: top, 
@@ -564,14 +564,14 @@ As #ref(<tbl-high-variance-orders>, supplement: [Table]) shows, guessing that th
   align: (left,right,right,right,right,),
   table.header([Order], [Rank], [Probability], [Expected pairs], [Expected places],),
   table.hline(),
-  [FEHG], [1], [0.066], [3.085], [1.180],
-  [GEHF], [2], [0.062], [3.013], [1.150],
-  [FHEG], [3], [0.059], [2.987], [1.134],
-  [FEGH], [7], [0.046], [3.112], [1.046],
-  [EFHG], [8], [0.045], [3.111], [1.045],
-  [GEFH], [11], [0.044], [3.064], [1.030],
-  [EFGH], [21], [0.030], [3.138], [0.911],
-  [EGFH], [22], [0.029], [3.115], [0.906],
+  [FEHG], [1], [0.074], [3.121], [1.227],
+  [GEHF], [2], [0.067], [3.022], [1.187],
+  [FHEG], [3], [0.061], [2.978], [1.155],
+  [EFHG], [7], [0.047], [3.157], [1.065],
+  [FEGH], [8], [0.047], [3.158], [1.065],
+  [GEFH], [11], [0.044], [3.093], [1.042],
+  [EFGH], [21], [0.028], [3.193], [0.903],
+  [EGFH], [22], [0.028], [3.164], [0.898],
 )
 ], caption: figure.caption(
 position: top, 
@@ -606,10 +606,10 @@ Having settled the ABCD and EFGH groups, the expert is now thinking about the JK
   align: (left,right,right,),
   table.header([Team], [Mean], [Standard deviation],),
   table.hline(),
-  [J], [4.0], [1],
-  [K], [2.5], [4],
-  [L], [1.1], [2],
-  [M], [1.0], [3],
+  [J], [1.3], [0.3],
+  [K], [0.8], [1.3],
+  [L], [0.4], [0.7],
+  [M], [0.3], [1.0],
 )
 ], caption: figure.caption(
 position: top, 
@@ -636,10 +636,10 @@ The reason that the expert panics at this point is that it is really unclear how
   align: (left,right,right,right,right,),
   table.header([Team], [First], [Second], [Third], [Fourth],),
   table.hline(),
-  [J], [0.443], [0.355], [0.158], [0.043],
-  [K], [0.313], [0.219], [0.214], [0.254],
-  [L], [0.102], [0.223], [0.345], [0.331],
-  [M], [0.142], [0.203], [0.283], [0.372],
+  [J], [0.436], [0.356], [0.163], [0.044],
+  [K], [0.306], [0.218], [0.219], [0.257],
+  [L], [0.117], [0.229], [0.338], [0.316],
+  [M], [0.140], [0.197], [0.280], [0.383],
 )
 ], caption: figure.caption(
 position: top, 
@@ -670,9 +670,9 @@ This answer is not obviously optimal for similar reasons to why guessing ABDC wa
   align: (left,right,),
   table.header([Team], [Probability],),
   table.hline(),
-  [K], [0.373],
-  [L], [0.332],
-  [M], [0.295],
+  [K], [0.369],
+  [L], [0.344],
+  [M], [0.287],
 )
 ], caption: figure.caption(
 position: top, 
@@ -777,7 +777,11 @@ supplement: "Table",
 )
 ]
 )
-The expert thinks it is 50/50 which kind of track we get; the weather forecasts are very uncertain about the trajectory of the storm. So the highest win probability belongs to N, at 0.35. But guessing that N will win has some downsides. Notably, it violates a reflection principle for guessing. If the expert guesses N, she knows that whatever happens overnight, in the morning she'll want to change that guess. This feels like something we should avoid, if possible. And the expert has an easy way out. Instead of guessing N, she can say (1).
+The expert thinks it is 50/50 which kind of track we get; the weather forecasts are very uncertain about the trajectory of the storm. So the highest win probability belongs to N, at 0.35. But guessing that N will win has some downsides. Notably, it violates a reflection principle for guessing. If the expert guesses N, she knows that whatever happens overnight, in the morning she'll want to change that guess.
+
+I'm appealing here to a principle that's familioar from the literature on belief revision. Jeremy Goodman and Bernhard Salow (#cite(<GoodmanSalow2025>, form: "year", supplement: [13])) call it $Pi^(-)$. If you believe $q$, then for any way of dividing what you might learn into mutually exclusive and jointly exhaustive possibilities, you could learn one of them and still believe $q$.#footnote[Joshua Edward #cite(<Pearson2025rev>, form: "prose") calls the two-option version of this principle #strong[Anticipation], and argues that it fails for belief. I'm not taking a stance on that here. I suspect that pragmatic encroachment views of belief can explain away the examples he uses to argue against #strong[Anticipation] without lapsing into scepticism, but defending that would require a very different paper.] I'm appealing to something that differs from $Pi^(-)$ in three respects. First, it restricts it to partitions where you are sure you will actually learn which member is true before you learn for sure whether $q$. Second, it applies it to guesses rather than beliefs. Third, it does not prohibit guesses which violate this principle, but say that you have a reason, which may be a sufficient reason given how strongly you care about different considerations, to make a guess which conforms to it. So my version is this. If you are guessing an answer to #emph[Q#super[?]], and there is some partition such that you'll learn which member of the partition is actual before you learn the true answer to #emph[Q#super[?]], the fact that a possible answer would not be your best guess conditional on any member of the partition is a reason not to guess it, and this reason may override the consideration that it is the most possible answer. The core idea is that you have a reason to not make guesses you know you'll retract.
+
+In this case, the expert has an easy way to guess in a way that respects that reason. Instead of guessing N, she can say (1).
 
 #block[
 #set enum(numbering: "(1)", start: 1)

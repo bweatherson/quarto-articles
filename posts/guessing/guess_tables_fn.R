@@ -87,9 +87,9 @@ expected_correct_places <- function(guess, place) {
 # A clearly best, F clearly worst. C is squeezed between B and D,
 # and E is 1.5 of C's standard deviations below C's mean.
 #m <- c(A = 5.7, B = 3.2, C = 3.0, D = 2.8, E = 0.75, F = -1.75)
-m <- c(A = 4, B = 3, C = 2, D = 1.55)
+m <- c(A = 1.4, B = 1.3, C = 1.2, D = 1.1)
 #d <- c(A = 0.3, B = 0.3, C = 1.5, D = 0.3, E = 0.3, F = 0.3)
-d <- c(A = 0.2, B = 0.2, C = 1.6, D = 0.2)
+d <- c(A = 0.2, B = 2, C = 2, D = 0.2)
 
 place <- sim_seasons(m, d, n = 2e5, s = 3, seed = 31)
 

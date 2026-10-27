@@ -205,6 +205,17 @@ marginparsep=0in]{geometry}
 \renewcommand{\textsc}[1]{{\scfont #1}}
 
 \renewcommand{\LettrineTextFont}{\scfont}
+% Number theorem-like environments straight through (Theorem 1, Theorem 2, ...)
+% rather than by section (1.1, 1.2, ...), which is Quarto's LaTeX default.
+% Guarded, since Quarto only defines a counter for environments the document uses.
+\makeatletter
+\AtBeginDocument{%
+  \@for\bw@thm:={theorem,lemma,corollary,proposition,conjecture,definition,%
+                 example,exercise,refremark,refsolution}\do{%
+    \@ifundefined{c@\bw@thm}{}{\expandafter\counterwithout\expandafter{\bw@thm}{section}}%
+  }%
+}
+\makeatother
 \usepackage{amsfonts}
 \usepackage{lettrine}
 \KOMAoption{captions}{tableheading}
@@ -258,6 +269,7 @@ marginparsep=0in]{geometry}
 \makeatother
 \hypersetup{
   pdftitle={Reply to commentators},
+  pdfauthor={Brian Weatherson},
   pdfkeywords={\xmpquote{pragmatic
 encroachment}, \xmpquote{interest-relativity}, \xmpquote{inquiry}, \xmpquote{checking}, \xmpquote{knowledge}, \xmpquote{sensitivity}},
   hidelinks,
@@ -265,7 +277,7 @@ encroachment}, \xmpquote{interest-relativity}, \xmpquote{inquiry}, \xmpquote{che
 
 
 \title{Reply to commentators}
-\author{}
+\author{Brian Weatherson}
 \date{2026}
 \begin{document}
 \maketitle
@@ -458,12 +470,12 @@ problem for my view here. One could concede a minuscule probability that
 no free throw is made, then add ``But that's not going to happen;
 someone will make one''? That's fine I think, but look what it does. It
 \emph{sets a possibility aside}. Contra Lewis
-(\citeproc{ref-Lewis1996}{1996}), I don't think the fact that we are
+(\citeproc{ref-Lewis1996bn}{1996}), I don't think the fact that we are
 attending to a possibility means we have to take it seriously. We can
 propose that we're not going to consider some possibility,\footnote{Here
   I'm basically in agreement with the criticisms that Blome-Tillmann
   (\citeproc{ref-MBT2009a}{2009}) makes of the Rule of Attention that
-  Lewis (\citeproc{ref-Lewis1996}{1996}) proposes} and provided that
+  Lewis (\citeproc{ref-Lewis1996bn}{1996}) proposes} and provided that
 everyone else goes along with this, we can act as if we know it. If this
 ignoring makes sense given our interests, we may in fact know it, so
 it's not just acting as if. All I insist on is that in doing that we are
@@ -705,11 +717,11 @@ activities is rather different: KS-FIND and KP-FIND are true; KS-CHECK
 and KP-CHECK are false.
 
 Combined with some intuitive judgments about who is checking and who is
-finding out, this gets plausible verdicts in all the cases. Brown's
-surgeon and Florian the coffee maker are checking, and so don't lose
-knowledge; Darja who is trying to decide whether to check, the inquirer
-who bootstraps, and the red-blue game player are finding out (or at
-least trying to), and do lose knowledge.
+finding out, this gets plausible verdicts in all the cases. The surgeon
+from Brown (\citeproc{ref-Brown2008}{2008}) and Florian the coffee maker
+are checking, and so don't lose knowledge; Darja who is trying to decide
+whether to check, the inquirer who bootstraps, and the red-blue game
+player are finding out (or at least trying to), and do lose knowledge.
 
 In the previous paragraph, I said Brown's surgeon is a checking case.
 One might worry this is question-begging. As Friedman points out, there
@@ -840,6 +852,12 @@ Blome-Tillmann, Michael. 2009. {``Knowledge and Presuppositions.''}
 \emph{Mind} 118 (470): 241--94. doi:
 \href{https://doi.org/10.1093/mind/fzp032}{10.1093/mind/fzp032}.
 
+\bibitem[\citeproctext]{ref-Brown2008}
+Brown, Jessica. 2008. {``Subject-Sensitive Invariantism and the
+Knowledge Norm for Practical Reasoning.''} \emph{No{û}s} 42 (2):
+167--89. doi:
+\href{https://doi.org/10.1111/j.1468-0068.2008.00677.x}{10.1111/j.1468-0068.2008.00677.x}.
+
 \bibitem[\citeproctext]{ref-Falbo2021}
 Falbo, Arianna. 2021. {``Inquiry and Confirmation.''} \emph{Analysis} 81
 (4): 622--31. doi:
@@ -869,10 +887,10 @@ Friedman, Jane. 2019a. {``Checking Again.''} \emph{Philosophical Issues}
 \emph{Philosophical Review} 129 (4): 501--36. doi:
 \href{https://doi.org/10.1215/00318108-8540918}{10.1215/00318108-8540918}.
 
-\bibitem[\citeproctext]{ref-Lewis1996}
-Lewis, David. 1996. {``Desire as Belief {II}.''} \emph{Mind} 105 (418):
-303--13. doi:
-\href{https://doi.org/10.1093/mind/105.418.303}{10.1093/mind/105.418.303}.
+\bibitem[\citeproctext]{ref-Lewis1996bn}
+Lewis, David. 1996. {``Elusive Knowledge.''} \emph{Australasian Journal
+of Philosophy} 74 (4): 549--67. doi:
+\href{https://doi.org/10.1080/00048409612347521}{10.1080/00048409612347521}.
 
 \bibitem[\citeproctext]{ref-Melchior2019}
 Melchior, Guido. 2019. \emph{Knowing and Checking: An Epistemological
@@ -895,7 +913,7 @@ Woodard, Elise. 2024. {``Why Double-Check.''} \emph{Episteme} 21:
 
 
 
-\noindent Draft.
+\noindent As submitted to \emph{Philosophical Studies}.
 
 
 \end{document}

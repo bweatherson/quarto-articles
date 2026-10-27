@@ -205,6 +205,17 @@ marginparsep=0in]{geometry}
 \renewcommand{\textsc}[1]{{\scfont #1}}
 
 \renewcommand{\LettrineTextFont}{\scfont}
+% Number theorem-like environments straight through (Theorem 1, Theorem 2, ...)
+% rather than by section (1.1, 1.2, ...), which is Quarto's LaTeX default.
+% Guarded, since Quarto only defines a counter for environments the document uses.
+\makeatletter
+\AtBeginDocument{%
+  \@for\bw@thm:={theorem,lemma,corollary,proposition,conjecture,definition,%
+                 example,exercise,refremark,refsolution}\do{%
+    \@ifundefined{c@\bw@thm}{}{\expandafter\counterwithout\expandafter{\bw@thm}{section}}%
+  }%
+}
+\makeatother
 \usepackage{amsfonts}
 \usepackage{lettrine}
 \KOMAoption{captions}{tableheading}
@@ -258,6 +269,7 @@ marginparsep=0in]{geometry}
 \makeatother
 \hypersetup{
   pdftitle={Précis of Knowledge: A Human Interest Story},
+  pdfauthor={Brian Weatherson},
   pdfkeywords={\xmpquote{pragmatic
 encroachment}, \xmpquote{interest-relativity}, \xmpquote{knowledge}, \xmpquote{rational
 action}, \xmpquote{inquiry}, \xmpquote{epistemology}},
@@ -266,7 +278,7 @@ action}, \xmpquote{inquiry}, \xmpquote{epistemology}},
 
 
 \title{Précis of \emph{Knowledge: A Human Interest Story}}
-\author{}
+\author{Brian Weatherson}
 \date{2026}
 \begin{document}
 \maketitle
@@ -511,7 +523,7 @@ on Knowledge.''} \emph{Philosophical Studies} 160 (2): 265--85. doi:
 
 
 
-\noindent Draft.
+\noindent As submitted to \emph{Philosophical Studies}.
 
 
 \end{document}

@@ -23,22 +23,9 @@ format:
     output-file: "Guessing the Less Probable (LaTeX)"
 #    include-in-header:
 #      file: lessprob-header.tex   # private copy of ../quarto2024.tex for testing
-  typst:
+  bwpaper-typst:                 # site-wide Typst look, from _extensions/bwpaper
     output-file: "Guessing the Less Probable (Typst)"
-    template-partials:
-      - typst/typst-template.typ   # fonts, headings, quotes, title block
-      - typst/page.typ             # page size, margins, running heads
-    section-numbering: "1.1"
-    date-format: "YYYY"
     keep-typ: true
-    # local copy of ../../chicago-with-note.csl: some Quarto versions write the
-    # "../../" path into Typst with a backslash, which Typst rejects
-    csl: chicago-with-note.csl
-    # If the maths still isn't in Garamond, Typst can't see the font (it only sees
-    # fonts installed in Font Book, not ones inside TeX). Uncomment and put in the
-    # folder that `kpsewhich Garamond-Math.otf` prints:
-    # font-paths:
-    #   - /path/to/folder/containing/Garamond-Math.otf
 image: "../images/overhead-football.jpeg"
 bibliography: guessing.bib
 draft: true
@@ -53,6 +40,10 @@ Something like **Guess the Most Probable** is a consequence of views defended by
 
 ```{r}
 #| label: setup-sec-order
+# Number of simulated seasons for every tournament in the paper.
+# 1e4 for quick test renders; set to 2e6 for the final version.
+n_sims <- 2e6
+
 library(dplyr)
 library(tidyr)
 library(purrr)
@@ -64,7 +55,7 @@ library(knitr)
 # Game model (ordered probit): z = q_i - q_j + s * N(0, 1);
 #   i wins if z > c, draw if |z| <= c, j wins if z < -c.
 # Ties on points are broken at random.
-sim_seasons <- function(m, d, n = 2e6, s = 3, c = 0.4 * s, seed = 1) {
+sim_seasons <- function(m, d, n = 2e6, s = 1, c = 0.4 * s, seed = 1) {
   set.seed(seed)
   k <- length(m)
   q <- matrix(rnorm(n * k, mean = rep(m, each = n), sd = rep(d, each = n)), n, k)
@@ -111,10 +102,11 @@ expected_correct_places <- function(guess, place) {
 ```{r}
 #| label: sim-sec-order
 #| cache: true
-m_order <- c(A = 4, B = 3, C = 2, D = 1.55)
-d_order <- c(A = 0.2, B = 0.2, C = 1.6, D = 0.2)
+#| cache.extra: !expr n_sims   # rerun when the number of seasons changes
+m_order <- c(A = 1.3, B = 1.0, C = 0.7, D = 0.5)
+d_order <- c(A = 0.1, B = 0.1, C = 0.6, D = 0.1)
 
-place_order <- sim_seasons(m_order, d_order, n = 2e6, s = 3, seed = 31)
+place_order <- sim_seasons(m_order, d_order, n = n_sims, s = 1, seed = 31)
 
 # Keep only the small summaries, so the cache stays small
 options_order <- table_probs(place_order) |>
@@ -137,7 +129,7 @@ Second, soccer games are just random. You may remember Saudi Arabia beating Arge
 
 Here's the model this paper uses for this kind of guessing.^[AI acknowledgment: I used Claude Opus 5.5 to build this model, having explained to it the kind of tournament that I wanted. Once it was done, it came up unprompted with some summary statistics about the model which in turn I use below.]
 
-Each team $i$ has a real quality $q_i$. In each tournament simulation, the qualities are drawn from the normal distributions with means and standard deviations described in @tbl-quality. In any game, we start with the difference $d$ between the two team qualities (remember quality is held fixed across a tournament). If the home team^['Home team' here is just the first listed team. We are not assuming any home field advantage.] is better, $d$ is positive; if they are worse $d$ is negative. Then we add a noise parameter drawn from $\mathcal{N}(0, 1)$ and tripled. If the absolute value of the result is less than 1.2, the game is a draw. Otherwise, if the result is positive the home team wins, and if it is negative the away team wins.
+Each team $i$ has a real quality $q_i$. In each tournament simulation, the qualities are drawn from the normal distributions with means and standard deviations described in @tbl-quality. In any game, we start with the difference $d$ between the two team qualities (remember quality is held fixed across a tournament). If the home team^['Home team' here is just the first listed team. We are not assuming any home field advantage.] is better, $d$ is positive; if they are worse $d$ is negative. Then we add a noise parameter drawn from $\mathcal{N}(0, 1)$. If the absolute value of the result is less than 0.4, the game is a draw. Otherwise, if the result is positive the home team wins, and if it is negative the away team wins.
 
 ```{r}
 #| label: tbl-quality
@@ -194,11 +186,12 @@ In the case I've described so far ABCD is the second-most probable guess; I coul
 ```{r}
 #| label: sim-high-variance
 #| cache: true
+#| cache.extra: !expr n_sims   # rerun when the number of seasons changes
 # The second group: E and H are well known, F and G are very uncertain
-m_hv <- c(E = 1.4, F = 1.3, G = 1.2, H = 1.1)
-d_hv <- c(E = 0.2, F = 2,   G = 2,   H = 0.2)
+m_hv <- c(E = 0.4, F = 0.35, G = 0.3, H = 0.25)
+d_hv <- c(E = 0.1, F = 0.8,  G = 0.8, H = 0.1)
 
-place_hv <- sim_seasons(m_hv, d_hv, n = 2e6, s = 3, seed = 31)
+place_hv <- sim_seasons(m_hv, d_hv, n = n_sims, s = 1, seed = 31)
 
 # All 24 possible orders, so an order that never came up still gets a row
 perms <- function(x) {
@@ -292,10 +285,11 @@ second_given_winner <- function(place, winner) {
 ```{r}
 #| label: sim-sec-follow
 #| cache: true
-m_follow <- c(J = 4, K = 2.5, L = 1.1, M = 1.0)
-d_follow <- c(J = 1, K = 4,   L = 2,   M = 3)
+#| cache.extra: !expr n_sims   # rerun when the number of seasons changes
+m_follow <- c(J = 1.3, K = 0.8, L = 0.4, M = 0.3)
+d_follow <- c(J = 0.3, K = 1.3, L = 0.7, M = 1.0)
 
-place_follow <- sim_seasons(m_follow, d_follow, n = 2e6, s = 3, seed = 31)
+place_follow <- sim_seasons(m_follow, d_follow, n = n_sims, s = 1, seed = 31)
 
 # Keep only the small summaries, so the cache stays small
 places_follow <- place_probs(place_follow)
@@ -391,7 +385,11 @@ The expert's win probabilities, conditional on the state of the track
 
 :::
 
-The expert thinks it is 50/50 which kind of track we get; the weather forecasts are very uncertain about the trajectory of the storm. So the highest win probability belongs to N, at 0.35. But guessing that N will win has some downsides. Notably, it violates a reflection principle for guessing. If the expert guesses N, she knows that whatever happens overnight, in the morning she'll want to change that guess. This feels like something we should avoid, if possible. And the expert has an easy way out. Instead of guessing N, she can say (@explicit-disj).
+The expert thinks it is 50/50 which kind of track we get; the weather forecasts are very uncertain about the trajectory of the storm. So the highest win probability belongs to N, at 0.35. But guessing that N will win has some downsides. Notably, it violates a reflection principle for guessing. If the expert guesses N, she knows that whatever happens overnight, in the morning she'll want to change that guess.
+
+I'm appealing here to a principle that's familioar from the literature on belief revision. Jeremy Goodman and Bernhard Salow [-@GoodmanSalow2025, 13] call it $\Pi^-$. If you believe $q$, then for any way of dividing what you might learn into mutually exclusive and jointly exhaustive possibilities, you could learn one of them and still believe $q$.^[Joshua Edward @Pearson2025rev calls the two-option version of this principle **Anticipation**, and argues that it fails for belief. I'm not taking a stance on that here. I suspect that pragmatic encroachment views of belief can explain away the examples he uses to argue against **Anticipation** without lapsing into scepticism, but defending that would require a very different paper.] I'm appealing to something that differs from $\Pi^-$ in three respects. First, it restricts it to partitions where you are sure you will actually learn which member is true before you learn for sure whether $q$. Second, it applies it to guesses rather than beliefs. Third, it does not prohibit guesses which violate this principle, but say that you have a reason, which may be a sufficient reason given how strongly you care about different considerations, to make a guess which conforms to it. So my version is this. If you are guessing an answer to _Q^?^_, and there is some partition such that you'll learn which member of the partition is actual before you learn the true answer to _Q^?^_, the fact that a possible answer would not be your best guess conditional on any member of the partition is a reason not to guess it, and this reason may override the consideration that it is the most possible answer. The core idea is that you have a reason to not make guesses you know you'll retract. 
+
+In this case, the expert has an easy way to guess in a way that respects that reason. Instead of guessing N, she can say (@explicit-disj).
 
 (@explicit-disj) If it is dry, O will win, or if it is wet, P will win.
 

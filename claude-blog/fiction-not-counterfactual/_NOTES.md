@@ -351,3 +351,33 @@ per claude-blog/CLAUDE.md. Deadline 31 Oct 2026. Models: Opus at most (no Fable)
 ## 2026-10-23 12:35 — References heading
 - BW request: add a References header (Quarto adds one automatically for HTML only).
 - Appended `# References {.unnumbered}` + `::: {#refs}\n:::` after the Conclusion. Re-rendered Typst (13 pp.) and HTML; one "References" heading in each, unnumbered in the PDF. No text changes.
+
+## 2026-10-26 — final read-over, bibliography, word count, methodology report
+- BW (08:43): "Give it one more read over to check for any mistakes, including checking the bibliography carefully" and
+  "Write up a memo per competition rules about how the paper was built, stressing (a) exactly what contributions I made, and
+  (b) the multi-step review process". PERMITTED (instruction to check; methodology report).
+- Competition rules re-fetched (competition page, detailed rules, FAQ). Report must cover: process in detail; every form of human
+  involvement incl. feedback and selection; approximate human time, machine time, token usage, cost; records; human vs AI
+  actions clearly distinguished; anonymised.
+- WORD COUNT PROBLEM: v7.2 ~6,190 rendered (citations expand) vs 5,909 counted on source. Fixed in v7.3 (see
+  final-check/CHANGES-v7.3.md): 5,840 plain / 5,989 raw PDF tokens.
+- Independent error check (opus, fresh): final-check/_mistake-hunt.md. All A and B items fixed; C mostly fixed.
+- Bib: Crossref 20/20 DOIs; TVLine title was wrong (fixed, then entry dropped with the footnote trim); dates now print.
+- v7.3 installed as paper/fiction-without-hidden-facts.qmd (+ .bib, .pdf, .html). "claude" category removed from YAML.
+- Two final screenings (E, F; fresh opus; brief identical to v7.1 apart from path) launched on screening/paper-v7.3-final.qmd.
+- Methodology report drafted: methodology/methodology-report.qmd; prompts appendix methodology/agent-prompts.md; redacted
+  records bundle methodology/records/ ("BW" -> "the human").
+- FINAL SCREENINGS on v7.3 (fresh opus x2; brief identical to v7.1's but for path):
+  E: PASS, FORMAL (screening/_screening-report-final-E.md). Good reply to central steps (n.39; PRP). Weaknesses: (B) single
+     judgement; coupling stipulated (mirrors defaults) so 'better-supported' strong; mixed fictional/actual claims; homogeneity
+     literature on quantified conditionals thin; dense.
+  F: PASS, FORMAL (screening/_screening-report-final-F.md). Same reservations; asks for Flippy-style control for (B); defaults
+     rebuttal applies to own tie-breaking; coupling costs; B&H's gap-projection argument; info-state semantics / homogeneity vs
+     CEM literature; and an INCONSISTENCY: conclusion's 'cannot' vs footnote's .4.
+  -> v7.3 final edit (post-screening, disclosed in methodology report): 'chances unchanged' qualification in abstract, §4.3 and
+     conclusion; cut 'Where a coin lands depends sensitively...' to keep length. Screened text kept as
+     final-check/v7.3-as-screened.qmd. Final count 5,838 plain / 5,987 raw PDF tokens / 5,712 alnum.
+- Methodology report: methodology/methodology-report.qmd/.pdf/.html (anonymised; human time is my estimate -> BW to confirm).
+  Supplementary: methodology/agent-prompts.md (43 prompts), methodology/process-records-redacted.zip (63 files).
+- Device bridge disconnected during this work; files delivered to BW via SendUserFile; commit to
+  claude-blog/fiction-not-counterfactual/ when the link is back.
