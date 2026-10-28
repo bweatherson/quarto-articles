@@ -80,3 +80,29 @@ print(f"  k=0: at exit {np.sqrt((N-1)/(N*N*q)):.3f}")
 print("bottleneck, forgetting rule, N=10:")
 print(f"  expected wait E[W] = N-1 = {N-1}; P(W >= 40) = (1-1/N)^40 = {(1-1/N)**40:.4f} = 1/{1/(1-1/N)**40:.1f}")
 print(f"  a queue serves every arrival after the N-1 = {N-1} ahead of her: wait {N-1} for everyone")
+
+# ---- Bottleneck with attrition (Section 5.3): pool of N kept full; each period one claimant is served and leaves;
+# each unserved claimant leaves unserved with probability a per period and is replaced. Rules: queue (longest wait),
+# forgetting, and a mild weight on waiting (chance proportional to 1 + 0.1 * wait).
+def bottleneck_attrition(rule, N=10, a=0.01, T=200000, burn=500):
+    rng2 = np.random.default_rng(2026)
+    wait = np.zeros(N); newc = []; served_w = []; unserved = 0
+    for t in range(T):
+        if rule == 'queue': p = (wait == wait.max()).astype(float)
+        elif rule == 'forgetting': p = np.ones(N)
+        else: p = 1 + 0.1 * wait
+        p = p / p.sum()
+        if t > burn:
+            nz = np.where(wait == 0)[0]
+            if len(nz): newc.extend(p[nz])
+        i = rng2.choice(N, p=p)
+        if t > burn: served_w.append(wait[i])
+        wait += 1; wait[i] = 0
+        ex = rng2.random(N) < a; ex[i] = False
+        if t > burn: unserved += int(ex.sum())
+        wait[ex] = 0
+    return np.mean(newc) * N, np.std(served_w), unserved / (unserved + len(served_w))
+print("bottleneck with attrition (N=10, a=0.01): newcomer's chance x N | sd of wait among the served | fraction leaving unserved")
+for rule in ('queue', 'forgetting', 'mild weight 1+0.1*wait'):
+    c, sd, u = bottleneck_attrition(rule)
+    print(f"  {rule:>22}: {c:.3f} | {sd:.2f} | {u:.3f}")
