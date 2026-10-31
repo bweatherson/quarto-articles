@@ -1,0 +1,670 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod,
+  twoside]{scrartcl}
+\usepackage{xcolor}
+\usepackage[left=1.1in, right=1in, top=0.8in, bottom=0.8in,
+paperheight=9.5in, paperwidth=7in, includemp=TRUE, marginparwidth=0in,
+marginparsep=0in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{3}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmathfont[]{Garamond-Math}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\setlength\heavyrulewidth{0ex}
+\setlength\lightrulewidth{0ex}
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\cehead{
+  Brian Weatherson
+  }
+\cohead{
+  Logical Positivism and the Rise of Analytic Philosophy
+  }
+\ohead{\bfseries \pagemark}
+\cfoot{}
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+\NoIndentAfterEnv{itemize}
+\NoIndentAfterEnv{enumerate}
+\NoIndentAfterEnv{description}
+\NoIndentAfterEnv{quote}
+\NoIndentAfterEnv{equation}
+\NoIndentAfterEnv{longtable}
+\NoIndentAfterEnv{abstract}
+\renewenvironment{abstract}
+ {\vspace{-1.25cm}
+ \quotation\small\noindent\emph{Abstract}:}
+ {\endquotation}
+\newfontfamily\tfont{EB Garamond}
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
+\addtokomafont{title}{\normalfont\itshape}
+\let\footnoterule\relax
+
+\makeatletter
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\itshape\huge\@title \par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large
+      \lineskip 0.3em%  % Reduced from default 0.5em
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 0.5em%  % Reduced from default
+    {\large \@date}%
+  \end{center}%
+  \par
+  }
+\makeatother
+\RequirePackage{lettrine}
+
+\renewenvironment{abstract}
+ {\quotation\small\noindent\emph{Abstract}:}
+ {\endquotation\vspace{-0.02cm}}
+
+\setmainfont{EB Garamond Math}[
+  BoldFont = {EB Garamond SemiBold},
+  ItalicFont = {EB Garamond Italic},
+  RawFeature = {+smcp},
+]
+
+\newfontfamily\scfont{EB Garamond Regular}[RawFeature=+smcp]
+\renewcommand{\textsc}[1]{{\scfont #1}}
+
+\renewcommand{\LettrineTextFont}{\scfont}
+% Number theorem-like environments straight through (Theorem 1, Theorem 2, ...)
+% rather than by section (1.1, 1.2, ...), which is Quarto's LaTeX default.
+% Guarded, since Quarto only defines a counter for environments the document uses.
+\makeatletter
+\AtBeginDocument{%
+  \@for\bw@thm:={theorem,lemma,corollary,proposition,conjecture,definition,%
+                 example,exercise,refremark,refsolution}\do{%
+    \@ifundefined{c@\bw@thm}{}{\expandafter\counterwithout\expandafter{\bw@thm}{section}}%
+  }%
+}
+\makeatother
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  pdftitle={Logical Positivism and the Rise of Analytic Philosophy},
+  pdfauthor={Brian Weatherson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Logical Positivism and the Rise of Analytic Philosophy}
+\author{Brian Weatherson}
+\date{2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+One of the interesting stories in Sander Verhaegh's \emph{Logical
+Positivism: An American History}, is how positivism feeds into the
+development of `analytic' philosophy after 1945. A coalition of
+`scientific', or later `analytic' philosophers is formed, with
+positivists being central to this coalition. What unified this coalition
+was not doctrinal agreement, but a commitment to putting logic and
+philosophy of science at the centre of philosophy, and to hiring and
+promoting people who did that, even if they disagreed on core
+philosophical theses. In effect, this became an alliance between
+positivists and prominent strands of realism, and within a couple of
+decades it took over all the leading philosophy departments in the
+United States. I suggest that given the structural advantages these
+kinds of coalitions have over philosophical schools with stronger
+doctrinal commitments, and the absence of any other coalition until the
+rise of `Continental' philosophy many years later, this success was
+almost inevitable given the structural arrangements in place in the
+1940s. I close with some questions about what would have had to happen
+for analytic philosophy not to become the dominant faction, and what
+such a world would look like.
+\end{abstract}
+
+
+\setstretch{1.1}
+\emph{Logical Positivism} (\citeproc{ref-Verhaegh2026}{Verhaegh 2026})
+is a great book.\footnote{In what follows, page references are to this
+  book unless otherwise indicated.} It combines careful attention to
+archival records, quantitative data, and social context, to tell an
+incredibly rich story about the rise, and I guess fall, of logical
+positivism in America. I'm going to recommend it to all my students as
+crucial background for how philosophy in America got to where it is, and
+a correction to several popular narratives.
+
+On the data side, this is one of the best examples you'll see of data
+use that highlights simple, understandable statistics. The main
+statistic the book uses is simply how often different philosophers are
+mentioned in leading American philosophy journals. This is not a simple
+statistic to gather; it takes an immense amount of data cleaning and
+analysis to tell whether, for example, a given mention is of Roy Wood
+Sellars or of Wilfrid Sellars. But Sander Verhaegh's team at Tilburg has
+done a mountain of work to get the data in a form where they can tell,
+with some confidence, who is being referred to at any point. (They have
+also made this data freely available to other researchers, for which
+they deserve a lot of credit.) And now, in a book like this, claims
+about changes in philosophy can be backed up with these statistics about
+how often philosophers are mentioned.
+
+The book also has a number of tables of outliers, e.g., which
+philosophers are mentioned most often or, relative to expectation, least
+often in a particular period or in a particular journal. These tables
+strike me as an absolutely incredible feat. Whenever I build tables of
+outliers, they just reveal data errors; the most common words are
+usually bits of meta-data that haven't been cleaned from the text. Of
+course, it's very easy to understand a table of who was mentioned most
+or least often, so it's great for the reader to have something like
+this, but I suspect it was an enormous effort to get the tables to be so
+useful.
+
+This note will largely be about Verhaegh's discussion of how positivism
+fed into the rise of analytic philosophy in America, but first I'll
+briefly discuss two smaller points about the book.
+
+\emph{Logical Positivism} is primarily a book about a movement within
+academic institutions. But it isn't entirely about that. The effects of
+the outside world on positivism are clearly important; we don't get a
+generation of exiled empiricists without something causing their exile.
+It is discussed well in the book. It isn't just that there were exiles;
+who they were, when they came, and where they came from also matter, and
+in part 1 of the book we learn a lot more about these questions and why
+they matter.
+
+What's more distinctive, though, is the book's discussion of the effects
+of positivism on the outside world. In the context of the book,
+especially in the discussion of positivism's effect on culture in
+chapter 11, positivism is a radical outside force that comes in to shake
+things up and is opposed by the conservative mainstream. I had a
+question about whether the positivists might have had a lasting and
+dramatic effect on American education.
+
+Many American schoolchildren these days are taught that there is a very
+sharp fact/opinion distinction. They get worksheets asking them to
+classify claims into facts and opinions. These are worksheets, so there
+is meant to be a right and wrong answer. Whatever the background of
+these worksheets, which I really don't know, they are positivist in
+effect. The answers which will be marked correct could have been taken
+straight from \emph{Language, Truth and Logic}. That's to say, they have
+a very expansive conception of what's `opinion' as opposed to `fact', a
+much more expansive one than many of the American positivists Verhaegh
+discusses would endorse. The conservative complaints about positivism
+that Verhaegh discusses in chapter 11, complaints that positivists were
+separating facts and values, would look really weird to modern American
+students who have been taught that this distinction is vitally
+important. Was getting this into the curriculum a success story for
+positivism, or does it have some other history? I'm not sure, but it
+feels like an interesting research topic for people who want to look
+further into the social effects of positivism.
+
+The other small point I want to note is that it's really pleasing to see
+how central \emph{public} universities are to the story in \emph{Logical
+Positivism}. The focus is so often on the famous Ivy League schools, and
+indeed five of the Ivies are central to Verhaegh's book. But his story
+relies on the big public universities too. We see Schlick get a huge
+audience at Berkeley very early on in the reception of positivism in
+America (144), then Feigl gets hired by Iowa and given more resources at
+Minnesota (268, 323). Reichenbach, after many challenges, is hired at
+UCLA (147). The central university at the end of the narrative, and
+still the home of the most important positivist archive, is Pitt
+(395ff). After Charles Stevenson is denied tenure at Yale, he gets a
+permanent home at Michigan (253, 268), where I'm based. To this day, our
+most prestigious research prize for graduate students is the Stevenson
+prize. Stevenson was succeeded at Michigan by Alan Gibbard, so we stayed
+a center for non-cognitivist meta-ethics for over half a century.
+
+The main thing I want to talk about is the story Verhaegh tells,
+primarily in chapters 9 and 10, of how logical positivism feeds into the
+spectacular rise of analytic philosophy in America post-WWII. As with
+all plausible narratives of this rise, Verhaegh's starts with the vexed
+question of just what this thing, analytic philosophy, is that ended up
+winning. The story he gives, and for which he marshals excellent
+evidence, is that it becomes in effect the merger of the realist and
+positivist traditions. It's a merger of especially the Cambridge realist
+tradition with less doctrinaire versions of positivism.
+
+One really striking thing about the narrative is that the label,
+`analytic philosophy', gets used for this would-be coalition before
+there is any sign of it being a coalition. It's not the only term that
+gets used; `scientific' philosophy is just as common. But two projects
+by Feigl and Wilfrid Sellars seem to be important in the terminological
+shift. One is the collection \emph{Readings in Philosophical Analysis}
+(\citeproc{ref-FeiglSellars1949}{Feigl and Sellars 1949}); the other is
+the founding of the journal \emph{Philosophical Studies} with the
+subtitle \emph{An International Journal for Philosophy in the Analytic
+Tradition}. To a large extent, Feigl and Sellars are inventing this
+tradition, or perhaps more charitably discovering it, and labeling
+it.\footnote{Verhaegh quotes Feigl and Sellars as saying that the two
+  traditions ``have increasingly merged'' (323). I think that's true in
+  terms of which questions they were asking, which approaches they were
+  using, and which answers they took seriously. It wasn't true in terms
+  of which answers they gave.} The labeling is a bit of what we'd now
+call conceptual engineering. It's massively successful. The forces of
+`scientific' philosophy really just run over all before them in the top
+American universities.
+
+This coalition, the realists and the positivists, looks so unstable.
+What exactly do they have in common? This is why the definitional
+question is so hard. The question about commonality can be traced back
+to the figures who are conscripted into this new tradition. What exactly
+do Carnap, Moore, and Anscombe have in common, which they don't also
+share with Peirce?
+
+Here Verhaegh also has a good pair of answers. First, what they have in
+common is a connection to \emph{Russell}. Verhaegh shows the positivists
+very consciously built a narrative where they were part of a common
+tradition with Russell, which helped fend off the charge that they were
+just a passing fad (241, 298). Second, there seems to have been
+something almost deliberate about writing Peirce into the anti-canon
+(334).
+
+Let's step back. One simple narrative, already visible in philosophy's
+self-conception, was that there were three primary schools in American
+philosophy before positivism arrived. These were idealism, pragmatism,
+and realism (\citeproc{ref-Perry1928}{Perry 1928};
+\citeproc{ref-Morris1935}{Morris 1935};
+\citeproc{ref-Verhaegh2026}{Verhaegh 2026, 154}).\footnote{I'd say that
+  is roughly their order of importance at the time, but making that
+  claim about their relative position stick would require a major detour
+  from this narrative.} There were other smaller schools; in a post-war
+survey of the state of philosophy Edgar Sheffield Brightman
+(\citeproc{ref-Brightman1947}{1947}) also lists naturalists, Thomists,
+personalists and Kantians. But these three were the largest, not least
+because they had distinctive sub-schools. It helps to start with these
+three.
+
+The coalition the positivists formed with the realists was not
+doctrinal; the positivists did not suddenly go around espousing realist
+theses.\footnote{For a long time, there was at least a negative thesis
+  the members of the coalition had in common: opposition to idealism.
+  But as we've seen in recent years, even that can be given up while
+  still staying within analytic philosophy, provided one keeps using the
+  right logical tools, and responding to the right arguments. See, e.g.,
+  Builes (\citeproc{ref-Builes2024}{2024}), and, for a survey of the
+  options, Chalmers (\citeproc{ref-Chalmers2019}{2019}).} Rather, it was
+administrative. When philosophy departments were expanding in the
+post-war years, the realists and positivists worked together to make
+sure positions were set aside for `scientific'/`analytic' philosophers.
+But at least during the period analytic philosophy was taking over
+American philosophy, the positivists were a key part of the coalition.
+Why did they enter into \emph{this} coalition, not into a coalition with
+one of the other major schools? The short answer is that neither of the
+other coalitions worked.
+
+It would have made sense for pragmatists and positivists to work
+together. They are both anti-metaphysical. This led people to treat them
+similarly at the time. Verhaegh quotes Feigl, Morris, Nagel, and Hook as
+treating them as a pair (164, 173, 216). If the two are really
+different, where do you put Ramsey? (I come back to him below.) Later in
+life, Ayer does an interview with Bryan Magee
+(\citeproc{ref-MageeAyer1978}{Magee and Ayer 1978}) where he says
+pragmatism was ``very akin to'' positivism.
+
+But this union doesn't work. Verhaegh suggests that it is because the
+pragmatists were allergic to dichotomies (185, 187), like the fact/value
+one, and that seems plausible. There was also a difference in how they
+treated formalism (168). It all seems very contingent; it's easy to
+imagine that if Ramsey had lived, he alone might have made the idea of
+pragmatist positivism work. But he didn't, and this pairing fails; the
+pragmatists at Columbia become some of the staunchest opponents of
+positivism.
+
+It's a bit more of a stretch, but you can see how a positivist/idealist
+coalition could work. Especially in early versions of positivism, they
+both put conscious experience right at the center. Verhaegh quotes
+Carnap complaining that people were reading the \emph{Aufbau} as
+idealist (151, 155, 210). While Carnap is plausibly right that it's a
+misreading, it's not an unintelligible one; there is a synthesis there
+if someone wants to develop it. But no one did. It's interesting to
+think about what a philosophical landscape would look like where
+positivism/idealism vs pragmatism/realism was the main dividing line;
+perhaps Ayer vs Austin on sense-data would be taught as the central
+debate in philosophy.\footnote{I've elsewhere argued that the standard
+  stories of the development of analytic philosophy in the actual world
+  don't give enough emphasis to Austin's role
+  (\citeproc{ref-Weatherson2007-WEADPW}{Weatherson 2007}). In this
+  counterfactual he is much more clearly central.} But that will remain
+forever a counterfactual; it's not the way philosophy developed.
+
+Instead, we get a positivist/realist coalition. Doctrinally, this seems
+very unstable. But it gets you two advantages, which Verhaegh stresses.
+One is that it gets you Russell inside the coalition, without worrying
+about Russell's changes of views over time (321). (At least, you don't
+have to worry if you ignore Russell's youthful idealism.) More
+importantly, it gets you a coalition between philosophers who think that
+logic and philosophy of science are central to philosophy. Before WWII,
+you already have Morris (\citeproc{ref-Morris1935}{1935}) noting how
+much more comfortable the realists are with mathematical approaches to
+philosophy than the other schools are. This becomes the defining
+characteristic of this new school; not what answers they give to
+philosophical questions, but which questions they ask (including
+questions from philosophy of science), and how they answer them (with
+tools from mathematics and logic). This turned out to be enough.
+
+Here's my contentious claim. Once that was the dividing line, the
+victory for the analytics was close to inevitable. We're taught to hate
+inevitability claims in history, and rightly so. And I do think it was
+really contingent that this became the dividing line. There are many
+things that could have happened before WWII that could have upset it. (I
+already noted that Ramsey's survival alone might have complicated the
+story significantly.) But once those are the sides, I think the
+analytics have to win. That's for two reasons.
+
+One is that idealism, especially in America, was dying. And pragmatism
+was just not strong enough to fight this new coalition on its own.
+Verhaegh has some damning numbers on this. At the key moment, eleven of
+Columbia's thirteen faculty were homegrown (187). If Deweyan pragmatism
+had really been strong, there would have been graduate students so good
+you couldn't help hiring them. There weren't.
+
+The bigger reason is that this coalition left the opposing forces
+hopelessly divided. This is already clear in Verhaegh's telling of the
+story. At Columbia, the anti-analytics wanted Deweyan pragmatism (260).
+At Princeton, they wanted Christian humanism (269). At Yale, they wanted
+a department that stayed a stronghold of metaphysics and humanist
+ethics. It's not that surprising that it was hard to put together a
+unified opposition; if the realists and positivists had to stretch to
+find things in common, the idealists, pragmatists, Thomists, etc., who
+opposed them had almost nothing in common except a dislike of the new
+analytic philosophy.
+
+When analytic philosophy did face a threat, it was from `continental
+philosophy'. Now continental philosophy, like analytic philosophy,
+covers a multitude of sins. But the advantage each has is that it will
+work with a pretty broad range of others under the umbrella, at least
+for institution building. That's needed to fight a battle like this, and
+the 1950s anti-analytics didn't have it.
+
+Looking at things from a broadly institutional perspective makes it
+clear why coalitions, like analytic or continental philosophy, are going
+to be well placed to overrun more cohesive schools. For a graduate
+student, it is much safer to start working in an analytic program, or a
+continental program, than in a program dedicated to pragmatism, or to
+Thomism. You can change your mind on key philosophical questions and
+still feel at home in the program. If the coalition has a big role in
+hiring, which it does, there is a better chance of a good job at the
+other end. Both these factors suggest that once a coalition like this
+gets rolling, it will start sweeping up graduate students. Indeed,
+that's basically what happened both when the `analytic' coalition began
+to form after WWII and when the `continental' coalition began to form a
+decade or two later.
+
+There is also an advantage at the hiring end. Academics are always fond
+of hiring people who share their views, at least about what the
+interesting questions are, if not always about what the right answers
+are. (Though the latter happens too, of course.) It's sometimes a
+challenge, but rarely impossible, to get academics on board with the
+idea of hiring in an area they are familiar with but don't think much
+of. It's much harder to get them to hire in areas that they are
+completely unfamiliar with, which they didn't study in graduate school,
+and which they don't interact with. One effect of this is that a school
+of philosophy centered around a few universities, even prominent ones,
+will lose out if students elsewhere are not learning about it: by the
+time those students are involved in hiring, they will have no interest
+at all in hiring from that school.
+
+The coalitional approach avoids this problem. The realists and
+positivists who were trained by post-war scientific philosophers
+disagreed on any number of doctrinal points. But they knew about each
+other; indeed, they usually had friends from each side of the various
+disputes, and they were willing to hire people who looked like their
+teachers or classmates, even if they had disagreed with those teachers
+or classmates. (Again, this isn't a point about analytic philosophy; I
+think you can tell the same story about continental philosophy, and how
+the existence of continental programs creates philosophers who are
+willing to hire from the different traditions within continental
+philosophy.)
+
+So I'll end with a question, one that I guess relates to the discussion
+of explanation in \emph{Logical Positivism}. I think counterfactuals are
+crucial to explanation. If we want to explain why analytic philosophy
+became dominant, we need to ask what the philosophical world would have
+looked like if it never became dominant. My question is, what does that
+world look like? And how late can it reasonably and feasibly differ from
+actual history? My guess is that the deviation from actual history has
+to come relatively early; by 1950, the outcome is baked in, even though
+the analytics don't actually take over for several more years. The more
+expansive analytic programs are going to have an easier job attracting
+good graduate students, and then those students will be more willing to
+hire from within this new `analytic tradition'. I'd like to be convinced
+I'm wrong; I get nervous with inevitability claims! But this
+institutional story seems fairly compelling in retrospect.
+
+As will hopefully be clear by now, \emph{Logical Positivism} is not just
+full of fascinating details about how positivism developed in America;
+it also tells a compelling story which opens up new ways of looking at
+the recent history of philosophy. It's a fantastic book, and I hope it's
+really widely read.
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Brightman1947}
+Brightman, Edgar Sheffield. 1947. {``Philosophy in the {United States}
+1939--1945.''} \emph{The Philosophical Review} 56 (4): 390--405. doi:
+\href{https://doi.org/10.2307/2181317}{10.2307/2181317}.
+
+\bibitem[\citeproctext]{ref-Builes2024}
+Builes, David. 2024. {``Modal Idealism.''} In \emph{Oxford Studies in
+Philosophy of Mind}, edited by Uriah Kriegel, 4:46--107. Oxford: Oxford
+University Press. doi:
+\href{https://doi.org/10.1093/9780198924159.003.0002}{10.1093/9780198924159.003.0002}.
+
+\bibitem[\citeproctext]{ref-Chalmers2019}
+Chalmers, David J. 2019. {``Idealism and the Mind-Body Problem.''} In
+\emph{The {Routledge} Handbook of Panpsychism}, edited by William
+Seager, 353--73. London: Routledge. doi:
+\href{https://doi.org/10.4324/9781315717708-28}{10.4324/9781315717708-28}.
+
+\bibitem[\citeproctext]{ref-FeiglSellars1949}
+Feigl, Herbert, and Wilfrid Sellars, eds. 1949. \emph{Readings in
+Philosophical Analysis}. New York: Appleton-Century-Crofts.
+
+\bibitem[\citeproctext]{ref-MageeAyer1978}
+Magee, Bryan, and A. J. Ayer. 1978. {``Logical Positivism and Its
+Legacy: {Bryan Magee} Talked to {A. J. Ayer}.''} British Broadcasting
+Corporation. \url{https://philpapers.org/rec/MAGLPA-2}.
+
+\bibitem[\citeproctext]{ref-Morris1935}
+Morris, Charles W. 1935. {``Some Aspects of Recent American Scientific
+Philosophy.''} \emph{Erkenntnis} 5 (1): 142--51. doi:
+\href{https://doi.org/10.1007/BF00172290}{10.1007/BF00172290}.
+
+\bibitem[\citeproctext]{ref-Perry1928}
+Perry, Ralph Barton. 1928. {``Peace Without Victory---in Philosophy.''}
+\emph{Journal of Philosophical Studies} 3 (11): 300--312.
+\url{https://www.jstor.org/stable/3745271}.
+
+\bibitem[\citeproctext]{ref-Verhaegh2026}
+Verhaegh, Sander. 2026. \emph{Logical Positivism: An American History}.
+New York: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Weatherson2007-WEADPW}
+Weatherson, Brian. 2007. {``{Doing Philosophy with Words}.''}
+\emph{Philosophical Studies} 135 (3): 429--37. doi:
+\href{https://doi.org/10.1007/s11098-006-9026-3}{10.1007/s11098-006-9026-3}.
+
+\end{CSLReferences}
+
+
+
+\vspace{12pt} \noindent Draft.
+
+
+\end{document}
