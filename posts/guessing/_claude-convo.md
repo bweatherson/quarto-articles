@@ -255,3 +255,7 @@ At the start of each simulated season, a draw with probability `p_star` decides 
 **Example settings.** I chose 6.2 with the star, 4.2 without, and p = 0.75. That keeps A's overall mean at 5.7, so the rest of the setup is the same as the squeezed-C case. The result barely moves: A-C-B-D-E-F 0.067, A-B-D-C-E-F 0.064, and the means table still third at 0.062. A is far enough clear that the star mostly changes how often A wins (70%), not the ordering below it.
 
 To make the star matter, put the star on one of the squeezed teams (B or D), or lower `mean_without` until a starless A falls into the B–C–D pack. The star-out case then gives A a narrow bimodal distribution, which is a cleaner version of the high-variance effect from before.
+
+# Further Citation
+
+Kendall, M. G. 1938. A new measure of rank correlation. Biometrika 30: 81–93.
