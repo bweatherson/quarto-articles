@@ -259,3 +259,4 @@ To make the star matter, put the star on one of the squeezed teams (B or D), or 
 # Further Citation
 
 Kendall, M. G. 1938. A new measure of rank correlation. Biometrika 30: 81–93.
+Lin, R., T. Louis, S. Paddock and G. Ridgeway. 2006. Loss function based ranking in two-stage, hierarchical models. Bayesian Analysis 1: 915–46.
