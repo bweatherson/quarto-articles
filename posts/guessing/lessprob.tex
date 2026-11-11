@@ -309,11 +309,14 @@ Kevin Dorst and Matthew Mandelkern
 (\citeproc{ref-LinnemannAzhar2025}{2025}). A puzzle that Helena Fang
 (\citeproc{ref-Fang2026}{2026}) raises for a generalisation of
 \textbf{Guess the Most Probable} might make one suspect that there will
-be problem cases for it. The point of this note is to build on Fang's
-idea and describe three cases where \textbf{Guess the Most Probable}
-fails. In all cases, some guesses which are not the most probable are
-permitted, and indeed in all three the most probable guess has some
-notable shortcomings.\footnote{This is not to say that it is
+be problem cases for it.\footnote{Quillien, Bramley, and Lucas
+  (\citeproc{ref-Quillien2025}{2025}) raises empirical doubts for
+  \textbf{Guess the Most Probable}, but the cases they use are rather
+  different to the argument here.} The point of this note is to build on
+Fang's idea and describe three cases where \textbf{Guess the Most
+Probable} fails. In all cases, some guesses which are not the most
+probable are permitted, and indeed in all three the most probable guess
+has some notable shortcomings.\footnote{This is not to say that it is
   impermissible; the cases are hard, and any answer might seem
   defective. But in all cases the most probable answer seems weird
   enough that it permits alternative answers.}
@@ -362,15 +365,21 @@ Here's the model this paper uses for this kind of guessing.\footnote{AI
 
 Each team \(i\) has a real quality \(q_i\). In each tournament
 simulation, the qualities are drawn from the normal distributions with
-means and standard deviations described in Table~\ref{tbl-quality}. In
-any game, we start with the difference \(d\) between the two team
-qualities (remember quality is held fixed across a tournament). If the
-home team\footnote{`Home team' here is just the first listed team. We
-  are not assuming any home field advantage.} is better, \(d\) is
-positive; if they are worse \(d\) is negative. Then we add a noise
-parameter drawn from \(\mathcal{N}(0, 1)\). If the absolute value of the
-result is less than 0.4, the game is a draw. Otherwise, if the result is
-positive the home team wins, and if it is negative the away team wins.
+means and standard deviations\footnote{What drives the model here is
+  that the standard deviations are different. As Lin et al.
+  (\citeproc{ref-LinEtAl2006}{2006}) say in their write up of a not
+  dissimilar model, ``all ranking methods we investigate are identical''
+  {[}§8{]}. The same holds for my discussion; if the standard
+  deviations/variances are fixed, all the approaches to guessing deliver
+  the same verdict.} described in Table~\ref{tbl-quality}. In any game,
+we start with the difference \(d\) between the two team qualities
+(remember quality is held fixed across a tournament). If the home
+team\footnote{`Home team' here is just the first listed team. We are not
+  assuming any home field advantage.} is better, \(d\) is positive; if
+they are worse \(d\) is negative. Then we add a noise parameter drawn
+from \(\mathcal{N}(0, 1)\). If the absolute value of the result is less
+than 0.4, the game is a draw. Otherwise, if the result is positive the
+home team wins, and if it is negative the away team wins.
 
 {
 
@@ -514,15 +523,28 @@ verisimilitude or partial truth.
 
 That provides a natural explanation for why ABCD may be a permissible
 guess even though ABDC is more probable. Say \(v_A(g, w)\) is the number
-of pairs whose finishing order is the same in \(g\) and \(w\). (So if
+of pairs whose finishing order is the same in \(g\) and \(w\). So if
 \(g\) is completely correct in \(w\), \(v_A(g, w) = 6\); if it just gets
-one pair flipped around, it's 5, and so on.) Then the guess with the
-highest expected accuracy, by this accuracy measure, will be ABCD. The
-expected pairs column in Table~\ref{tbl-pair-match} just is the expected
-accuracy score by this measure. In this case the guess which orders the
-teams by their mean quality will be a Condorcet winner. That is, one
-team will be guessed to finish higher than another iff the probability
-that it finishes higher is above 0.5.
+one pair flipped around, it's 5, and so on.\footnote{This is obviously
+  closely related to the \emph{Kendall distance} between two rankings,
+  which is the number of pairs they disagree on
+  (\citeproc{ref-Kendall1938}{Kendall 1938}); it's the same thing with
+  the sign flipped. Maximising the number of expected pairs correct is
+  choosing the Kemeny ranking of the credence-weighted profile of
+  outcomes (\citeproc{ref-Kemeny1959}{Kemeny 1959}). This turns out to
+  coincide with the Condorcet ordering if that ordering exists
+  (\citeproc{ref-YoungLevenglick1978}{Young and Levenglick 1978}). Young
+  (\citeproc{ref-Young1988}{1988}) discusses the connection between this
+  consideration and Condorcet's own reasons for caring about (what we
+  call) Condorcet winners.} Then the guess with the highest expected
+accuracy, by this accuracy measure, will be ABCD. The expected pairs
+column in Table~\ref{tbl-pair-match} just is the expected accuracy score
+by this measure. In this case the guess which orders the teams by their
+mean quality will be a Condorcet winner.\footnote{This claim relies on
+  the fact that the predictor's estimates of each team's quality is
+  symmetric about the mean. Without that assumption, things get much
+  messier.} That is, one team will be guessed to finish higher than
+another iff the probability that it finishes higher is above 0.5.
 
 Third, although it is very close, we can rerun the second argument if
 the guesser cares not about the relative positions of teams, but their
@@ -534,7 +556,15 @@ so on. If we do that, the expected places column in
 Table~\ref{tbl-pair-match} shows that ABCD has, by a whisker, the
 highest expected accuracy. Like with the pairs, the absolute finishing
 positions of the teams isn't another thing to guess above their order;
-guessing ABCD just is a way to guess that C will finish third.
+guessing ABCD just is a way to guess that C will finish
+third.\footnote{In general, when the guess that maximises the number of
+  expected pairs comes apart from the guess that maximises the number of
+  positions correctly predicted, the former seems like a more sensible
+  guess to me. But that's just a report of a personal preference. The
+  official view of this paper is that any scoring rule that takes into
+  account the questions that one answers by guessing a ranking could be
+  permissibly used, and it's a matter of personal taste which one is
+  actually used.}
 
 So there are several reasons to guess ABCD. There is still one reason to
 guess ABDC; it is the most probable. And I don't deny that it is, for
@@ -553,11 +583,21 @@ listed in Table~\ref{tbl-pair-match} and was lower than second-most
 probable. You might wonder whether this suggests that \textbf{Guess the
 Most Probable} is at least close to true. If the argument about pairs is
 correct, and it is always permissible to guess the Condorcet ranking,
-then it is permissible to guess really improbable orderings. Imagine our
-expert was asked to provide a best guess about the finishing order of
-the group with teams E, F, G and H, where the means and standard
-deviations of her credences about their quality are given in table
-Table~\ref{tbl-high-variance}.
+then it is permissible to guess really improbable orderings.\footnote{I've
+  said that it is \emph{permissible} to guess the Condorcet ranking, not
+  that it is required. That's in part because I don't think guessing the
+  most probable ranking is impermissible, though I think it will be rare
+  that it is the most appropriate guess. And it's in part because
+  sometimes a Condorcet ranking will not exist. Imagine we are about to
+  roll three `intransitive dice' (\citeproc{ref-Gardner1970}{Gardner
+  1970}) and are asked to guess the ranking of what they show. If we
+  said it was mandatory to guess the Condorcet ranking, we would say
+  that no guess is permissible here. That's not incoherent; maybe one
+  should make a disjunctive guess. But it seems more natural to say that
+  many guesses are permissible.} Imagine our expert was asked to provide
+a best guess about the finishing order of the group with teams E, F, G
+and H, where the means and standard deviations of her credences about
+their quality are given in table Table~\ref{tbl-high-variance}.
 
 {
 
@@ -591,7 +631,14 @@ But it is not the most probable order. In fact, it is the twenty-first
 most probable order out of twenty-four. The second-best guess by
 expected pairs guessed correctly is the twenty-second most probable
 order. Once we start caring about claims embedded within a guess, the
-best guess might be a long way down the probability ranking.
+best guess might be a long way down the probability ranking.\footnote{
+  Lin et al. (\citeproc{ref-LinEtAl2006}{2006}) describe a similar
+  procedure for estimating rankings, based around the idea that one
+  wants to minimise some loss function or other. They basically set
+  aside the ``all or nothing, experiment-wise'' {[}§4{]} loss function
+  which would deliver the result that one always guesses the most
+  probable ranking. As far as I can tell, that is the standard approach
+  in their field.}
 
 {
 
@@ -1092,6 +1139,12 @@ Fine, Kit. 2016. {``Angellic Content.''} \emph{Journal of Philosophical
 Logic} 45 (2): 199--226. doi:
 \href{https://doi.org/10.1007/s10992-015-9371-9}{10.1007/s10992-015-9371-9}.
 
+\bibitem[\citeproctext]{ref-Gardner1970}
+Gardner, Martin. 1970. {``Mathematical Games: The Paradox of the
+Nontransitive Dice and the Elusive Principle of Indifference.''}
+\emph{Scientific American} 223 (6): 110--15. doi:
+\href{https://doi.org/10.1038/scientificamerican1270-110}{10.1038/scientificamerican1270-110}.
+
 \bibitem[\citeproctext]{ref-GoodmanSalow2025}
 Goodman, Jeremy, and Bernhard Salow. 2025. {``Belief Revision
 Normalized.''} \emph{Journal of Philosophical Logic} 54 (1): 1--49. doi:
@@ -1106,6 +1159,21 @@ Holguín, Ben. 2022. {``Thinking, Guessing, and Believing.''}
 Horowitz, Sophie. 2019. {``Accuracy and Educated Guesses.''} In
 \emph{Oxford Studies in Epistemology}, edited by Tamar Szabó Gendler and
 John Hawthorne. Vol. 6. Oxford University Press.
+
+\bibitem[\citeproctext]{ref-Kemeny1959}
+Kemeny, John G. 1959. {``Mathematics Without Numbers.''} \emph{Daedalus}
+88 (4): 577--91. \url{https://www.jstor.org/stable/20026529}.
+
+\bibitem[\citeproctext]{ref-Kendall1938}
+Kendall, M. G. 1938. {``A New Measure of Rank Correlation.''}
+\emph{Biometrika} 30 (1/2): 81--93. doi:
+\href{https://doi.org/10.1093/biomet/30.1-2.81}{10.1093/biomet/30.1-2.81}.
+
+\bibitem[\citeproctext]{ref-LinEtAl2006}
+Lin, Rongheng, Thomas A. Louis, Susan M. Paddock, and Greg Ridgeway.
+2006. {``Loss Function Based Ranking in Two-Stage, Hierarchical
+Models.''} \emph{Bayesian Analysis} 1 (4): 915--46. doi:
+\href{https://doi.org/10.1214/06-BA130}{10.1214/06-BA130}.
 
 \bibitem[\citeproctext]{ref-LinnemannAzhar2025}
 Linnemann, Niels, and Feraz Azhar. 2025. {``Better Guesses.''}
@@ -1122,6 +1190,12 @@ Pearson, Joshua Edward. 2025. {``Belief Revision Revised.''}
 \emph{Philosophy and Phenomenological Research} 111 (2): 696--727. doi:
 \href{https://doi.org/10.1111/phpr.70037}{10.1111/phpr.70037}.
 
+\bibitem[\citeproctext]{ref-Quillien2025}
+Quillien, Tadeg, Neil Bramley, and Christopher G. Lucas. 2025. {``Lossy
+Encoding of Distributions in Judgment Under Uncertainty.''}
+\emph{Cognitive Psychology} 159: 101745. doi:
+\url{https://doi.org/10.1016/j.cogpsych.2025.101745}.
+
 \bibitem[\citeproctext]{ref-Skipper2023}
 Skipper, Mattias. 2023. {``Good Guesses as Accuracy-Specificity
 Tradeoffs.''} \emph{Philosophical Studies} 180 (7): 2025--50. doi:
@@ -1135,6 +1209,17 @@ Teague, Richard. 2024. {``A Puzzle about Guessing and Inquiry.''}
 \bibitem[\citeproctext]{ref-Yablo2014}
 Yablo, Stephen. 2014. \emph{Aboutness}. Princeton: Princeton University
 Press.
+
+\bibitem[\citeproctext]{ref-Young1988}
+Young, H. P. 1988. {``{Condorcet}'s Theory of Voting.''} \emph{American
+Political Science Review} 82 (4): 1231--44. doi:
+\href{https://doi.org/10.2307/1961757}{10.2307/1961757}.
+
+\bibitem[\citeproctext]{ref-YoungLevenglick1978}
+Young, H. P., and A. Levenglick. 1978. {``A Consistent Extension of
+{Condorcet}'s Election Principle.''} \emph{SIAM Journal on Applied
+Mathematics} 35 (2): 285--300. doi:
+\href{https://doi.org/10.1137/0135023}{10.1137/0135023}.
 
 \end{CSLReferences}
 
