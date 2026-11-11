@@ -204,6 +204,17 @@ includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
 \renewcommand{\textsc}[1]{{\scfont #1}}
 
 \renewcommand{\LettrineTextFont}{\scfont}
+% Number theorem-like environments straight through (Theorem 1, Theorem 2, ...)
+% rather than by section (1.1, 1.2, ...), which is Quarto's LaTeX default.
+% Guarded, since Quarto only defines a counter for environments the document uses.
+\makeatletter
+\AtBeginDocument{%
+  \@for\bw@thm:={theorem,lemma,corollary,proposition,conjecture,definition,%
+                 example,exercise,refremark,refsolution}\do{%
+    \@ifundefined{c@\bw@thm}{}{\expandafter\counterwithout\expandafter{\bw@thm}{section}}%
+  }%
+}
+\makeatother
 \newcommand{\nmodels}{\mathrel{\ooalign{$\models$\cr\raisebox{-0.001ex}{\hss$\mkern-1mu/\hss$}}}}
 \newcommand{\llbracket}{[\![}
 \newcommand{\rrbracket}{]\!]}
@@ -213,7 +224,7 @@ includemp=TRUE, marginparwidth=0in, marginparsep=0in]{geometry}
 \setlength\heavyrulewidth{0ex}
 \setlength\lightrulewidth{0ex}
 \usepackage[lines=2]{lettrine}
-\cehead{Draft of February 28, 2026}
+\cehead{Draft}
 \DeclareSymbolFont{symbolsC}{U}{txsyc}{m}{n}
 \DeclareMathSymbol{\Boxright}{\mathrel}{symbolsC}{128}
 \cehead{
@@ -1291,26 +1302,25 @@ contingencies like \(\neg E \vee H\).
 (David Jehle and Brian Weatherson (\citeproc{ref-JehleWeatherson}{2012})
 aim to resolve this problem using intuitionistic probability. That
 response requires taking on more non-classical commitments than the
-response here. Martin Martin Smith
-(\citeproc{ref-MartinSmith2017}{2017}) has argued that Jehle and
-Weatherson's approach should be rejected because it requires making more
-anti-realist assumptions than even the intuitionist should accept.)
+response here. Martin Smith (\citeproc{ref-MartinSmith2017}{2017}) has
+argued that Jehle and Weatherson's approach should be rejected because
+it requires making more anti-realist assumptions than even the
+intuitionist should accept.)
 
 Another application of the framework is to moral anti-realism and moral
-uncertainty. Michael Michael Smith
-(\citeproc{ref-MichaelSmith2002}{2002}) has argued that some
-anti-realists can't capture moral uncertainty. This framework isn't
-going to particularly help solve the problem Smith raises for the
-committed anti-realist; on this framework, credence is credence of
-truth, so if you're committed to moral claims not having truth-values,
-you can't assign them any positive credence. But while the framework
-can't help the committed anti-realist, it can still be useful. One might
-worry that the reasons Smith offers will create problems even for
-someone who isn't sure whether realism or anti-realism is correct, and
-mean that this person can't sensibly have credences representing their
-moral uncertainty. What the framework shows is that it is possible to
-coherently have credences in moral propositions while leaving open that
-some moral claims might be neither true nor false. So while the
+uncertainty. Michael Smith (\citeproc{ref-MichaelSmith2002}{2002}) has
+argued that some anti-realists can't capture moral uncertainty. This
+framework isn't going to particularly help solve the problem Smith
+raises for the committed anti-realist; on this framework, credence is
+credence of truth, so if you're committed to moral claims not having
+truth-values, you can't assign them any positive credence. But while the
+framework can't help the committed anti-realist, it can still be useful.
+One might worry that the reasons Smith offers will create problems even
+for someone who isn't sure whether realism or anti-realism is correct,
+and mean that this person can't sensibly have credences representing
+their moral uncertainty. What the framework shows is that it is possible
+to coherently have credences in moral propositions while leaving open
+that some moral claims might be neither true nor false. So while the
 framework has trivial cases involving The Couple as its cleanest
 applications, its potential applications are much much wider.
 
@@ -1647,7 +1657,6 @@ Joyce, James M. 1998. {``A Non-Pragmatic Vindication of Probabilism.''}
 Kelley, Mikayla. 2023. {``On Accuracy and Coherence with Infinite
 Opinion Sets.''} \emph{Philosophy of Science} 90 (1): 92--128. doi:
 \href{https://doi.org/10.1017/psa.2021.37}{10.1017/psa.2021.37}.
-Preprint at arXiv:2007.14490.
 
 \bibitem[\citeproctext]{ref-Lewis1978b}
 Lewis, David. 1978. {``Truth in Fiction.''} \emph{American Philosophical
