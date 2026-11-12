@@ -240,8 +240,31 @@
   toc_title: none,
   toc_depth: none,
   toc_indent: 1.5em,
+  // Quarto passes these too when the paper sets them. Only keywords and
+  // thanks are used; the others are accepted so that setting them in a paper
+  // doesn't stop the build (this template sets its own fonts and colours).
+  keywords: (),
+  thanks: none,
+  mathfont: none,
+  codefont: none,
+  linestretch: 1,
+  linkcolor: none,
+  citecolor: none,
+  filecolor: none,
   doc,
 ) = {
+  // PDF metadata: title, author, keywords
+  let plain(c) = {
+    if c == none { "" }
+    else if type(c) == str { c }
+    else if c.has("text") { c.text }
+    else if c.has("children") { c.children.map(plain).join("") }
+    else if c.has("body") { plain(c.body) }
+    else if c.func() == [ ].func() { " " }
+    else { "" }
+  }
+  set document(title: plain(title), keywords: keywords)
+  set document(author: authors.map(a => plain(a.name)).join(", ")) if authors != none and authors != ()
   // ---- Body text --------------------------------------------------------
   set text(lang: lang, region: region, font: font, size: fontsize,
            number-type: "old-style")
@@ -329,11 +352,38 @@
     it
   }
 
+  // ---- References made by Pandoc (citeproc: true, the default here) -------
+  // Pandoc writes the reference list as a block labelled <refs>. Give it the
+  // same look as above: EB Garamond, hanging indents, and a small
+  // "References" heading -- unless the paper already supplies one with
+  // `# References {-}`, in which case that heading is shown small instead.
+  show heading.where(numbering: none): it => {
+    if it.body == [References] {
+      // the level-1 heading rules above have already scaled the text by 1.2,
+      // so these sizes are divided by 1.2 to match the heading used below
+      block(above: 1.5em, below: 0.75em,
+        text(size: 1.05em / 1.2, it.body))
+    } else { it }
+  }
+  show <refs>: it => {
+    set text(font: ("EB Garamond",))
+    set par(first-line-indent: 0em, hanging-indent: 1.5em, justify: false)
+    set block(above: 0.6em, below: 0.6em)
+    context {
+      let before = query(selector(heading).before(here()))
+      if before.len() == 0 or before.last().body != [References] {
+        block(above: 1.8em, below: 0.9em,
+          text(font: heading-family, weight: heading-weight, size: 1.05em)[References])
+      }
+    }
+    it
+  }
+
   // ---- Title block ------------------------------------------------------
   if title != none {
     align(center)[
       #v(1em)
-      #text(font: ("EB Garamond",), style: "italic", size: 2em)[#title]
+      #text(font: ("EB Garamond",), style: "italic", size: 2em)[#title]#if thanks != none { footnote(thanks, numbering: "*") }
       #if subtitle != none { parbreak(); text(size: subtitle-size)[#subtitle] }
     ]
   }
@@ -420,7 +470,7 @@ There has been a flurry of recent interest in #emph[guessing]. Most of this work
 If one is asked #emph[Q#super[?]], and responds by guessing a complete answer, that answer is appropriate iff it is the most probable answer, given one's credences, to the question.
 ]
 
-Something like #strong[Guess the Most Probable] is a consequence of views defended by Sophie #cite(<Horowitz2019>, form: "prose"),#footnote[Horowitz only commits to this for cases where there are only two possible answers, but doesn't give any indication that the principle won't generalise further.] Kevin Dorst and Matthew Mandelkern (#cite(<DorstMandelkern2022>, form: "year")), Ben #cite(<Holguin2022>, form: "prose"), Mattias #cite(<Skipper2023>, form: "prose"), Richard #cite(<Teague2024>, form: "prose"), and Niels Linnemann and Feraz Azhar (#cite(<LinnemannAzhar2025>, form: "year")). A puzzle that Helena #cite(<Fang2026>, form: "prose") raises for a generalisation of #strong[Guess the Most Probable] might make one suspect that there will be problem cases for it. The point of this note is to build on Fang's idea and describe three cases where #strong[Guess the Most Probable] fails. In all cases, some guesses which are not the most probable are permitted, and indeed in all three the most probable guess has some notable shortcomings.#footnote[This is not to say that it is impermissible; the cases are hard, and any answer might seem defective. But in all cases the most probable answer seems weird enough that it permits alternative answers.]
+Something like #strong[Guess the Most Probable] is a consequence of views defended by Sophie Horowitz (#link(<ref-Horowitz2019>)[2019]),#footnote[Horowitz only commits to this for cases where there are only two possible answers, but doesn't give any indication that the principle won't generalise further.] Kevin Dorst and Matthew Mandelkern \(#link(<ref-DorstMandelkern2022>)[2022]), Ben Holguín (#link(<ref-Holguin2022>)[2022]), Mattias Skipper (#link(<ref-Skipper2023>)[2023]), Richard Teague (#link(<ref-Teague2024>)[2024]), and Niels Linnemann and Feraz Azhar \(#link(<ref-LinnemannAzhar2025>)[2025]). A puzzle that Helena Fang (#link(<ref-Fang2026>)[2026]) raises for a generalisation of #strong[Guess the Most Probable] might make one suspect that there will be problem cases for it.#footnote[Quillien, Bramley, and Lucas (#link(<ref-Quillien2025>)[2025]) raises empirical doubts for #strong[Guess the Most Probable], but the cases they use are rather different to the argument here.] The point of this note is to build on Fang's idea and describe three cases where #strong[Guess the Most Probable] fails. In all cases, some guesses which are not the most probable are permitted, and indeed in all three the most probable guess has some notable shortcomings.#footnote[This is not to say that it is impermissible; the cases are hard, and any answer might seem defective. But in all cases the most probable answer seems weird enough that it permits alternative answers.]
 
 = Guess the Order
 <sec-order>
@@ -436,7 +486,7 @@ Second, soccer games are just random. You may remember Saudi Arabia beating Arge
 
 Here's the model this paper uses for this kind of guessing.#footnote[AI acknowledgment: I used Claude Opus 5.5 to build this model, having explained to it the kind of tournament that I wanted. Once it was done, it came up unprompted with some summary statistics about the model which in turn I use below.]
 
-Each team $i$ has a real quality $q_i$. In each tournament simulation, the qualities are drawn from the normal distributions with means and standard deviations described in #ref(<tbl-quality>, supplement: [Table]). In any game, we start with the difference $d$ between the two team qualities (remember quality is held fixed across a tournament). If the home team#footnote['Home team' here is just the first listed team. We are not assuming any home field advantage.] is better, $d$ is positive; if they are worse $d$ is negative. Then we add a noise parameter drawn from $cal(N)\(0\,1\)$. If the absolute value of the result is less than 0.4, the game is a draw. Otherwise, if the result is positive the home team wins, and if it is negative the away team wins.
+Each team $i$ has a real quality $q_i$. In each tournament simulation, the qualities are drawn from the normal distributions with means and standard deviations#footnote[What drives the model here is that the standard deviations are different. As Lin et al. (#link(<ref-LinEtAl2006>)[2006]) say in their write up of a not dissimilar model, "all ranking methods we investigate are identical" \[§8\]. The same holds for my discussion; if the standard deviations/variances are fixed, all the approaches to guessing deliver the same verdict.] described in #ref(<tbl-quality>, supplement: [Table]). In any game, we start with the difference $d$ between the two team qualities (remember quality is held fixed across a tournament). If the home team#footnote['Home team' here is just the first listed team. We are not assuming any home field advantage.] is better, $d$ is positive; if they are worse $d$ is negative. Then we add a noise parameter drawn from $cal(N)\(0\,1\)$. If the absolute value of the result is less than 0.4, the game is a draw. Otherwise, if the result is positive the home team wins, and if it is negative the away team wins.
 
 #figure([
 #table(
@@ -526,13 +576,13 @@ The point here is not that thinking about relative finishing positions of pairs 
 
 There is a natural way to make this verdict fit with the picture that Dorst and Mandelkern give. At one point in their paper, they are interested in how the guesser might trade off between more and less specific guesses. (For example, when asked to guess who will win the group, when is it best to say A, and when is it best to say something less committal like A or B?) They use a standard epistemic utility model to model these decisions, where one of the factors is how accurate the guess is. Let $v_A\(g\,w\)$ be the accuracy value of guess $g$ in world $w$. Dorst and Mandelkern make the natural assumption that $v_A\(g\,w\)= 1$ if $g$ is true in $w$, and 0 otherwise. They also note that you might want a more complicated assumption if you care about verisimilitude or partial truth.
 
-That provides a natural explanation for why ABCD may be a permissible guess even though ABDC is more probable. Say $v_A\(g\,w\)$ is the number of pairs whose finishing order is the same in $g$ and $w$. (So if $g$ is completely correct in $w$, $v_A\(g\,w\)= 6$\; if it just gets one pair flipped around, it's 5, and so on.) Then the guess with the highest expected accuracy, by this accuracy measure, will be ABCD. The expected pairs column in #ref(<tbl-pair-match>, supplement: [Table]) just is the expected accuracy score by this measure. In this case the guess which orders the teams by their mean quality will be a Condorcet winner. That is, one team will be guessed to finish higher than another iff the probability that it finishes higher is above 0.5.
+That provides a natural explanation for why ABCD may be a permissible guess even though ABDC is more probable. Say $v_A\(g\,w\)$ is the number of pairs whose finishing order is the same in $g$ and $w$. So if $g$ is completely correct in $w$, $v_A\(g\,w\)= 6$\; if it just gets one pair flipped around, it's 5, and so on.#footnote[This is obviously closely related to the #emph[Kendall distance] between two rankings, which is the number of pairs they disagree on \(#link(<ref-Kendall1938>)[Kendall 1938])\; it's the same thing with the sign flipped. Maximising the number of expected pairs correct is choosing the Kemeny ranking of the credence-weighted profile of outcomes \(#link(<ref-Kemeny1959>)[Kemeny 1959]). This turns out to coincide with the Condorcet ordering if that ordering exists \(#link(<ref-YoungLevenglick1978>)[Young and Levenglick 1978]). Young (#link(<ref-Young1988>)[1988]) discusses the connection between this consideration and Condorcet's own reasons for caring about (what we call) Condorcet winners.] Then the guess with the highest expected accuracy, by this accuracy measure, will be ABCD. The expected pairs column in #ref(<tbl-pair-match>, supplement: [Table]) just is the expected accuracy score by this measure. In this case the guess which orders the teams by their mean quality will be a Condorcet winner.#footnote[This claim relies on the fact that the predictor's estimates of each team's quality is symmetric about the mean. Without that assumption, things get much messier.] That is, one team will be guessed to finish higher than another iff the probability that it finishes higher is above 0.5.
 
-Third, although it is very close, we can rerun the second argument if the guesser cares not about the relative positions of teams, but their absolute finishing position. Another natural setting for $v_A\(g\,w\)$ sets it equal to how many teams finish in the same position in $g$ and $w$. That's the right metric for a guesser who really wants to correctly guess who will finish first, and who will finish second, and so on. If we do that, the expected places column in #ref(<tbl-pair-match>, supplement: [Table]) shows that ABCD has, by a whisker, the highest expected accuracy. Like with the pairs, the absolute finishing positions of the teams isn't another thing to guess above their order; guessing ABCD just is a way to guess that C will finish third.
+Third, although it is very close, we can rerun the second argument if the guesser cares not about the relative positions of teams, but their absolute finishing position. Another natural setting for $v_A\(g\,w\)$ sets it equal to how many teams finish in the same position in $g$ and $w$. That's the right metric for a guesser who really wants to correctly guess who will finish first, and who will finish second, and so on. If we do that, the expected places column in #ref(<tbl-pair-match>, supplement: [Table]) shows that ABCD has, by a whisker, the highest expected accuracy. Like with the pairs, the absolute finishing positions of the teams isn't another thing to guess above their order; guessing ABCD just is a way to guess that C will finish third.#footnote[In general, when the guess that maximises the number of expected pairs comes apart from the guess that maximises the number of positions correctly predicted, the former seems like a more sensible guess to me. But that's just a report of a personal preference. The official view of this paper is that any scoring rule that takes into account the questions that one answers by guessing a ranking could be permissibly used, and it's a matter of personal taste which one is actually used.]
 
 So there are several reasons to guess ABCD. There is still one reason to guess ABDC; it is the most probable. And I don't deny that it is, for that reason, a permissible guess. What I do deny is that it is the only permissible complete guess. It is permissible to rank teams by their mean quality, or to prefer the Condorcet ordering, or to maximise the expected number of finishing positions one correctly predicts, even if that means making a guess with a slightly lower probability of being perfectly correct. As long as ABCD is one of the permissible guesses, that is enough to refute #strong[Guess the Most Probable], which says that only ABDC is.
 
-In the case I've described so far ABCD is the second-most probable guess; I couldn't find a model where it was best on both of the measures listed in #ref(<tbl-pair-match>, supplement: [Table]) and was lower than second-most probable. You might wonder whether this suggests that #strong[Guess the Most Probable] is at least close to true. If the argument about pairs is correct, and it is always permissible to guess the Condorcet ranking, then it is permissible to guess really improbable orderings. Imagine our expert was asked to provide a best guess about the finishing order of the group with teams E, F, G and H, where the means and standard deviations of her credences about their quality are given in table #ref(<tbl-high-variance>, supplement: [Table]).
+In the case I've described so far ABCD is the second-most probable guess; I couldn't find a model where it was best on both of the measures listed in #ref(<tbl-pair-match>, supplement: [Table]) and was lower than second-most probable. You might wonder whether this suggests that #strong[Guess the Most Probable] is at least close to true. If the argument about pairs is correct, and it is always permissible to guess the Condorcet ranking, then it is permissible to guess really improbable orderings.#footnote[I've said that it is #emph[permissible] to guess the Condorcet ranking, not that it is required. That's in part because I don't think guessing the most probable ranking is impermissible, though I think it will be rare that it is the most appropriate guess. And it's in part because sometimes a Condorcet ranking will not exist. Imagine we are about to roll three 'intransitive dice' \(#link(<ref-Gardner1970>)[Gardner 1970]) and are asked to guess the ranking of what they show. If we said it was mandatory to guess the Condorcet ranking, we would say that no guess is permissible here. That's not incoherent; maybe one should make a disjunctive guess. But it seems more natural to say that many guesses are permissible.] Imagine our expert was asked to provide a best guess about the finishing order of the group with teams E, F, G and H, where the means and standard deviations of her credences about their quality are given in table #ref(<tbl-high-variance>, supplement: [Table]).
 
 #figure([
 #table(
@@ -556,7 +606,7 @@ supplement: "Table",
 <tbl-high-variance>
 
 
-As #ref(<tbl-high-variance-orders>, supplement: [Table]) shows, guessing that they will finish EFGH maximises the expected number of pairs one expects to order correctly. It's also the Condorcet order: whenever $x$ is more than 50% likely to finish about $y$, it is guessed to finish above $y$. But it is not the most probable order. In fact, it is the twenty-first most probable order out of twenty-four. The second-best guess by expected pairs guessed correctly is the twenty-second most probable order. Once we start caring about claims embedded within a guess, the best guess might be a long way down the probability ranking.
+As #ref(<tbl-high-variance-orders>, supplement: [Table]) shows, guessing that they will finish EFGH maximises the expected number of pairs one expects to order correctly. It's also the Condorcet order: whenever $x$ is more than 50% likely to finish about $y$, it is guessed to finish above $y$. But it is not the most probable order. In fact, it is the twenty-first most probable order out of twenty-four. The second-best guess by expected pairs guessed correctly is the twenty-second most probable order. Once we start caring about claims embedded within a guess, the best guess might be a long way down the probability ranking.#footnote[ Lin et al. (#link(<ref-LinEtAl2006>)[2006]) describe a similar procedure for estimating rankings, based around the idea that one wants to minimise some loss function or other. They basically set aside the "all or nothing, experiment-wise" \[§4\] loss function which would deliver the result that one always guesses the most probable ranking. As far as I can tell, that is the standard approach in their field.]
 
 #figure([
 #table(
@@ -590,13 +640,13 @@ The general claim of this section, of this paper really, is that when asked to m
 
 You might worry this will overgeneralise. Why does this have anything to do with structure? Imagine someone asked to guess where James Bond is, and they guess Vienna. Here is a parallel to the earlier arguments about commitment. By guessing Vienna, they commit to Bond being within 50 miles of Vienna, so their guess should get some accuracy points if he is in Bratislava. And they commit to Bond being in Austria, so they should get some accuracy points if he is in Salzburg. So even for unstructured questions like #emph[Where is James Bond?], there could be a reason to use something other than a 0/1 accuracy score, and hence reason to make some guess other than the most probable.
 
-To respond to this worry, we need a tighter notion of commitment. It's true that Bond being in Bratislava or in Salzburg is, in different ways, like his being in Vienna. But the inferences from #emph[Bond is in Vienna] to #emph[Bond is near Vienna] or #emph[Bond is in Austria] involve a change of subject-matter. The core idea I'm using here is taken from #cite(<Yablo2014>, form: "prose")\; see #cite(<Fine2016>, form: "prose") and #cite(<Berto2022>, form: "prose") for related work. The inference from a conjunction to a conjunct, or from a ranking to a pair-ordering, does not involve changing the subject. If you guess a conjunction, the conjuncts are quite literally parts of the guess. So roughly (and see the earlier references for a less rough version), the idea is that by guessing $g$, you are committed to guessing anything that $g$ entails whose subject-matter is part of $g$'s. That's why the structured guesses allow for guessing the less probable; the relevant accuracy measure won't be the simple 0/1 measure.
+To respond to this worry, we need a tighter notion of commitment. It's true that Bond being in Bratislava or in Salzburg is, in different ways, like his being in Vienna. But the inferences from #emph[Bond is in Vienna] to #emph[Bond is near Vienna] or #emph[Bond is in Austria] involve a change of subject-matter. The core idea I'm using here is taken from Yablo (#link(<ref-Yablo2014>)[2014])\; see Fine (#link(<ref-Fine2016>)[2016]) and Berto (#link(<ref-Berto2022>)[2022]) for related work. The inference from a conjunction to a conjunct, or from a ranking to a pair-ordering, does not involve changing the subject. If you guess a conjunction, the conjuncts are quite literally parts of the guess. So roughly (and see the earlier references for a less rough version), the idea is that by guessing $g$, you are committed to guessing anything that $g$ entails whose subject-matter is part of $g$'s. That's why the structured guesses allow for guessing the less probable; the relevant accuracy measure won't be the simple 0/1 measure.
 
-Finally, a housekeeping note. Dorst and Mandelkern (#cite(<DorstMandelkern2022>, form: "year", supplement: [fn. 15])) list two reasons for thinking that the accuracy value might be something other than 0 or 1: verisimilitude or partial truth. The argument of the last few paragraphs is that partial truth really is important, but verisimilitude, i.e., closeness to the truth, is not. Guessing Bond is in Vienna when he's in Bratislava is close; it's less than 50 miles away! But for the #emph[Where is James Bond?] question, I've endorsed the claim that guesses should just be judged true or false, and the right (complete) guess is the most probable one. The examples that I do think make it reasonable for the guesser to have a more complicated value function are what they are calling partial truth cases. Not coincidentally, they cite Yablo as a place to look for more detail on partial truth, so the kinds of cases I'm using are pretty close to what they were considering.
+Finally, a housekeeping note. Dorst and Mandelkern \(#link(<ref-DorstMandelkern2022>)[2022], fn. 15) list two reasons for thinking that the accuracy value might be something other than 0 or 1: verisimilitude or partial truth. The argument of the last few paragraphs is that partial truth really is important, but verisimilitude, i.e., closeness to the truth, is not. Guessing Bond is in Vienna when he's in Bratislava is close; it's less than 50 miles away! But for the #emph[Where is James Bond?] question, I've endorsed the claim that guesses should just be judged true or false, and the right (complete) guess is the most probable one. The examples that I do think make it reasonable for the guesser to have a more complicated value function are what they are calling partial truth cases. Not coincidentally, they cite Yablo as a place to look for more detail on partial truth, so the kinds of cases I'm using are pretty close to what they were considering.
 
 = Follow Up Guesses
 <sec-follow>
-The next case is largely a variant on a case developed by Richard #cite(<Teague2024>, form: "prose")\; what I want to stress is the problem it raises for #strong[Guess the Most Probable].
+The next case is largely a variant on a case developed by Richard Teague (#link(<ref-Teague2024>)[2024])\; what I want to stress is the problem it raises for #strong[Guess the Most Probable].
 
 Having settled the ABCD and EFGH groups, the expert is now thinking about the JKLM group. The means and standard deviations of her credences about team qualities in that group are given in #ref(<tbl-quality-sec-2>, supplement: [Table]). Note that the variance is now really high; she is very unsure about all these teams.
 
@@ -685,7 +735,7 @@ supplement: "Table",
 <tbl-conditional-second>
 
 
-So the third option is to guess K. One motivation for this is the idea that when asked to make a series of guesses, one is being asked to develop a coherent story. One should maximise not the probability of the next step, but the probability of the whole story given the possible continuations of it. That means guessing the option with the highest conditional probability, or, if it is a structured guess, the highest expected accuracy.#footnote[#cite(<Fang2026>, form: "prose", supplement: [fn. 36]) briefly discusses this idea, and dismisses it as changing the question. I am somewhat more optimistic that it can work.] That seems like a plausible story of what we're doing with sequential guesses, and it gets what I think is the intuitive answer here.
+So the third option is to guess K. One motivation for this is the idea that when asked to make a series of guesses, one is being asked to develop a coherent story. One should maximise not the probability of the next step, but the probability of the whole story given the possible continuations of it. That means guessing the option with the highest conditional probability, or, if it is a structured guess, the highest expected accuracy.#footnote[Fang (#link(<ref-Fang2026>)[2026], fn. 36) briefly discusses this idea, and dismisses it as changing the question. I am somewhat more optimistic that it can work.] That seems like a plausible story of what we're doing with sequential guesses, and it gets what I think is the intuitive answer here.
 
 There is a fourth option, which isn't quite inconsistent with the previous ones. If sequential guessing is a matter of developing a story piece-by-piece, then guessers might want the option to eventually revise their previous guesses. After a while, a sequence of guesses might lead to too implausible a story. The point is not just that the story you end up with is absolutely implausible; sometimes the best guess will be very improbable. (Think of the pundits asked to choose which of 20! orderings of Premier League teams will be the right one.) Rather, the point is that sometimes when you see the full set of questions you are being asked, you can make a much more plausible set of guesses by retracting some earlier guesses.
 
@@ -695,7 +745,7 @@ I don't have a good answer here to what the expert should do; apart from noting 
 
 = Guesses with Incoming Information
 <sec-incoming>
-The last case is basically an application of some points Sarah #cite(<Moss2015sp>, form: "prose") made about disjunctions and context-sensitivity. Let's leave soccer and return to a case beloved in the guessing literature: horse racing.
+The last case is basically an application of some points Sarah Moss (#link(<ref-Moss2015sp>)[2015]) made about disjunctions and context-sensitivity. Let's leave soccer and return to a case beloved in the guessing literature: horse racing.
 
 There is a big race tomorrow with thirteen runners. Three of them, N, O and P, are very good; the other ten are not. The expert has views on two questions: how well each horse runs in different conditions, and what the conditions are likely to be. The latter is important. There is a big storm moving towards the racetrack. It will reach us overnight. While the storm is large, it is concentrated, so it's possible it will pass just north of here, but it's also possible it will hit us hard. If it passes by, the track will be dry and fast; if it hits, the track will be a slow muddy mess. Horse N is good in all conditions, but O and P have preferred conditions. O is a flat-track bully, able to sprint away on dry, fast tracks. P is a mudlark, able to churn through mud better than most. So the expert's credences about the race results are highly dependent on what happens overnight with the storm. In #ref(<tbl-dry>, supplement: [Table]) and #ref(<tbl-wet>, supplement: [Table]), I've listed her credences as to who will win conditional on a dry track, and conditional on a wet track.
 
@@ -779,7 +829,7 @@ supplement: "Table",
 )
 The expert thinks it is 50/50 which kind of track we get; the weather forecasts are very uncertain about the trajectory of the storm. So the highest win probability belongs to N, at 0.35. But guessing that N will win has some downsides. Notably, it violates a reflection principle for guessing. If the expert guesses N, she knows that whatever happens overnight, in the morning she'll want to change that guess.
 
-I'm appealing here to a principle that's familioar from the literature on belief revision. Jeremy Goodman and Bernhard Salow (#cite(<GoodmanSalow2025>, form: "year", supplement: [13])) call it $Pi^(-)$. If you believe $q$, then for any way of dividing what you might learn into mutually exclusive and jointly exhaustive possibilities, you could learn one of them and still believe $q$.#footnote[Joshua Edward #cite(<Pearson2025rev>, form: "prose") calls the two-option version of this principle #strong[Anticipation], and argues that it fails for belief. I'm not taking a stance on that here. I suspect that pragmatic encroachment views of belief can explain away the examples he uses to argue against #strong[Anticipation] without lapsing into scepticism, but defending that would require a very different paper.] I'm appealing to something that differs from $Pi^(-)$ in three respects. First, it restricts it to partitions where you are sure you will actually learn which member is true before you learn for sure whether $q$. Second, it applies it to guesses rather than beliefs. Third, it does not prohibit guesses which violate this principle, but say that you have a reason, which may be a sufficient reason given how strongly you care about different considerations, to make a guess which conforms to it. So my version is this. If you are guessing an answer to #emph[Q#super[?]], and there is some partition such that you'll learn which member of the partition is actual before you learn the true answer to #emph[Q#super[?]], the fact that a possible answer would not be your best guess conditional on any member of the partition is a reason not to guess it, and this reason may override the consideration that it is the most possible answer. The core idea is that you have a reason to not make guesses you know you'll retract.
+I'm appealing here to a principle that's familioar from the literature on belief revision. Jeremy Goodman and Bernhard Salow \(#link(<ref-GoodmanSalow2025>)[2025, 13]) call it $Pi^(-)$. If you believe $q$, then for any way of dividing what you might learn into mutually exclusive and jointly exhaustive possibilities, you could learn one of them and still believe $q$.#footnote[Joshua Edward Pearson (#link(<ref-Pearson2025rev>)[2025]) calls the two-option version of this principle #strong[Anticipation], and argues that it fails for belief. I'm not taking a stance on that here. I suspect that pragmatic encroachment views of belief can explain away the examples he uses to argue against #strong[Anticipation] without lapsing into scepticism, but defending that would require a very different paper.] I'm appealing to something that differs from $Pi^(-)$ in three respects. First, it restricts it to partitions where you are sure you will actually learn which member is true before you learn for sure whether $q$. Second, it applies it to guesses rather than beliefs. Third, it does not prohibit guesses which violate this principle, but say that you have a reason, which may be a sufficient reason given how strongly you care about different considerations, to make a guess which conforms to it. So my version is this. If you are guessing an answer to #emph[Q#super[?]], and there is some partition such that you'll learn which member of the partition is actual before you learn the true answer to #emph[Q#super[?]], the fact that a possible answer would not be your best guess conditional on any member of the partition is a reason not to guess it, and this reason may override the consideration that it is the most possible answer. The core idea is that you have a reason to not make guesses you know you'll retract.
 
 In this case, the expert has an easy way to guess in a way that respects that reason. Instead of guessing N, she can say (1).
 
@@ -824,7 +874,92 @@ And that is a violation of #strong[Guess the Most Probable]. Now I don't want to
 <conclusion>
 When presented with a question, and asked to guess, guessers can reasonably have many more goals than saying the thing that most likely is the true answer to that question. They might try to truly answer as many parts of the question as they can; that was the consideration behind the main example in #ref(<sec-order>, supplement: [Section]). They might try to craft a coherent story given their prior guesses; that was the consideration behind the main example in #ref(<sec-follow>, supplement: [Section]). They might try to make guesses that they have some chance of standing behind when new information comes in; that was the consideration behind the main example in #ref(<sec-incoming>, supplement: [Section]). By looking at cases like these, we get a much richer picture of what people are trying to do with guesses.
 
-#set bibliography(style: "chicago-with-note.csl")
+#block[
+#block[
+Berto, Francesco. 2022. #emph[Topics of Thought: The Logic of Knowledge, Belief, Imagination]. Oxford: Oxford University Press.
 
-#bibliography(("guessing.bib"))
+] <ref-Berto2022>
+#block[
+Dorst, Kevin, and Matthew Mandelkern. 2022. "Good Guesses." #emph[Philosophy and Phenomenological Research] 105 (3): 581--618. doi: #link("https://doi.org/10.1111/phpr.12831")[10.1111/phpr.12831].
+
+] <ref-DorstMandelkern2022>
+#block[
+Fang, Helena. 2026. "Guessing and Its Limits." #emph[Philosophy and Phenomenological Research] 112 (3): 563--77. doi: #link("https://doi.org/10.1111/phpr.70101")[10.1111/phpr.70101].
+
+] <ref-Fang2026>
+#block[
+Fine, Kit. 2016. "Angellic Content." #emph[Journal of Philosophical Logic] 45 (2): 199--226. doi: #link("https://doi.org/10.1007/s10992-015-9371-9")[10.1007/s10992-015-9371-9].
+
+] <ref-Fine2016>
+#block[
+Gardner, Martin. 1970. "Mathematical Games: The Paradox of the Nontransitive Dice and the Elusive Principle of Indifference." #emph[Scientific American] 223 (6): 110--15. doi: #link("https://doi.org/10.1038/scientificamerican1270-110")[10.1038/scientificamerican1270-110].
+
+] <ref-Gardner1970>
+#block[
+Goodman, Jeremy, and Bernhard Salow. 2025. "Belief Revision Normalized." #emph[Journal of Philosophical Logic] 54 (1): 1--49. doi: #link("https://doi.org/10.1007/s10992-024-09769-0")[10.1007/s10992-024-09769-0].
+
+] <ref-GoodmanSalow2025>
+#block[
+Holguín, Ben. 2022. "Thinking, Guessing, and Believing." #emph[Philosophers' Imprint] 22 (6). doi: #link("https://doi.org/10.3998/phimp.2123")[10.3998/phimp.2123].
+
+] <ref-Holguin2022>
+#block[
+Horowitz, Sophie. 2019. "Accuracy and Educated Guesses." In #emph[Oxford Studies in Epistemology], edited by Tamar Szabó Gendler and John Hawthorne. Vol. 6. Oxford University Press.
+
+] <ref-Horowitz2019>
+#block[
+Kemeny, John G. 1959. "Mathematics Without Numbers." #emph[Daedalus] 88 (4): 577--91. #link("https://www.jstor.org/stable/20026529").
+
+] <ref-Kemeny1959>
+#block[
+Kendall, M. G. 1938. "A New Measure of Rank Correlation." #emph[Biometrika] 30 (1/2): 81--93. doi: #link("https://doi.org/10.1093/biomet/30.1-2.81")[10.1093/biomet/30.1-2.81].
+
+] <ref-Kendall1938>
+#block[
+Lin, Rongheng, Thomas A. Louis, Susan M. Paddock, and Greg Ridgeway. 2006. "Loss Function Based Ranking in Two-Stage, Hierarchical Models." #emph[Bayesian Analysis] 1 (4): 915--46. doi: #link("https://doi.org/10.1214/06-BA130")[10.1214/06-BA130].
+
+] <ref-LinEtAl2006>
+#block[
+Linnemann, Niels, and Feraz Azhar. 2025. "Better Guesses." #emph[Philosophy and Phenomenological Research] 110 (2): 661--86. doi: #link("https://doi.org/10.1111/phpr.13118")[10.1111/phpr.13118].
+
+] <ref-LinnemannAzhar2025>
+#block[
+Moss, Sarah. 2015. "On the Semantics and Pragmatics of Epistemic Vocabulary." #emph[Semantics and Pragmatics] 8 (5): 1--81. doi: #link("https://doi.org/10.3765/sp.8.5")[10.3765/sp.8.5].
+
+] <ref-Moss2015sp>
+#block[
+Pearson, Joshua Edward. 2025. "Belief Revision Revised." #emph[Philosophy and Phenomenological Research] 111 (2): 696--727. doi: #link("https://doi.org/10.1111/phpr.70037")[10.1111/phpr.70037].
+
+] <ref-Pearson2025rev>
+#block[
+Quillien, Tadeg, Neil Bramley, and Christopher G. Lucas. 2025. "Lossy Encoding of Distributions in Judgment Under Uncertainty." #emph[Cognitive Psychology] 159: 101745. doi: #link("https://doi.org/10.1016/j.cogpsych.2025.101745").
+
+] <ref-Quillien2025>
+#block[
+Skipper, Mattias. 2023. "Good Guesses as Accuracy-Specificity Tradeoffs." #emph[Philosophical Studies] 180 (7): 2025--50. doi: #link("https://doi.org/10.1007/s11098-022-01915-1")[10.1007/s11098-022-01915-1].
+
+] <ref-Skipper2023>
+#block[
+Teague, Richard. 2024. "A Puzzle about Guessing and Inquiry." #emph[Analysis] 84 (2): 327--36. doi: #link("https://doi.org/10.1093/analys/anad057")[10.1093/analys/anad057].
+
+] <ref-Teague2024>
+#block[
+Yablo, Stephen. 2014. #emph[Aboutness]. Princeton: Princeton University Press.
+
+] <ref-Yablo2014>
+#block[
+Young, H. P. 1988. "Condorcet's Theory of Voting." #emph[American Political Science Review] 82 (4): 1231--44. doi: #link("https://doi.org/10.2307/1961757")[10.2307/1961757].
+
+] <ref-Young1988>
+#block[
+Young, H. P., and A. Levenglick. 1978. "A Consistent Extension of Condorcet's Election Principle." #emph[SIAM Journal on Applied Mathematics] 35 (2): 285--300. doi: #link("https://doi.org/10.1137/0135023")[10.1137/0135023].
+
+] <ref-YoungLevenglick1978>
+] <refs>
+
+
+// Bibliography partial for the bwpaper Typst format.
+// Uses the site's chicago-with-note.csl via a project-root path ("/..."),
+// because some Quarto versions mangle "../../" paths when writing them into
+// Typst (they come out as "\../../...", which Typst rejects).
 
