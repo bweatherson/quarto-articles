@@ -1,0 +1,26 @@
+title: Brian Weatherson paper (Typst)
+author: Brian Weatherson
+version: 1.0.0
+quarto-required: ">=1.4.0"
+contributes:
+  formats:
+    typst:
+      # Look matching the LaTeX papers (posts/quarto2024.tex):
+      # 7 x 9.5in page, EB Garamond, italic running heads, etc.
+      template-partials:
+        - typst-template.typ   # fonts, headings, quotes, definitions, examples, tables, citations
+        - page.typ             # page size, margins, running heads
+        - biblio.typ           # bibliography style (site CSL)
+      section-numbering: "1.1"
+      date-format: "YYYY"
+      # Let Pandoc format citations and references, as it does for HTML and
+      # LaTeX. Typst's own BibTeX reader rejects the whole .bib if any entry
+      # has, e.g., year = {forthcoming}. Set citeproc: false in a paper to go
+      # back to Typst's own citation handling.
+      citeproc: true
+      # Stops Typst failing on a citation whose key isn't in the .bib: the
+      # key is printed in bold with a "?" and Quarto warns, as for HTML.
+      filters:
+        - at: post-quarto
+          path: missing-cites.lua
+      link-citations: true
